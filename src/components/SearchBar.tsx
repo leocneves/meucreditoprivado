@@ -1,46 +1,28 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import Fuse from 'fuse.js';
-import { AssetMaster } from '../types';
 import { useNavigate } from 'react-router-dom';
+import { Asset } from '../utils/csv';
 import { Search } from 'lucide-react';
 
 interface SearchBarProps {
-  assets: AssetMaster[];
+  assets: Asset[];
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<AssetMaster[]>([]);
-  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
-  const fuseRef = useRef<Fuse<AssetMaster> | null>(null);
 
-  useEffect(() => {
-    if (assets.length > 0) {
-      fuseRef.current = new Fuse(assets, {
-        keys: ['ticker', 'isin', 'issuer_name'],
-        threshold: 0.3
-      });
-    }
-  }, [assets]);
+  const fuse = useMemo(() => new Fuse(assets, {
+    keys: ['ticker', 'issuer_name'],
+    threshold: 0.3,
+  }), [assets]);
 
-  const handleSearch = (val: string) => {
-    setQuery(val);
-    if (val.length > 1 && fuseRef.current) {
-      const fuseResults = fuseRef.current.search(val);
-      setResults(fuseResults.map(r => r.item).slice(0, 5));
-      setShowDropdown(true);
-    } else {
-      setResults([]);
-      setShowDropdown(false);
-    }
-  };
+  const results = query ? fuse.search(query).slice(0, 5) : [];
 
   const handleSelect = (ticker: string) => {
-    navigate(`/asset/${ticker}`);
     setQuery('');
-    setShowDropdown(false);
+    navigate(`/asset/${ticker}`);
   };
 
   return (
@@ -48,28 +30,24 @@ export const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
       <div className="relative">
         <input
           type="text"
+          className="w-full px-4 py-3 pl-12 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+          placeholder="Pesquisar por Ticker ou Emissor..."
           value={query}
-          onChange={(e) => handleSearch(e.target.value)}
-          placeholder="Busque por Ticker, ISIN ou Emissor..."
-          className="w-full pl-10 pr-4 py-3 bg-white border border-slate-300 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm sm:text-base"
+          onChange={(e) => setQuery(e.target.value)}
         />
-        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+        <Search className="absolute left-4 top-3.5 text-slate-400" size={20} />
       </div>
 
-      {showDropdown && results.length > 0 && (
-        <div className="absolute top-full mt-2 w-full bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 overflow-hidden">
-          {results.map((asset) => (
+      {results.length > 0 && (
+        <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden">
+          {results.map(({ item }) => (
             <button
-              key={asset.isin}
-              onClick={() => handleSelect(asset.ticker)}
-              className="w-full px-6 py-4 text-left hover:bg-slate-50 flex flex-col border-b last:border-0 border-slate-100 transition-colors"
+              key={item.ticker}
+              className="w-full px-4 py-3 text-left hover:bg-slate-50 flex flex-col transition-colors border-b last:border-0 border-slate-100"
+              onClick={() => handleSelect(item.ticker)}
             >
-              <div className="flex justify-between items-center mb-1">
-                <span className="font-bold text-brand-700 text-lg">{asset.ticker}</span>
-                <span className="text-xs font-semibold bg-slate-100 px-2 py-0.5 rounded text-slate-600 uppercase">{asset.asset_type}</span>
-              </div>
-              <span className="text-sm text-slate-600 font-medium truncate">{asset.issuer_name}</span>
-              <span className="text-[10px] text-slate-400 mt-0.5 tracking-tight">{asset.isin}</span>
+              <span className="font-bold text-blue-700">{item.ticker}</span>
+              <span className="text-sm text-slate-500 uppercase tracking-tight">{item.issuer_name}</span>
             </button>
           ))}
         </div>
@@ -77,3 +55,5 @@ export const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
     </div>
   );
 };
+
+export default SearchBar;
