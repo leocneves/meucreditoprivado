@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --outDir docs",
+    "build": "vite build --outDir docs && cp -r public/data docs/",
     "preview": "vite preview --port 5173"
   },
   "dependencies": {
