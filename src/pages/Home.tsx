@@ -147,7 +147,7 @@ const Home: React.FC = () => {
             <div>
               <p className="text-slate-400 text-sm">Emissores distintos</p>
               <p className="text-3xl font-bold text-slate-900">
-                {Object.keys(byIndexer).length}
+                {Object.keys(byIssuer).length}
               </p>
             </div>
           </div>
