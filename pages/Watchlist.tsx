@@ -21,12 +21,16 @@ const Watchlist: React.FC = () => {
 
   const exportCSV = () => {
     const csvContent = "ticker\n" + watchlist.join("\n");
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
+    a.style.display = 'none';
     a.href = url;
     a.download = 'minha_watchlist.csv';
+    document.body.appendChild(a);
     a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   };
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +45,8 @@ const Watchlist: React.FC = () => {
       localStorage.setItem('watchlist', JSON.stringify(newList));
     };
     reader.readAsText(file);
+    // Limpa o input para permitir importar o mesmo arquivo novamente se necessário
+    e.target.value = '';
   };
 
   return (
@@ -73,6 +79,7 @@ const Watchlist: React.FC = () => {
               <button 
                 onClick={() => removeAsset(asset.ticker)}
                 className="absolute top-4 right-4 text-slate-300 hover:text-red-500 p-2 rounded-full hover:bg-red-50 transition-all"
+                title="Remover da lista"
               >
                 <Trash2 size={18} />
               </button>

@@ -3,7 +3,6 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../App';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-// Added TrendingUp to the imports from lucide-react
 import { FileText, Download, Star, Info, ChevronLeft, TrendingUp } from 'lucide-react';
 
 const AssetDetail: React.FC = () => {
@@ -12,7 +11,10 @@ const AssetDetail: React.FC = () => {
   const [watchlist, setWatchlist] = useState<string[]>(JSON.parse(localStorage.getItem('watchlist') || '[]'));
 
   const asset = assets.find(a => a.ticker === ticker);
-  const assetPrices = prices.filter(p => p.ticker === ticker).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const assetPrices = useMemo(() => 
+    prices.filter(p => p.ticker === ticker).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+    [prices, ticker]
+  );
   const assetDocs = documents.filter(d => d.ticker === ticker);
   
   const latestPrice = assetPrices[assetPrices.length - 1];
@@ -29,6 +31,25 @@ const AssetDetail: React.FC = () => {
   };
 
   const isWatchlisted = watchlist.includes(ticker!);
+
+  const handleDownloadCSV = () => {
+    if (!assetPrices.length) return;
+    const headers = "ticker,date,price,ytm,spread,duration\n";
+    const rows = assetPrices.map(p => 
+      `${p.ticker},${p.date},${p.price},${p.ytm},${p.spread},${p.duration}`
+    ).join("\n");
+    
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${ticker}_precos.csv`);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
 
   if (!asset) return (
     <div className="p-8 text-center space-y-4">
@@ -59,14 +80,13 @@ const AssetDetail: React.FC = () => {
             <Star size={18} fill={isWatchlisted ? 'currentColor' : 'none'} />
             {isWatchlisted ? 'Monitorado' : 'Monitorar'}
           </button>
-          <a
-            href={`data:text/csv;charset=utf-8,${encodeURIComponent(JSON.stringify(assetPrices))}`}
-            download={`${asset.ticker}_prices.csv`}
+          <button
+            onClick={handleDownloadCSV}
             className="flex items-center gap-2 px-5 py-2.5 bg-indigo-900 text-white rounded-xl font-bold hover:bg-indigo-800 transition-all shadow-sm shadow-indigo-200"
           >
             <Download size={18} />
             CSV
-          </a>
+          </button>
         </div>
       </div>
 

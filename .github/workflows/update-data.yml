@@ -1,0 +1,32 @@
+
+name: Update Asset Data
+
+on:
+  schedule:
+    - cron: '0 21 * * 1-5' # Roda às 18h de segunda a sexta
+  workflow_dispatch: # Permite rodar manualmente
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: pip install pandas openpyxl
+        
+      - name: Run ETL Script
+        run: python scripts/fetch_data.py
+        
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'Data Bot'
+          git config --global user.email 'bot@meucreditoprivado.com.br'
+          git add data/
+          git commit -m "auto: update market data" || echo "No changes to commit"
+          git push
