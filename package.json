@@ -6,29 +6,30 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "deploy": "npm run build && npx gh-pages -d dist"
+    "build": "vite build --outDir docs",
+    "preview": "vite preview --port 5173"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.0",
-    "lucide-react": "^0.294.0",
-    "recharts": "^2.10.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.3",
     "papaparse": "^5.4.1",
     "fuse.js": "^7.0.0",
-    "date-fns": "^2.30.0"
+    "recharts": "^2.12.3",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.363.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.2"
   },
   "devDependencies": {
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@types/papaparse": "^5.3.14",
     "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
-    "vite": "^5.0.0",
-    "gh-pages": "^6.1.1"
+    "vite": "^5.2.0"
   }
 }

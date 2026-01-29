@@ -1,7 +1,4 @@
-event_date,ticker,event_type
-2024-02-15,VALE33,JUROS
-2024-02-20,PETR21,AMORTIZACAO
-2024-03-10,KLAB11,JUROS
-2024-03-25,TAEE15,JUROS
-2024-04-01,SUZA22,AMORTIZACAO
-2024-04-12,RADL21,VENCIMENTO
+event_id,ticker,isin,issuer_name,event_type,event_date,amount,currency,notes
+E1,ABCD11,BRABCD123456,Construtora ABC,Amortization,2026-02-15,100000,BRL,Parcial
+E2,XYZB2,BRXYZB654321,Agro XYZ,Coupon Payment,2026-02-28,50000,BRL,Semestral
+E3,LMN33,BRLMN330001,Incorp LMN,Principal Payment,2026-03-01,200000,BRL,Final

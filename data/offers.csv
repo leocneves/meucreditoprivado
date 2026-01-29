@@ -1,6 +1,4 @@
-ticker,debtor,status,volume,type,date
-ELET22,Eletrobras,Em Aberto,R$ 1.5 Bi,DEB,2024-02-15
-AZUL25,Azul Linhas Aéreas,Planejada,R$ 500 Mi,CRA,2024-03-10
-SABR33,Sabesp,Encerrada,R$ 2.0 Bi,DEB,2023-12-20
-VIVT11,Vivo/Telefônica,Em Aberto,R$ 800 Mi,DEB,2024-02-28
-MOVI21,Movida,Planejada,R$ 400 Mi,CRA,2024-04-05
+offer_id,ticker,isin,issuer_name,offer_type,announce_date,open_date,close_date,amount_offered,currency,status,prospectus_url
+OFF1,ABCD11,BRABCD123456,Construtora ABC,Private Placement,2026-01-10,2026-01-15,2026-01-20,5000000,BRL,closed,https://example.com/prospecto_abcd11.pdf
+OFF2,XYZB2,BRXYZB654321,Agro XYZ,Public,2026-02-01,2026-02-05,2026-02-12,2000000,BRL,open,https://example.com/prospecto_xyzb2.pdf
+OFF3,LMN33,BRLMN330001,Incorp LMN,Public,2026-03-10,2026-03-15,2026-03-20,7500000,BRL,announced,https://example.com/prospecto_lmn33.pdf

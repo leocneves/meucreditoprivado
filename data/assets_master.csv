@@ -1,6 +1,4 @@
-ticker,isin,debtor,type,issue_date,maturity_date,coupon,currency,sector
-VALE33,BRVALEDEB123,Vale S.A.,DEB,2021-01-15,2028-01-15,IPCA + 5.5%,BRL,Mineração
-PETR21,BRPETRDEB456,Petrobras,DEB,2022-03-20,2030-03-20,IPCA + 6.2%,BRL,Petróleo
-KLAB11,BRKLABCRI789,Klabin S.A.,CRI,2023-06-10,2033-06-10,IPCA + 5.8%,BRL,Papel e Celulose
-BTGP12,BRBTGPCRA111,BTG Pactual,CRA,2023-01-05,2026-01-05,CDI + 1.2%,BRL,Financeiro
-SUZA22,BRSUZADEB999,Suzano,DEB,2020-05-15,2027-05-15,IPCA + 4.9%,BRL,Papel e Celulose
+ticker,isin,issuer_name,asset_type,series,seniority,guarantee,rating_fitch,issue_date,maturity_date,coupon_type,issuer_cnpj,sector
+ABCD11,BRABCD123456,Construtora ABC,debenture,1,senior,real_estate_collateral,AA-,2024-05-10,2029-05-10,IPCA+,12.345.678/0001-90,Construção
+XYZB2,BRXYZB654321,Agro XYZ,CRA,1,subordinated,receivables,BBB,2023-03-01,2028-03-01,PRE,98.765.432/0001-11,Agronegócio
+LMN33,BRLMN330001,Incorp LMN,CRI,1,senior,real_estate_collateral,AA,2022-11-20,2032-11-20,IPCA+,11.223.344/0001-55,Imobiliário
