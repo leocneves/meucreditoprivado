@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useData } from '../App';
 import SearchBar from '../components/SearchBar';
-import { TrendingUp, Calendar, Zap } from 'lucide-react';
+import { TrendingUp, Calendar, Zap, ArrowUpRight } from 'lucide-react';
 
 const Home: React.FC = () => {
   const { assets, prices, offers, calendar } = useData();
@@ -31,98 +31,110 @@ const Home: React.FC = () => {
   }, [calendar]);
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700">
-      {/* Hero */}
-      <section className="text-center py-12 space-y-6">
-        <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
+    <div className="space-y-16 animate-in fade-in duration-700">
+      {/* Hero Section */}
+      <section className="text-center py-16 md:py-24 space-y-8">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+          <Zap size={14} /> Dados do Mercado em Tempo Real
+        </div>
+        <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-tight">
           Meu <span className="text-indigo-600">Crédito Privado</span>
         </h1>
-        <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-          Análise de spreads, histórico de preços e radar de mercado para investidores de renda fixa.
+        <p className="text-xl text-slate-500 max-w-2xl mx-auto font-medium">
+          A plataforma definitiva para análise de spreads, marcação a mercado e radar de emissões primárias.
         </p>
-        <div className="max-w-3xl mx-auto pt-4">
+        <div className="max-w-3xl mx-auto pt-6 px-4">
           <SearchBar />
         </div>
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Maiores Spreads */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 transition-hover hover:shadow-md">
-          <div className="flex items-center gap-3 mb-6 text-indigo-700">
-            <div className="p-2 bg-indigo-50 rounded-xl">
-              <TrendingUp size={24} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {/* Top Spreads Card */}
+        <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4 text-indigo-600">
+              <div className="p-3 bg-indigo-50 rounded-2xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                <TrendingUp size={28} />
+              </div>
+              <h2 className="font-black text-2xl text-slate-800">Top Spreads</h2>
             </div>
-            <h2 className="font-black text-xl text-slate-800 tracking-tight">Top Spreads</h2>
+            <ArrowUpRight className="text-slate-200 group-hover:text-indigo-400 transition-colors" />
           </div>
           <div className="space-y-4">
             {topSpreads.length > 0 ? topSpreads.map(p => (
-              <Link key={p.ticker} to={`/asset/${p.ticker}`} className="block group">
-                <div className="flex justify-between items-center p-4 rounded-2xl bg-slate-50 group-hover:bg-indigo-50 transition-all border border-transparent group-hover:border-indigo-100">
+              <Link key={p.ticker} to={`/asset/${p.ticker}`} className="block group/item">
+                <div className="flex justify-between items-center p-5 rounded-3xl bg-slate-50 group-hover/item:bg-white border border-transparent group-hover/item:border-slate-100 group-hover/item:shadow-sm transition-all">
                   <div>
-                    <p className="font-bold text-slate-900">{p.ticker}</p>
-                    <p className="text-xs text-slate-500 font-medium uppercase">{p.asset?.debtor}</p>
+                    <p className="font-black text-slate-900 text-lg">{p.ticker}</p>
+                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{p.asset?.debtor}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-black text-red-600 text-lg">{p.spread}%</p>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Spread</p>
+                    <p className="font-black text-red-600 text-xl">{p.spread}%</p>
+                    <p className="text-[9px] font-black text-slate-300 uppercase tracking-tighter">Premium</p>
                   </div>
                 </div>
               </Link>
-            )) : <p className="text-slate-400 text-center py-4">Aguardando dados...</p>}
+            )) : <div className="text-center py-10 text-slate-300 font-bold italic">Sem dados de preços...</div>}
           </div>
         </div>
 
-        {/* Mercado Primário */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 transition-hover hover:shadow-md">
-          <div className="flex items-center gap-3 mb-6 text-emerald-600">
-            <div className="p-2 bg-emerald-50 rounded-xl">
-              <Zap size={24} />
+        {/* Mercado Primário Card */}
+        <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4 text-emerald-600">
+              <div className="p-3 bg-emerald-50 rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <Zap size={28} />
+              </div>
+              <h2 className="font-black text-2xl text-slate-800">Radar Primário</h2>
             </div>
-            <h2 className="font-black text-xl text-slate-800 tracking-tight">Radar Primário</h2>
+            <ArrowUpRight className="text-slate-200 group-hover:text-emerald-400 transition-colors" />
           </div>
           <div className="space-y-4">
             {activeOffers.length > 0 ? activeOffers.map(o => (
-              <Link key={o.ticker} to="/primary" className="block group">
-                <div className="flex justify-between items-center p-4 rounded-2xl bg-slate-50 group-hover:bg-emerald-50 transition-all border border-transparent group-hover:border-emerald-100">
-                  <div>
-                    <p className="font-bold text-slate-900">{o.debtor}</p>
-                    <p className="text-xs text-slate-500 font-medium">{o.type} • {o.ticker}</p>
+              <Link key={o.ticker} to="/primary" className="block group/item">
+                <div className="flex justify-between items-center p-5 rounded-3xl bg-slate-50 group-hover/item:bg-white border border-transparent group-hover/item:border-slate-100 group-hover/item:shadow-sm transition-all">
+                  <div className="max-w-[160px]">
+                    <p className="font-black text-slate-900 text-lg truncate">{o.debtor}</p>
+                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{o.type} • {o.ticker}</p>
                   </div>
                   <div className="text-right">
-                    <span className={`text-[10px] px-2.5 py-1 font-bold rounded-lg uppercase tracking-wider ${
-                      o.status === 'Em Aberto' ? 'bg-emerald-200 text-emerald-800' : 'bg-blue-100 text-blue-700'
+                    <span className={`text-[9px] px-3 py-1.5 font-black rounded-xl uppercase tracking-widest ${
+                      o.status === 'Em Aberto' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
                     }`}>
                       {o.status}
                     </span>
                   </div>
                 </div>
               </Link>
-            )) : <p className="text-slate-400 text-center py-4">Nenhuma oferta no radar.</p>}
+            )) : <div className="text-center py-10 text-slate-300 font-bold italic">Nenhuma oferta ativa...</div>}
           </div>
-          <Link to="/primary" className="block text-center mt-8 text-indigo-600 font-bold hover:underline text-sm bg-indigo-50 py-3 rounded-2xl">Explorar Ofertas Pública</Link>
+          <Link to="/primary" className="block text-center mt-8 text-indigo-600 font-black text-xs uppercase tracking-widest bg-indigo-50/50 py-4 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all">Ver Pipeline Completo</Link>
         </div>
 
-        {/* Calendário */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 transition-hover hover:shadow-md">
-          <div className="flex items-center gap-3 mb-6 text-amber-600">
-            <div className="p-2 bg-amber-50 rounded-xl">
-              <Calendar size={24} />
+        {/* Agenda Card */}
+        <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4 text-amber-600">
+              <div className="p-3 bg-amber-50 rounded-2xl group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                <Calendar size={28} />
+              </div>
+              <h2 className="font-black text-2xl text-slate-800">Agenda</h2>
             </div>
-            <h2 className="font-black text-xl text-slate-800 tracking-tight">Agenda</h2>
+            <ArrowUpRight className="text-slate-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <div className="space-y-4">
             {upcomingEvents.length > 0 ? upcomingEvents.map((e, idx) => (
-              <div key={idx} className="flex gap-4 items-center p-4 bg-slate-50 rounded-2xl">
-                <div className="bg-white shadow-sm rounded-xl p-2 flex flex-col items-center min-w-[55px] border border-slate-100">
-                  <span className="text-[10px] uppercase font-black text-indigo-400">{new Date(e.event_date).toLocaleDateString('pt-BR', { month: 'short' })}</span>
-                  <span className="text-xl font-black text-slate-800">{new Date(e.event_date).getDate()}</span>
+              <div key={idx} className="flex gap-5 items-center p-5 bg-slate-50 rounded-3xl">
+                <div className="bg-white shadow-sm rounded-2xl p-3 flex flex-col items-center min-w-[65px] border border-slate-100">
+                  <span className="text-[9px] uppercase font-black text-indigo-400 leading-none mb-1">{new Date(e.event_date).toLocaleDateString('pt-BR', { month: 'short' })}</span>
+                  <span className="text-2xl font-black text-slate-800 leading-none">{new Date(e.event_date).getDate()}</span>
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900">{e.ticker}</p>
-                  <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider">{e.event_type}</p>
+                  <p className="font-black text-slate-900 text-lg leading-tight">{e.ticker}</p>
+                  <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mt-1">{e.event_type}</p>
                 </div>
               </div>
-            )) : <p className="text-slate-400 text-center py-4">Nenhum evento próximo.</p>}
+            )) : <div className="text-center py-10 text-slate-300 font-bold italic">Nenhum evento próximo...</div>}
           </div>
         </div>
       </div>

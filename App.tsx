@@ -31,27 +31,36 @@ const App: React.FC = () => {
   });
 
   const fetchData = async () => {
-    // Helper para buscar CSV com fallback para array vazio em caso de erro
     const safeFetchCSV = async <T,>(path: string): Promise<T[]> => {
       try {
+        console.log(`Buscando: ${path}`);
         const response = await fetch(path);
-        if (!response.ok) return []; // Retorna vazio se não encontrar o arquivo
+        if (!response.ok) {
+          console.warn(`Aviso: Arquivo não encontrado ou erro no fetch: ${path} (${response.status})`);
+          return [];
+        }
         const csvText = await response.text();
         return new Promise((resolve) => {
           Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
-            complete: (results) => resolve(results.data as T[]),
-            error: () => resolve([]),
+            complete: (results) => {
+              console.log(`Carregado ${path}: ${results.data.length} linhas`);
+              resolve(results.data as T[]);
+            },
+            error: (err) => {
+              console.error(`Erro PapaParse em ${path}:`, err);
+              resolve([]);
+            },
           });
         });
-      } catch {
+      } catch (e) {
+        console.error(`Erro crítico no fetch de ${path}:`, e);
         return [];
       }
     };
 
     try {
-      // Carrega os dados. Usamos Promise.all mas com o safeFetch para não estourar erro global
       const [assets, prices, offers, calendar, documents] = await Promise.all([
         safeFetchCSV<AssetMaster>('data/assets_master.csv'),
         safeFetchCSV<PriceData>('data/prices.csv'),
@@ -65,6 +74,7 @@ const App: React.FC = () => {
         const metaRes = await fetch('data/metadata.json');
         if (metaRes.ok) metadata = await metaRes.json();
       } catch (e) {
+        console.warn("Metadados não encontrados, usando data atual.");
         metadata = { last_updated: new Date().toISOString() };
       }
 
@@ -76,13 +86,14 @@ const App: React.FC = () => {
         documents,
         metadata,
         loading: false,
-        error: assets.length === 0 ? "Nenhum ativo carregado. Verifique se os arquivos CSV estão na pasta /data/." : null
+        error: assets.length === 0 ? "Nenhum ativo encontrado em 'data/assets_master.csv'. Verifique a pasta /data/ no seu repositório." : null
       });
     } catch (err: any) {
+      console.error("Erro fatal na inicialização:", err);
       setState(prev => ({ 
         ...prev, 
         loading: false, 
-        error: "Erro crítico ao inicializar aplicação." 
+        error: "Erro crítico ao inicializar aplicação. Verifique o console do navegador." 
       }));
     }
   };
@@ -100,13 +111,22 @@ const App: React.FC = () => {
             {state.loading ? (
               <div className="flex flex-col justify-center items-center h-96 space-y-4">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-900"></div>
-                <p className="text-slate-500 font-medium">Carregando dados do mercado...</p>
+                <p className="text-slate-500 font-medium">Sincronizando dados...</p>
               </div>
             ) : (
               <>
                 {state.error && (
-                  <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 shadow-sm">
-                    <p className="text-amber-800 font-medium">{state.error}</p>
+                  <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 shadow-sm rounded-r-xl">
+                    <div className="flex p-4">
+                       <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
+                             <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                       </div>
+                       <div className="ml-3">
+                          <p className="text-sm text-amber-700 font-medium">{state.error}</p>
+                       </div>
+                    </div>
                   </div>
                 )}
                 <Routes>
@@ -119,11 +139,14 @@ const App: React.FC = () => {
               </>
             )}
           </main>
-          <footer className="bg-white border-t py-6 mt-12">
-            <div className="container mx-auto px-4 text-center text-slate-500 text-sm">
-              <p className="font-semibold">Meu Crédito Privado &copy; {new Date().getFullYear()}</p>
+          <footer className="bg-white border-t py-8 mt-12">
+            <div className="container mx-auto px-4 text-center">
+              <p className="font-bold text-slate-800">Meu Crédito Privado</p>
+              <p className="text-slate-400 text-xs mt-1">Análise de ativos de renda fixa</p>
               {state.metadata && (
-                <p className="mt-1 opacity-75">Sincronizado em: {new Date(state.metadata.last_updated).toLocaleString('pt-BR')}</p>
+                <p className="mt-4 text-[10px] text-slate-400 uppercase tracking-widest">
+                  Base de dados: {new Date(state.metadata.last_updated).toLocaleString('pt-BR')}
+                </p>
               )}
             </div>
           </footer>
