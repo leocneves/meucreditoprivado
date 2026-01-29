@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import { useNavigate } from 'react-router-dom';
@@ -13,12 +12,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
-  const fuse = useMemo(() => new Fuse(assets, {
-    keys: ['ticker', 'issuer_name'],
-    threshold: 0.3,
-  }), [assets]);
+  const fuse = useMemo(
+    () =>
+      new Fuse(assets, {
+        keys: ['ticker', 'issuer', 'tipo'],
+        threshold: 0.3,
+      }),
+    [assets]
+  );
 
-  const results = query ? fuse.search(query).slice(0, 5) : [];
+  const results = query ? fuse.search(query).slice(0, 6) : [];
 
   const handleSelect = (ticker: string) => {
     setQuery('');
@@ -27,31 +30,59 @@ const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
 
   return (
     <div className="relative w-full max-w-xl mx-auto">
+
       <div className="relative">
         <input
           type="text"
-          className="w-full px-4 py-3 pl-12 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-          placeholder="Pesquisar por Ticker ou Emissor..."
+          className="w-full px-4 py-3 pl-12 bg-white border border-slate-200 rounded-xl shadow-sm
+                     focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+          placeholder="Pesquisar por ticker, emissor ou tipo..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={e => setQuery(e.target.value)}
         />
-        <Search className="absolute left-4 top-3.5 text-slate-400" size={20} />
+
+        <Search
+          className="absolute left-4 top-3.5 text-slate-400"
+          size={20}
+        />
       </div>
 
       {results.length > 0 && (
         <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden">
+
           {results.map(({ item }) => (
             <button
               key={item.ticker}
               className="w-full px-4 py-3 text-left hover:bg-slate-50 flex flex-col transition-colors border-b last:border-0 border-slate-100"
               onClick={() => handleSelect(item.ticker)}
             >
-              <span className="font-bold text-blue-700">{item.ticker}</span>
-              <span className="text-sm text-slate-500 uppercase tracking-tight">{item.issuer_name}</span>
+              {/* Linha principal */}
+              <span className="font-bold text-slate-900">
+                {item.ticker} — {item.issuer}
+              </span>
+
+              {/* Linha secundária */}
+              <div className="text-sm text-slate-500 flex flex-col gap-0.5">
+
+              <span>
+                {item.tipo}
+                {item.indexador && ` | ${item.indexador}`}
+                {item.rating && ` | ${item.rating}`}
+              </span>
+
+              {item.isin && (
+                <span className="text-xs text-slate-400 tracking-wide">
+                  ISIN {item.isin}
+                </span>
+              )}
+
+              </div>
             </button>
           ))}
+
         </div>
       )}
+
     </div>
   );
 };

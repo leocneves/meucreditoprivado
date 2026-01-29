@@ -22,8 +22,8 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">C</div>
-            <span className="font-black text-xl tracking-tighter text-slate-900 hidden sm:block">MeuCrédito</span>
+            <div className="w-10 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">MCP</div>
+            {/* <span className="font-black text-xl tracking-tighter text-slate-900 hidden sm:block">MCP</span> */}
           </Link>
 
           {/* Mobile Menu Button */}
@@ -91,10 +91,21 @@ const App: React.FC = () => {
         <footer className="bg-white border-t border-slate-200 py-10 mt-20">
           <div className="container mx-auto px-4 text-center">
             <p className="text-slate-400 text-sm font-medium">
-              &copy; {new Date().getFullYear()} Meu Crédito Privado. Dados meramente ilustrativos.
+              &copy; {new Date().getFullYear()} Meu Crédito Privado. Todos os direitos reservados.
+            </p>
+            <p className="text-slate-400 text-sm font-medium">
+              Desenvolvido por{' '}
+              <a
+                href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:text-blue-600 transition-colors"
+              >
+                Leonardo Contador Neves
+              </a>
             </p>
             <p className="text-slate-300 text-[10px] mt-2 uppercase tracking-widest">
-              Desenvolvido apenas com Client-side React + Vite
+              Base de dados CVM e ANBIMA
             </p>
           </div>
         </footer>
