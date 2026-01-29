@@ -1,2 +1,6 @@
-ticker,isin,issuer_name,asset_type,series,seniority,guarantee,issue_date,maturity_date,coupon_type,issuer_cnpj,sector
-ABCD11,BRABCD123456,Construtora ABC,debenture,1,senior,real_estate_collateral,2024-05-10,2029-05-10,IPCA+,12.345.678/0001-90,Construção
+ticker,tipo,issuer,volume,indexador,rating,duration,vencimento,isin
+VALE25,Debênture,Vale,1500000000,IPCA,AA+,4.2,2029-06-15,BRVALEDBS123
+PETR30,Debênture,Petrobras,3200000000,CDI,AAA,6.1,2031-09-10,BRVALEDBS123
+CRIABC01,CRI,Banco ABC,450000000,IPCA,AA,3.5,2028-03-20,BRVALEDBS123
+CRAGRAOS1,CRA,Agro Foods,280000000,CDI,A+,2.8,2027-11-05,BRVALEDBS123
+LOCAL1,Debênture,Localiza,900000000,IPCA,AA-,4.9,2030-08-12,BRVALEDBS123
