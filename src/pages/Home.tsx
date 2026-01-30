@@ -90,6 +90,13 @@ const Home: React.FC = () => {
       .slice(0, 5);
   }, [assets]);
 
+  const byIssuerTotal = useMemo(() => {
+    const m = countBy(assets, 'issuer');
+
+    return Object.entries(m)
+      .sort((a, b) => b[1] - a[1]);
+  }, [assets]);
+
   /* ================= RENDER ================= */
 
   return (
@@ -147,7 +154,7 @@ const Home: React.FC = () => {
             <div>
               <p className="text-slate-400 text-sm">Emissores distintos</p>
               <p className="text-3xl font-bold text-slate-900">
-                {Object.keys(byIssuer).length}
+                {Object.keys(byIssuerTotal).length}
               </p>
             </div>
           </div>
