@@ -193,12 +193,16 @@ const Home: React.FC = () => {
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
 
               <h3 className="text-lg font-semibold text-slate-800 mb-4">
-                Top emissores
+                Top 10 emissores
               </h3>
 
               <div className="space-y-2">
 
-                {byIssuer.map(([issuer, qty], i) => (
+              {byIssuerTotal
+                .filter(([issuer]) => 
+                  !issuer.toUpperCase().includes("SECURITIZADORA")
+                ).slice(0, 10)
+                .map(([issuer, qty], i) => (
                   <div
                     key={i}
                     className="flex justify-between items-center bg-slate-50 px-4 py-2 rounded-lg text-sm"
@@ -210,7 +214,7 @@ const Home: React.FC = () => {
                       {qty}
                     </span>
                   </div>
-                ))}
+              ))}
 
               </div>
 

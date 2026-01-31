@@ -10,8 +10,8 @@ export interface Asset {
   seniority: string;
   guarantee: string;
   issue_date: string;
-  maturity_date: string;
-  coupon_type: string;
+  vencimento: string;
+  indexador: string;
   issuer_cnpj: string;
   sector: string;
 }
