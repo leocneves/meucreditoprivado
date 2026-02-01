@@ -261,7 +261,7 @@ const Home: React.FC = () => {
 
       {/* ================= OVERVIEW NUMÉRICO ================= */}
 
-      <br/><br/><br/>
+      <br/>
       <section className="text-center space-y-6 px-4">
       <h1 className="text-4xl md:text-1xl font-extrabold tracking-tight">
         <span className="text-blue-500">
