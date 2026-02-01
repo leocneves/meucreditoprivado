@@ -16,6 +16,11 @@ export interface Asset {
   sector: string;
 }
 
+export interface DocsOverview {
+  tipo: string;
+  qtd_documentos: string;
+}
+
 export interface PriceRecord {
   date: string;
   ticker: string;

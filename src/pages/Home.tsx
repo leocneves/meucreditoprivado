@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { fetchCSV, fetchMetadata, Asset, Metadata } from '../utils/csv';
+import { fetchCSV, fetchMetadata, Asset, Metadata, DocsOverview } from '../utils/csv';
 import SearchBar from '../components/SearchBar';
 import Watchlist from '../components/Watchlist';
 import PieBox from '../components/PieBox';
-import { Clock, Layers, TrendingUp, CalendarDays , BarChart3} from 'lucide-react';
+import { Clock, Layers, TrendingUp, CalendarDays , BarChart3, FileText, Files, FileSearch, FileCheck} from 'lucide-react';
 
 /* ================= HELPERS ================= */
 
@@ -41,6 +41,7 @@ const toPieData = (obj: Record<string, number>) => {
 
 const Home: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [docsoverview, setDocsOverview] = useState<DocsOverview[]>([]);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +55,12 @@ const Home: React.FC = () => {
           fetchMetadata(),
         ]);
 
+        const [docsoverviewData] = await Promise.all([
+          fetchCSV<DocsOverview>('./data/docs_overview.csv')
+        ]);
+
         setAssets(assetsData);
+        setDocsOverview(docsoverviewData);
         setMetadata(metaData);
       } catch (err) {
         console.error('Erro ao carregar home', err);
@@ -69,6 +75,13 @@ const Home: React.FC = () => {
   /* ================= METRICS ================= */
 
   const totalAssets = assets.length;
+
+  const totalDocs = docsoverview.reduce(
+    (acc, d) => acc + parseFloat(d.qtd_documentos),
+    0
+  );
+  const totalAssembleias = docsoverview.find(d => d.tipo === "Assembléias")?.qtd_documentos ?? 0;
+  const totalRating = docsoverview.find(d => d.tipo === "Relatórios de Rating")?.qtd_documentos ?? 0;
 
   // const byIndexer = useMemo(
   //   () => countBy(assets, 'indexador'),
@@ -333,6 +346,36 @@ const Home: React.FC = () => {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })} bi
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+         <FileCheck size={36} className="text-emerald-600" />
+          <div>
+            <p className="text-slate-400 text-sm">Documentos Monitoradas (último dia útil)</p>
+            <p className="text-3xl font-bold text-slate-900">
+              {(totalDocs)}
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <FileText size={36} className="text-emerald-600" />
+          <div>
+            <p className="text-slate-400 text-sm">Assembléias Monitoradas (último dia útil)</p>
+            <p className="text-3xl font-bold text-slate-900">
+              {(totalAssembleias)}
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <FileText size={36} className="text-emerald-600" />
+          <div>
+            <p className="text-slate-400 text-sm">Relatórios de Rating Monitorados (último dia útil)</p>
+            <p className="text-3xl font-bold text-slate-900">
+              {(totalRating)}
             </p>
           </div>
         </div>

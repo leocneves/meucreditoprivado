@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import AssetPage from './pages/Asset';
 import Charts from './pages/Charts';
 import Primary from './pages/Primary';
-import { LayoutDashboard, LineChart, Tag, Menu, X } from 'lucide-react';
+import { LayoutDashboard, LineChart, Files, Tag, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -13,8 +13,9 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/', label: 'Home', icon: <LayoutDashboard size={18} /> },
-    { path: '/charts', label: 'Gráficos', icon: <LineChart size={18} /> },
-    { path: '/primary', label: 'Primário', icon: <Tag size={18} /> },
+    // { path: '/x', label: 'Radar de Eventos', icon: <Files size={18} /> },
+    { path: '/charts', label: 'Dashboard', icon: <LineChart size={18} /> },
+    { path: '/primary', label: 'Mercado Primário', icon: <Tag size={18} /> },
   ];
 
   return (
