@@ -47,6 +47,30 @@ const toPieData = (obj: Record<string, number>) => {
   }))
 }
 
+const downloadCSV = (rows: Asset[]) => {
+  if (!rows.length) return
+
+  const headers = Object.keys(rows[0])
+
+  const csv = [
+    headers.join(','),
+    ...rows.map(r =>
+      headers.map(h => `"${(r as any)[h] ?? ''}"`).join(',')
+    )
+  ].join('\n')
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'ativos_filtrados.csv'
+  link.click()
+
+  URL.revokeObjectURL(url)
+}
+
+
 /* ================= KPI ================= */
 
 const KPIBox = ({ title, value }: { title: string; value: any }) => (
@@ -294,7 +318,7 @@ const CreditDashboard: React.FC = () => {
 
         <div>
           <label className="text-sm text-slate-600 mb-1 block">
-            Issuer
+          Emissor / Devedor
           </label>
 
           <SearchMultiSelect
@@ -304,7 +328,7 @@ const CreditDashboard: React.FC = () => {
               setIssuersSel(vals)
               setTickersSel([])
             }}
-            placeholder="Buscar issuer..."
+            placeholder="Buscar emissor/devedor..."
           />
 
           <button
@@ -340,7 +364,7 @@ const CreditDashboard: React.FC = () => {
 
         <div>
           <label className="text-sm text-slate-600 mb-1 block">
-            Spread (bps)
+            Spread Over (bps)
           </label>
 
           <div className="flex gap-2">
@@ -381,9 +405,9 @@ const CreditDashboard: React.FC = () => {
       {/* KPIs */}
 
       <div className="grid md:grid-cols-3 gap-6">
-        <KPIBox title="Ativos vivos" value={ativosVivos} />
+        <KPIBox title="Papéis ativos" value={ativosVivos} />
         <KPIBox
-          title="Volume vivo"
+          title="Volume emissão"
           value={`R$ ${(volumeVivo / 1e9).toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
@@ -482,6 +506,91 @@ const CreditDashboard: React.FC = () => {
         </ResponsiveContainer>
 
       </div>
+
+      {/* LISTA DE ATIVOS FILTRADOS */}
+
+      <div className="bg-white p-6 rounded-2xl border flex flex-col">
+
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="font-semibold">
+            Ativos filtrados ({filteredAssets.length})
+          </h2>
+
+          <button
+            onClick={() => downloadCSV(filteredAssets)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+          >
+            Baixar CSV
+          </button>
+        </div>
+
+        <div className="border rounded-lg overflow-y-auto h-[350px]">
+
+          <table className="w-full text-sm">
+
+            <thead className="sticky top-0 bg-slate-100 border-b">
+              <tr>
+                <th className="p-2 text-left">Ticker</th>
+                <th className="p-2 text-left">ISIN</th>
+                <th className="p-2 text-left">Emissor</th>
+                <th className="p-2 text-left">Indexador</th>
+                <th className="p-2 text-right">Spread</th>
+                <th className="p-2 text-right">Duration (anos)</th>
+                <th className="p-2 text-right">Volume</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {filteredAssets.map((a, i) => {
+
+                const d = durationYears(a)
+                const spread = parseFloat(a.spread) * 100
+
+                return (
+                  <tr
+                    key={i}
+                    className="border-b hover:bg-slate-50"
+                  >
+                    <td className="p-2 font-medium">{a.ticker}</td>
+                    <td className="p-2 font-medium">{a.isin}</td>
+                    <td className="p-2">{a.issuer}</td>
+                    <td className="p-2">{a.indexador}</td>
+
+                    <td className="p-2 text-right">
+                      {isNaN(spread) ? '-' : spread.toFixed(1)}
+                    </td>
+
+                    <td className="p-2 text-right">
+                      {d == null ? '-' : d.toFixed(2)}
+                    </td>
+
+                    <td className="p-2 text-right">
+                      {Number(a.volume).toLocaleString('pt-BR')}
+                    </td>
+                  </tr>
+                )
+              })}
+
+              {!filteredAssets.length && (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="p-6 text-center text-slate-500"
+                  >
+                    Nenhum ativo encontrado com os filtros atuais
+                  </td>
+                </tr>
+              )}
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+
+
 
     </div>
   )
