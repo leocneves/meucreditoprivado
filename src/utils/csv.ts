@@ -12,6 +12,9 @@ export interface Asset {
   issue_date: string;
   vencimento: string;
   indexador: string;
+  rating: string;
+  agencia: string;
+  divulgacao: string;
   issuer_cnpj: string;
   sector: string;
 }

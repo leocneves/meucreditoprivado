@@ -103,9 +103,16 @@ const Primary: React.FC = () => {
       {/* HEADER */}
 
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Mercado Primário</h1>
+        <h1 className="text-3xl font-bold text-slate-900">
+          Mercado Primário
+        </h1>
+
         <p className="text-slate-600">
           Pipeline de emissões, visão geral e próximas liquidações
+        </p>
+
+        <p className="mt-2 text-lg font-semibold text-red-600">
+          ⚠️ Dados fictícios — base de dados ainda em desenvolvimento
         </p>
       </div>
 

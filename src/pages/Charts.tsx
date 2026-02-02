@@ -90,6 +90,7 @@ const CreditDashboard: React.FC = () => {
   const [indexadoresSel, setIndexadoresSel] = useState<string[]>([])
   const [issuersSel, setIssuersSel] = useState<string[]>([])
   const [tickersSel, setTickersSel] = useState<string[]>([])
+  const [ratingsSel, setRatingsSel] = useState<string[]>([])
 
   const [spreadMin, setSpreadMin] = useState<number | null>(null)
   const [spreadMax, setSpreadMax] = useState<number | null>(null)
@@ -149,6 +150,21 @@ const CreditDashboard: React.FC = () => {
     return unique(base.map(a => a.ticker))
   }, [ativosVivosBase, indexadoresSel, issuersSel])
 
+  const ratingsOptions = useMemo(() => {
+    let base = ativosVivosBase
+  
+    if (indexadoresSel.length)
+      base = base.filter(a => indexadoresSel.includes(a.indexador))
+  
+    if (issuersSel.length)
+      base = base.filter(a => issuersSel.includes(a.issuer))
+  
+    if (tickersSel.length)
+      base = base.filter(a => tickersSel.includes(a.ticker))
+  
+    return unique(base.map(a => a.rating))
+  }, [ativosVivosBase, indexadoresSel, issuersSel, tickersSel])
+
   /* ---------- Assets filtrados ---------- */
 
   const filteredAssets = useMemo(() => {
@@ -162,6 +178,9 @@ const CreditDashboard: React.FC = () => {
 
     if (tickersSel.length)
       base = base.filter(a => tickersSel.includes(a.ticker))
+
+    if (ratingsSel.length)
+      base = base.filter(a => ratingsSel.includes(a.rating))
 
     if (spreadMin !== null || spreadMax !== null) {
       base = base.filter(a => {
@@ -179,6 +198,7 @@ const CreditDashboard: React.FC = () => {
     indexadoresSel,
     issuersSel,
     tickersSel,
+    ratingsSel,
     spreadMin,
     spreadMax
   ])
@@ -364,6 +384,26 @@ const CreditDashboard: React.FC = () => {
 
         <div>
           <label className="text-sm text-slate-600 mb-1 block">
+            Rating
+          </label>
+
+          <SearchMultiSelect
+            options={ratingsOptions}
+            selected={ratingsSel}
+            onChange={setRatingsSel}
+            placeholder="Buscar rating..."
+          />
+
+          <button
+            className="text-sm underline mt-2"
+            onClick={() => setRatingsSel([])}
+          >
+            Limpar
+          </button>
+        </div>
+
+        <div>
+          <label className="text-sm text-slate-600 mb-1 block">
             Spread Over (bps)
           </label>
 
@@ -534,6 +574,9 @@ const CreditDashboard: React.FC = () => {
                 <th className="p-2 text-left">ISIN</th>
                 <th className="p-2 text-left">Emissor</th>
                 <th className="p-2 text-left">Indexador</th>
+                <th className="p-2 text-left">Agencia Rating</th>
+                <th className="p-2 text-left">Rating</th>
+                <th className="p-2 text-left">Data Divulgação Rating</th>
                 <th className="p-2 text-right">Spread</th>
                 <th className="p-2 text-right">Duration (anos)</th>
                 <th className="p-2 text-right">Volume</th>
@@ -556,6 +599,9 @@ const CreditDashboard: React.FC = () => {
                     <td className="p-2 font-medium">{a.isin}</td>
                     <td className="p-2">{a.issuer}</td>
                     <td className="p-2">{a.indexador}</td>
+                    <td className="p-2">{a.agencia}</td>
+                    <td className="p-2">{a.rating}</td>
+                    <td className="p-2">{a.divulgacao}</td>
 
                     <td className="p-2 text-right">
                       {isNaN(spread) ? '-' : spread.toFixed(1)}

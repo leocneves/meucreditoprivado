@@ -13,9 +13,21 @@ const AssetPage: React.FC = () => {
 
   const formatDatePretty = (dateStr: string) => {
     if (!dateStr) return "-";
-
-    const date = new Date(dateStr + "T00:00:00");
-
+  
+    let date: Date;
+  
+    // Se vier no formato brasileiro DD/MM/YYYY
+    if (dateStr.includes("/")) {
+      const [day, month, year] = dateStr.split("/").map(Number);
+      date = new Date(year, month - 1, day);
+    } 
+    // Se vier no formato ISO YYYY-MM-DD
+    else {
+      date = new Date(dateStr + "T00:00:00");
+    }
+  
+    if (isNaN(date.getTime())) return "-";
+  
     return date.toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "short",
@@ -226,8 +238,9 @@ const AssetPage: React.FC = () => {
             </div>
 
             <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Série</p>
-              <p>{asset.series}</p>
+              <p className="text-slate-400 text-xs font-bold uppercase">Rating</p>
+              <p>{asset.agencia} {asset.rating}</p>
+              ({asset.divulgacao})
             </div>
 
           </div>
