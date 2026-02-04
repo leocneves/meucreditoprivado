@@ -1,0 +1,24 @@
+404 · HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Meu Crédito Privado</title>
+    <script>
+        // Single Page Apps for GitHub Pages
+        // https://github.com/rafgraph/spa-github-pages
+        // Redireciona 404 para index.html preservando a rota
+        sessionStorage.redirect = location.href;
+        location.replace(
+            location.origin + 
+            location.pathname.split('/').slice(0, -1).join('/') + 
+            '/?p=/' + 
+            location.pathname.slice(1).split('/').slice(1).join('/').replace(/&/g, '~and~') +
+            (location.search ? '&q=' + location.search.slice(1).replace(/&/g, '~and~') : '') +
+            location.hash
+        );
+    </script>
+</head>
+<body>
+</body>
+</html>

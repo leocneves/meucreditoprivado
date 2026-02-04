@@ -170,38 +170,38 @@ const Home: React.FC = () => {
   }, [assets]);
 
   const mediaDurationNaoVencidos = useMemo(() => {
-      const hoje = new Date();
-    
-      const durationsEmAnos: number[] = [];
-    
-      assets.forEach(asset => {
-        if (!asset.vencimento || asset.duration == null) return;
-    
-        let dataVenc: Date;
-    
-        if (asset.vencimento.includes('/')) {
-          const [d, m, y] = asset.vencimento.split('/');
-          dataVenc = new Date(`${y}-${m}-${d}`);
-        } else {
-          dataVenc = new Date(asset.vencimento);
-        }
-    
-        if (dataVenc < hoje) return;
-    
-        const d = parseFloat(asset.duration);
-    
-        if (isNaN(d)) return;
-    
-        // duration vem em dias → converter pra anos
-        durationsEmAnos.push(d / 365);
-      });
-    
-      if (durationsEmAnos.length === 0) return 0;
-    
-      const soma = durationsEmAnos.reduce((a, b) => a + b, 0);
-    
-      return soma / durationsEmAnos.length;
-    }, [assets]);
+    const hoje = new Date();
+  
+    const durationsEmAnos: number[] = [];
+  
+    assets.forEach(asset => {
+      if (!asset.vencimento || asset.duration == null) return;
+  
+      let dataVenc: Date;
+  
+      if (asset.vencimento.includes('/')) {
+        const [d, m, y] = asset.vencimento.split('/');
+        dataVenc = new Date(`${y}-${m}-${d}`);
+      } else {
+        dataVenc = new Date(asset.vencimento);
+      }
+  
+      if (dataVenc < hoje) return;
+  
+      const d = parseFloat(asset.duration);
+  
+      // 👇 NOVA CONDIÇÃO
+      if (isNaN(d) || d <= 0) return;
+  
+      durationsEmAnos.push(d);
+    });
+  
+    if (durationsEmAnos.length === 0) return 0;
+  
+    const soma = durationsEmAnos.reduce((a, b) => a + b, 0);
+  
+    return soma / durationsEmAnos.length;
+  }, [assets]);  
 
   // const addDurationYears = (a: Asset) => {
   //   const d = parseNumber(a.duration)
@@ -411,7 +411,8 @@ const Home: React.FC = () => {
 
               {byIssuerTotal
                 .filter(([issuer]) => 
-                  !issuer.toUpperCase().includes("SECURITIZADORA")
+                  !issuer.toUpperCase().includes("SECURITIZADORA") &&
+                  !issuer.toUpperCase().includes("SECURITIZACAO")
                 ).slice(0, 10)
                 .map(([issuer, qty], i) => (
                   <div
