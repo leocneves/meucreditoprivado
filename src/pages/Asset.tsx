@@ -199,6 +199,16 @@ const AssetPage: React.FC = () => {
             </div>
 
             <div>
+              <p className="text-slate-400 text-xs font-bold uppercase">EMISSAO</p>
+              <p className="font-mono text-sm">{asset.emissao}</p>
+            </div>
+
+            <div>
+              <p className="text-slate-400 text-xs font-bold uppercase">SÉRIE</p>
+              <p className="font-mono text-sm">{asset.serie}</p>
+            </div>
+
+            <div>
               <p className="text-slate-400 text-xs font-bold uppercase">Vencimento</p>
               <p className="font-mono text-sm">
                 {formatDatePretty(asset.vencimento)}
@@ -223,13 +233,13 @@ const AssetPage: React.FC = () => {
             </div>
 
             <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">CNPJ</p>
-              <p className="font-mono text-sm">{asset.issuer_cnpj}</p>
+              <p className="text-slate-400 text-xs font-bold uppercase">TAXA EMISSÃO</p>
+              <p className="font-mono text-sm">{asset.taxa_emissao}</p>
             </div>
 
             <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Setor</p>
-              <p>{asset.sector}</p>
+              <p className="text-slate-400 text-xs font-bold uppercase">DATA EMISSÃO</p>
+              <p>{formatDatePretty(asset.data_emissao)}</p>
             </div>
 
             <div>

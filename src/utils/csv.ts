@@ -14,8 +14,7 @@ export interface Asset {
   dt_emissao: string;
   emissao: string;
   serie: string;
-  taxa: string;
-  pct_taxa: string;
+  taxa_emissao: string;
   indexador: string;
   rating: string;
   agencia: string;

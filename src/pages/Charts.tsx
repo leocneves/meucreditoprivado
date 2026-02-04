@@ -605,7 +605,7 @@ const CreditDashboard: React.FC = () => {
                     <td className="p-2 font-medium">{a.serie}</td>
                     <td className="p-2">{a.issuer}</td>
                     <td className="p-2">{a.indexador}</td>
-                    <td className="p-2">{a.taxa}</td>
+                    <td className="p-2">{a.taxa_emissao}</td>
                     <td className="p-2">{a.pu}</td>
                     <td className="p-2">{a.agencia}</td>
                     <td className="p-2">{a.rating}</td>
