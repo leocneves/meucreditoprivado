@@ -78,7 +78,7 @@ const Navbar = () => {
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <Router basename="/">
       <div className="min-h-screen flex flex-col font-sans">
         <Navbar />
         <main className="flex-1">
