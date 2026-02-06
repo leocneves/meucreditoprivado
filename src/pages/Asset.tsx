@@ -39,8 +39,8 @@ const AssetPage: React.FC = () => {
     const loadData = async () => {
       try {
         const [assetsData, pricesData] = await Promise.all([
-          fetchCSV<Asset>('./data/assets_master.csv'),
-          fetchCSV<PriceRecord>('./data/prices.csv')
+          fetchCSV<Asset>('/data/assets_master.csv'),
+          fetchCSV<PriceRecord>('/data/prices.csv')
         ]);
 
         const found = assetsData.find(a => a.ticker === ticker);
