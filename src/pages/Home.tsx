@@ -249,13 +249,13 @@ const Home: React.FC = () => {
       </h1>
 
         <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-          Plataforma de crédito privado construída com automação e{' '}
+          Plataforma construída com automação e{' '}
           <span className="font-semibold text-slate-800">
             inteligência artificial
           </span>{' '}
           para centralizar, acompanhar e analisar dados do{' '}
           <span className="font-semibold text-slate-800">
-            mercado de CRIs, CRAs e Debêntures
+            mercado de CRIs, CRAs e Debêntures de forma GRATUITA
           </span>.
         </p>
 
@@ -353,7 +353,7 @@ const Home: React.FC = () => {
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
          <FileCheck size={36} className="text-emerald-600" />
           <div>
-            <p className="text-slate-400 text-sm">Documentos Monitoradas (último dia útil)</p>
+            <p className="text-slate-400 text-sm">Documentos Monitorados (último dia útil)</p>
             <p className="text-3xl font-bold text-slate-900">
               {(totalDocs)}
             </p>

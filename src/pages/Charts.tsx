@@ -572,13 +572,16 @@ const CreditDashboard: React.FC = () => {
               <tr>
                 <th className="p-2 text-left">Ticker</th>
                 <th className="p-2 text-left">ISIN</th>
-                <th className="p-2 text-left">Emissao</th>
+                <th className="p-2 text-left">Emissão</th>
                 <th className="p-2 text-left">Serie</th>
                 <th className="p-2 text-left">Emissor</th>
+                <th className="p-2 text-left">Volume Emissão</th>
                 <th className="p-2 text-left">Indexador</th>
-                <th className="p-2 text-left">Taxa Emissao</th>
+                <th className="p-2 text-left">Taxa Emissão</th>
+                <th className="p-2 text-left">Data Emissão</th>
+                <th className="p-2 text-left">Data Vencimento</th>
                 <th className="p-2 text-left">PU</th>
-                <th className="p-2 text-left">Agencia Rating</th>
+                <th className="p-2 text-left">Agência Rating</th>
                 <th className="p-2 text-left">Rating</th>
                 <th className="p-2 text-left">Data Divulgação Rating</th>
                 <th className="p-2 text-right">Spread</th>
@@ -604,8 +607,11 @@ const CreditDashboard: React.FC = () => {
                     <td className="p-2 font-medium">{a.emissao}</td>
                     <td className="p-2 font-medium">{a.serie}</td>
                     <td className="p-2">{a.issuer}</td>
+                    <td className="p-2">{a.volume}</td>
                     <td className="p-2">{a.indexador}</td>
                     <td className="p-2">{a.taxa_emissao}</td>
+                    <td className="p-2">{a.data_emissao}</td>
+                    <td className="p-2">{a.vencimento}</td>
                     <td className="p-2">{a.pu}</td>
                     <td className="p-2">{a.agencia}</td>
                     <td className="p-2">{a.rating}</td>
