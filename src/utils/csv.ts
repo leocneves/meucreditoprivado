@@ -10,6 +10,7 @@ export interface Asset {
   indexador?: string;
   taxa_emissao?: string;
   rating?: string;
+  rating_normalizado?: string;
   agencia?: string;
   divulgacao?: string;
   duration?: string;
@@ -31,6 +32,128 @@ export interface Asset {
   issuer_cnpj?: string;
   sector?: string;
 }
+
+export const RATING_SCALE_ORDER = [
+  'AAA',
+  'AA+',
+  'AA',
+  'AA-',
+  'A+',
+  'A',
+  'A-',
+  'BBB+',
+  'BBB',
+  'BBB-',
+  'BB+',
+  'BB',
+  'BB-',
+  'B+',
+  'B',
+  'B-',
+  'CCC+',
+  'CCC',
+  'CCC-',
+  'CC',
+  'C',
+  'D',
+  'Sem Rating'
+];
+
+export const normalizeRating = (val?: string | null): string => {
+  if (!val || typeof val !== 'string') return 'Sem Rating';
+  let r = val.trim();
+  if (['nan', 'none', 'n/a', '', '-'].includes(r.toLowerCase())) {
+    return 'Sem Rating';
+  }
+
+  // Substituir hífens especiais
+  r = r.replace(/[–—−]/g, '-');
+
+  // Tratar ratings compostos como Ba2/Aa2.br -> pegar a escala nacional se existir
+  if (r.includes('/')) {
+    const parts = r.split('/');
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const pNorm = normalizeRating(parts[i]);
+      if (pNorm !== 'Sem Rating') return pNorm;
+    }
+  }
+
+  // Tratar parênteses não fechados como AA+(bra
+  if (r.includes('(') && !r.includes(')')) {
+    r = r.replace(/\(.*/, '');
+  }
+
+  // Remover anotações entre parênteses: (P), (sf), (exp), (o.e.), (bra), (Bra), (br), etc.
+  r = r.replace(/\s*\([^)]*\)/gi, '');
+
+  // Remover prefixos nacionais: 'br.', 'Br.', 'br', 'Br'
+  r = r.replace(/^(br\.|br|br\s+)/gi, '');
+
+  // Tratar sufixos estruturados sf, exp, oe, sr
+  r = r.replace(/(AAA|AA\+|AA-|AA|A\+|A-|A|BBB\+|BBB-|BBB|BB\+|BB-|BB|B\+|B-|B|CCC\+|CCC-|CCC|CC|C|D)\s*sf\b/gi, '$1');
+  r = r.replace(/\b(sf|exp|oe|sr)\b/gi, '');
+  r = r.replace(/SR$/gi, '');
+
+  // Remover sufixos nacionais: '.br', '-br', '.BR', 'br'
+  r = r.replace(/(\.br|-br|\s+br)$/gi, '');
+
+  // Limpeza de pontuação e espaços
+  r = r.replace(/^[.\s\-_]+|[.\s\-_]+$/g, '');
+
+  const rUp = r.toUpperCase();
+
+  // Mapeamento escala Moody's global / alfanumérica
+  const moodysMap: Record<string, string> = {
+    'AAA': 'AAA',
+    'AA1': 'AA+',
+    'AA2': 'AA',
+    'AA3': 'AA-',
+    'A1': 'A+',
+    'A2': 'A',
+    'A3': 'A-',
+    'BAA1': 'BBB+',
+    'BAA2': 'BBB',
+    'BAA3': 'BBB-',
+    'BA1': 'BB+',
+    'BA2': 'BB',
+    'BA3': 'BB-',
+    'B1': 'B+',
+    'B2': 'B',
+    'B3': 'B-',
+    'CAA1': 'CCC+',
+    'CAA2': 'CCC',
+    'CAA3': 'CCC-',
+    'CA': 'CC',
+    'C': 'C',
+    'D': 'D'
+  };
+
+  if (moodysMap[rUp]) return moodysMap[rUp];
+
+  // Regex padrão da escala Fitch / S&P
+  const match = rUp.match(/^(AAA|AA\+|AA-|AA|A\+|A-|A|BBB\+|BBB-|BBB|BB\+|BB-|BB|B\+|B-|B|CCC\+|CCC-|CCC|CC|C|D)\b/);
+  if (match) {
+    return match[1];
+  }
+
+  return rUp || 'Sem Rating';
+};
+
+export const getRatingBadgeClass = (normRating: string): string => {
+  if (['AAA', 'AA+', 'AA', 'AA-', 'A+', 'A', 'A-'].includes(normRating)) {
+    return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+  }
+  if (['BBB+', 'BBB', 'BBB-'].includes(normRating)) {
+    return 'bg-blue-50 text-blue-700 border-blue-200';
+  }
+  if (['BB+', 'BB', 'BB-', 'B+', 'B', 'B-'].includes(normRating)) {
+    return 'bg-amber-50 text-amber-700 border-amber-200';
+  }
+  if (['CCC+', 'CCC', 'CCC-', 'CC', 'C', 'D'].includes(normRating)) {
+    return 'bg-rose-50 text-rose-700 border-rose-200';
+  }
+  return 'bg-slate-100 text-slate-600 border-slate-200';
+};
 
 export interface DocsOverview {
   tipo: string;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchCSV, Asset, PriceRecord } from '../utils/csv';
+import { fetchCSV, Asset, PriceRecord, normalizeRating, getRatingBadgeClass } from '../utils/csv';
 import ChartComponent from '../components/ChartComponent';
 import { ArrowLeft, Star, FileText, Calendar, Percent } from 'lucide-react';
 
@@ -255,13 +255,24 @@ const AssetPage: React.FC = () => {
 
             <div>
               <p className="text-slate-400 text-xs font-bold uppercase">Tipo de Ativo</p>
-              <p className="capitalize">{asset.tipo}</p>
+              <p className="capitalize font-medium text-slate-800">{asset.tipo || 'Título'}</p>
             </div>
 
             <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Rating</p>
-              <p>{asset.agencia} {asset.rating}</p>
-              ({asset.divulgacao})
+              <p className="text-slate-400 text-xs font-bold uppercase">Rating Normalizado</p>
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold border mt-1 ${getRatingBadgeClass(asset.rating_normalizado || normalizeRating(asset.rating))}`}>
+                {asset.rating_normalizado || normalizeRating(asset.rating)}
+              </span>
+            </div>
+
+            <div>
+              <p className="text-slate-400 text-xs font-bold uppercase">Rating Original & Agência</p>
+              <p className="text-sm font-medium text-slate-800">
+                {asset.agencia || '-'} — <span className="font-mono text-slate-600 font-semibold">{asset.rating || '-'}</span>
+              </p>
+              {asset.divulgacao && (
+                <span className="text-xs text-slate-400 block mt-0.5">Divulgado em: {formatDatePretty(asset.divulgacao)}</span>
+              )}
             </div>
 
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { fetchCSV, Asset } from '../utils/csv'
+import { fetchCSV, Asset, normalizeRating, RATING_SCALE_ORDER, getRatingBadgeClass } from '../utils/csv'
 import {
   ResponsiveContainer,
   ScatterChart,
@@ -108,20 +108,25 @@ const CreditDashboard: React.FC = () => {
   const ativosVivosBase = useMemo(() => {
     const hoje = new Date()
 
-    return assets.filter(a => {
-      if (!a.vencimento) return false
+    return assets
+      .filter(a => {
+        if (!a.vencimento) return false
 
-      let d: Date
+        let d: Date
 
-      if (a.vencimento.includes('/')) {
-        const [dd, mm, yy] = a.vencimento.split('/')
-        d = new Date(`${yy}-${mm}-${dd}`)
-      } else {
-        d = new Date(a.vencimento)
-      }
+        if (a.vencimento.includes('/')) {
+          const [dd, mm, yy] = a.vencimento.split('/')
+          d = new Date(`${yy}-${mm}-${dd}`)
+        } else {
+          d = new Date(a.vencimento)
+        }
 
-      return d >= hoje
-    })
+        return d >= hoje
+      })
+      .map(a => ({
+        ...a,
+        rating_normalizado: a.rating_normalizado || normalizeRating(a.rating)
+      }))
   }, [assets])
 
   /* ---------- Options encadeadas ---------- */
@@ -134,7 +139,7 @@ const CreditDashboard: React.FC = () => {
   const issuersOptions = useMemo(() => {
     let base = ativosVivosBase
     if (indexadoresSel.length)
-      base = base.filter(a => indexadoresSel.includes(a.indexador))
+      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
     return unique(base.map(a => a.issuer))
   }, [ativosVivosBase, indexadoresSel])
 
@@ -142,10 +147,10 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
 
     if (indexadoresSel.length)
-      base = base.filter(a => indexadoresSel.includes(a.indexador))
+      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
 
     if (issuersSel.length)
-      base = base.filter(a => issuersSel.includes(a.issuer))
+      base = base.filter(a => issuersSel.includes(a.issuer || ''))
 
     return unique(base.map(a => a.ticker))
   }, [ativosVivosBase, indexadoresSel, issuersSel])
@@ -154,15 +159,20 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
   
     if (indexadoresSel.length)
-      base = base.filter(a => indexadoresSel.includes(a.indexador))
+      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
   
     if (issuersSel.length)
-      base = base.filter(a => issuersSel.includes(a.issuer))
+      base = base.filter(a => issuersSel.includes(a.issuer || ''))
   
     if (tickersSel.length)
       base = base.filter(a => tickersSel.includes(a.ticker))
   
-    return unique(base.map(a => a.rating))
+    const available = unique(base.map(a => a.rating_normalizado || 'Sem Rating'))
+    return available.sort((a, b) => {
+      const idxA = RATING_SCALE_ORDER.indexOf(a)
+      const idxB = RATING_SCALE_ORDER.indexOf(b)
+      return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB)
+    })
   }, [ativosVivosBase, indexadoresSel, issuersSel, tickersSel])
 
   /* ---------- Assets filtrados ---------- */
@@ -171,20 +181,20 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
 
     if (indexadoresSel.length)
-      base = base.filter(a => indexadoresSel.includes(a.indexador))
+      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
 
     if (issuersSel.length)
-      base = base.filter(a => issuersSel.includes(a.issuer))
+      base = base.filter(a => issuersSel.includes(a.issuer || ''))
 
     if (tickersSel.length)
       base = base.filter(a => tickersSel.includes(a.ticker))
 
     if (ratingsSel.length)
-      base = base.filter(a => ratingsSel.includes(a.rating))
+      base = base.filter(a => ratingsSel.includes(a.rating_normalizado || 'Sem Rating'))
 
     if (spreadMin !== null || spreadMax !== null) {
       base = base.filter(a => {
-        const s = parseFloat(a.spread) * 100
+        const s = parseFloat(a.spread || '') * 100
         if (isNaN(s)) return false
         if (spreadMin !== null && s < spreadMin) return false
         if (spreadMax !== null && s > spreadMax) return false
@@ -384,14 +394,14 @@ const CreditDashboard: React.FC = () => {
 
         <div>
           <label className="text-sm text-slate-600 mb-1 block">
-            Rating
+            Rating (Normalizado)
           </label>
 
           <SearchMultiSelect
             options={ratingsOptions}
             selected={ratingsSel}
             onChange={setRatingsSel}
-            placeholder="Buscar rating..."
+            placeholder="Buscar rating normalizado (ex: AAA, AA+)..."
           />
 
           <button
@@ -581,9 +591,10 @@ const CreditDashboard: React.FC = () => {
                 <th className="p-2 text-left">Data Emissão</th>
                 <th className="p-2 text-left">Data Vencimento</th>
                 <th className="p-2 text-left">PU</th>
-                <th className="p-2 text-left">Agência Rating</th>
-                <th className="p-2 text-left">Rating</th>
-                <th className="p-2 text-left">Data Divulgação Rating</th>
+                <th className="p-2 text-left">Agência</th>
+                <th className="p-2 text-left">Rating Original</th>
+                <th className="p-2 text-left">Rating (Normalizado)</th>
+                <th className="p-2 text-left">Data Rating</th>
                 <th className="p-2 text-right">Spread</th>
                 <th className="p-2 text-right">Duration (anos)</th>
                 <th className="p-2 text-right">Volume</th>
@@ -595,29 +606,39 @@ const CreditDashboard: React.FC = () => {
               {filteredAssets.map((a, i) => {
 
                 const d = durationYears(a)
-                const spread = parseFloat(a.spread) * 100
+                const spread = parseFloat(a.spread || '') * 100
+                const normRating = a.rating_normalizado || normalizeRating(a.rating)
 
                 return (
                   <tr
                     key={i}
                     className="border-b hover:bg-slate-50"
                   >
-                    <td className="p-2 font-medium">{a.ticker}</td>
-                    <td className="p-2 font-medium">{a.isin}</td>
-                    <td className="p-2 font-medium">{a.emissao}</td>
-                    <td className="p-2 font-medium">{a.serie}</td>
-                    <td className="p-2">{a.issuer}</td>
-                    <td className="p-2">{a.volume}</td>
-                    <td className="p-2">{a.indexador}</td>
-                    <td className="p-2">{a.taxa_emissao}</td>
-                    <td className="p-2">{a.data_emissao}</td>
-                    <td className="p-2">{a.vencimento}</td>
-                    <td className="p-2">{a.pu}</td>
-                    <td className="p-2">{a.agencia}</td>
-                    <td className="p-2">{a.rating}</td>
-                    <td className="p-2">{a.divulgacao}</td>
+                    <td className="p-2 font-medium">
+                      <a href={`/asset/${a.ticker}`} className="text-blue-600 hover:underline">
+                        {a.ticker}
+                      </a>
+                    </td>
+                    <td className="p-2 font-mono text-xs">{a.isin || '-'}</td>
+                    <td className="p-2 font-medium">{a.emissao || '-'}</td>
+                    <td className="p-2 font-medium">{a.serie || '-'}</td>
+                    <td className="p-2 max-w-[200px] truncate" title={a.issuer}>{a.issuer || '-'}</td>
+                    <td className="p-2">{a.volume || '-'}</td>
+                    <td className="p-2 font-semibold">{a.indexador || '-'}</td>
+                    <td className="p-2">{a.taxa_emissao || '-'}</td>
+                    <td className="p-2">{a.data_emissao || '-'}</td>
+                    <td className="p-2">{a.vencimento || '-'}</td>
+                    <td className="p-2">{a.pu || '-'}</td>
+                    <td className="p-2 text-xs text-slate-600">{a.agencia || '-'}</td>
+                    <td className="p-2 font-mono text-xs text-slate-500">{a.rating || '-'}</td>
+                    <td className="p-2">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold border ${getRatingBadgeClass(normRating)}`}>
+                        {normRating}
+                      </span>
+                    </td>
+                    <td className="p-2 text-xs text-slate-500">{a.divulgacao || '-'}</td>
 
-                    <td className="p-2 text-right">
+                    <td className="p-2 text-right font-medium">
                       {isNaN(spread) ? '-' : spread.toFixed(1)}
                     </td>
 

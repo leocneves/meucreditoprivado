@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import sqlite3
 import pandas as pd
@@ -10,6 +11,50 @@ DB_PATH = "/home/home/airflow/src/data/credito_privado.db"
 CSV_PATH = "public/data/assets_master.csv"
 OUTPUT_DIR = "public/asset"
 DOCS_OUTPUT_DIR = "docs/asset"
+
+def normalize_rating(val):
+    if not val or not isinstance(val, str):
+        return None
+    r = val.strip()
+    if r.lower() in ('nan', 'none', 'n/a', '', '-'):
+        return None
+
+    r = r.replace('–', '-').replace('—', '-').replace('−', '-')
+    
+    if '/' in r:
+        parts = r.split('/')
+        for p in reversed(parts):
+            p_norm = normalize_rating(p)
+            if p_norm:
+                return p_norm
+
+    if '(' in r and ')' not in r:
+        r = re.sub(r'\(.*', '', r)
+
+    r = re.sub(r'\s*\([^)]*\)', '', r, flags=re.IGNORECASE)
+    r = re.sub(r'^(br\.|br|br\s+)', '', r, flags=re.IGNORECASE)
+    r = re.sub(r'(AAA|AA\+|AA-|AA|A\+|A-|A|BBB\+|BBB-|BBB|BB\+|BB-|BB|B\+|B-|B|CCC\+|CCC-|CCC|CC|C|D)\s*sf\b', r'\1', r, flags=re.IGNORECASE)
+    r = re.sub(r'\b(sf|exp|oe|sr)\b', '', r, flags=re.IGNORECASE)
+    r = re.sub(r'SR$', '', r, flags=re.IGNORECASE)
+    r = re.sub(r'(\.br|-br|\s+br)$', '', r, flags=re.IGNORECASE)
+    r = r.strip(' .-_')
+    r_up = r.upper()
+
+    moodys_map = {
+        'AAA': 'AAA', 'AA1': 'AA+', 'AA2': 'AA', 'AA3': 'AA-',
+        'A1': 'A+', 'A2': 'A', 'A3': 'A-', 'BAA1': 'BBB+', 'BAA2': 'BBB',
+        'BAA3': 'BBB-', 'BA1': 'BB+', 'BA2': 'BB', 'BA3': 'BB-',
+        'B1': 'B+', 'B2': 'B', 'B3': 'B-', 'CAA1': 'CCC+', 'CAA2': 'CCC',
+        'CAA3': 'CCC-', 'CA': 'CC', 'C': 'C', 'D': 'D'
+    }
+    if r_up in moodys_map:
+        return moodys_map[r_up]
+
+    m = re.match(r'^(AAA|AA\+|AA-|AA|A\+|A-|A|BBB\+|BBB-|BBB|BB\+|BB-|BB|B\+|B-|B|CCC\+|CCC-|CCC|CC|C|D)\b', r_up)
+    if m:
+        return m.group(1)
+
+    return r_up if r_up else None
 
 def get_assets():
     if os.path.exists(CSV_PATH):
@@ -56,6 +101,10 @@ def generate_asset_html(row):
     if rating.lower() in ('nan', 'none', ''):
         rating = '-'
 
+    rating_norm = normalize_rating(rating) or rating
+    if rating_norm == '-':
+        rating_norm = 'Sem Rating'
+
     agencia = str(row.get('agencia', '')).strip()
     if agencia.lower() in ('nan', 'none', ''):
         agencia = '-'
@@ -100,10 +149,10 @@ def generate_asset_html(row):
             pass
 
     page_url = f"{BASE_URL}/asset/{ticker}"
-    title = f"{tipo} {ticker} ({issuer}) — Taxas, Rating, Spread e Vencimento | FIXDATA"
+    title = f"{tipo} {ticker} ({issuer}) — Taxas, Rating {rating_norm}, Spread e Vencimento | FIXDATA"
     description = (
         f"Análise completa e dados de mercado de {tipo} {ticker} emitida por {issuer}. "
-        f"Indexador: {indexador} (Taxa: {taxa}), Vencimento: {vencimento}, Rating: {rating} ({agencia}), "
+        f"Indexador: {indexador} (Taxa: {taxa}), Vencimento: {vencimento}, Rating Normalizado: {rating_norm} (Original: {rating} - {agencia}), "
         f"Duration: {duration}, Spread: {spread}. Acompanhe cotações e gráficos no FIXDATA."
     )
 
@@ -219,8 +268,8 @@ def generate_asset_html(row):
               <h1 class="text-3xl font-extrabold text-slate-900 mt-2">{ticker}</h1>
               <p class="text-lg text-slate-600 font-medium">{issuer}</p>
             </div>
-            <div class="flex gap-2">
-              <span class="px-3 py-1.5 bg-slate-100 border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg">Rating: <strong>{rating}</strong></span>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-800 text-sm font-bold rounded-lg">Rating (Normalizado): <strong>{rating_norm}</strong></span>
               <span class="px-3 py-1.5 bg-slate-100 border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg">Indexador: <strong>{indexador}</strong></span>
             </div>
           </div>
@@ -255,8 +304,8 @@ def generate_asset_html(row):
               <strong class="text-sm text-slate-800">{pu}</strong>
             </div>
             <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">Agência de Rating</span>
-              <strong class="text-sm text-slate-800">{agencia}</strong>
+              <span class="text-xs text-slate-500 font-medium block">Agência / Rating Original</span>
+              <strong class="text-sm text-slate-800">{agencia} ({rating})</strong>
             </div>
           </div>
         </div>
