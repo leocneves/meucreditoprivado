@@ -12,7 +12,7 @@ const CSV_PATH = path.join(
   "../public/data/assets_master.csv"
 );
 
-const BASE_URL = "https://meucreditoprivado.netlify.app";
+const BASE_URL = "https://fixdata.netlify.app";
 
 const OUTPUT_PATH = path.join(
   __dirname,

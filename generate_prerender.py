@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 
-BASE_URL = "https://meucreditoprivado.netlify.app"
+BASE_URL = "https://fixdata.netlify.app"
 DB_PATH = "/home/home/airflow/src/data/credito_privado.db"
 CSV_PATH = "public/data/assets_master.csv"
 OUTPUT_DIR = "public/asset"

@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 
-BASE_URL = "https://meucreditoprivado.netlify.app"
+BASE_URL = "https://fixdata.netlify.app"
 
 CSV_PATH = "public/data/assets_master.csv"   # ajuste se necessário
 OUTPUT_FILE = "public/sitemap.xml"
