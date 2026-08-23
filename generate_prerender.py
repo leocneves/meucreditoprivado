@@ -56,6 +56,42 @@ def normalize_rating(val):
 
     return r_up if r_up else None
 
+def get_emitters_map():
+    emitters_file = "public/data/emitters_master.csv"
+    if not os.path.exists(emitters_file):
+        emitters_file = "/home/home/airflow/src/cp_site/data/emitters_master.csv"
+    
+    if not os.path.exists(emitters_file):
+        return {}
+    
+    try:
+        df_e = pd.read_csv(emitters_file)
+        e_dict = {}
+        for _, row in df_e.iterrows():
+            rs = str(row.get('razao_social', '')).strip().lower()
+            nf = str(row.get('nome_fantasia', '')).strip().lower()
+            item = {
+                'cnpj': str(row.get('cnpj', '')).strip(),
+                'cnpj_formatado': str(row.get('cnpj_formatado', '')).strip(),
+                'razao_social': str(row.get('razao_social', '')).strip(),
+                'nome_fantasia': str(row.get('nome_fantasia', '')).strip(),
+                'setor': str(row.get('setor', '')).strip(),
+                'categoria_cvm': str(row.get('categoria_cvm', '')).strip(),
+                'situacao_cvm': str(row.get('situacao_cvm', '')).strip(),
+                'site_ri': str(row.get('site_ri', '')).strip() if pd.notna(row.get('site_ri')) else None,
+                'municipio': str(row.get('municipio', '')).strip() if pd.notna(row.get('municipio')) else None,
+                'uf': str(row.get('uf', '')).strip() if pd.notna(row.get('uf')) else None,
+                'descricao': str(row.get('descricao', '')).strip() if pd.notna(row.get('descricao')) else None
+            }
+            if rs and rs not in ('nan', 'none', ''):
+                e_dict[rs] = item
+            if nf and nf not in ('nan', 'none', ''):
+                e_dict[nf] = item
+        return e_dict
+    except Exception as err:
+        print(f"Erro ao carregar mapa de emissores: {err}")
+        return {}
+
 def get_assets():
     if os.path.exists(CSV_PATH):
         df = pd.read_csv(CSV_PATH)
@@ -66,6 +102,8 @@ def get_assets():
     else:
         raise FileNotFoundError("Base de dados de ativos não encontrada.")
     return df
+
+EMITTERS_MAP = get_emitters_map()
 
 def generate_asset_html(row):
     ticker = str(row.get('ticker', '')).strip()
@@ -148,13 +186,34 @@ def generate_asset_html(row):
         except:
             pass
 
+    # Procurar emissor cadastrado
+    issuer_key = issuer.strip().lower()
+    emitter_info = EMITTERS_MAP.get(issuer_key)
+    if not emitter_info:
+        for k, v in EMITTERS_MAP.items():
+            if len(k) > 3 and (k in issuer_key or issuer_key in k):
+                emitter_info = v
+                break
+
     page_url = f"{BASE_URL}/asset/{ticker}"
     title = f"{tipo} {ticker} ({issuer}) — Taxas, Rating {rating_norm}, Spread e Vencimento | FIXDATA"
+    
+    cnpj_desc = f" (CNPJ: {emitter_info['cnpj_formatado']})" if emitter_info and emitter_info.get('cnpj_formatado') else ""
     description = (
-        f"Análise completa e dados de mercado de {tipo} {ticker} emitida por {issuer}. "
+        f"Análise completa e dados de mercado de {tipo} {ticker} emitida por {issuer}{cnpj_desc}. "
         f"Indexador: {indexador} (Taxa: {taxa}), Vencimento: {vencimento}, Rating Normalizado: {rating_norm} (Original: {rating} - {agencia}), "
         f"Duration: {duration}, Spread: {spread}. Acompanhe cotações e gráficos no FIXDATA."
     )
+
+    provider_data = {
+        "@type": "Organization",
+        "name": issuer
+    }
+    if emitter_info:
+        if emitter_info.get('cnpj_formatado'):
+            provider_data["taxID"] = emitter_info['cnpj_formatado']
+        if emitter_info.get('site_ri'):
+            provider_data["url"] = emitter_info['site_ri']
 
     schema_json = json.dumps({
         "@context": "https://schema.org",
@@ -165,11 +224,34 @@ def generate_asset_html(row):
         "description": description,
         "url": page_url,
         "category": tipo,
-        "provider": {
-            "@type": "Organization",
-            "name": issuer
-        }
+        "provider": provider_data
     }, ensure_ascii=False)
+
+    emitter_section_html = ""
+    if emitter_info:
+        ri_button = f'<a href="{emitter_info["site_ri"]}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200">Portal de RI &rarr;</a>' if emitter_info.get("site_ri") else ""
+        razao_sub = f'<p class="text-xs text-slate-500 font-medium">{emitter_info["razao_social"]}</p>' if emitter_info.get("razao_social") and emitter_info.get("razao_social") != emitter_info.get("nome_fantasia") else ""
+        desc_box = f'<p class="text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100 mt-3">{emitter_info["descricao"]}</p>' if emitter_info.get("descricao") else ""
+        sede = f'{emitter_info.get("municipio") or ""} / {emitter_info.get("uf") or ""}'.strip(' /') or 'Brasil'
+        emitter_section_html = f"""
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Perfil do Emissor / Devedor CVM</span>
+              <h2 class="text-xl font-extrabold text-slate-900 mt-0.5">{emitter_info.get('nome_fantasia') or emitter_info.get('razao_social')}</h2>
+              {razao_sub}
+            </div>
+            {ri_button}
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="p-2.5 bg-slate-50 rounded-lg"><span class="text-slate-400 font-bold block mb-0.5">CNPJ</span><strong class="text-slate-800 font-mono text-sm">{emitter_info.get('cnpj_formatado') or '-'}</strong></div>
+            <div class="p-2.5 bg-slate-50 rounded-lg"><span class="text-slate-400 font-bold block mb-0.5">Setor</span><strong class="text-slate-800">{emitter_info.get('setor') or '-'}</strong></div>
+            <div class="p-2.5 bg-slate-50 rounded-lg"><span class="text-slate-400 font-bold block mb-0.5">Registro CVM</span><strong class="text-emerald-700">{emitter_info.get('situacao_cvm') or 'Ativo'}</strong></div>
+            <div class="p-2.5 bg-slate-50 rounded-lg"><span class="text-slate-400 font-bold block mb-0.5">Sede</span><strong class="text-slate-800">{sede}</strong></div>
+          </div>
+          {desc_box}
+        </div>
+        """
 
     html_content = f"""<!DOCTYPE html>
 <html lang="pt-BR">
@@ -238,24 +320,22 @@ def generate_asset_html(row):
     </script>
     <link rel="stylesheet" href="/index.css">
   </head>
-  <body class="bg-slate-50 text-slate-900">
+  <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <!-- Semantic Static Fallback for Search Crawlers -->
-      <header class="bg-white border-b border-slate-200 py-4 px-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-          <a href="/" class="text-xl font-extrabold tracking-tight text-slate-800">
-            FIX<span class="text-blue-600">DATA</span>
+      <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+          <a href="/" class="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900">
+            <span class="text-blue-600">FIX</span>DATA
           </a>
-          <nav class="space-x-4 text-sm font-semibold text-slate-600">
-            <a href="/" class="hover:text-blue-600">Home</a>
-            <a href="/charts" class="hover:text-blue-600">Dashboard</a>
-            <a href="/primary" class="hover:text-blue-600">Mercado Primário</a>
+          <nav class="flex items-center gap-4 text-sm font-medium text-slate-600">
+            <a href="/" class="hover:text-blue-600 transition">Início</a>
+            <a href="/charts" class="hover:text-blue-600 transition">Dashboard & Filtros</a>
           </nav>
         </div>
       </header>
 
-      <main class="max-w-5xl mx-auto px-4 py-8 space-y-6">
-        <div class="flex items-center gap-2 text-sm text-slate-500">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+        <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/" class="hover:underline">{tipo}s</a> &gt;
           <span class="text-slate-800 font-bold">{ticker}</span>
@@ -309,6 +389,8 @@ def generate_asset_html(row):
             </div>
           </div>
         </div>
+
+        {emitter_section_html}
 
         <p class="text-xs text-slate-400 text-center">
           Dados fornecidos por ANBIMA, CVM e B3 através do FIXDATA. Cotações e preços históricos sujeitos à liquidez do mercado secundário.

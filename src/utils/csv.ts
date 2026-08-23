@@ -172,6 +172,22 @@ export interface PriceRecord {
   volume_traded: string;
 }
 
+export interface Emitter {
+  cnpj: string;
+  cnpj_formatado?: string;
+  razao_social: string;
+  nome_fantasia?: string;
+  setor?: string;
+  categoria_cvm?: string;
+  situacao_cvm?: string;
+  site_ri?: string;
+  email?: string;
+  municipio?: string;
+  uf?: string;
+  tipo_emissor?: string;
+  descricao?: string;
+}
+
 export interface Metadata {
   last_update: string;
 }

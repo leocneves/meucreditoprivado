@@ -65,24 +65,22 @@
     </script>
     <link rel="stylesheet" href="/index.css">
   </head>
-  <body class="bg-slate-50 text-slate-900">
+  <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <!-- Semantic Static Fallback for Search Crawlers -->
-      <header class="bg-white border-b border-slate-200 py-4 px-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-          <a href="/" class="text-xl font-extrabold tracking-tight text-slate-800">
-            FIX<span class="text-blue-600">DATA</span>
+      <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+          <a href="/" class="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900">
+            <span class="text-blue-600">FIX</span>DATA
           </a>
-          <nav class="space-x-4 text-sm font-semibold text-slate-600">
-            <a href="/" class="hover:text-blue-600">Home</a>
-            <a href="/charts" class="hover:text-blue-600">Dashboard</a>
-            <a href="/primary" class="hover:text-blue-600">Mercado Primário</a>
+          <nav class="flex items-center gap-4 text-sm font-medium text-slate-600">
+            <a href="/" class="hover:text-blue-600 transition">Início</a>
+            <a href="/charts" class="hover:text-blue-600 transition">Dashboard & Filtros</a>
           </nav>
         </div>
       </header>
 
-      <main class="max-w-5xl mx-auto px-4 py-8 space-y-6">
-        <div class="flex items-center gap-2 text-sm text-slate-500">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+        <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/" class="hover:underline">CRIs</a> &gt;
           <span class="text-slate-800 font-bold">22L0001601</span>
@@ -136,6 +134,8 @@
             </div>
           </div>
         </div>
+
+        
 
         <p class="text-xs text-slate-400 text-center">
           Dados fornecidos por ANBIMA, CVM e B3 através do FIXDATA. Cotações e preços históricos sujeitos à liquidez do mercado secundário.
