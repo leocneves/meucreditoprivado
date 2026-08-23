@@ -67,10 +67,12 @@ const AssetPage: React.FC = () => {
           fetchCSV<Emitter>('/data/emitters_master.csv')
         ]);
 
-        const found = assetsData.find(a => a.ticker === ticker);
+        const targetTicker = (ticker || '').trim().toUpperCase();
+        const found = assetsData.find(a => (a.ticker || '').trim().toUpperCase() === targetTicker);
         if (found) {
           setAsset(found);
-          setPrices(pricesData.filter(p => p.ticker === ticker));
+          const assetPrices = (pricesData || []).filter(p => p && (p.ticker || '').trim().toUpperCase() === targetTicker);
+          setPrices(assetPrices);
           
           const matched = matchEmitter(emittersData || [], found);
           setEmitter(matched);

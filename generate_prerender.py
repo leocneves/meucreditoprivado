@@ -103,7 +103,29 @@ def get_assets():
         raise FileNotFoundError("Base de dados de ativos não encontrada.")
     return df
 
+def get_prices_map():
+    prices_file = "public/data/prices.csv"
+    if not os.path.exists(prices_file):
+        prices_file = "/home/home/airflow/src/cp_site/data/prices.csv"
+    if not os.path.exists(prices_file):
+        return {}
+    try:
+        df_p = pd.read_csv(prices_file)
+        p_map = {}
+        for ticker, group in df_p.groupby('ticker'):
+            t_upper = str(ticker).strip().upper()
+            recent = group.tail(5).to_dict(orient='records')
+            p_map[t_upper] = {
+                'total_trades': len(group),
+                'recent': recent
+            }
+        return p_map
+    except Exception as err:
+        print(f"Erro ao carregar mapa de preços: {err}")
+        return {}
+
 EMITTERS_MAP = get_emitters_map()
+PRICES_MAP = get_prices_map()
 
 def generate_asset_html(row):
     ticker = str(row.get('ticker', '')).strip()
@@ -253,6 +275,40 @@ def generate_asset_html(row):
         </div>
         """
 
+    prices_info = PRICES_MAP.get(ticker.upper())
+    prices_section_html = ""
+    if prices_info and prices_info.get('recent'):
+        recent_items = prices_info['recent']
+        grid_items = ""
+        for item in reversed(recent_items):
+            dt = str(item.get('date', ''))
+            dt_fmt = f"{dt.split('-')[2]}/{dt.split('-')[1]}/{dt.split('-')[0]}" if '-' in dt else dt
+            yield_val = item.get('yield')
+            price_val = item.get('price')
+            yield_str = f"{float(yield_val):.4f}% a.a." if pd.notna(yield_val) and str(yield_val).lower() != 'nan' else "-"
+            price_str = f"R$ {float(price_val):,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.') if pd.notna(price_val) and str(price_val).lower() != 'nan' else "-"
+            grid_items += f"""
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+              <span class="text-[11px] text-slate-400 font-semibold block">{dt_fmt}</span>
+              <p class="font-bold text-blue-700 mt-0.5">{yield_str}</p>
+              <p class="text-[11px] text-slate-600 font-medium">{price_str}</p>
+            </div>
+            """
+        prices_section_html = f"""
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Histórico de Mercado Secundário</span>
+              <h2 class="text-xl font-extrabold text-slate-900 mt-0.5">Cotações e Taxas Indicativas ({ticker})</h2>
+            </div>
+            <span class="text-xs text-slate-500 font-medium">{prices_info['total_trades']} sessões registradas</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            {grid_items}
+          </div>
+        </div>
+        """
+
     html_content = f"""<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -308,13 +364,16 @@ def generate_asset_html(row):
         "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
         "papaparse": "https://esm.sh/papaparse@^5.5.3",
         "react": "https://esm.sh/react@^19.2.4",
+        "react-dom": "https://esm.sh/react-dom@^19.2.4",
+        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
         "fuse.js": "https://esm.sh/fuse.js@^7.1.0",
         "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
         "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
         "react/": "https://esm.sh/react@^19.2.4/",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "recharts": "https://esm.sh/recharts@^2.15.1",
         "chart.js": "https://esm.sh/chart.js@^4.5.1",
-        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1"
       }}
     }}
     </script>
@@ -391,6 +450,8 @@ def generate_asset_html(row):
         </div>
 
         {emitter_section_html}
+
+        {prices_section_html}
 
         <p class="text-xs text-slate-400 text-center">
           Dados fornecidos por ANBIMA, CVM e B3 através do FIXDATA. Cotações e preços históricos sujeitos à liquidez do mercado secundário.

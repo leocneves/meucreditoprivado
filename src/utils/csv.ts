@@ -203,8 +203,15 @@ export interface Metadata {
 }
 
 export const fetchCSV = <T,>(url: string): Promise<T[]> => {
+  let normalizedUrl = url;
+  if (normalizedUrl.startsWith('./data/')) {
+    normalizedUrl = '/data/' + normalizedUrl.slice(7);
+  } else if (normalizedUrl.startsWith('data/')) {
+    normalizedUrl = '/data/' + normalizedUrl.slice(5);
+  }
+
   return new Promise((resolve, reject) => {
-    Papa.parse(url, {
+    Papa.parse(normalizedUrl, {
       download: true,
       header: true,
       skipEmptyLines: true,
