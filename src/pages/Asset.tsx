@@ -47,6 +47,17 @@ const AssetPage: React.FC = () => {
         if (found) {
           setAsset(found);
           setPrices(pricesData.filter(p => p.ticker === ticker));
+
+          // SEO dinâmico por ativo
+          const tipoStr = found.tipo || 'Título';
+          const emissorStr = found.issuer ? `(${found.issuer})` : '';
+          document.title = `${tipoStr} ${found.ticker} ${emissorStr} — Taxas, Spread e Rating | FIXDATA`;
+          
+          const metaDesc = document.querySelector('meta[name="description"]');
+          const descText = `Análise de ${tipoStr} ${found.ticker} emitida por ${found.issuer || 'Emissor'}. Indexador: ${found.indexador || '-'}, Vencimento: ${found.vencimento || '-'}, Rating: ${found.rating || '-'}. Dados de mercado no FIXDATA.`;
+          if (metaDesc) {
+            metaDesc.setAttribute('content', descText);
+          }
         }
 
         const saved = localStorage.getItem('watchlist');

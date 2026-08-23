@@ -242,20 +242,17 @@ const Home: React.FC = () => {
 
       <section className="text-center space-y-6 px-4">
       <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-        Meu{' '}
-        <span className="text-blue-700">
-          Crédito Privado
-        </span>
+        FIX<span className="text-blue-600">DATA</span>
       </h1>
 
         <p className="text-slate-600 max-w-2xl mx-auto text-lg">
           Plataforma construída com automação e{' '}
           <span className="font-semibold text-slate-800">
-            inteligência artificial
+            inteligência de dados
           </span>{' '}
           para centralizar, acompanhar e analisar dados do{' '}
           <span className="font-semibold text-slate-800">
-            mercado de CRIs, CRAs e Debêntures de forma GRATUITA
+            mercado de Debêntures, CRIs e CRAs de forma 100% GRATUITA
           </span>.
         </p>
 

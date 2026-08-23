@@ -300,8 +300,8 @@ const CreditDashboard: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
 
-      <h1 className="text-3xl font-bold">
-        Dashboard — Crédito Privado
+      <h1 className="text-3xl font-bold text-slate-900">
+        Dashboard — Renda Fixa e Mercado Secundário
       </h1>
 
       {/* FILTERS */}

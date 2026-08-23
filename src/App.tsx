@@ -23,8 +23,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">MCP</div>
-            {/* <span className="font-black text-xl tracking-tighter text-slate-900 hidden sm:block">MCP</span> */}
+            <div className="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-base shadow-sm">
+              FIX<span className="text-blue-200 font-extrabold">DATA</span>
+            </div>
+            <span className="font-extrabold text-lg tracking-tight text-slate-800 hidden sm:block">
+              FIX<span className="text-blue-600">DATA</span>
+            </span>
           </Link>
 
           {/* Mobile Menu Button */}
@@ -90,11 +94,11 @@ const App: React.FC = () => {
           </Routes>
         </main>
         <footer className="bg-white border-t border-slate-200 py-10 mt-20">
-          <div className="container mx-auto px-4 text-center">
-            <p className="text-slate-400 text-sm font-medium">
-              &copy; {new Date().getFullYear()} Meu Crédito Privado. Todos os direitos reservados.
+          <div className="container mx-auto px-4 text-center space-y-2">
+            <p className="text-slate-500 text-sm font-semibold">
+              &copy; {new Date().getFullYear()} FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
             </p>
-            <p className="text-slate-400 text-sm font-medium">
+            <p className="text-slate-400 text-xs font-medium">
               Desenvolvido por{' '}
               <a
                 href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/"
@@ -105,8 +109,8 @@ const App: React.FC = () => {
                 Leonardo Contador Neves
               </a>
             </p>
-            <p className="text-slate-300 text-[10px] mt-2 uppercase tracking-widest">
-              Base de dados CVM e ANBIMA
+            <p className="text-slate-300 text-[10px] uppercase tracking-widest">
+              Base de dados CVM, ANBIMA e B3
             </p>
           </div>
         </footer>

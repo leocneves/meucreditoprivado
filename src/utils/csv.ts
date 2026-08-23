@@ -3,24 +3,33 @@ import Papa from 'papaparse';
 
 export interface Asset {
   ticker: string;
-  isin: string;
-  issuer: string;
-  asset_type: string;
-  series: string;
-  seniority: string;
-  guarantee: string;
-  issue_date: string;
-  vencimento: string;
-  dt_emissao: string;
-  emissao: string;
-  serie: string;
-  taxa_emissao: string;
-  indexador: string;
-  rating: string;
-  agencia: string;
-  divulgacao: string;
-  issuer_cnpj: string;
-  sector: string;
+  tipo?: string;
+  issuer?: string;
+  pu?: string;
+  volume?: string;
+  indexador?: string;
+  taxa_emissao?: string;
+  rating?: string;
+  agencia?: string;
+  divulgacao?: string;
+  duration?: string;
+  spread?: string;
+  vencimento?: string;
+  data_emissao?: string;
+  emissao?: string;
+  serie?: string;
+  isin?: string;
+  ntnb_referencia?: string;
+  taxa_ntnb?: string;
+  taxa_ativo?: string;
+  asset_type?: string;
+  series?: string;
+  seniority?: string;
+  guarantee?: string;
+  issue_date?: string;
+  dt_emissao?: string;
+  issuer_cnpj?: string;
+  sector?: string;
 }
 
 export interface DocsOverview {
