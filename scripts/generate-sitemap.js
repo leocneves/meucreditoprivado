@@ -12,7 +12,7 @@ const CSV_PATH = path.join(
   "../public/data/assets_master.csv"
 );
 
-const BASE_URL = "https://leocneves.github.io/meucreditoprivado";
+const BASE_URL = "https://meucreditoprivado.netlify.app";
 
 const OUTPUT_PATH = path.join(
   __dirname,
@@ -40,24 +40,32 @@ function fetchCSVNode() {
 
 function generateSitemap(assets) {
   const urls = [];
+  const today = new Date().toISOString().split('T')[0];
 
-  // homepage
-  urls.push(`${BASE_URL}/#/`);
+  // páginas estáticas
+  urls.push({ loc: `${BASE_URL}/`, priority: "1.0", changefreq: "daily" });
+  urls.push({ loc: `${BASE_URL}/charts`, priority: "0.9", changefreq: "daily" });
+  urls.push({ loc: `${BASE_URL}/primary`, priority: "0.9", changefreq: "daily" });
 
   // páginas dos ativos
   for (const asset of assets) {
-    if (!asset.ticker) continue;
+    if (!asset.ticker || asset.ticker === "nan" || asset.ticker === "N/A") continue;
 
-    urls.push(`${BASE_URL}/#/asset/${asset.ticker}`);
+    urls.push({
+      loc: `${BASE_URL}/asset/${encodeURIComponent(asset.ticker.trim())}`,
+      priority: "0.8",
+      changefreq: "daily"
+    });
   }
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(url => `
-  <url>
-    <loc>${url}</loc>
-  </url>
-`).join("")}
+${urls.map(u => `  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join("\n")}
 </urlset>`;
 }
 

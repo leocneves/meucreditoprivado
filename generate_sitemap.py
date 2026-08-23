@@ -52,8 +52,9 @@ for url in urls:
 
 xml.append("</urlset>")
 
-# Salva arquivo
-with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-    f.write("\n".join(xml))
+# Salva arquivos
+for output_file in ["public/sitemap.xml", "docs/sitemap.xml"]:
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("\n".join(xml))
 
-print(f"Sitemap gerado com {len(urls)} URLs -> {OUTPUT_FILE}")
+print(f"Sitemap gerado com {len(urls)} URLs em public/sitemap.xml e docs/sitemap.xml")
