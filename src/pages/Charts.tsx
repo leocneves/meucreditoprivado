@@ -529,7 +529,7 @@ const CreditDashboard: React.FC = () => {
         {/* OBSERVAÇÃO */}
 
         <div className="mt-2 text-xs text-slate-500">
-          * Spread Over calculado só para papéis atrelados ao IPCA e utilizando taxas indicativas.
+          * Spread Over calculado para papéis IPCA (vs NTN-B equivalente), DI+ (spread direto sobre CDI), DI% e Pré-Fixados (spread sobre a Curva de DI Futuro da ANBIMA).
         </div>
 
       </div>
