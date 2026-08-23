@@ -1,23 +1,47 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { fetchCSV, fetchMetadata, Asset, Metadata, DocsOverview } from '../utils/csv';
+import { Link } from 'react-router-dom';
+import { fetchCSV, fetchMetadata, Asset, Metadata, DocsOverview, normalizeRating, getRatingBadgeClass } from '../utils/csv';
 import SearchBar from '../components/SearchBar';
 import Watchlist from '../components/Watchlist';
-import PieBox from '../components/PieBox';
-import { Clock, Layers, TrendingUp, CalendarDays , BarChart3, FileText, Files, FileSearch, FileCheck} from 'lucide-react';
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip as RechartsTooltip,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid
+} from 'recharts';
+import {
+  Layers,
+  TrendingUp,
+  CalendarDays,
+  BarChart3,
+  FileCheck,
+  Building2,
+  ShieldCheck,
+  ArrowUpRight,
+  PieChart as PieIcon,
+  Activity,
+  Flame,
+  Clock
+} from 'lucide-react';
 
 /* ================= HELPERS ================= */
 
 const parseNumber = (v: any) => {
-  if (v == null) return NaN
-  if (typeof v === 'number') return v
+  if (v == null) return NaN;
+  if (typeof v === 'number') return v;
   if (typeof v === 'string') {
-    // replace comma decimal and remove anything else except digits, dot, minus
-    const cleaned = v.replace(/\./g, '').replace(/,/g, '.').replace(/[^0-9.\-]/g, '')
-    const n = parseFloat(cleaned)
-    return isNaN(n) ? NaN : n
+    const cleaned = v.replace(/\./g, '').replace(/,/g, '.').replace(/[^0-9.\-]/g, '');
+    const n = parseFloat(cleaned);
+    return isNaN(n) ? NaN : n;
   }
-  return NaN
-}
+  return NaN;
+};
 
 const countBy = (arr: Asset[], key: keyof Asset) => {
   const map: Record<string, number> = {};
@@ -28,14 +52,28 @@ const countBy = (arr: Asset[], key: keyof Asset) => {
   return map;
 };
 
-const toPieData = (obj: Record<string, number>) => {
-  const total = Object.values(obj).reduce((a, b) => a + b, 0);
+const PIE_COLORS_RATING = [
+  '#10b981', // AAA (emerald)
+  '#059669', // AA (green)
+  '#0284c7', // A (sky)
+  '#2563eb', // BBB (blue)
+  '#f59e0b', // High Yield (amber)
+  '#94a3b8'  // Sem Rating (slate)
+];
 
-  return Object.entries(obj).map(([name, value]) => ({
-    name,
-    value: Math.round((value / total) * 100),
-  }));
-};
+const PIE_COLORS_TIPO = [
+  '#2563eb', // Debêntures
+  '#8b5cf6', // CRI
+  '#10b981'  // CRA
+];
+
+const PIE_COLORS_INDEX = [
+  '#2563eb', // IPCA
+  '#0284c7', // DI+
+  '#10b981', // DI%
+  '#f59e0b', // Pré
+  '#94a3b8'  // Outros
+];
 
 /* ================= COMPONENT ================= */
 
@@ -50,18 +88,15 @@ const Home: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [assetsData, metaData] = await Promise.all([
+        const [assetsData, metaData, docsoverviewData] = await Promise.all([
           fetchCSV<Asset>('./data/assets_master.csv'),
           fetchMetadata(),
-        ]);
-
-        const [docsoverviewData] = await Promise.all([
           fetchCSV<DocsOverview>('./data/docs_overview.csv')
         ]);
 
-        setAssets(assetsData);
-        setDocsOverview(docsoverviewData);
+        setAssets(assetsData || []);
         setMetadata(metaData);
+        setDocsOverview(docsoverviewData || []);
       } catch (err) {
         console.error('Erro ao carregar home', err);
       } finally {
@@ -72,361 +107,673 @@ const Home: React.FC = () => {
     loadData();
   }, []);
 
-  /* ================= METRICS ================= */
+  /* ================= CALCULATED METRICS ================= */
 
   const totalAssets = assets.length;
 
-  const totalDocs = docsoverview.reduce(
-    (acc, d) => acc + parseFloat(d.qtd_documentos),
-    0
-  );
-  const totalAssembleias = docsoverview.find(d => d.tipo === "Assembléias")?.qtd_documentos ?? 0;
-  const totalRating = docsoverview.find(d => d.tipo === "Relatórios de Rating")?.qtd_documentos ?? 0;
+  const totalDocs = useMemo(() => {
+    return docsoverview.reduce((acc, d) => acc + (parseFloat(d.qtd_documentos) || 0), 0);
+  }, [docsoverview]);
 
-  // const byIndexer = useMemo(
-  //   () => countBy(assets, 'indexador'),
-  //   [assets]
-  // );
-
-  const byIndexer = useMemo(() => {
-    const raw = countBy(assets, 'indexador');
-  
-    const principais = ['IPCA', 'DI+', 'DI%', 'Pré-Fixado'];
-  
-    const result: Record<string, number> = {
-      IPCA: 0,
-      'DI+': 0,
-      'DI%': 0,
-      'Pré-Fixado': 0,
-      Outros: 0
-    };
-  
-    Object.entries(raw).forEach(([key, value]) => {
-      if (principais.includes(key)) {
-        result[key] += value;
-      } else {
-        result.Outros += value;
-      }
-    });
-  
-    return result;
-  }, [assets]);
-
-  const byRating = useMemo(() => {
-    const map: Record<string, number> = {
-      'AA ou superior': 0,
-      Outros: 0,
-    };
-
-    assets.forEach(a => {
-      if (!a.rating) return;
-
-      if (a.rating.startsWith('AAA') || a.rating.startsWith('AA')) {
-        map['AA ou superior']++;
-      } else {
-        map['Outros']++;
-      }
-    });
-
-    return map;
-  }, [assets]);
-
-  const byIssuer = useMemo(() => {
-    const m = countBy(assets, 'issuer');
-
-    return Object.entries(m)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-  }, [assets]);
-
-  const byIssuerTotal = useMemo(() => {
-    const m = countBy(assets, 'issuer');
-
-    return Object.entries(m)
-      .sort((a, b) => b[1] - a[1]);
-  }, [assets]);
-
-  const ativosNaoVencidos = useMemo(() => {
+  // Ativos Vivos (Não Vencidos)
+  const ativosVivos = useMemo(() => {
     const hoje = new Date();
-  
     return assets.filter(asset => {
       if (!asset.vencimento) return false;
-  
-      let dataVenc;
-  
-      // Se vier formato BR: DD/MM/YYYY
-      if (asset.vencimento.includes('/')) {
-        const [d, m, y] = asset.vencimento.split('/');
-        dataVenc = new Date(`${y}-${m}-${d}`);
-      } 
-      // Se vier ISO: YYYY-MM-DD
-      else {
-        dataVenc = new Date(asset.vencimento);
-      }
-  
-      return dataVenc >= hoje;
-    }).length;
-  
-  }, [assets]);
-
-  const mediaDurationNaoVencidos = useMemo(() => {
-    const hoje = new Date();
-  
-    const durationsEmAnos: number[] = [];
-  
-    assets.forEach(asset => {
-      if (!asset.vencimento || asset.duration == null) return;
-  
       let dataVenc: Date;
-  
       if (asset.vencimento.includes('/')) {
         const [d, m, y] = asset.vencimento.split('/');
         dataVenc = new Date(`${y}-${m}-${d}`);
       } else {
         dataVenc = new Date(asset.vencimento);
       }
-  
-      if (dataVenc < hoje) return;
-  
-      const d = parseFloat(asset.duration);
-  
-      // 👇 NOVA CONDIÇÃO
-      if (isNaN(d) || d <= 0) return;
-  
-      durationsEmAnos.push(d);
+      return dataVenc >= hoje;
     });
-  
-    if (durationsEmAnos.length === 0) return 0;
-  
-    const soma = durationsEmAnos.reduce((a, b) => a + b, 0);
-  
-    return soma / durationsEmAnos.length;
-  }, [assets]);  
-
-  // const addDurationYears = (a: Asset) => {
-  //   const d = parseNumber(a.duration)
-  //   if (isNaN(d)) return null
-  //   return d / 365.0
-  // }
-
-  const volumeNaoVencidos = useMemo(() => {
-    const hoje = new Date();
-  
-    return assets.reduce((acc, asset) => {
-      if (!asset.vencimento || asset.volume == null) return acc;
-  
-      let dataVenc;
-  
-      if (asset.vencimento.includes('/')) {
-        const [d, m, y] = asset.vencimento.split('/');
-        dataVenc = new Date(`${y}-${m}-${d}`);
-      } else {
-        dataVenc = new Date(asset.vencimento);
-      }
-  
-      if (dataVenc >= hoje) {
-        return acc + Number(asset.volume);
-      }
-  
-      return acc;
-    }, 0);
-  
   }, [assets]);
 
-  /* ================= RENDER ================= */
+  // Volume Total Não Vencido
+  const volumeTotalVivos = useMemo(() => {
+    return ativosVivos.reduce((acc, a) => {
+      const v = Number(a.volume);
+      return acc + (isNaN(v) ? 0 : v);
+    }, 0);
+  }, [ativosVivos]);
+
+  // Duration Média
+  const durationMedia = useMemo(() => {
+    const durations = ativosVivos
+      .map(a => parseFloat(a.duration || ''))
+      .filter(d => !isNaN(d) && d > 0);
+    if (!durations.length) return 0;
+    return durations.reduce((a, b) => a + b, 0) / durations.length;
+  }, [ativosVivos]);
+
+  // Emissores Únicos
+  const totalEmissores = useMemo(() => {
+    return new Set(assets.map(a => a.issuer).filter(Boolean)).size;
+  }, [assets]);
+
+  /* ================= GRÁFICOS: 1. QUALIDADE DE CRÉDITO (RATINGS NORMALIZADOS) ================= */
+
+  const ratingDistribution = useMemo(() => {
+    const buckets: Record<string, number> = {
+      'AAA': 0,
+      'Grau AA': 0,
+      'Grau A': 0,
+      'Grau BBB': 0,
+      'High Yield (BB/B/CCC/D)': 0,
+      'Sem Rating': 0
+    };
+
+    ativosVivos.forEach(a => {
+      const norm = a.rating_normalizado || normalizeRating(a.rating);
+      if (norm === 'AAA') buckets['AAA']++;
+      else if (norm.startsWith('AA')) buckets['Grau AA']++;
+      else if (norm.startsWith('A')) buckets['Grau A']++;
+      else if (norm.startsWith('BBB')) buckets['Grau BBB']++;
+      else if (['BB+', 'BB', 'BB-', 'B+', 'B', 'B-', 'CCC+', 'CCC', 'CCC-', 'CC', 'C', 'D'].includes(norm)) {
+        buckets['High Yield (BB/B/CCC/D)']++;
+      } else {
+        buckets['Sem Rating']++;
+      }
+    });
+
+    const total = ativosVivos.length || 1;
+    return Object.entries(buckets).map(([name, count]) => ({
+      name,
+      count,
+      percent: Math.round((count / total) * 100)
+    }));
+  }, [ativosVivos]);
+
+  /* ================= GRÁFICOS: 2. TIPO DE ATIVO (DEBÊNTURES, CRI, CRA) ================= */
+
+  const tipoDistribution = useMemo(() => {
+    const buckets: Record<string, { count: number; volume: number }> = {
+      'Debêntures': { count: 0, volume: 0 },
+      'CRI': { count: 0, volume: 0 },
+      'CRA': { count: 0, volume: 0 }
+    };
+
+    ativosVivos.forEach(a => {
+      const tipo = (a.tipo || '').toLowerCase();
+      const vol = Number(a.volume) || 0;
+
+      if (tipo.includes('deb')) {
+        buckets['Debêntures'].count++;
+        buckets['Debêntures'].volume += vol;
+      } else if (tipo.includes('cri')) {
+        buckets['CRI'].count++;
+        buckets['CRI'].volume += vol;
+      } else if (tipo.includes('cra')) {
+        buckets['CRA'].count++;
+        buckets['CRA'].volume += vol;
+      }
+    });
+
+    const totalCount = ativosVivos.length || 1;
+    return Object.entries(buckets).map(([name, val]) => ({
+      name,
+      count: val.count,
+      volumeBi: (val.volume / 1e9).toFixed(1),
+      percent: Math.round((val.count / totalCount) * 100)
+    }));
+  }, [ativosVivos]);
+
+  /* ================= GRÁFICOS: 3. INDEXADORES ================= */
+
+  const indexadorDistribution = useMemo(() => {
+    const raw = countBy(ativosVivos, 'indexador');
+    const mapping: Record<string, number> = {
+      'IPCA': 0,
+      'DI+ (CDI + Spread)': 0,
+      'DI% (% do CDI)': 0,
+      'Pré-Fixado': 0,
+      'Outros (IGP-M/TR)': 0
+    };
+
+    Object.entries(raw).forEach(([idx, count]) => {
+      if (idx === 'IPCA') mapping['IPCA'] += count;
+      else if (idx === 'DI+') mapping['DI+ (CDI + Spread)'] += count;
+      else if (idx === 'DI%') mapping['DI% (% do CDI)'] += count;
+      else if (idx === 'Pré-Fixado' || idx === 'PRE') mapping['Pré-Fixado'] += count;
+      else mapping['Outros (IGP-M/TR)'] += count;
+    });
+
+    const total = ativosVivos.length || 1;
+    return Object.entries(mapping).map(([name, count]) => ({
+      name,
+      count,
+      percent: Math.round((count / total) * 100)
+    }));
+  }, [ativosVivos]);
+
+  /* ================= GRÁFICOS: 4. MATURITY WALL (CRONOGRAMA DE VENCIMENTOS) ================= */
+
+  const maturityWall = useMemo(() => {
+    const yearsMap: Record<string, { count: number; volume: number }> = {
+      '2026': { count: 0, volume: 0 },
+      '2027': { count: 0, volume: 0 },
+      '2028': { count: 0, volume: 0 },
+      '2029': { count: 0, volume: 0 },
+      '2030': { count: 0, volume: 0 },
+      '2031-2035': { count: 0, volume: 0 },
+      '2036+': { count: 0, volume: 0 }
+    };
+
+    ativosVivos.forEach(a => {
+      if (!a.vencimento) return;
+      let yr: number;
+      if (a.vencimento.includes('/')) {
+        yr = parseInt(a.vencimento.split('/')[2], 10);
+      } else {
+        yr = parseInt(a.vencimento.split('-')[0], 10);
+      }
+
+      if (isNaN(yr)) return;
+      const vol = (Number(a.volume) || 0) / 1e9; // em R$ Bilhões
+
+      if (yr <= 2026) {
+        yearsMap['2026'].count++;
+        yearsMap['2026'].volume += vol;
+      } else if (yr === 2027) {
+        yearsMap['2027'].count++;
+        yearsMap['2027'].volume += vol;
+      } else if (yr === 2028) {
+        yearsMap['2028'].count++;
+        yearsMap['2028'].volume += vol;
+      } else if (yr === 2029) {
+        yearsMap['2029'].count++;
+        yearsMap['2029'].volume += vol;
+      } else if (yr === 2030) {
+        yearsMap['2030'].count++;
+        yearsMap['2030'].volume += vol;
+      } else if (yr >= 2031 && yr <= 2035) {
+        yearsMap['2031-2035'].count++;
+        yearsMap['2031-2035'].volume += vol;
+      } else if (yr >= 2036) {
+        yearsMap['2036+'].count++;
+        yearsMap['2036+'].volume += vol;
+      }
+    });
+
+    return Object.entries(yearsMap).map(([ano, data]) => ({
+      ano,
+      quantidade: data.count,
+      volumeBi: Number(data.volume.toFixed(2))
+    }));
+  }, [ativosVivos]);
+
+  /* ================= TOP DEVEDORES & MAIORES SPREADS ================= */
+
+  const topEmissores = useMemo(() => {
+    const issuerMap: Record<string, { count: number; volume: number }> = {};
+
+    ativosVivos.forEach(a => {
+      const issuer = a.issuer?.trim();
+      if (!issuer || issuer.toLowerCase() in { nan: 1, none: 1, '': 1 }) return;
+      // Excluir nomes genéricos de securitizadoras para focar em devedores corporativos reais
+      const up = issuer.toUpperCase();
+      if (up.includes('SECURITIZADORA') || up.includes('SECURITIZACAO') || up.includes('COMPANHIA DE SECURITIZACAO')) {
+        return;
+      }
+
+      if (!issuerMap[issuer]) {
+        issuerMap[issuer] = { count: 0, volume: 0 };
+      }
+      issuerMap[issuer].count++;
+      issuerMap[issuer].volume += (Number(a.volume) || 0);
+    });
+
+    return Object.entries(issuerMap)
+      .sort((a, b) => b[1].volume - a[1].volume)
+      .slice(0, 6)
+      .map(([name, d]) => ({
+        name,
+        count: d.count,
+        volumeBi: (d.volume / 1e9).toFixed(2)
+      }));
+  }, [ativosVivos]);
+
+  // Top Oportunidades / Spreads Mais Altos (IPCA com rating Grau de Investimento ou Geral)
+  const topSpreads = useMemo(() => {
+    return ativosVivos
+      .filter(a => {
+        const s = parseFloat(a.spread || '');
+        return !isNaN(s) && s > 0 && s < 0.25 && a.indexador === 'IPCA';
+      })
+      .sort((a, b) => parseFloat(b.spread || '0') - parseFloat(a.spread || '0'))
+      .slice(0, 5);
+  }, [ativosVivos]);
 
   return (
-    <div className="space-y-14 py-10">
+    <div className="space-y-12 py-8">
 
-      {/* ================= HERO ================= */}
+      {/* ================= HERO SECTION ================= */}
+      <section className="text-center space-y-6 px-4 max-w-4xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold uppercase tracking-wider">
+          <Activity size={14} className="text-blue-600 animate-pulse" />
+          Inteligência de Mercado em Tempo Real
+        </div>
 
-      <section className="text-center space-y-6 px-4">
-      <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-        FIX<span className="text-blue-600">DATA</span>
-      </h1>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
+          FIX<span className="text-blue-600">DATA</span>
+        </h1>
 
-        <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-          Plataforma construída com automação e{' '}
-          <span className="font-semibold text-slate-800">
-            inteligência de dados
-          </span>{' '}
-          para centralizar, acompanhar e analisar dados do{' '}
-          <span className="font-semibold text-slate-800">
-            mercado de Debêntures, CRIs e CRAs de forma 100% GRATUITA
-          </span>.
+        <p className="text-slate-600 text-lg md:text-xl font-normal leading-relaxed">
+          A maior plataforma aberta de inteligência e dados de{' '}
+          <strong className="text-slate-900 font-semibold">Debêntures, CRIs e CRAs</strong> do Brasil.
+          Acompanhe cotações, spreads contra NTN-B, ratings normalizados e cronogramas de vencimento.
         </p>
 
-        <br/>
-        <br/>
-        <SearchBar assets={assets} />
-
-        {/* <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
-          <Clock size={16} />
-          <span>
-            Última atualização:{' '}
-            {metadata ? metadata.last_update : 'desconhecida'}
-          </span>
-        </div> */}
+        <div className="pt-2">
+          <SearchBar assets={assets} />
+        </div>
       </section>
 
-      {/* ================= OVERVIEW NUMÉRICO ================= */}
-
-      <br/>
-      <section className="text-center space-y-6 px-4">
-      <h1 className="text-4xl md:text-1xl font-extrabold tracking-tight">
-        <span className="text-blue-500">
-          Sobre nossa base
-        </span>
-      </h1>
-      </section>
-
-
+      {/* ================= KPI CARDS (METRICAS PRINCIPAIS) ================= */}
       <section className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <Layers size={36} className="text-blue-600" />
-            <div>
-              <p className="text-slate-400 text-sm">Ativos na base</p>
-              <p className="text-3xl font-bold text-slate-900">
-                {totalAssets}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <TrendingUp size={36} className="text-green-600" />
-            <div>
-              <p className="text-slate-400 text-sm">Emissores distintos</p>
-              <p className="text-3xl font-bold text-slate-900">
-                {Object.keys(byIssuerTotal).length}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <TrendingUp size={36} className="text-purple-600" />
-            <div>
-              <p className="text-slate-400 text-sm">Ratings AA+</p>
-              <p className="text-3xl font-bold text-slate-900">
-                {byRating['AA ou superior']}
-              </p>
-            </div>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <CalendarDays size={36} className="text-orange-600" />
-          <div>
-            <p className="text-slate-400 text-sm">Ativos não vencidos</p>
-            <p className="text-3xl font-bold text-slate-900">
-              {ativosNaoVencidos}
-            </p>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                <Layers size={22} />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-medium">Ativos na Base</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalAssets.toLocaleString('pt-BR')}</p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <BarChart3 size={36} className="text-indigo-600" />
-          <div>
-            <p className="text-slate-400 text-sm">Duration média (anos)</p>
-            <p className="text-3xl font-bold text-slate-900">
-              {mediaDurationNaoVencidos.toFixed(2)}
-            </p>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+                <CalendarDays size={22} />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-medium">Ativos Vivos</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{ativosVivos.length.toLocaleString('pt-BR')}</p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <BarChart3 size={36} className="text-emerald-600" />
-          <div>
-            <p className="text-slate-400 text-sm">Volume não vencido</p>
-            <p className="text-3xl font-bold text-slate-900">
-              {(volumeNaoVencidos / 1e9).toLocaleString('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })} bi
-            </p>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
+                <TrendingUp size={22} />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-medium">Volume em Estoque</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">
+                  R$ {(volumeTotalVivos / 1e9).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} bi
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-         <FileCheck size={36} className="text-emerald-600" />
-          <div>
-            <p className="text-slate-400 text-sm">Documentos Monitorados (último dia útil)</p>
-            <p className="text-3xl font-bold text-slate-900">
-              {(totalDocs)}
-            </p>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
+                <BarChart3 size={22} />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-medium">Duration Média</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{durationMedia.toFixed(2)} anos</p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <FileText size={36} className="text-emerald-600" />
-          <div>
-            <p className="text-slate-400 text-sm">Assembléias Monitoradas (último dia útil)</p>
-            <p className="text-3xl font-bold text-slate-900">
-              {(totalAssembleias)}
-            </p>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-sky-50 text-sky-600 rounded-xl">
+                <Building2 size={22} />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-medium">Emissores Únicos</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalEmissores.toLocaleString('pt-BR')}</p>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-          <FileText size={36} className="text-emerald-600" />
-          <div>
-            <p className="text-slate-400 text-sm">Relatórios de Rating Monitorados (último dia útil)</p>
-            <p className="text-3xl font-bold text-slate-900">
-              {(totalRating)}
-            </p>
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-purple-50 text-purple-600 rounded-xl">
+                <FileCheck size={22} />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-medium">Docs Monitorados</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalDocs.toLocaleString('pt-BR')}</p>
+              </div>
+            </div>
           </div>
-        </div>
 
         </div>
       </section>
 
-      {/* ================= GRÁFICOS ================= */}
-
+      {/* ================= GRÁFICOS: SEÇÃO DE ESTRUTURA DO MERCADO ================= */}
       {!loading && (
-        <section className="container mx-auto px-4">
+        <section className="container mx-auto px-4 space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
+                <PieIcon size={24} className="text-blue-600" />
+                Estrutura e Qualidade do Mercado de Crédito
+              </h2>
+              <p className="text-sm text-slate-500 mt-0.5">
+                Composição dos {ativosVivos.length.toLocaleString('pt-BR')} ativos vivos por régua de rating, tipo de instrumento e indexador.
+              </p>
+            </div>
+
+            <Link
+              to="/charts"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-sm"
+            >
+              Abrir Dashboard Completo
+              <ArrowUpRight size={16} />
+            </Link>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            <PieBox
-              title="Indexadores"
-              data={toPieData(byIndexer)}
-            />
+            {/* CARD 1: QUALIDADE DE CRÉDITO (RATINGS NORMALIZADOS) */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <ShieldCheck size={18} className="text-emerald-600" />
+                    Qualidade de Crédito (Rating Normalizado)
+                  </h3>
+                </div>
 
-            <PieBox
-              title="Qualidade de crédito"
-              data={toPieData(byRating)}
-            />
-
-            {/* ===== TOP EMISSORES ===== */}
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
-
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">
-                Top 10 emissores
-              </h3>
-
-              <div className="space-y-2">
-
-              {byIssuerTotal
-                .filter(([issuer]) => 
-                  !issuer.toUpperCase().includes("SECURITIZADORA") &&
-                  !issuer.toUpperCase().includes("SECURITIZACAO")
-                ).slice(0, 10)
-                .map(([issuer, qty], i) => (
-                  <div
-                    key={i}
-                    className="flex justify-between items-center bg-slate-50 px-4 py-2 rounded-lg text-sm"
-                  >
-                    <span className="text-slate-700 font-medium">
-                      {issuer}
-                    </span>
-                    <span className="text-slate-500">
-                      {qty}
-                    </span>
-                  </div>
-              ))}
-
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={ratingDistribution}
+                        dataKey="count"
+                        nameKey="name"
+                        innerRadius={50}
+                        outerRadius={75}
+                        paddingAngle={3}
+                      >
+                        {ratingDistribution.map((_, idx) => (
+                          <Cell key={idx} fill={PIE_COLORS_RATING[idx % PIE_COLORS_RATING.length]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip
+                        formatter={(val: any, name: any, item: any) => [
+                          `${val.toLocaleString('pt-BR')} ativos (${item.payload.percent}%)`,
+                          name
+                        ]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
 
+              <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs">
+                {ratingDistribution.map((d, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      style={{ background: PIE_COLORS_RATING[i % PIE_COLORS_RATING.length] }}
+                    />
+                    <span className="text-slate-600 truncate" title={d.name}>
+                      {d.name}: <strong className="text-slate-800">{d.percent}%</strong>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CARD 2: TIPO DE ATIVO */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <Layers size={18} className="text-blue-600" />
+                    Instrumentos (Debêntures / CRI / CRA)
+                  </h3>
+                </div>
+
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={tipoDistribution}
+                        dataKey="count"
+                        nameKey="name"
+                        innerRadius={50}
+                        outerRadius={75}
+                        paddingAngle={3}
+                      >
+                        {tipoDistribution.map((_, idx) => (
+                          <Cell key={idx} fill={PIE_COLORS_TIPO[idx % PIE_COLORS_TIPO.length]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip
+                        formatter={(val: any, name: any, item: any) => [
+                          `${val.toLocaleString('pt-BR')} títulos | R$ ${item.payload.volumeBi} bi (${item.payload.percent}%)`,
+                          name
+                        ]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-100 space-y-2 text-xs">
+                {tipoDistribution.map((d, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ background: PIE_COLORS_TIPO[i % PIE_COLORS_TIPO.length] }}
+                      />
+                      <span className="text-slate-700 font-medium">{d.name}</span>
+                    </div>
+                    <span className="text-slate-600">
+                      <strong>{d.count.toLocaleString('pt-BR')}</strong> ({d.percent}%) — <span className="text-slate-500">R$ {d.volumeBi} bi</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CARD 3: INDEXADORES */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <TrendingUp size={18} className="text-sky-600" />
+                    Indexadores de Mercado
+                  </h3>
+                </div>
+
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={indexadorDistribution}
+                        dataKey="count"
+                        nameKey="name"
+                        innerRadius={50}
+                        outerRadius={75}
+                        paddingAngle={3}
+                      >
+                        {indexadorDistribution.map((_, idx) => (
+                          <Cell key={idx} fill={PIE_COLORS_INDEX[idx % PIE_COLORS_INDEX.length]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip
+                        formatter={(val: any, name: any, item: any) => [
+                          `${val.toLocaleString('pt-BR')} ativos (${item.payload.percent}%)`,
+                          name
+                        ]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs">
+                {indexadorDistribution.map((d, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ background: PIE_COLORS_INDEX[i % PIE_COLORS_INDEX.length] }}
+                      />
+                      <span className="text-slate-700">{d.name}</span>
+                    </div>
+                    <span className="text-slate-600">
+                      <strong>{d.count.toLocaleString('pt-BR')}</strong> ({d.percent}%)
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </section>
+      )}
+
+      {/* ================= GRÁFICO 4: MATURITY WALL (CRONOGRAMA DE VENCIMENTO / AMORTIZAÇÃO) ================= */}
+      {!loading && (
+        <section className="container mx-auto px-4">
+          <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                  <CalendarDays size={22} className="text-blue-600" />
+                  Maturity Wall — Cronograma de Vencimento de Dívidas Privadas
+                </h2>
+                <p className="text-sm text-slate-500 mt-1">
+                  Distribuição do volume financeiro total (R$ Bilhões) e quantidade de papéis com vencimento por ano.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4 text-xs font-semibold text-slate-600">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded bg-blue-600" />
+                  Volume Vencendo (R$ Bi)
+                </span>
+              </div>
+            </div>
+
+            <div className="h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={maturityWall} margin={{ top: 20, right: 30, left: 10, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis dataKey="ano" stroke="#64748b" fontSize={12} tickLine={false} />
+                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} unit=" bi" />
+                  <RechartsTooltip
+                    cursor={{ fill: '#f8fafc' }}
+                    formatter={(val: any, name: any, item: any) => [
+                      `R$ ${val} Bilhões (${item.payload.quantidade} ativos)`,
+                      'Volume de Vencimento'
+                    ]}
+                  />
+                  <Bar dataKey="volumeBi" fill="#2563eb" radius={[6, 6, 0, 0]} maxBarSize={55} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ================= DESTAQUES DE MERCADO & TOP EMISSORES ================= */}
+      {!loading && (
+        <section className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            {/* TOP SPREADS NO MERCADO SECUNDÁRIO (OPORTUNIDADES DE RETORNO) */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Flame size={20} className="text-amber-500" />
+                  Maiores Spreads Indicativos (IPCA + Prêmio vs NTN-B)
+                </h3>
+                <span className="text-xs text-slate-500 font-medium">Mercado Secundário</span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-slate-50 text-slate-500 text-xs font-semibold uppercase">
+                    <tr>
+                      <th className="p-2.5">Ticker</th>
+                      <th className="p-2.5">Devedor</th>
+                      <th className="p-2.5">Rating</th>
+                      <th className="p-2.5">Vencimento</th>
+                      <th className="p-2.5 text-right">Spread vs NTN-B</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {topSpreads.map((a, i) => {
+                      const spread = parseFloat(a.spread || '0') * 100;
+                      const norm = a.rating_normalizado || normalizeRating(a.rating);
+                      return (
+                        <tr key={i} className="hover:bg-slate-50 transition">
+                          <td className="p-2.5 font-bold">
+                            <Link to={`/asset/${a.ticker}`} className="text-blue-600 hover:underline">
+                              {a.ticker}
+                            </Link>
+                          </td>
+                          <td className="p-2.5 text-slate-700 max-w-[140px] truncate" title={a.issuer}>
+                            {a.issuer || '-'}
+                          </td>
+                          <td className="p-2.5">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold border ${getRatingBadgeClass(norm)}`}>
+                              {norm}
+                            </span>
+                          </td>
+                          <td className="p-2.5 text-slate-600 font-mono text-xs">{a.vencimento || '-'}</td>
+                          <td className="p-2.5 text-right font-bold text-emerald-600">
+                            +{spread.toFixed(2)}%
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* TOP 6 MAIORES EMISSORES CORPORATIVOS */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Building2 size={20} className="text-blue-600" />
+                  Top Devedores Corporativos em Circulação
+                </h3>
+                <span className="text-xs text-slate-500 font-medium">Exclui Securitizadoras</span>
+              </div>
+
+              <div className="space-y-2.5">
+                {topEmissores.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-bold text-xs flex items-center justify-center">
+                        {idx + 1}
+                      </span>
+                      <div>
+                        <p className="text-sm font-bold text-slate-800">{item.name}</p>
+                        <p className="text-xs text-slate-500">{item.count} títulos emitidos</p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-sm font-extrabold text-slate-900">R$ {item.volumeBi} bi</p>
+                      <p className="text-xs text-slate-400">Volume Total</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
@@ -434,11 +781,10 @@ const Home: React.FC = () => {
       )}
 
       {/* ================= WATCHLIST ================= */}
-
-      <section className="container mx-auto px-4 space-y-6">
+      <section className="container mx-auto px-4 space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-slate-800">
-            Sua Watchlist
+          <h2 className="text-2xl font-extrabold text-slate-900">
+            Sua Carteira de Monitoramento (Watchlist)
           </h2>
         </div>
 
