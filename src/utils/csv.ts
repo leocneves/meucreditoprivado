@@ -23,6 +23,7 @@ export interface Asset {
   ntnb_referencia?: string;
   taxa_ntnb?: string;
   taxa_ativo?: string;
+  fonte_precificacao?: string;
   asset_type?: string;
   series?: string;
   seniority?: string;
@@ -31,6 +32,15 @@ export interface Asset {
   dt_emissao?: string;
   issuer_cnpj?: string;
   sector?: string;
+}
+
+export interface SpreadHistoryRecord {
+  date: string;
+  indexador: string;
+  spread_mediano_bps: string;
+  spread_medio_bps: string;
+  taxa_media: string;
+  count: string;
 }
 
 export const RATING_SCALE_ORDER = [

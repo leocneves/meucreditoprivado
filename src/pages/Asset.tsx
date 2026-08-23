@@ -374,6 +374,13 @@ const AssetPage: React.FC = () => {
           </div>
         )}
 
+        {/* ================= HISTÓRICO DE PREÇOS E TAXAS ================= */}
+        <ChartComponent 
+          prices={prices} 
+          ticker={asset.ticker} 
+          indexador={asset.indexador}
+        />
+
       </div>
 
     </div>
@@ -381,20 +388,3 @@ const AssetPage: React.FC = () => {
 };
 
 export default AssetPage;
-
-
-          {/* GRÁFICO MENOR */}
-          {/* <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-
-          <p className="text-sm font-bold text-slate-500 mb-2">
-            Histórico de Preços
-          </p>
-
-          <div className="h-[300px] w-full">
-            <ChartComponent 
-              prices={prices} 
-              ticker={asset.ticker} 
-            />
-          </div>
-
-          </div> */}
