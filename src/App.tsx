@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import Home from './pages/Home';
 import AssetPage from './pages/Asset';
 import Charts from './pages/Charts';
+import NtnbDashboard from './pages/NtnbDashboard';
 import Primary from './pages/Primary';
-import { LayoutDashboard, LineChart, Files, Tag, Menu, X } from 'lucide-react';
+import { LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -13,8 +14,8 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/', label: 'Home', icon: <LayoutDashboard size={18} /> },
-    // { path: '/x', label: 'Radar de Eventos', icon: <Files size={18} /> },
-    { path: '/charts', label: 'Dashboard', icon: <LineChart size={18} /> },
+    { path: '/charts', label: 'Crédito Privado', icon: <LineChart size={18} /> },
+    { path: '/ntnb', label: 'Curva NTN-B', icon: <Landmark size={18} /> },
     { path: '/primary', label: 'Mercado Primário', icon: <Tag size={18} /> },
   ];
 
@@ -90,6 +91,8 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/asset/:ticker" element={<AssetPage />} />
             <Route path="/charts" element={<Charts />} />
+            <Route path="/ntnb" element={<NtnbDashboard />} />
+            <Route path="/dashboard-ntnb" element={<NtnbDashboard />} />
             <Route path="/primary" element={<Primary />} />
           </Routes>
         </main>

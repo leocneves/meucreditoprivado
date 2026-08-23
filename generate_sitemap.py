@@ -25,6 +25,7 @@ urls = []
 static_pages = [
     "/",
     "/charts",
+    "/ntnb",
     "/primary"
 ]
 

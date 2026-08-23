@@ -182,6 +182,18 @@ export interface PriceRecord {
   volume_traded: string;
 }
 
+export interface NtnbRecord {
+  date: string;
+  data_vencimento: string;
+  taxa_indicativa: string;
+  taxa_compra?: string;
+  taxa_venda?: string;
+  pu: string;
+  vencimento_iso: string;
+  vertice_ano: string;
+  titulo_nome: string;
+}
+
 export interface Emitter {
   cnpj: string;
   cnpj_formatado?: string;
