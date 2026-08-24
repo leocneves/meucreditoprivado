@@ -89,12 +89,52 @@ const toTopPieData = (obj: Record<string, number>, topN = 5) => {
 const downloadCSV = (rows: Asset[]) => {
   if (!rows.length) return
 
-  const headers = Object.keys(rows[0])
+  const fieldOrder: { key: keyof Asset | string; label: string }[] = [
+    { key: 'ticker', label: 'ticker' },
+    { key: 'tipo', label: 'tipo_ativo' },
+    { key: 'issuer', label: 'emissor_devedor' },
+    { key: 'indexador', label: 'indexador' },
+    { key: 'incentivada', label: 'incentivada_lei_12431' },
+    { key: 'taxa_emissao', label: 'taxa_emissao' },
+    { key: 'taxa_mercado', label: 'taxa_mercado_atual' },
+    { key: 'taxa_ativo', label: 'taxa_referencia' },
+    { key: 'taxa_compra', label: 'taxa_bid_compra' },
+    { key: 'taxa_venda', label: 'taxa_ask_venda' },
+    { key: 'spread', label: 'spread_over_decimal' },
+    { key: 'duration', label: 'duration_anos_du252' },
+    { key: 'pu_emissao', label: 'pu_emissao' },
+    { key: 'pu_mercado', label: 'pu_mercado_atual' },
+    { key: 'volume_emissao', label: 'volume_emissao_brl' },
+    { key: 'quantidade_emitida', label: 'quantidade_emitida' },
+    { key: 'data_emissao', label: 'data_emissao' },
+    { key: 'vencimento', label: 'data_vencimento' },
+    { key: 'emissao', label: 'numero_emissao' },
+    { key: 'serie', label: 'numero_serie' },
+    { key: 'isin', label: 'codigo_isin' },
+    { key: 'rating_normalizado', label: 'rating_normalizado' },
+    { key: 'rating_original', label: 'rating_original' },
+    { key: 'rating_agencia', label: 'rating_agencia' },
+    { key: 'rating_data', label: 'rating_data_divulgacao' },
+    { key: 'setor', label: 'setor_emissor' },
+    { key: 'cnpj_emissor', label: 'cnpj_emissor' },
+    { key: 'agente_fiduciario', label: 'agente_fiduciario' },
+    { key: 'coordenador_lider', label: 'coordenador_lider' },
+    { key: 'fonte_precificacao', label: 'fonte_precificacao' },
+    { key: 'ntnb_referencia', label: 'ntnb_referencia' }
+  ]
 
+  const headers = fieldOrder.map(f => f.label)
   const csv = [
     headers.join(','),
     ...rows.map(r =>
-      headers.map(h => `"${(r as any)[h] ?? ''}"`).join(',')
+      fieldOrder.map(f => {
+        let val = (r as any)[f.key]
+        if (f.key === 'spread' && val != null) {
+          const num = parseFloat(val)
+          val = !isNaN(num) ? num.toFixed(6) : val
+        }
+        return `"${val ?? ''}"`
+      }).join(',')
     )
   ].join('\n')
 
@@ -103,7 +143,7 @@ const downloadCSV = (rows: Asset[]) => {
 
   const link = document.createElement('a')
   link.href = url
-  link.download = 'ativos_filtrados.csv'
+  link.download = `fixdata_credito_privado_${new Date().toISOString().slice(0, 10)}.csv`
   link.click()
 
   URL.revokeObjectURL(url)
@@ -142,6 +182,8 @@ const CreditDashboard: React.FC = () => {
   const [spreadHistory, setSpreadHistory] = useState<SpreadHistoryRecord[]>([])
   const [loading, setLoading] = useState(true)
 
+  const [tiposSel, setTiposSel] = useState<string[]>([])
+  const [incentivadaSel, setIncentivadaSel] = useState<'ALL' | 'SIM' | 'NAO'>('ALL')
   const [indexadoresSel, setIndexadoresSel] = useState<string[]>([])
   const [issuersSel, setIssuersSel] = useState<string[]>([])
   const [tickersSel, setTickersSel] = useState<string[]>([])
@@ -151,6 +193,7 @@ const CreditDashboard: React.FC = () => {
   const [spreadMax, setSpreadMax] = useState<number | null>(null)
 
   const [spreadHistIdx, setSpreadHistIdx] = useState<'IPCA' | 'DI+' | 'ALL'>('ALL')
+  const [tableSearch, setTableSearch] = useState('')
 
   /* ---------- Load CSVs ---------- */
 
@@ -195,47 +238,56 @@ const CreditDashboard: React.FC = () => {
 
   /* ---------- Options encadeadas ---------- */
 
-  const indexadoresOptions = useMemo(
-    () => unique(ativosVivosBase.map(a => a.indexador)),
+  const tiposOptions = useMemo(
+    () => unique(ativosVivosBase.map(a => a.tipo)),
     [ativosVivosBase]
   )
 
+  const indexadoresOptions = useMemo(() => {
+    let base = ativosVivosBase
+    if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    return unique(base.map(a => a.indexador))
+  }, [ativosVivosBase, tiposSel])
+
   const issuersOptions = useMemo(() => {
     let base = ativosVivosBase
-    if (indexadoresSel.length)
-      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
     return unique(base.map(a => a.issuer))
-  }, [ativosVivosBase, indexadoresSel])
+  }, [ativosVivosBase, tiposSel, indexadoresSel])
 
   const tickersOptions = useMemo(() => {
     let base = ativosVivosBase
-
-    if (indexadoresSel.length)
-      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
-
-    if (issuersSel.length)
-      base = base.filter(a => issuersSel.includes(a.issuer || ''))
-
+    if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
     return unique(base.map(a => a.ticker))
-  }, [ativosVivosBase, indexadoresSel, issuersSel])
+  }, [ativosVivosBase, tiposSel, indexadoresSel, issuersSel])
 
   const ratingsOptions = useMemo(() => {
     let base = ativosVivosBase
-    if (indexadoresSel.length)
-      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
-    if (issuersSel.length)
-      base = base.filter(a => issuersSel.includes(a.issuer || ''))
-    if (tickersSel.length)
-      base = base.filter(a => tickersSel.includes(a.ticker))
+    if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
+    if (tickersSel.length) base = base.filter(a => tickersSel.includes(a.ticker))
 
     const existingRatings = unique(base.map(a => a.rating_normalizado || 'Sem Rating'))
     return RATING_SCALE_ORDER.filter(r => existingRatings.includes(r))
-  }, [ativosVivosBase, indexadoresSel, issuersSel, tickersSel])
+  }, [ativosVivosBase, tiposSel, indexadoresSel, issuersSel, tickersSel])
 
   /* ---------- Filtered ---------- */
 
   const filteredAssets = useMemo(() => {
     let base = ativosVivosBase
+
+    if (tiposSel.length)
+      base = base.filter(a => tiposSel.includes(a.tipo || ''))
+
+    if (incentivadaSel === 'SIM')
+      base = base.filter(a => a.incentivada === 'Sim')
+
+    if (incentivadaSel === 'NAO')
+      base = base.filter(a => a.incentivada === 'Não')
 
     if (indexadoresSel.length)
       base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
@@ -262,6 +314,8 @@ const CreditDashboard: React.FC = () => {
     return base
   }, [
     ativosVivosBase,
+    tiposSel,
+    incentivadaSel,
     indexadoresSel,
     issuersSel,
     tickersSel,
@@ -281,7 +335,7 @@ const CreditDashboard: React.FC = () => {
 
   const volumeVivo = useMemo(() => {
     return filteredAssets.reduce((s, a) => {
-      const v = Number(a.volume)
+      const v = Number(a.volume_emissao || a.volume)
       return s + (isNaN(v) ? 0 : v)
     }, 0)
   }, [filteredAssets])
@@ -296,7 +350,11 @@ const CreditDashboard: React.FC = () => {
   }, [filteredAssets])
 
   const totalComPrecoMercado = useMemo(() => {
-    return filteredAssets.filter(a => a.fonte_precificacao === 'ANBIMA Mercado').length
+    return filteredAssets.filter(a => a.fonte_precificacao === 'ANBIMA Mercado' || a.taxa_mercado).length
+  }, [filteredAssets])
+
+  const totalIncentivados = useMemo(() => {
+    return filteredAssets.filter(a => a.incentivada === 'Sim').length
   }, [filteredAssets])
 
   /* ---------- Pies ---------- */
@@ -333,6 +391,8 @@ const CreditDashboard: React.FC = () => {
           name: a.ticker,
           issuer: a.issuer,
           indexador: a.indexador,
+          tipo: a.tipo,
+          incentivada: a.incentivada,
           rating: a.rating_normalizado || 'Sem Rating',
           fonte: a.fonte_precificacao || 'Duration Calculada'
         }
@@ -366,6 +426,8 @@ const CreditDashboard: React.FC = () => {
 
   const hasActiveFilters = useMemo(() => {
     return (
+      tiposSel.length > 0 ||
+      incentivadaSel !== 'ALL' ||
       indexadoresSel.length > 0 ||
       issuersSel.length > 0 ||
       tickersSel.length > 0 ||
@@ -373,7 +435,7 @@ const CreditDashboard: React.FC = () => {
       spreadMin !== null ||
       spreadMax !== null
     )
-  }, [indexadoresSel, issuersSel, tickersSel, ratingsSel, spreadMin, spreadMax])
+  }, [tiposSel, incentivadaSel, indexadoresSel, issuersSel, tickersSel, ratingsSel, spreadMin, spreadMax])
 
   const filteredTickerSet = useMemo(() => {
     return new Set(filteredAssets.map(a => a.ticker))
@@ -382,7 +444,6 @@ const CreditDashboard: React.FC = () => {
   const formattedSpreadHistory = useMemo(() => {
     if (!spreadHistory.length) return []
 
-    // Agrupar por data
     const dateMap: Record<string, { date: string; datePretty: string; ipca?: number; di?: number; total?: number }> = {}
 
     spreadHistory.forEach(h => {
@@ -411,7 +472,6 @@ const CreditDashboard: React.FC = () => {
 
     const dateMap: Record<string, { date: string; datePretty: string; ipcaValues: number[]; diValues: number[] }> = {}
 
-    // Map each ticker to its indexador
     const tickerIndexadorMap = new Map<string, string>()
     filteredAssets.forEach(a => {
       tickerIndexadorMap.set(a.ticker, a.indexador || '')
@@ -461,6 +521,19 @@ const CreditDashboard: React.FC = () => {
     return result.length > 0 ? result : formattedSpreadHistory
   }, [hasActiveFilters, prices, filteredTickerSet, filteredAssets, formattedSpreadHistory])
 
+  /* ---------- Tabela Filtrada com Busca ---------- */
+
+  const displayTableAssets = useMemo(() => {
+    if (!tableSearch.trim()) return filteredAssets
+    const q = tableSearch.toLowerCase().trim()
+    return filteredAssets.filter(a =>
+      (a.ticker && a.ticker.toLowerCase().includes(q)) ||
+      (a.issuer && a.issuer.toLowerCase().includes(q)) ||
+      (a.setor && a.setor.toLowerCase().includes(q)) ||
+      (a.isin && a.isin.toLowerCase().includes(q))
+    )
+  }, [filteredAssets, tableSearch])
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -482,64 +555,20 @@ const CreditDashboard: React.FC = () => {
             Dashboard Analítico de Crédito Privado
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Visão consolidada de spreads over, durations calculadas (DU/252), ratings normalizados e histórico secundário.
+            Visão consolidada de spreads over, durations calculadas (DU/252), debêntures incentivadas (Lei 12.431), ratings normalizados e cotações secundárias.
           </p>
         </div>
       </div>
 
       {/* FILTROS */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filtros Dinâmicos</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <SearchMultiSelect
-            label="Indexadores"
-            options={indexadoresOptions}
-            selected={indexadoresSel}
-            onChange={setIndexadoresSel}
-          />
-          <SearchMultiSelect
-            label="Emissores"
-            options={issuersOptions}
-            selected={issuersSel}
-            onChange={setIssuersSel}
-          />
-          <SearchMultiSelect
-            label="Tickers"
-            options={tickersOptions}
-            selected={tickersSel}
-            onChange={setTickersSel}
-          />
-          <SearchMultiSelect
-            label="Rating (Normalizado)"
-            options={ratingsOptions}
-            selected={ratingsSel}
-            onChange={setRatingsSel}
-          />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-4 pt-3 border-t border-slate-100">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-            <span>Filtro de Spread (bps):</span>
-            <input
-              type="number"
-              placeholder="Min"
-              value={spreadMin ?? ''}
-              onChange={e => setSpreadMin(e.target.value === '' ? null : Number(e.target.value))}
-              className="border border-slate-300 rounded-lg px-2.5 py-1.5 w-24 text-xs bg-slate-50 focus:bg-white"
-            />
-            <span>até</span>
-            <input
-              type="number"
-              placeholder="Max"
-              value={spreadMax ?? ''}
-              onChange={e => setSpreadMax(e.target.value === '' ? null : Number(e.target.value))}
-              className="border border-slate-300 rounded-lg px-2.5 py-1.5 w-24 text-xs bg-slate-50 focus:bg-white"
-            />
-          </div>
-
-          {(spreadMin !== null || spreadMax !== null || indexadoresSel.length > 0 || issuersSel.length > 0 || tickersSel.length > 0 || ratingsSel.length > 0) && (
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filtros Dinâmicos</h3>
+          {hasActiveFilters && (
             <button
               onClick={() => {
+                setTiposSel([])
+                setIncentivadaSel('ALL')
                 setIndexadoresSel([])
                 setIssuersSel([])
                 setTickersSel([])
@@ -553,33 +582,127 @@ const CreditDashboard: React.FC = () => {
             </button>
           )}
         </div>
+
+        {/* Linha 1: MultiSelects */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <SearchMultiSelect
+            label="Tipo de Ativo"
+            options={tiposOptions}
+            selected={tiposSel}
+            onChange={setTiposSel}
+          />
+          <SearchMultiSelect
+            label="Indexadores"
+            options={indexadoresOptions}
+            selected={indexadoresSel}
+            onChange={setIndexadoresSel}
+          />
+          <SearchMultiSelect
+            label="Emissores"
+            options={issuersOptions}
+            selected={issuersSel}
+            onChange={setIssuersSel}
+          />
+          <SearchMultiSelect
+            label="Rating (Normalizado)"
+            options={ratingsOptions}
+            selected={ratingsSel}
+            onChange={setRatingsSel}
+          />
+          <SearchMultiSelect
+            label="Tickers"
+            options={tickersOptions}
+            selected={tickersSel}
+            onChange={setTickersSel}
+          />
+        </div>
+
+        {/* Linha 2: Incentivada (Lei 12.431) e Faixas de Spread */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider mr-1">
+              Incentivadas (Lei 12.431 / Isentos):
+            </span>
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                onClick={() => setIncentivadaSel('ALL')}
+                className={`px-3 py-1 rounded-lg transition ${
+                  incentivadaSel === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Todos
+              </button>
+              <button
+                onClick={() => setIncentivadaSel('SIM')}
+                className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
+                  incentivadaSel === 'SIM' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span>⚡ Incentivados (12.431 / CRI / CRA)</span>
+              </button>
+              <button
+                onClick={() => setIncentivadaSel('NAO')}
+                className={`px-3 py-1 rounded-lg transition ${
+                  incentivadaSel === 'NAO' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Debêntures Comuns
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+            <span>Spread (bps):</span>
+            <input
+              type="number"
+              placeholder="Min"
+              value={spreadMin ?? ''}
+              onChange={e => setSpreadMin(e.target.value === '' ? null : Number(e.target.value))}
+              className="border border-slate-300 rounded-lg px-2.5 py-1 w-20 text-xs bg-slate-50 focus:bg-white"
+            />
+            <span>até</span>
+            <input
+              type="number"
+              placeholder="Max"
+              value={spreadMax ?? ''}
+              onChange={e => setSpreadMax(e.target.value === '' ? null : Number(e.target.value))}
+              className="border border-slate-300 rounded-lg px-2.5 py-1 w-20 text-xs bg-slate-50 focus:bg-white"
+            />
+          </div>
+        </div>
       </div>
 
       {/* KPIS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <KPIBox
-          title="Ativos Filtrados"
+          title="Ativos Vivos"
           value={ativosVivos.toLocaleString('pt-BR')}
-          subtitle="Títulos ativos em carteira"
-          icon={Database}
-        />
-        <KPIBox
-          title="Volume em Estoque"
-          value={`R$ ${(volumeVivo / 1e9).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} bi`}
-          subtitle="Valor emitido em circulação"
+          subtitle={`Total filtrado`}
           icon={TrendingUp}
         />
         <KPIBox
+          title="Incentivados (12.431)"
+          value={totalIncentivados.toLocaleString('pt-BR')}
+          subtitle={`${Math.round((totalIncentivados / (ativosVivos || 1)) * 100)}% dos ativos`}
+          icon={ShieldCheck}
+        />
+        <KPIBox
+          title="Volume Emitido"
+          value={`R$ ${(volumeVivo / 1e9).toFixed(1)}B`}
+          subtitle="Volume total emitido"
+          icon={Database}
+        />
+        <KPIBox
           title="Duration Média"
-          value={`${durationMedia.toFixed(2)} anos`}
-          subtitle="Base Dias Úteis (DU/252)"
+          value={`${durationMedia.toFixed(2)}a`}
+          subtitle="Média ponderada DU/252"
           icon={Clock}
         />
         <KPIBox
-          title="Negociados ANBIMA"
+          title="Com Preço Mercado"
           value={totalComPrecoMercado.toLocaleString('pt-BR')}
-          subtitle={`${Math.round((totalComPrecoMercado / (ativosVivos || 1)) * 100)}% com preço secundário`}
-          icon={ShieldCheck}
+          subtitle={`${Math.round((totalComPrecoMercado / (ativosVivos || 1)) * 100)}% com taxa secundária`}
+          icon={Activity}
         />
       </div>
 
@@ -756,6 +879,7 @@ const CreditDashboard: React.FC = () => {
                     <div className="bg-slate-900 text-white p-3 rounded-xl shadow-lg border border-slate-800 text-xs space-y-1">
                       <div className="font-bold text-blue-400 text-sm">{p.name}</div>
                       <div>Emissor: {p.issuer || '-'}</div>
+                      <div>Tipo: {p.tipo || '-'} {p.incentivada === 'Sim' && <span className="text-emerald-400 font-bold">(Incentivado)</span>}</div>
                       <div>Indexador: {p.indexador || '-'}</div>
                       <div>Rating: <span className="font-bold">{p.rating}</span></div>
                       <div>Duration: {p.x.toFixed(2)} anos (DU/252)</div>
@@ -795,45 +919,64 @@ const CreditDashboard: React.FC = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* LISTA DE ATIVOS FILTRADOS */}
+      {/* LISTA DE ATIVOS FILTRADOS COMPLETA */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col space-y-4">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap justify-between items-center gap-4">
           <div>
             <h2 className="font-bold text-slate-900 text-lg">
-              Ativos Filtrados ({filteredAssets.length})
+              Tabela Completa de Ativos ({displayTableAssets.length.toLocaleString('pt-BR')} de {filteredAssets.length.toLocaleString('pt-BR')})
             </h2>
-            <p className="text-xs text-slate-500">Tabela completa com ratings normalizados, spreads e metodologia de precificação.</p>
+            <p className="text-xs text-slate-500">
+              Detalhamento de taxas de emissão vs mercado atual, PUs, debêntures 12.431, ratings normalizados e spreads.
+            </p>
           </div>
 
-          <button
-            onClick={() => downloadCSV(filteredAssets)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm"
-          >
-            Baixar CSV
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              type="text"
+              placeholder="Buscar ticker, emissor, setor, ISIN..."
+              value={tableSearch}
+              onChange={e => setTableSearch(e.target.value)}
+              className="border border-slate-200 rounded-xl px-3 py-1.5 text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-100 outline-none w-64"
+            />
+            <button
+              onClick={() => downloadCSV(filteredAssets)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5"
+              title="Baixar arquivo estruturado com todos os 27 campos para análise em Excel ou Python"
+            >
+              <span>Baixar CSV Completo ({filteredAssets.length.toLocaleString('pt-BR')})</span>
+            </button>
+          </div>
         </div>
 
-        <div className="border border-slate-200 rounded-xl overflow-y-auto max-h-[450px]">
-          <table className="w-full text-xs">
-            <thead className="sticky top-0 bg-slate-100 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
+        <div className="border border-slate-200 rounded-xl overflow-x-auto overflow-y-auto max-h-[500px]">
+          <table className="w-full text-xs text-left">
+            <thead className="sticky top-0 bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider whitespace-nowrap">
               <tr>
-                <th className="p-2.5 text-left">Ticker</th>
-                <th className="p-2.5 text-left">Emissor</th>
-                <th className="p-2.5 text-left">Tipo</th>
-                <th className="p-2.5 text-left">Indexador</th>
-                <th className="p-2.5 text-left">Taxa Ativo</th>
-                <th className="p-2.5 text-left">Rating Normalizado</th>
-                <th className="p-2.5 text-right">Spread (bps)</th>
+                <th className="p-2.5">Ticker</th>
+                <th className="p-2.5">Tipo</th>
+                <th className="p-2.5">Incentivada</th>
+                <th className="p-2.5">Emissor / Devedor</th>
+                <th className="p-2.5">Indexador</th>
+                <th className="p-2.5">Taxa Emissão</th>
+                <th className="p-2.5">Taxa Mercado</th>
+                <th className="p-2.5 text-right">Spread Over (bps)</th>
                 <th className="p-2.5 text-right">Duration (anos)</th>
-                <th className="p-2.5 text-left">Fonte Precificação</th>
-                <th className="p-2.5 text-left">Vencimento</th>
+                <th className="p-2.5 text-right">PU Mercado</th>
+                <th className="p-2.5">Rating Normalizado</th>
+                <th className="p-2.5">Rating Original</th>
+                <th className="p-2.5">Vencimento</th>
+                <th className="p-2.5">Setor</th>
+                <th className="p-2.5">ISIN</th>
+                <th className="p-2.5">Fonte Precificação</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filteredAssets.slice(0, 200).map(a => {
+            <tbody className="divide-y divide-slate-100 whitespace-nowrap">
+              {displayTableAssets.slice(0, 250).map(a => {
                 const spreadVal = parseFloat(a.spread || '') * 100
                 const durVal = parseFloat(a.duration || '')
                 const normRating = a.rating_normalizado || normalizeRating(a.rating)
+                const puNum = parseFloat(a.pu_mercado || a.pu || '')
 
                 return (
                   <tr key={a.ticker} className="hover:bg-slate-50 transition">
@@ -842,16 +985,29 @@ const CreditDashboard: React.FC = () => {
                         {a.ticker}
                       </a>
                     </td>
+                    <td className="p-2.5 text-slate-600">{a.tipo || '-'}</td>
+                    <td className="p-2.5">
+                      {a.incentivada === 'Sim' ? (
+                        <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                          Sim (12.431/Isento)
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-[10px] font-medium">
+                          Não (Comum)
+                        </span>
+                      )}
+                    </td>
                     <td className="p-2.5 font-medium text-slate-800 truncate max-w-[200px]" title={a.issuer}>
                       {a.issuer || '-'}
                     </td>
-                    <td className="p-2.5 text-slate-600">{a.tipo || '-'}</td>
                     <td className="p-2.5 font-semibold text-slate-700">{a.indexador || '-'}</td>
-                    <td className="p-2.5 text-slate-700">{a.taxa_ativo || a.taxa_emissao || '-'}</td>
-                    <td className="p-2.5">
-                      <span className={`px-2 py-0.5 rounded-md font-bold text-[10px] border ${getRatingBadgeClass(normRating)}`}>
-                        {normRating}
-                      </span>
+                    <td className="p-2.5 text-slate-600 font-mono">{a.taxa_emissao || '-'}</td>
+                    <td className="p-2.5 font-mono font-bold text-blue-700">
+                      {a.taxa_mercado ? (
+                        <span>{a.taxa_mercado}%</span>
+                      ) : (
+                        <span className="text-slate-400 font-normal">-</span>
+                      )}
                     </td>
                     <td className="p-2.5 text-right font-mono font-bold text-slate-900">
                       {isNaN(spreadVal) ? '-' : `+${spreadVal.toFixed(0)} bps`}
@@ -859,6 +1015,22 @@ const CreditDashboard: React.FC = () => {
                     <td className="p-2.5 text-right font-mono text-slate-700">
                       {isNaN(durVal) ? '-' : durVal.toFixed(2)}
                     </td>
+                    <td className="p-2.5 text-right font-mono text-slate-700">
+                      {!isNaN(puNum) && puNum > 0 ? `R$ ${puNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
+                    </td>
+                    <td className="p-2.5">
+                      <span className={`px-2 py-0.5 rounded-md font-bold text-[10px] border ${getRatingBadgeClass(normRating)}`}>
+                        {normRating}
+                      </span>
+                    </td>
+                    <td className="p-2.5 text-slate-500 font-mono text-[11px]">
+                      {a.rating_original ? `${a.rating_original} (${a.rating_agencia || a.agencia || ''})` : '-'}
+                    </td>
+                    <td className="p-2.5 text-slate-600 font-mono">{a.vencimento || '-'}</td>
+                    <td className="p-2.5 text-slate-600 truncate max-w-[150px]" title={a.setor}>
+                      {a.setor || '-'}
+                    </td>
+                    <td className="p-2.5 text-slate-400 font-mono text-[11px]">{a.isin || '-'}</td>
                     <td className="p-2.5">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
                         a.fonte_precificacao === 'ANBIMA Mercado'
@@ -868,7 +1040,6 @@ const CreditDashboard: React.FC = () => {
                         {a.fonte_precificacao || 'Calculada'}
                       </span>
                     </td>
-                    <td className="p-2.5 text-slate-500 font-mono">{a.vencimento || '-'}</td>
                   </tr>
                 )
               })}
