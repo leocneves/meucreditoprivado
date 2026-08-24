@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import {
   fetchCSV,
   Asset,
+  PriceRecord,
   SpreadHistoryRecord,
   normalizeRating,
   RATING_SCALE_ORDER,
@@ -137,6 +138,7 @@ const KPIBox = ({
 
 const CreditDashboard: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([])
+  const [prices, setPrices] = useState<PriceRecord[]>([])
   const [spreadHistory, setSpreadHistory] = useState<SpreadHistoryRecord[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -155,10 +157,12 @@ const CreditDashboard: React.FC = () => {
   useEffect(() => {
     Promise.all([
       fetchCSV<Asset>('./data/assets_master.csv'),
+      fetchCSV<PriceRecord>('./data/prices.csv').catch(() => []),
       fetchCSV<SpreadHistoryRecord>('./data/spread_history.csv').catch(() => [])
     ])
-      .then(([assetsData, historyData]) => {
+      .then(([assetsData, pricesData, historyData]) => {
         setAssets(assetsData || [])
+        setPrices(pricesData || [])
         setSpreadHistory(historyData || [])
       })
       .finally(() => setLoading(false))
@@ -360,6 +364,21 @@ const CreditDashboard: React.FC = () => {
 
   /* ---------- Spread History Time Series ---------- */
 
+  const hasActiveFilters = useMemo(() => {
+    return (
+      indexadoresSel.length > 0 ||
+      issuersSel.length > 0 ||
+      tickersSel.length > 0 ||
+      ratingsSel.length > 0 ||
+      spreadMin !== null ||
+      spreadMax !== null
+    )
+  }, [indexadoresSel, issuersSel, tickersSel, ratingsSel, spreadMin, spreadMax])
+
+  const filteredTickerSet = useMemo(() => {
+    return new Set(filteredAssets.map(a => a.ticker))
+  }, [filteredAssets])
+
   const formattedSpreadHistory = useMemo(() => {
     if (!spreadHistory.length) return []
 
@@ -384,6 +403,63 @@ const CreditDashboard: React.FC = () => {
 
     return Object.values(dateMap).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   }, [spreadHistory])
+
+  const dynamicSpreadHistory = useMemo(() => {
+    if (!hasActiveFilters || !prices.length) {
+      return formattedSpreadHistory
+    }
+
+    const dateMap: Record<string, { date: string; datePretty: string; ipcaValues: number[]; diValues: number[] }> = {}
+
+    // Map each ticker to its indexador
+    const tickerIndexadorMap = new Map<string, string>()
+    filteredAssets.forEach(a => {
+      tickerIndexadorMap.set(a.ticker, a.indexador || '')
+    })
+
+    prices.forEach(p => {
+      if (!p.date || !p.ticker || !filteredTickerSet.has(p.ticker)) return
+      const sp = parseFloat(String(p.spread_over_ref || ''))
+      if (isNaN(sp)) return
+
+      const idx = (tickerIndexadorMap.get(p.ticker) || '').toUpperCase()
+
+      if (!dateMap[p.date]) {
+        const parts = p.date.split('-')
+        dateMap[p.date] = {
+          date: p.date,
+          datePretty: parts.length === 3 ? `${parts[2]}/${parts[1]}` : p.date,
+          ipcaValues: [],
+          diValues: []
+        }
+      }
+
+      if (idx.includes('IPCA')) {
+        dateMap[p.date].ipcaValues.push(sp)
+      } else if (idx.includes('DI+') || idx.includes('CDI') || idx.includes('DI%')) {
+        dateMap[p.date].diValues.push(sp)
+      }
+    })
+
+    const median = (arr: number[]) => {
+      if (!arr.length) return undefined
+      const sorted = [...arr].sort((a, b) => a - b)
+      const mid = Math.floor(sorted.length / 2)
+      return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+    }
+
+    const result = Object.values(dateMap)
+      .map(d => ({
+        date: d.date,
+        datePretty: d.datePretty,
+        ipca: d.ipcaValues.length ? Math.round(median(d.ipcaValues)!) : undefined,
+        di: d.diValues.length ? Math.round(median(d.diValues)!) : undefined
+      }))
+      .filter(d => d.ipca !== undefined || d.di !== undefined)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    return result.length > 0 ? result : formattedSpreadHistory
+  }, [hasActiveFilters, prices, filteredTickerSet, filteredAssets, formattedSpreadHistory])
 
   if (loading) {
     return (
@@ -508,16 +584,25 @@ const CreditDashboard: React.FC = () => {
       </div>
 
       {/* ================= HISTÓRICO DE SPREAD OVER NO TEMPO ================= */}
-      {formattedSpreadHistory.length > 0 && (
+      {dynamicSpreadHistory.length > 0 && (
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div>
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <BarChart3 className="text-blue-600" size={20} />
-                Evolução Histórica do Spread Over Médio de Mercado (bps)
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <BarChart3 className="text-blue-600" size={20} />
+                  Evolução Histórica do Spread Over de Mercado (bps)
+                </h2>
+                {hasActiveFilters && (
+                  <span className="text-[11px] font-extrabold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-md">
+                    Filtro Ativo ({filteredAssets.length} ativos)
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Acompanhamento temporal da abertura e compressão de prêmios de crédito no mercado secundário (ANBIMA / B3).
+                {hasActiveFilters
+                  ? `Série temporal recalculada dinamicamente para os ${filteredAssets.length} ativos selecionados.`
+                  : 'Acompanhamento temporal da abertura e compressão de prêmios de crédito no mercado secundário (ANBIMA / B3).'}
               </p>
             </div>
 
@@ -551,7 +636,7 @@ const CreditDashboard: React.FC = () => {
 
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={formattedSpreadHistory} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
+              <AreaChart data={dynamicSpreadHistory} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorIpca" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
