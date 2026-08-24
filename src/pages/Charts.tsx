@@ -594,6 +594,7 @@ const CreditDashboard: React.FC = () => {
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#colorIpca)"
+                    connectNulls
                   />
                 )}
                 {(spreadHistIdx === 'ALL' || spreadHistIdx === 'DI+') && (
@@ -605,6 +606,7 @@ const CreditDashboard: React.FC = () => {
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#colorDi)"
+                    connectNulls
                   />
                 )}
               </AreaChart>
