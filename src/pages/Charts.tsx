@@ -49,14 +49,41 @@ const countBy = <T, K extends keyof T>(arr: T[], key: K) => {
   return map
 }
 
-const toPieData = (obj: Record<string, number>) => {
-  const total = Object.values(obj).reduce((a, b) => a + b, 0)
-  if (!total) return []
-  return Object.entries(obj).map(([name, value]) => ({
+const toTopPieData = (obj: Record<string, number>, topN = 5) => {
+  const validEntries = Object.entries(obj)
+    .filter(([k, v]) => k && !['null', 'undefined', 'nan', '', '-'].includes(k.toLowerCase()) && v > 0)
+    .sort((a, b) => b[1] - a[1]);
+
+  const total = validEntries.reduce((acc, [, val]) => acc + val, 0);
+  if (!total) return [];
+
+  if (validEntries.length <= topN) {
+    return validEntries.map(([name, count]) => ({
+      name,
+      count,
+      value: Math.round((count / total) * 1000) / 10
+    }));
+  }
+
+  const top = validEntries.slice(0, topN);
+  const othersCount = validEntries.slice(topN).reduce((acc, [, val]) => acc + val, 0);
+
+  const result = top.map(([name, count]) => ({
     name,
-    value: Math.round((value / total) * 100)
-  }))
-}
+    count,
+    value: Math.round((count / total) * 1000) / 10
+  }));
+
+  if (othersCount > 0) {
+    result.push({
+      name: `Outros (${validEntries.length - topN})`,
+      count: othersCount,
+      value: Math.round((othersCount / total) * 1000) / 10
+    });
+  }
+
+  return result;
+};
 
 const downloadCSV = (rows: Asset[]) => {
   if (!rows.length) return
@@ -271,25 +298,19 @@ const CreditDashboard: React.FC = () => {
   /* ---------- Pies ---------- */
 
   const pieIndexador = useMemo(
-    () => toPieData(countBy(filteredAssets, 'indexador')),
+    () => toTopPieData(countBy(filteredAssets, 'indexador'), 5),
     [filteredAssets]
   )
 
   const pieIssuer = useMemo(
-    () => toPieData(countBy(filteredAssets, 'issuer')),
+    () => toTopPieData(countBy(filteredAssets, 'issuer'), 5),
     [filteredAssets]
   )
 
-  const pieRating = useMemo(() => {
-    const counts = countBy(filteredAssets, 'rating_normalizado')
-    const total = Object.values(counts).reduce((a, b) => a + b, 0)
-    if (!total) return []
-
-    return RATING_SCALE_ORDER.filter(r => counts[r]).map(r => ({
-      name: r,
-      value: Math.round((counts[r] / total) * 100)
-    }))
-  }, [filteredAssets])
+  const pieRating = useMemo(
+    () => toTopPieData(countBy(filteredAssets, 'rating_normalizado'), 5),
+    [filteredAssets]
+  )
 
   /* ---------- Scatter ---------- */
 
@@ -594,9 +615,9 @@ const CreditDashboard: React.FC = () => {
 
       {/* PIE CHARTS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <PieBox title="Indexador" data={pieIndexador} />
-        <PieBox title="Emissores" data={pieIssuer} />
-        <PieBox title="Ratings (Normalizados)" data={pieRating} />
+        <PieBox title="Indexador" subtitle="Top 5 + Outros" data={pieIndexador} />
+        <PieBox title="Emissores Mais Concentrados" subtitle="Top 5 + Outros" data={pieIssuer} />
+        <PieBox title="Ratings Mais Frequentes" subtitle="Top 5 + Outros" data={pieRating} />
       </div>
 
       {/* SCATTER PLOT */}
