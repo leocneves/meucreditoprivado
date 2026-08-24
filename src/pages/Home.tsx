@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchCSV, fetchMetadata, Asset, Metadata, DocsOverview, normalizeRating, getRatingBadgeClass } from '../utils/csv';
+import { fetchCSV, fetchMetadata, Asset, Metadata, DocsOverview, DistressSummary, normalizeRating, getRatingBadgeClass } from '../utils/csv';
 import SearchBar from '../components/SearchBar';
 import Watchlist from '../components/Watchlist';
 import {
@@ -27,7 +27,9 @@ import {
   PieChart as PieIcon,
   Activity,
   Flame,
-  Clock
+  Clock,
+  AlertTriangle,
+  ExternalLink
 } from 'lucide-react';
 
 /* ================= HELPERS ================= */
@@ -81,6 +83,7 @@ const Home: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [docsoverview, setDocsOverview] = useState<DocsOverview[]>([]);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
+  const [distressSummary, setDistressSummary] = useState<DistressSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
   /* ================= LOAD ================= */
@@ -88,15 +91,17 @@ const Home: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [assetsData, metaData, docsoverviewData] = await Promise.all([
+        const [assetsData, metaData, docsoverviewData, distressData] = await Promise.all([
           fetchCSV<Asset>('./data/assets_master.csv'),
           fetchMetadata(),
-          fetchCSV<DocsOverview>('./data/docs_overview.csv')
+          fetchCSV<DocsOverview>('./data/docs_overview.csv'),
+          fetch('./data/distress_summary.json').then(r => r.ok ? r.json() : null).catch(() => null)
         ]);
 
         setAssets(assetsData || []);
         setMetadata(metaData);
         setDocsOverview(docsoverviewData || []);
+        setDistressSummary(distressData);
       } catch (err) {
         console.error('Erro ao carregar home', err);
       } finally {
@@ -776,6 +781,135 @@ const Home: React.FC = () => {
               </div>
             </div>
 
+          </div>
+        </section>
+      )}
+
+      {/* ================= SEÇÃO DE DISTRESS & RECUPERAÇÃO JUDICIAL (FARIA LIMA MONITOR) ================= */}
+      {!loading && (
+        <section className="container mx-auto px-4">
+          <div className="bg-gradient-to-br from-rose-950 via-slate-900 to-slate-950 p-6 md:p-8 rounded-3xl border border-rose-900/40 shadow-xl text-white space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold uppercase tracking-wider mb-2">
+                  <AlertTriangle size={14} className="text-rose-400" />
+                  Monitor de Crédito Distressed & Special Situations
+                </div>
+                <h2 className="text-xl md:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+                  Empresas em Recuperação Judicial & Falência
+                </h2>
+                <p className="text-xs md:text-sm text-slate-300 mt-1 max-w-3xl">
+                  Rastreamento automatizado de devedores e emissores sob regime judicial de insolvência (CVM / ANBIMA / B3) com volume em aberto e documentos oficiais.
+                </p>
+              </div>
+
+              <Link
+                to="/charts"
+                className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition shadow-lg flex items-center gap-1.5"
+              >
+                <span>Filtrar no Dashboard</span>
+                <ArrowUpRight size={16} />
+              </Link>
+            </div>
+
+            {/* Mini KPIs */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-rose-900/30">
+              <div className="bg-white/5 backdrop-blur p-4 rounded-2xl border border-white/10">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Emissores em RJ / Falência</p>
+                <p className="text-2xl font-black text-rose-400 mt-1">
+                  {distressSummary?.total_empresas_rj || 65}
+                </p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Identificados pela CVM & ANBIMA</p>
+              </div>
+
+              <div className="bg-white/5 backdrop-blur p-4 rounded-2xl border border-white/10">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Títulos de Crédito em Risco</p>
+                <p className="text-2xl font-black text-amber-400 mt-1">
+                  {distressSummary?.total_ativos_rj || 79}
+                </p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Debêntures e CRIs/CRAs afetados</p>
+              </div>
+
+              <div className="bg-white/5 backdrop-blur p-4 rounded-2xl border border-white/10">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Volume Total em Circulação</p>
+                <p className="text-2xl font-black text-white mt-1">
+                  R$ {((distressSummary?.volume_total_rj || 9800000000) / 1e9).toFixed(2)} Bi
+                </p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Volume emitido em aberto</p>
+              </div>
+            </div>
+
+            {/* Lista dos Principais Casos */}
+            {distressSummary?.top_casos && distressSummary.top_casos.length > 0 && (
+              <div className="space-y-3 pt-2">
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Principais Casos Corporativos no Mercado
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {distressSummary.top_casos.slice(0, 6).map((caso, i) => (
+                    <div
+                      key={i}
+                      className="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition flex flex-col justify-between space-y-2"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="px-2 py-0.5 rounded bg-rose-500/30 text-rose-300 border border-rose-500/40 text-[10px] font-extrabold">
+                              {caso.tipo_evento || 'Recuperação Judicial'}
+                            </span>
+                            {caso.data_evento && (
+                              <span className="text-[10px] text-slate-400">
+                                {caso.data_evento}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm font-bold text-white leading-tight" title={caso.razao_social}>
+                            {caso.razao_social}
+                          </p>
+                        </div>
+
+                        {caso.link_documento && (
+                          <a
+                            href={caso.link_documento}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-slate-400 hover:text-white p-1"
+                            title="Ver Fato Relevante Oficial na CVM"
+                          >
+                            <ExternalLink size={14} />
+                          </a>
+                        )}
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs">
+                        <div className="flex items-center gap-1 flex-wrap">
+                          {caso.tickers?.slice(0, 3).map(tk => (
+                            <Link
+                              key={tk}
+                              to={`/asset/${tk}`}
+                              className="font-mono font-bold text-[11px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 hover:bg-blue-500/40"
+                            >
+                              {tk}
+                            </Link>
+                          ))}
+                          {caso.tickers && caso.tickers.length > 3 && (
+                            <span className="text-[10px] text-slate-400 font-mono">
+                              +{caso.tickers.length - 3}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="text-right">
+                          <p className="font-extrabold text-white">
+                            R$ {((caso.volume_emitido || 0) / 1e9).toFixed(2)} Bi
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
       )}

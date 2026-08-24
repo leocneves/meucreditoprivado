@@ -95,6 +95,7 @@ const downloadCSV = (rows: Asset[]) => {
     { key: 'issuer', label: 'emissor_devedor' },
     { key: 'indexador', label: 'indexador' },
     { key: 'incentivada', label: 'incentivada_lei_12431' },
+    { key: 'em_recuperacao_judicial', label: 'em_recuperacao_judicial' },
     { key: 'taxa_emissao', label: 'taxa_emissao' },
     { key: 'taxa_mercado', label: 'taxa_mercado_atual' },
     { key: 'taxa_ativo', label: 'taxa_referencia' },
@@ -184,6 +185,7 @@ const CreditDashboard: React.FC = () => {
 
   const [tiposSel, setTiposSel] = useState<string[]>([])
   const [incentivadaSel, setIncentivadaSel] = useState<'ALL' | 'SIM' | 'NAO'>('ALL')
+  const [rjSel, setRjSel] = useState<'ALL' | 'EXCLUIR_RJ' | 'APENAS_RJ'>('ALL')
   const [indexadoresSel, setIndexadoresSel] = useState<string[]>([])
   const [issuersSel, setIssuersSel] = useState<string[]>([])
   const [tickersSel, setTickersSel] = useState<string[]>([])
@@ -289,6 +291,12 @@ const CreditDashboard: React.FC = () => {
     if (incentivadaSel === 'NAO')
       base = base.filter(a => a.incentivada === 'Não')
 
+    if (rjSel === 'EXCLUIR_RJ')
+      base = base.filter(a => a.em_recuperacao_judicial !== 'Sim')
+
+    if (rjSel === 'APENAS_RJ')
+      base = base.filter(a => a.em_recuperacao_judicial === 'Sim')
+
     if (indexadoresSel.length)
       base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
 
@@ -316,6 +324,7 @@ const CreditDashboard: React.FC = () => {
     ativosVivosBase,
     tiposSel,
     incentivadaSel,
+    rjSel,
     indexadoresSel,
     issuersSel,
     tickersSel,
@@ -428,6 +437,7 @@ const CreditDashboard: React.FC = () => {
     return (
       tiposSel.length > 0 ||
       incentivadaSel !== 'ALL' ||
+      rjSel !== 'ALL' ||
       indexadoresSel.length > 0 ||
       issuersSel.length > 0 ||
       tickersSel.length > 0 ||
@@ -435,7 +445,7 @@ const CreditDashboard: React.FC = () => {
       spreadMin !== null ||
       spreadMax !== null
     )
-  }, [tiposSel, incentivadaSel, indexadoresSel, issuersSel, tickersSel, ratingsSel, spreadMin, spreadMax])
+  }, [tiposSel, incentivadaSel, rjSel, indexadoresSel, issuersSel, tickersSel, ratingsSel, spreadMin, spreadMax])
 
   const filteredTickerSet = useMemo(() => {
     return new Set(filteredAssets.map(a => a.ticker))
@@ -555,7 +565,7 @@ const CreditDashboard: React.FC = () => {
             Dashboard Analítico de Crédito Privado
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Visão consolidada de spreads over, durations calculadas (DU/252), debêntures incentivadas (Lei 12.431), ratings normalizados e cotações secundárias.
+            Visão consolidada de spreads over, durations calculadas (DU/252), debêntures incentivadas (Lei 12.431), recuperação judicial e cotações secundárias.
           </p>
         </div>
       </div>
@@ -569,6 +579,7 @@ const CreditDashboard: React.FC = () => {
               onClick={() => {
                 setTiposSel([])
                 setIncentivadaSel('ALL')
+                setRjSel('ALL')
                 setIndexadoresSel([])
                 setIssuersSel([])
                 setTickersSel([])
@@ -617,37 +628,75 @@ const CreditDashboard: React.FC = () => {
           />
         </div>
 
-        {/* Linha 2: Incentivada (Lei 12.431) e Faixas de Spread */}
+        {/* Linha 2: Incentivada (Lei 12.431), Recuperação Judicial e Faixas de Spread */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider mr-1">
-              Incentivadas (Lei 12.431 / Isentos):
-            </span>
-            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
-              <button
-                onClick={() => setIncentivadaSel('ALL')}
-                className={`px-3 py-1 rounded-lg transition ${
-                  incentivadaSel === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Todos
-              </button>
-              <button
-                onClick={() => setIncentivadaSel('SIM')}
-                className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
-                  incentivadaSel === 'SIM' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <span>⚡ Incentivados (12.431 / CRI / CRA)</span>
-              </button>
-              <button
-                onClick={() => setIncentivadaSel('NAO')}
-                className={`px-3 py-1 rounded-lg transition ${
-                  incentivadaSel === 'NAO' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Debêntures Comuns
-              </button>
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Filtro Incentivadas */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Incentivadas:
+              </span>
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                <button
+                  onClick={() => setIncentivadaSel('ALL')}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    incentivadaSel === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Todos
+                </button>
+                <button
+                  onClick={() => setIncentivadaSel('SIM')}
+                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
+                    incentivadaSel === 'SIM' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <span>⚡ 12.431 / Isentos</span>
+                </button>
+                <button
+                  onClick={() => setIncentivadaSel('NAO')}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    incentivadaSel === 'NAO' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Comuns
+                </button>
+              </div>
+            </div>
+
+            {/* Filtro Recuperação Judicial */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Recuperação Judicial:
+              </span>
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                <button
+                  onClick={() => setRjSel('ALL')}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    rjSel === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Todos
+                </button>
+                <button
+                  onClick={() => setRjSel('EXCLUIR_RJ')}
+                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
+                    rjSel === 'EXCLUIR_RJ' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Oculta títulos de devedores que estão em recuperação judicial ou falência"
+                >
+                  <span>🛡️ Excluir em RJ</span>
+                </button>
+                <button
+                  onClick={() => setRjSel('APENAS_RJ')}
+                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
+                    rjSel === 'APENAS_RJ' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Filtra apenas títulos distressed sob regime de recuperação judicial"
+                >
+                  <span>⚠️ Apenas em RJ</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -998,7 +1047,12 @@ const CreditDashboard: React.FC = () => {
                       )}
                     </td>
                     <td className="p-2.5 font-medium text-slate-800 truncate max-w-[200px]" title={a.issuer}>
-                      {a.issuer || '-'}
+                      <span>{a.issuer || '-'}</span>
+                      {a.em_recuperacao_judicial === 'Sim' && (
+                        <span className="ml-1.5 px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-[9px] font-extrabold" title="Emissor em Recuperação Judicial / Falência">
+                          ⚠️ Em RJ
+                        </span>
+                      )}
                     </td>
                     <td className="p-2.5 font-semibold text-slate-700">{a.indexador || '-'}</td>
                     <td className="p-2.5 text-slate-600 font-mono">{a.taxa_emissao || '-'}</td>

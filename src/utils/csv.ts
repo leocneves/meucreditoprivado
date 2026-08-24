@@ -24,6 +24,7 @@ export interface Asset {
   serie?: string;
   isin?: string;
   incentivada?: string;
+  em_recuperacao_judicial?: string;
   lei?: string;
   rating_original?: string;
   rating?: string;
@@ -49,6 +50,26 @@ export interface Asset {
   guarantee?: string;
   issue_date?: string;
   dt_emissao?: string;
+}
+
+export interface DistressCase {
+  cnpj: string;
+  cnpj_formatado?: string;
+  razao_social: string;
+  tipo_evento: string;
+  data_evento?: string;
+  volume_emitido?: number;
+  qtd_ativos?: number;
+  tickers?: string[];
+  link_documento?: string;
+}
+
+export interface DistressSummary {
+  total_empresas_rj: number;
+  total_ativos_rj: number;
+  volume_total_rj: number;
+  top_casos: DistressCase[];
+  atualizado_em: string;
 }
 
 export interface SpreadHistoryRecord {
