@@ -110,16 +110,21 @@ const AssetPage: React.FC = () => {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadData = async () => {
       try {
-        const [assetsData, pricesData, emittersData, schedulesData] = await Promise.all([
-          fetchCSV<Asset>('/data/assets_master.csv'),
-          fetchCSV<PriceRecord>('/data/prices.csv'),
-          fetchCSV<Emitter>('/data/emitters_master.csv'),
-          fetchCSV<PaymentEvent>('/data/payment_schedules.csv')
+        const targetTicker = (ticker || '').trim().toUpperCase();
+
+        // 1. Carregar bases principais de forma rápida e resiliente
+        const [assetsData, pricesData, emittersData] = await Promise.all([
+          fetchCSV<Asset>('/data/assets_master.csv').catch(() => fetchCSV<Asset>('./data/assets_master.csv')).catch(() => []),
+          fetchCSV<PriceRecord>('/data/prices.csv').catch(() => fetchCSV<PriceRecord>('./data/prices.csv')).catch(() => []),
+          fetchCSV<Emitter>('/data/emitters_master.csv').catch(() => fetchCSV<Emitter>('./data/emitters_master.csv')).catch(() => [])
         ]);
 
-        const targetTicker = (ticker || '').trim().toUpperCase();
+        if (!isMounted) return;
+
         const found = assetsData.find(a => (a.ticker || '').trim().toUpperCase() === targetTicker);
         if (found) {
           setAsset(found);
@@ -128,10 +133,6 @@ const AssetPage: React.FC = () => {
           
           const matched = matchEmitter(emittersData || [], found);
           setEmitter(matched);
-
-          const assetEvents = (schedulesData || []).filter(e => e && (e.ticker || '').trim().toUpperCase() === targetTicker);
-          assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
-          setPaymentEvents(assetEvents);
 
           // SEO dinâmico por ativo
           const tipoStr = found.tipo || 'Título';
@@ -153,11 +154,31 @@ const AssetPage: React.FC = () => {
       } catch (err) {
         console.error("Error loading asset detail", err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
+      }
+
+      // 2. Carregar cronograma de pagamentos em segundo plano para não bloquear o gráfico de preços
+      try {
+        const targetTicker = (ticker || '').trim().toUpperCase();
+        const schedulesData = await fetchCSV<PaymentEvent>('/data/payment_schedules.csv')
+          .catch(() => fetchCSV<PaymentEvent>('./data/payment_schedules.csv'))
+          .catch(() => []);
+        
+        if (isMounted && schedulesData && schedulesData.length > 0) {
+          const assetEvents = schedulesData.filter(e => e && (e.ticker || '').trim().toUpperCase() === targetTicker);
+          assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
+          setPaymentEvents(assetEvents);
+        }
+      } catch (err) {
+        console.warn("Erro ao carregar payment_schedules", err);
       }
     };
 
     loadData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [ticker]);
 
   const toggleFavorite = () => {
@@ -471,6 +492,13 @@ const AssetPage: React.FC = () => {
           </div>
         )}
 
+        {/* ================= HISTÓRICO DE PREÇOS E TAXAS ================= */}
+        <ChartComponent 
+          prices={prices} 
+          ticker={asset.ticker} 
+          indexador={asset.indexador}
+        />
+
         {/* ================= CRONOGRAMA DE CUPONS E AMORTIZAÇÕES ================= */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
@@ -602,13 +630,6 @@ const AssetPage: React.FC = () => {
             </div>
           )}
         </div>
-
-        {/* ================= HISTÓRICO DE PREÇOS E TAXAS ================= */}
-        <ChartComponent 
-          prices={prices} 
-          ticker={asset.ticker} 
-          indexador={asset.indexador}
-        />
 
     </div>
   );
