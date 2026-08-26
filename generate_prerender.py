@@ -124,8 +124,29 @@ def get_prices_map():
         print(f"Erro ao carregar mapa de preços: {err}")
         return {}
 
+def get_payments_map():
+    payments_file = "public/data/payment_schedules.csv"
+    if not os.path.exists(payments_file):
+        payments_file = "/home/home/airflow/src/cp_site/data/payment_schedules.csv"
+    if not os.path.exists(payments_file):
+        return {}
+    try:
+        df_pay = pd.read_csv(payments_file)
+        pay_map = {}
+        for ticker, group in df_pay.groupby('ticker'):
+            t_upper = str(ticker).strip().upper()
+            pay_map[t_upper] = {
+                'total_events': len(group),
+                'events': group.to_dict(orient='records')
+            }
+        return pay_map
+    except Exception as err:
+        print(f"Erro ao carregar mapa de pagamentos: {err}")
+        return {}
+
 EMITTERS_MAP = get_emitters_map()
 PRICES_MAP = get_prices_map()
+PAYMENTS_MAP = get_payments_map()
 
 def generate_asset_html(row):
     ticker = str(row.get('ticker', '')).strip()
@@ -272,6 +293,55 @@ def generate_asset_html(row):
             <div class="p-2.5 bg-slate-50 rounded-lg"><span class="text-slate-400 font-bold block mb-0.5">Sede</span><strong class="text-slate-800">{sede}</strong></div>
           </div>
           {desc_box}
+        </div>
+        """
+
+    pay_info = PAYMENTS_MAP.get(ticker.upper())
+    payments_section_html = ""
+    if pay_info and pay_info.get('events'):
+        pay_rows = ""
+        for ev in pay_info['events'][:8]:
+            dt = str(ev.get('data_evento', ''))
+            dt_fmt = f"{dt.split('-')[2]}/{dt.split('-')[1]}/{dt.split('-')[0]}" if '-' in dt else dt
+            tipo_ev = str(ev.get('tipo_evento', 'Pagamento'))
+            val_real = ev.get('valor_real')
+            val_str = f"R$ {float(val_real):,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.') if pd.notna(val_real) and str(val_real).lower() != 'nan' else "-"
+            st = str(ev.get('status', 'Previsto'))
+            fonte_ev = str(ev.get('fonte', 'Cronograma Contratual'))
+            pay_rows += f"""
+            <tr class="border-b border-slate-100 text-xs">
+              <td class="px-3 py-2 font-semibold text-slate-800">{dt_fmt}</td>
+              <td class="px-3 py-2"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded font-medium">{tipo_ev}</span></td>
+              <td class="px-3 py-2 text-right font-bold text-slate-900">{val_str}</td>
+              <td class="px-3 py-2 text-center"><span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded font-semibold">{st}</span></td>
+              <td class="px-3 py-2 text-slate-400">{fonte_ev}</td>
+            </tr>
+            """
+        payments_section_html = f"""
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Cronograma & Fluxo de Pagamentos</span>
+              <h2 class="text-xl font-extrabold text-slate-900 mt-0.5">Agenda de Cupons e Amortizações ({ticker})</h2>
+            </div>
+            <span class="text-xs text-slate-500 font-medium">{pay_info['total_events']} eventos registrados</span>
+          </div>
+          <div class="overflow-x-auto max-h-72 overflow-y-auto rounded-xl border border-slate-200">
+            <table class="w-full text-left text-xs text-slate-600">
+              <thead class="bg-slate-100 text-slate-700 font-bold sticky top-0">
+                <tr>
+                  <th class="px-3 py-2">Data</th>
+                  <th class="px-3 py-2">Evento</th>
+                  <th class="px-3 py-2 text-right">Valor Pago (R$)</th>
+                  <th class="px-3 py-2 text-center">Status</th>
+                  <th class="px-3 py-2">Fonte</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white">
+                {pay_rows}
+              </tbody>
+            </table>
+          </div>
         </div>
         """
 
@@ -450,6 +520,8 @@ def generate_asset_html(row):
         </div>
 
         {emitter_section_html}
+
+        {payments_section_html}
 
         {prices_section_html}
 

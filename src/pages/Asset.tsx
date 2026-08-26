@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchCSV, Asset, PriceRecord, Emitter, normalizeRating, getRatingBadgeClass } from '../utils/csv';
+import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, normalizeRating, getRatingBadgeClass } from '../utils/csv';
 import ChartComponent from '../components/ChartComponent';
-import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock } from 'lucide-react';
 
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   if (!asset.issuer) return null;
@@ -31,6 +31,8 @@ const AssetPage: React.FC = () => {
   const [asset, setAsset] = useState<Asset | null>(null);
   const [emitter, setEmitter] = useState<Emitter | null>(null);
   const [prices, setPrices] = useState<PriceRecord[]>([]);
+  const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>([]);
+  const [filterType, setFilterType] = useState<'ALL' | 'JUROS' | 'AMORTIZACAO' | 'FUTUROS'>('ALL');
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -61,10 +63,11 @@ const AssetPage: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [assetsData, pricesData, emittersData] = await Promise.all([
+        const [assetsData, pricesData, emittersData, schedulesData] = await Promise.all([
           fetchCSV<Asset>('/data/assets_master.csv'),
           fetchCSV<PriceRecord>('/data/prices.csv'),
-          fetchCSV<Emitter>('/data/emitters_master.csv')
+          fetchCSV<Emitter>('/data/emitters_master.csv'),
+          fetchCSV<PaymentEvent>('/data/payment_schedules.csv')
         ]);
 
         const targetTicker = (ticker || '').trim().toUpperCase();
@@ -76,6 +79,10 @@ const AssetPage: React.FC = () => {
           
           const matched = matchEmitter(emittersData || [], found);
           setEmitter(matched);
+
+          const assetEvents = (schedulesData || []).filter(e => e && (e.ticker || '').trim().toUpperCase() === targetTicker);
+          assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
+          setPaymentEvents(assetEvents);
 
           // SEO dinâmico por ativo
           const tipoStr = found.tipo || 'Título';
@@ -375,6 +382,138 @@ const AssetPage: React.FC = () => {
             )}
           </div>
         )}
+
+        {/* ================= CRONOGRAMA DE CUPONS E AMORTIZAÇÕES ================= */}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <span className="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-md uppercase tracking-wider">
+                Fluxo de Pagamentos & Cronograma
+              </span>
+              <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1 flex items-center gap-2">
+                <Receipt size={22} className="text-blue-600" />
+                Agenda de Cupons e Amortizações
+              </h3>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
+                {paymentEvents.length} eventos registrados no histórico e projeção contratual
+              </p>
+            </div>
+
+            {/* Filtros rápidos */}
+            {paymentEvents.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600">
+                <button
+                  onClick={() => setFilterType('ALL')}
+                  className={`px-3 py-1.5 rounded-lg transition ${filterType === 'ALL' ? 'bg-white text-blue-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                >
+                  Todos ({paymentEvents.length})
+                </button>
+                <button
+                  onClick={() => setFilterType('JUROS')}
+                  className={`px-3 py-1.5 rounded-lg transition ${filterType === 'JUROS' ? 'bg-white text-blue-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                >
+                  Cupons
+                </button>
+                <button
+                  onClick={() => setFilterType('AMORTIZACAO')}
+                  className={`px-3 py-1.5 rounded-lg transition ${filterType === 'AMORTIZACAO' ? 'bg-white text-blue-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                >
+                  Amortizações
+                </button>
+                <button
+                  onClick={() => setFilterType('FUTUROS')}
+                  className={`px-3 py-1.5 rounded-lg transition ${filterType === 'FUTUROS' ? 'bg-white text-blue-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                >
+                  Futuros
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Tabela com dimensão fixa e scroll vertical suave */}
+          {paymentEvents.length === 0 ? (
+            <div className="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-500 text-sm">
+              Nenhum evento de pagamento registrado para este ativo até o momento.
+            </div>
+          ) : (
+            <div className="relative overflow-x-auto overflow-y-auto max-h-80 rounded-xl border border-slate-200 shadow-inner">
+              <table className="w-full text-left text-sm text-slate-600">
+                <thead className="text-xs uppercase bg-slate-100 text-slate-700 font-bold sticky top-0 z-10 shadow-sm border-b border-slate-200">
+                  <tr>
+                    <th scope="col" className="px-4 py-3">Data do Evento</th>
+                    <th scope="col" className="px-4 py-3">Tipo de Evento</th>
+                    <th scope="col" className="px-4 py-3 text-right">Taxa / %</th>
+                    <th scope="col" className="px-4 py-3 text-right">Valor Pago (R$)</th>
+                    <th scope="col" className="px-4 py-3 text-center">Status</th>
+                    <th scope="col" className="px-4 py-3">Fonte</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 bg-white">
+                  {paymentEvents
+                    .filter(ev => {
+                      if (filterType === 'JUROS') {
+                        return (ev.tipo_evento || '').toLowerCase().includes('juros') || (ev.tipo_evento || '').toLowerCase().includes('cupom');
+                      }
+                      if (filterType === 'AMORTIZACAO') {
+                        return (ev.tipo_evento || '').toLowerCase().includes('amortiza') || (ev.tipo_evento || '').toLowerCase().includes('vencimento');
+                      }
+                      if (filterType === 'FUTUROS') {
+                        return (ev.status || '') === 'Previsto';
+                      }
+                      return true;
+                    })
+                    .map((ev, idx) => {
+                      const isLiquidado = ev.status === 'Liquidado';
+                      const isJuros = (ev.tipo_evento || '').toLowerCase().includes('juros') || (ev.tipo_evento || '').toLowerCase().includes('cupom');
+                      const isAmort = (ev.tipo_evento || '').toLowerCase().includes('amortiza');
+                      
+                      return (
+                        <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="px-4 py-3 font-semibold text-slate-800 whitespace-nowrap">
+                            {formatDatePretty(ev.data_evento)}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold ${
+                              isJuros
+                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                : isAmort
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-purple-50 text-purple-700 border border-purple-200'
+                            }`}>
+                              {ev.tipo_evento || 'Evento de Pagamento'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-right font-mono text-xs text-slate-700">
+                            {ev.taxa && Number(ev.taxa) > 0 ? `${Number(ev.taxa).toFixed(2)}%` : '-'}
+                          </td>
+                          <td className="px-4 py-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
+                            {ev.valor_real && Number(ev.valor_real) > 0 ? (
+                              `R$ ${Number(ev.valor_real).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`
+                            ) : (
+                              <span className="text-slate-400 font-normal text-xs">{isLiquidado ? '-' : 'A liquidar'}</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-center whitespace-nowrap">
+                            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                              isLiquidado
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-blue-50 text-blue-700 border border-blue-200'
+                            }`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${isLiquidado ? 'bg-emerald-500' : 'bg-blue-500'}`}></span>
+                              {ev.status || 'Previsto'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-slate-400 whitespace-nowrap">
+                            {ev.fonte || 'Cronograma Contratual'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
 
         {/* ================= HISTÓRICO DE PREÇOS E TAXAS ================= */}
         <ChartComponent 

@@ -52,6 +52,19 @@ export interface Asset {
   dt_emissao?: string;
 }
 
+export interface PaymentEvent {
+  ticker: string;
+  data_evento: string;
+  data_liquidacao?: string;
+  tipo_evento: string;
+  taxa?: string;
+  valor_real?: string;
+  valor_projetado?: string;
+  status?: string;
+  flag_status?: string;
+  fonte?: string;
+}
+
 export interface DistressCase {
   cnpj: string;
   cnpj_formatado?: string;
