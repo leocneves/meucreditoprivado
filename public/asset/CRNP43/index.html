@@ -89,52 +89,33 @@
           <span class="text-slate-800 font-bold">CRNP43</span>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-full uppercase tracking-wider">Debênture</span>
-              <h1 class="text-3xl font-extrabold text-slate-900 mt-2">CRNP43</h1>
-              <p class="text-lg text-slate-600 font-medium">CONCESSIONARIA DE RODOVIAS NOROESTE PAULISTA S.A.</p>
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-3 py-1 bg-blue-600 text-white text-xs font-black rounded-lg uppercase tracking-wider">Debênture</span>
+                <div class="inline-flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold">
+                  <span class="text-slate-400 text-[11px] uppercase">Rating:</span>
+                  <span class="px-2 py-0.5 rounded text-xs font-black bg-emerald-600 text-white">Sem Rating</span>
+                  <span class="text-slate-300 text-[11px]">(-)</span>
+                </div>
+              </div>
+              <h1 class="text-4xl font-black text-slate-900 tracking-tight">CRNP43</h1>
+              <p class="text-lg text-slate-600 font-semibold">CONCESSIONARIA DE RODOVIAS NOROESTE PAULISTA S.A.</p>
             </div>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-3 py-1.5 bg-blue-50 border border-blue-200 text-blue-800 text-sm font-bold rounded-lg">Rating (Normalizado): <strong>Sem Rating</strong></span>
-              <span class="px-3 py-1.5 bg-slate-100 border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg">Indexador: <strong>IPCA</strong></span>
+            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
+              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
+              <p class="text-2xl font-black text-blue-700 font-mono">IPCA + 8.30%</p>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">ISIN</span>
-              <strong class="text-sm text-slate-800">BRCRNPDBS057</strong>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">Taxa de Emissão</span>
-              <strong class="text-sm text-slate-800">8.30%</strong>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">Data de Vencimento</span>
-              <strong class="text-sm text-slate-800">2047-12-15</strong>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">Duration</span>
-              <strong class="text-sm text-slate-800">11.00 anos</strong>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">Spread NTN-B</span>
-              <strong class="text-sm text-slate-800">-</strong>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">Emissão / Série</span>
-              <strong class="text-sm text-slate-800">3.0ª / 4.0ª</strong>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">PU Par</span>
-              <strong class="text-sm text-slate-800">R$ 1.000,00</strong>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl">
-              <span class="text-xs text-slate-500 font-medium block">Agência / Rating Original</span>
-              <strong class="text-sm text-slate-800">- (-)</strong>
-            </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRCRNPDBS057</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2047-12-15</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">11.00 anos</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">-</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">3.0ª / 4.0ª</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Par</span><strong class="text-slate-800">R$ 1.000,00</strong></div>
           </div>
         </div>
 

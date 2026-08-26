@@ -201,19 +201,36 @@ export const normalizeRating = (val?: string | null): string => {
 };
 
 export const getRatingBadgeClass = (normRating: string): string => {
-  if (['AAA', 'AA+', 'AA', 'AA-', 'A+', 'A', 'A-'].includes(normRating)) {
-    return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+  if (['AAA', 'AA+', 'AA', 'AA-'].includes(normRating)) {
+    return 'bg-emerald-600 text-white border-emerald-700 shadow-sm shadow-emerald-600/30';
+  }
+  if (['A+', 'A', 'A-'].includes(normRating)) {
+    return 'bg-teal-600 text-white border-teal-700 shadow-sm shadow-teal-600/30';
   }
   if (['BBB+', 'BBB', 'BBB-'].includes(normRating)) {
-    return 'bg-blue-50 text-blue-700 border-blue-200';
+    return 'bg-blue-600 text-white border-blue-700 shadow-sm shadow-blue-600/30';
   }
   if (['BB+', 'BB', 'BB-', 'B+', 'B', 'B-'].includes(normRating)) {
-    return 'bg-amber-50 text-amber-700 border-amber-200';
+    return 'bg-amber-500 text-white border-amber-600 shadow-sm shadow-amber-500/30';
   }
   if (['CCC+', 'CCC', 'CCC-', 'CC', 'C', 'D'].includes(normRating)) {
-    return 'bg-rose-50 text-rose-700 border-rose-200';
+    return 'bg-rose-600 text-white border-rose-700 shadow-sm shadow-rose-600/30';
   }
-  return 'bg-slate-100 text-slate-600 border-slate-200';
+  return 'bg-slate-700 text-slate-100 border-slate-600';
+};
+
+export const getTipoBadgeClass = (tipo?: string | null): string => {
+  const t = (tipo || '').toUpperCase();
+  if (t.includes('DEB')) {
+    return 'bg-blue-600 text-white border-blue-700 shadow-sm shadow-blue-600/30';
+  }
+  if (t.includes('CRI')) {
+    return 'bg-emerald-600 text-white border-emerald-700 shadow-sm shadow-emerald-600/30';
+  }
+  if (t.includes('CRA')) {
+    return 'bg-purple-600 text-white border-purple-700 shadow-sm shadow-purple-600/30';
+  }
+  return 'bg-slate-800 text-white border-slate-700';
 };
 
 export interface DocsOverview {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, normalizeRating, getRatingBadgeClass } from '../utils/csv';
+import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
 import ChartComponent from '../components/ChartComponent';
-import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock } from 'lucide-react';
+import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers } from 'lucide-react';
 
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   if (!asset.issuer) return null;
@@ -36,7 +36,7 @@ const AssetPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const formatDatePretty = (dateStr: string) => {
+  const formatDatePretty = (dateStr?: string | null) => {
     if (!dateStr) return "-";
   
     let date: Date;
@@ -58,6 +58,55 @@ const AssetPage: React.FC = () => {
       month: "short",
       year: "numeric"
     });
+  };
+
+  const formatDurationDisplay = (dur?: string | number | null) => {
+    if (!dur) return "-";
+    const d = Number(dur);
+    if (isNaN(d) || d <= 0) return "-";
+    return `${d.toFixed(2)} anos`;
+  };
+
+  const formatVolumeDisplay = (vol?: string | number | null) => {
+    if (!vol) return "-";
+    const v = Number(vol);
+    if (isNaN(v) || v <= 0) return "-";
+    if (v >= 1e9) {
+      return `R$ ${(v / 1e9).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bi`;
+    }
+    return `R$ ${(v / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MM`;
+  };
+
+  const formatPUDisplay = (pu?: string | number | null) => {
+    if (!pu) return "R$ 1.000,00";
+    const p = Number(pu);
+    if (isNaN(p) || p <= 0) return "R$ 1.000,00";
+    return `R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
+  const formatTaxaDisplay = (a: Asset) => {
+    const idx = (a.indexador || '').trim();
+    const tMercado = a.taxa_mercado || a.taxa_ativo;
+    const tEmissao = a.taxa_emissao;
+    const taxaNum = tMercado ? Number(tMercado) : (tEmissao ? Number(tEmissao) : null);
+    
+    if (taxaNum === null || isNaN(taxaNum)) {
+      return idx || 'A definir';
+    }
+
+    if (idx.includes('IPCA') || idx.includes('IGP')) {
+      return `${idx} + ${taxaNum.toFixed(2)}% a.a.`;
+    }
+    if (idx.includes('DI%') || idx.includes('%CDI')) {
+      return `${taxaNum.toFixed(2)}% do CDI`;
+    }
+    if (idx.includes('DI+') || idx.includes('CDI+')) {
+      return `CDI + ${taxaNum.toFixed(2)}% a.a.`;
+    }
+    if (idx.includes('PRE') || idx.includes('PRÉ')) {
+      return `${taxaNum.toFixed(2)}% a.a. Pré`;
+    }
+    return `${idx} ${taxaNum > 0 ? `+ ${taxaNum.toFixed(2)}%` : ''}`.trim();
   };
 
   useEffect(() => {
@@ -127,193 +176,232 @@ const AssetPage: React.FC = () => {
     setIsFavorite(!isFavorite);
   };
 
-  if (loading) return <div className="p-10 text-center">Carregando dados...</div>;
+  if (loading) return <div className="p-10 text-center text-slate-600 font-semibold">Carregando dados do ativo...</div>;
 
   if (!asset) return (
-    <div className="p-10 text-center">
-      Ativo não encontrado.{' '}
-      <Link to="/" className="text-blue-500 underline">Voltar</Link>
+    <div className="p-10 text-center space-y-4">
+      <p className="text-xl font-bold text-slate-800">Ativo não encontrado na base de dados.</p>
+      <Link to="/" className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-bold rounded-xl shadow-sm hover:bg-blue-700 transition">
+        <ArrowLeft size={16} /> Voltar para a busca
+      </Link>
     </div>
   );
+
+  const normRating = asset.rating_normalizado || normalizeRating(asset.rating);
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
 
-      <Link
-        to="/"
-        className="inline-flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors"
-      >
-        <ArrowLeft size={20} />
-        Voltar para a busca
-      </Link>
-
-      <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-        <div>
-          <h1 className="text-4xl font-black text-slate-900">
-            {asset.ticker}
-          </h1>
-          <p className="text-xl text-slate-500 font-medium">
-            {asset.issuer_name}
-          </p>
-        </div>
+      {/* BARRA DE NAVEGAÇÃO SUPERIOR */}
+      <div className="flex items-center justify-between">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-blue-600 hover:border-blue-300 font-bold text-sm transition-all shadow-sm group"
+        >
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform text-blue-600" />
+          Voltar para a busca
+        </Link>
 
         <button
           onClick={toggleFavorite}
-          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shadow-sm ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-sm ${
             isFavorite
-              ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+              ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
               : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
           }`}
         >
-          <Star size={20} fill={isFavorite ? 'currentColor' : 'none'} />
-          {isFavorite ? 'Favorito' : 'Seguir Ativo'}
+          <Star size={18} className={isFavorite ? 'text-amber-500 fill-amber-400' : 'text-slate-400'} />
+          {isFavorite ? 'Ativo Salvo' : 'Seguir Ativo'}
         </button>
       </div>
 
-      {/* CONTEÚDO */}
-
-      <div className="space-y-8">
-
-        {/* CARDS IPCA + VENCIMENTO */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
-              <Percent size={24} />
-            </div>
-            <div>
-              <p className="text-xs text-slate-400 font-bold uppercase">Devedor / EMISSOR</p>
-              <p className="text-lg font-bold text-slate-800">
-                {asset.issuer}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
-              <Percent size={24} />
-            </div>
-            <div>
-              <p className="text-xs text-slate-400 font-bold uppercase">Indexador</p>
-              <p className="text-lg font-bold text-slate-800">
-                {asset.indexador}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-indigo-50 text-indigo-600 rounded-lg">
-              <Calendar size={24} />
-            </div>
-            <div>
-              <p className="text-xs text-slate-400 font-bold uppercase">VOLUME DA EMISSÃO</p>
-              <p className="text-lg font-bold text-slate-800">
-                R$ {(asset.volume / 1e6).toLocaleString('pt-BR', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                })} MM
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-indigo-50 text-indigo-600 rounded-lg">
-              <Calendar size={24} />
-            </div>
-            <div>
-              <p className="text-xs text-slate-400 font-bold uppercase">Vencimento</p>
-              <p className="text-lg font-bold text-slate-800">
-                {formatDatePretty(asset.vencimento)}
-              </p>
-            </div>
-          </div>
-
-        </div>
-
-        {/* DETALHES DO ATIVO (AGORA EMBAIXO) */}
-
-        <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl space-y-6">
-
-          <h3 className="text-xl font-bold border-b border-slate-700 pb-4">
-            Detalhes do Papel
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">ISIN</p>
-              <p className="font-mono text-sm">{asset.isin}</p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">EMISSAO</p>
-              <p className="font-mono text-sm">{asset.emissao}</p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">SÉRIE</p>
-              <p className="font-mono text-sm">{asset.serie}</p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Vencimento</p>
-              <p className="font-mono text-sm">
-                {formatDatePretty(asset.vencimento)}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Referência NTN-B</p>
-              <p className="font-mono text-sm">
-                {formatDatePretty(asset.ntnb_referencia)}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Duration</p>
-              <p className="font-mono text-sm">
-                {(asset.duration / 365).toLocaleString('pt-BR', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                })} anos
-              </p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">TAXA EMISSÃO</p>
-              <p className="font-mono text-sm">{asset.taxa_emissao}</p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">DATA EMISSÃO</p>
-              <p>{formatDatePretty(asset.data_emissao)}</p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Tipo de Ativo</p>
-              <p className="capitalize font-medium text-slate-800">{asset.tipo || 'Título'}</p>
-            </div>
-
-            <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Rating Normalizado</p>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold border mt-1 ${getRatingBadgeClass(asset.rating_normalizado || normalizeRating(asset.rating))}`}>
-                {asset.rating_normalizado || normalizeRating(asset.rating)}
+      {/* ================= HERO CARD PRINCIPAL DO ATIVO ================= */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-3">
+            {/* BADGES SUPERIORES COM CORES VIBRANTES E ALTO CONTRASTE */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider ${getTipoBadgeClass(asset.tipo)}`}>
+                <Tag size={13} />
+                {asset.tipo || 'Título de Crédito'}
               </span>
+
+              {asset.incentivada === 'Sim' && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-extrabold bg-emerald-100 text-emerald-950 border border-emerald-300 shadow-sm">
+                  <Sparkles size={13} className="text-emerald-700" />
+                  Isento de IR (Lei 12.431)
+                </span>
+              )}
+
+              {asset.em_recuperacao_judicial === 'Sim' && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-black bg-rose-600 text-white shadow-sm animate-pulse">
+                  <AlertTriangle size={13} />
+                  Em Recuperação Judicial
+                </span>
+              )}
+
+              {/* RATING BADGE DE ALTO DESTAQUE */}
+              <div className="inline-flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold shadow-sm">
+                <span className="text-slate-400 text-[11px] uppercase font-semibold">Rating:</span>
+                <span className={`px-2 py-0.5 rounded text-xs font-black ${getRatingBadgeClass(normRating)}`}>
+                  {normRating}
+                </span>
+                {asset.agencia && asset.agencia !== '-' && (
+                  <span className="text-slate-300 text-[11px] font-medium">({asset.agencia})</span>
+                )}
+              </div>
             </div>
 
+            {/* TICKER E EMISSOR */}
             <div>
-              <p className="text-slate-400 text-xs font-bold uppercase">Rating Original & Agência</p>
-              <p className="text-sm font-medium text-slate-800">
-                {asset.agencia || '-'} — <span className="font-mono text-slate-600 font-semibold">{asset.rating || '-'}</span>
+              <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
+                {asset.ticker}
+              </h1>
+              <p className="text-lg sm:text-xl font-semibold text-slate-600 mt-0.5">
+                {asset.issuer || 'Emissor Privado'}
               </p>
-              {asset.divulgacao && (
-                <span className="text-xs text-slate-400 block mt-0.5">Divulgado em: {formatDatePretty(asset.divulgacao)}</span>
+            </div>
+          </div>
+
+          {/* SPREAD & RETORNO DESTAQUE */}
+          <div className="flex items-center gap-4 bg-gradient-to-br from-slate-50 to-blue-50/60 p-5 rounded-2xl border border-blue-100 shadow-inner">
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Taxa Contratada / Mercado</span>
+              <p className="text-2xl sm:text-3xl font-black text-blue-700 font-mono">
+                {formatTaxaDisplay(asset)}
+              </p>
+              {asset.spread && (
+                <span className="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md border border-emerald-300">
+                  <TrendingUp size={12} className="text-emerald-700" />
+                  Spread: {Number(asset.spread) > 0 ? '+' : ''}{(Number(asset.spread) * 100).toFixed(2)}% bps
+                </span>
               )}
             </div>
+          </div>
+        </div>
 
+        {/* GRID DE CARDS KPI (6 MÉTRICAS PRINCIPAIS) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 pt-4 border-t border-slate-100">
+          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-colors">
+            <div className="flex items-center gap-1.5 text-blue-600 mb-1">
+              <Percent size={16} />
+              <span className="text-[11px] font-bold text-slate-400 uppercase">Indexador</span>
+            </div>
+            <p className="text-base font-extrabold text-slate-900">{asset.indexador || '-'}</p>
+            <span className="text-[11px] text-slate-400 font-medium">Contratual</span>
           </div>
 
+          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-200 transition-colors">
+            <div className="flex items-center gap-1.5 text-indigo-600 mb-1">
+              <Clock size={16} />
+              <span className="text-[11px] font-bold text-slate-400 uppercase">Duration</span>
+            </div>
+            <p className="text-base font-extrabold text-slate-900">
+              {formatDurationDisplay(asset.duration)}
+            </p>
+            <span className="text-[11px] text-indigo-600 font-semibold">{asset.fonte_precificacao || 'DU / 252'}</span>
+          </div>
+
+          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-200 transition-colors">
+            <div className="flex items-center gap-1.5 text-emerald-600 mb-1">
+              <Calendar size={16} />
+              <span className="text-[11px] font-bold text-slate-400 uppercase">Vencimento</span>
+            </div>
+            <p className="text-base font-extrabold text-slate-900">{formatDatePretty(asset.vencimento)}</p>
+            <span className="text-[11px] text-slate-400 font-medium">Data Final</span>
+          </div>
+
+          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-violet-200 transition-colors">
+            <div className="flex items-center gap-1.5 text-violet-600 mb-1">
+              <Landmark size={16} />
+              <span className="text-[11px] font-bold text-slate-400 uppercase">Volume</span>
+            </div>
+            <p className="text-base font-extrabold text-slate-900">
+              {formatVolumeDisplay(asset.volume || asset.volume_emissao)}
+            </p>
+            <span className="text-[11px] text-slate-400 font-medium">Série Total</span>
+          </div>
+
+          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-amber-200 transition-colors">
+            <div className="flex items-center gap-1.5 text-amber-600 mb-1">
+              <TrendingUp size={16} />
+              <span className="text-[11px] font-bold text-slate-400 uppercase">Ref. NTN-B</span>
+            </div>
+            <p className="text-base font-extrabold text-slate-900">{asset.ntnb_referencia ? formatDatePretty(asset.ntnb_referencia) : '-'}</p>
+            <span className="text-[11px] text-slate-400 font-medium">{asset.taxa_ntnb ? `${Number(asset.taxa_ntnb).toFixed(2)}% a.a.` : 'Benchmark'}</span>
+          </div>
+
+          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-300 transition-colors">
+            <div className="flex items-center gap-1.5 text-slate-600 mb-1">
+              <Layers size={16} />
+              <span className="text-[11px] font-bold text-slate-400 uppercase">PU Par</span>
+            </div>
+            <p className="text-base font-extrabold text-slate-900">
+              {formatPUDisplay(asset.pu || asset.pu_emissao)}
+            </p>
+            <span className="text-[11px] text-slate-400 font-medium">Por Título</span>
+          </div>
         </div>
+      </div>
+
+      {/* ================= ESPECIFICAÇÕES TÉCNICAS DO PAPEL ================= */}
+      <div className="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-2.5">
+            <FileText size={20} className="text-blue-400" />
+            Especificações Técnicas & Detalhes da Emissão
+          </h3>
+          <span className="text-xs font-mono text-slate-300 bg-slate-800/90 border border-slate-700 px-3 py-1 rounded-lg">
+            ISIN: <strong className="text-blue-300">{asset.isin || '-'}</strong>
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-xs sm:text-sm">
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span>
+            <p className="font-mono text-sm font-bold text-blue-300">{asset.isin || '-'}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span>
+            <p className="font-semibold text-slate-100">{asset.emissao ? `${asset.emissao}ª Emissão` : '-'} / {asset.serie ? `${asset.serie}ª Série` : '-'}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span>
+            <p className="font-semibold text-slate-100">{formatDatePretty(asset.data_emissao)}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Agência & Rating Original</span>
+            <p className="font-semibold text-slate-100">
+              {asset.agencia || '-'} — <span className="text-amber-300 font-bold">{asset.rating || 'Sem Rating'}</span>
+            </p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico</span>
+            <p className="font-semibold text-slate-100">{asset.setor || 'Crédito Privado'}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span>
+            <p className="font-semibold text-slate-100 truncate" title={asset.agente_fiduciario}>{asset.agente_fiduciario || '-'}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span>
+            <p className="font-semibold text-slate-100 truncate" title={asset.coordenador_lider}>{asset.coordenador_lider || '-'}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Enquadramento Legal</span>
+            <p className="font-semibold text-emerald-400">
+              {asset.incentivada === 'Sim' ? 'Lei 12.431 (Incentivada)' : (asset.lei ? `Lei ${asset.lei}` : 'Comum')}
+            </p>
+          </div>
+        </div>
+      </div>
 
         {/* ================= PERFIL DO EMISSOR / DEVEDOR ================= */}
         {emitter && (
@@ -521,8 +609,6 @@ const AssetPage: React.FC = () => {
           ticker={asset.ticker} 
           indexador={asset.indexador}
         />
-
-      </div>
 
     </div>
   );
