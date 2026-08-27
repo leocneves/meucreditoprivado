@@ -6,7 +6,8 @@ import AssetPage from './pages/Asset';
 import Charts from './pages/Charts';
 import NtnbDashboard from './pages/NtnbDashboard';
 import Primary from './pages/Primary';
-import { LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark } from 'lucide-react';
+import Contact from './pages/Contact';
+import { LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const Navbar = () => {
     { path: '/charts', label: 'Crédito Privado', icon: <LineChart size={18} /> },
     { path: '/ntnb', label: 'Curva NTN-B', icon: <Landmark size={18} /> },
     { path: '/primary', label: 'Mercado Primário', icon: <Tag size={18} /> },
+    { path: '/contact', label: 'Contato & Apoio', icon: <Coffee size={18} /> },
   ];
 
   return (
@@ -94,23 +96,30 @@ const App: React.FC = () => {
             <Route path="/ntnb" element={<NtnbDashboard />} />
             <Route path="/dashboard-ntnb" element={<NtnbDashboard />} />
             <Route path="/primary" element={<Primary />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/apoiar" element={<Contact />} />
           </Routes>
         </main>
         <footer className="bg-white border-t border-slate-200 py-10 mt-20">
-          <div className="container mx-auto px-4 text-center space-y-2">
+          <div className="container mx-auto px-4 text-center space-y-3">
             <p className="text-slate-500 text-sm font-semibold">
               &copy; {new Date().getFullYear()} FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
             </p>
-            <p className="text-slate-400 text-xs font-medium">
-              Desenvolvido por{' '}
+            <p className="text-slate-400 text-xs font-medium flex items-center justify-center gap-2 flex-wrap">
+              <span>Desenvolvido por{' '}
               <a
                 href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 hover:text-blue-600 transition-colors"
+                className="text-blue-500 hover:text-blue-600 transition-colors font-bold"
               >
                 Leonardo Contador Neves
-              </a>
+              </a></span>
+              <span>•</span>
+              <Link to="/contact" className="text-amber-600 hover:text-amber-700 font-bold flex items-center gap-1">
+                <Coffee size={14} />
+                <span>Buy Me a Coffee / Contato</span>
+              </Link>
             </p>
             <p className="text-slate-300 text-[10px] uppercase tracking-widest">
               Base de dados CVM, ANBIMA e B3

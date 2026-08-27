@@ -26,7 +26,8 @@ static_pages = [
     "/",
     "/charts",
     "/ntnb",
-    "/primary"
+    "/primary",
+    "/contact"
 ]
 
 for page in static_pages:
