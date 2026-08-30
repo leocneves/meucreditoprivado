@@ -112,7 +112,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 11L0005889,CRI,,,,,,,,,,,,,,,,,1.0,5.0,BRHBSCCRI031,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 11L0015528,CRI,,,,,,,,,,,,,,,,,1.0,15.0,BRPDGSCRI0D0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 11L0018659,CRI,,,,,,,,,,,,,,,07/2026,,1.0,85.0,BRRBCSCRI2E8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-11L0018734,CRI,,,,,,,,,,,,,,,22/09/2026,,1.0,86.0,BRRBCSCRI2F5,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,31/03/2026,31/03/2026,,,,AAA,Sim,Não,Vencido / Sem Precificação,
+11L0018734,CRI,,IPCA,5.17,,,,,300000.0,300000.0,,208200000.0,208200000.0,694.0,694.0,2011-12-15,2023-12-19,1.0,86.0,BRRBCSCRI2F5,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,31/03/2026,31/03/2026,,,,AAA,Sim,Não,Vencido / Sem Precificação,
 11L0018829,CRI,,,,,,,,,,,,,,,31/03/2026,,1.0,87.0,BRRBCSCRI2G3,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,31/03/2026,31/03/2026,,,,AAA,Sim,Não,Vencido / Sem Precificação,
 11L0019395,CRI,,,,,,,,,,,,,,,,,1.0,275.0,BRBSCSCRI772,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 11L0019402,CRI,,,,,,,,,,,,,,,,,1.0,277.0,BRBSCSCRI798,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -328,7 +328,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 15L0542300,CRI,,,,,,,,,,,,,,,,,1.0,31.0,BRPLSCCRI0E2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 15L0542301,CRI,,,,,,,,,,,,,,,,,1.0,32.0,BRPLSCCRI0F9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 15L0542303,CRI,,,,,,,,,,,,,,,,,1.0,33.0,BRPLSCCRI0G7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-15L0542353,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,22.0,BRAPCSCRI1U9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+15L0542353,CRI,,IPCA,9.67,,,,,100000.0,100000.0,,52500000.0,52500000.0,525.0,525.0,2015-12-09,2027-12-07,1.0,22.0,BRAPCSCRI1U9,,,,,,,,,,,,1.23,,,,Sim,Não,Duration Calculada (DU/252),
 15L0648443,CRI,WT MORUMBI,IPCA,6.0,,,,,1000733.08196,1000733.08196,,275201597.539,275201597.539,275,275,2015-12-18,2031-11-12,1.0,132.0,BRRBRACRI3F6,,,,,,,,,,,,4.24,,,,Sim,Não,Duration Calculada (DU/252),
 15L0648450,CRI,,,,,,,,,,,,,,,06/2026,,1.0,369.0,BRBSCSCRI9U8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 15L0648481,CRI,,,,,,,,,,,,,,,,,1.0,370.0,BRBSCSCRI9V6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -755,10 +755,10 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 18H0134531,CRI,,,,,,,,,,,,,,,,,1.0,179.0,BRFSECCRI567,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 18H0135364,CRI,,,,,,,,,,,,,,,,,1.0,175.0,BRFSECCRI526,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 18H0135388,CRI,,,,,,,,,,,,,,,,,1.0,176.0,BRFSECCRI534,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-18H0193630,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,153.0,BRAPCSCRI440,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-18H0193742,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,154.0,BRAPCSCRI457,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-18H0193767,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,155.0,BRAPCSCRI465,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-18H0193821,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,156.0,BRAPCSCRI473,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+18H0193630,CRI,,IPCA,9.05,,,,,1000000.0,1000000.0,,34000000.0,34000000.0,34.0,34.0,2018-08-16,2033-09-07,1.0,153.0,BRAPCSCRI440,,,,,,,,,,,,5.45,,,,Sim,Não,Duration Calculada (DU/252),
+18H0193742,CRI,,IPCA,9.05,,,,,1000000.0,1000000.0,,34000000.0,34000000.0,34.0,34.0,2018-08-16,2033-09-07,1.0,154.0,BRAPCSCRI457,,,,,,,,,,,,5.45,,,,Sim,Não,Duration Calculada (DU/252),
+18H0193767,CRI,,IPCA,9.05,,,,,1000000.0,1000000.0,,34000000.0,34000000.0,34.0,34.0,2018-08-16,2033-09-07,1.0,155.0,BRAPCSCRI465,,,,,,,,,,,,5.45,,,,Sim,Não,Duration Calculada (DU/252),
+18H0193821,CRI,Sumaúma Estacionamentos,IPCA,9.05,,,,,1000000.0,1000000.0,,34000000.0,34000000.0,34.0,34.0,2018-08-16,2033-09-07,1.0,156.0,BRAPCSCRI473,,,,,,,,,,,,5.45,,,,Sim,Não,Duration Calculada (DU/252),
 18H0193841,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,157.0,BRAPCSCRI481,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 18H0250037,CRI,,,,,,,,,,,,,,,31/12/2024,,3.0,4.0,BRPVSCCRI057,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 18H0863601,CRI,STX,IGPM,16.0,,,,,1000.0,1000.0,,7500000.0,7500000.0,7500,7500,2018-08-07,2020-03-20,1.0,110.0,BRFSECCRI5F9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -768,7 +768,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 18I0222026,CRI,RENDA PORTUGUESA II,IPCA,13.15,,,,,1000.0,1000.0,,7000000.0,7000000.0,7000,7000,2018-09-20,2027-05-20,1.0,181.0,BRFSECCRI583,,,,,,brBB(sf),brBB(sf),AUSTIN RATING,AUSTIN RATING,10/01/2020,10/01/2020,0.71,,,BB,Sim,Não,Duration Calculada (DU/252),
 18I0259504,CRI,CRISTIANO VIANA,DI+,4.75,,,,,1000.0,1000.0,,25000000.0,25000000.0,25000,25000,2018-09-14,2023-04-20,1.0,183.0,BRASPRCRI018,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.0475
 18I0260591,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-18I0295172,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,172.0,BRAPCSCRI4H0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+18I0295172,CRI,,IPCA,9.5,,,,,1048.8,1048.8,,8390411.8,8390411.8,8000.0,8000.0,2018-09-28,2032-10-28,1.0,172.0,BRAPCSCRI4H0,,,,,,,,,,,,4.8,,,,Sim,Não,Duration Calculada (DU/252),
 18I0295174,CRI,,,,,,,,,,,,,,,,,1.0,173.0,BRAPCSCRI4I8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 18I0295182,CRI,,,,,,,,,,,,,,,,,1.0,174.0,BRAPCSCRI4J6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 18I0295212,CRI,,,,,,,,,,,,,,,27/08/2026,,1.0,154.0,BRRBRACRI432,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -978,7 +978,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 19H0202888,CRI,,,,,,,,,,,,,,,,,1.0,70.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19H0204332,CRI,BERRINI II,IGP-DI,7.5,,,,,1000.0,1000.0,,17300000.0,17300000.0,17300,17300,2019-08-28,2032-12-22,1.0,160.0,BRHBSCCRI3O7,,,,,,,,,,,,4.95,,,,Sim,Não,Duration Calculada (DU/252),
 19H0205086,CRI,,,,,,,,,,,,,,,,,4.0,117.0,BRGAIACRI436,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19H0221304,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,163.0,BRAPCSCRI5U0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+19H0221304,CRI,JFL Holding e JFL V House Investimentos Imobiliários S.A.,IPCA,7.0,,,,,100539.77,100539.77,,78421024.08,78421024.08,780.0,780.0,2019-08-16,2031-07-23,1.0,163.0,BRAPCSCRI5U0,,,,,,,,,,,,4.1,,,,Sim,Não,Duration Calculada (DU/252),
 19H0235501,CRI,NORTH WEST,IPCA,3.883,,,,,1000.0,1000.0,,551100000.0,551100000.0,551100,551100,2019-08-19,2031-07-02,1.0,214.0,BRAPCSCRI5T2,,,,,,AAAsf(bra),AAAsf(bra),Fitch Ratings,Fitch Ratings,01/03/2024,01/03/2024,4.04,,,AAA,Sim,Não,Duration Calculada (DU/252),
 19H0262186,CRI,REDE D'OR SÃO LUIZ S.A. ,IPCA,3.4465,,,,,1000.0,1000.0,,538328000.0,538328000.0,538328,538328,2019-08-15,2029-08-15,1.0,221.0,BRRBRACRI5T2,,,,,,Br.AAA,Br.AAA,Standard & Poor's,Standard & Poor's,16/07/2026,16/07/2026,2.71,,,AAA,Sim,Não,Duration Calculada (DU/252),
 19H0263644,CRI,,,,,,,,,,,,,,,20/08/2025,,1.0,71.0,BRASTECRI307,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -1061,10 +1061,10 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 19K0059589,CRI,,,,,,,,,,,,,,,01/08/2025,,1.0,73.0,BRASTECRI0E9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K0093569,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,254.0,BRAPCSCRI6G7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K0093591,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,255.0,BRAPCSCRI6H5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19K0093603,CRI,,,,,,,,,,,,,,,24/09/2026,,1.0,256.0,BRAPCSCRI6I3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19K0093608,CRI,,,,,,,,,,,,,,,24/09/2026,,1.0,257.0,BRAPCSCRI6J1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19K0093963,CRI,,,,,,,,,,,,,,,24/09/2026,,1.0,258.0,BRAPCSCRI6K9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19K0093990,CRI,,,,,,,,,,,,,,,24/09/2026,,1.0,259.0,BRAPCSCRI6L7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+19K0093603,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000.0,20000.0,2019-11-04,2039-12-20,1.0,256.0,BRAPCSCRI6I3,,,,,,,,,,,,7.85,,,,Sim,Não,Duration Calculada (DU/252),
+19K0093608,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000.0,20000.0,2019-11-04,2039-12-20,1.0,257.0,BRAPCSCRI6J1,,,,,,,,,,,,7.85,,,,Sim,Não,Duration Calculada (DU/252),
+19K0093963,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000.0,20000.0,2019-11-04,2039-12-20,1.0,258.0,BRAPCSCRI6K9,,,,,,,,,,,,7.85,,,,Sim,Não,Duration Calculada (DU/252),
+19K0093990,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000.0,20000.0,2019-11-04,2039-12-20,1.0,259.0,BRAPCSCRI6L7,,,,,,,,,,,,7.85,,,,Sim,Não,Duration Calculada (DU/252),
 19K0105324,CRI,,,,,,,,,,,,,,,30/06/2025,,1.0,237.0,BRAPCSCRI6M5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K0175216,CRI,,,,,,,,,,,,,,,06/2026,,1.0,309.0,BRFSECCRI864,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K0175217,CRI,,,,,,,,,,,,,,,,,1.0,310.0,BRFSECCRI872,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -1089,9 +1089,9 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 19K0981679,CRI,LOCALFRIO,IPCA,6.0,,,,,1000.0,1000.0,,80000000.0,80000000.0,80000,80000,2019-11-14,2031-12-16,4.0,54.0,BRIMWLCRI1O0,,,,,,,,,,,,4.33,,,,Sim,Não,Duration Calculada (DU/252),
 19K0981682,CRI,LOCALFRIO,IPCA,7.0,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000,20000,2019-11-14,2031-12-16,4.0,55.0,BRIMWLCRI1P7,,,,,,,,,,,,4.33,,,,Sim,Não,Duration Calculada (DU/252),
 19K1003755,CRI,,,,,,,,,,,,,,,06/12/2019,,4.0,130.0,BRGAIACRI477,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19K1007971,CRI,,,,,,,,,,,,,,,22/09/2026,,1.0,251.0,BRRBRACRI6A0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+19K1007971,CRI,,IPCA,7.75,,,,,1000.0,1000.0,,32000000.0,32000000.0,32000.0,32000.0,2019-11-27,2034-07-11,1.0,251.0,BRRBRACRI6A0,,,,,,,,,,,,5.8,,,,Sim,Não,Duration Calculada (DU/252),
 19K1033635,CRI,GRUPO CEM III,IGPM,9.6,,,,,1000.0,1000.0,,27000000.0,27000000.0,27000,27000,2019-11-18,2032-01-19,4.0,56.0,BRIMWLCRI1R3,,,,,,,,,,,,4.42,,,,Sim,Não,Duration Calculada (DU/252),
-19K1034250,CRI,,,,,,,,,,,,,,,22/09/2026,,1.0,242.0,BRRBRACRI697,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+19K1034250,CRI,,IPCA,8.25,,,,,1000.0,1000.0,,40480000.0,40480000.0,40480.0,40480.0,2019-11-18,2031-12-25,1.0,242.0,BRRBRACRI697,,,,,,,,,,,,4.36,,,,Sim,Não,Duration Calculada (DU/252),
 19K1034586,CRI,,,,,,,,,,,,,,,31/12/2023,,1.0,237.0,BRRBRACRI6B8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K1056888,CRI,VARZEA GRANDE,DI+,8.64,,,,,1000.0,1000.0,,115000000.0,115000000.0,115000,115000,2019-11-21,2031-11-21,4.0,52.0,BRIMWLCRI1Q5,,,,,,,,,,,,5.19,,,,Sim,Não,Duration Calculada (DU/252),0.0864
 19K1080327,CRI,,,,,,,,,,,,,,,31/12/2023,,1.0,237.0,BRRBRACRI6B8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -1116,7 +1116,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 19K1139656,CRI,,,,,,,,,,,,,,,,,4.0,133.0,BRGAIACRI4C6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K1139657,CRI,,,,,,,,,,,,,,,,,4.0,134.0,BRGAIACRI4D4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K1139670,CRI,,,,,,,,,,,,,,,06/2026,,1.0,244.0,BRAPCSCRI6S2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19K1145372,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,233.0,BRRBRACRI630,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,30/06/2026,30/06/2026,,,,AAA,Sim,Não,Vencido / Sem Precificação,
+19K1145372,CRI,,IPCA,3.8,,,,,1000.0,1000.0,,527772000.0,527772000.0,527772.0,527772.0,2019-11-15,2029-12-18,1.0,233.0,BRRBRACRI630,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,30/06/2026,30/06/2026,2.94,,,AAA,Sim,Não,Duration Calculada (DU/252),
 19K1145398,CRI,,,,,,,,,,,,,,,07/2026,,4.0,128.0,BRGAIACRI485,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K1145399,CRI,,,,,,,,,,,,,,,,,129.0,4.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19K1145463,CRI,,,,,,,,,,,,,,,,,4.0,129.0,BRGAIACRI493,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -1141,7 +1141,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 19L0838765,CRI,CONE,DI+,1.75,,,,,1000.0,1000.0,,60471000.0,60471000.0,60471,60471,2019-12-18,2034-12-18,4.0,63.0,BRIMWLCRI1Y9,,,,,,,,,,,,8.25,,,,Sim,Não,Duration Calculada (DU/252),0.0175
 19L0838850,CRI,MAIA,IPCA,4.35,,,,,1000.0,1000.0,,78635000.0,78635000.0,78635,78635,2019-12-12,2030-10-14,4.0,57.0,BRIMWLCRI1S1,,,,,,,,,,,,3.49,,,,Sim,Não,Duration Calculada (DU/252),
 19L0840477,CRI,TRX,IPCA,4.8,,,,,1000.0,1000.0,,55472000.0,55472000.0,55472,55472,2019-12-23,2030-01-12,1.0,75.0,BRASTECRI2B1,,,,,,,,,,,,3.01,,,,Sim,Não,Duration Calculada (DU/252),
-19L0853159,CRI,,,,,,,,,,,,,,,17/09/2026,,1.0,243.0,BRRBRACRI6H5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+19L0853159,CRI,,CDI,4.2,,,,,1000.0,1000.0,,51200000.0,51200000.0,51200.0,51200.0,2019-12-16,2031-12-24,1.0,243.0,BRRBRACRI6H5,,,,,,,,,,,,5.28,,,,Sim,Não,Duration Calculada (DU/252),
 19L0867734,CRI,,,,,,,,,,,,,,,07/2026,,1.0,281.0,BRAPCSCRI6Y0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19L0882278,CRI,CANOPUS,IPCA,6.0,,,,,1000.12380402,1000.12380402,,80119917.9400422,80119917.9400422,80110,80110,2019-12-10,2035-02-15,4.0,51.0,BRIMWLCRI1S1,,,,,,,,,,,,6.13,,,,Sim,Não,Duration Calculada (DU/252),
 19L0882396,CRI,ALIANZA I,IPCA,5.55,,,,,999.9993647,999.9993647,,83974946.6506825,83974946.6506825,83975,83975,2019-12-18,2027-12-24,1.0,247.0,BRRBRACRI6I3,,,,,,,,,,,,1.28,,,,Sim,Não,Duration Calculada (DU/252),
@@ -1179,8 +1179,8 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 19L0906182,CRI,CALÃADA,IPCA,12.0,,,,,1000.0,1000.0,,30000000.0,30000000.0,30000,30000,2019-12-20,2029-12-21,1.0,183.0,BRHBSCCRI4M9,,,,,,,,,,,,2.95,,,,Sim,Não,Duration Calculada (DU/252),
 19L0906443,CRI,,,,,,,,,,,,,,,30/09/2024,,1.0,180.0,BRHBSCCRI4N7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19L0907825,CRI,,,,,,,,,,,,,,,,,1.0,182.0,BRHBSCCRI4O5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19L0907835,CRI,,,,,,,,,,,,,,,17/09/2026,,,,BRRBRACRI6F9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-19L0907914,CRI,FLBC,IPCA,8.66,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000,50000,2019-12-20,2034-12-20,1.0,238.0,BRRBRACRI6F9,,,,,,,,,,,,5.99,,,,Sim,Não,Duration Calculada (DU/252),
+19L0907835,CRI,FLBC,IGPM,4.75,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000.0,50000.0,2019-12-20,2034-12-20,1.0,238.0,BRRBRACRI6F9,,,,,,,,,,,,5.99,,,,Sim,Não,Duration Calculada (DU/252),
+19L0907914,CRI,FLBC,IGPM,4.75,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000.0,50000.0,2019-12-20,2034-12-20,1.0,238.0,BRRBRACRI6F9,,,,,,,,,,,,5.99,,,,Sim,Não,Duration Calculada (DU/252),
 19L0907949,CRI,GREEN TOWER,IPCA,8.66,,,,,1000.0,1000.0,,140000000.0,140000000.0,140000,140000,2019-12-20,2034-12-15,1.0,239.0,BRRBRACRI6G7,,,,,,,,,,,,5.97,,,,Sim,Não,Duration Calculada (DU/252),
 19L0909256,CRI,,,,,,,,,,,,,,,07/2026,,4.0,123.0,BRGAIACRI4F9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 19L0909950,CRI,,,,,,,,,,,,,,,31/12/2025,,1.0,246.0,BRBLNSDBS007,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -1193,7 +1193,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 19L0986349,CRI,HSI TRANCHE CURTA,DI+,1.2,,,,,1.0,1.0,,45950000.0,45950000.0,45950000,45950000,2019-12-31,2021-01-12,14.0,3.0,BRVERTCRI0K2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.012
 19L0986350,CRI,HSI TRANCHE LONGA,Não há,0.0,,,,,1.0,1.0,,16224344.0,16224344.0,16224344,16224344,2019-12-31,2030-01-10,15.0,1.0,BRVERTCRI0M8,,,,,,,,,,,,3.0,,,,Sim,Não,Duration Calculada (DU/252),
 19L0986351,CRI,HSI TRANCHE LONGA,Não há,0.0,,,,,1.0,1.0,,11800477.0,11800477.0,11800477,11800477,2019-12-31,2030-01-10,15.0,2.0,BRVERTCRI0O4,,,,,,,,,,,,3.0,,,,Sim,Não,Duration Calculada (DU/252),
-19L0987016,CRI,,,,,,,,,,,,,,,22/09/2026,,1.0,229.0,BRRBRACRI614,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+19L0987016,CRI,,CDI,2.2,,,,,1000.0,1000.0,,30600000.0,30600000.0,30600.0,30600.0,2019-12-16,2031-12-12,1.0,229.0,BRRBRACRI614,,,,,,,,,,,,5.25,,,,Sim,Não,Duration Calculada (DU/252),
 19L0987208,CRI,CUNHA DA CAMARA,IPCA,8.6464,,,,,1000.02426369,1000.02426369,,26979654.6100925,26979654.6100925,26979,26979,2019-12-30,2034-10-10,4.0,67.0,BRIMWLCRI1Z6,,,,,,,,,,,,5.8,,,,Sim,Não,Duration Calculada (DU/252),
 19L0989477,CRI,,,,,,,,,,,,,,,31/12/2022,,1.0,26.0,BRTSSACRI0Y1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 20A0029932,CRI,,,,,,,,,,,,,,,,,1.0,999.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -1313,7 +1313,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 20E1051043,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 20E1051047,CRI,VILA LEOPOLDINA,DI+,6.0,,,,,1000.0,1000.0,,25330000.0,25330000.0,25330,25330,2020-06-26,2026-06-29,4.0,149.0,BRGAIACRI4L7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.06
 20E1055012,CRI,HABITASEC NEX CRI,DI+,8.5,,,,,1000.0,1000.0,,25000000.0,25000000.0,25000,25000,2020-05-11,2025-01-30,1.0,93.0,BRHBSCCRI4W8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.085
-20F0165468,CRI,,,,,,,,,,,,,,,16/09/2026,,1.0,27.0,BROSECCRI0M5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+20F0165468,CRI,,IPCA,12.0,,,,,1000.0,1000.0,,42000000.0,42000000.0,42000.0,42000.0,2020-06-04,2024-12-05,1.0,27.0,BROSECCRI0M5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 20F0638988,CRI,FORTESEC AC LIMA - CRI,IPCA,10.0,,,,,1000.0,1000.0,,1968000.0,1968000.0,1968,1968,2020-06-05,2030-07-20,1.0,417.0,BRFSECCRIAY3,,,,,,,,,,,,3.4,,,,Sim,Não,Duration Calculada (DU/252),
 20F0638992,CRI,FORTESEC AC LIMA - CRI,IPCA,10.0,,,,,1000.0,1000.0,,156000.0,156000.0,156,156,2020-06-05,2030-07-20,1.0,419.0,BRFSECCRIB09,,,,,,,,,,,,3.4,,,,Sim,Não,Duration Calculada (DU/252),
 20F0638993,CRI,FORTESEC AC LIMA - CRI,IPCA,16.25,,,,,1000.0,1000.0,,1312000.0,1312000.0,1312,1312,2020-06-05,2030-07-20,1.0,418.0,BRFSECCRIAZ0,,,,,,,,,,,,3.4,,,,Sim,Não,Duration Calculada (DU/252),
@@ -1395,7 +1395,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 20G0753911,CRI,BLUECAP,DI+,4.5,,,,,1000.0,1000.0,,32000000.0,32000000.0,32000,32000,2020-07-14,2032-08-11,1.0,310.0,BRAPCSCRI7Y8,,,,,,,,,,,,5.91,,,,Sim,Não,Duration Calculada (DU/252),0.045
 20G0754279,CRI,,,,,,,,,,,,,,,06/05/2026,,1.0,30.0,BROSECCRI0O1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 20G0797791,CRI,,,,,,,,,,,,,,,31/12/2022,,1.0,187.0,BRHBSCCRI502,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-20G0798867,CRI,,,,,,,,,,,,,,,22/09/2026,,1.0,282.0,BRRBRACRI721,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+20G0798867,CRI,,IPCA,5.0,,,,,1000.0,1000.0,,13832000.0,13832000.0,13832.0,13832.0,2020-07-29,2030-04-14,1.0,282.0,BRRBRACRI721,,,,,,,,,,,,3.13,,,,Sim,Não,Duration Calculada (DU/252),
 20G0800227,CRI,,,,,,,,,,,,,,,06/2026,,1.0,236.0,BRAPCSCRI804,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 20G0855277,CRI,,,,,,,,,,,,,,,31/12/2025,,1.0,285.0,BRRBRACRI747,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 20G0855350,CRI,,,,,,,,,,,,,,,31/12/2025,,1.0,283.0,BRRBRACRI739,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -1718,7 +1718,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 21A0857929,CRI,RIACHUELO,IPCA,7.2,,,,,1137.900206,1137.900206,,5689501.03,5689501.03,5000,5000,2021-01-05,2028-12-07,1.0,337.0,BRAPCSCRI8W0,,,,,,,,,,,,2.11,,,,Sim,Não,Duration Calculada (DU/252),
 21A0859444,CRI,,,,,,,,,,,,,,,,,4.0,148.0,BRIMWLCRI591,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21A0859460,CRI,LIFTPLAN II,IPCA,15.0,,,,,1000.0,1000.0,,13000000.0,13000000.0,13000,13000,2021-01-26,2023-08-10,1.0,45.0,BRTSSACRI133,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-21A0859622,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,354.0,BRAPCSCRI8Z3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+21A0859622,CRI,DERRY INVESTIMENTOS IMOBILIÁRIOS BRASIL S.A,IPCA,6.2,,,,,1000.0,1000.0,,54000000.0,54000000.0,54000.0,54000.0,2021-01-20,2033-01-24,1.0,354.0,BRAPCSCRI8Z3,,,,,,,,,,,,5.04,,,,Sim,Não,Duration Calculada (DU/252),
 21A0869388,CRI,,,,,,,,,,,,,,,,,4.0,149.0,BRIMWLCRI5A0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21A0870788,CRI,,,,,,,,,,,,,,,10/06/2026,,3.0,49.0,BRPVSCCRI1D0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21B0000204,CRI,,,,,,,,,,,,,,,,,4.0,187.0,BRIMWLCRI526,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -2138,8 +2138,8 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 21G0813778,CRI,,,,,,,,,,,,,,,,,55.0,9.0,BRVERTCRI297,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21G0856704,CRI,ALPHAVILLE AUSA,IPCA,7.5,,,,,1000.0,1000.0,,105000000.0,105000000.0,105000,105000,2021-07-27,2027-07-22,1.0,371.0,BRRBRACRI8X8,,,,,,,,,,,,0.88,,,,Sim,Não,Duration Calculada (DU/252),
 21G0864335,CRI,,,,,,,,,,,,,,,10/09/2026,,1.0,304.0,BRAPCSCRIAG7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-21G0864337,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,305.0,BRAPCSCRIAH5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-21G0864339,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,399.0,BRAPCSCRIAI3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+21G0864337,CRI,,IPCA,7.5,,,,,1000.0,1000.0,,35500000.0,35500000.0,35500.0,35500.0,2021-07-15,2035-08-15,1.0,305.0,BRAPCSCRIAH5,,,,,,,,,,,,6.37,,,,Sim,Não,Duration Calculada (DU/252),
+21G0864339,CRI,,IPCA,6.5,,,,,1000.0,1000.0,,22850000.0,22850000.0,22850.0,22850.0,2021-07-15,2033-08-15,1.0,399.0,BRAPCSCRIAI3,,,,,,,,,,,,5.38,,,,Sim,Não,Duration Calculada (DU/252),
 21G0864353,CRI,,,,,,,,,,,,,,,07/2026,,1.0,427.0,BRAPCSCRIAJ1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21G0864354,CRI,,,,,,,,,,,,,,,31/12/2024,,1.0,258.0,BRHBSCCRI6X1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21G0881444,CRI,,,,,,,,,,,,,,,07/2026,,1.0,228.0,BRHBSCCRI7M2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -2228,7 +2228,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 21H0922521,CRI,,,,,,,,,,,,,,,10/07/2026,,49.0,1.0,BRVERTCRI2B7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21H0926710,CRI,BRASPARK,IPCA,7.5,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000,50000,2021-08-20,2031-08-20,4.0,347.0,BRIMWLCRI8J5,,,,,,,,,,,,4.18,,,,Sim,Não,Duration Calculada (DU/252),
 21H0926803,CRI,YOU LIVINA,DI+,4.9,,,,,1000.0,1000.0,,17000000.0,17000000.0,17000,17000,2021-08-23,2026-08-20,4.0,356.0,BRIMWLCRI8L1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.049
-21H0950730,CRI,,,,,,,,,,,,,,,11/09/2026,,1.0,445.0,BRAPCSCRIAT0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+21H0950730,CRI,,CDI,6.0,,,,,1000.0,1000.0,,30000000.0,30000000.0,30000.0,30000.0,2021-08-23,2026-10-20,1.0,445.0,BRAPCSCRIAT0,,,,,,,,,,,,0.13,,,,Sim,Não,Duration Calculada (DU/252),
 21H0953037,CRI,VILLA JARDIM,IPCA,10.0,,,,,1000.0,1000.0,,26625000.0,26625000.0,26625,26625,2021-08-23,2025-12-24,4.0,305.0,BRIMWLCRA1Y7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21H0953102,CRI,,,,,,,,,,,,,,,,,4.0,354.0,BRIMWLCRA1X9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 21H0953104,CRI,AURA VILA MARIANA,IPCA,8.5,,,,,1000.0,1000.0,,24800000.0,24800000.0,24800,24800,2021-08-20,2038-02-15,1.0,245.0,BRHBSCCRI759,,,,,,,,,,,,7.36,,,,Sim,Não,Duration Calculada (DU/252),
@@ -2772,7 +2772,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22C0463848,CRI,CREDITAS XV,IPCA,7.25,,,,,1000.0,1000.0,,25136000.0,25136000.0,25136,25136,2022-03-29,2042-07-20,77.0,1.0,BRVERTCRI3K6,,,,,,,,,,,,8.58,,,,Sim,Não,Duration Calculada (DU/252),
 22C0463849,CRI,CREDITAS XV,IPCA,8.92,,,,,1000.0,1000.0,,4435000.0,4435000.0,4435,4435,2022-03-29,2042-07-20,77.0,2.0,BRVERTCRI3L4,,,,,,,,,,,,8.58,,,,Sim,Não,Duration Calculada (DU/252),
 22C0463850,CRI,,,,,,,,,,,,,,,,,77.0,3.0,BRVERTCRI3M2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-22C0508211,CRI,,,,,,,,,,,,,,,24/09/2026,,88.0,1.0,BRAPCSCRIF15,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22C0508211,CRI,JFL Holding,IPCA,8.0,,,,,1000.0,1000.0,,35000000.0,35000000.0,35000.0,35000.0,2022-09-06,2039-12-20,88.0,1.0,BRAPCSCRIF15,,,,,,,,,,,,7.85,,,,Sim,Não,Duration Calculada (DU/252),
 22C0508888,CRI,,,,,,,,,,,,,,,07/2026,,1.0,509.0,BRAPCSCRIC67,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22C0509641,CRI,LOG COMMERCIAL PROPERTIES E PARTICIPAÇÕES S.A.,IPCA,6.3,,,,,1000.0,1000.0,,169650000.0,169650000.0,169650,169650,2022-03-18,2029-03-15,1.0,510.0,BRAPCSCRIC75,,,,,,,,,,,,2.29,,,,Sim,Não,Duration Calculada (DU/252),
 22C0509668,CRI,,,,,,,,,,,,,,,19/08/2026,,1.0,451.0,BRRBRACRIBA8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -2853,7 +2853,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22D0895765,CRI,RIACHO DOCE,IPCA,13.0,,,,,1000.0,1000.0,,5000000.0,5000000.0,5000,5000,2022-04-08,2032-03-24,1.0,344.0,BRHBSCCRI8O6,,,,,,,,,,,,4.41,,,,Sim,Não,Duration Calculada (DU/252),
 22D0897027,CRI,RIACHO DOCE,IPCA,13.0,,,,,1000.0,1000.0,,5000000.0,5000000.0,5000,5000,2022-04-08,2032-03-24,1.0,345.0,BRHBSCCRI8P3,,,,,,,,,,,,4.41,,,,Sim,Não,Duration Calculada (DU/252),
 22D0902937,CRI,RIACHO DOCE,IPCA,13.0,,,,,1000.0,1000.0,,5000000.0,5000000.0,5000,5000,2022-04-08,2032-03-24,1.0,346.0,BRHBSCCRI8Q1,,,,,,,,,,,,4.41,,,,Sim,Não,Duration Calculada (DU/252),
-22D0945203,CRI,,,,,,,,,,,,,,,18/09/2026,,1.0,424.0,BRRBRACRIBZ5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22D0945203,CRI,,IPCA,8.61,,,,,1000.0,1000.0,,70000000.0,70000000.0,70000.0,70000.0,2022-04-15,2032-04-19,1.0,424.0,BRRBRACRIBZ5,,,,,,,,,,,,4.47,,,,Sim,Não,Duration Calculada (DU/252),
 22D0946642,CRI,,,,,,,,,,,,,,,07/2026,,1.0,495.0,BRRBRACRIC26,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22D1008852,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22D1010108,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -2913,12 +2913,12 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22E0914464,CRI,,,,,,,,,,,,,,,07/2026,,86.0,1.0,BRVERTCRI4C1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22E0914465,CRI,CREDITAS XX,IPCA,9.92,,,,,1000.0,1000.0,,4415000.0,4415000.0,4415,4415,2022-05-27,2042-09-22,86.0,2.0,BRVERTCRI4D9,,,,,,,,,,,,8.76,,,,Sim,Não,Duration Calculada (DU/252),
 22E0914466,CRI,,,,,,,,,,,,,,,,,86.0,3.0,BRVERTCRI4E7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-22E1056953,CRI,,,,,,,,,,,,,,,22/09/2026,,2.0,1.0,BRRBRACRIC42,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22E1056953,CRI,Gaps Agronegócio Ltda.,IPCA,8.6666,,,,,1000.0,1000.0,,305000000.0,305000000.0,305000.0,305000.0,2022-05-13,2032-05-17,2.0,1.0,BRRBRACRIC42,,,,,,,,,,,,4.55,,,,Sim,Não,Duration Calculada (DU/252),
 22E1095384,CRI,MRV ENGENHARIA E PARTICIPAÇÕES S.A.,IPCA,6.4802,"12,1141","12,1141","12,2395","11,8543",1000.0,1000.0,"1069,66868665",81115000.0,81115000.0,81115,81115,2022-09-09,2030-09-16,32.0,1.0,BRAPCSCRICS8,,,,,,Br.A+,Br.A+,Standard & Poor's,Standard & Poor's,20/07/2026,20/07/2026,2.64,15/05/2029,"7,9521",A,Sim,Não,ANBIMA Mercado (DU/252),0.038554136510544845
 22E1095521,CRI,,,,,,,,,,,,,,,,,32.0,2.0,BRAPCSCRICT6,,,,,,Br.A+,Br.A+,Standard & Poor's,Standard & Poor's,20/07/2026,20/07/2026,,,,A,Sim,Não,Vencido / Sem Precificação,
 22E1096309,CRI,CREDITAS XXI,IPCA,9.92,,,,,1000.0,1000.0,,4418000.0,4418000.0,4418,4418,2022-06-01,2042-09-22,87.0,2.0,BRVERTCRI4A5,,,,,,,,,,,,8.76,,,,Sim,Não,Duration Calculada (DU/252),
 22E1096310,CRI,,,,,,,,,,,,,,,,,87.0,3.0,BRVERTCRI4B3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-22E1102599,CRI,,,,,,,,,,,,,,,18/09/2026,,11.0,1.0,BRRBRACRIC75,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22E1102599,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,50000000.0,50000000.0,35521.0,35521.0,2022-05-26,2042-06-22,11.0,1.0,BRRBRACRIC75,,,,,,,,,,,,8.5,,,,Sim,Não,Duration Calculada (DU/252),
 22E1102623,CRI,,,,,,,,,,,,,,,,,11.0,2.0,BRRBRACRIC83,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22E1150402,CRI,,,,,,,,,,,,,,,07/2026,,,,BRGAIACRI6N8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22E1150634,CRI,URBAN HUB MAUA,IPCA,8.0,,,,,1000.0,1000.0,,40000000.0,40000000.0,40000,40000,2022-05-25,2032-05-25,35.0,1.0,BRGAIACRI6N8,,,,,,,,,,,,4.57,,,,Sim,Não,Duration Calculada (DU/252),
@@ -2936,7 +2936,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22E1313201,CRI,,,,,,,,,,,,,,,,,10.0,2.0,BRAPCSCRICZ3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22E1313202,CRI,QUOTA,IPCA,7.75,,,,,1000.0,1000.0,,70000000.0,70000000.0,70000,70000,2022-06-17,2032-06-15,38.0,1.0,BRAPCSCRID09,,,,,,,,,,,,4.63,,,,Sim,Não,Duration Calculada (DU/252),
 22E1313665,CRI,VIA SUL,DI+,4.75,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000,50000,2022-06-23,2027-06-15,18.0,1.0,BRAPCSCRID41,,,,,,,,,,,,0.77,,,,Sim,Não,Duration Calculada (DU/252),0.0475
-22E1313668,CRI,,,,,,,,,,,,,,,25/09/2026,,34.0,1.0,BRAPCSCRID58,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22E1313668,CRI,,CDI,2.46,,,,,1000.0,1000.0,,150000000.0,150000000.0,150000.0,150000.0,2022-06-15,2027-06-15,34.0,1.0,BRAPCSCRID58,,,,,,,,,,,,0.77,,,,Sim,Não,Duration Calculada (DU/252),
 22E1313669,CRI,HOSPITAL CARE,IPCA,6.9959,,,,,1000.0,1000.0,,122667000.0,122667000.0,122667,122667,2022-06-15,2029-06-15,34.0,2.0,BRAPCSCRID66,,,,,,,,,,,,2.54,,,,Sim,Não,Duration Calculada (DU/252),
 22E1313804,CRI,,,,,,,,,,,,,,,31/12/2024,,48.0,1.0,BRAPCSCRID17,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22E1313805,CRI,,,,,,,,,,,,,,,,,48.0,2.0,BRAPCSCRID25,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -2967,7 +2967,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22F0236437,CRI,,,,,,,,,,,,,,,,,23.0,2.0,BRIMWLCRICI2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22F0284570,CRI,BRASILATA,IPCA,8.0,,,,,1000.0,1000.0,,75400000.0,75400000.0,75400,75400,2022-06-09,2035-06-07,17.0,1.0,BRIMWLCRIGV6,,,,,,,,,,,,6.17,,,,Sim,Não,Duration Calculada (DU/252),
 22F0315398,CRI,LOCALIZA RENT A CAR S.A.,DI+,0.95,"0,4833","0,4833","0,6331","0,2665",1000.0,1000.0,"1037,73550091",300000000.0,300000000.0,300000,300000,2022-06-08,2027-06-07,22.0,1.0,BRIMWLCRICB7,,,,,,AAA.br,AAA.br,Moody's,Moody's,10/08/2026,10/08/2026,0.72,,,AAA,Sim,Não,ANBIMA Mercado (DU/252),0.0048330000000000005
-22F0636859,CRI,,,,,,,,,,,,,,,18/09/2026,,27.0,1.0,BRRBRACRICF5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22F0636859,CRI,,IPCA,9.0,,,,,1000.0,1000.0,,60000000.0,60000000.0,60000.0,60000.0,2022-06-15,2028-05-24,27.0,1.0,BRRBRACRICF5,,,,,,,,,,,,1.65,,,,Sim,Não,Duration Calculada (DU/252),
 22F0636861,CRI,,,,,,,,,,,,,,,,,27.0,2.0,BRRBRACRICG3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22F0636862,CRI,,,,,,,,,,,,,,,,,27.0,3.0,BRRBRACRICH1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22F0658594,CRI,SHOPPING UBERABA,DI+,2.7,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000,50000,2022-06-10,2025-06-30,25.0,1.0,BRIMWLCRICJ0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.027000000000000003
@@ -3008,7 +3008,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22F1025727,CRI,,,,,,,,,,,,,,,,,10.0,2.0,BRRBRACRICN9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22F1035289,CRI,,,,,,,,,,,,,,,07/2026,,29.0,1.0,BRRBRACRICX8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22F1035343,CRI,GAFISA SOROCABA II,DI+,5.0,,,,,1000.0,1000.0,,24000000.0,24000000.0,24000,24000,2022-06-22,2025-12-26,44.0,1.0,BRRBRACRICQ2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.05
-22F1036083,CRI,,,,,,,,,,,,,,,18/09/2026,,12.0,1.0,BRRBRACRICL3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22F1036083,CRI,SOLAIA LTDA,IPCA,9.85,,,,,1000.0,1000.0,,26000000.0,26000000.0,26000.0,26000.0,2022-06-20,2032-06-23,12.0,1.0,BRRBRACRICL3,,,,,,,,,,,,4.65,,,,Sim,Não,Duration Calculada (DU/252),
 22F1105757,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22F1105839,CRI,,,,,,,,,,,,,,,03/08/2026,,9.0,1.0,BRPVSCCRI1L3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22F1106105,CRI,,,,,,,,,,,,,,,07/08/2026,,8.0,1.0,BRPVSCCRI1M1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -3169,12 +3169,12 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22H1519129,CRI,QUINTAS SAO JOSE,DI+,12.5,,,,,1000.0,1000.0,,5000000.0,5000000.0,5000,5000,2022-08-22,2030-08-20,4.0,1.0,BRHBSCCRI932,,,,,,,,,,,,3.93,,,,Sim,Não,Duration Calculada (DU/252),0.125
 22H1522146,CRI,EBAZAR.COM.BR. LTDA.,DI+,0.88,,,,,1000.0,1000.0,,133770000.0,133770000.0,133770,133770,2022-08-15,2027-08-16,52.0,1.0,BRAPCSCRIEM7,,,,,,,,,,,,0.95,,,,Sim,Não,Duration Calculada (DU/252),0.0088
 22H1522692,CRI,MERCADO LIVRE,IPCA,6.4124,,,,,1000.0,1000.0,,366230000.0,366230000.0,366230,366230,2022-08-15,2029-08-15,52.0,2.0,BRAPCSCRIEN5,,,,,,,,,,,,2.71,,,,Sim,Não,Duration Calculada (DU/252),
-22H1574900,CRI,,,,,,,,,,,,,,,11/09/2026,,57.0,1.0,BRAPCSCRIEO3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22H1574900,CRI,LANDSOL SERVIÇOS E PARTICIPAÇÕES S.A.,IPCA,11.0,,,,,1000.0,1000.0,,60000000.0,60000000.0,60000.0,60000.0,2022-08-15,2032-08-16,57.0,1.0,BRAPCSCRIEO3,,,,,,,,,,,,4.8,,,,Sim,Não,Duration Calculada (DU/252),
 22H1575011,CRI,,,,,,,,,,,,,,,,,57.0,2.0,BRAPCSCRIEP0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22H1575176,CRI,,,,,,,,,,,,,,,,,57.0,3.0,BRAPCSCRIEQ8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22H1575281,CRI,,,,,,,,,,,,,,,,,57.0,4.0,BRAPCSCRIER6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22H1579450,CRI,PATIO RORAIMA,IPCA,7.7,,,,,1000.0,1000.0,,33000000.0,33000000.0,33000,33000,2022-08-24,2034-08-25,47.0,1.0,BRRBRACRIE24,,,,,,,,,,,,5.93,,,,Sim,Não,Duration Calculada (DU/252),
-22H1582777,CRI,,,,,,,,,,,,,,,11/09/2026,,56.0,1.0,BRAPCSCRIES4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22H1582777,CRI,LANDSOL SERVIÇOS E PARTICIPAÇÕES S.A.,IPCA,9.5,,,,,1000.0,1000.0,,160000000.0,160000000.0,160000.0,160000.0,2022-08-15,2032-08-16,56.0,1.0,BRAPCSCRIES4,,,,,,,,,,,,4.8,,,,Sim,Não,Duration Calculada (DU/252),
 22H1630624,CRI,,,,,,,,,,,,,,,07/2026,,46.0,1.0,BRIMWLCRIDF6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22H1631360,CRI,ARMAZEM MATEUS S.A.,IPCA,7.5894,,,,,1000.0,1000.0,,65712000.0,65712000.0,65712,65712,2022-08-25,2039-08-15,38.0,1.0,BRRBRACRIE32,,,,,,,,,,,,7.85,,,,Sim,Não,Duration Calculada (DU/252),
 22H1631360 Anual,CRI,ARMAZEM MATEUS S.A.,IPCA,7.5894,,,,,1000.0,1000.0,,65712000.0,65712000.0,65712,65712,2022-08-25,2039-08-15,38.0,1.0,,,,,,,,,,,,,7.85,,,,Sim,Não,Duration Calculada (DU/252),
@@ -3201,7 +3201,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22H2625804,CRI,TAEL,DI+,3.25,,,,,1000.0,1000.0,,36200000.0,36200000.0,36200,36200,2022-08-24,2029-09-17,83.0,2.0,BRAPCSCRIO30,,,,,,,,,,,,3.02,,,,Sim,Não,Duration Calculada (DU/252),0.0325
 22H2625805,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22I0020348,CRI,CURY CONSTRUTORA E INCORPORADORA S.A.,IPCA,6.8301,,,,,1000.0,1000.0,,57000000.0,57000000.0,57000,57000,2022-09-15,2028-09-15,75.0,2.0,BRAPCSCRIF07,,,,,,,,,,,,1.9,,,,Sim,Não,Duration Calculada (DU/252),
-22I0020390,CRI,,,,,,,,,,,,,,,11/09/2026,,75.0,1.0,BRAPCSCRIEZ9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22I0020390,CRI,Cury,CDI,1.1,,,,,1000.0,1000.0,,100000000.0,100000000.0,100000.0,100000.0,2022-09-15,2028-09-15,75.0,1.0,BRAPCSCRIEZ9,,,,,,,,,,,,2.03,,,,Sim,Não,Duration Calculada (DU/252),
 22I0050260,CRI,,,,,,,,,,,,,,,11/08/2026,,15.0,1.0,BRIMWLCRIDG4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22I0053302,CRI,,,,,,,,,,,,,,,12/08/2026,,11.0,1.0,BRPVSCCRI1U4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22I0053638,CRI,,,,,,,,,,,,,,,,,11.0,2.0,BRPVSCCRI1V2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -3436,7 +3436,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22K1451369,CRI,,,,,,,,,,,,,,,,,97.0,12.0,BRVERTCRI5E4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22K1451370,CRI,,,,,,,,,,,,,,,,,97.0,13.0,BRVERTCRI5F1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22K1451371,CRI,,,,,,,,,,,,,,,,,97.0,14.0,BRVERTCRI5G9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-22K1457799,CRI,,,,,,,,,,,,,,,03/03/3036,,83.0,1.0,BRRBRACRIF64,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,30/06/2026,30/06/2026,,,,AAA,Sim,Não,Vencido / Sem Precificação,
+22K1457799,CRI,REDE D’OR SÃO LUIZ S.A.,CDI,0.75,,,,,1000.0,1000.0,,86186000.0,86186000.0,86186.0,86186.0,2022-11-16,2027-12-15,83.0,1.0,BRRBRACRIF64,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,30/06/2026,30/06/2026,1.28,,,AAA,Sim,Não,Duration Calculada (DU/252),
 22K1520003,CRI,REDE D'OR SÃO LUIZ S.A.,DI+,1.0,,,,,1000.0,1000.0,,176323000.0,176323000.0,176323,176323,2022-11-16,2029-12-17,83.0,2.0,BRRBRACRIF72,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,30/06/2026,30/06/2026,3.26,,,AAA,Sim,Não,Duration Calculada (DU/252),0.01
 22K1520055,CRI,REDE D'OR SÃO LUIZ S.A.,IPCA,6.7947,,,,,1000.0,1000.0,,82487000.0,82487000.0,82487,82487,2022-11-16,2029-12-15,83.0,3.0,BRRBRACRIF80,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,30/06/2026,30/06/2026,2.93,15/08/2030,"8,08",AAA,Sim,Não,Duration Calculada (DU/252),-0.01189211695040715
 22K1520058,CRI,,,,,,,,,,,,,,,,,83.0,4.0,BRRBRACRIF98,,,,,,AAA(Bra),AAA(Bra),Fitch Ratings,Fitch Ratings,30/06/2026,30/06/2026,,,,AAA,Sim,Não,Vencido / Sem Precificação,
@@ -3449,7 +3449,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 22K1691627,CRI,GRU IV AIRPORT,DI+,1.8,,,,,1000.0,1000.0,,80900000.0,80900000.0,80900,80900,2022-12-29,2026-01-22,111.0,1.0,BRRBRACRIGF6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.018000000000000002
 22K1692410,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22K1692411,CRI,TOTAL EXPRESS,DI+,4.0,,,,,1000.0,1000.0,,90000000.0,90000000.0,90000,90000,2022-11-16,2028-11-16,104.0,1.0,BRAPCSCRIGF6,,,,,,,,,,,,2.19,,,,Sim,Não,Duration Calculada (DU/252),0.04
-22K1802248,CRI,,,,,,,,,,,,,,,14/09/2026,,137.0,1.0,BRAPCSCRIGZ4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+22K1802248,CRI,,CDI,4.9,,,,,1000.0,1000.0,,300000000.0,300000000.0,300000.0,300000.0,2023-08-30,2028-09-01,137.0,1.0,BRAPCSCRIGZ4,,,,,,,,,,,,2.0,,,,Sim,Não,Duration Calculada (DU/252),
 22L0001401,CRI,HELVETIA,IPCA,12.6825,,,,,1000.0,1000.0,,12000000.0,12000000.0,12000,12000,2022-12-01,2027-03-24,7.0,2.0,BRASTECRI1F4,,,,,,,,,,,,0.55,,,,Sim,Não,Duration Calculada (DU/252),
 22L0001601,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 22L0001605,CRI,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -3647,7 +3647,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 23C1668294,CRI,,,,,,,,,,,,,,,07/2026,,136.0,1.0,BRAPCSCRIH47,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23C1735023,CRI,YOU II,DI+,4.5,,,,,1.0,1.0,,20497142.0,20497142.0,20497142,20497142,2023-03-14,2026-02-27,143.0,1.0,BRAPCSCRIH54,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.045
 23C1756501,CRI,,,,,,,,,,,,,,,,,1.0,518.0,BRRBRACRIH96,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-23C1758107,CRI,,,,,,,,,,,,,,,24/09/2026,,127.0,1.0,BRRBRACRIH62,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+23C1758107,CRI,URBA 5 LOTEAMENTOS LTDA. / RESIDENCIAL PROGRESSO EMPREENDIMENTO IMOBILIÁRIO SPE LTDA.,IPCA,7.7,,,,,1000.0,1000.0,,38650000.0,38650000.0,38650.0,38650.0,2023-03-31,2033-03-31,127.0,1.0,BRRBRACRIH62,,,,,,,,,,,,5.01,,,,Sim,Não,Duration Calculada (DU/252),
 23C1791451,CRI,,,,,,,,,,,,,,,,,1.0,999.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23C1800868,CRI,,,,,,,,,,,,,,,,,127.0,2.0,BRRBRACRIH70,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23C1835265,CRI,,,,,,,,,,,,,,,06/2026,,3.0,1.0,BRFSECCRIJN7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -3669,7 +3669,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 23C1843839,CRI,,,,,,,,,,,,,,,,,154.0,2.0,BRAPCSCRIH88,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23C1869458,CRI,,,,,,,,,,,,,,,07/2026,,121.0,1.0,BRAPCSCRIHB3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23C2552432,CRI,INTER CONSTRUTORA,Não há,0.0,,,,,1000.0,1000.0,,60000000.0,60000000.0,60000,60000,2023-03-30,2028-03-31,138.0,1.0,BRAPCSCRIHC1,,,,,,,,,,,,1.51,,,,Sim,Não,Duration Calculada (DU/252),
-23C2706233,CRI,PLACI,DI+,6.0,,,,,1000.0,1000.0,,35000000.0,35000000.0,35000,35000,2023-03-27,2028-03-20,25.0,1.0,BRRBRACRIHA5,,,,,,,,,,,,1.54,,,,Sim,Não,Duration Calculada (DU/252),0.06
+23C2706233,CRI,"SOCIEDADE HOSPITALAR 4 DE JULHO LTDA., HOSPITAL PLACI BARRA LTDA, HOSPITAL PLACI BRASÍLIA LTDA e SETRE SERVIÇO DE TRATAMENTO E REABILITAÇÃO ESPECIALIZADA LTDA.",CDI,6.0,,,,,1000.0,1000.0,,35000000.0,35000000.0,35000.0,35000.0,2023-03-27,2028-03-20,25.0,1.0,BRRBRACRIHA5,,,,,,,,,,,,1.54,,,,Sim,Não,Duration Calculada (DU/252),
 23C2796602,CRI,,,,,,,,,,,,,,,,,2.0,1.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23C2796634,CRI,,,,,,,,,,,,,,,,,2.0,2.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23C2796635,CRI,,,,,,,,,,,,,,,,,2.0,3.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -3705,7 +3705,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 23D1333883,CRI,,,,,,,,,,,,,,,07/2026,,101.0,1.0,BRIMWLCRIFQ8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23D1446730,CRI,,,,,,,,,,,,,,,27/12/2024,,118.0,1.0,BRRBRACRIHG2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23D1446940,CRI,,,,,,,,,,,,,,,,,118.0,2.0,BRRBRACRIHH0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-23D1515316,CRI,,,,,,,,,,,,,,,24/09/2026,,136.0,1.0,BRRBRACRIHF4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+23D1515316,CRI,,IPCA,7.8444,,,,,1000.0,1000.0,,161233000.0,161233000.0,161233.0,161233.0,2023-04-27,2042-04-06,136.0,1.0,BRRBRACRIHF4,,,,,,,,,,,,8.29,,,,Sim,Não,Duration Calculada (DU/252),
 23D1515671,CRI,,,,,,,,,,,,,,,30/09/2025,,98.0,1.0,BRIMWLCRIFR6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23D1557666,CRI,PORTE AMALGAH,IPCA,10.0,,,,,1000.0,1000.0,,112139000.0,112139000.0,112139,112139,2023-04-20,2028-04-19,45.0,1.0,,,,,,,,,,,,,1.55,,,,Sim,Não,Duration Calculada (DU/252),
 23D1610941,CRI,PULVERIZADO MAUÃ,IPCA,9.0,,,,,1065.04,1065.04,,21300800.0,21300800.0,20000,20000,2023-04-12,2032-07-12,127.0,2.0,BRAPCSCRIHO6,,,,,,,,,,,,4.7,,,,Sim,Não,Duration Calculada (DU/252),
@@ -3780,7 +3780,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 23F0012402,CRI,,,,,,,,,,,,,,,07/2026,,177.0,1.0,BRAPCSCRIIA3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23F0012403,CRI,BV,DI%,105.0,,,,,1000.0,1000.0,,21000000.0,21000000.0,21000,21000,2023-06-09,2028-06-13,177.0,2.0,BRAPCSCRIIB1,,,,,,,,,,,,1.77,,,,Sim,Não,Duration Calculada (DU/252),0.05
 23F0012602,CRI,FARMACIA E DROGARIA NISSEI S.A.,DI+,3.5,"4,2219","4,2219",,"3,9899",1000.0,1000.0,"631,94180153",250000000.0,250000000.0,250000,250000,2023-06-22,2028-06-22,120.0,1.0,BRRBRACRIGU5,,,,,,,,,,,,0.83,,,,Sim,Não,ANBIMA Mercado (DU/252),0.042219
-23F0013404,CRI,,,,,,,,,,,,,,,24/09/2026,,142.0,1.0,BRRBRACRIHC1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+23F0013404,CRI,ITAÚ UNIBANCO HOLDING S.A.,CDI,98.0,,,,,1000.0,1000.0,,658600000.0,658600000.0,658600.0,658600.0,2023-06-19,2027-06-21,142.0,1.0,BRRBRACRIHC1,,,,,,,,,,,,0.79,,,,Sim,Não,Duration Calculada (DU/252),
 23F0013602,CRI,LF ITAÃ ,DI+,99.0,,,,,1000.0,1000.0,,341400000.0,341400000.0,341400,341400,2023-06-19,2029-06-20,142.0,2.0,BRRBRACRIHD9,,,,,,,,,,,,2.77,,,,Sim,Não,Duration Calculada (DU/252),0.99
 23F0046476,CRI,,,,,,,,,,,,,,,07/2026,,139.0,1.0,BRRBRACRIHB3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23F0918527,CRI,CREDITAS XXIX,IPCA,10.5,,,,,1000.0,1000.0,,63328000.0,63328000.0,63328,63328,2023-06-14,2043-09-21,111.0,1.0,BRVERTCRI6A0,,,,,,,,,,,,8.97,,,,Sim,Não,Duration Calculada (DU/252),
@@ -3824,11 +3824,11 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 23F1829746,CRI,,,,,,,,,,,,,,,28/07/2026,,29.0,1.0,BRPVSCCRI2E6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23F1834604,CRI,,,,,,,,,,,,,,,,,29.0,2.0,BRPVSCCRI2F3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23F2335074,CRI,,,,,,,,,,,,,,,07/2026,,146.0,1.0,BRRBRACRII95,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-23F2354249,CRI,,,,,,,,,,,,,,,24/09/2026,,196.0,1.0,BRAPCSCRIIU1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+23F2354249,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,53750000.0,53750000.0,53750.0,53750.0,2023-06-23,2033-06-27,196.0,1.0,BRAPCSCRIIU1,,,,,,,,,,,,5.24,,,,Sim,Não,Duration Calculada (DU/252),
 23F2354336,CRI,,,,,,,,,,,,,,,,,146.0,2.0,BRRBRACRIIA3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-23F2356215,CRI,,,,,,,,,,,,,,,24/09/2026,,174.0,1.0,BRAPCSCRIIX5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-23F2356518,CRI,,,,,,,,,,,,,,,24/09/2026,,197.0,1.0,BRAPCSCRIIW7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-23F2356527,CRI,,,,,,,,,,,,,,,24/09/2026,,198.0,1.0,BRAPCSCRIIV9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+23F2356215,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,53750000.0,53750000.0,53750.0,53750.0,2023-06-23,2033-06-27,174.0,1.0,BRAPCSCRIIX5,,,,,,,,,,,,5.24,,,,Sim,Não,Duration Calculada (DU/252),
+23F2356518,CRI,,CDI,2.4,,,,,1000.0,1000.0,,53750000.0,53750000.0,53750.0,53750.0,2023-06-23,2033-06-27,197.0,1.0,BRAPCSCRIIW7,,,,,,,,,,,,6.78,,,,Sim,Não,Duration Calculada (DU/252),
+23F2356527,CRI,,CDI,2.4,,,,,1000.0,1000.0,,53750000.0,53750000.0,53750.0,53750.0,2023-06-23,2033-06-27,198.0,1.0,BRAPCSCRIIV9,,,,,,,,,,,,6.78,,,,Sim,Não,Duration Calculada (DU/252),
 23F2367721,CRI,URBA 2,IPCA,10.5,,,,,1000.0,1000.0,,48188000.0,48188000.0,48188,48188,2023-06-30,2031-09-30,166.0,1.0,BRRBRACRII20,,,,,,,,,,,,4.12,,,,Sim,Não,Duration Calculada (DU/252),
 23F2368406,CRI,URBA 2 ,IPCA,10.5,,,,,1000.0,1000.0,,12047000.0,12047000.0,12047,12047,2023-06-30,2038-06-30,166.0,2.0,BRRBRACRII38,,,,,,,,,,,,7.4,,,,Sim,Não,Duration Calculada (DU/252),
 23F2369786,CRI,,,,,,,,,,,,,,,05/11/2025,,96.0,1.0,BRRBRACRIID7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -4115,7 +4115,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 23J1450858,CRI,,,,,,,,,,,,,,,,,243.0,2.0,BRAPCSCRIKT9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23J1450937,CRI,,,,,,,,,,,,,,,,,243.0,3.0,BRAPCSCRIKU7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23J1646537,CRI,EXTREMA,IPCA,13.0,,,,,1.0,1.0,,40000000.0,40000000.0,40000000,40000000,2023-10-19,2028-04-25,17.0,3.0,BRAPCSCRIKX1,,,,,,,,,,,,1.57,,,,Sim,Não,Duration Calculada (DU/252),
-23J1654998,CRI,,,,,,,,,,,,,,,11/09/2026,,226.0,1.0,BRAPCSCRIKY9,,,,,,Br.A+,Br.A+,Standard & Poor's,Standard & Poor's,20/07/2026,20/07/2026,,,,A,Sim,Não,Vencido / Sem Precificação,
+23J1654998,CRI,MRV Engenharia e Participações S.A.,CDI,110.5,,,,,1000.0,1000.0,,400000000.0,400000000.0,400000.0,400000.0,2023-12-15,2027-12-15,226.0,1.0,BRAPCSCRIKY9,,,,,,Br.A+,Br.A+,Standard & Poor's,Standard & Poor's,20/07/2026,20/07/2026,1.28,,,A,Sim,Não,Duration Calculada (DU/252),
 23J1655144,CRI,,,,,,,,,,,,,,,,,226.0,2.0,BRAPCSCRIKZ6,,,,,,Br.A+,Br.A+,Standard & Poor's,Standard & Poor's,20/07/2026,20/07/2026,,,,A,Sim,Não,Vencido / Sem Precificação,
 23J1706526,CRI,,,,,,,,,,,,,,,03/09/2026,,170.0,1.0,BRAPCSCRIL09,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23J1706527,CRI,,,,,,,,,,,,,,,,,170.0,2.0,BRAPCSCRIL17,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -4138,7 +4138,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 23J2077851,CRI,,,,,,,,,,,,,,,28/08/2026,,210.0,1.0,BRRBRACRIK34,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23J2094862,CRI,IPIOCA,IPCA,12.0,,,,,1000.0,1000.0,,84000000.0,84000000.0,84000,84000,2023-10-25,2028-12-22,124.0,1.0,BRIMWLCRIGU8,,,,,,,,,,,,2.16,,,,Sim,Não,Duration Calculada (DU/252),
 23J2150945,CRI,,,,,,,,,,,,,,,31/03/2025,,230.0,1.0,BRAPCSCRIL41,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-23J2157659,CRI,,,,,,,,,,,,,,,18/07/2027,,233.0,1.0,BRAPCSCRIL58,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+23J2157659,CRI,,CDI,5.0,,,,,1000.0,1000.0,,15620000.0,15620000.0,15620.0,15620.0,2023-11-03,2029-03-23,233.0,1.0,BRAPCSCRIL58,,,,,,,,,,,,2.54,,,,Sim,Não,Duration Calculada (DU/252),
 23J2160761,CRI,,,,,,,,,,,,,,,,,241.0,3.0,BRAPCSCRIL66,,,,,,Br.AAA,Br.AAA,Standard & Poor's,Standard & Poor's,20/07/2026,20/07/2026,,,,AAA,Sim,Não,Vencido / Sem Precificação,
 23J2162618,CRI,,,,,,,,,,,,,,,,,1.0,545.0,BRRBRACRIKI2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 23J2231398,CRI,H2 ENERGY,IPCA,10.5,,,,,1000.0,1000.0,,53500000.0,53500000.0,53500,53500,2022-08-04,2034-10-23,28.0,2.0,BRRBRACRIKJ0,,,,,,,,,,,,5.83,,,,Sim,Não,Duration Calculada (DU/252),
@@ -4627,7 +4627,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24D2960594,CRI,ASSAI GIC ,IPCA,7.0,,,,,1000.01367,1000.01367,,72221987.26107,72221987.26107,72221,72221,2024-04-11,2034-04-11,24.0,3.0,BRRBRACRINF2,,,,,,,,,,,,5.55,,,,Sim,Não,Duration Calculada (DU/252),
 24D2960647,CRI,ASSAI GIC  ,IPCA,7.0,,,,,1000.00305,1000.00305,,38235116.61675,38235116.61675,38235,38235,2024-04-11,2034-04-11,24.0,4.0,BRRBRACRING0,,,,,,,,,,,,5.55,,,,Sim,Não,Duration Calculada (DU/252),
 24D2962583,CRI,,,,,,,,,,,,,,,07/2026,,2.0,1.0,BRRCKSCRI015,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24D3055754,CRI,,,,,,,,,,,,,,,24/09/2026,,268.0,1.0,BRRBRACRINL0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24D3055754,CRI,,IPCA,10.1559,,,,,1000.0,1000.0,,4324000.0,4324000.0,4324.0,4324.0,2024-04-12,2028-04-27,268.0,1.0,BRRBRACRINL0,,,,,,,,,,,,1.57,,,,Sim,Não,Duration Calculada (DU/252),
 24D3055772,CRI,,,,,,,,,,,,,,,,,268.0,2.0,BRRBRACRINM8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24D3055807,CRI,,,,,,,,,,,,,,,,,268.0,3.0,BRRBRACRINN6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24D3055829,CRI,,,,,,,,,,,,,,,,,268.0,4.0,BRRBRACRINO4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -4707,7 +4707,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24D3470150,CRI,,,,,,,,,,,,,,,,,317.0,2.0,BRAPCSCRIO22,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24D3470625,CRI,,,,,,,,,,,,,,,,,56.0,3.0,BRHBSCCRIBE5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24D3676679,CRI,,,,,,,,,,,,,,,06/2026,,6.0,1.0,BRLSECCRI052,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24D3680470,CRI,,,,,,,,,,,,,,,25/09/2026,,229.0,1.0,BRAPCSCRIOC7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24D3680470,CRI,,IPCA,10.55,,,,,1000.0,1000.0,,40000000.0,40000000.0,40000.0,40000.0,2024-05-17,2034-05-24,229.0,1.0,BRAPCSCRIOC7,,,,,,,,,,,,5.67,,,,Sim,Não,Duration Calculada (DU/252),
 24D3680471,CRI,,,,,,,,,,,,,,,07/2026,,306.0,1.0,BRAPCSCRIOD5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24D3680472,CRI,TAEL,DI+,4.75,,,,,1000.0,1000.0,,1000.0,1000.0,1,1,2024-05-02,2029-08-15,83.0,4.0,BRAPCSCRIO55,,,,,,,,,,,,2.93,,,,Sim,Não,Duration Calculada (DU/252),0.0475
 24D3680473,CRI,TAEL,DI+,4.75,,,,,1000.0,1000.0,,10000000.0,10000000.0,10000,10000,2024-05-02,2029-09-17,83.0,5.0,BRAPCSCRIO63,,,,,,,,,,,,3.02,,,,Sim,Não,Duration Calculada (DU/252),0.0475
@@ -4766,7 +4766,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24E1701575,CRI,,,,,,,,,,,,,,,,,132.0,3.0,BRIMWLCRII77,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24E1703996,CRI,,,,,,,,,,,,,,,,,132.0,4.0,BRIMWLCRII85,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24E1730283,CRI,,,,,,,,,,,,,,,25/08/2026,,64.0,1.0,BRPVSCCRI4F9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24E1751024,CRI,,,,,,,,,,,,,,,24/09/2026,,254.0,1.0,BRRBRACRINK2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24E1751024,CRI,,CDI,4.25,,,,,1000.0,1000.0,,52000000.0,52000000.0,52000.0,52000.0,2024-05-16,2028-05-17,254.0,1.0,BRRBRACRINK2,,,,,,,,,,,,1.69,,,,Sim,Não,Duration Calculada (DU/252),
 24E1751027,CRI,,,,,,,,,,,,,,,,,8.0,1.0,BRRBRACR0061,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24E1752048,CRI,ONE PERDIZES,DI+,2.5,,,,,1000.0,1000.0,,59500000.0,59500000.0,59500,59500,2024-05-16,2027-05-28,271.0,1.0,BRRBRACRIO89,,,,,,,,,,,,0.73,,,,Sim,Não,Duration Calculada (DU/252),0.025
 24E1752053,CRI,ONE PERDIZES,DI+,5.5,,,,,1000.0,1000.0,,25500000.0,25500000.0,25500,25500,2024-05-16,2027-05-28,271.0,2.0,BRRBRACRIO97,,,,,,,,,,,,0.73,,,,Sim,Não,Duration Calculada (DU/252),0.055
@@ -4869,7 +4869,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24F0002202,CRI,,,,,,,,,,,,,,,,,2.0,2.0,BRKNSTCRI067,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F0002203,CRI,,,,,,,,,,,,,,,,,2.0,3.0,BRKNSTCRI075,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F0002404,CRI,,,,,,,,,,,,,,,,,2.0,4.0,BRKNSTCRI083,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24F1075307,CRI,,,,,,,,,,,,,,,21/09/2026,,1.0,1.0,BRLVERCRI005,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24F1075307,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,300000000.0,300000000.0,300000.0,300000.0,2024-06-05,2027-07-21,1.0,1.0,BRLVERCRI005,,,,,,,,,,,,0.88,,,,Sim,Não,Duration Calculada (DU/252),
 24F1075308,CRI,,,,,,,,,,,,,,,,,1.0,2.0,BRLVERCRI013,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F1126487,CRI,IGUATEMI II,DI+,0.3,,,,,1000.0,1000.0,,350000000.0,350000000.0,350000,350000,2024-06-15,2032-06-15,298.0,1.0,BRRBRACRIOA1,,,,,,,,,,,,5.75,,,,Sim,Não,Duration Calculada (DU/252),0.003
 24F1126524,CRI,IGUATEMI EMPRESA DE SHOPPING CENTERS S.A.,DI%,103.0,,,,,1000.0,1000.0,,551917000.0,551917000.0,551917,551917,2024-06-15,2032-06-15,298.0,2.0,BRRBRACRIOB9,,,,,,,,,,,,5.75,,,,Sim,Não,Duration Calculada (DU/252),0.03
@@ -4921,7 +4921,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24F1596770,CRI,,,,,,,,,,,,,,,07/2026,,269.0,1.0,BRRBRACRIOO2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F1645739,CRI,,,,,,,,,,,,,,,31/03/2025,,173.0,1.0,BRIMWLCRIIU4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F1851251,CRI,,,,,,,,,,,,,,,09/09/2024,,288.0,1.0,BRRBRACRIOC7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24F1970219,CRI,,,,,,,,,,,,,,,24/09/2026,,282.0,1.0,BRRBRACRIOR5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24F1970219,CRI,,CDI,5.0,,,,,1000.0,1000.0,,18800000.0,18800000.0,18800.0,18800.0,2024-06-20,2027-06-25,282.0,1.0,BRRBRACRIOR5,,,,,,,,,,,,0.81,,,,Sim,Não,Duration Calculada (DU/252),
 24F1972412,CRI,,,,,,,,,,,,,,,,,282.0,2.0,BRRBRACRIOS3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F2007358,CRI,,,,,,,,,,,,,,,12/08/2026,,59.0,1.0,BRHBSCCRIBI6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F2009551,CRI,,,,,,,,,,,,,,,,,59.0,2.0,BRHBSCCRIBJ4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -4932,7 +4932,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24F2198175,CRI,,,,,,,,,,,,,,,,,112.0,2.0,BRCASCCR0017,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F2199369,CRI,,,,,,,,,,,,,,,06/2026,,10.0,1.0,BRBASECRI1B3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F2199377,CRI,,,,,,,,,,,,,,,,,10.0,2.0,BRBASECRI1C1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24F2255907,CRI,,,,,,,,,,,,,,,21/09/2026,,2.0,1.0,BRLVERCRI021,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24F2255907,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,289000000.0,289000000.0,289000.0,289000.0,2024-06-28,2027-07-20,2.0,1.0,BRLVERCRI021,,,,,,,,,,,,0.87,,,,Sim,Não,Duration Calculada (DU/252),
 24F2255908,CRI,,,,,,,,,,,,,,,,,2.0,2.0,BRLVERCRI039,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F2263347,CRI,,,,,,,,,,,,,,,30/07/2026,,67.0,1.0,BRPVSCCRI4M5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24F2269311,CRI,,,,,,,,,,,,,,,,,174.0,2.0,BRIMWLCRIJ19,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -4954,7 +4954,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24G1253164,CRI,,,,,,,,,,,,,,,19/07/2024,,7.0,1.0,BRIMWLCR0085,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24G1253187,CRI,,,,,,,,,,,,,,,,,7.0,2.0,BRIMWLCR0093,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24G1255391,CRI,,,,,,,,,,,,,,,20/08/2026,,185.0,1.0,BRIMWLCRIJ35,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24G1305617,CRI,,,,,,,,,,,,,,,21/09/2026,,4.0,1.0,BRLVERCRI047,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24G1305617,CRI,,IPCA,8.0,,,,,1000.0,1000.0,,523000000.0,523000000.0,523000.0,523000.0,2024-07-11,2027-07-20,4.0,1.0,BRLVERCRI047,,,,,,,,,,,,0.87,,,,Sim,Não,Duration Calculada (DU/252),
 24G1305618,CRI,,,,,,,,,,,,,,,,,4.0,2.0,BRLVERCRI054,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24G1305619,CRI,,,,,,,,,,,,,,,,,4.0,3.0,BRLVERCRI062,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24G1305620,CRI,,,,,,,,,,,,,,,,,4.0,4.0,BRLVERCRI070,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -5411,7 +5411,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 24K2460086,CRI,,,,,,,,,,,,,,,,,57.0,5.0,BRTSSACRI4D7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24K2486986,CRI,,,,,,,,,,,,,,,,,1.0,1.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24K2516972,CRI,,,,,,,,,,,,,,,,,1.0,2.0,BRASECCRI014,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-24K2559952,CRI,,,,,,,,,,,,,,,16/09/2026,,70.0,6.0,BRPVSCCRI5H2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+24K2559952,CRI,Netcorp Augusta Incorporação e Empreendimento Imobiliário SPE Ltda.,,,,,,,1000.0,1000.0,,63189000.0,63189000.0,63189.0,63189.0,2024-11-28,,70.0,6.0,BRPVSCCRI5H2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24K2582816,CRI,GUARDIAN,IPCA,8.1191,,,,,1000.0,1000.0,,384000000.0,384000000.0,384000,384000,2024-12-16,2037-12-15,230.0,1.0,BRIMWLCRIKR6,,,,,,,,,,,,7.19,,,,Sim,Não,Duration Calculada (DU/252),
 24K2590508,CRI,,,,,,,,,,,,,,,,,2.0,3.0,BRSPSECR0010,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 24K2591027,CRI,,,,,,,,,,,,,,,31/12/2025,,381.0,1.0,BRRBRACRIRP2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -5920,7 +5920,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25E3729759,CRI,,,,,,,,,,,,,,,,,14.0,3.0,BRASPRCRI1N7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25E3736055,CRI,,,,,,,,,,,,,,,,,14.0,4.0,BRASPRCRI1O5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25E3766887,CRI,NTRS - SINART,IPCA,10.5,,,,,1000.0,1000.0,,64376000.0,64376000.0,64376,64376,2025-05-22,2037-05-22,150.0,1.0,BRCASCCRI5Q3,,,,,,,,,,,,6.95,,,,Sim,Não,Duration Calculada (DU/252),
-25E3855233,CRI,,,,,,,,,,,,,,,24/09/2026,,419.0,1.0,BRRBRACRIVH1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25E3855233,CRI,Mitre Realty Empreendimentos e Participações S.A.,CDI,2.8,,,,,1000.0,1000.0,,110000000.0,110000000.0,110000.0,110000.0,2025-05-23,2029-10-24,419.0,1.0,BRRBRACRIVH1,,,,,,,,,,,,3.12,,,,Sim,Não,Duration Calculada (DU/252),
 25E3880724,CRI,,,,,,,,,,,,,,,,,154.0,23.0,BRVERTCRICH7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25E3880886,CRI,,,,,,,,,,,,,,,,,154.0,24.0,BRVERTCRICI5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25E3880984,CRI,CREDITAS,IPCA,12.7,,,,,1000.0,1000.0,,4585000.0,4585000.0,4585,4585,2025-05-29,2046-09-20,154.0,25.0,BRVERTCRICJ3,,,,,,,,,,,,9.5,,,,Sim,Não,Duration Calculada (DU/252),
@@ -5937,7 +5937,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25E9078756,CRI,BRGD II,IPCA,10.75,,,,,1000.0,1000.0,,54700000.0,54700000.0,54700,54700,2025-05-26,2040-11-30,151.0,1.0,BRCASCCRI5R1,,,,,,,,,,,,8.08,,,,Sim,Não,Duration Calculada (DU/252),
 25F0008603,CRI,SQUARE LIFE,DI+,3.6,,,,,1000.0,1000.0,,44000000.0,44000000.0,44000,44000,2024-12-20,2029-12-26,60.0,4.0,BRTSSACRI4J4,,,,,,,,,,,,3.29,,,,Sim,Não,Duration Calculada (DU/252),0.036000000000000004
 25F0010202,CRI,RL80 DESENVOLVIMENTO IMOBILIÁRIO LTDA,DI%,102.5,,,,,1000.0,1000.0,,125000000.0,125000000.0,125000,125000,2025-06-09,2030-06-12,276.0,1.0,BRIMWLCRINB4,,,,,,,,,,,,3.74,,,,Sim,Não,Duration Calculada (DU/252),0.025
-25F0010602,CRI,,,,,,,,,,,,,,,24/09/2026,,447.0,1.0,BRRBRACRIVE8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25F0010602,CRI,"PRATI, DONADUZZI & CIA LTDA.",CDI,98.0,,,,,1000.0,1000.0,,200000000.0,200000000.0,200000.0,200000.0,2025-06-17,2030-06-19,447.0,1.0,BRRBRACRIVE8,,,,,,,,,,,,3.76,,,,Sim,Não,Duration Calculada (DU/252),
 25F0010603,CRI,,,,,,,,,,,,,,,,,447.0,2.0,BRRBRACRIVF5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25F0010604,CRI,,,,,,,,,,,,,,,,,447.0,3.0,BRRBRACRIVG3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25F0062988,CRI,JL II,DI+,3.0,,,,,1000.0,1000.0,,123000000.0,123000000.0,123000,123000,2025-06-04,2030-06-26,272.0,1.0,BRIMWLCRINL3,,,,,,,,,,,,3.78,,,,Sim,Não,Duration Calculada (DU/252),0.03
@@ -6004,7 +6004,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25F7028333,CRI,AIKON 12 EMPREENDIMENTOS IMOBILIÁRIOS LTDA.,DI+,4.75,,,,,1000.0,1000.0,,28000000.0,28000000.0,28000,28000,2025-06-27,2030-07-22,136.0,1.0,BRCASCCRI5X9,,,,,,,,,,,,3.85,,,,Sim,Não,Duration Calculada (DU/252),0.0475
 25F7062967,CRI,AIKON 12 EMPREENDIMENTOS IMOBILIÁRIOS LTDA.,DI+,6.25,,,,,1000.0,1000.0,,25000000.0,25000000.0,25000,25000,2025-06-27,2030-07-22,136.0,4.0,BRCASCCRI604,,,,,,,,,,,,3.85,,,,Sim,Não,Duration Calculada (DU/252),0.0625
 25F7064609,CRI,AIKON 12 EMPREENDIMENTOS IMOBILIÁRIOS LTDA.,DI+,9.0,,,,,1000.0,1000.0,,17000000.0,17000000.0,17000,17000,2025-06-27,2030-07-22,136.0,5.0,BRCASCCRI612,,,,,,,,,,,,3.85,,,,Sim,Não,Duration Calculada (DU/252),0.09
-25F7064898,CRI,,,,,,,,,,,,,,,11/09/2026,,465.0,1.0,BRRBRACRIWA4,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25F7064898,CRI,DUBLIN EMPREENDIMENTO IMOBILIÁRIO SPE S.A.,CDI,1.7,,,,,1000.0,1000.0,,68000000.0,68000000.0,68000.0,68000.0,2025-06-23,2033-06-15,465.0,1.0,BRRBRACRIWA4,,,,,,,,,,,,6.75,,,,Sim,Não,Duration Calculada (DU/252),
 25F7066676,CRI,AIKON 12 EMPREENDIMENTOS IMOBILIÁRIOS LTDA.,DI+,9.0,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000,20000,2025-06-27,2030-07-22,136.0,6.0,BRCASCCRI620,,,,,,,,,,,,3.85,,,,Sim,Não,Duration Calculada (DU/252),0.09
 25F7201183,CRI,,,,,,,,,,,,,,,,,88.0,1.0,BRHBSCCRICO2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25F7201931,CRI,HOT BEACH,DI+,4.0,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000,20000,2025-06-30,2029-07-27,467.0,1.0,BRRBRACRIWB2,,,,,,,,,,,,2.88,,,,Sim,Não,Duration Calculada (DU/252),0.04
@@ -6012,7 +6012,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25F8288064,CRI,,,,,,,,,,,,,,,,,24.0,4.0,BRHBSCCRICP9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25F8582172,CRI,DUE EMPREENDIMENTOS IMOBILIÁRIOS LTDA.,DI+,4.0,,,,,1000.0,1000.0,,32000000.0,32000000.0,32000,32000,2025-07-07,2030-06-25,147.0,1.0,BRCASCCRI5V3,,,,,,,,,,,,3.77,,,,Sim,Não,Duration Calculada (DU/252),0.04
 25F8630698,CRI,,,,,,,,,,,,,,,09/09/2026,,286.0,1.0,BRIMWLCRINZ3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-25F8639014,CRI,,,,,,,,,,,,,,,24/09/2026,,459.0,1.0,BRRBRACRIW06,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25F8639014,CRI,TELLUS IV PARTICIPAÇÕES S.A,,,,,,,1000.0,1000.0,,150000000.0,150000000.0,150000.0,150000.0,2025-06-26,,459.0,1.0,BRRBRACRIW06,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25F8639787,CRI,DUE EMPREENDIMENTOS IMOBILIÁRIOS LTDA.,DI+,3.9,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000,20000,2025-07-07,2030-07-26,147.0,2.0,BRCASCCRI5W1,,,,,,,,,,,,3.87,,,,Sim,Não,Duration Calculada (DU/252),0.039
 25F8639834,CRI,,,,,,,,,,,,,,,,,4.0,511.0,BRIMWLCRINQ2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25F8639835,CRI,,,,,,,,,,,,,,,,,4.0,512.0,BRIMWLCRINR0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -6056,7 +6056,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25G3335082,CRI,,,,,,,,,,,,,,,06/2026,,112.0,1.0,BRPVSCCRI6X7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25G3349043,CRI,,,,,,,,,,,,,,,06/2026,,457.0,1.0,BRRBRACRIVT6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25G3477922,CRI,,,,,,,,,,,,,,,18/06/2026,,69.0,2.0,BRRBRACRIWL1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-25G3489092,CRI,,,,,,,,,,,,,,,18/09/2026,,425.0,1.0,BRRBRACRIWM9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25G3489092,CRI,CPR 8 SANTA BÁRBARA D’OESTE EMPREENDIMENTO IMOBILIÁRIO SPE LTDA.,,,,,,,1000.0,1000.0,,10000000.0,10000000.0,10000.0,10000.0,2025-07-18,,425.0,1.0,BRRBRACRIWM9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25G3629974,CRI,PLANO & PLANO DESENVOLVIMENTO IMOBILIÁRIO S.A.,DI%,98.0,"100,6383","100,6383","102,87",,1000.0,1000.0,"1005,51722772",136297000.0,136297000.0,136297,136297,2025-07-15,2030-07-15,291.0,1.0,BRIMWLCRIO38,,,,,,,,,,,,3.07,,,,Sim,Não,ANBIMA Mercado (DU/252),0.00638300000000001
 25G3629975,CRI,PLANO & PLANO DESENVOLVIMENTO IMOBILIÁRIO S.A.,DI%,99.0,"103,2188","103,2188",,"101,125",1000.0,1000.0,"995,92132432",,,,,2025-07-15,2031-07-15,291.0,2.0,BRIMWLCRIO46,,,,,,,,,,,,3.62,,,,Sim,Não,ANBIMA Mercado (DU/252),0.032188000000000015
 25G3749934,CRI,PRACINHA,DI+,6.0,,,,,1000.0,1000.0,,25000000.0,25000000.0,25000,25000,2025-07-18,2026-07-30,113.0,1.0,BRPVSCCRI727,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.06
@@ -6243,7 +6243,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25I4004809,CRI,,,,,,,,,,,,,,,,,4.0,6.0,BRKNSTCRI0J5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25I4005116,CRI,,,,,,,,,,,,,,,,,4.0,7.0,BRKNSTCRI0N7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25I4008597,CRI,,,,,,,,,,,,,,,07/2026,,2.0,1.0,BREXSECRI046,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-25I4083748,CRI,,,,,,,,,,,,,,,18/09/2026,,25.0,1.0,BRRBRACRIHA5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25I4083748,CRI,"SOCIEDADE HOSPITALAR 4 DE JULHO LTDA., HOSPITAL PLACI BARRA LTDA, HOSPITAL PLACI BRASÍLIA LTDA e SETRE SERVIÇO DE TRATAMENTO E REABILITAÇÃO ESPECIALIZADA LTDA.",CDI,6.0,,,,,1000.0,1000.0,,35000000.0,35000000.0,35000.0,35000.0,2023-03-27,2028-03-20,25.0,1.0,BRRBRACRIHA5,,,,,,,,,,,,1.54,,,,Sim,Não,Duration Calculada (DU/252),
 25I4092899,CRI,VETTER GOLD COAST,IPCA,11.5,,,,,1000.0,1000.0,,26055000.0,26055000.0,26055,26055,2025-09-12,2028-10-24,7.0,1.0,BRRCKSCRI0B7,,,,,,,,,,,,2.0,,,,Sim,Não,Duration Calculada (DU/252),
 25I4093476,CRI,VETTER GOLD COAST,DI+,3.0,,,,,1000.0,1000.0,,2895000.0,2895000.0,2895,2895,2025-09-12,2028-10-24,7.0,2.0,BRRCKSCRI0C5,,,,,,,,,,,,2.13,,,,Sim,Não,Duration Calculada (DU/252),0.03
 25I4138643,CRI,JATAI,DI+,4.0,,,,,1000.0,1000.0,,18400000.0,18400000.0,18400,18400,2025-09-29,2030-09-30,511.0,1.0,BRRBRACRIXS4,,,,,,,,,,,,4.05,,,,Sim,Não,Duration Calculada (DU/252),0.04
@@ -6268,7 +6268,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25I4858675,CRI,BARBOSA II,Não há,0.0,,,,,1000.0,1000.0,,13750000.0,13750000.0,13750,13750,2025-09-24,2028-03-24,72.0,1.0,BRTSSACRI4W7,,,,,,,,,,,,1.49,,,,Sim,Não,Duration Calculada (DU/252),
 25I4858680,CRI,BARBOSA II,IPCA,11.0,,,,,1000.0,1000.0,,13700000.0,13700000.0,13700,13700,2025-09-24,2028-03-25,72.0,2.0,BRTSSACRI4X5,,,,,,,,,,,,1.49,,,,Sim,Não,Duration Calculada (DU/252),
 25I4858683,CRI,BARBOSA II,IPCA,24.6471,,,,,1000.0,1000.0,,15794000.0,15794000.0,15794,15794,2025-09-24,2028-03-24,72.0,3.0,BRTSSACRI4Y3,,,,,,,,,,,,1.49,,,,Sim,Não,Duration Calculada (DU/252),
-25I4892150,CRI,,,,,,,,,,,,,,,21/09/2026,,163.0,1.0,BRVERTCRID82,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25I4892150,CRI,CONSTRUTORA ADOLPHO LINDENBERG S.A.,CDI,,,,,,1000.0,1000.0,,200000000.0,200000000.0,200000.0,200000.0,21/09/2026,2029-09-26,163.0,1.0,BRVERTCRID82,,,,,,,,,,,,3.05,,,,Sim,Não,Duration Calculada (DU/252),
 25I4892151,CRI,,,,,,,,,,,,,,,,,163.0,2.0,BRVERTCRID90,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25I4989191,CRI,,,,,,,,,,,,,,,,,3.0,2.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25I4989195,CRI,,,,,,,,,,,,,,,,,3.0,1.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -6598,7 +6598,7 @@ ticker,tipo,issuer,indexador,taxa_emissao,taxa_mercado,taxa_ativo,taxa_compra,ta
 25L3689636,CRI,,,,,,,,,,,,,,,04/08/2026,,60.0,1.0,BRLSECCRI3X9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25L3700856,CRI,,,,,,,,,,,,,,,,,60.0,2.0,BRLSECCRI425,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25L3702166,CRI,,,,,,,,,,,,,,,,,60.0,3.0,BRLSECCRI433,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-25L3723350,CRI,,,,,,,,,,,,,,,23/07/2027,,488.0,1.0,BRRBRACIR184,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+25L3723350,CRI,SENDAS DISTRIBUIDORA S.A.,,8.7895,,,,,1008.03,1008.03,,278216280.0,278216280.0,276000.0,276000.0,23/07/2027,2040-12-17,488.0,1.0,BRRBRACIR184,,,,,,,,,,,,8.12,,,,Sim,Não,Duration Calculada (DU/252),
 25L3758199,CRI,,,,,,,,,,,,,,,06/2026,,573.0,1.0,BRRBRACIR192,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 25L3832008,CRI,VICUNHA AÃOS,DI+,3.9,,,,,1.0,1.0,,56961374.0,56961374.0,56961374,56961374,2025-12-18,2032-12-10,29.0,1.0,BRRBRACRICX8,,,,,,,,,,,,6.24,,,,Sim,Não,Duration Calculada (DU/252),0.039
 25L3861195,CRI,,,,,,,,,,,,,,,07/2026,,110.0,1.0,BRHBSCCRIDV5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -8466,7 +8466,7 @@ CRA019005Q0,CRA,AÇUCAREIRA QUATÁ S.A.,DI+,2.5,,,,,1000.0,1000.0,,600000000.0,6
 CRA019005VK,CRA,NATIVA,DI+,5.0,,,,,1000.0,1000.0,,12600000.0,12600000.0,12600,12600,2019-11-14,2022-12-20,29.0,1.0,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.05
 CRA01900614,CRA,MINERVA S.A.,IPCA,4.5,,,,,1000.0,1000.0,,500000000.0,500000000.0,500000,500000,2019-12-16,2024-12-16,8.0,1.0,BRIMWLCRA0D3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA01900615,CRA,,,,,,,,,,,,,,,28/04/2023,,9.0,1.0,BRIMWLCRA0E1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-CRA0190066O,CRA,,,,,,,,,,,,,,,15/07/2026,,18.0,1.0,BRECOACRA4D4,,,,,,Br.AA,Br.AA,Standard & Poor's,Standard & Poor's,15/07/2026,15/07/2026,,,,AA,Sim,Não,Vencido / Sem Precificação,
+CRA0190066O,CRA,ADECOAGRO VALE DO IVINHEMA S.A.,IPCA,3.8,,,,,1000.0,1000.0,,400000000.0,400000000.0,400000.0,400000.0,2019-11-14,2027-11-17,18.0,1.0,BRECOACRA4D4,,,,,,Br.AA,Br.AA,Standard & Poor's,Standard & Poor's,15/07/2026,15/07/2026,1.18,,,AA,Sim,Não,Duration Calculada (DU/252),
 CRA019006C8,CRA,VERT BEM ALIMENTOS CRA,DI+,2.5,,,,,1000.0,1000.0,,70000000.0,70000000.0,70000,70000,2019-11-14,2024-11-14,42.0,1.0,BRVERTCRA1R3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.025
 CRA019006HS,CRA,,,,,,,,,,,,,,,30/04/2026,,26.0,1.0,BRECOACRA4Q6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA019006NG,CRA,BAYER,DI+,0.5,,,,,1000.0,1000.0,,340000000.0,340000000.0,340000,340000,2019-12-06,2023-07-05,39.0,1.0,BRVERTCRA1L6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.005
@@ -8793,7 +8793,7 @@ CRA021004YS,CRA,,,,,,,,,,,,,,,,,80.0,4.0,BRIMWLCRA341,,,,,,,,,,,,,,,,Sim,Não,Ve
 CRA02100549,CRA,,,,,,,,,,,,,,,06/07/2022,,29.0,1.0,BRGAIACRA177,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA0210054A,CRA,,,,,,,,,,,,,,,,,29.0,2.0,BRGAIACRA185,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA0210054B,CRA,,,,,,,,,,,,,,,,,29.0,3.0,BRGAIACRA193,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-CRA0210054C,CRA,,,,,,,,,,,,,,,18/09/2026,,24.0,1.0,BRRBRACRA1I2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA0210054C,CRA,,CDI,3.0,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000.0,50000.0,2022-03-18,2027-03-09,24.0,1.0,BRRBRACRA1I2,,,,,,,,,,,,0.51,,,,Sim,Não,Duration Calculada (DU/252),
 CRA0210054D,CRA,GAIA - CRA - FJR,DI+,8.0,,,,,1000.0,1000.0,,7062000.0,7062000.0,7062,7062,2021-12-08,2025-12-30,24.0,2.0,BRGAIACRA151,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.08
 CRA0210054E,CRA,GAIA - CRA - FJR,DI+,100.0,,,,,1000.0,1000.0,,5401000.0,5401000.0,5401,5401,2021-12-08,2025-12-30,24.0,3.0,BRGAIACRA169,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,1.0
 CRA0210059T,CRA,BRASKEM S.A.,IPCA,5.5386,,,,,1000.0,1000.0,,581602000.0,581602000.0,581602,581602,2021-12-15,2028-12-15,124.0,1.0,BRECOACRA8A1,,,,,,Br.D,Br.D,Standard & Poor's,Standard & Poor's,15/07/2026,15/07/2026,2.14,15/08/2028,"7,952",D,Sim,Não,Duration Calculada (DU/252),-0.022356232399585063
@@ -8882,7 +8882,7 @@ CRA022001UP,CRA,PRIMATO,DI+,4.5,,,,,1000.0,1000.0,,75000000.0,75000000.0,75000,7
 CRA02200209,CRA,CRESOL,DI+,3.5,,,,,1000.0,1000.0,,60000000.0,60000000.0,60000,60000,2022-02-21,2027-12-30,138.0,1.0,BRECOACRA9J0,,,,,,,,,,,,1.32,,,,Sim,Não,Duration Calculada (DU/252),0.035
 CRA0220020A,CRA,ACP II,DI+,5.5,,,,,1000.0,1000.0,,150000000.0,150000000.0,150000,150000,2022-05-17,2022-05-19,94.0,1.0,BRIMWLCRA3M8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,0.055
 CRA0220020B,CRA,,,,,,,,,,,,,,,07/2026,,30.0,1.0,BRRBRACRA1C5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-CRA0220020C,CRA,,,,,,,,,,,,,,,16/09/2026,,32.0,1.0,BROCTSCRA3C1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA0220020C,CRA,,CDI,5.09,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000.0,50000.0,2022-02-25,2027-02-25,32.0,1.0,BROCTSCRA3C1,,,,,,,,,,,,0.48,,,,Sim,Não,Duration Calculada (DU/252),
 CRA0220020D,CRA,,,,,,,,,,,,,,,,,9.0,1.0,BRREICCRA065,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA0220020E,CRA,,,,,,,,,,,,,,,,,8.0,1.0,BRREICCRA057,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA0220025T,CRA,,,,,,,,,,,,,,,06/02/2025,,21.0,1.0,BRRBRACRA1D3,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -8902,7 +8902,7 @@ CRA022002XL,CRA,VIRGO - JBS 2022 - CRA,PTAX,3.53,,,,,1000.0,1000.0,,64000000.0,6
 CRA022002XM,CRA,JBS S.A.,IPCA,5.9626,,,,,1000.0,1000.0,,511000000.0,511000000.0,511000,511000,2022-04-15,2032-04-15,98.0,2.0,BRIMWLCRA3S5,,,,,,,,,,,,4.47,15/05/2031,"8,0501",,Sim,Não,Duration Calculada (DU/252),-0.019319741490290143
 CRA022002XN,CRA,JBS S.A.,IPCA,6.0953,,,,,1000.0,1000.0,,625000000.0,625000000.0,625000,625000,2022-04-15,2037-04-15,98.0,3.0,BRIMWLCRA3T3,,,,,,,,,,,,6.85,15/05/2035,"7,9049",,Sim,Não,Duration Calculada (DU/252),-0.016770322756427092
 CRA022002XO,CRA,RODOIL (C),DI+,3.0,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000,50000,2022-03-18,2027-03-09,24.0,1.0,,,,,,,,,,,,,0.51,,,,Sim,Não,Duration Calculada (DU/252),0.03
-CRA022002XP,CRA,,,,,,,,,,,,,,,18/09/2026,,24.0,1.0,BRRBRACRA1I2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA022002XP,CRA,,CDI,3.0,,,,,1000.0,1000.0,,50000000.0,50000000.0,50000.0,50000.0,2022-03-18,2027-03-09,24.0,1.0,BRRBRACRA1I2,,,,,,,,,,,,0.51,,,,Sim,Não,Duration Calculada (DU/252),
 CRA022002XR,CRA,,,,,,,,,,,,,,,,,24.0,2.0,BRRBRACRA1J0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA022002XS,CRA,ECTP (C),DI%,95.0,,,,,10000.0,10000.0,,1000000000.0,1000000000.0,100000,100000,2022-03-22,2023-09-22,70.0,1.0,BRVERTCRA2R1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,-0.05
 CRA022002XT,CRA,,,,,,,,,,,,,,,30/04/2026,,160.0,1.0,BRECOACRA9N2,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -8939,7 +8939,7 @@ CRA02200462,CRA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precifi
 CRA02200463,CRA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA022004BL,CRA,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA022004BM,CRA,,,,,,,,,,,,,,,31/12/2022,,42.0,1.0,BRRBRACRA1V5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-CRA022004BN,CRA,,,,,,,,,,,,,,,27/02/2202,,155.0,1.0,BRECOACRA9X1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA022004BN,CRA,,CDI,5.0,,,,,1000.0,1000.0,,45000000.0,45000000.0,45000.0,45000.0,2022-04-27,2026-04-23,155.0,2.0,BRECOACRA9X1,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA022004BO,CRA,,,,,,,,,,,,,,,,,155.0,2.0,BRECOACRA9Y9,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA022004H5,CRA,NARDINI AGROINDUSTRIAL LTDA.,IPCA,7.4986,"7,996","7,996",,"7,7924",1000.0,1000.0,"816,65858058",200000000.0,200000000.0,200000,200000,2022-04-15,2028-04-15,36.0,1.0,BRRBRACRA1W3,,,,,,,,,,,,1.06,15/05/2027,"6,73",,Sim,Não,ANBIMA Mercado (DU/252),0.011861707111402664
 CRA022004MP,CRA,FUTURA INSUMOS AGRICOLAS,DI+,5.5,,,,,1000.0,1000.0,,19500000.0,19500000.0,19500,19500,2022-04-29,2026-09-30,2.0,1.0,BRCESCCRA025,,,,,,,,,,,,0.08,,,,Sim,Não,Duration Calculada (DU/252),0.055
@@ -9188,7 +9188,7 @@ CRA02200CNN,CRA,,,,,,,,,,,,,,,07/2026,,58.0,1.0,BRRBRACRA2I0,,,,,,,,,,,,,,,,Sim,
 CRA02200CT5,CRA,SANTA HELENA,DI+,4.0,,,,,1000.0,1000.0,,65000000.0,65000000.0,65000,65000,2022-11-22,2027-11-22,81.0,1.0,BRVERTCRA351,,,,,,,,,,,,1.21,,,,Sim,Não,Duration Calculada (DU/252),0.04
 CRA02200CT6,CRA,,,,,,,,,,,,,,,,,81.0,2.0,BRVERTCRA369,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA02200CYP,CRA,AGROCIN,DI+,4.166,,,,,1007.0334588,1007.0334588,,25175836.47,25175836.47,25000,25000,2022-12-07,2027-01-22,128.0,1.0,BRIMWLCRA5N1,,,,,,,,,,,,0.39,,,,Sim,Não,Duration Calculada (DU/252),0.04166
-CRA02200CYR,CRI,,,,,,,,,,,,,,,22/09/2026,,64.0,1.0,BRRBRACRICE8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA02200CYR,CRI,,CDI,0.9,,,,,1000.0,1000.0,,100000000.0,100000000.0,100000.0,100000.0,2022-07-13,2027-07-15,64.0,1.0,BRRBRACRICE8,,,,,,,,,,,,0.86,,,,Sim,Não,Duration Calculada (DU/252),
 CRA02200CYS,CRA,USINA CAETE,DI+,4.0,,,,,1000.0,1000.0,,60000000.0,60000000.0,60000,60000,2022-12-01,2027-12-20,63.0,1.0,BRRBRACRA2L4,,,,,,,,,,,,1.29,,,,Sim,Não,Duration Calculada (DU/252),0.04
 CRA02200D49,CRA,ESTEIO RURAL,DI+,5.5,,,,,1000.0,1000.0,,17000000.0,17000000.0,17000,17000,2022-12-01,2026-11-30,9.0,1.0,,,,,,,,,,,,,0.24,,,,Sim,Não,Duration Calculada (DU/252),0.055
 CRA02200D4A,CRA,ESTEIO RURAL,DI+,7.0,,,,,1000.0,1000.0,,8000000.0,8000000.0,8000,8000,2022-12-01,2026-11-30,9.0,2.0,,,,,,,,,,,,,0.24,,,,Sim,Não,Duration Calculada (DU/252),0.07
@@ -9409,7 +9409,7 @@ CRA02300G7E,CRA,MARFRIG GLOBAL FOODS S.A.,DI+,1.5,"2,1723","2,1723","2,4365","2,
 CRA02300G7F,CRA,CPY_03853896000140,IPCA,6.6,"11,7875","11,7875","11,9501","11,3778",1000.0,1000.0,"973,74896854",498702000.0,498702000.0,498702,498702,2023-07-17,2030-08-15,273.0,3.0,BRECOACRADX6,,,,,,,,,,,,3.48,15/08/2030,"8,08",,Sim,Não,ANBIMA Mercado (DU/252),0.03430329385640274
 CRA02300GCX,CRA,IPIRANGA RETAP,Não há,0.0,,,,,1000.0,1000.0,,200000000.0,200000000.0,200000,200000,2023-07-15,2027-07-16,88.0,1.0,BRVERTCRA3K4,,,,,,AAA.br,AAA.br,Moody's,Moody's,31/07/2026,31/07/2026,0.87,,,AAA,Sim,Não,Duration Calculada (DU/252),
 CRA02300GCY,CRA,IPIRANGA PRODUTOS DE PETRÓLEO S.A.,DI+,0.7,"0,4188","0,4188",,,1000.0,1000.0,"1019,4822553",200000000.0,200000000.0,200000,200000,2023-07-15,2027-07-16,88.0,2.0,BRVERTCRA3L2,,,,,,AAA.br,AAA.br,Moody's,Moody's,31/07/2026,31/07/2026,0.82,,,AAA,Sim,Não,ANBIMA Mercado (DU/252),0.004188
-CRA02300GIH,CRA,,,,,,,,,,,,,,,11/09/2026,,23.0,1.0,BRCESCCRA132,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA02300GIH,CRA,,CDI,5.0,,,,,1000.0,1000.0,,70000000.0,70000000.0,70000.0,70000.0,2023-07-24,2028-07-24,23.0,1.0,BRCESCCRA132,,,,,,,,,,,,1.88,,,,Sim,Não,Duration Calculada (DU/252),
 CRA02300GO1,CRA,PATENSE II,DI+,3.0,,,,,1000.0,1000.0,,130000000.0,130000000.0,130000,130000,2023-07-28,2029-01-15,265.0,1.0,BRECOACRADY4,,,,,,,,,,,,2.35,,,,Sim,Não,Duration Calculada (DU/252),0.03
 CRA02300GTL,CRA,,,,,,,,,,,,,,,07/2026,,22.0,1.0,BRCESCCRA140,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA02300GTM,CRA,,,,,,,,,,,,,,,,,22.0,2.0,BRCESCCRA157,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -9744,7 +9744,7 @@ CRA0240038Q,CRA,,,,,,,,,,,,,,,07/2026,,132.0,1.0,BRRBRACRA587,,,,,,,,,,,,,,,,Sim
 CRA024003E9,CRA,,,,,,,,,,,,,,,06/2026,,312.0,1.0,BRECOACRAG84,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA024003EA,CRA,,,,,,,,,,,,,,,,,312.0,2.0,BRECOACRAG92,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA024003EB,CRA,,,,,,,,,,,,,,,06/2026,,13.0,1.0,BRPVSCCRA0F5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-CRA024003JT,CRA,,,,,,,,,,,,,,,18/09/2026,,134.0,1.0,BRRBRACRA595,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA024003JT,CRA,,CDI,4.5,,,,,1000.0,1000.0,,60000000.0,60000000.0,60000.0,60000.0,2024-03-21,2029-03-22,134.0,1.0,BRRBRACRA595,,,,,,,,,,,,2.53,,,,Sim,Não,Duration Calculada (DU/252),
 CRA024003K1,CRA,,,,,,,,,,,,,,,28/08/2026,,135.0,1.0,BRRBRACRIN98,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA024003PD,CRA,SINAGRO,DI+,4.0,,,,,1000.0,1000.0,,120000000.0,120000000.0,120000,120000,2024-03-25,2028-12-29,305.0,1.0,BRECOACRAGE9,,,,,,,,,,,,2.31,,,,Sim,Não,Duration Calculada (DU/252),0.04
 CRA024003PE,CRA,,,,,,,,,,,,,,,,,305.0,2.0,BRECOACRAGF6,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -9753,7 +9753,7 @@ CRA024003PG,CRA,UNIGGEL RIZA,DI+,4.4,,,,,1000.0,1000.0,,30000000.0,30000000.0,30
 CRA024003UX,CRA,LAR COOPERATIVA AGROINDUSTRIAL,Pré-Fixado,12.792,,,,,1000.0,1000.0,,,,,,2024-04-15,2029-04-15,319.0,1.0,BRECOACRAGB5,,,,,,,,,,,,2.37,,,,Sim,Não,Duration Calculada (DU/252),-0.0085419116841563
 CRA024003UY,CRA,LAR COOPERATIVA AGROINDUSTRIAL,DI+,1.55,"1,4816","1,4816","2,0074","0,874",1000.0,1000.0,"1006,44106232",63994000.0,63994000.0,63994,63994,2024-04-15,2029-04-16,319.0,2.0,BRECOACRAGC3,,,,,,,,,,,,1.81,,,,Sim,Não,ANBIMA Mercado (DU/252),0.014816000000000001
 CRA024003UZ,CRA,LAR COOPERATIVA AGROINDUSTRIAL,IPCA,7.8363,"9,453","9,453","10,3154","8,822",1000.0,1000.0,"1063,29841271",271812000.0,271812000.0,271812,271812,2024-04-15,2031-04-15,319.0,3.0,BRECOACRAGD1,,,,,,,,,,,,3.11,15/08/2030,"8,08",,Sim,Não,ANBIMA Mercado (DU/252),0.012703552923760242
-CRA0240040H,CRA,,,,,,,,,,,,,,,16/09/2026,,320.0,1.0,BRECOACRAGA7,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA0240040H,CRA,Coplana – Cooperativa Agroindustrial,CDI,3.5,,,,,1000.0,1000.0,,100000000.0,100000000.0,100000.0,100000.0,2024-04-03,2028-04-28,320.0,1.0,BRECOACRAGA7,,,,,,,,,,,,1.65,,,,Sim,Não,Duration Calculada (DU/252),
 CRA02400461,CRA,IMPACTO,Não há,6.25,,,,,1000.0,1000.0,,20000000.0,20000000.0,20000,20000,2024-04-11,2025-12-29,95.0,1.0,BRCASCCRA0W0,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA024004BL,CRA,,,,,,,,,,,,,,,,,5.0,1.0,BRLSECCRA059,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA024004BM,CRA,,,,,,,,,,,,,,,30/04/2026,,5.0,3.0,BRLSECCRA075,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
@@ -10087,7 +10087,7 @@ CRA025003JT,CRA,GUANABARA,DI+,2.3,,,,,1000.0,1000.0,,30000000.0,30000000.0,30000
 CRA025003JV,CRA,GUANABARA,DI+,4.5,,,,,1000.0,1000.0,,30000000.0,30000000.0,30000,30000,2025-05-20,2030-05-22,175.0,2.0,BRRBRACRA710,,,,,,,,,,,,3.68,,,,Sim,Não,Duration Calculada (DU/252),0.045
 CRA025003JW,CRA,CELM,DI+,5.0,,,,,1000.0,1000.0,,90000000.0,90000000.0,90000,90000,2025-05-12,2029-12-17,158.0,1.0,BRRBRACRA6R2,,,,,,,,,,,,3.26,,,,Sim,Não,Duration Calculada (DU/252),0.05
 CRA025003PD,CRA,SÃO MARTINHO S.A.,DI%,97.0,"102,9222","102,9222","105,8966","100,23",1000.0,1000.0,"994,91895038",1000000000.0,1000000000.0,1000000,1000000,2025-06-16,2032-06-15,104.0,1.0,BRVERTCRA4W7,,,,,,,,,,,,4.04,,,,Sim,Não,ANBIMA Mercado (DU/252),0.029222000000000036
-CRA025003PE,CRA,,,,,,,,,,,,,,,15/09/2026,,164.0,1.0,BRRBRACRA6Y8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA025003PE,CRA,Usina Caeté S.A.,,,,,,,1000.0,1000.0,,72000000.0,72000000.0,72000.0,72000.0,2025-05-16,2030-05-27,178.0,1.0,BRRBRACRA6Y8,,,,,,,,,,,,3.24,,,,Sim,Não,Duration Calculada (DU/252),
 CRA025003PG,CRA,,,,,,,,,,,,,,,,,178.0,2.0,BRRBRACRA6Z5,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA025003PH,CRA,SEARA ,PTAX,5.65,,,,,1000.0,1000.0,,18711000.0,18711000.0,18711,18711,2025-05-15,2035-05-04,269.0,1.0,BRIMWLCRAAO1,,,,,,AAA.br (sf),AAA.br (sf),Moody's Local,Moody's Local,03/06/2025,03/06/2025,6.08,,,AAA,Sim,Não,Duration Calculada (DU/252),
 CRA025003PI,CRA,SEARA ,IPCA,7.35,,,,,1000.0,1000.0,,159791000.0,159791000.0,159791,159791,2025-05-15,2045-05-15,269.0,2.0,BRIMWLCRAAP8,,,,,,AAA.br (sf),AAA.br (sf),Moody's Local,Moody's Local,03/06/2025,03/06/2025,8.99,,,AAA,Sim,Não,Duration Calculada (DU/252),
@@ -10205,8 +10205,8 @@ CRA025008C3,CRA,NEOMILLE S.A.,DI%,105.0,"111,3665","111,3665",,"110,25",1000.0,1
 CRA025008HM,CRA,COCAL COMÉRCIO INDÚSTRIA CANAÃ AÇUCAR E ÁCOOL S.A.,DI%,102.0,"107,7333","107,7333",,,1000.0,1000.0,"1037,95693466",500000000.0,500000000.0,500000,500000,2025-09-15,2031-09-15,106.0,1.0,BRVERTCRA542,,,,,,brAA+,brAA+,S&P Global,S&P Global,13/07/2026,13/07/2026,3.25,,,AA,Sim,Não,ANBIMA Mercado (DU/252),0.077333
 CRA025008HN,CRA,COCAL,Não há,0.0,,,,,1000.0,1000.0,,200000000.0,200000000.0,200000,200000,2025-09-15,2031-09-15,106.0,2.0,BRVERTCRA559,,,,,,brAA+,brAA+,S&P Global,S&P Global,13/07/2026,13/07/2026,4.07,,,AA,Sim,Não,Duration Calculada (DU/252),
 CRA025008HR,CRA,NARDINI AGROINDUSTRIAL LTDA.,IPCA,8.4773,,,,,1000.0,1000.0,,300000000.0,300000000.0,300000,300000,2025-10-15,2032-10-15,193.0,1.0,BRRBRACRA7T6,,,,,,,,,,,,4.77,15/05/2031,"8,0501",,Sim,Não,Duration Calculada (DU/252),0.003953721468096694
-CRA025008N5,CRA,,,,,,,,,,,,,,,15/09/2026,,190.0,1.0,BRRBRACRA7X8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
-CRA025008N6,CRA,,,,,,,,,,,,,,,15/09/2026,,1111.0,1.0,BRRBRACRA7X8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA025008N5,CRA,COOPERATIVA DOS PLANTADORES DE CANA DO OESTE DO ESTADO DE SÃO PAULO – COPERCANA,,,,,,,1000.0,1000.0,,400000000.0,400000000.0,400000.0,400000.0,2025-09-29,,190.0,1.0,BRRBRACRA7X8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
+CRA025008N6,CRA,COOPERATIVA DOS PLANTADORES DE CANA DO OESTE DO ESTADO DE SÃO PAULO – COPERCANA,,,,,,,1000.0,1000.0,,400000000.0,400000000.0,400000.0,400000.0,2025-09-29,,1111.0,1.0,BRRBRACRA7X8,,,,,,,,,,,,,,,,Sim,Não,Vencido / Sem Precificação,
 CRA025008N8,CRA,TRÊS TENTOS AGROINDUSTRIAL S.A.,DI%,103.75,"107,7261","107,7261","114,0833","102,95",1000.0,1000.0,"1035,8161918",189609000.0,189609000.0,189609,189609,2025-10-15,2030-10-15,201.0,1.0,BRRBRACRA7U4,,,,,,,,,,,,3.07,,,,Sim,Não,ANBIMA Mercado (DU/252),0.07726100000000002
 CRA025008N9,CRA,3  TENTOS,DI+,0.6,,,,,1000.0,1000.0,,35665000.0,35665000.0,35665,35665,2025-10-15,2032-10-15,201.0,2.0,BRRBRACRA7V2,,,,,,,,,,,,6.09,,,,Sim,Não,Duration Calculada (DU/252),0.006
 CRA025008NA,CRA,TRÊS TENTOS AGROINDUSTRIAL S.A.,Pré-Fixado,14.1458,,,,,1000.0,1000.0,,274726000.0,274726000.0,274726,274726,2025-10-15,2032-10-15,201.0,3.0,BRRBRACRA7W0,,,,,,,,,,,,4.77,,,,Sim,Não,Duration Calculada (DU/252),0.007229030097523292
