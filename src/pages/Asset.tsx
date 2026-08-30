@@ -175,7 +175,7 @@ const AssetPage: React.FC = () => {
         console.warn("Erro ao carregar payment_schedules", err);
       }
 
-      // 3. Carregar documentos B3 para CRI/CRA em segundo plano
+      // 3. Carregar documentos B3 para CRI/CRA em segundo plano (ordenados por data de entrega mais recente)
       try {
         const targetTicker = (ticker || '').trim().toUpperCase();
         const docsData = await fetchCSV<AssetDocument>('/data/cricra_documents.csv')
@@ -186,6 +186,12 @@ const AssetPage: React.FC = () => {
           const assetDocs = docsData.filter(d => d && (
             (d.ticker && d.ticker.trim().toUpperCase() === targetTicker)
           ));
+          // Ordena estritamente da data de entrega mais recente para a mais antiga
+          assetDocs.sort((a, b) => {
+            const da = (a.data_entrega || a.data_referencia || '').trim();
+            const db = (b.data_entrega || b.data_referencia || '').trim();
+            return db.localeCompare(da);
+          });
           setDocuments(assetDocs);
         }
       } catch (err) {
@@ -705,7 +711,7 @@ const AssetPage: React.FC = () => {
                 <table className="w-full text-left text-sm text-slate-600">
                   <thead className="text-xs uppercase bg-slate-100 text-slate-700 font-bold sticky top-0 z-10 shadow-sm border-b border-slate-200">
                     <tr>
-                      <th scope="col" className="px-4 py-3">Data Ref. / Entrega</th>
+                      <th scope="col" className="px-4 py-3">Data de Entrega</th>
                       <th scope="col" className="px-4 py-3">Categoria</th>
                       <th scope="col" className="px-4 py-3">Tipo de Documento</th>
                       <th scope="col" className="px-4 py-3">Securitizadora</th>
@@ -733,7 +739,7 @@ const AssetPage: React.FC = () => {
                         return (
                           <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
                             <td className="px-4 py-3 font-semibold text-slate-800 whitespace-nowrap text-xs">
-                              {formatDatePretty(doc.data_referencia || doc.data_entrega)}
+                              {formatDatePretty(doc.data_entrega || doc.data_referencia)}
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap">
                               <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-700">
@@ -748,7 +754,7 @@ const AssetPage: React.FC = () => {
                                 </span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-xs text-slate-500 whitespace-nowrap truncate max-w-[200px]" title={doc.securitizadora}>
+                            <td className="px-4 py-3 text-xs font-semibold text-slate-700 whitespace-nowrap truncate max-w-[220px]" title={doc.securitizadora}>
                               {doc.securitizadora || '-'}
                             </td>
                             <td className="px-4 py-3 text-center whitespace-nowrap">
