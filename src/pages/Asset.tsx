@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
+import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, AssetDocument, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
 import ChartComponent from '../components/ChartComponent';
-import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers } from 'lucide-react';
+import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen } from 'lucide-react';
 
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   if (!asset.issuer) return null;
@@ -32,7 +32,9 @@ const AssetPage: React.FC = () => {
   const [emitter, setEmitter] = useState<Emitter | null>(null);
   const [prices, setPrices] = useState<PriceRecord[]>([]);
   const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>([]);
+  const [documents, setDocuments] = useState<AssetDocument[]>([]);
   const [filterType, setFilterType] = useState<'ALL' | 'JUROS' | 'AMORTIZACAO' | 'FUTUROS'>('ALL');
+  const [docFilter, setDocFilter] = useState<'ALL' | 'PROSPECTO' | 'RELATORIO' | 'ASSEMBLEIA'>('ALL');
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -171,6 +173,23 @@ const AssetPage: React.FC = () => {
         }
       } catch (err) {
         console.warn("Erro ao carregar payment_schedules", err);
+      }
+
+      // 3. Carregar documentos B3 para CRI/CRA em segundo plano
+      try {
+        const targetTicker = (ticker || '').trim().toUpperCase();
+        const docsData = await fetchCSV<AssetDocument>('/data/cricra_documents.csv')
+          .catch(() => fetchCSV<AssetDocument>('./data/cricra_documents.csv'))
+          .catch(() => []);
+        
+        if (isMounted && docsData && docsData.length > 0) {
+          const assetDocs = docsData.filter(d => d && (
+            (d.ticker && d.ticker.trim().toUpperCase() === targetTicker)
+          ));
+          setDocuments(assetDocs);
+        }
+      } catch (err) {
+        console.warn("Erro ao carregar cricra_documents", err);
       }
     };
 
@@ -372,9 +391,6 @@ const AssetPage: React.FC = () => {
             <FileText size={20} className="text-blue-400" />
             Especificações Técnicas & Detalhes da Emissão
           </h3>
-          <span className="text-xs font-mono text-slate-300 bg-slate-800/90 border border-slate-700 px-3 py-1 rounded-lg">
-            ISIN: <strong className="text-blue-300">{asset.isin || '-'}</strong>
-          </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-xs sm:text-sm">
@@ -630,6 +646,131 @@ const AssetPage: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* ================= DOCUMENTOS OFICIAIS (CRI / CRA) ================= */}
+        {(asset.tipo === 'CRI' || asset.tipo === 'CRA' || documents.length > 0) && (
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+              <div>
+                <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-md uppercase tracking-wider">
+                  Documentos & Prospectos B3
+                </span>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1 flex items-center gap-2">
+                  <FileText size={22} className="text-emerald-600" />
+                  Documentos Oficiais da Emissão
+                </h3>
+                <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  {documents.length} documento(s) oficial(is) arquivado(s) na B3 FNET para este ativo
+                </p>
+              </div>
+
+              {/* Filtros rápidos de documentos */}
+              {documents.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold text-slate-600">
+                  <button
+                    onClick={() => setDocFilter('ALL')}
+                    className={`px-3 py-1.5 rounded-lg transition ${docFilter === 'ALL' ? 'bg-white text-emerald-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                  >
+                    Todos ({documents.length})
+                  </button>
+                  <button
+                    onClick={() => setDocFilter('PROSPECTO')}
+                    className={`px-3 py-1.5 rounded-lg transition ${docFilter === 'PROSPECTO' ? 'bg-white text-emerald-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                  >
+                    Prospectos & Termos
+                  </button>
+                  <button
+                    onClick={() => setDocFilter('RELATORIO')}
+                    className={`px-3 py-1.5 rounded-lg transition ${docFilter === 'RELATORIO' ? 'bg-white text-emerald-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                  >
+                    Relatórios
+                  </button>
+                  <button
+                    onClick={() => setDocFilter('ASSEMBLEIA')}
+                    className={`px-3 py-1.5 rounded-lg transition ${docFilter === 'ASSEMBLEIA' ? 'bg-white text-emerald-700 shadow-sm font-extrabold' : 'hover:text-slate-900'}`}
+                  >
+                    Assembleias
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Box de tamanho fixo com scroll vertical suave */}
+            {documents.length === 0 ? (
+              <div className="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-500 text-sm">
+                Nenhum documento B3 arquivado para este ativo até o momento.
+              </div>
+            ) : (
+              <div className="relative overflow-x-auto overflow-y-auto max-h-80 rounded-xl border border-slate-200 shadow-inner">
+                <table className="w-full text-left text-sm text-slate-600">
+                  <thead className="text-xs uppercase bg-slate-100 text-slate-700 font-bold sticky top-0 z-10 shadow-sm border-b border-slate-200">
+                    <tr>
+                      <th scope="col" className="px-4 py-3">Data Ref. / Entrega</th>
+                      <th scope="col" className="px-4 py-3">Categoria</th>
+                      <th scope="col" className="px-4 py-3">Tipo de Documento</th>
+                      <th scope="col" className="px-4 py-3">Securitizadora</th>
+                      <th scope="col" className="px-4 py-3 text-center">Download</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 bg-white">
+                    {documents
+                      .filter(doc => {
+                        const t = (doc.tipo_documento || '').toLowerCase();
+                        const c = (doc.categoria_documento || '').toLowerCase();
+                        if (docFilter === 'PROSPECTO') {
+                          return t.includes('prospecto') || t.includes('termo') || t.includes('lâmina') || t.includes('lamina') || c.includes('oferta');
+                        }
+                        if (docFilter === 'RELATORIO') {
+                          return t.includes('relatório') || t.includes('relatorio') || t.includes('demonstraç') || t.includes('demonstrac') || c.includes('relatório') || c.includes('informes');
+                        }
+                        if (docFilter === 'ASSEMBLEIA') {
+                          return t.includes('ago') || t.includes('age') || t.includes('assembl') || c.includes('assembl');
+                        }
+                        return true;
+                      })
+                      .map((doc, idx) => {
+                        const isProspecto = (doc.tipo_documento || '').toLowerCase().includes('prospecto') || (doc.tipo_documento || '').toLowerCase().includes('termo');
+                        return (
+                          <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                            <td className="px-4 py-3 font-semibold text-slate-800 whitespace-nowrap text-xs">
+                              {formatDatePretty(doc.data_referencia || doc.data_entrega)}
+                            </td>
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-700">
+                                {doc.categoria_documento || 'Geral'}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 font-medium text-slate-900">
+                              <div className="flex items-center gap-1.5">
+                                {isProspecto && <Sparkles size={14} className="text-amber-500 flex-shrink-0" />}
+                                <span className={isProspecto ? 'font-bold text-slate-900' : 'text-slate-800'}>
+                                  {doc.tipo_documento || 'Documento B3'}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-xs text-slate-500 whitespace-nowrap truncate max-w-[200px]" title={doc.securitizadora}>
+                              {doc.securitizadora || '-'}
+                            </td>
+                            <td className="px-4 py-3 text-center whitespace-nowrap">
+                              <a
+                                href={doc.link_download}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 text-xs font-bold rounded-lg border border-emerald-200 transition shadow-sm"
+                              >
+                                <ExternalLink size={13} />
+                                Baixar PDF
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
 
     </div>
   );

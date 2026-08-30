@@ -65,6 +65,17 @@ export interface PaymentEvent {
   fonte?: string;
 }
 
+export interface AssetDocument {
+  ticker: string;
+  isin: string;
+  data_referencia?: string;
+  data_entrega?: string;
+  categoria_documento?: string;
+  tipo_documento?: string;
+  securitizadora?: string;
+  link_download: string;
+}
+
 export interface DistressCase {
   cnpj: string;
   cnpj_formatado?: string;
