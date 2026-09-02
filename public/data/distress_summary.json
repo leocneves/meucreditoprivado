@@ -1,5 +1,5 @@
 {
-  "total_empresas_rj": 15,
+  "total_empresas_rj": 16,
   "total_ativos_rj": 78,
   "volume_total_rj": 44871384153.0,
   "top_casos": [
@@ -8,19 +8,19 @@
       "razao_social": "AMERICANAS S.A - EM RECUPERACAO JUDICIAL",
       "tipo_evento": "Esclarecimentos Sobre a Recuperação Judicial",
       "data_evento": "2026-07-09",
-      "volume_emitido": 14538274980.0,
-      "qtd_ativos": 12,
+      "volume_emitido": 11438274980.0,
+      "qtd_ativos": 11,
       "tickers": [
         "AMERE2",
         "AMERF2",
         "AMERG2",
-        "BTOW15",
         "LAME19",
         "LAMEA2",
         "LAMEA3",
         "LAMEA4",
         "LAMEA5",
-        "LAMEA6"
+        "LAMEA6",
+        "LAMEA7"
       ],
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1543326&numSequencia=1068032&numVersao=1"
     },
@@ -78,6 +78,18 @@
         "CCCI93"
       ],
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1502328&numSequencia=1027034&numVersao=1"
+    },
+    {
+      "cnpj": "00776574000660",
+      "razao_social": "AMERICANAS S/A",
+      "tipo_evento": "Esclarecimentos Sobre a Recuperação Judicial",
+      "data_evento": "2026-07-09",
+      "volume_emitido": 3100000000.0,
+      "qtd_ativos": 1,
+      "tickers": [
+        "BTOW15"
+      ],
+      "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1543326&numSequencia=1068032&numVersao=1"
     },
     {
       "cnpj": "10678505000163",
@@ -217,19 +229,7 @@
         "JFEN13"
       ],
       "link_documento": NaN
-    },
-    {
-      "cnpj": "08613550000198",
-      "razao_social": "BRASIL BROKERS PARTICIPACOES S.A..",
-      "tipo_evento": "Recuperação Judicial",
-      "data_evento": null,
-      "volume_emitido": 120000000.0,
-      "qtd_ativos": 1,
-      "tickers": [
-        "BBRK11"
-      ],
-      "link_documento": null
     }
   ],
-  "atualizado_em": "2026-09-01 04:00:14"
+  "atualizado_em": "2026-09-02 04:00:14"
 }
