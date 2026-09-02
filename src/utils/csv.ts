@@ -295,10 +295,14 @@ export interface Metadata {
 
 export const fetchCSV = <T,>(url: string): Promise<T[]> => {
   let normalizedUrl = url;
+  
+  // Trata caminhos para garantir que resolvam a partir da raiz /data/...
   if (normalizedUrl.startsWith('./data/')) {
     normalizedUrl = '/data/' + normalizedUrl.slice(7);
   } else if (normalizedUrl.startsWith('data/')) {
     normalizedUrl = '/data/' + normalizedUrl.slice(5);
+  } else if (!normalizedUrl.startsWith('/') && !normalizedUrl.startsWith('http')) {
+    normalizedUrl = '/' + normalizedUrl;
   }
 
   return new Promise((resolve, reject) => {
@@ -307,6 +311,13 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+        if (results.data && results.data.length > 0) {
+          const firstRowStr = JSON.stringify(results.data[0]);
+          if (firstRowStr.toLowerCase().includes('<!doctype') || firstRowStr.toLowerCase().includes('<html')) {
+            reject(new Error(`HTML 404 recebido em vez do CSV ${normalizedUrl}`));
+            return;
+          }
+        }
         resolve(results.data as T[]);
       },
       error: (error) => {
@@ -318,7 +329,7 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
 
 export const fetchMetadata = async (): Promise<Metadata | null> => {
   try {
-    const response = await fetch('./data/_metadata.json');
+    const response = await fetch('/data/_metadata.json');
     if (!response.ok) return null;
     return await response.json();
   } catch {

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   fetchCSV,
   Asset,
@@ -1030,9 +1031,9 @@ const CreditDashboard: React.FC = () => {
                 return (
                   <tr key={a.ticker} className="hover:bg-slate-50 transition">
                     <td className="p-2.5 font-mono font-bold text-blue-600">
-                      <a href={`/asset/${a.ticker}`} className="hover:underline">
+                      <Link to={`/asset/${a.ticker}`} className="hover:underline">
                         {a.ticker}
-                      </a>
+                      </Link>
                     </td>
                     <td className="p-2.5 text-slate-600">{a.tipo || '-'}</td>
                     <td className="p-2.5">

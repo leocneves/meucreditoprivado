@@ -1,7 +1,7 @@
 {
-  "total_empresas_rj": 16,
-  "total_ativos_rj": 78,
-  "volume_total_rj": 44871384153.0,
+  "total_empresas_rj": 14,
+  "total_ativos_rj": 74,
+  "volume_total_rj": 43611527653.0,
   "top_casos": [
     {
       "cnpj": "00776574000660",
@@ -165,20 +165,6 @@
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1429512&numSequencia=954224&numVersao=1"
     },
     {
-      "cnpj": "",
-      "razao_social": "NSP INVESTIMENTOS SA - EM RECUPERACAO JUDICIAL",
-      "tipo_evento": "Recuperação Judicial",
-      "data_evento": null,
-      "volume_emitido": 674000000.0,
-      "qtd_ativos": 3,
-      "tickers": [
-        "OSPI72",
-        "OSPI92",
-        "OSPV31"
-      ],
-      "link_documento": NaN
-    },
-    {
       "cnpj": "08773135000100",
       "razao_social": "2W ECOBANK S.A.",
       "tipo_evento": "Aprovação do Aumento de Capital Social  previsto no Plano de Recuperação Judicial",
@@ -192,18 +178,6 @@
         "WWAV23"
       ],
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1489834&numSequencia=1014540&numVersao=1"
-    },
-    {
-      "cnpj": "",
-      "razao_social": "INEPAR SA INDUSTRIA E CONSTRUCOES - EM RECUPERACAO JUDICIAL",
-      "tipo_evento": "Recuperação Judicial",
-      "data_evento": null,
-      "volume_emitido": 585856500.0,
-      "qtd_ativos": 1,
-      "tickers": [
-        "INEP15"
-      ],
-      "link_documento": null
     },
     {
       "cnpj": "38199406000118",
@@ -229,7 +203,19 @@
         "JFEN13"
       ],
       "link_documento": NaN
+    },
+    {
+      "cnpj": "08613550000198",
+      "razao_social": "BRASIL BROKERS PARTICIPACOES S.A..",
+      "tipo_evento": "Recuperação Judicial",
+      "data_evento": null,
+      "volume_emitido": 120000000.0,
+      "qtd_ativos": 1,
+      "tickers": [
+        "BBRK11"
+      ],
+      "link_documento": null
     }
   ],
-  "atualizado_em": "2026-09-02 04:00:14"
+  "atualizado_em": "2026-09-02 15:11:22"
 }

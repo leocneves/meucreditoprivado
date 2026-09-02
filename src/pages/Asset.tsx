@@ -115,22 +115,35 @@ const AssetPage: React.FC = () => {
     let isMounted = true;
 
     const loadData = async () => {
-      try {
-        const targetTicker = (ticker || '').trim().toUpperCase();
+      const targetKey = decodeURIComponent(ticker || '').trim().toUpperCase();
+      let currentAsset: Asset | null = null;
 
+      try {
         // 1. Carregar bases principais de forma rápida e resiliente
         const [assetsData, pricesData, emittersData] = await Promise.all([
-          fetchCSV<Asset>('/data/assets_master.csv').catch(() => fetchCSV<Asset>('./data/assets_master.csv')).catch(() => []),
-          fetchCSV<PriceRecord>('/data/prices.csv').catch(() => fetchCSV<PriceRecord>('./data/prices.csv')).catch(() => []),
-          fetchCSV<Emitter>('/data/emitters_master.csv').catch(() => fetchCSV<Emitter>('./data/emitters_master.csv')).catch(() => [])
+          fetchCSV<Asset>('/data/assets_master.csv').catch(() => []),
+          fetchCSV<PriceRecord>('/data/prices.csv').catch(() => []),
+          fetchCSV<Emitter>('/data/emitters_master.csv').catch(() => [])
         ]);
 
         if (!isMounted) return;
 
-        const found = assetsData.find(a => (a.ticker || '').trim().toUpperCase() === targetTicker);
+        const found = assetsData.find(a => 
+          (a.ticker || '').trim().toUpperCase() === targetKey ||
+          (a.isin || '').trim().toUpperCase() === targetKey
+        );
+
         if (found) {
+          currentAsset = found;
           setAsset(found);
-          const assetPrices = (pricesData || []).filter(p => p && (p.ticker || '').trim().toUpperCase() === targetTicker);
+
+          const foundTicker = (found.ticker || '').trim().toUpperCase();
+          const foundIsin = (found.isin || '').trim().toUpperCase();
+
+          const assetPrices = (pricesData || []).filter(p => p && (
+            (p.ticker && p.ticker.trim().toUpperCase() === foundTicker) ||
+            (foundIsin && p.isin && p.isin.trim().toUpperCase() === foundIsin)
+          ));
           setPrices(assetPrices);
           
           const matched = matchEmitter(emittersData || [], found);
@@ -159,15 +172,18 @@ const AssetPage: React.FC = () => {
         if (isMounted) setLoading(false);
       }
 
-      // 2. Carregar cronograma de pagamentos em segundo plano para não bloquear o gráfico de preços
+      // 2. Carregar cronograma de pagamentos em segundo plano
       try {
-        const targetTicker = (ticker || '').trim().toUpperCase();
-        const schedulesData = await fetchCSV<PaymentEvent>('/data/payment_schedules.csv')
-          .catch(() => fetchCSV<PaymentEvent>('./data/payment_schedules.csv'))
-          .catch(() => []);
+        const schedulesData = await fetchCSV<PaymentEvent>('/data/payment_schedules.csv').catch(() => []);
         
-        if (isMounted && schedulesData && schedulesData.length > 0) {
-          const assetEvents = schedulesData.filter(e => e && (e.ticker || '').trim().toUpperCase() === targetTicker);
+        if (isMounted && schedulesData && schedulesData.length > 0 && currentAsset) {
+          const foundTicker = (currentAsset.ticker || '').trim().toUpperCase();
+          const foundIsin = (currentAsset.isin || '').trim().toUpperCase();
+
+          const assetEvents = schedulesData.filter(e => e && (
+            (e.ticker && e.ticker.trim().toUpperCase() === foundTicker) ||
+            (foundIsin && e.ticker && e.ticker.trim().toUpperCase() === foundIsin)
+          ));
           assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
           setPaymentEvents(assetEvents);
         }
@@ -175,18 +191,18 @@ const AssetPage: React.FC = () => {
         console.warn("Erro ao carregar payment_schedules", err);
       }
 
-      // 3. Carregar documentos B3 para CRI/CRA em segundo plano (ordenados por data de entrega mais recente)
+      // 3. Carregar documentos B3 para CRI/CRA em segundo plano
       try {
-        const targetTicker = (ticker || '').trim().toUpperCase();
-        const docsData = await fetchCSV<AssetDocument>('/data/cricra_documents.csv')
-          .catch(() => fetchCSV<AssetDocument>('./data/cricra_documents.csv'))
-          .catch(() => []);
+        const docsData = await fetchCSV<AssetDocument>('/data/cricra_documents.csv').catch(() => []);
         
-        if (isMounted && docsData && docsData.length > 0) {
+        if (isMounted && docsData && docsData.length > 0 && currentAsset) {
+          const foundTicker = (currentAsset.ticker || '').trim().toUpperCase();
+          const foundIsin = (currentAsset.isin || '').trim().toUpperCase();
+
           const assetDocs = docsData.filter(d => d && (
-            (d.ticker && d.ticker.trim().toUpperCase() === targetTicker)
+            (d.ticker && d.ticker.trim().toUpperCase() === foundTicker) ||
+            (foundIsin && d.isin && d.isin.trim().toUpperCase() === foundIsin)
           ));
-          // Ordena estritamente da data de entrega mais recente para a mais antiga
           assetDocs.sort((a, b) => {
             const da = (a.data_entrega || a.data_referencia || '').trim();
             const db = (b.data_entrega || b.data_referencia || '').trim();
@@ -312,7 +328,9 @@ const AssetPage: React.FC = () => {
           {/* SPREAD & RETORNO DESTAQUE */}
           <div className="flex items-center gap-4 bg-gradient-to-br from-slate-50 to-blue-50/60 p-5 rounded-2xl border border-blue-100 shadow-inner">
             <div className="space-y-1">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Taxa Contratada / Mercado</span>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                {asset.taxa_mercado ? 'Taxa Negociada (Mercado Secundário)' : 'Taxa Contratada (Emissão)'}
+              </span>
               <p className="text-2xl sm:text-3xl font-black text-blue-700 font-mono">
                 {formatTaxaDisplay(asset)}
               </p>
