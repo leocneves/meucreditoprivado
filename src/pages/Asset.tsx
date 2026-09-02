@@ -119,35 +119,88 @@ const AssetPage: React.FC = () => {
       let currentAsset: Asset | null = null;
 
       try {
-        // 1. Carregar bases principais de forma rápida e resiliente
-        const [assetsData, pricesData, emittersData] = await Promise.all([
+        setLoading(true);
+        // Carregar todas as bases de forma unificada com cache em memória em csv.ts
+        const [assetsData, pricesData, emittersData, schedulesData, docsData] = await Promise.all([
           fetchCSV<Asset>('/data/assets_master.csv').catch(() => []),
           fetchCSV<PriceRecord>('/data/prices.csv').catch(() => []),
-          fetchCSV<Emitter>('/data/emitters_master.csv').catch(() => [])
+          fetchCSV<Emitter>('/data/emitters_master.csv').catch(() => []),
+          fetchCSV<PaymentEvent>('/data/payment_schedules.csv').catch(() => []),
+          fetchCSV<AssetDocument>('/data/cricra_documents.csv').catch(() => [])
         ]);
 
         if (!isMounted) return;
 
-        const found = assetsData.find(a => 
-          (a.ticker || '').trim().toUpperCase() === targetKey ||
-          (a.isin || '').trim().toUpperCase() === targetKey
-        );
+        const cleanTargetKey = targetKey.replace(/[\s\-]/g, '');
+
+        const found = assetsData.find(a => {
+          const tk = (a.ticker || '').trim().toUpperCase();
+          const isin = (a.isin || '').trim().toUpperCase();
+          const tkClean = tk.replace(/[\s\-]/g, '');
+          const isinClean = isin.replace(/[\s\-]/g, '');
+          return tk === targetKey || isin === targetKey || 
+                 (cleanTargetKey.length > 0 && (tkClean === cleanTargetKey || isinClean === cleanTargetKey));
+        });
 
         if (found) {
-          currentAsset = found;
           setAsset(found);
 
           const foundTicker = (found.ticker || '').trim().toUpperCase();
           const foundIsin = (found.isin || '').trim().toUpperCase();
+          const foundTickerClean = foundTicker.replace(/[\s\-]/g, '');
+          const foundIsinClean = foundIsin.replace(/[\s\-]/g, '');
 
-          const assetPrices = (pricesData || []).filter(p => p && (
-            (p.ticker && p.ticker.trim().toUpperCase() === foundTicker) ||
-            (foundIsin && p.isin && p.isin.trim().toUpperCase() === foundIsin)
-          ));
+          // 1. Preços
+          const assetPrices = (pricesData || []).filter(p => {
+            if (!p) return false;
+            const pTk = (p.ticker || '').trim().toUpperCase();
+            const pIsin = (p.isin || '').trim().toUpperCase();
+            const pTkClean = pTk.replace(/[\s\-]/g, '');
+            const pIsinClean = pIsin.replace(/[\s\-]/g, '');
+            return (foundTicker && pTk === foundTicker) ||
+                   (foundIsin && (pTk === foundIsin || pIsin === foundIsin)) ||
+                   (foundTickerClean && (pTkClean === foundTickerClean || pIsinClean === foundTickerClean)) ||
+                   (foundIsinClean && (pTkClean === foundIsinClean || pIsinClean === foundIsinClean));
+          });
           setPrices(assetPrices);
           
+          // 2. Emissor
           const matched = matchEmitter(emittersData || [], found);
           setEmitter(matched);
+
+          // 3. Cronograma de Pagamentos
+          const assetEvents = (schedulesData || []).filter(e => {
+            if (!e) return false;
+            const eTk = (e.ticker || '').trim().toUpperCase();
+            const eIsin = ((e as any).isin || (e as any).ISIN || '').trim().toUpperCase();
+            const eTkClean = eTk.replace(/[\s\-]/g, '');
+            const eIsinClean = eIsin.replace(/[\s\-]/g, '');
+            return (foundTicker && eTk === foundTicker) ||
+                   (foundIsin && (eTk === foundIsin || eIsin === foundIsin)) ||
+                   (foundTickerClean && (eTkClean === foundTickerClean || eIsinClean === foundTickerClean)) ||
+                   (foundIsinClean && (eTkClean === foundIsinClean || eIsinClean === foundIsinClean));
+          });
+          assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
+          setPaymentEvents(assetEvents);
+
+          // 4. Documentos B3
+          const assetDocs = (docsData || []).filter(d => {
+            if (!d) return false;
+            const dTk = (d.ticker || '').trim().toUpperCase();
+            const dIsin = (d.isin || '').trim().toUpperCase();
+            const dTkClean = dTk.replace(/[\s\-]/g, '');
+            const dIsinClean = dIsin.replace(/[\s\-]/g, '');
+            return (foundTicker && dTk === foundTicker) ||
+                   (foundIsin && (dTk === foundIsin || dIsin === foundIsin)) ||
+                   (foundTickerClean && (dTkClean === foundTickerClean || dIsinClean === foundTickerClean)) ||
+                   (foundIsinClean && (dTkClean === foundIsinClean || dIsinClean === foundIsinClean));
+          });
+          assetDocs.sort((a, b) => {
+            const da = (a.data_entrega || a.data_referencia || '').trim();
+            const db = (b.data_entrega || b.data_referencia || '').trim();
+            return db.localeCompare(da);
+          });
+          setDocuments(assetDocs);
 
           // SEO dinâmico por ativo
           const tipoStr = found.tipo || 'Título';
@@ -170,48 +223,6 @@ const AssetPage: React.FC = () => {
         console.error("Error loading asset detail", err);
       } finally {
         if (isMounted) setLoading(false);
-      }
-
-      // 2. Carregar cronograma de pagamentos em segundo plano
-      try {
-        const schedulesData = await fetchCSV<PaymentEvent>('/data/payment_schedules.csv').catch(() => []);
-        
-        if (isMounted && schedulesData && schedulesData.length > 0 && currentAsset) {
-          const foundTicker = (currentAsset.ticker || '').trim().toUpperCase();
-          const foundIsin = (currentAsset.isin || '').trim().toUpperCase();
-
-          const assetEvents = schedulesData.filter(e => e && (
-            (e.ticker && e.ticker.trim().toUpperCase() === foundTicker) ||
-            (foundIsin && e.ticker && e.ticker.trim().toUpperCase() === foundIsin)
-          ));
-          assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
-          setPaymentEvents(assetEvents);
-        }
-      } catch (err) {
-        console.warn("Erro ao carregar payment_schedules", err);
-      }
-
-      // 3. Carregar documentos B3 para CRI/CRA em segundo plano
-      try {
-        const docsData = await fetchCSV<AssetDocument>('/data/cricra_documents.csv').catch(() => []);
-        
-        if (isMounted && docsData && docsData.length > 0 && currentAsset) {
-          const foundTicker = (currentAsset.ticker || '').trim().toUpperCase();
-          const foundIsin = (currentAsset.isin || '').trim().toUpperCase();
-
-          const assetDocs = docsData.filter(d => d && (
-            (d.ticker && d.ticker.trim().toUpperCase() === foundTicker) ||
-            (foundIsin && d.isin && d.isin.trim().toUpperCase() === foundIsin)
-          ));
-          assetDocs.sort((a, b) => {
-            const da = (a.data_entrega || a.data_referencia || '').trim();
-            const db = (b.data_entrega || b.data_referencia || '').trim();
-            return db.localeCompare(da);
-          });
-          setDocuments(assetDocs);
-        }
-      } catch (err) {
-        console.warn("Erro ao carregar cricra_documents", err);
       }
     };
 

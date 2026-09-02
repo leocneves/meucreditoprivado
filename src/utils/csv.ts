@@ -293,6 +293,8 @@ export interface Metadata {
   last_update: string;
 }
 
+const csvCache = new Map<string, Promise<any[]>>();
+
 export const fetchCSV = <T,>(url: string): Promise<T[]> => {
   let normalizedUrl = url;
   
@@ -305,7 +307,11 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
     normalizedUrl = '/' + normalizedUrl;
   }
 
-  return new Promise((resolve, reject) => {
+  if (csvCache.has(normalizedUrl)) {
+    return csvCache.get(normalizedUrl) as Promise<T[]>;
+  }
+
+  const promise = new Promise<T[]>((resolve, reject) => {
     Papa.parse(normalizedUrl, {
       download: true,
       header: true,
@@ -314,6 +320,7 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
         if (results.data && results.data.length > 0) {
           const firstRowStr = JSON.stringify(results.data[0]);
           if (firstRowStr.toLowerCase().includes('<!doctype') || firstRowStr.toLowerCase().includes('<html')) {
+            csvCache.delete(normalizedUrl);
             reject(new Error(`HTML 404 recebido em vez do CSV ${normalizedUrl}`));
             return;
           }
@@ -321,10 +328,14 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
         resolve(results.data as T[]);
       },
       error: (error) => {
+        csvCache.delete(normalizedUrl);
         reject(error);
       }
     });
   });
+
+  csvCache.set(normalizedUrl, promise);
+  return promise;
 };
 
 export const fetchMetadata = async (): Promise<Metadata | null> => {
