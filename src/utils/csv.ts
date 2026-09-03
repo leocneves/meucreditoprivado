@@ -293,6 +293,28 @@ export interface Metadata {
   last_update: string;
 }
 
+export const sanitizeIssuerName = (name?: string | null): string => {
+  if (!name || typeof name !== 'string') return '';
+  let s = name.trim();
+  if (['nan', 'none', 'n/a', '-', ''].includes(s.toLowerCase())) return '';
+  if (/emiss[aã]o|s[eé]rie/i.test(s)) {
+    s = s.replace(/\s+BR[A-Z0-9]{10}\b.*$/i, '').trim();
+    s = s.replace(/\s+\d{2}\/\d{4}$/, '').trim();
+    const m = s.match(/s[eé]rie(?:\(s\))?[:\s]+(?:\d+)(?:\s*\(\+\d+\))?\s+(.*)$/i);
+    if (m && m[1]) {
+      s = m[1].trim();
+    } else {
+      s = s.replace(/^.*?(?:CRI|CRA)?\s*Emiss[aã]o[:\s]+\d+\s*(?:S[eé]rie[:\s]+\d+)?\s*/i, '').trim();
+    }
+    s = s.replace(/^(?:CRI|CRA)\s+/i, '').trim();
+    s = s.replace(/\s+\d{2}\/\d{4}$/, '').trim();
+    if (s && !s.includes(' ') && s.length > 8) {
+      s = s.replace(/([a-z])([A-Z])/g, '$1 $2');
+    }
+  }
+  return s;
+};
+
 const csvCache = new Map<string, Promise<any[]>>();
 
 export const fetchCSV = <T,>(url: string): Promise<T[]> => {
@@ -323,6 +345,13 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
             csvCache.delete(normalizedUrl);
             reject(new Error(`HTML 404 recebido em vez do CSV ${normalizedUrl}`));
             return;
+          }
+          if (normalizedUrl.includes('assets_master.csv')) {
+            (results.data as any[]).forEach(row => {
+              if (row && row.issuer) {
+                row.issuer = sanitizeIssuerName(row.issuer);
+              }
+            });
           }
         }
         resolve(results.data as T[]);
