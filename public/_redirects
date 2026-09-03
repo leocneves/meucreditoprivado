@@ -1,1 +1,7 @@
-/* /index.html 200
+/data/*        /data/:splat        200
+/assets/*      /assets/:splat      200
+/index.css     /index.css          200
+/favicon.ico   /favicon.ico        200
+/sitemap.xml   /sitemap.xml        200
+/robots.txt    /robots.txt         200
+/*             /index.html         200!

@@ -92,6 +92,16 @@ def get_emitters_map():
         print(f"Erro ao carregar mapa de emissores: {err}")
         return {}
 
+def get_bundle_script():
+    for d in ("docs/assets", "public/assets", "dist/assets"):
+        if os.path.exists(d):
+            for f in os.listdir(d):
+                if f.startswith("index-") and f.endswith(".js"):
+                    return f'<script type="module" crossorigin src="/assets/{f}"></script>'
+    return '<script type="module" crossorigin src="/assets/index-CfwFOZan.js"></script>'
+
+BUNDLE_SCRIPT_TAG = get_bundle_script()
+
 def get_assets():
     if os.path.exists(CSV_PATH):
         df = pd.read_csv(CSV_PATH)
@@ -523,8 +533,7 @@ def generate_asset_html(row):
       </main>
     </div>
     
-    <script type="module" src="/src/main.tsx"></script>
-    <script type="module" src="/index.tsx"></script>
+    {BUNDLE_SCRIPT_TAG}
   </body>
 </html>"""
     return ticker, html_content
