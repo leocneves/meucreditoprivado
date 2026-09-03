@@ -1,49 +1,25 @@
 {
-  "total_empresas_rj": 14,
+  "total_empresas_rj": 15,
   "total_ativos_rj": 74,
   "volume_total_rj": 43611527653.0,
   "top_casos": [
     {
       "cnpj": "00776574000660",
-      "razao_social": "AMERICANAS S.A - EM RECUPERACAO JUDICIAL",
+      "razao_social": "AMERICANAS S/A",
       "tipo_evento": "Esclarecimentos Sobre a Recuperação Judicial",
       "data_evento": "2026-07-09",
-      "volume_emitido": 11438274980.0,
-      "qtd_ativos": 11,
+      "volume_emitido": 10838274980.0,
+      "qtd_ativos": 7,
       "tickers": [
         "AMERE2",
         "AMERF2",
         "AMERG2",
-        "LAME19",
-        "LAMEA2",
-        "LAMEA3",
-        "LAMEA4",
-        "LAMEA5",
+        "BTOW15",
         "LAMEA6",
-        "LAMEA7"
+        "LAMEA7",
+        "LAMEA8"
       ],
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1543326&numSequencia=1068032&numVersao=1"
-    },
-    {
-      "cnpj": "22606673000122",
-      "razao_social": "NSP INVESTIMENTOS S.A. - EM RECUPERACAO JUDICIAL",
-      "tipo_evento": "Recuperação Judicial",
-      "data_evento": null,
-      "volume_emitido": 7548150185.0,
-      "qtd_ativos": 14,
-      "tickers": [
-        "OSPI12",
-        "OSPI22",
-        "OSPI32",
-        "OSPI42",
-        "OSPI52",
-        "OSPI62",
-        "OSPI82",
-        "OSPIA2",
-        "OSPIB2",
-        "OSPV11"
-      ],
-      "link_documento": NaN
     },
     {
       "cnpj": "76535764000143",
@@ -57,6 +33,25 @@
         "TLNL16"
       ],
       "link_documento": null
+    },
+    {
+      "cnpj": "22606673000122",
+      "razao_social": "NSP INVESTIMENTOS S.A. - EM RECUPERACAO JUDICIAL",
+      "tipo_evento": "Recuperação Judicial",
+      "data_evento": null,
+      "volume_emitido": 4549000000.0,
+      "qtd_ativos": 8,
+      "tickers": [
+        "OSPI12",
+        "OSPI22",
+        "OSPI82",
+        "OSPIA2",
+        "OSPV11",
+        "OSPV41",
+        "OSPV51",
+        "OSPV61"
+      ],
+      "link_documento": NaN
     },
     {
       "cnpj": "62258884000136",
@@ -81,15 +76,36 @@
     },
     {
       "cnpj": "00776574000660",
-      "razao_social": "AMERICANAS S/A",
+      "razao_social": "AMERICANAS S.A - EM RECUPERACAO JUDICIAL",
       "tipo_evento": "Esclarecimentos Sobre a Recuperação Judicial",
       "data_evento": "2026-07-09",
-      "volume_emitido": 3100000000.0,
-      "qtd_ativos": 1,
+      "volume_emitido": 3700000000.0,
+      "qtd_ativos": 5,
       "tickers": [
-        "BTOW15"
+        "LAME19",
+        "LAMEA2",
+        "LAMEA3",
+        "LAMEA4",
+        "LAMEA5"
       ],
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1543326&numSequencia=1068032&numVersao=1"
+    },
+    {
+      "cnpj": "22606673000122",
+      "razao_social": "OSP INVESTIMENTOS S/A",
+      "tipo_evento": "Recuperação Judicial",
+      "data_evento": null,
+      "volume_emitido": 2999150185.0,
+      "qtd_ativos": 6,
+      "tickers": [
+        "OSPI32",
+        "OSPI42",
+        "OSPI52",
+        "OSPI62",
+        "OSPIB2",
+        "OSPV21"
+      ],
+      "link_documento": null
     },
     {
       "cnpj": "10678505000163",
@@ -217,5 +233,5 @@
       "link_documento": null
     }
   ],
-  "atualizado_em": "2026-09-03 04:00:25"
+  "atualizado_em": "2026-09-03 13:06:22"
 }
