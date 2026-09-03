@@ -5,25 +5,43 @@ import ChartComponent from '../components/ChartComponent';
 import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen } from 'lucide-react';
 
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
-  if (!asset.issuer) return null;
-  const target = asset.issuer.trim().toLowerCase();
-  if (['nan', 'none', '-', ''].includes(target)) return null;
-  
-  // 1. Match exato
-  const exact = issuers.find(e => 
-    (e.razao_social && e.razao_social.trim().toLowerCase() === target) ||
-    (e.nome_fantasia && e.nome_fantasia.trim().toLowerCase() === target)
-  );
-  if (exact) return exact;
+  const issuerName = (asset.issuer || '').trim();
+  const cnpjClean = (asset.cnpj_emissor || '').replace(/\D/g, '');
 
-  // 2. Match parcial
-  const partial = issuers.find(e => {
-    const r = (e.razao_social || '').trim().toLowerCase();
-    const f = (e.nome_fantasia || '').trim().toLowerCase();
-    return (r.length > 3 && target.includes(r)) || (target.length > 3 && r.includes(target)) ||
-           (f.length > 3 && target.includes(f)) || (target.length > 3 && f.includes(target));
-  });
-  return partial || null;
+  if (cnpjClean && cnpjClean.length >= 8) {
+    const byCnpj = issuers.find(e => (e.cnpj || '').replace(/\D/g, '') === cnpjClean);
+    if (byCnpj) return byCnpj;
+  }
+
+  if (issuerName && !['nan', 'none', '-', ''].includes(issuerName.toLowerCase())) {
+    const target = issuerName.toLowerCase();
+    const exact = issuers.find(e => 
+      (e.razao_social && e.razao_social.trim().toLowerCase() === target) ||
+      (e.nome_fantasia && e.nome_fantasia.trim().toLowerCase() === target)
+    );
+    if (exact) return exact;
+
+    const partial = issuers.find(e => {
+      const r = (e.razao_social || '').trim().toLowerCase();
+      const f = (e.nome_fantasia || '').trim().toLowerCase();
+      return (r.length > 3 && target.includes(r)) || (target.length > 3 && r.includes(target)) ||
+             (f.length > 3 && target.includes(f)) || (target.length > 3 && f.includes(target));
+    });
+    if (partial) return partial;
+
+    return {
+      cnpj: asset.cnpj_emissor || '-',
+      cnpj_formatado: asset.cnpj_emissor || '-',
+      razao_social: issuerName,
+      nome_fantasia: issuerName,
+      setor: asset.setor || 'Crédito Privado',
+      tipo_emissor: 'Emissor / Devedor',
+      situacao_cvm: 'Ativo',
+      descricao: `Emissor/Devedor registrado no mercado de Crédito Privado para a emissão de ${asset.tipo || 'Títulos'} (${asset.ticker}).`
+    };
+  }
+
+  return null;
 };
 
 const AssetPage: React.FC = () => {
@@ -682,9 +700,8 @@ const AssetPage: React.FC = () => {
           )}
         </div>
 
-        {/* ================= DOCUMENTOS OFICIAIS (CRI / CRA) ================= */}
-        {(asset.tipo === 'CRI' || asset.tipo === 'CRA' || documents.length > 0) && (
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        {/* ================= DOCUMENTOS OFICIAIS (CRI / CRA / DEBÊNTURES) ================= */}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
                 <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-md uppercase tracking-wider">
@@ -805,7 +822,6 @@ const AssetPage: React.FC = () => {
               </div>
             )}
           </div>
-        )}
 
     </div>
   );
