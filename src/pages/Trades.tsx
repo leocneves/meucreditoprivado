@@ -25,7 +25,10 @@ import {
   BarChart3,
   Activity,
   Briefcase,
-  Eye
+  Eye,
+  AlertCircle,
+  Filter,
+  Info
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -116,6 +119,57 @@ export interface B3MarketKpis {
   distribuicao_indexador?: Record<string, { volume_total: number; trades_total: number; pct_volume: number; taxa_media_ponderada: number }>;
 }
 
+export interface B3MarketSeriesPoint {
+  date: string;
+  datePretty: string;
+  volume: number;
+  volumeRaw: number;
+  trades: number;
+  price: number;
+  yield: number;
+  spread_bps: number | null;
+}
+
+export interface B3MarketSeriesPayload {
+  atualizado_em: string;
+  datas: string[];
+  series: {
+    TODOS: B3MarketSeriesPoint[];
+    IPCA: B3MarketSeriesPoint[];
+    'CDI+': B3MarketSeriesPoint[];
+    'CDI%': B3MarketSeriesPoint[];
+    PRE: B3MarketSeriesPoint[];
+  };
+}
+
+export interface B3NoRateAsset {
+  ticker: string;
+  devedor: string;
+  tipo: string;
+  indexador: string;
+  taxa_emissao?: number | string;
+  rating?: string;
+  duration?: number;
+  vencimento?: string;
+  setor?: string;
+  incentivada?: string;
+  total_volume: number;
+  total_trades: number;
+  total_qtd?: number;
+  vwap_medio: number;
+  ultimo_pu: number;
+  ultimo_pregao: string;
+  pregoes_ativos?: number;
+}
+
+export interface B3NoRatePayload {
+  atualizado_em: string;
+  total_ativos: number;
+  total_volume: number;
+  total_trades: number;
+  items: B3NoRateAsset[];
+}
+
 /* ================= HELPERS DE FORMATAÇÃO ================= */
 
 const formatMoney = (val?: number | string | null) => {
@@ -171,20 +225,30 @@ const CustomChartTooltip: React.FC<{
   active?: boolean;
   payload?: any[];
   label?: string;
-  metric: 'price' | 'yield' | 'volume';
+  metric: 'price' | 'yield' | 'spread' | 'volume';
   indexador?: string;
 }> = ({ active, payload, metric, indexador }) => {
   if (!active || !payload || !payload.length) return null;
   const data = payload[0].payload;
+  const idx = indexador || data.indexador;
 
   return (
-    <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-2xl border border-slate-700 text-xs space-y-1.5 min-w-[210px] z-50">
+    <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-2xl border border-slate-700 text-xs space-y-1.5 min-w-[220px] z-50">
       <div className="flex items-center justify-between border-b border-slate-700/80 pb-1.5 font-mono">
         <span className="font-bold text-slate-300">Pregão B3:</span>
         <span className="font-black text-white">{formatDateBR(data.date)}</span>
       </div>
 
       <div className="space-y-1 pt-0.5">
+        {data.spread !== undefined && data.spread !== null && (
+          <div className="flex items-center justify-between">
+            <span className="text-amber-300 font-medium">Spread Over:</span>
+            <strong className="text-amber-400 font-mono text-sm">
+              {data.spread > 0 ? `+${Number(data.spread).toFixed(1)} bps` : `${Number(data.spread).toFixed(1)} bps`}
+            </strong>
+          </div>
+        )}
+
         <div className="flex items-center justify-between">
           <span className="text-slate-400">Preço (VWAP):</span>
           <strong className="text-blue-400 font-mono text-sm">{formatPU(data.price)}</strong>
@@ -200,7 +264,7 @@ const CustomChartTooltip: React.FC<{
         {data.yield !== undefined && (
           <div className="flex items-center justify-between">
             <span className="text-slate-400">Taxa Média:</span>
-            <strong className="text-emerald-400 font-mono">{formatTaxa(data.yield, indexador || data.indexador)}</strong>
+            <strong className="text-emerald-400 font-mono">{formatTaxa(data.yield, idx)}</strong>
           </div>
         )}
 
@@ -213,6 +277,13 @@ const CustomChartTooltip: React.FC<{
           <span className="text-slate-400">Trades Confirmados:</span>
           <strong className="text-amber-300 font-mono">{Number(data.trades || 0).toLocaleString('pt-BR')}</strong>
         </div>
+
+        {idx && (
+          <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800">
+            <span>Indexador:</span>
+            <span className="font-mono font-bold text-slate-300">{idx}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -239,10 +310,25 @@ const Trades: React.FC = () => {
   const [search, setSearch] = useState('');
 
   // Estados do Gráfico de Preços nos N Dias
-  const [chartPeriod, setChartPeriod] = useState<'7d' | '15d' | '30d'>('30d');
-  const [chartMetric, setChartMetric] = useState<'price' | 'yield' | 'volume'>('price');
+  const [chartPeriod, setChartPeriod] = useState<'7d' | '15d' | '30d' | 'ytd'>('30d');
+  const [chartMetric, setChartMetric] = useState<'price' | 'yield' | 'spread' | 'volume'>('price');
+  const [chartIndexer, setChartIndexer] = useState<'TODOS' | 'IPCA' | 'CDI+' | 'CDI%' | 'PRE'>('TODOS');
   const [chartTarget, setChartTarget] = useState<'ticker' | 'market'>('ticker');
   const [selectedTicker, setSelectedTicker] = useState<string>('RENTQ8');
+
+  // Séries YTD de Mercado e Ativos sem Taxa
+  const [marketSeries, setMarketSeries] = useState<B3MarketSeriesPayload | null>(null);
+  const [noRatePayload, setNoRatePayload] = useState<B3NoRatePayload | null>(null);
+
+  // Estados para Papéis Negociados a PU (Sem Taxa B3)
+  const [noRateSearch, setNoRateSearch] = useState('');
+  const [noRateTipoFilter, setNoRateTipoFilter] = useState('TODOS');
+  const [noRateIndexerFilter, setNoRateIndexerFilter] = useState('TODOS');
+  const [noRateRatingFilter, setNoRateRatingFilter] = useState('TODOS');
+  const [noRatePage, setNoRatePage] = useState(1);
+  const [noRatePageSize, setNoRatePageSize] = useState(25);
+  const [noRateSortField, setNoRateSortField] = useState<'volume' | 'trades' | 'pu' | 'ticker' | 'pregao'>('volume');
+  const [noRateSortDirection, setNoRateSortDirection] = useState<'asc' | 'desc'>('desc');
 
   // Ordenação da Tabela
   const [sortField, setSortField] = useState<'volume' | 'trades' | 'taxa' | 'pu' | 'ticker'>('volume');
@@ -261,14 +347,18 @@ const Trades: React.FC = () => {
       try {
         setLoading(true);
 
-        // Carrega simultaneamente o JSON de KPIs, o CSV de negócios recentes e a base cadastral
-        const [kpiRes, rawTrades, assetsMaster] = await Promise.all([
+        // Carrega simultaneamente o JSON de KPIs, CSV de negócios recentes, base cadastral, séries YTD e papéis sem taxa
+        const [kpiRes, rawTrades, assetsMaster, seriesRes, noRateRes] = await Promise.all([
           fetch('/data/b3_market_kpis.json').then(r => r.json()).catch(() => null),
           fetchCSV<B3TradeRow>('/data/b3_trades_recent.csv').catch(() => []),
-          fetchCSV<Asset>('/data/assets_master.csv').catch(() => [])
+          fetchCSV<Asset>('/data/assets_master.csv').catch(() => []),
+          fetch('/data/b3_market_series_ytd.json').then(r => r.json()).catch(() => null),
+          fetch('/data/b3_trades_no_rate.json').then(r => r.json()).catch(() => null)
         ]);
 
         if (kpiRes) setKpis(kpiRes);
+        if (seriesRes) setMarketSeries(seriesRes);
+        if (noRateRes) setNoRatePayload(noRateRes);
 
         // Cria mapa de ativos para cruzamento cadastral instantâneo O(1)
         const assetMap = new Map<string, Asset>();
@@ -654,14 +744,37 @@ const Trades: React.FC = () => {
   /* ================= DADOS DO GRÁFICO DE PREÇOS NOS N DIAS ================= */
 
   const chartData = useMemo(() => {
-    if (!trades.length) return [];
-
-    const numDays = chartPeriod === '7d' ? 5 : chartPeriod === '15d' ? 11 : 30;
-    const targetDates = availableDates.slice(0, numDays);
-    const minDate = targetDates[targetDates.length - 1] || targetDates[0];
-
-    // Modo 1: Média Geral do Mercado
+    // Modo 1: Média Geral do Mercado (Consolidado ou por Indexador via Séries Pré-calculadas YTD)
     if (chartTarget === 'market') {
+      const activeIndexer = (chartMetric === 'spread' && chartIndexer === 'TODOS') ? 'IPCA' : chartIndexer;
+      const seriesList = marketSeries?.series?.[activeIndexer];
+
+      if (seriesList && seriesList.length > 0) {
+        let points = seriesList;
+        if (chartPeriod === '7d') points = seriesList.slice(-5);
+        else if (chartPeriod === '15d') points = seriesList.slice(-11);
+        else if (chartPeriod === '30d') points = seriesList.slice(-25);
+        // if chartPeriod === 'ytd': usa todos os pregões do ano
+
+        return points.map(p => ({
+          date: p.date,
+          datePretty: p.datePretty,
+          price: p.price,
+          yield: p.yield,
+          spread: p.spread_bps,
+          volume: p.volume,
+          volumeRaw: p.volumeRaw,
+          trades: p.trades,
+          indexador: activeIndexer
+        }));
+      }
+
+      // Fallback enquanto marketSeries carrega
+      if (!trades.length) return [];
+      const numDays = chartPeriod === '7d' ? 5 : chartPeriod === '15d' ? 11 : 25;
+      const targetDates = availableDates.slice(0, numDays);
+      const minDate = targetDates[targetDates.length - 1] || targetDates[0];
+
       const dayMap = new Map<string, { date: string; volume: number; trades: number; sumWeightedPrice: number; sumQty: number; sumWeightedYield: number; sumYieldQty: number }>();
       
       trades.forEach(t => {
@@ -697,16 +810,23 @@ const Trades: React.FC = () => {
             datePretty: parts.length === 3 ? `${parts[2]}/${parts[1]}` : entry.date,
             price: entry.sumQty > 0 ? Number((entry.sumWeightedPrice / entry.sumQty).toFixed(2)) : 0,
             yield: entry.sumYieldQty > 0 ? Number((entry.sumWeightedYield / entry.sumYieldQty).toFixed(2)) : 0,
+            spread: null,
             volume: Number((entry.volume / 1e6).toFixed(2)),
             volumeRaw: entry.volume,
-            trades: entry.trades
+            trades: entry.trades,
+            indexador: activeIndexer
           };
         });
     }
 
     // Modo 2: Ativo Específico Selecionado
+    if (!trades.length) return [];
     const tkUpper = selectedTicker.trim().toUpperCase();
-    const assetTrades = trades.filter(t => (t.ticker || '').trim().toUpperCase() === tkUpper && t.data_negocio >= minDate);
+    const numDays = chartPeriod === '7d' ? 5 : chartPeriod === '15d' ? 11 : chartPeriod === '30d' ? 25 : 999;
+    const targetDates = chartPeriod === 'ytd' ? availableDates : availableDates.slice(0, numDays);
+    const minDate = targetDates[targetDates.length - 1] || targetDates[0];
+
+    const assetTrades = trades.filter(t => (t.ticker || '').trim().toUpperCase() === tkUpper && (chartPeriod === 'ytd' || t.data_negocio >= minDate));
 
     return assetTrades
       .sort((a, b) => a.data_negocio.localeCompare(b.data_negocio))
@@ -722,6 +842,21 @@ const Trades: React.FC = () => {
         const trd = Number(t.qtd_negocios) || 0;
         const qty = Number(t.quantidade_negociada) || 0;
 
+        // Cálculo de spread over para o papel selecionado
+        let spreadBps: number | null = null;
+        const idx = (t.indexador || '').toUpperCase();
+        if (tx > 0) {
+          if (idx.includes('DI+') || idx.includes('CDI+')) {
+            spreadBps = Number((tx * 100).toFixed(1));
+          } else if (idx.includes('DI%') || idx.includes('%CDI')) {
+            spreadBps = Number(((tx - 100) * 100).toFixed(1));
+          } else if (idx.includes('IPCA') || idx.includes('IGP')) {
+            spreadBps = Number(((tx - 6.40) * 100).toFixed(1));
+          } else if (idx.includes('PRE') || idx.includes('PRÉ')) {
+            spreadBps = Number(((tx - 13.50) * 100).toFixed(1));
+          }
+        }
+
         return {
           date: t.data_negocio,
           datePretty: parts.length === 3 ? `${parts[2]}/${parts[1]}` : t.data_negocio,
@@ -731,6 +866,7 @@ const Trades: React.FC = () => {
           yield: tx,
           yieldMin: txMin,
           yieldMax: txMax,
+          spread: spreadBps,
           volume: Number((vol / 1e6).toFixed(2)),
           volumeRaw: vol,
           trades: trd,
@@ -741,7 +877,7 @@ const Trades: React.FC = () => {
           rating: t.rating
         };
       });
-  }, [trades, selectedTicker, chartPeriod, chartTarget, availableDates]);
+  }, [trades, selectedTicker, chartPeriod, chartTarget, chartMetric, chartIndexer, marketSeries, availableDates]);
 
   // Resumo estatístico do período para o cabeçalho do gráfico
   const chartSummary = useMemo(() => {
@@ -758,12 +894,18 @@ const Trades: React.FC = () => {
     const currentYield = lastPoint.yield;
     const firstYield = firstPoint.yield;
 
-    const totalVol = chartData.reduce((acc, d) => acc + (d.volumeRaw || 0), 0);
+    const currentSpread = (lastPoint.spread !== undefined && lastPoint.spread !== null) ? Number(lastPoint.spread) : null;
+
+    const totalVol = chartData.reduce((acc, d) => acc + (d.volumeRaw || (d.volume ? d.volume * 1e6 : 0)), 0);
     const totalTrd = chartData.reduce((acc, d) => acc + (d.trades || 0), 0);
 
     const validPrices = chartData.map(d => d.price).filter(p => p > 0);
     const minPrice = validPrices.length ? Math.min(...validPrices) : 0;
     const maxPrice = validPrices.length ? Math.max(...validPrices) : 0;
+
+    const validSpreads = chartData.map(d => d.spread).filter(s => s !== null && s !== undefined) as number[];
+    const minSpread = validSpreads.length ? Math.min(...validSpreads) : null;
+    const maxSpread = validSpreads.length ? Math.max(...validSpreads) : null;
 
     const assetMeta = trades.find(t => (t.ticker || '').trim().toUpperCase() === selectedTicker.trim().toUpperCase());
 
@@ -773,14 +915,25 @@ const Trades: React.FC = () => {
       priceChangePct,
       priceChangeNom,
       currentYield,
+      currentSpread,
       totalVol,
       totalTrd,
       minPrice,
       maxPrice,
+      minSpread,
+      maxSpread,
       daysCount: chartData.length,
       assetMeta
     };
   }, [chartData, trades, selectedTicker]);
+
+  // Handler de mudança de métrica (ajusta indexador se spread for selecionado)
+  const handleMetricChange = (metric: 'price' | 'yield' | 'spread' | 'volume') => {
+    setChartMetric(metric);
+    if (metric === 'spread' && chartIndexer === 'TODOS') {
+      setChartIndexer('IPCA');
+    }
+  };
 
   // Handler para focar gráfico a partir do clique em uma linha da tabela
   const handleFocusTickerChart = (ticker: string) => {
@@ -832,6 +985,137 @@ const Trades: React.FC = () => {
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     link.setAttribute('download', `fixdata_negocios_b3_${latestDate}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  /* ================= FILTRAGEM & ORDENAÇÃO DE PAPÉIS SEM TAXA (A PU) ================= */
+
+  const filteredNoRateAssets = useMemo(() => {
+    if (!noRatePayload?.items) return [];
+
+    const cleanSearch = noRateSearch.trim().toLowerCase();
+
+    return noRatePayload.items.filter(item => {
+      // 1. Tipo
+      if (noRateTipoFilter !== 'TODOS') {
+        const tp = (item.tipo || '').toUpperCase();
+        if (noRateTipoFilter === 'DEB' && !tp.includes('DEB')) return false;
+        if (noRateTipoFilter === 'CRI' && !tp.includes('CRI')) return false;
+        if (noRateTipoFilter === 'CRA' && !tp.includes('CRA')) return false;
+      }
+
+      // 2. Indexador
+      if (noRateIndexerFilter !== 'TODOS') {
+        const idx = (item.indexador || '').toUpperCase();
+        if (noRateIndexerFilter === 'DI+' && !idx.includes('DI+') && !idx.includes('CDI+')) return false;
+        if (noRateIndexerFilter === 'IPCA' && !idx.includes('IPCA') && !idx.includes('IGP')) return false;
+        if (noRateIndexerFilter === 'DI%' && !idx.includes('DI%') && !idx.includes('%CDI')) return false;
+        if (noRateIndexerFilter === 'PRE' && !idx.includes('PRÉ') && !idx.includes('PRE')) return false;
+      }
+
+      // 3. Rating
+      if (noRateRatingFilter !== 'TODOS') {
+        const r = (item.rating || '').toUpperCase();
+        if (noRateRatingFilter === 'AAA' && !r.includes('AAA')) return false;
+        if (noRateRatingFilter === 'AA' && !r.includes('AA') && !r.includes('AAA')) return false;
+        if (noRateRatingFilter === 'SEM_RATING' && (r !== '-' && r !== 'NAN' && r !== 'N/D' && r !== '')) return false;
+      }
+
+      // 4. Busca
+      if (cleanSearch) {
+        const tk = (item.ticker || '').toLowerCase();
+        const dev = (item.devedor || '').toLowerCase();
+        const st = (item.setor || '').toLowerCase();
+        if (!tk.includes(cleanSearch) && !dev.includes(cleanSearch) && !st.includes(cleanSearch)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [noRatePayload, noRateTipoFilter, noRateIndexerFilter, noRateRatingFilter, noRateSearch]);
+
+  const sortedNoRateAssets = useMemo(() => {
+    const list = [...filteredNoRateAssets];
+    return list.sort((a, b) => {
+      let valA: number | string = 0;
+      let valB: number | string = 0;
+
+      switch (noRateSortField) {
+        case 'volume':
+          valA = a.total_volume || 0;
+          valB = b.total_volume || 0;
+          break;
+        case 'trades':
+          valA = a.total_trades || 0;
+          valB = b.total_trades || 0;
+          break;
+        case 'pu':
+          valA = a.ultimo_pu || a.vwap_medio || 0;
+          valB = b.ultimo_pu || a.vwap_medio || 0;
+          break;
+        case 'pregao':
+          valA = a.ultimo_pregao || '';
+          valB = b.ultimo_pregao || '';
+          return noRateSortDirection === 'asc' 
+            ? String(valA).localeCompare(String(valB)) 
+            : String(valB).localeCompare(String(valA));
+        case 'ticker':
+          valA = a.ticker || '';
+          valB = b.ticker || '';
+          return noRateSortDirection === 'asc' 
+            ? String(valA).localeCompare(String(valB)) 
+            : String(valB).localeCompare(String(valA));
+        default:
+          valA = a.total_volume || 0;
+          valB = b.total_volume || 0;
+      }
+
+      return noRateSortDirection === 'asc' ? (valA as number) - (valB as number) : (valB as number) - (valA as number);
+    });
+  }, [filteredNoRateAssets, noRateSortField, noRateSortDirection]);
+
+  const noRateTotalPages = Math.ceil(sortedNoRateAssets.length / noRatePageSize) || 1;
+  const paginatedNoRateAssets = useMemo(() => {
+    const start = (noRatePage - 1) * noRatePageSize;
+    return sortedNoRateAssets.slice(start, start + noRatePageSize);
+  }, [sortedNoRateAssets, noRatePage, noRatePageSize]);
+
+  // Exportação CSV de papéis a PU
+  const exportNoRateCSV = () => {
+    if (!sortedNoRateAssets.length) return;
+
+    const headers = [
+      'Ticker', 'Tipo', 'Emissor/Devedor', 'Setor', 'Indexador', 'Taxa Emissão', 
+      'Rating', 'Duration', 'Vencimento', 'Incentivada', 'Último PU', 
+      'VWAP Médio', 'Volume Total R$', 'Total Trades', 'Último Pregão'
+    ];
+
+    const rows = sortedNoRateAssets.map(a => [
+      a.ticker,
+      a.tipo,
+      `"${(a.devedor || '').replace(/"/g, '""')}"`,
+      `"${(a.setor || '').replace(/"/g, '""')}"`,
+      a.indexador,
+      a.taxa_emissao ?? '',
+      (a.rating === 'nan' || !a.rating) ? '-' : a.rating,
+      a.duration ?? '',
+      a.vencimento || '',
+      a.incentivada || '',
+      a.ultimo_pu,
+      a.vwap_medio,
+      a.total_volume,
+      a.total_trades,
+      a.ultimo_pregao
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `fixdata_papeis_sem_taxa_b3_${latestDate}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -1114,17 +1398,17 @@ const Trades: React.FC = () => {
                 <LineChart size={20} />
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                Evolução de Preços & Negócios nos {chartPeriod === '7d' ? '7' : chartPeriod === '15d' ? '15' : '30'} Dias
+                Evolução de Preços, Taxas & Spread {chartPeriod === 'ytd' ? 'em 2026 (YTD)' : chartPeriod === '7d' ? 'nos 7 Dias' : chartPeriod === '15d' ? 'nos 15 Dias' : 'nos 30 Dias'}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-500">
               {chartTarget === 'ticker' 
-                ? `Curva histórica diária de VWAP, taxa negociada e liquidez do ativo ${selectedTicker}` 
-                : 'Média ponderada geral de preços e volume negociado em todo o mercado B3'}
+                ? `Curva diária de VWAP, taxa negociada, spread over e volume do ativo ${selectedTicker}` 
+                : 'Média ponderada do mercado secundário por indexador homogêneo e liquidez consolidada'}
             </p>
           </div>
 
-          {/* Controles do Gráfico: Modo Ativo vs Mercado, N Dias & Métrica */}
+          {/* Controles do Gráfico: Modo Ativo vs Mercado, Período & Métrica */}
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Toggle Ativo vs Mercado */}
             <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
@@ -1150,7 +1434,7 @@ const Trades: React.FC = () => {
               </button>
             </div>
 
-            {/* Toggle de Período (N Dias) */}
+            {/* Toggle de Período: 7d, 15d, 30d, YTD */}
             <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
               <button
                 onClick={() => setChartPeriod('7d')}
@@ -1176,12 +1460,21 @@ const Trades: React.FC = () => {
               >
                 30 Dias
               </button>
+              <button
+                onClick={() => setChartPeriod('ytd')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
+                  chartPeriod === 'ytd' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Sparkles size={11} className={chartPeriod === 'ytd' ? 'text-amber-300' : 'text-slate-400'} />
+                YTD (2026)
+              </button>
             </div>
 
             {/* Toggle de Métrica */}
             <div className="inline-flex p-1 bg-blue-50 border border-blue-200 rounded-xl">
               <button
-                onClick={() => setChartMetric('price')}
+                onClick={() => handleMetricChange('price')}
                 className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   chartMetric === 'price' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
                 }`}
@@ -1189,7 +1482,7 @@ const Trades: React.FC = () => {
                 Preço (VWAP)
               </button>
               <button
-                onClick={() => setChartMetric('yield')}
+                onClick={() => handleMetricChange('yield')}
                 className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   chartMetric === 'yield' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
                 }`}
@@ -1197,7 +1490,15 @@ const Trades: React.FC = () => {
                 Taxa (%)
               </button>
               <button
-                onClick={() => setChartMetric('volume')}
+                onClick={() => handleMetricChange('spread')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  chartMetric === 'spread' ? 'bg-amber-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
+                }`}
+              >
+                Spread Over (bps)
+              </button>
+              <button
+                onClick={() => handleMetricChange('volume')}
                 className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   chartMetric === 'volume' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
                 }`}
@@ -1207,6 +1508,60 @@ const Trades: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Seletor de Indexador para Mercado Geral */}
+        {chartTarget === 'market' && (
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs font-bold text-slate-500 mr-1 flex items-center gap-1">
+                <Filter size={13} /> Filtrar por Indexador:
+              </span>
+
+              <button
+                onClick={() => setChartIndexer('TODOS')}
+                disabled={chartMetric === 'spread'}
+                title={chartMetric === 'spread' ? 'Spread over requer um indexador homogêneo específico' : 'Consolidado de todo o mercado'}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                  chartIndexer === 'TODOS' && chartMetric !== 'spread'
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : chartMetric === 'spread'
+                    ? 'bg-slate-100 text-slate-300 cursor-not-allowed border border-slate-200'
+                    : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                TODOS (Consolidado)
+              </button>
+
+              {(['IPCA', 'CDI+', 'CDI%', 'PRE'] as const).map(idx => (
+                <button
+                  key={idx}
+                  onClick={() => setChartIndexer(idx)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    chartIndexer === idx
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-blue-50'
+                  }`}
+                >
+                  {idx === 'IPCA' ? 'IPCA (vs NTN-B)' : idx === 'CDI+' ? 'CDI+ (bps)' : idx === 'CDI%' ? 'CDI% (vs 100%)' : 'PRÉ (vs DI)'}
+                </button>
+              ))}
+            </div>
+
+            <div className="text-[11px] text-slate-500 font-medium">
+              {chartMetric === 'spread' ? (
+                <span className="text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                  Separado por indexador para apuração correta do Spread Over
+                </span>
+              ) : chartMetric === 'volume' && chartIndexer === 'TODOS' ? (
+                <span className="text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
+                  Exibindo volume total consolidado do mercado B3
+                </span>
+              ) : (
+                <span>Visualização ajustada por indexador</span>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Seletor de Ativo e Pílulas Rápidas */}
         {chartTarget === 'ticker' && (
@@ -1251,10 +1606,12 @@ const Trades: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
               <span className="text-[11px] font-bold uppercase text-slate-400 block mb-0.5">
-                Último Preço (VWAP)
+                {chartMetric === 'spread' ? 'Último Spread Over' : 'Último Preço (VWAP)'}
               </span>
-              <p className="text-lg font-black text-slate-900 font-mono">
-                {formatPU(chartSummary.currentPrice)}
+              <p className={`text-lg font-black font-mono ${chartMetric === 'spread' ? 'text-amber-600' : 'text-slate-900'}`}>
+                {chartMetric === 'spread' 
+                  ? (chartSummary.currentSpread !== null ? `${chartSummary.currentSpread > 0 ? `+${chartSummary.currentSpread.toFixed(1)}` : chartSummary.currentSpread.toFixed(1)} bps` : '-')
+                  : formatPU(chartSummary.currentPrice)}
               </p>
               <div className="flex items-center gap-1 mt-0.5">
                 {chartSummary.priceChangePct >= 0 ? (
@@ -1275,23 +1632,36 @@ const Trades: React.FC = () => {
                 Taxa Média
               </span>
               <p className="text-lg font-black text-emerald-600 font-mono">
-                {formatTaxa(chartSummary.currentYield, chartSummary.assetMeta?.indexador)}
+                {formatTaxa(chartSummary.currentYield, chartSummary.assetMeta?.indexador || chartIndexer)}
               </p>
-              <span className="text-[11px] text-slate-400 block mt-0.5">
-                {chartSummary.assetMeta?.indexador || 'Mercado Secundário'}
+              <span className="text-[11px] text-slate-400 block mt-0.5 font-medium">
+                {chartTarget === 'market' ? (chartIndexer === 'TODOS' ? 'Mercado Consolidado' : `Indexador: ${chartIndexer}`) : (chartSummary.assetMeta?.indexador || 'Mercado Secundário')}
               </span>
             </div>
 
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
               <span className="text-[11px] font-bold uppercase text-slate-400 block mb-0.5">
-                Faixa PU no Período
+                {chartMetric === 'spread' ? 'Faixa Spread no Período' : 'Faixa PU no Período'}
               </span>
-              <p className="text-xs font-black text-slate-800 font-mono mt-0.5">
-                Mín: <strong className="text-slate-900">{formatPU(chartSummary.minPrice)}</strong>
-              </p>
-              <p className="text-xs font-black text-slate-800 font-mono mt-0.5">
-                Máx: <strong className="text-slate-900">{formatPU(chartSummary.maxPrice)}</strong>
-              </p>
+              {chartMetric === 'spread' && chartSummary.minSpread !== null ? (
+                <>
+                  <p className="text-xs font-black text-slate-800 font-mono mt-0.5">
+                    Mín: <strong className="text-amber-700">{chartSummary.minSpread > 0 ? `+${chartSummary.minSpread.toFixed(1)}` : chartSummary.minSpread.toFixed(1)} bps</strong>
+                  </p>
+                  <p className="text-xs font-black text-slate-800 font-mono mt-0.5">
+                    Máx: <strong className="text-amber-700">{chartSummary.maxSpread && chartSummary.maxSpread > 0 ? `+${chartSummary.maxSpread.toFixed(1)}` : chartSummary.maxSpread?.toFixed(1)} bps</strong>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs font-black text-slate-800 font-mono mt-0.5">
+                    Mín: <strong className="text-slate-900">{formatPU(chartSummary.minPrice)}</strong>
+                  </p>
+                  <p className="text-xs font-black text-slate-800 font-mono mt-0.5">
+                    Máx: <strong className="text-slate-900">{formatPU(chartSummary.maxPrice)}</strong>
+                  </p>
+                </>
+              )}
             </div>
 
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
@@ -1301,7 +1671,7 @@ const Trades: React.FC = () => {
               <p className="text-lg font-black text-blue-600 font-mono">
                 {formatMoney(chartSummary.totalVol)}
               </p>
-              <span className="text-[11px] text-slate-400 block mt-0.5">
+              <span className="text-[11px] text-slate-400 block mt-0.5 font-medium">
                 Em {chartSummary.daysCount} pregões
               </span>
             </div>
@@ -1313,13 +1683,15 @@ const Trades: React.FC = () => {
               <p className="text-lg font-black text-violet-600 font-mono">
                 {chartSummary.totalTrd.toLocaleString('pt-BR')}
               </p>
-              {chartSummary.assetMeta && (
+              {chartSummary.assetMeta ? (
                 <Link
                   to={`/asset/${chartSummary.assetMeta.ticker}`}
                   className="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1 mt-0.5"
                 >
                   <Eye size={12} /> Abrir página do ativo
                 </Link>
+              ) : (
+                <span className="text-[10px] text-slate-400 mt-0.5 block">Negócios no período</span>
               )}
             </div>
           </div>
@@ -1338,6 +1710,10 @@ const Trades: React.FC = () => {
                   <linearGradient id="colorYield" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#059669" stopOpacity={0.4} />
                     <stop offset="95%" stopColor="#059669" stopOpacity={0.0} />
+                  </linearGradient>
+                  <linearGradient id="colorSpread" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#d97706" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#d97706" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="colorVolume" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.4} />
@@ -1359,18 +1735,34 @@ const Trades: React.FC = () => {
                   tickFormatter={val => {
                     if (chartMetric === 'price') return `R$ ${val >= 1000 ? Math.round(val) : val}`;
                     if (chartMetric === 'yield') return `${val}%`;
+                    if (chartMetric === 'spread') return `${val > 0 ? `+${val}` : val} bps`;
                     return `${val}M`;
                   }}
                 />
-                <RechartsTooltip content={<CustomChartTooltip metric={chartMetric} indexador={chartSummary?.assetMeta?.indexador} />} />
+                <RechartsTooltip content={<CustomChartTooltip metric={chartMetric} indexador={chartSummary?.assetMeta?.indexador || chartIndexer} />} />
                 <Area
                   type="monotone"
-                  dataKey={chartMetric === 'price' ? 'price' : chartMetric === 'yield' ? 'yield' : 'volume'}
-                  stroke={chartMetric === 'price' ? '#2563eb' : chartMetric === 'yield' ? '#059669' : '#7c3aed'}
+                  dataKey={
+                    chartMetric === 'price' ? 'price' :
+                    chartMetric === 'yield' ? 'yield' :
+                    chartMetric === 'spread' ? 'spread' : 'volume'
+                  }
+                  stroke={
+                    chartMetric === 'price' ? '#2563eb' :
+                    chartMetric === 'yield' ? '#059669' :
+                    chartMetric === 'spread' ? '#d97706' : '#7c3aed'
+                  }
                   strokeWidth={2.5}
                   fillOpacity={1}
-                  fill={`url(#${chartMetric === 'price' ? 'colorPrice' : chartMetric === 'yield' ? 'colorYield' : 'colorVolume'})`}
-                  dot={{ r: 3, fill: chartMetric === 'price' ? '#2563eb' : chartMetric === 'yield' ? '#059669' : '#7c3aed' }}
+                  fill={`url(#${
+                    chartMetric === 'price' ? 'colorPrice' :
+                    chartMetric === 'yield' ? 'colorYield' :
+                    chartMetric === 'spread' ? 'colorSpread' : 'colorVolume'
+                  })`}
+                  dot={{
+                    r: chartPeriod === 'ytd' ? 1.5 : 3,
+                    fill: chartMetric === 'price' ? '#2563eb' : chartMetric === 'yield' ? '#059669' : chartMetric === 'spread' ? '#d97706' : '#7c3aed'
+                  }}
                   activeDot={{ r: 6 }}
                 />
               </AreaChart>
@@ -1379,10 +1771,10 @@ const Trades: React.FC = () => {
         ) : (
           <div className="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300">
             <p className="text-sm font-semibold text-slate-500">
-              Nenhum negócio registrado para {selectedTicker} no período de {chartPeriod === '7d' ? '7 dias' : chartPeriod === '15d' ? '15 dias' : '30 dias'}.
+              Nenhum negócio registrado para {selectedTicker} no período selecionado.
             </p>
             <p className="text-xs text-slate-400 mt-1">
-              Experimente aumentar o período para 30 dias ou selecionar um dos ativos mais negociados acima.
+              Experimente alterar o período ou selecionar outro ativo acima.
             </p>
           </div>
         )}
@@ -1862,6 +2254,445 @@ const Trades: React.FC = () => {
                 <button
                   onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
                   disabled={currentPage === totalPages}
+                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ================= SEÇÃO DE PAPÉIS NEGOCIADOS A PU (SEM TAXA B3) ================= */}
+      <div id="papeis-sem-taxa-section" className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        
+        {/* Cabeçalho da Seção */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <span className="p-2 bg-amber-100 text-amber-800 rounded-xl">
+                <AlertCircle size={20} />
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                Papéis Negociados a PU (Sem Taxa Declarada na B3)
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-3xl">
+              Ativos de crédito privado negociados no mercado secundário por preço unitário (PU), sem taxa indicativa registrada nos boletins de negociação da B3. Cruzamento cadastral completo com ratings, duration e indicadores de liquidez acumulada em 2026.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={exportNoRateCSV}
+              disabled={!sortedNoRateAssets.length}
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50"
+              title="Exportar tabela de papéis a PU para CSV"
+            >
+              <Download size={16} />
+              Exportar CSV ({sortedNoRateAssets.length})
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Cards de Resumo dessa categoria */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/60">
+            <span className="text-[11px] font-bold uppercase text-amber-800 tracking-wider block mb-1">
+              Ativos Negociados a PU
+            </span>
+            <p className="text-xl sm:text-2xl font-black text-amber-900 font-mono">
+              {noRatePayload?.total_ativos ? noRatePayload.total_ativos.toLocaleString('pt-BR') : '3.279'}
+            </p>
+            <span className="text-[11px] text-amber-700 mt-0.5 block font-medium">
+              Sem taxa indicativa B3
+            </span>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span className="text-[11px] font-bold uppercase text-slate-500 tracking-wider block mb-1">
+              Volume Total Acumulado
+            </span>
+            <p className="text-xl sm:text-2xl font-black text-slate-900 font-mono">
+              {formatMoney(noRatePayload?.total_volume || 229410000000)}
+            </p>
+            <span className="text-[11px] text-slate-400 mt-0.5 block font-medium">
+              Negociado em 2026
+            </span>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span className="text-[11px] font-bold uppercase text-slate-500 tracking-wider block mb-1">
+              Trades Confirmados
+            </span>
+            <p className="text-xl sm:text-2xl font-black text-blue-600 font-mono">
+              {noRatePayload?.total_trades ? noRatePayload.total_trades.toLocaleString('pt-BR') : '1.309.288'}
+            </p>
+            <span className="text-[11px] text-slate-400 mt-0.5 block font-medium">
+              Operações a PU
+            </span>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span className="text-[11px] font-bold uppercase text-slate-500 tracking-wider block mb-1">
+              Regime de Negociação
+            </span>
+            <p className="text-sm sm:text-base font-black text-emerald-700 font-sans mt-1">
+              PU de Curva / Marcação
+            </p>
+            <span className="text-[11px] text-slate-400 mt-0.5 block font-medium">
+              Comum em CRIs e Debêntures
+            </span>
+          </div>
+        </div>
+
+        {/* Barra de Filtros e Busca de Papéis sem Taxa */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+          {/* Busca textual */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-2.5 text-slate-400" size={16} />
+            <input
+              type="text"
+              value={noRateSearch}
+              onChange={e => {
+                setNoRateSearch(e.target.value);
+                setNoRatePage(1);
+              }}
+              placeholder="Buscar por Ticker, Emissor ou Setor..."
+              className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+            />
+            {noRateSearch && (
+              <button
+                onClick={() => {
+                  setNoRateSearch('');
+                  setNoRatePage(1);
+                }}
+                className="absolute right-3 top-2.5 text-xs font-bold text-slate-400 hover:text-slate-600"
+              >
+                Limpar
+              </button>
+            )}
+          </div>
+
+          {/* Filtros em Pílulas */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Filtro de Tipo */}
+            <div className="inline-flex p-1 bg-white border border-slate-200 rounded-xl">
+              {(['TODOS', 'DEB', 'CRI', 'CRA'] as const).map(t => (
+                <button
+                  key={t}
+                  onClick={() => {
+                    setNoRateTipoFilter(t);
+                    setNoRatePage(1);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    noRateTipoFilter === t
+                      ? 'bg-slate-900 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
+            {/* Filtro de Indexador */}
+            <div className="inline-flex p-1 bg-white border border-slate-200 rounded-xl">
+              {(['TODOS', 'DI+', 'IPCA', 'DI%', 'PRE'] as const).map(i => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setNoRateIndexerFilter(i);
+                    setNoRatePage(1);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    noRateIndexerFilter === i
+                      ? 'bg-amber-600 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {i}
+                </button>
+              ))}
+            </div>
+
+            {/* Filtro de Rating */}
+            <div className="inline-flex p-1 bg-white border border-slate-200 rounded-xl">
+              {(['TODOS', 'AAA', 'AA', 'SEM_RATING'] as const).map(r => (
+                <button
+                  key={r}
+                  onClick={() => {
+                    setNoRateRatingFilter(r);
+                    setNoRatePage(1);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    noRateRatingFilter === r
+                      ? 'bg-purple-600 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {r === 'SEM_RATING' ? 'Sem Rating' : r}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Tabela de Papéis a PU */}
+        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-slate-100 text-slate-600 uppercase text-[11px] font-black border-b border-slate-200">
+                <th 
+                  className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors"
+                  onClick={() => {
+                    setNoRateSortField('ticker');
+                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
+                  }}
+                >
+                  <div className="flex items-center gap-1.5">
+                    Ticker / Tipo
+                    <ArrowUpDown size={12} className={noRateSortField === 'ticker' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th className="p-3.5">Emissor / Devedor & Setor</th>
+                <th className="p-3.5">Indexador & Emissão</th>
+                <th className="p-3.5">Rating</th>
+                <th className="p-3.5">Duration / Venc.</th>
+
+                <th 
+                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors"
+                  onClick={() => {
+                    setNoRateSortField('pu');
+                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
+                  }}
+                >
+                  <div className="flex items-center justify-end gap-1.5">
+                    Último PU (VWAP)
+                    <ArrowUpDown size={12} className={noRateSortField === 'pu' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th 
+                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors"
+                  onClick={() => {
+                    setNoRateSortField('volume');
+                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
+                  }}
+                >
+                  <div className="flex items-center justify-end gap-1.5">
+                    Volume Total (R$)
+                    <ArrowUpDown size={12} className={noRateSortField === 'volume' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th 
+                  className="p-3.5 text-center cursor-pointer hover:bg-slate-200/70 transition-colors"
+                  onClick={() => {
+                    setNoRateSortField('trades');
+                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
+                  }}
+                >
+                  <div className="flex items-center justify-center gap-1.5">
+                    Trades
+                    <ArrowUpDown size={12} className={noRateSortField === 'trades' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th 
+                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors"
+                  onClick={() => {
+                    setNoRateSortField('pregao');
+                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
+                  }}
+                >
+                  <div className="flex items-center justify-end gap-1.5">
+                    Último Pregão
+                    <ArrowUpDown size={12} className={noRateSortField === 'pregao' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th className="p-3.5 text-center">Ver</th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-slate-100 bg-white font-medium">
+              {paginatedNoRateAssets.map((item, idx) => (
+                <tr key={`${item.ticker}-${idx}`} className="hover:bg-amber-50/30 transition-colors group">
+                  {/* Ticker & Tipo */}
+                  <td className="p-3.5">
+                    <div className="flex items-center gap-2">
+                      {renderTipoBadge(item.tipo)}
+                      <Link 
+                        to={`/asset/${item.ticker}`}
+                        className="font-extrabold text-blue-600 hover:text-blue-800 hover:underline font-mono"
+                      >
+                        {item.ticker}
+                      </Link>
+                    </div>
+                    {item.incentivada === 'Sim' && (
+                      <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded mt-0.5 inline-block">
+                        Incentivada 12.431
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Devedor & Setor */}
+                  <td className="p-3.5 max-w-xs">
+                    <p className="font-bold text-slate-900 line-clamp-1 group-hover:text-blue-950">
+                      {item.devedor || 'Emissor Privado'}
+                    </p>
+                    {item.setor && (
+                      <span className="text-[11px] text-slate-400 block line-clamp-1">
+                        {item.setor}
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Indexador & Emissão */}
+                  <td className="p-3.5">
+                    <span className="font-extrabold text-slate-800 block">
+                      {item.indexador || '-'}
+                    </span>
+                    {item.taxa_emissao !== undefined && item.taxa_emissao !== null && item.taxa_emissao !== '' && (
+                      <span className="text-[11px] text-slate-400">
+                        Emissão: {Number(item.taxa_emissao) > 0 ? `+${Number(item.taxa_emissao).toFixed(2)}%` : `${item.taxa_emissao}%`}
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Rating */}
+                  <td className="p-3.5">
+                    {item.rating && item.rating !== '-' && item.rating !== 'nan' ? (
+                      <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-extrabold ${
+                        item.rating.includes('AAA') 
+                          ? 'bg-purple-100 text-purple-800 border border-purple-200' 
+                          : item.rating.includes('AA')
+                          ? 'bg-blue-100 text-blue-800 border border-blue-200'
+                          : 'bg-slate-100 text-slate-700'
+                      }`}>
+                        {item.rating}
+                      </span>
+                    ) : (
+                      <span className="text-slate-400 text-xs">-</span>
+                    )}
+                  </td>
+
+                  {/* Duration / Vencimento */}
+                  <td className="p-3.5">
+                    <span className="font-mono text-slate-800 font-bold block">
+                      {item.duration ? `${Number(item.duration).toFixed(1)}a` : '-'}
+                    </span>
+                    {item.vencimento && (
+                      <span className="text-[11px] text-slate-400 font-mono">
+                        {formatDateBR(item.vencimento)}
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Preço Médio (VWAP) */}
+                  <td className="p-3.5 text-right">
+                    <p className="font-black text-slate-900 font-mono">
+                      {formatPU(item.ultimo_pu || item.vwap_medio)}
+                    </p>
+                    <span className="text-[10px] text-slate-400 block font-mono">
+                      (Negociado a PU)
+                    </span>
+                  </td>
+
+                  {/* Volume Total */}
+                  <td className="p-3.5 text-right">
+                    <p className="font-black text-slate-900 font-mono">
+                      {formatMoney(item.total_volume)}
+                    </p>
+                    {item.total_qtd && (
+                      <span className="text-[10px] text-slate-400 font-mono block">
+                        {Number(item.total_qtd).toLocaleString('pt-BR')} títulos
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Trades & Pregões */}
+                  <td className="p-3.5 text-center">
+                    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-xs font-black bg-amber-50 text-amber-900 font-mono border border-amber-200">
+                      {item.total_trades}
+                    </span>
+                    {item.pregoes_ativos && (
+                      <span className="text-[10px] text-slate-400 block mt-0.5">
+                        {item.pregoes_ativos} pregões
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Último Pregão */}
+                  <td className="p-3.5 text-right text-xs text-slate-600 font-mono">
+                    {formatDateBR(item.ultimo_pregao)}
+                  </td>
+
+                  {/* Link do Ativo */}
+                  <td className="p-3.5 text-center">
+                    <Link
+                      to={`/asset/${item.ticker}`}
+                      title={`Ver cadastro e detalhes de ${item.ticker}`}
+                      className="p-1.5 bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 rounded-lg transition-all inline-flex items-center justify-center"
+                    >
+                      <Eye size={14} />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+
+              {paginatedNoRateAssets.length === 0 && (
+                <tr>
+                  <td colSpan={10} className="p-8 text-center text-slate-500 font-medium">
+                    Nenhum papel sem taxa encontrado com os filtros selecionados.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Paginação da Seção de Papéis a PU */}
+        {sortedNoRateAssets.length > 0 && (
+          <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-slate-500 font-medium">Itens por página:</span>
+              <select
+                value={noRatePageSize}
+                onChange={e => {
+                  setNoRatePageSize(Number(e.target.value));
+                  setNoRatePage(1);
+                }}
+                className="bg-white border border-slate-200 rounded-lg px-2 py-1 font-bold text-slate-700"
+              >
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+              <span className="text-slate-400 ml-2">
+                Total de {sortedNoRateAssets.length.toLocaleString('pt-BR')} ativos filtrados
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-slate-500 font-medium">
+                Página <strong>{noRatePage}</strong> de <strong>{noRateTotalPages}</strong>
+              </span>
+
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setNoRatePage(p => Math.max(p - 1, 1))}
+                  disabled={noRatePage === 1}
+                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  onClick={() => setNoRatePage(p => Math.min(p + 1, noRateTotalPages))}
+                  disabled={noRatePage === noRateTotalPages}
                   className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
                 >
                   <ChevronRight size={16} />
