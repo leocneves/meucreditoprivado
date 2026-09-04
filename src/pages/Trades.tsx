@@ -299,8 +299,8 @@ const Trades: React.FC = () => {
   // Período do Box de Destaques
   const [kpiPeriod, setKpiPeriod] = useState<'pregao' | '30d' | 'ytd'>('pregao');
 
-  // Filtros da Tabela
-  const [periodFilter, setPeriodFilter] = useState<'ultimo' | '7d' | '30d'>('ultimo');
+  // Filtros da Tabela e Download
+  const [periodFilter, setPeriodFilter] = useState<'ultimo' | '7d' | '30d' | 'ytd'>('ultimo');
   const [instrumentFilter, setInstrumentFilter] = useState<string>('TODOS');
   const [indexerFilter, setIndexerFilter] = useState<string>('TODOS');
   const [sectorFilter, setSectorFilter] = useState<string>('TODOS');
@@ -438,31 +438,7 @@ const Trades: React.FC = () => {
       .map(entry => entry[0]);
   }, [trades]);
 
-  // Lista de Tickers distintos para o Seletor do Gráfico
-  const availableTickers = useMemo(() => {
-    const map = new Map<string, { ticker: string; devedor: string; tipo: string; volume: number }>();
-    trades.forEach(t => {
-      const tk = (t.ticker || '').trim().toUpperCase();
-      if (tk) {
-        const current = map.get(tk) || { ticker: tk, devedor: t.devedor || '', tipo: t.tipo || '', volume: 0 };
-        current.volume += (Number(t.volume_financeiro) || 0);
-        map.set(tk, current);
-      }
-    });
-    return Array.from(map.values()).sort((a, b) => b.volume - a.volume);
-  }, [trades]);
-
-  /* ================= INICIALIZAÇÃO DO TICKER SELECIONADO ================= */
-
-  useEffect(() => {
-    if (trades.length > 0 && availableTickers.length > 0) {
-      if (!selectedTicker || selectedTicker === 'RENTQ8') {
-        setSelectedTicker(availableTickers[0].ticker);
-      }
-    }
-  }, [trades, availableTickers]);
-
-  /* ================= FILTRAGEM REATIVA DA TABELA ================= */
+  /* ================= FILTRAGEM REATIVA DA BASE DE TRADES ================= */
 
   const filteredTrades = useMemo(() => {
     if (!trades.length) return [];
@@ -474,7 +450,11 @@ const Trades: React.FC = () => {
         const last7 = availableDates.slice(0, 5); // 5 pregões = ~7 dias corridos
         return last7[last7.length - 1] || latestDate;
       }
-      return availableDates[availableDates.length - 1] || latestDate;
+      if (periodFilter === '30d') {
+        const last30 = availableDates.slice(0, 22);
+        return last30[last30.length - 1] || availableDates[availableDates.length - 1] || latestDate;
+      }
+      return '2026-01-01'; // 'ytd'
     })();
 
     const cleanSearch = search.trim().toLowerCase();
@@ -483,7 +463,7 @@ const Trades: React.FC = () => {
       // 1. Filtro de Período
       if (periodFilter === 'ultimo') {
         if (t.data_negocio !== latestDate) return false;
-      } else {
+      } else if (periodFilter !== 'ytd') {
         if (t.data_negocio < cutoffDate) return false;
       }
 
@@ -540,6 +520,32 @@ const Trades: React.FC = () => {
       return true;
     });
   }, [trades, periodFilter, latestDate, availableDates, instrumentFilter, indexerFilter, sectorFilter, debtorFilter, ratingFilter, taxFreeFilter, search]);
+
+  // Lista de Tickers distintos para o Seletor do Gráfico (alimentada pelos filtros reativos)
+  const availableTickers = useMemo(() => {
+    const sourceTrades = filteredTrades.length > 0 ? filteredTrades : trades;
+    const map = new Map<string, { ticker: string; devedor: string; tipo: string; volume: number }>();
+    sourceTrades.forEach(t => {
+      const tk = (t.ticker || '').trim().toUpperCase();
+      if (tk) {
+        const current = map.get(tk) || { ticker: tk, devedor: t.devedor || '', tipo: t.tipo || '', volume: 0 };
+        current.volume += (Number(t.volume_financeiro) || 0);
+        map.set(tk, current);
+      }
+    });
+    return Array.from(map.values()).sort((a, b) => b.volume - a.volume);
+  }, [filteredTrades, trades]);
+
+  /* ================= INICIALIZAÇÃO E ATUALIZAÇÃO DO TICKER SELECIONADO ================= */
+
+  useEffect(() => {
+    if (availableTickers.length > 0) {
+      const exists = availableTickers.some(t => t.ticker === selectedTicker);
+      if (!exists) {
+        setSelectedTicker(availableTickers[0].ticker);
+      }
+    }
+  }, [availableTickers, selectedTicker]);
 
   /* ================= ORDENAÇÃO ================= */
 
@@ -605,8 +611,8 @@ const Trades: React.FC = () => {
           trades: kpis.ultimo_pregao.total_trades,
           ativos: kpis.ultimo_pregao.ativos_negociados,
           prazo_du: kpis.ultimo_pregao.prazo_medio_du,
-          top_volume: (kpis.ultimo_pregao.top_ativos || []).slice(0, 5),
-          top_trades: [...(kpis.ultimo_pregao.top_ativos || [])].sort((a, b) => (b.qtd_negocios || 0) - (a.qtd_negocios || 0)).slice(0, 5)
+          top_volume: (kpis.ultimo_pregao.top_ativos || []).slice(0, 10),
+          top_trades: [...(kpis.ultimo_pregao.top_ativos || [])].sort((a, b) => (b.qtd_negocios || 0) - (a.qtd_negocios || 0)).slice(0, 10)
         };
       }
       if (kpiPeriod === '30d' && kpis.ultimos_30_dias) {
@@ -616,8 +622,8 @@ const Trades: React.FC = () => {
           trades: kpis.ultimos_30_dias.total_trades,
           ativos: kpis.ultimos_30_dias.ativos_unicos,
           prazo_du: 0.4,
-          top_volume: (kpis.ultimos_30_dias.top_volume || []).slice(0, 5),
-          top_trades: (kpis.ultimos_30_dias.top_trades || []).slice(0, 5)
+          top_volume: (kpis.ultimos_30_dias.top_volume || []).slice(0, 10),
+          top_trades: (kpis.ultimos_30_dias.top_trades || []).slice(0, 10)
         };
       }
       if (kpiPeriod === 'ytd') {
@@ -628,8 +634,8 @@ const Trades: React.FC = () => {
           trades: ytd?.total_trades || 3425714,
           ativos: ytd?.ativos_unicos || 4759,
           prazo_du: 0.4,
-          top_volume: (kpis.ultimos_30_dias?.top_volume || []).slice(0, 5),
-          top_trades: (kpis.ultimos_30_dias?.top_trades || []).slice(0, 5)
+          top_volume: (kpis.ultimos_30_dias?.top_volume || []).slice(0, 10),
+          top_trades: (kpis.ultimos_30_dias?.top_trades || []).slice(0, 10)
         };
       }
     }
@@ -646,7 +652,7 @@ const Trades: React.FC = () => {
         ? dayTrades.reduce((acc, t) => acc + (Number(t.prazo_medio_liquidacao_du) || 0), 0) / dayTrades.length 
         : 0.3;
 
-      const topVol = [...dayTrades].sort((a, b) => (Number(b.volume_financeiro) || 0) - (Number(a.volume_financeiro) || 0)).slice(0, 5).map(t => ({
+      const topVol = [...dayTrades].sort((a, b) => (Number(b.volume_financeiro) || 0) - (Number(a.volume_financeiro) || 0)).slice(0, 10).map(t => ({
         ticker: t.ticker,
         tipo: t.tipo,
         devedor: t.devedor,
@@ -657,7 +663,7 @@ const Trades: React.FC = () => {
         indexador: t.indexador
       }));
 
-      const topTrd = [...dayTrades].sort((a, b) => (Number(b.qtd_negocios) || 0) - (Number(a.qtd_negocios) || 0)).slice(0, 5).map(t => ({
+      const topTrd = [...dayTrades].sort((a, b) => (Number(b.qtd_negocios) || 0) - (Number(a.qtd_negocios) || 0)).slice(0, 10).map(t => ({
         ticker: t.ticker,
         tipo: t.tipo,
         devedor: t.devedor,
@@ -704,7 +710,7 @@ const Trades: React.FC = () => {
     const sortedByVol = Array.from(mapTicker.values()).sort((a, b) => b.vol - a.vol);
     const sortedByTrd = [...sortedByVol].sort((a, b) => b.trd - a.trd);
 
-    const topVol = sortedByVol.slice(0, 5).map(i => ({
+    const topVol = sortedByVol.slice(0, 10).map(i => ({
       ticker: i.ticker,
       tipo: i.tipo,
       devedor: i.devedor,
@@ -715,7 +721,7 @@ const Trades: React.FC = () => {
       indexador: i.indexador
     }));
 
-    const topTrd = sortedByTrd.slice(0, 5).map(i => ({
+    const topTrd = sortedByTrd.slice(0, 10).map(i => ({
       ticker: i.ticker,
       tipo: i.tipo,
       devedor: i.devedor,
@@ -737,19 +743,24 @@ const Trades: React.FC = () => {
     };
   }, [kpis, kpiPeriod, trades, latestDate]);
 
-  // Líderes em Volume e Giro
-  const leaderVolume = activeKpiData?.top_volume[0];
-  const leaderTrades = activeKpiData?.top_trades[0];
-
   /* ================= DADOS DO GRÁFICO DE PREÇOS NOS N DIAS ================= */
 
   const chartData = useMemo(() => {
-    // Modo 1: Média Geral do Mercado (Consolidado ou por Indexador via Séries Pré-calculadas YTD)
+    // Verificamos se há filtros granulares ativos (setor, devedor, rating, incentivada, tipo de instrumento, busca)
+    const hasGranularFilters = sectorFilter !== 'TODOS' || 
+                               debtorFilter !== 'TODOS' || 
+                               ratingFilter !== 'TODOS' || 
+                               taxFreeFilter !== 'TODOS' || 
+                               instrumentFilter !== 'TODOS' || 
+                               Boolean(search.trim());
+
+    // Modo 1: Média Geral do Mercado ou Segmento Filtrado (Setor / Devedor / etc.)
     if (chartTarget === 'market') {
       const activeIndexer = (chartMetric === 'spread' && chartIndexer === 'TODOS') ? 'IPCA' : chartIndexer;
-      const seriesList = marketSeries?.series?.[activeIndexer];
 
-      if (seriesList && seriesList.length > 0) {
+      // Se NÃO houver filtros granulares e temos as séries pré-calculadas de mercado YTD, usamos direto para performance máxima!
+      if (!hasGranularFilters && marketSeries?.series?.[activeIndexer]?.length) {
+        const seriesList = marketSeries.series[activeIndexer];
         let points = seriesList;
         if (chartPeriod === '7d') points = seriesList.slice(-5);
         else if (chartPeriod === '15d') points = seriesList.slice(-11);
@@ -769,36 +780,130 @@ const Trades: React.FC = () => {
         }));
       }
 
-      // Fallback enquanto marketSeries carrega
+      // Se HÁ filtros granulares ativos OU marketSeries ainda não carregou:
+      // Agregamos dinamicamente os trades que atendem a todos os filtros!
       if (!trades.length) return [];
-      const numDays = chartPeriod === '7d' ? 5 : chartPeriod === '15d' ? 11 : 25;
-      const targetDates = availableDates.slice(0, numDays);
-      const minDate = targetDates[targetDates.length - 1] || targetDates[0];
+      const numDays = chartPeriod === '7d' ? 5 : chartPeriod === '15d' ? 11 : chartPeriod === '30d' ? 25 : 999;
+      const targetDates = chartPeriod === 'ytd' ? availableDates : availableDates.slice(0, numDays);
+      const minDate = targetDates[targetDates.length - 1] || targetDates[0] || '2026-01-01';
 
-      const dayMap = new Map<string, { date: string; volume: number; trades: number; sumWeightedPrice: number; sumQty: number; sumWeightedYield: number; sumYieldQty: number }>();
-      
-      trades.forEach(t => {
-        if (t.data_negocio >= minDate) {
-          const d = t.data_negocio;
-          const entry = dayMap.get(d) || { date: d, volume: 0, trades: 0, sumWeightedPrice: 0, sumQty: 0, sumWeightedYield: 0, sumYieldQty: 0 };
-          const vol = Number(t.volume_financeiro) || 0;
-          const trd = Number(t.qtd_negocios) || 0;
-          const qty = Number(t.quantidade_negociada) || 0;
-          const pu = Number(t.preco_medio_ponderado) || 0;
-          const tx = Number(t.taxa_media_ponderada) || 0;
+      const cleanSearch = search.trim().toLowerCase();
+      const matchingTradesForChart = trades.filter(t => {
+        if (chartPeriod !== 'ytd' && t.data_negocio < minDate) return false;
 
-          entry.volume += vol;
-          entry.trades += trd;
-          if (pu > 0 && qty > 0) {
-            entry.sumWeightedPrice += pu * qty;
-            entry.sumQty += qty;
-          }
-          if (tx > 0 && qty > 0) {
-            entry.sumWeightedYield += tx * qty;
-            entry.sumYieldQty += qty;
-          }
-          dayMap.set(d, entry);
+        // Instrumento
+        if (instrumentFilter !== 'TODOS') {
+          const tipoUpper = (t.tipo || '').toUpperCase();
+          if (instrumentFilter === 'DEB' && !tipoUpper.includes('DEB')) return false;
+          if (instrumentFilter === 'CRI' && !tipoUpper.includes('CRI')) return false;
+          if (instrumentFilter === 'CRA' && !tipoUpper.includes('CRA')) return false;
         }
+
+        // Indexador selecionado no gráfico ou filtro
+        const targetIdx = activeIndexer !== 'TODOS' ? activeIndexer : (indexerFilter !== 'TODOS' ? indexerFilter : 'TODOS');
+        if (targetIdx !== 'TODOS') {
+          const idx = (t.indexador || '').toUpperCase();
+          if ((targetIdx === 'DI+' || targetIdx === 'CDI+') && !idx.includes('DI+') && !idx.includes('CDI+')) return false;
+          if (targetIdx === 'IPCA' && !idx.includes('IPCA') && !idx.includes('IGP')) return false;
+          if (targetIdx === 'PRE' && !idx.includes('PRÉ') && !idx.includes('PRE')) return false;
+          if ((targetIdx === 'DI%' || targetIdx === 'CDI%') && !idx.includes('DI%') && !idx.includes('%CDI')) return false;
+        }
+
+        // Setor
+        if (sectorFilter !== 'TODOS') {
+          if ((t.setor || '').trim().toUpperCase() !== sectorFilter.toUpperCase()) return false;
+        }
+
+        // Devedor
+        if (debtorFilter !== 'TODOS') {
+          if ((t.devedor || '').trim().toUpperCase() !== debtorFilter.toUpperCase()) return false;
+        }
+
+        // Rating
+        if (ratingFilter !== 'TODOS') {
+          const r = (t.rating || '').toUpperCase();
+          if (ratingFilter === 'AAA' && !r.includes('AAA')) return false;
+          if (ratingFilter === 'AA' && !r.includes('AA') && !r.includes('AAA')) return false;
+          if (ratingFilter === 'OUTROS' && (r.includes('AAA') || r.includes('AA'))) return false;
+        }
+
+        // Incentivada
+        if (taxFreeFilter === 'SIM' && t.incentivada !== 'Sim') return false;
+        if (taxFreeFilter === 'NAO' && t.incentivada === 'Sim') return false;
+
+        // Busca
+        if (cleanSearch) {
+          const tk = (t.ticker || '').toLowerCase();
+          const dev = (t.devedor || '').toLowerCase();
+          const isin = (t.isin || '').toLowerCase();
+          const st = (t.setor || '').toLowerCase();
+          if (!tk.includes(cleanSearch) && !dev.includes(cleanSearch) && !isin.includes(cleanSearch) && !st.includes(cleanSearch)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      const dayMap = new Map<string, { 
+        date: string; 
+        volume: number; 
+        trades: number; 
+        sumWeightedPrice: number; 
+        sumQty: number; 
+        sumWeightedYield: number; 
+        sumYieldQty: number;
+        sumWeightedSpread: number;
+        sumSpreadVol: number;
+      }>();
+      
+      matchingTradesForChart.forEach(t => {
+        const d = t.data_negocio;
+        const entry = dayMap.get(d) || { 
+          date: d, 
+          volume: 0, 
+          trades: 0, 
+          sumWeightedPrice: 0, 
+          sumQty: 0, 
+          sumWeightedYield: 0, 
+          sumYieldQty: 0,
+          sumWeightedSpread: 0,
+          sumSpreadVol: 0
+        };
+
+        const vol = Number(t.volume_financeiro) || 0;
+        const trd = Number(t.qtd_negocios) || 0;
+        const qty = Number(t.quantidade_negociada) || 0;
+        const pu = Number(t.preco_medio_ponderado) || 0;
+        const tx = Number(t.taxa_media_ponderada) || 0;
+
+        entry.volume += vol;
+        entry.trades += trd;
+        if (pu > 0 && qty > 0) {
+          entry.sumWeightedPrice += pu * qty;
+          entry.sumQty += qty;
+        }
+        if (tx > 0 && vol > 0) {
+          entry.sumWeightedYield += tx * vol;
+          entry.sumYieldQty += vol;
+        }
+
+        // Spread aproximado por indexador
+        const idx = (t.indexador || '').toUpperCase();
+        let spBps: number | null = null;
+        if (tx > 0) {
+          if (idx.includes('DI+') || idx.includes('CDI+')) spBps = tx * 100;
+          else if (idx.includes('DI%') || idx.includes('%CDI')) spBps = (tx - 100) * 100;
+          else if (idx.includes('IPCA') || idx.includes('IGP')) spBps = (tx - 6.40) * 100;
+          else if (idx.includes('PRE') || idx.includes('PRÉ')) spBps = (tx - 13.50) * 100;
+        }
+
+        if (spBps !== null && vol > 0) {
+          entry.sumWeightedSpread += spBps * vol;
+          entry.sumSpreadVol += vol;
+        }
+
+        dayMap.set(d, entry);
       });
 
       return Array.from(dayMap.values())
@@ -810,7 +915,7 @@ const Trades: React.FC = () => {
             datePretty: parts.length === 3 ? `${parts[2]}/${parts[1]}` : entry.date,
             price: entry.sumQty > 0 ? Number((entry.sumWeightedPrice / entry.sumQty).toFixed(2)) : 0,
             yield: entry.sumYieldQty > 0 ? Number((entry.sumWeightedYield / entry.sumYieldQty).toFixed(2)) : 0,
-            spread: null,
+            spread: entry.sumSpreadVol > 0 ? Number((entry.sumWeightedSpread / entry.sumSpreadVol).toFixed(1)) : null,
             volume: Number((entry.volume / 1e6).toFixed(2)),
             volumeRaw: entry.volume,
             trades: entry.trades,
@@ -877,7 +982,7 @@ const Trades: React.FC = () => {
           rating: t.rating
         };
       });
-  }, [trades, selectedTicker, chartPeriod, chartTarget, chartMetric, chartIndexer, marketSeries, availableDates]);
+  }, [trades, selectedTicker, chartPeriod, chartTarget, chartMetric, chartIndexer, marketSeries, availableDates, sectorFilter, debtorFilter, ratingFilter, taxFreeFilter, instrumentFilter, indexerFilter, search]);
 
   // Resumo estatístico do período para o cabeçalho do gráfico
   const chartSummary = useMemo(() => {
@@ -1239,8 +1344,8 @@ const Trades: React.FC = () => {
           </div>
         </div>
 
-        {/* 4 Cards de Métricas Principais */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* 3 Cards de Métricas Principais */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/60">
             <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider block mb-1">
               Volume Total Negociado
@@ -1276,114 +1381,411 @@ const Trades: React.FC = () => {
               Ativos únicos negociados
             </span>
           </div>
+        </div>
 
-          <div className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/60">
-            <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider block mb-1">
-              Prazo Médio Liquidação
+        {/* ================= TOP 10 RANKINGS: VOLUME VS GIRO ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+          
+          {/* Coluna 1: Top 10 em Volume Financeiro */}
+          <div className="bg-slate-800/90 rounded-2xl border border-blue-800/40 p-5 shadow-lg flex flex-col justify-between">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-700/60 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30">
+                  <Award size={16} />
+                </span>
+                <div>
+                  <h3 className="text-sm font-black text-white uppercase tracking-wider">
+                    Top 10 em Volume Financeiro
+                  </h3>
+                  <span className="text-[11px] text-slate-400">
+                    Maior volume financeiro acumulado no período
+                  </span>
+                </div>
+              </div>
+              <span className="text-[11px] font-mono text-blue-400 font-bold bg-blue-950/60 px-2 py-0.5 rounded border border-blue-800/50">
+                Ranking R$
+              </span>
+            </div>
+
+            {/* Lista dos 10 Ativos em Volume */}
+            <div className="divide-y divide-slate-700/40 space-y-1">
+              {(activeKpiData?.top_volume || []).map((item, idx) => {
+                const vol = item.volume_financeiro || item.volume_total || 0;
+                const trd = item.qtd_negocios || item.trades_total || 0;
+                const pu = item.preco_medio_ponderado || item.vwap || 0;
+                const tx = item.taxa_media_ponderada || item.taxa_media || 0;
+
+                const rankBadgeClass = 
+                  idx === 0 ? 'bg-amber-400 text-slate-950 font-black ring-2 ring-amber-400/30' :
+                  idx === 1 ? 'bg-slate-300 text-slate-950 font-black ring-2 ring-slate-300/30' :
+                  idx === 2 ? 'bg-amber-700 text-amber-100 font-black ring-2 ring-amber-700/30' :
+                  'bg-slate-800 text-slate-400 font-bold border border-slate-700';
+
+                return (
+                  <div key={`vol-${item.ticker}-${idx}`} className="py-2 flex items-center justify-between gap-3 group hover:bg-slate-750/50 rounded-xl px-2 transition-colors">
+                    {/* Rank + Ticker + Devedor */}
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] flex-shrink-0 ${rankBadgeClass}`}>
+                        {idx + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <Link
+                            to={`/asset/${item.ticker}`}
+                            className="font-black text-white hover:text-blue-300 text-xs sm:text-sm transition-colors"
+                          >
+                            {item.ticker}
+                          </Link>
+                          <span className="text-[10px] text-slate-400 font-medium">
+                            {item.tipo?.replace('Debênture', 'DEB')}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 truncate max-w-[150px] sm:max-w-[220px]" title={item.devedor}>
+                          {item.devedor || 'Emissor Privado'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Métricas: VWAP, Taxa, Volume e Ação */}
+                    <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0 text-right">
+                      <div className="hidden sm:block text-[11px] font-mono text-slate-400">
+                        <div>PU: <span className="text-white font-semibold">{formatPU(pu)}</span></div>
+                        <div>Taxa: <span className="text-emerald-400 font-semibold">{formatTaxa(tx, item.indexador)}</span></div>
+                      </div>
+
+                      <div className="text-right">
+                        <div className="text-xs sm:text-sm font-black text-blue-400 font-mono">
+                          {formatMoney(vol)}
+                        </div>
+                        <div className="text-[10px] text-slate-400 font-mono">
+                          {trd.toLocaleString('pt-BR')} trades
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleFocusTickerChart(item.ticker)}
+                        className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-blue-900/40 rounded-lg transition-colors"
+                        title={`Visualizar evolução de ${item.ticker} no gráfico`}
+                      >
+                        <LineChart size={14} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Coluna 2: Top 10 em Giro (Mais Negociados) */}
+          <div className="bg-slate-800/90 rounded-2xl border border-emerald-800/40 p-5 shadow-lg flex flex-col justify-between">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-700/60 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 bg-emerald-500/20 text-emerald-400 rounded-lg border border-emerald-500/30">
+                  <TrendingUp size={16} />
+                </span>
+                <div>
+                  <h3 className="text-sm font-black text-white uppercase tracking-wider">
+                    Top 10 em Giro (Mais Negociados)
+                  </h3>
+                  <span className="text-[11px] text-slate-400">
+                    Maior quantidade de trades confirmados no período
+                  </span>
+                </div>
+              </div>
+              <span className="text-[11px] font-mono text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
+                Ranking Trades
+              </span>
+            </div>
+
+            {/* Lista dos 10 Ativos em Giro */}
+            <div className="divide-y divide-slate-700/40 space-y-1">
+              {(activeKpiData?.top_trades || []).map((item, idx) => {
+                const vol = item.volume_financeiro || item.volume_total || 0;
+                const trd = item.qtd_negocios || item.trades_total || 0;
+                const pu = item.preco_medio_ponderado || item.vwap || 0;
+                const tx = item.taxa_media_ponderada || item.taxa_media || 0;
+
+                const rankBadgeClass = 
+                  idx === 0 ? 'bg-amber-400 text-slate-950 font-black ring-2 ring-amber-400/30' :
+                  idx === 1 ? 'bg-slate-300 text-slate-950 font-black ring-2 ring-slate-300/30' :
+                  idx === 2 ? 'bg-amber-700 text-amber-100 font-black ring-2 ring-amber-700/30' :
+                  'bg-slate-800 text-slate-400 font-bold border border-slate-700';
+
+                return (
+                  <div key={`trd-${item.ticker}-${idx}`} className="py-2 flex items-center justify-between gap-3 group hover:bg-slate-750/50 rounded-xl px-2 transition-colors">
+                    {/* Rank + Ticker + Devedor */}
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] flex-shrink-0 ${rankBadgeClass}`}>
+                        {idx + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <Link
+                            to={`/asset/${item.ticker}`}
+                            className="font-black text-white hover:text-emerald-300 text-xs sm:text-sm transition-colors"
+                          >
+                            {item.ticker}
+                          </Link>
+                          <span className="text-[10px] text-slate-400 font-medium">
+                            {item.tipo?.replace('Debênture', 'DEB')}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 truncate max-w-[150px] sm:max-w-[220px]" title={item.devedor}>
+                          {item.devedor || 'Emissor Privado'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Métricas: VWAP, Taxa, Trades e Ação */}
+                    <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0 text-right">
+                      <div className="hidden sm:block text-[11px] font-mono text-slate-400">
+                        <div>PU: <span className="text-white font-semibold">{formatPU(pu)}</span></div>
+                        <div>Taxa: <span className="text-emerald-400 font-semibold">{formatTaxa(tx, item.indexador)}</span></div>
+                      </div>
+
+                      <div className="text-right">
+                        <div className="text-xs sm:text-sm font-black text-emerald-400 font-mono">
+                          {trd.toLocaleString('pt-BR')} <span className="text-[10px] font-normal text-slate-400">trades</span>
+                        </div>
+                        <div className="text-[10px] text-slate-400 font-mono">
+                          {formatMoney(vol)}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleFocusTickerChart(item.ticker)}
+                        className="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/40 rounded-lg transition-colors"
+                        title={`Visualizar evolução de ${item.ticker} no gráfico`}
+                      >
+                        <LineChart size={14} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ================= BARRA DE FILTROS REATIVOS (APLICADOS AO GRÁFICO, TABELA E DOWNLOAD) ================= */}
+      <div id="filtros-mercado-section" className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+        
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          
+          {/* Busca textual */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3.5 top-3 text-slate-400" size={18} />
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Buscar por Ticker (ex: RENTQ8), Emissor, Setor ou ISIN..."
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-3 text-xs font-bold text-slate-400 hover:text-slate-600"
+              >
+                Limpar
+              </button>
+            )}
+          </div>
+
+          {/* Filtro de Período da Base e Download */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">
+              Período:
             </span>
-            <p className="text-xl sm:text-2xl font-black text-violet-400 font-mono">
-              D+{activeKpiData?.prazo_du !== undefined ? Number(activeKpiData.prazo_du).toFixed(1) : '0'} d.u.
-            </p>
-            <span className="text-[11px] text-slate-400 mt-0.5 block">
-              Predomínio de D+0 (À Vista)
-            </span>
+            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+              <button
+                onClick={() => setPeriodFilter('ultimo')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  periodFilter === 'ultimo'
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Último Pregão ({formatDateBR(latestDate)})
+              </button>
+              <button
+                onClick={() => setPeriodFilter('7d')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  periodFilter === '7d'
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Últimos 7 Dias
+              </button>
+              <button
+                onClick={() => setPeriodFilter('30d')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  periodFilter === '30d'
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Últimos 30 Dias
+              </button>
+              <button
+                onClick={() => setPeriodFilter('ytd')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  periodFilter === 'ytd'
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Ano 2026 (YTD)
+              </button>
+            </div>
+
+            {/* Botão de Download CSV em destaque nos filtros */}
+            <button
+              onClick={exportFilteredCSV}
+              disabled={!sortedTrades.length}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all disabled:opacity-50"
+              title="Exportar dados de cada trade filtrado para CSV"
+            >
+              <Download size={14} />
+              Exportar CSV ({sortedTrades.length.toLocaleString('pt-BR')})
+            </button>
           </div>
         </div>
 
-        {/* Líderes de Mercado: Top Volume vs Top Giro */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        {/* Linha de Sub-Filtros: Instrumento, Indexador, Setor, Devedor, Rating, Incentivada */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-3 border-t border-slate-100 text-xs">
           
-          {/* Card Líder em Volume */}
-          <div className="bg-gradient-to-r from-blue-950/70 to-slate-800/90 p-5 rounded-2xl border border-blue-800/50 flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-3">
-              <span className="inline-flex items-center gap-1 text-xs font-black uppercase text-blue-400 bg-blue-900/60 px-2.5 py-1 rounded-md border border-blue-700/50">
-                <Award size={14} /> Líder em Volume Financeiro
-              </span>
-              <span className="text-xs text-slate-400 font-mono">
-                {leaderVolume ? `${(leaderVolume.qtd_negocios || leaderVolume.trades_total || 0)} trades` : ''}
-              </span>
-            </div>
-
-            {leaderVolume ? (
-              <div className="space-y-2">
-                <div className="flex items-baseline justify-between gap-2">
-                  <Link 
-                    to={`/asset/${leaderVolume.ticker}`} 
-                    className="text-lg sm:text-xl font-black text-white hover:text-blue-300 transition-colors flex items-center gap-2"
-                  >
-                    {leaderVolume.ticker}
-                    <span className="text-xs font-normal text-slate-400">({leaderVolume.tipo})</span>
-                  </Link>
-                  <span className="text-base sm:text-lg font-black text-blue-400 font-mono">
-                    {formatMoney(leaderVolume.volume_financeiro || leaderVolume.volume_total)}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-300 line-clamp-1">
-                  {leaderVolume.devedor}
-                </p>
-                <div className="flex items-center justify-between text-xs font-mono text-slate-300 pt-1 border-t border-slate-700/60">
-                  <div className="flex items-center gap-4">
-                    <span>VWAP: <strong className="text-white">{formatPU(leaderVolume.preco_medio_ponderado || leaderVolume.vwap)}</strong></span>
-                    <span>Taxa: <strong className="text-emerald-400">{formatTaxa(leaderVolume.taxa_media_ponderada || leaderVolume.taxa_media, leaderVolume.indexador)}</strong></span>
-                  </div>
-                  <button
-                    onClick={() => handleFocusTickerChart(leaderVolume.ticker)}
-                    className="text-xs text-blue-400 hover:text-blue-300 font-bold flex items-center gap-1 font-sans"
-                  >
-                    <LineChart size={12} /> Ver no Gráfico
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-slate-400">Carregando métricas de liderança...</p>
-            )}
+          {/* Instrumento */}
+          <div>
+            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Instrumento
+            </label>
+            <select
+              value={instrumentFilter}
+              onChange={e => setInstrumentFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="TODOS">Todos (DEB/CRI/CRA)</option>
+              <option value="DEB">Apenas Debêntures</option>
+              <option value="CRI">Apenas CRIs</option>
+              <option value="CRA">Apenas CRAs</option>
+            </select>
           </div>
 
-          {/* Card Líder em Giro / Quantidade de Negócios */}
-          <div className="bg-gradient-to-r from-emerald-950/70 to-slate-800/90 p-5 rounded-2xl border border-emerald-800/50 flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-3">
-              <span className="inline-flex items-center gap-1 text-xs font-black uppercase text-emerald-400 bg-emerald-900/60 px-2.5 py-1 rounded-md border border-emerald-700/50">
-                <TrendingUp size={14} /> Líder em Giro (Mais Negociado)
-              </span>
-              <span className="text-xs text-emerald-400 font-mono font-bold">
-                {leaderTrades ? `${(leaderTrades.qtd_negocios || leaderTrades.trades_total || 0).toLocaleString('pt-BR')} trades` : ''}
-              </span>
-            </div>
-
-            {leaderTrades ? (
-              <div className="space-y-2">
-                <div className="flex items-baseline justify-between gap-2">
-                  <Link 
-                    to={`/asset/${leaderTrades.ticker}`} 
-                    className="text-lg sm:text-xl font-black text-white hover:text-emerald-300 transition-colors flex items-center gap-2"
-                  >
-                    {leaderTrades.ticker}
-                    <span className="text-xs font-normal text-slate-400">({leaderTrades.tipo})</span>
-                  </Link>
-                  <span className="text-base sm:text-lg font-black text-emerald-400 font-mono">
-                    {formatMoney(leaderTrades.volume_financeiro || leaderTrades.volume_total)}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-300 line-clamp-1">
-                  {leaderTrades.devedor}
-                </p>
-                <div className="flex items-center justify-between text-xs font-mono text-slate-300 pt-1 border-t border-slate-700/60">
-                  <div className="flex items-center gap-4">
-                    <span>VWAP: <strong className="text-white">{formatPU(leaderTrades.preco_medio_ponderado || leaderTrades.vwap)}</strong></span>
-                    <span>Taxa: <strong className="text-emerald-400">{formatTaxa(leaderTrades.taxa_media_ponderada || leaderTrades.taxa_media, leaderTrades.indexador)}</strong></span>
-                  </div>
-                  <button
-                    onClick={() => handleFocusTickerChart(leaderTrades.ticker)}
-                    className="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 font-sans"
-                  >
-                    <LineChart size={12} /> Ver no Gráfico
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-slate-400">Carregando métricas de giro...</p>
-            )}
+          {/* Indexador */}
+          <div>
+            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Indexador
+            </label>
+            <select
+              value={indexerFilter}
+              onChange={e => setIndexerFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="TODOS">Todos Indexadores</option>
+              <option value="DI+">CDI+ (Spread)</option>
+              <option value="IPCA">IPCA+ (Inflação)</option>
+              <option value="PRE">Pré-Fixado</option>
+              <option value="DI%">% do CDI</option>
+            </select>
           </div>
+
+          {/* Setor */}
+          <div>
+            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Setor
+            </label>
+            <select
+              value={sectorFilter}
+              onChange={e => setSectorFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="TODOS">Todos os Setores ({availableSectors.length})</option>
+              {availableSectors.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Devedor / Emissor */}
+          <div>
+            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Devedor / Emissor
+            </label>
+            <select
+              value={debtorFilter}
+              onChange={e => setDebtorFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="TODOS">Todos os Devedores</option>
+              {availableDebtors.slice(0, 100).map(d => (
+                <option key={d} value={d}>{d.length > 25 ? `${d.slice(0, 25)}...` : d}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Rating */}
+          <div>
+            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Rating Cadastral
+            </label>
+            <select
+              value={ratingFilter}
+              onChange={e => setRatingFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="TODOS">Todos os Ratings</option>
+              <option value="AAA">Apenas AAA (Top Tier)</option>
+              <option value="AA">Grau Alto (AAA e AA)</option>
+              <option value="OUTROS">Outros / Sem Rating</option>
+            </select>
+          </div>
+
+          {/* Incentivada */}
+          <div>
+            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Isenção de IR (12.431)
+            </label>
+            <select
+              value={taxFreeFilter}
+              onChange={e => setTaxFreeFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="TODOS">Todas as Emissões</option>
+              <option value="SIM">Apenas Incentivadas</option>
+              <option value="NAO">Não Incentivadas</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Resumo de Registros Filtrados e Limpar Filtros */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 pt-2 border-t border-slate-100">
+          <div className="flex items-center gap-2">
+            <Filter size={13} className="text-blue-600" />
+            <span>
+              Filtros ativos: <strong>{sortedTrades.length.toLocaleString('pt-BR')}</strong> negócios aplicados ao <strong>Gráfico</strong>, à <strong>Tabela</strong> e ao <strong>Download CSV</strong>
+            </span>
+          </div>
+
+          {(instrumentFilter !== 'TODOS' || indexerFilter !== 'TODOS' || sectorFilter !== 'TODOS' || debtorFilter !== 'TODOS' || ratingFilter !== 'TODOS' || taxFreeFilter !== 'TODOS' || search || periodFilter !== 'ultimo') && (
+            <button
+              onClick={() => {
+                setPeriodFilter('ultimo');
+                setInstrumentFilter('TODOS');
+                setIndexerFilter('TODOS');
+                setSectorFilter('TODOS');
+                setDebtorFilter('TODOS');
+                setRatingFilter('TODOS');
+                setTaxFreeFilter('TODOS');
+                setSearch('');
+              }}
+              className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 self-start sm:self-auto"
+            >
+              <RefreshCw size={12} /> Limpar Todos os Filtros
+            </button>
+          )}
         </div>
       </div>
 
@@ -1780,205 +2182,39 @@ const Trades: React.FC = () => {
         )}
       </div>
 
-      {/* ================= BARRA DE FILTROS REATIVOS ================= */}
-      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-        
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          
-          {/* Busca textual */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-3 text-slate-400" size={18} />
-            <input
-              type="text"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Buscar por Ticker (ex: RENTQ8), Emissor, Setor ou ISIN..."
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                className="absolute right-3 top-3 text-xs font-bold text-slate-400 hover:text-slate-600"
-              >
-                Limpar
-              </button>
-            )}
-          </div>
-
-          {/* Filtro de Período dos Dados da Tabela */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">
-              Período da Tabela:
-            </span>
-            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
-              <button
-                onClick={() => setPeriodFilter('ultimo')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  periodFilter === 'ultimo'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Último Pregão ({formatDateBR(latestDate)})
-              </button>
-              <button
-                onClick={() => setPeriodFilter('7d')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  periodFilter === '7d'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Últimos 7 Dias
-              </button>
-              <button
-                onClick={() => setPeriodFilter('30d')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  periodFilter === '30d'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Últimos 30 Dias
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Linha de Sub-Filtros: Instrumento, Indexador, Setor, Devedor, Rating, Incentivada */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-3 border-t border-slate-100 text-xs">
-          
-          {/* Instrumento */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Instrumento
-            </label>
-            <select
-              value={instrumentFilter}
-              onChange={e => setInstrumentFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos (DEB/CRI/CRA)</option>
-              <option value="DEB">Apenas Debêntures</option>
-              <option value="CRI">Apenas CRIs</option>
-              <option value="CRA">Apenas CRAs</option>
-            </select>
-          </div>
-
-          {/* Indexador */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Indexador
-            </label>
-            <select
-              value={indexerFilter}
-              onChange={e => setIndexerFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos Indexadores</option>
-              <option value="DI+">CDI+ (Spread)</option>
-              <option value="IPCA">IPCA+ (Inflação)</option>
-              <option value="PRE">Pré-Fixado</option>
-              <option value="DI%">% do CDI</option>
-            </select>
-          </div>
-
-          {/* Setor */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Setor
-            </label>
-            <select
-              value={sectorFilter}
-              onChange={e => setSectorFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos os Setores ({availableSectors.length})</option>
-              {availableSectors.map(s => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Devedor / Emissor */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Devedor / Emissor
-            </label>
-            <select
-              value={debtorFilter}
-              onChange={e => setDebtorFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos os Devedores</option>
-              {availableDebtors.slice(0, 100).map(d => (
-                <option key={d} value={d}>{d.length > 25 ? `${d.slice(0, 25)}...` : d}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Rating */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Rating Cadastral
-            </label>
-            <select
-              value={ratingFilter}
-              onChange={e => setRatingFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos os Ratings</option>
-              <option value="AAA">Apenas AAA (Top Tier)</option>
-              <option value="AA">Grau Alto (AAA e AA)</option>
-              <option value="OUTROS">Outros / Sem Rating</option>
-            </select>
-          </div>
-
-          {/* Incentivada */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Isenção de IR (12.431)
-            </label>
-            <select
-              value={taxFreeFilter}
-              onChange={e => setTaxFreeFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todas as Emissões</option>
-              <option value="SIM">Apenas Incentivadas</option>
-              <option value="NAO">Não Incentivadas</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Resumo de Registros Filtrados e Limpar Filtros */}
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
-          <span>
-            Mostrando <strong>{paginatedTrades.length}</strong> de <strong>{sortedTrades.length}</strong> registros encontrados
-          </span>
-
-          {(instrumentFilter !== 'TODOS' || indexerFilter !== 'TODOS' || sectorFilter !== 'TODOS' || debtorFilter !== 'TODOS' || ratingFilter !== 'TODOS' || taxFreeFilter !== 'TODOS' || search || periodFilter !== 'ultimo') && (
-            <button
-              onClick={() => {
-                setPeriodFilter('ultimo');
-                setInstrumentFilter('TODOS');
-                setIndexerFilter('TODOS');
-                setSectorFilter('TODOS');
-                setDebtorFilter('TODOS');
-                setRatingFilter('TODOS');
-                setTaxFreeFilter('TODOS');
-                setSearch('');
-              }}
-              className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1"
-            >
-              <RefreshCw size={12} /> Limpar Todos os Filtros
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* ================= TABELA DE NEGÓCIOS CRUZADA COM CADASTRO ================= */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        
+        {/* Cabeçalho Superior da Tabela */}
+        <div className="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="p-2 bg-blue-50 text-blue-700 rounded-xl">
+                <Briefcase size={18} />
+              </span>
+              <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                Negócios Confirmados na B3
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Registros detalhados com cruzamento cadastral, VWAP e taxas do mercado secundário
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500 font-medium">
+              Mostrando <strong className="text-slate-800">{paginatedTrades.length}</strong> de <strong className="text-slate-800">{sortedTrades.length.toLocaleString('pt-BR')}</strong> negócios filtrados
+            </span>
+            <button
+              onClick={exportFilteredCSV}
+              disabled={!sortedTrades.length}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all disabled:opacity-50"
+              title="Exportar dados filtrados da tabela para CSV"
+            >
+              <Download size={14} /> CSV
+            </button>
+          </div>
+        </div>
         
         {loading ? (
           <div className="p-16 text-center space-y-3">

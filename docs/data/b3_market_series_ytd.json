@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-09-04 15:02:25",
+  "atualizado_em": "2026-09-04 18:35:53",
   "datas": [
     "2026-01-02",
     "2026-01-05",
@@ -167,7 +167,8 @@
     "2026-08-31",
     "2026-09-01",
     "2026-09-02",
-    "2026-09-03"
+    "2026-09-03",
+    "2026-09-04"
   ],
   "series": {
     "TODOS": [
@@ -1839,6 +1840,16 @@
         "trades": 17685,
         "price": 151.21,
         "yield": 11.4,
+        "spread_bps": null
+      },
+      {
+        "date": "2026-09-04",
+        "datePretty": "04/09",
+        "volume": 7013.16,
+        "volumeRaw": 7013164062.4,
+        "trades": 19379,
+        "price": 68.2,
+        "yield": 12.06,
         "spread_bps": null
       }
     ],
@@ -3512,6 +3523,16 @@
         "price": 94.07,
         "yield": 11.11,
         "spread_bps": 87.2
+      },
+      {
+        "date": "2026-09-04",
+        "datePretty": "04/09",
+        "volume": 2769.55,
+        "volumeRaw": 2769545206.67,
+        "trades": 9362,
+        "price": 36.49,
+        "yield": 11.21,
+        "spread_bps": 129.6
       }
     ],
     "CDI+": [
@@ -5184,6 +5205,16 @@
         "price": 954.8,
         "yield": 5.94,
         "spread_bps": 156.6
+      },
+      {
+        "date": "2026-09-04",
+        "datePretty": "04/09",
+        "volume": 3141.13,
+        "volumeRaw": 3141127844.5,
+        "trades": 2988,
+        "price": 1030.93,
+        "yield": 3.59,
+        "spread_bps": 147.4
       }
     ],
     "CDI%": [
@@ -6856,6 +6887,16 @@
         "price": 17.5,
         "yield": 107.02,
         "spread_bps": 421.2
+      },
+      {
+        "date": "2026-09-04",
+        "datePretty": "04/09",
+        "volume": 272.28,
+        "volumeRaw": 272275372.74,
+        "trades": 1760,
+        "price": 1008.64,
+        "yield": 101.22,
+        "spread_bps": 54.4
       }
     ],
     "PRE": [
@@ -8528,6 +8569,16 @@
         "price": 200.27,
         "yield": 15.45,
         "spread_bps": 393.6
+      },
+      {
+        "date": "2026-09-04",
+        "datePretty": "04/09",
+        "volume": 179.27,
+        "volumeRaw": 179267406.76999998,
+        "trades": 2132,
+        "price": 92.17,
+        "yield": 15.65,
+        "spread_bps": 406.7
       }
     ]
   }

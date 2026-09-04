@@ -1,109 +1,121 @@
 {
-  "atualizado_em": "2026-09-04 15:02:13",
+  "atualizado_em": "2026-09-04 18:35:41",
   "ultimo_pregao": {
-    "data": "2026-09-03",
-    "volume_financeiro": 4795712098.88,
-    "total_trades": 17685,
-    "ativos_negociados": 1579,
-    "prazo_medio_du": 0.3,
+    "data": "2026-09-04",
+    "volume_financeiro": 7013164062.4,
+    "total_trades": 19379,
+    "ativos_negociados": 1695,
+    "prazo_medio_du": 0.19,
     "top_ativos": [
       {
-        "ticker": "RENTQ8",
+        "ticker": "ISAEB2",
         "tipo": "Debênture",
-        "devedor": "LOCALIZA RENT A CAR S/A",
-        "volume_financeiro": 244335825.7,
-        "qtd_negocios": 15,
-        "preco_medio_ponderado": 1018.3927,
-        "taxa_media_ponderada": 1.3045
-      },
-      {
-        "ticker": "CEEBD1",
-        "tipo": "Debênture",
-        "devedor": "CIA. DE ELETRIC. DO EST. DA BAHIA-COELBA",
-        "volume_financeiro": 210034197.68,
-        "qtd_negocios": 99,
-        "preco_medio_ponderado": 935.6977,
-        "taxa_media_ponderada": 14.2607
-      },
-      {
-        "ticker": "RDORE4",
-        "tipo": "Debênture",
-        "devedor": "REDE DOR SAO LUIZ S/A",
-        "volume_financeiro": 198487234.66,
-        "qtd_negocios": 11,
-        "preco_medio_ponderado": 1085.0803,
-        "taxa_media_ponderada": 1.0386
+        "devedor": "ISA ENERGIA BRASIL S.A.",
+        "volume_financeiro": 360023523.04,
+        "qtd_negocios": 3,
+        "preco_medio_ponderado": 979.6558,
+        "taxa_media_ponderada": 7.19
       },
       {
         "ticker": "CGASA5",
         "tipo": "Debênture",
         "devedor": "COMPANHIA DE GAS DE SAO PAULO - COMGAS",
-        "volume_financeiro": 188733936.08,
-        "qtd_negocios": 9,
-        "preco_medio_ponderado": 1065.4687,
-        "taxa_media_ponderada": 0.74
-      },
-      {
-        "ticker": "AXIA28",
-        "tipo": "Debênture",
-        "devedor": "AXIA ENERGIA S.A",
-        "volume_financeiro": 82131427.72,
-        "qtd_negocios": 12,
-        "preco_medio_ponderado": 978.2908,
-        "taxa_media_ponderada": 7.5009
-      },
-      {
-        "ticker": "AXIAA1",
-        "tipo": "Debênture",
-        "devedor": "AXIA ENERGIA S.A",
-        "volume_financeiro": 81731697.84,
-        "qtd_negocios": 3,
-        "preco_medio_ponderado": 1034.5785,
-        "taxa_media_ponderada": 7.5041
-      },
-      {
-        "ticker": "HAPV17",
-        "tipo": "Debênture",
-        "devedor": "HAPVIDA PARTICIPACOES E INVESTIMENTOS S.A.",
-        "volume_financeiro": 75678237.95,
-        "qtd_negocios": 3,
-        "preco_medio_ponderado": 843.4841,
-        "taxa_media_ponderada": 10.23
-      },
-      {
-        "ticker": "25K3397285",
-        "tipo": "CRI",
-        "devedor": "Bivi Holding S.A.,",
-        "volume_financeiro": 69827088.59,
+        "volume_financeiro": 278840324.6,
         "qtd_negocios": 15,
-        "preco_medio_ponderado": 1007.6059,
-        "taxa_media_ponderada": 15.9801
+        "preco_medio_ponderado": 1065.1094,
+        "taxa_media_ponderada": 0.7567
+      },
+      {
+        "ticker": "SPEJ11",
+        "tipo": "Debênture",
+        "devedor": "SPE JOPE ISB INOVA CXS S/A",
+        "volume_financeiro": 229923147.42,
+        "qtd_negocios": 1,
+        "preco_medio_ponderado": 1069.41,
+        "taxa_media_ponderada": null
+      },
+      {
+        "ticker": "RENTQ8",
+        "tipo": "Debênture",
+        "devedor": "LOCALIZA RENT A CAR S/A",
+        "volume_financeiro": 223167900.41,
+        "qtd_negocios": 13,
+        "preco_medio_ponderado": 1017.6653,
+        "taxa_media_ponderada": 1.3223
+      },
+      {
+        "ticker": "COOV11",
+        "tipo": "Debênture",
+        "devedor": "CONCESSIONARIA DE RODOVIA NOVA 364 SA",
+        "volume_financeiro": 170334068.19,
+        "qtd_negocios": 1,
+        "preco_medio_ponderado": 1032.3277,
+        "taxa_media_ponderada": 2.0
+      },
+      {
+        "ticker": "BRKT14",
+        "tipo": "Debênture",
+        "devedor": "BRK AMBIENTAL - MANSO S.A.",
+        "volume_financeiro": 156818440.17,
+        "qtd_negocios": 1,
+        "preco_medio_ponderado": 1493.509,
+        "taxa_media_ponderada": 2.01
+      },
+      {
+        "ticker": "SAPRB4",
+        "tipo": "Debênture",
+        "devedor": "COMPANHIA DE SANEAMENTO DO PARANA - SANEPAR",
+        "volume_financeiro": 152478233.22,
+        "qtd_negocios": 6,
+        "preco_medio_ponderado": 1036.1391,
+        "taxa_media_ponderada": 0.5205
       },
       {
         "ticker": "PASS14",
         "tipo": "Debênture",
         "devedor": "COMPASS GAS E ENERGIA S.A",
-        "volume_financeiro": 68707169.49,
-        "qtd_negocios": 2,
-        "preco_medio_ponderado": 1035.4015,
-        "taxa_media_ponderada": 0.74
+        "volume_financeiro": 136315911.39,
+        "qtd_negocios": 8,
+        "preco_medio_ponderado": 1035.8824,
+        "taxa_media_ponderada": 0.7239
       },
       {
-        "ticker": "26H2820486",
-        "tipo": "CRI",
-        "devedor": "MULTIPLAN",
-        "volume_financeiro": 63812763.8,
-        "qtd_negocios": 18,
-        "preco_medio_ponderado": 988.5788,
-        "taxa_media_ponderada": 98.7859
+        "ticker": "RNDNB2",
+        "tipo": "Debênture",
+        "devedor": "RANDONCORP S.A.",
+        "volume_financeiro": 134812194.22,
+        "qtd_negocios": 6,
+        "preco_medio_ponderado": 973.0922,
+        "taxa_media_ponderada": 2.2
+      },
+      {
+        "ticker": "SRNJ11",
+        "tipo": "Debênture",
+        "devedor": "CONCESSIONARIA ROTA SERTANEJA MG-GO S.A",
+        "volume_financeiro": 132173312.4,
+        "qtd_negocios": 1,
+        "preco_medio_ponderado": 1101.4443,
+        "taxa_media_ponderada": 2.35
       }
     ]
   },
   "ultimos_30_dias": {
-    "volume_financeiro": 127516445846.56,
-    "total_trades": 529606,
-    "ativos_unicos": 3504,
+    "volume_financeiro": 130703712991.01001,
+    "total_trades": 532494,
+    "ativos_unicos": 3514,
     "top_volume": [
+      {
+        "ticker": "RENTQ8",
+        "tipo": "Debênture",
+        "devedor": "LOCALIZA RENT A CAR S/A",
+        "indexador": "DI+",
+        "volume_total": 1578466684.16,
+        "trades_total": 181,
+        "titulos_total": 1562065,
+        "dias_com_negocio": 21,
+        "vwap": 1013.124838095238,
+        "taxa_media": 1.251395238095238
+      },
       {
         "ticker": "CEEDA1",
         "tipo": "Debênture",
@@ -117,28 +129,16 @@
         "taxa_media": 0.7896214285714286
       },
       {
-        "ticker": "RENTQ8",
+        "ticker": "CEEBD1",
         "tipo": "Debênture",
-        "devedor": "LOCALIZA RENT A CAR S/A",
-        "indexador": "DI+",
-        "volume_total": 1355298783.75,
-        "trades_total": 168,
-        "titulos_total": 1342771,
-        "dias_com_negocio": 20,
-        "vwap": 1012.8978149999999,
-        "taxa_media": 1.2478500000000001
-      },
-      {
-        "ticker": "RENTD9",
-        "tipo": "Debênture",
-        "devedor": "LOCALIZA RENT A CAR S/A",
-        "indexador": "DI+",
-        "volume_total": 1237060672.48,
-        "trades_total": 14,
-        "titulos_total": 1187956,
-        "dias_com_negocio": 2,
-        "vwap": 1056.19295,
-        "taxa_media": 1.57115
+        "devedor": "CIA. DE ELETRIC. DO EST. DA BAHIA-COELBA",
+        "indexador": "Pré-Fixado",
+        "volume_total": 1101468681.1100001,
+        "trades_total": 2867,
+        "titulos_total": 1185638,
+        "dias_com_negocio": 30,
+        "vwap": 933.4253666666666,
+        "taxa_media": 14.143536666666668
       },
       {
         "ticker": "CGOS15",
@@ -153,28 +153,16 @@
         "taxa_media": 0.6460208333333334
       },
       {
-        "ticker": "CEEBD1",
-        "tipo": "Debênture",
-        "devedor": "CIA. DE ELETRIC. DO EST. DA BAHIA-COELBA",
-        "indexador": "Pré-Fixado",
-        "volume_total": 1057190862.16,
-        "trades_total": 2834,
-        "titulos_total": 1138784,
-        "dias_com_negocio": 30,
-        "vwap": 932.8731233333333,
-        "taxa_media": 14.144626666666666
-      },
-      {
         "ticker": "AXIAA1",
         "tipo": "Debênture",
         "devedor": "AXIA ENERGIA S.A",
         "indexador": "IPCA",
-        "volume_total": 1055754057.76,
-        "trades_total": 285,
-        "titulos_total": 1033682,
-        "dias_com_negocio": 20,
-        "vwap": 1021.279825,
-        "taxa_media": 7.671721052631579
+        "volume_total": 1059894157.5200001,
+        "trades_total": 287,
+        "titulos_total": 1037682,
+        "dias_com_negocio": 21,
+        "vwap": 1021.9343523809524,
+        "taxa_media": 7.662985000000001
       },
       {
         "ticker": "RENTH7",
@@ -193,12 +181,12 @@
         "tipo": "Debênture",
         "devedor": "RGE SUL DISTRIBUIDORA DE ENERGIA S/A",
         "indexador": "IPCA",
-        "volume_total": 841988466.88,
-        "trades_total": 92,
-        "titulos_total": 870229,
-        "dias_com_negocio": 22,
-        "vwap": 973.2339181818181,
-        "taxa_media": 7.745868181818182
+        "volume_total": 842140848.8199999,
+        "trades_total": 94,
+        "titulos_total": 870383,
+        "dias_com_negocio": 23,
+        "vwap": 973.9408434782608,
+        "taxa_media": 7.735595652173913
       },
       {
         "ticker": "EDST11",
@@ -213,16 +201,28 @@
         "taxa_media": null
       },
       {
+        "ticker": "CGOSA2",
+        "tipo": "Debênture",
+        "devedor": "EQUATORIAL GOIAS DISTRIBUIDORA DE ENERGIA S.A.",
+        "indexador": "IPCA",
+        "volume_total": 754316183.5400001,
+        "trades_total": 449,
+        "titulos_total": 806241,
+        "dias_com_negocio": 30,
+        "vwap": 956.4211366666666,
+        "taxa_media": 7.757093333333333
+      },
+      {
         "ticker": "TFLEA3",
         "tipo": "Debênture",
         "devedor": "LOCALIZA FLEET S/A",
         "indexador": "DI+",
-        "volume_total": 746984982.84,
-        "trades_total": 29,
-        "titulos_total": 736096,
-        "dias_com_negocio": 4,
-        "vwap": 1028.015975,
-        "taxa_media": 1.450725
+        "volume_total": 737250162.14,
+        "trades_total": 25,
+        "titulos_total": 726592,
+        "dias_com_negocio": 3,
+        "vwap": 1029.2590666666667,
+        "taxa_media": 1.4860666666666666
       }
     ],
     "top_trades": [
@@ -231,164 +231,158 @@
         "tipo": "CRI",
         "devedor": "Allos VI",
         "indexador": "DI+",
-        "volume_total": 172243287.67,
-        "trades_total": 6643,
-        "titulos_total": 163663,
+        "volume_total": 172118468.43,
+        "trades_total": 6637,
+        "titulos_total": 163528,
         "dias_com_negocio": 30,
-        "vwap": 1062.5088333333333,
-        "taxa_media": 98.27037666666666
+        "vwap": 1064.0296866666665,
+        "taxa_media": 98.135
       },
       {
         "ticker": "CRA0240066A",
         "tipo": "CRA",
         "devedor": "CAMIL ALIMENTOS S.A.",
         "indexador": "DI%",
-        "volume_total": 227109294.69,
-        "trades_total": 3303,
-        "titulos_total": 231819,
+        "volume_total": 226128016.54000002,
+        "trades_total": 3315,
+        "titulos_total": 230835,
         "dias_com_negocio": 30,
-        "vwap": 966.1195299999999,
-        "taxa_media": 122.74133333333334
+        "vwap": 966.01167,
+        "taxa_media": 122.98064000000001
       },
       {
         "ticker": "24I1980390",
         "tipo": "CRI",
         "devedor": "MRV ENGENHARIA E PARTICIPAÇÕES S.A",
         "indexador": "DI%",
-        "volume_total": 79953696.03999999,
-        "trades_total": 2952,
-        "titulos_total": 80326,
+        "volume_total": 79812610.97999999,
+        "trades_total": 2987,
+        "titulos_total": 80193,
         "dias_com_negocio": 30,
-        "vwap": 1005.05882,
-        "taxa_media": 123.31913333333334
+        "vwap": 1004.9671066666667,
+        "taxa_media": 123.55577
       },
       {
         "ticker": "CRA025005V5",
         "tipo": "CRA",
         "devedor": "MINERVA S.A.",
         "indexador": "DI%",
-        "volume_total": 64873650.17,
-        "trades_total": 2947,
-        "titulos_total": 68971,
+        "volume_total": 65323153.23,
+        "trades_total": 2974,
+        "titulos_total": 69435,
         "dias_com_negocio": 30,
-        "vwap": 940.8424033333333,
-        "taxa_media": 122.4282
-      },
-      {
-        "ticker": "CRA021000RX",
-        "tipo": "CRA",
-        "devedor": "MINERVA S.A.",
-        "indexador": "IPCA",
-        "volume_total": 301702229.37,
-        "trades_total": 2864,
-        "titulos_total": 244830,
-        "dias_com_negocio": 30,
-        "vwap": 1233.62419,
-        "taxa_media": 13.179663333333334
-      },
-      {
-        "ticker": "CEEBD1",
-        "tipo": "Debênture",
-        "devedor": "CIA. DE ELETRIC. DO EST. DA BAHIA-COELBA",
-        "indexador": "Pré-Fixado",
-        "volume_total": 1057190862.16,
-        "trades_total": 2834,
-        "titulos_total": 1138784,
-        "dias_com_negocio": 30,
-        "vwap": 932.8731233333333,
-        "taxa_media": 14.144626666666666
+        "vwap": 941.0972633333333,
+        "taxa_media": 122.54088666666667
       },
       {
         "ticker": "24A2715837",
         "tipo": "CRI",
         "devedor": "DIAGNÓSTICOS DA AMÉRICA S.A.",
         "indexador": "Pré-Fixado",
-        "volume_total": 68377910.69,
-        "trades_total": 2818,
-        "titulos_total": 77039,
+        "volume_total": 69314793.49,
+        "trades_total": 2882,
+        "titulos_total": 78067,
         "dias_com_negocio": 30,
-        "vwap": 883.5643133333334,
-        "taxa_media": 19.640596666666667
+        "vwap": 884.5085466666666,
+        "taxa_media": 19.62255
+      },
+      {
+        "ticker": "CRA021000RX",
+        "tipo": "CRA",
+        "devedor": "MINERVA S.A.",
+        "indexador": "IPCA",
+        "volume_total": 305908638.40999997,
+        "trades_total": 2874,
+        "titulos_total": 247944,
+        "dias_com_negocio": 30,
+        "vwap": 1234.95537,
+        "taxa_media": 13.13334
+      },
+      {
+        "ticker": "CEEBD1",
+        "tipo": "Debênture",
+        "devedor": "CIA. DE ELETRIC. DO EST. DA BAHIA-COELBA",
+        "indexador": "Pré-Fixado",
+        "volume_total": 1101468681.1100001,
+        "trades_total": 2867,
+        "titulos_total": 1185638,
+        "dias_com_negocio": 30,
+        "vwap": 933.4253666666666,
+        "taxa_media": 14.143536666666668
       },
       {
         "ticker": "ELET14",
         "tipo": "Debênture",
         "devedor": "AXIA ENERGIA S.A",
         "indexador": "IPCA",
-        "volume_total": 236374973.0,
-        "trades_total": 2695,
-        "titulos_total": 210352,
+        "volume_total": 228214065.61,
+        "trades_total": 2709,
+        "titulos_total": 202897,
         "dias_com_negocio": 30,
-        "vwap": 1122.3902666666665,
-        "taxa_media": 7.685536666666667
-      },
-      {
-        "ticker": "CRA0240086K",
-        "tipo": "CRA",
-        "devedor": "SEARA ALIMENTOS LTDA.",
-        "indexador": "IPCA",
-        "volume_total": 34296126.58,
-        "trades_total": 2171,
-        "titulos_total": 35744,
-        "dias_com_negocio": 30,
-        "vwap": 954.2745466666668,
-        "taxa_media": 9.749566666666668
+        "vwap": 1123.2370733333335,
+        "taxa_media": 7.669473333333333
       },
       {
         "ticker": "24A2721829",
         "tipo": "CRI",
         "devedor": "DIAGNÓSTICOS DA AMÉRICA S.A",
         "indexador": "Pré-Fixado",
-        "volume_total": 37859158.75,
-        "trades_total": 2165,
-        "titulos_total": 44732,
+        "volume_total": 38901404.34,
+        "trades_total": 2198,
+        "titulos_total": 45926,
         "dias_com_negocio": 30,
-        "vwap": 845.16899,
-        "taxa_media": 19.580343333333335
+        "vwap": 845.75467,
+        "taxa_media": 19.581419999999998
+      },
+      {
+        "ticker": "CRA0240086K",
+        "tipo": "CRA",
+        "devedor": "SEARA ALIMENTOS LTDA.",
+        "indexador": "IPCA",
+        "volume_total": 33992037.53,
+        "trades_total": 2171,
+        "titulos_total": 35417,
+        "dias_com_negocio": 30,
+        "vwap": 955.4344833333333,
+        "taxa_media": 9.73343
       }
     ],
     "distribuicao_instrumento": {
       "CRA": {
-        "volume": 9556743489.13,
-        "trades": 160484,
-        "ativos": 621
+        "volume": 9721519242.01,
+        "trades": 161595,
+        "ativos": 623
       },
       "CRI": {
-        "volume": 23422543996.22,
-        "trades": 148859,
-        "ativos": 1167
+        "volume": 23827829760.14,
+        "trades": 150337,
+        "ativos": 1175
       },
       "Debênture": {
-        "volume": 94537158361.21,
-        "trades": 220263,
+        "volume": 97154363988.86,
+        "trades": 220562,
         "ativos": 1716
       }
     },
     "distribuicao_indexador": {
       "CDI / DI+": {
-        "volume": 55271972390.18,
-        "trades": 129528
+        "volume": 56406484306.31,
+        "trades": 131104
       },
       "IPCA": {
-        "volume": 53142928563.17,
-        "trades": 259747
+        "volume": 54657099226.44,
+        "trades": 259228
       },
       "Outros": {
-        "volume": 14069359366.5,
-        "trades": 78784
+        "volume": 14500101975.32,
+        "trades": 80102
       },
       "Pré-Fixado": {
-        "volume": 5032185526.71,
-        "trades": 61547
+        "volume": 5140027482.94,
+        "trades": 62060
       }
     },
     "timeline": [
-      {
-        "data_negocio": "2026-07-23",
-        "volume": 3825896917.95,
-        "trades": 16491,
-        "ativos": 1514
-      },
       {
         "data_negocio": "2026-07-24",
         "volume": 3888832337.84,
@@ -562,13 +556,19 @@
         "volume": 4795712098.88,
         "trades": 17685,
         "ativos": 1579
+      },
+      {
+        "data_negocio": "2026-09-04",
+        "volume": 7013164062.4,
+        "trades": 19379,
+        "ativos": 1695
       }
     ]
   },
   "acumulado_ano_ytd": {
-    "volume_financeiro": 881743764772.06,
-    "total_trades": 3437540,
-    "ativos_unicos": 4759,
-    "total_pregoes": 167
+    "volume_financeiro": 888756928834.46,
+    "total_trades": 3456919,
+    "ativos_unicos": 4774,
+    "total_pregoes": 168
   }
 }
