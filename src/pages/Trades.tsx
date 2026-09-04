@@ -1383,10 +1383,10 @@ const Trades: React.FC = () => {
           </div>
         </div>
 
-        {/* ================= TOP 10 RANKINGS: VOLUME VS GIRO ================= */}
+        {/* ================= TOP 5 RANKINGS: VOLUME VS GIRO ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
           
-          {/* Coluna 1: Top 10 em Volume Financeiro */}
+          {/* Coluna 1: Top 5 em Volume Financeiro */}
           <div className="bg-slate-800/90 rounded-2xl border border-blue-800/40 p-5 shadow-lg flex flex-col justify-between">
             <div className="flex items-center justify-between pb-3 border-b border-slate-700/60 mb-3">
               <div className="flex items-center gap-2">
@@ -1395,7 +1395,7 @@ const Trades: React.FC = () => {
                 </span>
                 <div>
                   <h3 className="text-sm font-black text-white uppercase tracking-wider">
-                    Top 10 em Volume Financeiro
+                    Top 5 em Volume Financeiro
                   </h3>
                   <span className="text-[11px] text-slate-400">
                     Maior volume financeiro acumulado no período
@@ -1407,9 +1407,9 @@ const Trades: React.FC = () => {
               </span>
             </div>
 
-            {/* Lista dos 10 Ativos em Volume */}
+            {/* Lista dos 5 Ativos em Volume */}
             <div className="divide-y divide-slate-700/40 space-y-1">
-              {(activeKpiData?.top_volume || []).map((item, idx) => {
+              {(activeKpiData?.top_volume || []).slice(0, 5).map((item, idx) => {
                 const vol = item.volume_financeiro || item.volume_total || 0;
                 const trd = item.qtd_negocios || item.trades_total || 0;
                 const pu = item.preco_medio_ponderado || item.vwap || 0;
@@ -1476,7 +1476,7 @@ const Trades: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 2: Top 10 em Giro (Mais Negociados) */}
+          {/* Coluna 2: Top 5 em Giro (Mais Negociados) */}
           <div className="bg-slate-800/90 rounded-2xl border border-emerald-800/40 p-5 shadow-lg flex flex-col justify-between">
             <div className="flex items-center justify-between pb-3 border-b border-slate-700/60 mb-3">
               <div className="flex items-center gap-2">
@@ -1485,7 +1485,7 @@ const Trades: React.FC = () => {
                 </span>
                 <div>
                   <h3 className="text-sm font-black text-white uppercase tracking-wider">
-                    Top 10 em Giro (Mais Negociados)
+                    Top 5 em Giro (Mais Negociados)
                   </h3>
                   <span className="text-[11px] text-slate-400">
                     Maior quantidade de trades confirmados no período
@@ -1497,9 +1497,9 @@ const Trades: React.FC = () => {
               </span>
             </div>
 
-            {/* Lista dos 10 Ativos em Giro */}
+            {/* Lista dos 5 Ativos em Giro */}
             <div className="divide-y divide-slate-700/40 space-y-1">
-              {(activeKpiData?.top_trades || []).map((item, idx) => {
+              {(activeKpiData?.top_trades || []).slice(0, 5).map((item, idx) => {
                 const vol = item.volume_financeiro || item.volume_total || 0;
                 const trd = item.qtd_negocios || item.trades_total || 0;
                 const pu = item.preco_medio_ponderado || item.vwap || 0;
@@ -2243,10 +2243,10 @@ const Trades: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[380px] overflow-y-auto">
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[11px] font-black tracking-wider">
+              <thead className="sticky top-0 bg-slate-100 z-10 shadow-sm">
+                <tr className="bg-slate-100 border-b border-slate-200 text-slate-700 uppercase text-[11px] font-black tracking-wider">
                   
                   <th 
                     onClick={() => {
@@ -2468,6 +2468,7 @@ const Trades: React.FC = () => {
                 onChange={e => setPageSize(Number(e.target.value))}
                 className="bg-white border border-slate-200 rounded-lg px-2 py-1 font-bold text-slate-700"
               >
+                <option value={5}>5</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
@@ -2676,10 +2677,10 @@ const Trades: React.FC = () => {
         </div>
 
         {/* Tabela de Papéis a PU */}
-        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+        <div className="overflow-x-auto max-h-[380px] overflow-y-auto rounded-2xl border border-slate-200">
           <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-slate-100 text-slate-600 uppercase text-[11px] font-black border-b border-slate-200">
+            <thead className="sticky top-0 bg-slate-100 z-10 shadow-sm">
+              <tr className="bg-slate-100 text-slate-700 uppercase text-[11px] font-black border-b border-slate-200">
                 <th 
                   className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors"
                   onClick={() => {
@@ -2904,6 +2905,7 @@ const Trades: React.FC = () => {
                 }}
                 className="bg-white border border-slate-200 rounded-lg px-2 py-1 font-bold text-slate-700"
               >
+                <option value={5}>5</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
