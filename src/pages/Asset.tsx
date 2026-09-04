@@ -129,16 +129,94 @@ const AssetPage: React.FC = () => {
     return `${idx} ${taxaNum > 0 ? `+ ${taxaNum.toFixed(2)}%` : ''}`.trim();
   };
 
+  const applyLoadedData = (payload: {
+    asset: Asset;
+    prices?: PriceRecord[];
+    emitter?: Emitter | null;
+    paymentEvents?: PaymentEvent[];
+    documents?: AssetDocument[];
+  }) => {
+    const found = payload.asset;
+    setAsset(found);
+    setPrices(payload.prices || []);
+    setEmitter(payload.emitter || null);
+
+    const assetEvents = [...(payload.paymentEvents || [])];
+    assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
+    setPaymentEvents(assetEvents);
+
+    const assetDocs = [...(payload.documents || [])];
+    assetDocs.sort((a, b) => {
+      const da = (a.data_entrega || a.data_referencia || '').trim();
+      const db = (b.data_entrega || b.data_referencia || '').trim();
+      return db.localeCompare(da);
+    });
+    setDocuments(assetDocs);
+
+    // SEO dinâmico por ativo
+    const tipoStr = found.tipo || 'Título';
+    const emissorStr = found.issuer ? `(${found.issuer})` : '';
+    document.title = `${tipoStr} ${found.ticker} ${emissorStr} — Taxas, Spread e Rating | FIXDATA`;
+
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const descText = `Análise de ${tipoStr} ${found.ticker} emitida por ${found.issuer || 'Emissor'}. Indexador: ${found.indexador || '-'}, Vencimento: ${found.vencimento || '-'}, Rating: ${found.rating || '-'}. Dados de mercado no FIXDATA.`;
+    if (metaDesc) {
+      metaDesc.setAttribute('content', descText);
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
 
     const loadData = async () => {
       const targetKey = decodeURIComponent(ticker || '').trim().toUpperCase();
-      let currentAsset: Asset | null = null;
+      const cleanTargetKey = targetKey.replace(/[\s\-]/g, '');
 
       try {
         setLoading(true);
-        // Carregar todas as bases de forma unificada com cache em memória em csv.ts
+
+        // 1. FAST PATH 1: Leitura instantânea de dados pré-carregados no HTML SSR (0ms, 0 bytes de rede)
+        const preloadedEl = document.getElementById('__PRELOADED_ASSET__');
+        if (preloadedEl && preloadedEl.textContent) {
+          try {
+            const payload = JSON.parse(preloadedEl.textContent);
+            if (payload && payload.asset) {
+              const pTk = (payload.asset.ticker || '').trim().toUpperCase();
+              const pIsin = (payload.asset.isin || '').trim().toUpperCase();
+              const pTkClean = pTk.replace(/[\s\-]/g, '');
+              const pIsinClean = pIsin.replace(/[\s\-]/g, '');
+
+              if (pTk === targetKey || pIsin === targetKey || 
+                  (cleanTargetKey && (pTkClean === cleanTargetKey || pIsinClean === cleanTargetKey))) {
+                applyLoadedData(payload);
+                if (!isMounted) return;
+                setLoading(false);
+                return;
+              }
+            }
+          } catch (ePre) {
+            console.warn('Falha ao ler __PRELOADED_ASSET__, usando fallback:', ePre);
+          }
+        }
+
+        // 2. FAST PATH 2: Navegação interna (SPA) via JSON individual (~10 KB em vez de 72 MB)
+        try {
+          const jsonKey = cleanTargetKey || targetKey;
+          const jsonResp = await fetch(`/data/assets/${encodeURIComponent(jsonKey)}.json`);
+          if (jsonResp.ok) {
+            const payload = await jsonResp.json();
+            if (payload && payload.asset) {
+              applyLoadedData(payload);
+              if (!isMounted) return;
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (eJson) {
+          // Continua para fallback clássico
+        }
+
+        // 3. FALLBACK DE SEGURANÇA: Se não houver pré-renderização para o ativo, carrega dos CSVs completos
         const [assetsData, pricesData, emittersData, schedulesData, docsData] = await Promise.all([
           fetchCSV<Asset>('/data/assets_master.csv').catch(() => []),
           fetchCSV<PriceRecord>('/data/prices.csv').catch(() => []),
@@ -148,8 +226,6 @@ const AssetPage: React.FC = () => {
         ]);
 
         if (!isMounted) return;
-
-        const cleanTargetKey = targetKey.replace(/[\s\-]/g, '');
 
         const found = assetsData.find(a => {
           const tk = (a.ticker || '').trim().toUpperCase();
@@ -161,8 +237,6 @@ const AssetPage: React.FC = () => {
         });
 
         if (found) {
-          setAsset(found);
-
           const foundTicker = (found.ticker || '').trim().toUpperCase();
           const foundIsin = (found.isin || '').trim().toUpperCase();
           const foundTickerClean = foundTicker.replace(/[\s\-]/g, '');
@@ -180,11 +254,9 @@ const AssetPage: React.FC = () => {
                    (foundTickerClean && (pTkClean === foundTickerClean || pIsinClean === foundTickerClean)) ||
                    (foundIsinClean && (pTkClean === foundIsinClean || pIsinClean === foundIsinClean));
           });
-          setPrices(assetPrices);
-          
+
           // 2. Emissor
           const matched = matchEmitter(emittersData || [], found);
-          setEmitter(matched);
 
           // 3. Cronograma de Pagamentos
           const assetEvents = (schedulesData || []).filter(e => {
@@ -198,8 +270,6 @@ const AssetPage: React.FC = () => {
                    (foundTickerClean && (eTkClean === foundTickerClean || eIsinClean === foundTickerClean)) ||
                    (foundIsinClean && (eTkClean === foundIsinClean || eIsinClean === foundIsinClean));
           });
-          assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
-          setPaymentEvents(assetEvents);
 
           // 4. Documentos B3
           const assetDocs = (docsData || []).filter(d => {
@@ -213,23 +283,14 @@ const AssetPage: React.FC = () => {
                    (foundTickerClean && (dTkClean === foundTickerClean || dIsinClean === foundTickerClean)) ||
                    (foundIsinClean && (dTkClean === foundIsinClean || dIsinClean === foundIsinClean));
           });
-          assetDocs.sort((a, b) => {
-            const da = (a.data_entrega || a.data_referencia || '').trim();
-            const db = (b.data_entrega || b.data_referencia || '').trim();
-            return db.localeCompare(da);
-          });
-          setDocuments(assetDocs);
 
-          // SEO dinâmico por ativo
-          const tipoStr = found.tipo || 'Título';
-          const emissorStr = found.issuer ? `(${found.issuer})` : '';
-          document.title = `${tipoStr} ${found.ticker} ${emissorStr} — Taxas, Spread e Rating | FIXDATA`;
-          
-          const metaDesc = document.querySelector('meta[name="description"]');
-          const descText = `Análise de ${tipoStr} ${found.ticker} emitida por ${found.issuer || 'Emissor'}. Indexador: ${found.indexador || '-'}, Vencimento: ${found.vencimento || '-'}, Rating: ${found.rating || '-'}. Dados de mercado no FIXDATA.`;
-          if (metaDesc) {
-            metaDesc.setAttribute('content', descText);
-          }
+          applyLoadedData({
+            asset: found,
+            prices: assetPrices,
+            emitter: matched,
+            paymentEvents: assetEvents,
+            documents: assetDocs
+          });
         }
 
         const saved = localStorage.getItem('watchlist');

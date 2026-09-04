@@ -124,10 +124,12 @@ def get_prices_map():
         p_map = {}
         for ticker, group in df_p.groupby('ticker'):
             t_upper = str(ticker).strip().upper()
-            recent = group.tail(5).to_dict(orient='records')
+            all_records = group.to_dict(orient='records')
+            recent = all_records[-5:] if len(all_records) > 5 else all_records
             p_map[t_upper] = {
                 'total_trades': len(group),
-                'recent': recent
+                'recent': recent,
+                'all': all_records
             }
         return p_map
     except Exception as err:
@@ -154,9 +156,32 @@ def get_payments_map():
         print(f"Erro ao carregar mapa de pagamentos: {err}")
         return {}
 
+def get_docs_map():
+    docs_file = "public/data/cricra_documents.csv"
+    if not os.path.exists(docs_file):
+        docs_file = "/home/home/airflow/src/cp_site/data/cricra_documents.csv"
+    if not os.path.exists(docs_file):
+        return {}
+    try:
+        df_docs = pd.read_csv(docs_file)
+        docs_map = {}
+        for ticker, group in df_docs.groupby('ticker'):
+            t_upper = str(ticker).strip().upper()
+            docs_map[t_upper] = group.to_dict(orient='records')
+        if 'isin' in df_docs.columns:
+            for isin, group in df_docs.groupby('isin'):
+                i_upper = str(isin).strip().upper()
+                if i_upper and i_upper not in ('NAN', 'NONE', '', '-') and i_upper not in docs_map:
+                    docs_map[i_upper] = group.to_dict(orient='records')
+        return docs_map
+    except Exception as err:
+        print(f"Erro ao carregar mapa de documentos: {err}")
+        return {}
+
 EMITTERS_MAP = get_emitters_map()
 PRICES_MAP = get_prices_map()
 PAYMENTS_MAP = get_payments_map()
+DOCS_MAP = get_docs_map()
 
 def generate_asset_html(row):
     ticker = str(row.get('ticker', '')).strip()
@@ -282,6 +307,41 @@ def generate_asset_html(row):
         "category": tipo,
         "provider": provider_data
     }, ensure_ascii=False)
+
+    # ─── PAYLOAD ESTRUTURADO PARA HYDRATION INSTANTÂNEO & ROTA SPA ────
+    asset_dict = {}
+    for k, v in row.items():
+        if pd.isna(v) or v is None:
+            asset_dict[k] = None
+        elif isinstance(v, (int, float, str, bool)):
+            asset_dict[k] = v
+        else:
+            asset_dict[k] = str(v)
+
+    price_info = PRICES_MAP.get(ticker.upper()) or {}
+    asset_prices = price_info.get('all', [])
+    if not asset_prices and isin and isin != '-':
+        asset_prices = (PRICES_MAP.get(isin.upper()) or {}).get('all', [])
+
+    payment_info = PAYMENTS_MAP.get(ticker.upper()) or {}
+    asset_payments = payment_info.get('events', [])
+    if not asset_payments and isin and isin != '-':
+        asset_payments = (PAYMENTS_MAP.get(isin.upper()) or {}).get('events', [])
+
+    asset_docs = DOCS_MAP.get(ticker.upper(), [])
+    if not asset_docs and isin and isin != '-':
+        asset_docs = DOCS_MAP.get(isin.upper(), [])
+
+    payload = {
+        "asset": asset_dict,
+        "prices": asset_prices,
+        "emitter": emitter_info,
+        "paymentEvents": asset_payments,
+        "documents": asset_docs
+    }
+
+    payload_json = json.dumps(payload, ensure_ascii=False, default=str)
+    payload_json_safe = payload_json.replace("</script>", "<\\/script>")
 
     emitter_section_html = ""
     if emitter_info:
@@ -536,21 +596,56 @@ def generate_asset_html(row):
       </main>
     </div>
     
+    <script id="__PRELOADED_ASSET__" type="application/json">
+{payload_json_safe}
+    </script>
     {BUNDLE_SCRIPT_TAG}
   </body>
 </html>"""
-    return ticker, html_content
+    return ticker, html_content, payload
+
+ASSETS_JSON_DIR = "public/data/assets"
+DOCS_ASSETS_JSON_DIR = "docs/data/assets"
 
 def write_asset(args):
-    ticker, html_content = args
-    if not ticker or not html_content:
+    ticker, html_content, payload = args
+    if not ticker:
         return
-    for out_dir in (OUTPUT_DIR, DOCS_OUTPUT_DIR):
-        target_dir = os.path.join(out_dir, ticker)
-        os.makedirs(target_dir, exist_ok=True)
-        file_path = os.path.join(target_dir, "index.html")
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(html_content)
+
+    # 1. Grava páginas HTML pré-renderizadas
+    if html_content:
+        for out_dir in (OUTPUT_DIR, DOCS_OUTPUT_DIR):
+            target_dir = os.path.join(out_dir, ticker)
+            os.makedirs(target_dir, exist_ok=True)
+            file_path = os.path.join(target_dir, "index.html")
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(html_content)
+
+    # 2. Grava JSON individual do ativo para rotas SPA instantâneas
+    if payload:
+        clean_ticker = ticker.replace(' ', '').replace('-', '').upper()
+        isin = str(payload.get('asset', {}).get('isin', '')).strip().upper()
+        payload_str = json.dumps(payload, ensure_ascii=False, default=str)
+
+        def safe_write_json(base_dir, name):
+            if not name or name in ('-', 'NONE', 'NAN'):
+                return
+            full_path = os.path.join(base_dir, f"{name}.json")
+            os.makedirs(os.path.dirname(full_path), exist_ok=True)
+            with open(full_path, "w", encoding="utf-8") as f:
+                f.write(payload_str)
+            if '/' in name:
+                safe_name = name.replace('/', '_')
+                safe_path = os.path.join(base_dir, f"{safe_name}.json")
+                with open(safe_path, "w", encoding="utf-8") as f:
+                    f.write(payload_str)
+
+        for d_dir in (ASSETS_JSON_DIR, DOCS_ASSETS_JSON_DIR):
+            safe_write_json(d_dir, ticker)
+            if clean_ticker and clean_ticker != ticker:
+                safe_write_json(d_dir, clean_ticker)
+            if isin and isin != '-' and len(isin) == 12:
+                safe_write_json(d_dir, isin)
 
 def main():
     print("Iniciando pré-renderização estática de HTMLs para SEO...")
