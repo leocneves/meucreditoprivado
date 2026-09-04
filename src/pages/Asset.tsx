@@ -427,12 +427,16 @@ const AssetPage: React.FC = () => {
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-1.5 text-slate-600 mb-1">
               <Layers size={16} />
-              <span className="text-[11px] font-bold text-slate-400 uppercase">PU Par</span>
+              <span className="text-[11px] font-bold text-slate-400 uppercase">
+                {asset.pu_mercado ? 'PU Negócio' : 'PU Par'}
+              </span>
             </div>
             <p className="text-base font-extrabold text-slate-900">
-              {formatPUDisplay(asset.pu || asset.pu_emissao)}
+              {formatPUDisplay(asset.pu_mercado || asset.pu || asset.pu_emissao)}
             </p>
-            <span className="text-[11px] text-slate-400 font-medium">Por Título</span>
+            <span className="text-[11px] text-slate-400 font-medium">
+              {asset.pu_mercado ? 'Mercado B3' : 'Por Título'}
+            </span>
           </div>
         </div>
       </div>

@@ -179,7 +179,8 @@ def generate_asset_html(row):
     if indexador.lower() in ('nan', 'none', ''):
         indexador = '-'
 
-    taxa = str(row.get('taxa_emissao', '')).strip()
+    taxa_val = row.get('taxa_mercado') or row.get('taxa_ativo') or row.get('taxa_emissao', '')
+    taxa = str(taxa_val).strip()
     if taxa.lower() in ('nan', 'none', ''):
         taxa = '-'
     else:
@@ -230,7 +231,9 @@ def generate_asset_html(row):
     if serie.lower() in ('nan', 'none', ''):
         serie = '-'
 
-    pu = str(row.get('pu', '')).strip()
+    pu_val = row.get('pu_mercado') or row.get('pu') or row.get('pu_emissao', '')
+    pu = str(pu_val).strip()
+    pu_label = 'PU Negócio' if (row.get('pu_mercado') and str(row.get('pu_mercado')).strip() not in ('nan', 'none', '')) else 'PU Par'
     if pu.lower() in ('nan', 'none', ''):
         pu = '-'
     else:
@@ -517,7 +520,7 @@ def generate_asset_html(row):
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">{duration}</strong></div>
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">{spread}</strong></div>
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">{emissao}ª / {serie}ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Par</span><strong class="text-slate-800">{pu}</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">{pu_label}</span><strong class="text-slate-800">{pu}</strong></div>
           </div>
         </div>
 

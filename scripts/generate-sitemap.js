@@ -44,6 +44,7 @@ function generateSitemap(assets) {
 
   // páginas estáticas
   urls.push({ loc: `${BASE_URL}/`, priority: "1.0", changefreq: "daily" });
+  urls.push({ loc: `${BASE_URL}/negocios`, priority: "0.9", changefreq: "daily" });
   urls.push({ loc: `${BASE_URL}/charts`, priority: "0.9", changefreq: "daily" });
   urls.push({ loc: `${BASE_URL}/primary`, priority: "0.9", changefreq: "daily" });
 

@@ -24,6 +24,7 @@ urls = []
 # Páginas fixas
 static_pages = [
     "/",
+    "/negocios",
     "/charts",
     "/ntnb",
     "/primary",
