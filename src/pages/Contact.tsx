@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Linkedin, Coffee, Copy, Check, ExternalLink, Sparkles, QrCode, MessageSquare } from 'lucide-react';
+import pixImg from '../assets/pix.jpeg';
+import bitcoinImg from '../assets/bitcoin.jpeg';
 
 const Contact: React.FC = () => {
   const [copiedPix, setCopiedPix] = useState(false);
@@ -118,7 +120,7 @@ const Contact: React.FC = () => {
               {/* PIX QR Image */}
               <div className="flex justify-center my-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                 <img
-                  src="/pix.jpeg"
+                  src={pixImg}
                   alt="QR Code PIX doação Itaú - Leonardo Contador Neves"
                   className="w-48 h-48 object-contain rounded-xl shadow-sm border border-white"
                 />
@@ -181,7 +183,7 @@ const Contact: React.FC = () => {
               {/* Bitcoin QR Image */}
               <div className="flex justify-center my-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                 <img
-                  src="/bitcoin.jpeg"
+                  src={bitcoinImg}
                   alt="QR Code Bitcoin carteira doação - Leonardo Contador Neves"
                   className="w-48 h-48 object-contain rounded-xl shadow-sm border border-white"
                 />

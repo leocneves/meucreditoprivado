@@ -28,12 +28,17 @@ import {
   Eye,
   AlertCircle,
   Filter,
-  Info
+  Info,
+  Plus,
+  Minus,
+  X,
+  Check
 } from 'lucide-react';
 import {
   ResponsiveContainer,
   AreaChart,
   Area,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -227,7 +232,8 @@ const CustomChartTooltip: React.FC<{
   label?: string;
   metric: 'price' | 'yield' | 'spread' | 'volume';
   indexador?: string;
-}> = ({ active, payload, metric, indexador }) => {
+  movingAveragePeriod?: number;
+}> = ({ active, payload, metric, indexador, movingAveragePeriod }) => {
   if (!active || !payload || !payload.length) return null;
   const data = payload[0].payload;
   const idx = indexador || data.indexador;
@@ -278,6 +284,20 @@ const CustomChartTooltip: React.FC<{
           <strong className="text-amber-300 font-mono">{Number(data.trades || 0).toLocaleString('pt-BR')}</strong>
         </div>
 
+        {movingAveragePeriod && movingAveragePeriod > 0 && data.maValue !== undefined && data.maValue !== null && (
+          <div className="flex items-center justify-between text-amber-300 pt-1.5 border-t border-slate-700/80">
+            <span className="font-bold flex items-center gap-1">
+              <Sparkles size={11} className="text-amber-400" /> MM ({movingAveragePeriod}D):
+            </span>
+            <strong className="font-mono text-amber-300 font-black">
+              {metric === 'price' ? formatPU(data.maValue) :
+               metric === 'yield' ? `${Number(data.maValue).toFixed(2)}%` :
+               metric === 'spread' ? `${Number(data.maValue) > 0 ? `+${Number(data.maValue).toFixed(1)}` : Number(data.maValue).toFixed(1)} bps` :
+               formatMoney(data.maValue * 1e6)}
+            </strong>
+          </div>
+        )}
+
         {idx && (
           <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800">
             <span>Indexador:</span>
@@ -299,8 +319,8 @@ const Trades: React.FC = () => {
   // Período do Box de Destaques
   const [kpiPeriod, setKpiPeriod] = useState<'pregao' | '30d' | 'ytd'>('pregao');
 
-  // Filtros da Tabela e Download
-  const [periodFilter, setPeriodFilter] = useState<'ultimo' | '7d' | '30d' | 'ytd'>('ultimo');
+  // Filtros Unificados da Tabela, Gráfico e Download (Default de 7 dias)
+  const [periodFilter, setPeriodFilter] = useState<'ultimo' | '7d' | '15d' | '30d' | 'ytd'>('7d');
   const [instrumentFilter, setInstrumentFilter] = useState<string>('TODOS');
   const [indexerFilter, setIndexerFilter] = useState<string>('TODOS');
   const [sectorFilter, setSectorFilter] = useState<string>('TODOS');
@@ -309,12 +329,17 @@ const Trades: React.FC = () => {
   const [taxFreeFilter, setTaxFreeFilter] = useState<string>('TODOS');
   const [search, setSearch] = useState('');
 
-  // Estados do Gráfico de Preços nos N Dias
-  const [chartPeriod, setChartPeriod] = useState<'7d' | '15d' | '30d' | 'ytd'>('30d');
-  const [chartMetric, setChartMetric] = useState<'price' | 'yield' | 'spread' | 'volume'>('price');
+  // Filtro Consolidado de Ativos (Inclusão Múltipla & Exclusão de Distorções / Outliers)
+  const [includedTickers, setIncludedTickers] = useState<string[]>([]);
+  const [excludedTickers, setExcludedTickers] = useState<string[]>([]);
+  const [tickerInputValue, setTickerInputValue] = useState<string>('');
+
+  // Estados do Gráfico (Defaults: Mercado Geral em Volume)
+  const [chartMetric, setChartMetric] = useState<'price' | 'yield' | 'spread' | 'volume'>('volume');
   const [chartIndexer, setChartIndexer] = useState<'TODOS' | 'IPCA' | 'CDI+' | 'CDI%' | 'PRE'>('TODOS');
-  const [chartTarget, setChartTarget] = useState<'ticker' | 'market'>('ticker');
+  const [chartTarget, setChartTarget] = useState<'ticker' | 'market'>('market');
   const [selectedTicker, setSelectedTicker] = useState<string>('RENTQ8');
+  const [movingAveragePeriod, setMovingAveragePeriod] = useState<0 | 3 | 5>(0);
 
   // Séries YTD de Mercado e Ativos sem Taxa
   const [marketSeries, setMarketSeries] = useState<B3MarketSeriesPayload | null>(null);
@@ -438,6 +463,36 @@ const Trades: React.FC = () => {
       .map(entry => entry[0]);
   }, [trades]);
 
+  /* ================= HANDLERS DE INCLUSÃO/EXCLUSÃO DE ATIVOS ================= */
+
+  const handleAddIncludedTicker = (val: string) => {
+    const clean = val.trim().toUpperCase();
+    if (!clean) return;
+    if (!includedTickers.includes(clean)) {
+      setIncludedTickers(prev => [...prev, clean]);
+    }
+    setExcludedTickers(prev => prev.filter(t => t !== clean));
+    setTickerInputValue('');
+  };
+
+  const handleRemoveIncludedTicker = (tk: string) => {
+    setIncludedTickers(prev => prev.filter(t => t !== tk));
+  };
+
+  const handleAddExcludedTicker = (val: string) => {
+    const clean = val.trim().toUpperCase();
+    if (!clean) return;
+    if (!excludedTickers.includes(clean)) {
+      setExcludedTickers(prev => [...prev, clean]);
+    }
+    setIncludedTickers(prev => prev.filter(t => t !== clean));
+    setTickerInputValue('');
+  };
+
+  const handleRemoveExcludedTicker = (tk: string) => {
+    setExcludedTickers(prev => prev.filter(t => t !== tk));
+  };
+
   /* ================= FILTRAGEM REATIVA DA BASE DE TRADES ================= */
 
   const filteredTrades = useMemo(() => {
@@ -450,6 +505,10 @@ const Trades: React.FC = () => {
         const last7 = availableDates.slice(0, 5); // 5 pregões = ~7 dias corridos
         return last7[last7.length - 1] || latestDate;
       }
+      if (periodFilter === '15d') {
+        const last15 = availableDates.slice(0, 11); // 11 pregões = ~15 dias corridos
+        return last15[last15.length - 1] || latestDate;
+      }
       if (periodFilter === '30d') {
         const last30 = availableDates.slice(0, 22);
         return last30[last30.length - 1] || availableDates[availableDates.length - 1] || latestDate;
@@ -460,6 +519,18 @@ const Trades: React.FC = () => {
     const cleanSearch = search.trim().toLowerCase();
 
     return trades.filter(t => {
+      const tkUpper = (t.ticker || '').trim().toUpperCase();
+
+      // 0. Exclusão de Outliers / Distorções
+      if (excludedTickers.length > 0 && excludedTickers.includes(tkUpper)) {
+        return false;
+      }
+
+      // 0.1 Inclusão Específica de Ativos
+      if (includedTickers.length > 0 && !includedTickers.includes(tkUpper)) {
+        return false;
+      }
+
       // 1. Filtro de Período
       if (periodFilter === 'ultimo') {
         if (t.data_negocio !== latestDate) return false;
@@ -519,7 +590,7 @@ const Trades: React.FC = () => {
 
       return true;
     });
-  }, [trades, periodFilter, latestDate, availableDates, instrumentFilter, indexerFilter, sectorFilter, debtorFilter, ratingFilter, taxFreeFilter, search]);
+  }, [trades, periodFilter, latestDate, availableDates, instrumentFilter, indexerFilter, sectorFilter, debtorFilter, ratingFilter, taxFreeFilter, search, includedTickers, excludedTickers]);
 
   // Lista de Tickers distintos para o Seletor do Gráfico (alimentada pelos filtros reativos)
   const availableTickers = useMemo(() => {
@@ -743,55 +814,46 @@ const Trades: React.FC = () => {
     };
   }, [kpis, kpiPeriod, trades, latestDate]);
 
-  /* ================= DADOS DO GRÁFICO DE PREÇOS NOS N DIAS ================= */
+  /* ================= DADOS DO GRÁFICO DE PREÇOS & LIQUIDEZ (REATIVO AOS FILTROS) ================= */
 
   const chartData = useMemo(() => {
-    // Verificamos se há filtros granulares ativos (setor, devedor, rating, incentivada, tipo de instrumento, busca)
+    // Verificamos se há filtros granulares ativos
     const hasGranularFilters = sectorFilter !== 'TODOS' || 
                                debtorFilter !== 'TODOS' || 
                                ratingFilter !== 'TODOS' || 
                                taxFreeFilter !== 'TODOS' || 
                                instrumentFilter !== 'TODOS' || 
+                               includedTickers.length > 0 ||
+                               excludedTickers.length > 0 ||
                                Boolean(search.trim());
 
-    // Modo 1: Média Geral do Mercado ou Segmento Filtrado (Setor / Devedor / etc.)
+    // Modo 1: Média Geral do Mercado ou Universo Filtrado
     if (chartTarget === 'market') {
-      const activeIndexer = (chartMetric === 'spread' && chartIndexer === 'TODOS') ? 'IPCA' : chartIndexer;
+      const activeIndexer = (chartMetric === 'spread' && (indexerFilter === 'TODOS' || chartIndexer === 'TODOS')) ? 'IPCA' : (indexerFilter !== 'TODOS' ? indexerFilter : chartIndexer);
 
-      // Se NÃO houver filtros granulares e temos as séries pré-calculadas de mercado YTD, usamos direto para performance máxima!
-      if (!hasGranularFilters && marketSeries?.series?.[activeIndexer]?.length) {
-        const seriesList = marketSeries.series[activeIndexer];
-        let points = seriesList;
-        if (chartPeriod === '7d') points = seriesList.slice(-5);
-        else if (chartPeriod === '15d') points = seriesList.slice(-11);
-        else if (chartPeriod === '30d') points = seriesList.slice(-25);
-        // if chartPeriod === 'ytd': usa todos os pregões do ano
-
-        return points.map(p => ({
-          date: p.date,
-          datePretty: p.datePretty,
-          price: p.price,
-          yield: p.yield,
-          spread: p.spread_bps,
-          volume: p.volume,
-          volumeRaw: p.volumeRaw,
-          trades: p.trades,
-          indexador: activeIndexer
-        }));
-      }
-
-      // Se HÁ filtros granulares ativos OU marketSeries ainda não carregou:
-      // Agregamos dinamicamente os trades que atendem a todos os filtros!
       if (!trades.length) return [];
-      const numDays = chartPeriod === '7d' ? 5 : chartPeriod === '15d' ? 11 : chartPeriod === '30d' ? 25 : 999;
-      const targetDates = chartPeriod === 'ytd' ? availableDates : availableDates.slice(0, numDays);
+      const numDays = periodFilter === 'ultimo' ? 1 : periodFilter === '7d' ? 5 : periodFilter === '15d' ? 11 : periodFilter === '30d' ? 25 : 999;
+      const targetDates = periodFilter === 'ytd' ? availableDates : availableDates.slice(0, numDays);
       const minDate = targetDates[targetDates.length - 1] || targetDates[0] || '2026-01-01';
 
       const cleanSearch = search.trim().toLowerCase();
       const matchingTradesForChart = trades.filter(t => {
-        if (chartPeriod !== 'ytd' && t.data_negocio < minDate) return false;
+        const tkUpper = (t.ticker || '').trim().toUpperCase();
 
-        // Instrumento
+        // 0. Exclusão de Outliers / Distorções
+        if (excludedTickers.length > 0 && excludedTickers.includes(tkUpper)) return false;
+
+        // 0.1 Inclusão Específica de Ativos
+        if (includedTickers.length > 0 && !includedTickers.includes(tkUpper)) return false;
+
+        // 1. Período
+        if (periodFilter === 'ultimo') {
+          if (t.data_negocio !== latestDate) return false;
+        } else if (periodFilter !== 'ytd' && t.data_negocio < minDate) {
+          return false;
+        }
+
+        // 2. Instrumento
         if (instrumentFilter !== 'TODOS') {
           const tipoUpper = (t.tipo || '').toUpperCase();
           if (instrumentFilter === 'DEB' && !tipoUpper.includes('DEB')) return false;
@@ -799,7 +861,7 @@ const Trades: React.FC = () => {
           if (instrumentFilter === 'CRA' && !tipoUpper.includes('CRA')) return false;
         }
 
-        // Indexador selecionado no gráfico ou filtro
+        // 3. Indexador
         const targetIdx = activeIndexer !== 'TODOS' ? activeIndexer : (indexerFilter !== 'TODOS' ? indexerFilter : 'TODOS');
         if (targetIdx !== 'TODOS') {
           const idx = (t.indexador || '').toUpperCase();
@@ -809,17 +871,17 @@ const Trades: React.FC = () => {
           if ((targetIdx === 'DI%' || targetIdx === 'CDI%') && !idx.includes('DI%') && !idx.includes('%CDI')) return false;
         }
 
-        // Setor
+        // 4. Setor
         if (sectorFilter !== 'TODOS') {
           if ((t.setor || '').trim().toUpperCase() !== sectorFilter.toUpperCase()) return false;
         }
 
-        // Devedor
+        // 5. Devedor
         if (debtorFilter !== 'TODOS') {
           if ((t.devedor || '').trim().toUpperCase() !== debtorFilter.toUpperCase()) return false;
         }
 
-        // Rating
+        // 6. Rating
         if (ratingFilter !== 'TODOS') {
           const r = (t.rating || '').toUpperCase();
           if (ratingFilter === 'AAA' && !r.includes('AAA')) return false;
@@ -827,11 +889,11 @@ const Trades: React.FC = () => {
           if (ratingFilter === 'OUTROS' && (r.includes('AAA') || r.includes('AA'))) return false;
         }
 
-        // Incentivada
+        // 7. Incentivada
         if (taxFreeFilter === 'SIM' && t.incentivada !== 'Sim') return false;
         if (taxFreeFilter === 'NAO' && t.incentivada === 'Sim') return false;
 
-        // Busca
+        // 8. Busca
         if (cleanSearch) {
           const tk = (t.ticker || '').toLowerCase();
           const dev = (t.devedor || '').toLowerCase();
@@ -906,7 +968,7 @@ const Trades: React.FC = () => {
         dayMap.set(d, entry);
       });
 
-      return Array.from(dayMap.values())
+      const rawPoints = Array.from(dayMap.values())
         .sort((a, b) => a.date.localeCompare(b.date))
         .map(entry => {
           const parts = entry.date.split('-');
@@ -922,18 +984,37 @@ const Trades: React.FC = () => {
             indexador: activeIndexer
           };
         });
+
+      // Aplicação da Média Móvel (MM)
+      return rawPoints.map((p, index) => {
+        if (movingAveragePeriod <= 0) {
+          return { ...p, maValue: null };
+        }
+        const windowStart = Math.max(0, index - movingAveragePeriod + 1);
+        const slice = rawPoints.slice(windowStart, index + 1);
+        const vals = slice
+          .map(pt => pt[chartMetric])
+          .filter((val): val is number => val !== null && val !== undefined && !isNaN(val) && (chartMetric === 'volume' ? val >= 0 : val > 0));
+        const ma = vals.length > 0 ? Number((vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2)) : null;
+        return { ...p, maValue: ma };
+      });
     }
 
     // Modo 2: Ativo Específico Selecionado
     if (!trades.length) return [];
-    const tkUpper = selectedTicker.trim().toUpperCase();
-    const numDays = chartPeriod === '7d' ? 5 : chartPeriod === '15d' ? 11 : chartPeriod === '30d' ? 25 : 999;
-    const targetDates = chartPeriod === 'ytd' ? availableDates : availableDates.slice(0, numDays);
+    const targetTicker = (includedTickers.length === 1 ? includedTickers[0] : selectedTicker).trim().toUpperCase();
+    const numDays = periodFilter === 'ultimo' ? 1 : periodFilter === '7d' ? 5 : periodFilter === '15d' ? 11 : periodFilter === '30d' ? 25 : 999;
+    const targetDates = periodFilter === 'ytd' ? availableDates : availableDates.slice(0, numDays);
     const minDate = targetDates[targetDates.length - 1] || targetDates[0];
 
-    const assetTrades = trades.filter(t => (t.ticker || '').trim().toUpperCase() === tkUpper && (chartPeriod === 'ytd' || t.data_negocio >= minDate));
+    const assetTrades = trades.filter(t => {
+      if ((t.ticker || '').trim().toUpperCase() !== targetTicker) return false;
+      if (periodFilter === 'ultimo') return t.data_negocio === latestDate;
+      if (periodFilter !== 'ytd' && t.data_negocio < minDate) return false;
+      return true;
+    });
 
-    return assetTrades
+    const rawPoints = assetTrades
       .sort((a, b) => a.data_negocio.localeCompare(b.data_negocio))
       .map(t => {
         const parts = t.data_negocio.split('-');
@@ -947,7 +1028,6 @@ const Trades: React.FC = () => {
         const trd = Number(t.qtd_negocios) || 0;
         const qty = Number(t.quantidade_negociada) || 0;
 
-        // Cálculo de spread over para o papel selecionado
         let spreadBps: number | null = null;
         const idx = (t.indexador || '').toUpperCase();
         if (tx > 0) {
@@ -982,7 +1062,21 @@ const Trades: React.FC = () => {
           rating: t.rating
         };
       });
-  }, [trades, selectedTicker, chartPeriod, chartTarget, chartMetric, chartIndexer, marketSeries, availableDates, sectorFilter, debtorFilter, ratingFilter, taxFreeFilter, instrumentFilter, indexerFilter, search]);
+
+    // Aplicação da Média Móvel (MM)
+    return rawPoints.map((p, index) => {
+      if (movingAveragePeriod <= 0) {
+        return { ...p, maValue: null };
+      }
+      const windowStart = Math.max(0, index - movingAveragePeriod + 1);
+      const slice = rawPoints.slice(windowStart, index + 1);
+      const vals = slice
+        .map(pt => pt[chartMetric])
+        .filter((val): val is number => val !== null && val !== undefined && !isNaN(val) && (chartMetric === 'volume' ? val >= 0 : val > 0));
+      const ma = vals.length > 0 ? Number((vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2)) : null;
+      return { ...p, maValue: ma };
+    });
+  }, [trades, selectedTicker, includedTickers, excludedTickers, periodFilter, chartTarget, chartMetric, chartIndexer, movingAveragePeriod, availableDates, sectorFilter, debtorFilter, ratingFilter, taxFreeFilter, instrumentFilter, indexerFilter, search]);
 
   // Resumo estatístico do período para o cabeçalho do gráfico
   const chartSummary = useMemo(() => {
@@ -1620,6 +1714,16 @@ const Trades: React.FC = () => {
                 Últimos 7 Dias
               </button>
               <button
+                onClick={() => setPeriodFilter('15d')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  periodFilter === '15d'
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                15 Dias
+              </button>
+              <button
                 onClick={() => setPeriodFilter('30d')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   periodFilter === '30d'
@@ -1631,12 +1735,13 @@ const Trades: React.FC = () => {
               </button>
               <button
                 onClick={() => setPeriodFilter('ytd')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
                   periodFilter === 'ytd'
                     ? 'bg-white text-blue-600 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
+                <Sparkles size={11} className={periodFilter === 'ytd' ? 'text-amber-500' : 'text-slate-400'} />
                 Ano 2026 (YTD)
               </button>
             </div>
@@ -1652,6 +1757,119 @@ const Trades: React.FC = () => {
               Exportar CSV ({sortedTrades.length.toLocaleString('pt-BR')})
             </button>
           </div>
+        </div>
+
+        {/* ================= FILTRO CONSOLIDADO DE ATIVOS & GESTÃO DE DISTORÇÕES ================= */}
+        <div className="bg-slate-50/90 p-3.5 rounded-2xl border border-slate-200/80 space-y-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="p-1 bg-blue-100 text-blue-700 rounded-lg">
+                <Tag size={13} />
+              </span>
+              <span className="text-xs font-bold text-slate-800">
+                Filtro de Ativos & Gestão de Outliers:
+              </span>
+              <span className="text-[11px] text-slate-500 hidden sm:inline">
+                Adicione múltiplos papéis para ver juntos ou exclua negócios atípicos que distorcem as médias
+              </span>
+            </div>
+
+            {(includedTickers.length > 0 || excludedTickers.length > 0) && (
+              <button
+                onClick={() => {
+                  setIncludedTickers([]);
+                  setExcludedTickers([]);
+                }}
+                className="text-[11px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 self-start sm:self-auto"
+              >
+                <RefreshCw size={11} /> Limpar Seleção de Ativos
+              </button>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Campo para digitar ou escolher Ticker */}
+            <div className="relative flex-1 min-w-[200px] max-w-xs">
+              <input
+                type="text"
+                list="b3-tickers-list"
+                value={tickerInputValue}
+                onChange={e => setTickerInputValue(e.target.value.toUpperCase())}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddIncludedTicker(tickerInputValue);
+                  }
+                }}
+                placeholder="Ex: RENTQ8, VALE39..."
+                className="w-full pl-3 pr-2 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase shadow-xs"
+              />
+              <datalist id="b3-tickers-list">
+                {availableTickers.slice(0, 150).map(t => (
+                  <option key={t.ticker} value={t.ticker}>{t.ticker} — {t.devedor || t.tipo}</option>
+                ))}
+              </datalist>
+            </div>
+
+            {/* Botão Incluir Ativo */}
+            <button
+              onClick={() => handleAddIncludedTicker(tickerInputValue)}
+              disabled={!tickerInputValue.trim()}
+              className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-xs font-bold rounded-xl transition-all shadow-xs"
+              title="Adicionar papel para visualizar junto no gráfico e tabela"
+            >
+              <Plus size={13} /> Adicionar Ativo
+            </button>
+
+            {/* Botão Excluir Distorção / Outlier */}
+            <button
+              onClick={() => handleAddExcludedTicker(tickerInputValue)}
+              disabled={!tickerInputValue.trim()}
+              className="flex items-center gap-1 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-40 text-white text-xs font-bold rounded-xl transition-all shadow-xs"
+              title="Excluir papel das agregações de volume e médias de mercado"
+            >
+              <Minus size={13} /> Excluir Outlier / Distorção
+            </button>
+          </div>
+
+          {/* Tags de Ativos Selecionados */}
+          {(includedTickers.length > 0 || excludedTickers.length > 0) && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-200/60">
+              {includedTickers.map(tk => (
+                <span
+                  key={`inc-${tk}`}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-bold font-mono bg-blue-100 text-blue-800 border border-blue-200"
+                >
+                  <Check size={11} className="text-blue-600" />
+                  <span>{tk}</span>
+                  <button
+                    onClick={() => handleRemoveIncludedTicker(tk)}
+                    className="ml-0.5 text-blue-500 hover:text-blue-900 rounded hover:bg-blue-200/60"
+                    title={`Remover filtro de ${tk}`}
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              ))}
+
+              {excludedTickers.map(tk => (
+                <span
+                  key={`exc-${tk}`}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-bold font-mono bg-rose-100 text-rose-800 border border-rose-200"
+                >
+                  <AlertCircle size={11} className="text-rose-600" />
+                  <span>Excluído: {tk}</span>
+                  <button
+                    onClick={() => handleRemoveExcludedTicker(tk)}
+                    className="ml-0.5 text-rose-500 hover:text-rose-900 rounded hover:bg-rose-200/60"
+                    title={`Restaurar ${tk}`}
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Linha de Sub-Filtros: Instrumento, Indexador, Setor, Devedor, Rating, Incentivada */}
@@ -1681,7 +1899,10 @@ const Trades: React.FC = () => {
             </label>
             <select
               value={indexerFilter}
-              onChange={e => setIndexerFilter(e.target.value)}
+              onChange={e => {
+                setIndexerFilter(e.target.value);
+                setChartIndexer(e.target.value as any);
+              }}
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="TODOS">Todos Indexadores</option>
@@ -1766,20 +1987,29 @@ const Trades: React.FC = () => {
             <Filter size={13} className="text-blue-600" />
             <span>
               Filtros ativos: <strong>{sortedTrades.length.toLocaleString('pt-BR')}</strong> negócios aplicados ao <strong>Gráfico</strong>, à <strong>Tabela</strong> e ao <strong>Download CSV</strong>
+              {excludedTickers.length > 0 && (
+                <span className="text-rose-600 font-bold ml-1.5">
+                  ({excludedTickers.length} outlier{excludedTickers.length > 1 ? 's' : ''} excluído{excludedTickers.length > 1 ? 's' : ''})
+                </span>
+              )}
             </span>
           </div>
 
-          {(instrumentFilter !== 'TODOS' || indexerFilter !== 'TODOS' || sectorFilter !== 'TODOS' || debtorFilter !== 'TODOS' || ratingFilter !== 'TODOS' || taxFreeFilter !== 'TODOS' || search || periodFilter !== 'ultimo') && (
+          {(instrumentFilter !== 'TODOS' || indexerFilter !== 'TODOS' || sectorFilter !== 'TODOS' || debtorFilter !== 'TODOS' || ratingFilter !== 'TODOS' || taxFreeFilter !== 'TODOS' || search || periodFilter !== '7d' || includedTickers.length > 0 || excludedTickers.length > 0) && (
             <button
               onClick={() => {
-                setPeriodFilter('ultimo');
+                setPeriodFilter('7d');
                 setInstrumentFilter('TODOS');
                 setIndexerFilter('TODOS');
+                setChartIndexer('TODOS');
                 setSectorFilter('TODOS');
                 setDebtorFilter('TODOS');
                 setRatingFilter('TODOS');
                 setTaxFreeFilter('TODOS');
                 setSearch('');
+                setIncludedTickers([]);
+                setExcludedTickers([]);
+                setTickerInputValue('');
               }}
               className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 self-start sm:self-auto"
             >
@@ -1800,17 +2030,21 @@ const Trades: React.FC = () => {
                 <LineChart size={20} />
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                Evolução de Preços, Taxas & Spread {chartPeriod === 'ytd' ? 'em 2026 (YTD)' : chartPeriod === '7d' ? 'nos 7 Dias' : chartPeriod === '15d' ? 'nos 15 Dias' : 'nos 30 Dias'}
+                Evolução de Preços, Taxas & Spread {periodFilter === 'ytd' ? 'em 2026 (YTD)' : periodFilter === '7d' ? 'nos 7 Dias' : periodFilter === '15d' ? 'nos 15 Dias' : periodFilter === 'ultimo' ? 'no Último Pregão' : 'nos 30 Dias'}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-500">
               {chartTarget === 'ticker' 
-                ? `Curva diária de VWAP, taxa negociada, spread over e volume do ativo ${selectedTicker}` 
-                : 'Média ponderada do mercado secundário por indexador homogêneo e liquidez consolidada'}
+                ? `Curva diária de VWAP, taxa negociada, spread over e volume do ativo ${includedTickers.length === 1 ? includedTickers[0] : selectedTicker}` 
+                : (includedTickers.length > 0
+                  ? `Média consolidada dos ativos selecionados (${includedTickers.join(', ')})${excludedTickers.length ? ` (excluindo distorções: ${excludedTickers.join(', ')})` : ''}`
+                  : (excludedTickers.length
+                    ? `Média ponderada do mercado secundário (excluindo distorções: ${excludedTickers.join(', ')})`
+                    : 'Média ponderada do mercado secundário por indexador homogêneo e liquidez consolidada'))}
             </p>
           </div>
 
-          {/* Controles do Gráfico: Modo Ativo vs Mercado, Período & Métrica */}
+          {/* Controles do Gráfico: Modo Ativo vs Mercado, Média Móvel & Métrica */}
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Toggle Ativo vs Mercado */}
             <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
@@ -1836,45 +2070,53 @@ const Trades: React.FC = () => {
               </button>
             </div>
 
-            {/* Toggle de Período: 7d, 15d, 30d, YTD */}
-            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+            {/* Toggle de Média Móvel */}
+            <div className="inline-flex items-center p-1 bg-amber-50/80 border border-amber-200 rounded-xl">
+              <span className="text-[11px] font-bold text-amber-800 px-2 flex items-center gap-1">
+                <Sparkles size={12} className="text-amber-600" /> Média Móvel:
+              </span>
               <button
-                onClick={() => setChartPeriod('7d')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartPeriod === '7d' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                onClick={() => setMovingAveragePeriod(0)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  movingAveragePeriod === 0
+                    ? 'bg-amber-600 text-white shadow-sm'
+                    : 'text-amber-800 hover:text-amber-950'
                 }`}
               >
-                7 Dias
+                Sem MM
               </button>
               <button
-                onClick={() => setChartPeriod('15d')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartPeriod === '15d' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                onClick={() => setMovingAveragePeriod(3)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  movingAveragePeriod === 3
+                    ? 'bg-amber-600 text-white shadow-sm'
+                    : 'text-amber-800 hover:text-amber-950'
                 }`}
               >
-                15 Dias
+                MM 3D
               </button>
               <button
-                onClick={() => setChartPeriod('30d')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartPeriod === '30d' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                onClick={() => setMovingAveragePeriod(5)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  movingAveragePeriod === 5
+                    ? 'bg-amber-600 text-white shadow-sm'
+                    : 'text-amber-800 hover:text-amber-950'
                 }`}
               >
-                30 Dias
-              </button>
-              <button
-                onClick={() => setChartPeriod('ytd')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
-                  chartPeriod === 'ytd' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Sparkles size={11} className={chartPeriod === 'ytd' ? 'text-amber-300' : 'text-slate-400'} />
-                YTD (2026)
+                MM 5D
               </button>
             </div>
 
-            {/* Toggle de Métrica */}
+            {/* Toggle de Métrica (Volume R$ em destaque como padrão) */}
             <div className="inline-flex p-1 bg-blue-50 border border-blue-200 rounded-xl">
+              <button
+                onClick={() => handleMetricChange('volume')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  chartMetric === 'volume' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
+                }`}
+              >
+                Volume (R$)
+              </button>
               <button
                 onClick={() => handleMetricChange('price')}
                 className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
@@ -1899,14 +2141,6 @@ const Trades: React.FC = () => {
               >
                 Spread Over (bps)
               </button>
-              <button
-                onClick={() => handleMetricChange('volume')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'volume' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Volume (R$)
-              </button>
             </div>
           </div>
         </div>
@@ -1920,7 +2154,10 @@ const Trades: React.FC = () => {
               </span>
 
               <button
-                onClick={() => setChartIndexer('TODOS')}
+                onClick={() => {
+                  setChartIndexer('TODOS');
+                  setIndexerFilter('TODOS');
+                }}
                 disabled={chartMetric === 'spread'}
                 title={chartMetric === 'spread' ? 'Spread over requer um indexador homogêneo específico' : 'Consolidado de todo o mercado'}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
@@ -1937,7 +2174,10 @@ const Trades: React.FC = () => {
               {(['IPCA', 'CDI+', 'CDI%', 'PRE'] as const).map(idx => (
                 <button
                   key={idx}
-                  onClick={() => setChartIndexer(idx)}
+                  onClick={() => {
+                    setChartIndexer(idx);
+                    setIndexerFilter(idx);
+                  }}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
                     chartIndexer === idx
                       ? 'bg-blue-600 text-white shadow-sm'
@@ -1971,8 +2211,13 @@ const Trades: React.FC = () => {
             <div className="flex items-center gap-2 flex-1 max-w-md">
               <span className="text-xs font-bold text-slate-500 whitespace-nowrap">Selecionar Ativo:</span>
               <select
-                value={selectedTicker}
-                onChange={e => setSelectedTicker(e.target.value)}
+                value={includedTickers.length === 1 ? includedTickers[0] : selectedTicker}
+                onChange={e => {
+                  setSelectedTicker(e.target.value);
+                  if (includedTickers.length > 0) {
+                    setIncludedTickers([e.target.value]);
+                  }
+                }}
                 className="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-black text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono shadow-sm"
               >
                 {availableTickers.slice(0, 200).map(t => (
@@ -1989,9 +2234,14 @@ const Trades: React.FC = () => {
               {availableTickers.slice(0, 6).map(t => (
                 <button
                   key={t.ticker}
-                  onClick={() => setSelectedTicker(t.ticker)}
+                  onClick={() => {
+                    setSelectedTicker(t.ticker);
+                    if (includedTickers.length > 0) {
+                      setIncludedTickers([t.ticker]);
+                    }
+                  }}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all ${
-                    selectedTicker === t.ticker
+                    (includedTickers.length === 1 ? includedTickers[0] : selectedTicker) === t.ticker
                       ? 'bg-blue-600 text-white shadow-sm'
                       : 'bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-blue-50'
                   }`}
@@ -2141,13 +2391,26 @@ const Trades: React.FC = () => {
                     return `${val}M`;
                   }}
                 />
-                <RechartsTooltip content={<CustomChartTooltip metric={chartMetric} indexador={chartSummary?.assetMeta?.indexador || chartIndexer} />} />
+                <RechartsTooltip
+                  content={
+                    <CustomChartTooltip
+                      metric={chartMetric}
+                      indexador={chartSummary?.assetMeta?.indexador || chartIndexer}
+                      movingAveragePeriod={movingAveragePeriod}
+                    />
+                  }
+                />
                 <Area
                   type="monotone"
                   dataKey={
                     chartMetric === 'price' ? 'price' :
                     chartMetric === 'yield' ? 'yield' :
                     chartMetric === 'spread' ? 'spread' : 'volume'
+                  }
+                  name={
+                    chartMetric === 'price' ? 'Preço (VWAP)' :
+                    chartMetric === 'yield' ? 'Taxa Média' :
+                    chartMetric === 'spread' ? 'Spread Over' : 'Volume Negociado'
                   }
                   stroke={
                     chartMetric === 'price' ? '#2563eb' :
@@ -2162,11 +2425,22 @@ const Trades: React.FC = () => {
                     chartMetric === 'spread' ? 'colorSpread' : 'colorVolume'
                   })`}
                   dot={{
-                    r: chartPeriod === 'ytd' ? 1.5 : 3,
+                    r: periodFilter === 'ytd' ? 1.5 : 3,
                     fill: chartMetric === 'price' ? '#2563eb' : chartMetric === 'yield' ? '#059669' : chartMetric === 'spread' ? '#d97706' : '#7c3aed'
                   }}
                   activeDot={{ r: 6 }}
                 />
+                {movingAveragePeriod > 0 && (
+                  <Line
+                    type="monotone"
+                    dataKey="maValue"
+                    name={`Média Móvel (${movingAveragePeriod}D)`}
+                    stroke="#f59e0b"
+                    strokeWidth={2.5}
+                    dot={false}
+                    isAnimationActive={true}
+                  />
+                )}
               </AreaChart>
             </ResponsiveContainer>
           </div>
