@@ -1,10 +1,10 @@
 {
-  "atualizado_em": "2026-09-07 04:02:17",
+  "atualizado_em": "2026-09-08 09:01:11",
   "ultimo_pregao": {
     "data": "2026-09-04",
-    "volume_financeiro": 7007925736.879999,
-    "total_trades": 19377,
-    "ativos_negociados": 1695,
+    "volume_financeiro": 6988664884.919998,
+    "total_trades": 19370,
+    "ativos_negociados": 1696,
     "prazo_medio_du": 0.19,
     "top_ativos": [
       {
@@ -100,9 +100,9 @@
     ]
   },
   "ultimos_30_dias": {
-    "volume_financeiro": 130653907540.30002,
-    "total_trades": 532472,
-    "ativos_unicos": 3514,
+    "volume_financeiro": 129567421832.48,
+    "total_trades": 532036,
+    "ativos_unicos": 3515,
     "top_volume": [
       {
         "ticker": "RENTQ8",
@@ -227,18 +227,6 @@
     ],
     "top_trades": [
       {
-        "ticker": "26C3170159",
-        "tipo": "CRI",
-        "devedor": "Allos VI",
-        "indexador": "DI+",
-        "volume_total": 172118468.43,
-        "trades_total": 6637,
-        "titulos_total": 163528,
-        "dias_com_negocio": 30,
-        "vwap": 1064.0296866666665,
-        "taxa_media": 98.135
-      },
-      {
         "ticker": "CRA0240066A",
         "tipo": "CRA",
         "devedor": "CAMIL ALIMENTOS S.A.",
@@ -345,230 +333,242 @@
         "dias_com_negocio": 30,
         "vwap": 955.4344833333333,
         "taxa_media": 9.73343
+      },
+      {
+        "ticker": "CRA0220073P",
+        "tipo": "CRA",
+        "devedor": "MINERVA S.A.",
+        "indexador": "IPCA",
+        "volume_total": 160157809.97,
+        "trades_total": 1957,
+        "titulos_total": 154713,
+        "dias_com_negocio": 30,
+        "vwap": 1027.65653,
+        "taxa_media": 13.531336666666668
       }
     ],
     "distribuicao_instrumento": {
       "CRA": {
-        "volume": 9671713791.3,
-        "trades": 161573,
-        "ativos": 623
+        "volume": 9644270282.63,
+        "trades": 161525,
+        "ativos": 624
       },
       "CRI": {
-        "volume": 23827829760.14,
-        "trades": 150337,
-        "ativos": 1175
+        "volume": 22777881207.51,
+        "trades": 150106,
+        "ativos": 1176
       },
       "Debênture": {
-        "volume": 97154363988.86,
-        "trades": 220562,
-        "ativos": 1716
+        "volume": 97145270342.34,
+        "trades": 220405,
+        "ativos": 1715
       }
     },
     "distribuicao_indexador": {
       "CDI / DI+": {
-        "volume": 56492043351.65,
-        "trades": 134150
+        "volume": 51947511515.91,
+        "trades": 111461
       },
       "IPCA": {
-        "volume": 54671877711.29,
-        "trades": 259626
+        "volume": 50396765219.82,
+        "trades": 244168
       },
       "Outros": {
-        "volume": 14349958994.42,
-        "trades": 76636
+        "volume": 22740617646.59,
+        "trades": 122655
       },
       "Pré-Fixado": {
-        "volume": 5140027482.94,
-        "trades": 62060
+        "volume": 4482527450.16,
+        "trades": 53752
       }
     },
     "timeline": [
       {
         "data_negocio": "2026-07-24",
-        "volume": 3888832337.84,
-        "trades": 15076,
+        "volume": 3888472743.78,
+        "trades": 15065,
         "ativos": 1435
       },
       {
         "data_negocio": "2026-07-27",
-        "volume": 2222767142.5,
-        "trades": 15786,
+        "volume": 2221195478.72,
+        "trades": 15770,
         "ativos": 1366
       },
       {
         "data_negocio": "2026-07-28",
-        "volume": 7024154126.27,
-        "trades": 20590,
+        "volume": 6738751574.58,
+        "trades": 20579,
         "ativos": 1612
       },
       {
         "data_negocio": "2026-07-29",
-        "volume": 4414597982.0,
-        "trades": 18987,
+        "volume": 4297137562.91,
+        "trades": 18966,
         "ativos": 1566
       },
       {
         "data_negocio": "2026-07-30",
-        "volume": 4374253849.82,
-        "trades": 17735,
-        "ativos": 1670
+        "volume": 4373760016.93,
+        "trades": 17733,
+        "ativos": 1671
       },
       {
         "data_negocio": "2026-07-31",
-        "volume": 3754970677.65,
-        "trades": 10312,
-        "ativos": 1339
+        "volume": 3754442006.09,
+        "trades": 10309,
+        "ativos": 1340
       },
       {
         "data_negocio": "2026-08-03",
-        "volume": 3507612504.29,
-        "trades": 20214,
-        "ativos": 1593
+        "volume": 3485500158.59,
+        "trades": 20202,
+        "ativos": 1595
       },
       {
         "data_negocio": "2026-08-04",
-        "volume": 4585091564.83,
-        "trades": 15432,
-        "ativos": 1524
+        "volume": 4498209666.66,
+        "trades": 15422,
+        "ativos": 1525
       },
       {
         "data_negocio": "2026-08-05",
-        "volume": 2856049252.54,
-        "trades": 16511,
-        "ativos": 1578
+        "volume": 2851400251.97,
+        "trades": 16509,
+        "ativos": 1580
       },
       {
         "data_negocio": "2026-08-07",
-        "volume": 2883954839.02,
-        "trades": 15960,
-        "ativos": 1471
+        "volume": 2883726930.46,
+        "trades": 15956,
+        "ativos": 1472
       },
       {
         "data_negocio": "2026-08-10",
-        "volume": 2246713075.35,
-        "trades": 14166,
+        "volume": 2246428097.91,
+        "trades": 14160,
         "ativos": 1460
       },
       {
         "data_negocio": "2026-08-11",
-        "volume": 4104165198.06,
-        "trades": 19918,
-        "ativos": 1492
+        "volume": 3985764566.89,
+        "trades": 19912,
+        "ativos": 1493
       },
       {
         "data_negocio": "2026-08-12",
-        "volume": 4149263740.44,
-        "trades": 16287,
+        "volume": 4030682264.57,
+        "trades": 16281,
         "ativos": 1544
       },
       {
         "data_negocio": "2026-08-13",
-        "volume": 4583328466.02,
-        "trades": 16670,
+        "volume": 4581357987.45,
+        "trades": 16660,
         "ativos": 1532
       },
       {
         "data_negocio": "2026-08-14",
-        "volume": 3986194854.73,
-        "trades": 15693,
-        "ativos": 1458
+        "volume": 3983357936.89,
+        "trades": 15685,
+        "ativos": 1459
       },
       {
         "data_negocio": "2026-08-17",
-        "volume": 3116479452.91,
-        "trades": 16815,
-        "ativos": 1639
+        "volume": 3109968333.59,
+        "trades": 16806,
+        "ativos": 1641
       },
       {
         "data_negocio": "2026-08-18",
-        "volume": 3894792562.37,
-        "trades": 19189,
-        "ativos": 1606
+        "volume": 3870109005.32,
+        "trades": 19180,
+        "ativos": 1607
       },
       {
         "data_negocio": "2026-08-19",
-        "volume": 4308954375.93,
-        "trades": 18214,
+        "volume": 4304412618.58,
+        "trades": 18204,
         "ativos": 1709
       },
       {
         "data_negocio": "2026-08-20",
-        "volume": 4527896353.47,
-        "trades": 21026,
+        "volume": 4526029412.65,
+        "trades": 21013,
         "ativos": 1623
       },
       {
         "data_negocio": "2026-08-21",
-        "volume": 4776910239.63,
-        "trades": 18957,
+        "volume": 4772768873.25,
+        "trades": 18947,
         "ativos": 1544
       },
       {
         "data_negocio": "2026-08-24",
-        "volume": 6150063467.95,
-        "trades": 18452,
-        "ativos": 1684
+        "volume": 6147513707.28,
+        "trades": 18426,
+        "ativos": 1685
       },
       {
         "data_negocio": "2026-08-25",
-        "volume": 4728662288.02,
-        "trades": 19123,
-        "ativos": 1676
+        "volume": 4728508988.14,
+        "trades": 19124,
+        "ativos": 1677
       },
       {
         "data_negocio": "2026-08-26",
-        "volume": 5024125734.09,
-        "trades": 21428,
-        "ativos": 1648
+        "volume": 5023646801.75,
+        "trades": 21425,
+        "ativos": 1649
       },
       {
         "data_negocio": "2026-08-27",
-        "volume": 4218967137.95,
-        "trades": 16388,
-        "ativos": 1608
+        "volume": 4215922050.09,
+        "trades": 16372,
+        "ativos": 1609
       },
       {
         "data_negocio": "2026-08-28",
-        "volume": 4644715497.3,
-        "trades": 16809,
-        "ativos": 1708
+        "volume": 4640734849.08,
+        "trades": 16796,
+        "ativos": 1709
       },
       {
         "data_negocio": "2026-08-31",
-        "volume": 5827395619.14,
-        "trades": 20996,
+        "volume": 5697858651.06,
+        "trades": 20966,
         "ativos": 1685
       },
       {
         "data_negocio": "2026-09-01",
-        "volume": 3069053910.31,
-        "trades": 17843,
-        "ativos": 1535
+        "volume": 3023543679.95,
+        "trades": 17723,
+        "ativos": 1536
       },
       {
         "data_negocio": "2026-09-02",
-        "volume": 5985538160.51,
-        "trades": 20835,
-        "ativos": 1670
+        "volume": 5984757083.84,
+        "trades": 20823,
+        "ativos": 1671
       },
       {
         "data_negocio": "2026-09-03",
-        "volume": 4790477392.4800005,
-        "trades": 17683,
+        "volume": 4712795648.58,
+        "trades": 17652,
         "ativos": 1579
       },
       {
         "data_negocio": "2026-09-04",
-        "volume": 7007925736.88,
-        "trades": 19377,
-        "ativos": 1695
+        "volume": 6988664884.92,
+        "trades": 19370,
+        "ativos": 1696
       }
     ]
   },
   "acumulado_ano_ytd": {
-    "volume_financeiro": 888694019784.76,
-    "total_trades": 3456893,
-    "ativos_unicos": 4774,
+    "volume_financeiro": 886825907915.1599,
+    "total_trades": 3457184,
+    "ativos_unicos": 4776,
     "total_pregoes": 168
   }
 }

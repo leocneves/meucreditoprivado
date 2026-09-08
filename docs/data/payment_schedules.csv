@@ -11701,7 +11701,7 @@ ticker,data_evento,data_liquidacao,tipo_evento,taxa,valor_real,valor_projetado,s
 22C0023008,2025-03-08,2025-03-08,Pagamento de Juros,0.3494,3.494,3.494,Liquidado,Total,Cronograma Contratual
 22C0023008,2025-09-08,2025-09-08,Pagamento de Juros,0.3494,3.494,3.494,Liquidado,Total,Cronograma Contratual
 22C0023008,2026-03-08,2026-03-08,Pagamento de Juros,0.3494,3.494,3.494,Liquidado,Total,Cronograma Contratual
-22C0023008,2026-09-08,2026-09-08,Pagamento de Juros,0.3494,,3.494,Previsto,Total,Cronograma Contratual
+22C0023008,2026-09-08,2026-09-08,Pagamento de Juros,0.3494,3.494,3.494,Liquidado,Total,Cronograma Contratual
 22C0023008,2027-03-08,2027-03-08,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 22C0023008,2027-03-08,2027-03-08,Pagamento de Juros,0.3494,,3.494,Previsto,Total,Cronograma Contratual
 22C0422763,2022-04-01,2022-04-01,Pagamento de Juros,0.3743,3.743,3.743,Liquidado,Total,Cronograma Contratual
@@ -12003,7 +12003,7 @@ ticker,data_evento,data_liquidacao,tipo_evento,taxa,valor_real,valor_projetado,s
 22C1214804,2025-03-08,2025-03-08,Pagamento de Juros,3.6822,36.822,36.822,Liquidado,Total,Cronograma Contratual
 22C1214804,2025-09-08,2025-09-08,Pagamento de Juros,3.6822,36.822,36.822,Liquidado,Total,Cronograma Contratual
 22C1214804,2026-03-08,2026-03-08,Pagamento de Juros,3.6822,36.822,36.822,Liquidado,Total,Cronograma Contratual
-22C1214804,2026-09-08,2026-09-08,Pagamento de Juros,3.6822,,36.822,Previsto,Total,Cronograma Contratual
+22C1214804,2026-09-08,2026-09-08,Pagamento de Juros,3.6822,36.822,36.822,Liquidado,Total,Cronograma Contratual
 22C1214804,2027-03-08,2027-03-08,Pagamento de Juros,3.6822,,36.822,Previsto,Total,Cronograma Contratual
 22C1214804,2027-09-08,2027-09-08,Pagamento de Juros,3.6822,,36.822,Previsto,Total,Cronograma Contratual
 22C1214804,2028-03-08,2028-03-08,Pagamento de Juros,3.6822,,36.822,Previsto,Total,Cronograma Contratual
@@ -19901,8 +19901,8 @@ ticker,data_evento,data_liquidacao,tipo_evento,taxa,valor_real,valor_projetado,s
 23H1037957,2025-03-08,2025-03-08,Pagamento de Juros,0.6479,6.479,6.479,Liquidado,Total,Cronograma Contratual
 23H1037957,2025-09-08,2025-09-08,Pagamento de Juros,0.6479,6.479,6.479,Liquidado,Total,Cronograma Contratual
 23H1037957,2026-03-08,2026-03-08,Pagamento de Juros,0.6479,6.479,6.479,Liquidado,Total,Cronograma Contratual
-23H1037957,2026-09-08,2026-09-08,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-23H1037957,2026-09-08,2026-09-08,Pagamento de Juros,0.6479,,6.479,Previsto,Total,Cronograma Contratual
+23H1037957,2026-09-08,2026-09-08,Amortização,,1000.0,1000.0,Liquidado,Total,Cronograma Contratual
+23H1037957,2026-09-08,2026-09-08,Pagamento de Juros,0.6479,6.479,6.479,Liquidado,Total,Cronograma Contratual
 23H1152062,2028-06-20,2028-06-20,Pagamento de Juros,5.4751,,54.751,Previsto,Total,Cronograma Contratual
 23H1152062,2028-12-20,2028-12-20,Pagamento de Juros,5.4751,,54.751,Previsto,Total,Cronograma Contratual
 23H1152062,2029-06-20,2029-06-20,Pagamento de Juros,5.4751,,54.751,Previsto,Total,Cronograma Contratual
@@ -32988,18 +32988,14 @@ ticker,data_evento,data_liquidacao,tipo_evento,taxa,valor_real,valor_projetado,s
 5387524SN1,2036-02-12,2036-02-12,Pagamento de Juros,0.8464,,8.464,Previsto,Total,Cronograma Contratual
 AAJR11,2025-06-25,2025-06-25,Pagamento de Juros,1.7349,17.349,17.349,Liquidado,Total,Cronograma Contratual
 AAJR11,2025-12-25,2025-12-25,Pagamento de Juros,1.7349,17.349,17.349,Liquidado,Total,Cronograma Contratual
-AAJR11,2026-06-25,2026-06-25,Amortização,20.0,200.0,200.0,Liquidado,Total,ANBIMA Oficial
-AAJR11,2026-06-25,2026-06-25,Pagamento de Juros,3.5,185.6455,185.6455,Liquidado,Total,ANBIMA Oficial
+AAJR11,2026-06-25,2026-06-25,Pagamento de Juros,1.7349,17.349,17.349,Liquidado,Total,Cronograma Contratual
 AAJR11,2026-12-25,2026-12-25,Pagamento de Juros,1.7349,,17.349,Previsto,Total,Cronograma Contratual
-AAJR11,2027-06-25,2027-06-25,Amortização,25.0,,,Previsto,Total,ANBIMA Oficial
-AAJR11,2027-06-25,2027-06-25,Pagamento de Juros,3.5,,,Previsto,Total,ANBIMA Oficial
+AAJR11,2027-06-25,2027-06-25,Pagamento de Juros,1.7349,,17.349,Previsto,Total,Cronograma Contratual
 AAJR11,2027-12-25,2027-12-25,Pagamento de Juros,1.7349,,17.349,Previsto,Total,Cronograma Contratual
-AAJR11,2028-06-25,2028-06-26,Amortização,33.3333,,,Previsto,Total,ANBIMA Oficial
-AAJR11,2028-06-25,2028-06-26,Pagamento de Juros,3.5,,,Previsto,Total,ANBIMA Oficial
+AAJR11,2028-06-25,2028-06-25,Pagamento de Juros,1.7349,,17.349,Previsto,Total,Cronograma Contratual
 AAJR11,2028-12-25,2028-12-25,Pagamento de Juros,1.7349,,17.349,Previsto,Total,Cronograma Contratual
 AAJR11,2029-06-25,2029-06-25,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-AAJR11,2029-06-25,2029-06-25,Pagamento de Juros,3.5,,,Previsto,Total,ANBIMA Oficial
-AAJR11,2029-06-25,2029-06-25,Resgate Antecipado,,,,Previsto,Total,ANBIMA Oficial
+AAJR11,2029-06-25,2029-06-25,Pagamento de Juros,1.7349,,17.349,Previsto,Total,Cronograma Contratual
 AALM11,2021-11-08,2021-11-08,Pagamento de Juros,2.1518,21.518,21.518,Liquidado,Total,Cronograma Contratual
 AALM11,2022-05-08,2022-05-08,Pagamento de Juros,2.1518,21.518,21.518,Liquidado,Total,Cronograma Contratual
 AALM11,2022-11-08,2022-11-08,Pagamento de Juros,2.1518,21.518,21.518,Liquidado,Total,Cronograma Contratual
@@ -33008,26 +33004,19 @@ AALM11,2023-11-08,2023-11-08,Pagamento de Juros,2.1518,21.518,21.518,Liquidado,T
 AALM11,2024-05-08,2024-05-08,Pagamento de Juros,2.1518,21.518,21.518,Liquidado,Total,Cronograma Contratual
 AALM11,2024-11-08,2024-11-08,Amortização,,1000.0,1000.0,Liquidado,Total,Cronograma Contratual
 AALM11,2024-11-08,2024-11-08,Pagamento de Juros,2.1518,21.518,21.518,Liquidado,Total,Cronograma Contratual
-AALM12,2025-04-02,2025-04-02,Pagamento de Juros,1.6,59.9757,59.9757,Liquidado,Total,ANBIMA Oficial
-AALM12,2025-10-02,2025-10-02,Pagamento de Juros,1.6,80.193,80.193,Liquidado,Total,ANBIMA Oficial
-AALM12,2026-04-02,2026-04-02,Pagamento de Juros,1.6,79.6987,79.6987,Liquidado,Total,ANBIMA Oficial
-AALM12,2026-10-02,2026-10-02,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2027-04-02,2027-04-02,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2027-10-02,2027-10-04,Amortização,14.2857,,,Previsto,Total,ANBIMA Oficial
-AALM12,2027-10-02,2027-10-04,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2028-04-02,2028-04-03,Amortização,16.6667,,,Previsto,Total,ANBIMA Oficial
-AALM12,2028-04-02,2028-04-03,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2028-10-02,2028-10-02,Amortização,20.0,,,Previsto,Total,ANBIMA Oficial
-AALM12,2028-10-02,2028-10-02,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2029-04-02,2029-04-02,Amortização,25.0,,,Previsto,Total,ANBIMA Oficial
-AALM12,2029-04-02,2029-04-02,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2029-10-02,2029-10-02,Amortização,33.3333,,,Previsto,Total,ANBIMA Oficial
-AALM12,2029-10-02,2029-10-02,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2030-04-02,2030-04-02,Amortização,50.0,,,Previsto,Total,ANBIMA Oficial
-AALM12,2030-04-02,2030-04-02,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
+AALM12,2025-04-02,2025-04-02,Pagamento de Juros,0.7968,7.968,7.968,Liquidado,Total,Cronograma Contratual
+AALM12,2025-10-02,2025-10-02,Pagamento de Juros,0.7968,7.968,7.968,Liquidado,Total,Cronograma Contratual
+AALM12,2026-04-02,2026-04-02,Pagamento de Juros,0.7968,7.968,7.968,Liquidado,Total,Cronograma Contratual
+AALM12,2026-10-02,2026-10-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
+AALM12,2027-04-02,2027-04-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
+AALM12,2027-10-02,2027-10-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
+AALM12,2028-04-02,2028-04-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
+AALM12,2028-10-02,2028-10-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
+AALM12,2029-04-02,2029-04-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
+AALM12,2029-10-02,2029-10-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
+AALM12,2030-04-02,2030-04-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
 AALM12,2030-10-02,2030-10-02,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-AALM12,2030-10-02,2030-10-02,Pagamento de Juros,1.6,,,Previsto,Total,ANBIMA Oficial
-AALM12,2030-10-02,2030-10-02,Resgate Antecipado,,,,Previsto,Total,ANBIMA Oficial
+AALM12,2030-10-02,2030-10-02,Pagamento de Juros,0.7968,,7.968,Previsto,Total,Cronograma Contratual
 AALR11,2018-03-01,2018-03-01,Pagamento de Juros,2.9563,295.63,295.63,Liquidado,Total,Cronograma Contratual
 AALR11,2018-09-01,2018-09-01,Pagamento de Juros,2.9563,295.63,295.63,Liquidado,Total,Cronograma Contratual
 AALR11,2019-03-01,2019-03-01,Pagamento de Juros,2.9563,295.63,295.63,Liquidado,Total,Cronograma Contratual
@@ -33100,29 +33089,17 @@ AARJA1,2024-12-23,2024-12-23,Pagamento de Juros,1.7349,17.349,17.349,Liquidado,T
 AARJA1,2025-06-23,2025-06-23,Pagamento de Juros,1.7349,17.349,17.349,Liquidado,Total,Cronograma Contratual
 AARJA1,2025-12-23,2025-12-23,Amortização,,1000.0,1000.0,Liquidado,Total,Cronograma Contratual
 AARJA1,2025-12-23,2025-12-23,Pagamento de Juros,1.7349,17.349,17.349,Liquidado,Total,Cronograma Contratual
-AARJA2,2024-08-23,2024-08-23,Pagamento de Juros,3.35,66.652,66.652,Liquidado,Total,ANBIMA Oficial
+AARJA2,2024-08-23,2024-08-23,Pagamento de Juros,1.6612,16.612,16.612,Liquidado,Total,Cronograma Contratual
 AARJA2,2025-02-23,2025-02-23,Pagamento de Juros,1.6612,16.612,16.612,Liquidado,Total,Cronograma Contratual
-AARJA2,2025-02-24,2025-02-24,Amortização,11.111,111.11,111.11,Liquidado,Total,ANBIMA Oficial
-AARJA2,2025-02-24,2025-02-24,Pagamento de Juros,3.35,73.7104,73.7104,Liquidado,Total,ANBIMA Oficial
 AARJA2,2025-08-23,2025-08-23,Pagamento de Juros,1.6612,16.612,16.612,Liquidado,Total,Cronograma Contratual
-AARJA2,2025-08-25,2025-08-25,Amortização,12.5,111.1112,111.1112,Liquidado,Total,ANBIMA Oficial
-AARJA2,2025-08-25,2025-08-25,Pagamento de Juros,3.35,76.4358,76.4358,Liquidado,Total,ANBIMA Oficial
-AARJA2,2026-02-23,2026-02-23,Amortização,14.286,111.1135,111.1135,Liquidado,Total,ANBIMA Oficial
-AARJA2,2026-02-23,2026-02-23,Pagamento de Juros,3.35,69.2051,69.2051,Liquidado,Total,ANBIMA Oficial
+AARJA2,2026-02-23,2026-02-23,Pagamento de Juros,1.6612,16.612,16.612,Liquidado,Total,Cronograma Contratual
 AARJA2,2026-08-23,2026-08-23,Pagamento de Juros,1.6612,16.612,16.612,Liquidado,Total,Cronograma Contratual
-AARJA2,2026-08-24,2026-08-24,Amortização,16.667,111.1131,111.1131,Liquidado,Total,ANBIMA Oficial
-AARJA2,2026-08-24,2026-08-24,Pagamento de Juros,3.35,58.2616,58.2616,Liquidado,Total,ANBIMA Oficial
-AARJA2,2027-02-23,2027-02-23,Amortização,20.0,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2027-02-23,2027-02-23,Pagamento de Juros,3.35,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2027-08-23,2027-08-23,Amortização,25.0,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2027-08-23,2027-08-23,Pagamento de Juros,3.35,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2028-02-23,2028-02-23,Amortização,33.333,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2028-02-23,2028-02-23,Pagamento de Juros,3.35,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2028-08-23,2028-08-23,Amortização,50.0,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2028-08-23,2028-08-23,Pagamento de Juros,3.35,,,Previsto,Total,ANBIMA Oficial
+AARJA2,2027-02-23,2027-02-23,Pagamento de Juros,1.6612,,16.612,Previsto,Total,Cronograma Contratual
+AARJA2,2027-08-23,2027-08-23,Pagamento de Juros,1.6612,,16.612,Previsto,Total,Cronograma Contratual
+AARJA2,2028-02-23,2028-02-23,Pagamento de Juros,1.6612,,16.612,Previsto,Total,Cronograma Contratual
+AARJA2,2028-08-23,2028-08-23,Pagamento de Juros,1.6612,,16.612,Previsto,Total,Cronograma Contratual
 AARJA2,2029-02-23,2029-02-23,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-AARJA2,2029-02-23,2029-02-23,Pagamento de Juros,3.35,,,Previsto,Total,ANBIMA Oficial
-AARJA2,2029-02-23,2029-02-23,Resgate Antecipado,,,,Previsto,Total,ANBIMA Oficial
+AARJA2,2029-02-23,2029-02-23,Pagamento de Juros,1.6612,,16.612,Previsto,Total,Cronograma Contratual
 AASN11,2022-11-10,2022-11-10,Amortização,,1000.0,1000.0,Liquidado,Total,Cronograma Contratual
 AASN11,2022-11-10,2022-11-10,Pagamento de Juros,9.5445,95.445,95.445,Liquidado,Total,Cronograma Contratual
 ABFR11,2021-01-03,2021-01-03,Pagamento de Juros,1.7841,17.841,17.841,Liquidado,Total,Cronograma Contratual
@@ -33133,58 +33110,45 @@ ABFR11,2023-01-03,2023-01-03,Pagamento de Juros,1.7841,17.841,17.841,Liquidado,T
 ABFR11,2023-07-03,2023-07-03,Pagamento de Juros,1.7841,17.841,17.841,Liquidado,Total,Cronograma Contratual
 ABFR11,2024-01-03,2024-01-03,Amortização,,1000.0,1000.0,Liquidado,Total,Cronograma Contratual
 ABFR11,2024-01-03,2024-01-03,Pagamento de Juros,1.7841,17.841,17.841,Liquidado,Total,Cronograma Contratual
-ABFR12,2022-06-15,2022-06-15,Pagamento de Juros,8.1869,36.348,36.348,Liquidado,Total,ANBIMA Oficial
-ABFR12,2022-12-15,2022-12-15,Pagamento de Juros,8.1869,42.2694,42.2694,Liquidado,Total,ANBIMA Oficial
-ABFR12,2023-06-15,2023-06-15,Pagamento de Juros,8.1869,43.0789,43.0789,Liquidado,Total,ANBIMA Oficial
-ABFR12,2023-12-15,2023-12-15,Pagamento de Juros,8.1869,44.6073,44.6073,Liquidado,Total,ANBIMA Oficial
+ABFR12,2022-06-15,2022-06-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
+ABFR12,2022-12-15,2022-12-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
+ABFR12,2023-06-15,2023-06-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
+ABFR12,2023-12-15,2023-12-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
 ABFR12,2024-06-15,2024-06-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
-ABFR12,2024-06-17,2024-06-17,Pagamento de Juros,8.1869,44.7702,44.7702,Liquidado,Total,ANBIMA Oficial
 ABFR12,2024-12-15,2024-12-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
-ABFR12,2024-12-16,2024-12-16,Amortização,25.0,289.0988,289.0988,Liquidado,Total,ANBIMA Oficial
-ABFR12,2024-12-16,2024-12-16,Pagamento de Juros,8.1869,47.1568,47.1568,Liquidado,Total,ANBIMA Oficial
 ABFR12,2025-06-15,2025-06-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
-ABFR12,2025-06-16,2025-06-16,Pagamento de Juros,8.1869,35.0732,35.0732,Liquidado,Total,ANBIMA Oficial
-ABFR12,2025-12-15,2025-12-15,Amortização,33.3333,301.9973,301.9973,Liquidado,Total,ANBIMA Oficial
-ABFR12,2025-12-15,2025-12-15,Pagamento de Juros,8.1869,36.9456,36.9456,Liquidado,Total,ANBIMA Oficial
-ABFR12,2026-06-15,2026-06-15,Pagamento de Juros,8.1869,24.284,24.284,Liquidado,Total,ANBIMA Oficial
-ABFR12,2026-12-15,2026-12-15,Amortização,50.0,,,Previsto,Total,ANBIMA Oficial
-ABFR12,2026-12-15,2026-12-15,Pagamento de Juros,8.1869,,,Previsto,Total,ANBIMA Oficial
-ABFR12,2027-06-15,2027-06-15,Pagamento de Juros,8.1869,,,Previsto,Total,ANBIMA Oficial
+ABFR12,2025-12-15,2025-12-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
+ABFR12,2026-06-15,2026-06-15,Pagamento de Juros,4.0129,40.129,40.129,Liquidado,Total,Cronograma Contratual
+ABFR12,2026-12-15,2026-12-15,Pagamento de Juros,4.0129,,40.129,Previsto,Total,Cronograma Contratual
+ABFR12,2027-06-15,2027-06-15,Pagamento de Juros,4.0129,,40.129,Previsto,Total,Cronograma Contratual
 ABFR12,2027-12-15,2027-12-15,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-ABFR12,2027-12-15,2027-12-15,Pagamento de Juros,8.1869,,,Previsto,Total,ANBIMA Oficial
-ABFR12,2027-12-15,2027-12-15,Resgate Antecipado,,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2026-04-15,2026-04-15,Pagamento de Juros,2.65,74.5357,74.5357,Liquidado,Total,ANBIMA Oficial
-ABFR14,2026-10-15,2026-10-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2027-04-15,2027-04-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2027-10-15,2027-10-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2028-04-15,2028-04-17,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2028-10-15,2028-10-16,Amortização,25.0,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2028-10-15,2028-10-16,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2029-04-15,2029-04-16,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2029-10-15,2029-10-15,Amortização,33.3333,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2029-10-15,2029-10-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2030-04-15,2030-04-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2030-10-15,2030-10-15,Amortização,50.0,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2030-10-15,2030-10-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2031-04-15,2031-04-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
+ABFR12,2027-12-15,2027-12-15,Pagamento de Juros,4.0129,,40.129,Previsto,Total,Cronograma Contratual
+ABFR14,2026-04-15,2026-04-15,Pagamento de Juros,1.3163,13.163,13.163,Liquidado,Total,Cronograma Contratual
+ABFR14,2026-10-15,2026-10-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2027-04-15,2027-04-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2027-10-15,2027-10-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2028-04-15,2028-04-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2028-10-15,2028-10-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2029-04-15,2029-04-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2029-10-15,2029-10-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2030-04-15,2030-04-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2030-10-15,2030-10-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR14,2031-04-15,2031-04-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
 ABFR14,2031-10-15,2031-10-15,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-ABFR14,2031-10-15,2031-10-15,Pagamento de Juros,2.65,,,Previsto,Total,ANBIMA Oficial
-ABFR14,2031-10-15,2031-10-15,Resgate Antecipado,,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2026-04-15,2026-04-15,Pagamento de Juros,11.0989,48.1794,48.1794,Liquidado,Total,ANBIMA Oficial
-ABFR24,2026-10-15,2026-10-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2027-04-15,2027-04-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2027-10-15,2027-10-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2028-04-15,2028-04-17,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2028-10-15,2028-10-16,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2029-04-15,2029-04-16,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2029-10-15,2029-10-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2030-04-15,2030-04-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2030-10-15,2030-10-15,Amortização,50.0,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2030-10-15,2030-10-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2031-04-15,2031-04-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
+ABFR14,2031-10-15,2031-10-15,Pagamento de Juros,1.3163,,13.163,Previsto,Total,Cronograma Contratual
+ABFR24,2026-04-15,2026-04-15,Pagamento de Juros,5.4035,54.035,54.035,Liquidado,Total,Cronograma Contratual
+ABFR24,2026-10-15,2026-10-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2027-04-15,2027-04-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2027-10-15,2027-10-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2028-04-15,2028-04-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2028-10-15,2028-10-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2029-04-15,2029-04-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2029-10-15,2029-10-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2030-04-15,2030-04-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2030-10-15,2030-10-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
+ABFR24,2031-04-15,2031-04-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
 ABFR24,2031-10-15,2031-10-15,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-ABFR24,2031-10-15,2031-10-15,Pagamento de Juros,11.0989,,,Previsto,Total,ANBIMA Oficial
-ABFR24,2031-10-15,2031-10-15,Resgate Antecipado,50.0,,,Previsto,Total,ANBIMA Oficial
+ABFR24,2031-10-15,2031-10-15,Pagamento de Juros,5.4035,,54.035,Previsto,Total,Cronograma Contratual
 ABIO11,2026-06-15,2026-06-15,Pagamento de Juros,4.9734,49.734,49.734,Liquidado,Total,Cronograma Contratual
 ABIO11,2026-12-15,2026-12-15,Pagamento de Juros,4.9734,,49.734,Previsto,Total,Cronograma Contratual
 ABIO11,2027-06-15,2027-06-15,Amortização,7.2,,,Previsto,Total,ANBIMA Oficial
@@ -33594,26 +33558,14 @@ ACHL12,2026-07-31,2026-07-31,Pagamento de Juros,0.6976,6.976,6.976,Liquidado,Tot
 ACHL12,2027-01-31,2027-01-31,Pagamento de Juros,0.6976,,6.976,Previsto,Total,Cronograma Contratual
 ACHL12,2027-07-31,2027-07-31,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 ACHL12,2027-07-31,2027-07-31,Pagamento de Juros,0.6976,,6.976,Previsto,Total,Cronograma Contratual
-ACIA11,2026-09-15,2026-09-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2026-12-15,2026-12-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2027-03-15,2027-03-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2027-06-15,2027-06-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2027-09-15,2027-09-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2027-12-15,2027-12-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2028-03-15,2028-03-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2028-06-15,2028-06-16,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2028-09-15,2028-09-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2028-12-15,2028-12-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2029-03-15,2029-03-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2029-06-15,2029-06-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2029-09-15,2029-09-17,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2029-12-15,2029-12-17,Amortização,16.6667,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2029-12-15,2029-12-17,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2030-03-15,2030-03-15,Amortização,20.0,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2030-03-15,2030-03-15,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2030-06-15,2030-06-17,Amortização,25.0,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2030-06-15,2030-06-17,Pagamento de Juros,1.92,,,Previsto,Total,ANBIMA Oficial
-ACIA11,2030-09-15,2030-09-16,Amortização,33.3333,,,Previsto,Total,ANBIMA Oficial
+ACIA11,2026-09-15,2026-09-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
+ACIA11,2027-03-15,2027-03-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
+ACIA11,2027-09-15,2027-09-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
+ACIA11,2028-03-15,2028-03-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
+ACIA11,2028-09-15,2028-09-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
+ACIA11,2029-03-15,2029-03-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
+ACIA11,2029-09-15,2029-09-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
+ACIA11,2030-03-15,2030-03-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
 ACIA11,2030-09-15,2030-09-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
 ACIA11,2031-03-15,2031-03-15,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 ACIA11,2031-03-15,2031-03-15,Pagamento de Juros,0.9554,,9.554,Previsto,Total,Cronograma Contratual
@@ -33715,26 +33667,16 @@ ACQU11,2026-10-15,2026-10-15,Pagamento de Juros,6.5,,,Previsto,Total,ANBIMA Ofic
 ACQU11,2026-10-15,2026-10-15,Resgate Antecipado,,,,Previsto,Total,ANBIMA Oficial
 ACRC11,2025-01-15,2025-01-15,Pagamento de Juros,3.4267,34.267,34.267,Liquidado,Total,Cronograma Contratual
 ACRC11,2025-07-15,2025-07-15,Pagamento de Juros,3.4267,34.267,34.267,Liquidado,Total,Cronograma Contratual
-ACRC11,2026-01-15,2026-01-15,Pagamento de Juros,6.9708,111.0677,111.0677,Liquidado,Total,ANBIMA Oficial
-ACRC11,2026-07-15,2026-07-15,Amortização,6.2,75.3657,75.3657,Liquidado,Total,ANBIMA Oficial
-ACRC11,2026-07-15,2026-07-15,Pagamento de Juros,6.9708,40.6459,40.6459,Liquidado,Total,ANBIMA Oficial
-ACRC11,2027-01-15,2027-01-15,Amortização,5.7569,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2027-01-15,2027-01-15,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2027-07-15,2027-07-15,Amortização,6.1086,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2027-07-15,2027-07-15,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2028-01-15,2028-01-17,Amortização,7.8313,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2028-01-15,2028-01-17,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2028-07-15,2028-07-17,Amortização,8.4967,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2028-07-15,2028-07-17,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2029-01-15,2029-01-15,Amortização,6.4286,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2029-01-15,2029-01-15,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2029-07-15,2029-07-16,Amortização,6.8702,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2029-07-15,2029-07-16,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2030-01-15,2030-01-15,Amortização,6.5574,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2030-01-15,2030-01-15,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2030-07-15,2030-07-15,Amortização,7.0175,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2030-07-15,2030-07-15,Pagamento de Juros,6.9708,,,Previsto,Total,ANBIMA Oficial
-ACRC11,2031-01-15,2031-01-15,Amortização,7.9245,,,Previsto,Total,ANBIMA Oficial
+ACRC11,2026-01-15,2026-01-15,Pagamento de Juros,3.4267,34.267,34.267,Liquidado,Total,Cronograma Contratual
+ACRC11,2026-07-15,2026-07-15,Pagamento de Juros,3.4267,34.267,34.267,Liquidado,Total,Cronograma Contratual
+ACRC11,2027-01-15,2027-01-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
+ACRC11,2027-07-15,2027-07-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
+ACRC11,2028-01-15,2028-01-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
+ACRC11,2028-07-15,2028-07-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
+ACRC11,2029-01-15,2029-01-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
+ACRC11,2029-07-15,2029-07-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
+ACRC11,2030-01-15,2030-01-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
+ACRC11,2030-07-15,2030-07-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
 ACRC11,2031-01-15,2031-01-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
 ACRC11,2031-07-15,2031-07-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
 ACRC11,2032-01-15,2032-01-15,Pagamento de Juros,3.4267,,34.267,Previsto,Total,Cronograma Contratual
@@ -33800,29 +33742,25 @@ ACRC21,2044-01-15,2044-01-15,Pagamento de Juros,3.6412,,36.412,Previsto,Total,Cr
 ACRC21,2044-07-15,2044-07-15,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 ACRC21,2044-07-15,2044-07-15,Pagamento de Juros,3.6412,,36.412,Previsto,Total,Cronograma Contratual
 ADAG11,2020-12-15,2020-12-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
-ADAG11,2021-06-15,2021-06-15,Pagamento de Juros,4.24,22.9051,22.9051,Liquidado,Total,ANBIMA Oficial
-ADAG11,2021-12-15,2021-12-15,Pagamento de Juros,4.24,23.4984,23.4984,Liquidado,Total,ANBIMA Oficial
-ADAG11,2022-06-15,2022-06-15,Pagamento de Juros,4.24,24.6051,24.6051,Liquidado,Total,ANBIMA Oficial
-ADAG11,2022-12-15,2022-12-15,Pagamento de Juros,4.24,24.6869,24.6869,Liquidado,Total,ANBIMA Oficial
-ADAG11,2023-06-15,2023-06-15,Pagamento de Juros,4.24,25.1635,25.1635,Liquidado,Total,ANBIMA Oficial
-ADAG11,2023-12-15,2023-12-15,Pagamento de Juros,4.24,26.0504,26.0504,Liquidado,Total,ANBIMA Oficial
+ADAG11,2021-06-15,2021-06-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
+ADAG11,2021-12-15,2021-12-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
+ADAG11,2022-06-15,2022-06-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
+ADAG11,2022-12-15,2022-12-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
+ADAG11,2023-06-15,2023-06-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
+ADAG11,2023-12-15,2023-12-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
 ADAG11,2024-06-15,2024-06-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
-ADAG11,2024-06-17,2024-06-17,Pagamento de Juros,4.24,26.1514,26.1514,Liquidado,Total,ANBIMA Oficial
 ADAG11,2024-12-15,2024-12-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
-ADAG11,2024-12-16,2024-12-16,Amortização,33.3333,430.6096,430.6096,Liquidado,Total,ANBIMA Oficial
-ADAG11,2024-12-16,2024-12-16,Pagamento de Juros,4.24,27.5372,27.5372,Liquidado,Total,ANBIMA Oficial
 ADAG11,2025-06-15,2025-06-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
-ADAG11,2025-06-16,2025-06-16,Pagamento de Juros,4.24,18.2122,18.2122,Liquidado,Total,ANBIMA Oficial
-ADAG11,2025-12-15,2025-12-15,Pagamento de Juros,4.24,19.1773,19.1773,Liquidado,Total,ANBIMA Oficial
-ADAG11,2026-06-15,2026-06-15,Pagamento de Juros,13.47,58.7665,58.7665,Liquidado,Total,ANBIMA Oficial
-ADAG11,2026-12-15,2026-12-15,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
-ADAG11,2027-06-15,2027-06-15,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
-ADAG11,2027-12-15,2027-12-15,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
-ADAG11,2028-06-15,2028-06-16,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
-ADAG11,2028-12-15,2028-12-15,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
-ADAG11,2029-06-15,2029-06-15,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
-ADAG11,2029-12-15,2029-12-17,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
-ADAG11,2030-06-15,2030-06-17,Pagamento de Juros,13.47,,,Previsto,Total,ANBIMA Oficial
+ADAG11,2025-12-15,2025-12-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
+ADAG11,2026-06-15,2026-06-15,Pagamento de Juros,6.5223,65.223,65.223,Liquidado,Total,Cronograma Contratual
+ADAG11,2026-12-15,2026-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
+ADAG11,2027-06-15,2027-06-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
+ADAG11,2027-12-15,2027-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
+ADAG11,2028-06-15,2028-06-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
+ADAG11,2028-12-15,2028-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
+ADAG11,2029-06-15,2029-06-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
+ADAG11,2029-12-15,2029-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
+ADAG11,2030-06-15,2030-06-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
 ADAG11,2030-12-15,2030-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
 ADAG11,2031-06-15,2031-06-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
 ADAG11,2031-12-15,2031-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
@@ -33833,26 +33771,14 @@ ADAG11,2033-12-15,2033-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cr
 ADAG11,2034-06-15,2034-06-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
 ADAG11,2034-12-15,2034-12-15,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 ADAG11,2034-12-15,2034-12-15,Pagamento de Juros,6.5223,,65.223,Previsto,Total,Cronograma Contratual
-ADDI11,2025-03-10,2025-03-10,Pagamento de Juros,2.4,32.705,32.705,Liquidado,Total,ANBIMA Oficial
-ADDI11,2025-06-10,2025-06-10,Pagamento de Juros,2.4,39.9103,39.9103,Liquidado,Total,ANBIMA Oficial
-ADDI11,2025-09-10,2025-09-10,Pagamento de Juros,2.4,42.7715,42.7715,Liquidado,Total,ANBIMA Oficial
-ADDI11,2025-12-10,2025-12-10,Pagamento de Juros,2.4,42.162,42.162,Liquidado,Total,ANBIMA Oficial
-ADDI11,2026-03-10,2026-03-10,Pagamento de Juros,2.4,39.4755,39.4755,Liquidado,Total,ANBIMA Oficial
-ADDI11,2026-06-10,2026-06-10,Pagamento de Juros,2.4,40.08,40.08,Liquidado,Total,ANBIMA Oficial
-ADDI11,2026-09-10,2026-09-10,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2026-12-10,2026-12-10,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2027-03-10,2027-03-10,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2027-06-10,2027-06-10,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2027-09-10,2027-09-10,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2027-12-10,2027-12-10,Amortização,20.0,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2027-12-10,2027-12-10,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2028-03-10,2028-03-10,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2028-06-10,2028-06-12,Amortização,25.0,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2028-06-10,2028-06-12,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2028-09-10,2028-09-11,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2028-12-10,2028-12-11,Amortização,33.3333,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2028-12-10,2028-12-11,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
-ADDI11,2029-03-10,2029-03-12,Pagamento de Juros,2.4,,,Previsto,Total,ANBIMA Oficial
+ADDI11,2025-06-10,2025-06-10,Pagamento de Juros,1.1929,11.929,11.929,Liquidado,Total,Cronograma Contratual
+ADDI11,2025-12-10,2025-12-10,Pagamento de Juros,1.1929,11.929,11.929,Liquidado,Total,Cronograma Contratual
+ADDI11,2026-06-10,2026-06-10,Pagamento de Juros,1.1929,11.929,11.929,Liquidado,Total,Cronograma Contratual
+ADDI11,2026-12-10,2026-12-10,Pagamento de Juros,1.1929,,11.929,Previsto,Total,Cronograma Contratual
+ADDI11,2027-06-10,2027-06-10,Pagamento de Juros,1.1929,,11.929,Previsto,Total,Cronograma Contratual
+ADDI11,2027-12-10,2027-12-10,Pagamento de Juros,1.1929,,11.929,Previsto,Total,Cronograma Contratual
+ADDI11,2028-06-10,2028-06-10,Pagamento de Juros,1.1929,,11.929,Previsto,Total,Cronograma Contratual
+ADDI11,2028-12-10,2028-12-10,Pagamento de Juros,1.1929,,11.929,Previsto,Total,Cronograma Contratual
 ADDI11,2029-06-10,2029-06-10,Pagamento de Juros,1.1929,,11.929,Previsto,Total,Cronograma Contratual
 ADDI11,2029-12-10,2029-12-10,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 ADDI11,2029-12-10,2029-12-10,Pagamento de Juros,1.1929,,11.929,Previsto,Total,Cronograma Contratual
@@ -135574,8 +135500,8 @@ TOTS15,2024-09-08,2024-09-08,Pagamento de Juros,0.4739,4.739,4.739,Liquidado,Tot
 TOTS15,2025-03-08,2025-03-08,Pagamento de Juros,0.4739,4.739,4.739,Liquidado,Total,Cronograma Contratual
 TOTS15,2025-09-08,2025-09-08,Pagamento de Juros,0.4739,4.739,4.739,Liquidado,Total,Cronograma Contratual
 TOTS15,2026-03-08,2026-03-08,Pagamento de Juros,0.4739,4.739,4.739,Liquidado,Total,Cronograma Contratual
-TOTS15,2026-09-08,2026-09-08,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
-TOTS15,2026-09-08,2026-09-08,Pagamento de Juros,0.4739,,4.739,Previsto,Total,Cronograma Contratual
+TOTS15,2026-09-08,2026-09-08,Amortização,,1000.0,1000.0,Liquidado,Total,Cronograma Contratual
+TOTS15,2026-09-08,2026-09-08,Pagamento de Juros,0.4739,4.739,4.739,Liquidado,Total,Cronograma Contratual
 TOTS16,2026-07-29,2026-07-29,Pagamento de Juros,0.2946,2.946,2.946,Liquidado,Total,Cronograma Contratual
 TOTS16,2027-01-29,2027-01-29,Pagamento de Juros,0.2946,,2.946,Previsto,Total,Cronograma Contratual
 TOTS16,2027-07-29,2027-07-29,Pagamento de Juros,0.2946,,2.946,Previsto,Total,Cronograma Contratual
@@ -141795,7 +141721,7 @@ VERTD1,2032-06-14,2032-06-14,Pagamento de Juros,1.9804,,19.804,Previsto,Total,Cr
 VERTD1,2032-12-14,2032-12-14,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 VERTD1,2032-12-14,2032-12-14,Pagamento de Juros,1.9804,,19.804,Previsto,Total,Cronograma Contratual
 VERTD2,2026-03-08,2026-03-08,Pagamento de Juros,2.7132,27.132,27.132,Liquidado,Total,Cronograma Contratual
-VERTD2,2026-09-08,2026-09-08,Pagamento de Juros,2.7132,,27.132,Previsto,Total,Cronograma Contratual
+VERTD2,2026-09-08,2026-09-08,Pagamento de Juros,2.7132,27.132,27.132,Liquidado,Total,Cronograma Contratual
 VERTD2,2027-03-08,2027-03-08,Pagamento de Juros,2.7132,,27.132,Previsto,Total,Cronograma Contratual
 VERTD2,2027-09-08,2027-09-08,Pagamento de Juros,2.7132,,27.132,Previsto,Total,Cronograma Contratual
 VERTD2,2028-03-08,2028-03-08,Pagamento de Juros,2.7132,,27.132,Previsto,Total,Cronograma Contratual
@@ -144202,7 +144128,7 @@ VSCFA02,2031-07-15,2031-07-15,Pagamento de Juros,0.4589,,4.589,Previsto,Total,Cr
 VSCFA02,2032-01-15,2032-01-15,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 VSCFA02,2032-01-15,2032-01-15,Pagamento de Juros,0.4589,,4.589,Previsto,Total,Cronograma Contratual
 VSCFA1,2026-03-08,2026-03-08,Pagamento de Juros,0.449,4.49,4.49,Liquidado,Total,Cronograma Contratual
-VSCFA1,2026-09-08,2026-09-08,Pagamento de Juros,0.449,,4.49,Previsto,Total,Cronograma Contratual
+VSCFA1,2026-09-08,2026-09-08,Pagamento de Juros,0.449,4.49,4.49,Liquidado,Total,Cronograma Contratual
 VSCFA1,2027-03-08,2027-03-08,Pagamento de Juros,0.449,,4.49,Previsto,Total,Cronograma Contratual
 VSCFA1,2027-09-08,2027-09-08,Amortização,,,1000.0,Previsto,Total,Cronograma Contratual
 VSCFA1,2027-09-08,2027-09-08,Pagamento de Juros,0.449,,4.49,Previsto,Total,Cronograma Contratual
