@@ -1,7 +1,7 @@
 {
-  "total_empresas_rj": 15,
-  "total_ativos_rj": 74,
-  "volume_total_rj": 43611527653.0,
+  "total_empresas_rj": 25,
+  "total_ativos_rj": 87,
+  "volume_total_rj": 44924530639.36,
   "top_casos": [
     {
       "cnpj": "00776574000660",
@@ -209,29 +209,29 @@
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1522430&numSequencia=1047136&numVersao=1"
     },
     {
-      "cnpj": "33035536000100",
-      "razao_social": "JOAO FORTES ENGENHARIA S/A",
-      "tipo_evento": "Recuperação Judicial",
-      "data_evento": "2021-05-19",
-      "volume_emitido": 175000000.0,
-      "qtd_ativos": 1,
-      "tickers": [
-        "JFEN13"
-      ],
-      "link_documento": NaN
-    },
-    {
-      "cnpj": "08613550000198",
-      "razao_social": "BRASIL BROKERS PARTICIPACOES S.A..",
+      "cnpj": "",
+      "razao_social": "Alumini Engenharia S.A. - Em Recuperação Judicial",
       "tipo_evento": "Recuperação Judicial",
       "data_evento": null,
-      "volume_emitido": 120000000.0,
+      "volume_emitido": 400000000.0,
       "qtd_ativos": 1,
       "tickers": [
-        "BBRK11"
+        "ALUS12"
+      ],
+      "link_documento": null
+    },
+    {
+      "cnpj": "",
+      "razao_social": "Brasil Pharma S.A. - Em Recuperação Judicial",
+      "tipo_evento": "Recuperação Judicial",
+      "data_evento": null,
+      "volume_emitido": 400000000.0,
+      "qtd_ativos": 1,
+      "tickers": [
+        "BPHR17"
       ],
       "link_documento": null
     }
   ],
-  "atualizado_em": "2026-09-09 04:01:11"
+  "atualizado_em": "2026-09-09 11:25:42"
 }
