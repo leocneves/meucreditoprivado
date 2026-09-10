@@ -298,14 +298,7 @@ const CreditDashboard: React.FC = () => {
     if (rjSel === 'APENAS_RJ')
       base = base.filter(a => a.em_recuperacao_judicial === 'Sim')
 
-    if (spreadHistIdx === 'IPCA') {
-      base = base.filter(a => (a.indexador || '').toUpperCase().includes('IPCA'))
-    } else if (spreadHistIdx === 'DI+') {
-      base = base.filter(a => {
-        const idx = (a.indexador || '').toUpperCase()
-        return idx.includes('DI+') || idx.includes('CDI') || idx.includes('DI%')
-      })
-    } else if (indexadoresSel.length) {
+    if (indexadoresSel.length) {
       base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
     }
 
@@ -334,7 +327,6 @@ const CreditDashboard: React.FC = () => {
     tiposSel,
     incentivadaSel,
     rjSel,
-    spreadHistIdx,
     indexadoresSel,
     issuersSel,
     tickersSel,
