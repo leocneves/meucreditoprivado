@@ -40,10 +40,10 @@ const Watchlist: React.FC<WatchlistProps> = ({ assets }) => {
         <div key={asset.ticker} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group relative">
           <Link to={`/asset/${asset.ticker}`} className="block">
             <h3 className="font-bold text-lg text-blue-900">{asset.ticker}</h3>
-            <p className="text-sm text-slate-500 truncate mb-2">{asset.issuer_name}</p>
+            <p className="text-sm text-slate-500 truncate mb-2">{asset.issuer || (asset as any).issuer_name}</p>
             <div className="flex gap-2">
-              <span className="text-[10px] px-2 py-0.5 bg-slate-100 rounded-full font-semibold uppercase">{asset.asset_type}</span>
-              <span className="text-[10px] px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full font-semibold">{asset.coupon_type}</span>
+              <span className="text-[10px] px-2 py-0.5 bg-slate-100 rounded-full font-semibold uppercase">{asset.tipo || (asset as any).asset_type}</span>
+              <span className="text-[10px] px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full font-semibold">{asset.indexador || (asset as any).coupon_type}</span>
             </div>
           </Link>
           <button 

@@ -550,7 +550,7 @@ const Trades: React.FC = () => {
       if (indexerFilter !== 'TODOS') {
         const idx = (t.indexador || '').toUpperCase();
         if (indexerFilter === 'DI+' && !idx.includes('DI+') && !idx.includes('CDI+')) return false;
-        if (indexerFilter === 'IPCA' && !idx.includes('IPCA') && !idx.includes('IGP')) return false;
+        if (indexerFilter === 'IPCA' && !idx.includes('IPCA')) return false;
         if (indexerFilter === 'PRE' && !idx.includes('PRÉ') && !idx.includes('PRE')) return false;
         if (indexerFilter === 'DI%' && !idx.includes('DI%') && !idx.includes('%CDI')) return false;
       }
@@ -866,7 +866,7 @@ const Trades: React.FC = () => {
         if (targetIdx !== 'TODOS') {
           const idx = (t.indexador || '').toUpperCase();
           if ((targetIdx === 'DI+' || targetIdx === 'CDI+') && !idx.includes('DI+') && !idx.includes('CDI+')) return false;
-          if (targetIdx === 'IPCA' && !idx.includes('IPCA') && !idx.includes('IGP')) return false;
+          if (targetIdx === 'IPCA' && !idx.includes('IPCA')) return false;
           if (targetIdx === 'PRE' && !idx.includes('PRÉ') && !idx.includes('PRE')) return false;
           if ((targetIdx === 'DI%' || targetIdx === 'CDI%') && !idx.includes('DI%') && !idx.includes('%CDI')) return false;
         }
@@ -1209,7 +1209,7 @@ const Trades: React.FC = () => {
       if (noRateIndexerFilter !== 'TODOS') {
         const idx = (item.indexador || '').toUpperCase();
         if (noRateIndexerFilter === 'DI+' && !idx.includes('DI+') && !idx.includes('CDI+')) return false;
-        if (noRateIndexerFilter === 'IPCA' && !idx.includes('IPCA') && !idx.includes('IGP')) return false;
+        if (noRateIndexerFilter === 'IPCA' && !idx.includes('IPCA')) return false;
         if (noRateIndexerFilter === 'DI%' && !idx.includes('DI%') && !idx.includes('%CDI')) return false;
         if (noRateIndexerFilter === 'PRE' && !idx.includes('PRÉ') && !idx.includes('PRE')) return false;
       }
@@ -1900,8 +1900,10 @@ const Trades: React.FC = () => {
             <select
               value={indexerFilter}
               onChange={e => {
-                setIndexerFilter(e.target.value);
-                setChartIndexer(e.target.value as any);
+                const val = e.target.value;
+                setIndexerFilter(val);
+                setChartIndexer(val as any);
+                setNoRateIndexerFilter(val === 'TODOS' ? 'TODOS' : val);
               }}
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -2157,6 +2159,7 @@ const Trades: React.FC = () => {
                 onClick={() => {
                   setChartIndexer('TODOS');
                   setIndexerFilter('TODOS');
+                  setNoRateIndexerFilter('TODOS');
                 }}
                 disabled={chartMetric === 'spread'}
                 title={chartMetric === 'spread' ? 'Spread over requer um indexador homogêneo específico' : 'Consolidado de todo o mercado'}
@@ -2177,6 +2180,7 @@ const Trades: React.FC = () => {
                   onClick={() => {
                     setChartIndexer(idx);
                     setIndexerFilter(idx);
+                    setNoRateIndexerFilter(idx === 'CDI+' ? 'DI+' : idx === 'CDI%' ? 'DI%' : idx);
                   }}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
                     chartIndexer === idx

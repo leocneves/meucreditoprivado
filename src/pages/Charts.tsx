@@ -298,8 +298,16 @@ const CreditDashboard: React.FC = () => {
     if (rjSel === 'APENAS_RJ')
       base = base.filter(a => a.em_recuperacao_judicial === 'Sim')
 
-    if (indexadoresSel.length)
+    if (spreadHistIdx === 'IPCA') {
+      base = base.filter(a => (a.indexador || '').toUpperCase().includes('IPCA'))
+    } else if (spreadHistIdx === 'DI+') {
+      base = base.filter(a => {
+        const idx = (a.indexador || '').toUpperCase()
+        return idx.includes('DI+') || idx.includes('CDI') || idx.includes('DI%')
+      })
+    } else if (indexadoresSel.length) {
       base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    }
 
     if (issuersSel.length)
       base = base.filter(a => issuersSel.includes(a.issuer || ''))
@@ -326,6 +334,7 @@ const CreditDashboard: React.FC = () => {
     tiposSel,
     incentivadaSel,
     rjSel,
+    spreadHistIdx,
     indexadoresSel,
     issuersSel,
     tickersSel,
@@ -541,7 +550,8 @@ const CreditDashboard: React.FC = () => {
       (a.ticker && a.ticker.toLowerCase().includes(q)) ||
       (a.issuer && a.issuer.toLowerCase().includes(q)) ||
       (a.setor && a.setor.toLowerCase().includes(q)) ||
-      (a.isin && a.isin.toLowerCase().includes(q))
+      (a.isin && a.isin.toLowerCase().includes(q)) ||
+      (a.indexador && a.indexador.toLowerCase().includes(q))
     )
   }, [filteredAssets, tableSearch])
 
@@ -581,6 +591,7 @@ const CreditDashboard: React.FC = () => {
                 setTiposSel([])
                 setIncentivadaSel('ALL')
                 setRjSel('ALL')
+                setSpreadHistIdx('ALL')
                 setIndexadoresSel([])
                 setIssuersSel([])
                 setTickersSel([])
@@ -629,9 +640,70 @@ const CreditDashboard: React.FC = () => {
           />
         </div>
 
-        {/* Linha 2: Incentivada (Lei 12.431), Recuperação Judicial e Faixas de Spread */}
+        {/* Linha 2: Indexador Rápido, Incentivada (Lei 12.431), Recuperação Judicial e Faixas de Spread */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
           <div className="flex flex-wrap items-center gap-4">
+            {/* Filtro Rápido de Indexador */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Indexador:
+              </span>
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                <button
+                  onClick={() => {
+                    setSpreadHistIdx('ALL')
+                    setIndexadoresSel([])
+                  }}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    spreadHistIdx === 'ALL' && indexadoresSel.length === 0
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Todos
+                </button>
+                <button
+                  onClick={() => {
+                    setSpreadHistIdx('IPCA')
+                    setIndexadoresSel(['IPCA'])
+                  }}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    spreadHistIdx === 'IPCA' || (indexadoresSel.length === 1 && indexadoresSel[0] === 'IPCA')
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  IPCA
+                </button>
+                <button
+                  onClick={() => {
+                    setSpreadHistIdx('DI+')
+                    setIndexadoresSel(['DI+'])
+                  }}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    spreadHistIdx === 'DI+' || (indexadoresSel.length === 1 && indexadoresSel[0] === 'DI+')
+                      ? 'bg-emerald-600 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  CDI / DI+
+                </button>
+                <button
+                  onClick={() => {
+                    setSpreadHistIdx('ALL')
+                    setIndexadoresSel(['Pré'])
+                  }}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    indexadoresSel.length === 1 && indexadoresSel[0] === 'Pré'
+                      ? 'bg-amber-600 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Pré
+                </button>
+              </div>
+            </div>
+
             {/* Filtro Incentivadas */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
@@ -781,25 +853,34 @@ const CreditDashboard: React.FC = () => {
 
             <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-bold">
               <button
-                onClick={() => setSpreadHistIdx('ALL')}
+                onClick={() => {
+                  setSpreadHistIdx('ALL')
+                  setIndexadoresSel([])
+                }}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  spreadHistIdx === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600'
+                  spreadHistIdx === 'ALL' && indexadoresSel.length === 0 ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Todos
               </button>
               <button
-                onClick={() => setSpreadHistIdx('IPCA')}
+                onClick={() => {
+                  setSpreadHistIdx('IPCA')
+                  setIndexadoresSel(['IPCA'])
+                }}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  spreadHistIdx === 'IPCA' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600'
+                  spreadHistIdx === 'IPCA' || (indexadoresSel.length === 1 && indexadoresSel[0] === 'IPCA') ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 IPCA (vs NTN-B)
               </button>
               <button
-                onClick={() => setSpreadHistIdx('DI+')}
+                onClick={() => {
+                  setSpreadHistIdx('DI+')
+                  setIndexadoresSel(['DI+'])
+                }}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  spreadHistIdx === 'DI+' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600'
+                  spreadHistIdx === 'DI+' || (indexadoresSel.length === 1 && indexadoresSel[0] === 'DI+') ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 DI+ (sobre CDI)
