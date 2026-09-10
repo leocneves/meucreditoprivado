@@ -1095,14 +1095,14 @@ const CreditDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 whitespace-nowrap">
-              {displayTableAssets.slice(0, 250).map(a => {
+              {displayTableAssets.slice(0, 250).map((a, idx) => {
                 const spreadVal = parseFloat(a.spread || '') * 100
                 const durVal = parseFloat(a.duration || '')
                 const normRating = a.rating_normalizado || normalizeRating(a.rating)
                 const puNum = parseFloat(a.pu_mercado || a.pu || '')
 
                 return (
-                  <tr key={a.ticker} className="hover:bg-slate-50 transition">
+                  <tr key={`${a.ticker}_${a.isin || a.issuer || idx}`} className="hover:bg-slate-50 transition">
                     <td className="p-2.5 font-mono font-bold text-blue-600">
                       <Link to={`/asset/${a.ticker}`} className="hover:underline">
                         {a.ticker}
