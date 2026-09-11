@@ -1060,12 +1060,12 @@ const CreditDashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Filtro Liquidez B3 (Compra/Venda & Dias Negociados) */}
+          {/* Filtro Liquidez & Cotações (ANBIMA Compra/Venda & B3 Dias Negociados) */}
           <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/70 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                 <Droplets size={13} className="text-emerald-600" />
-                Liquidez Mínima B3
+                Liquidez & Cotações
               </span>
               {(bidAskFilter !== 'ALL' || minDiasNegociados > 0) && (
                 <button
@@ -1079,15 +1079,15 @@ const CreditDashboard: React.FC = () => {
                 </button>
               )}
             </div>
-            {/* Cotação Firme Bid/Ask */}
+            {/* Cotação Firme Bid/Ask ANBIMA */}
             <div className="space-y-1">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                Cotações Firmes no Secundário:
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider" title="Taxas de Compra (Bid) e Venda (Ask) informadas pelos formadores de mercado à ANBIMA">
+                Cotações ANBIMA (Bid / Ask Firme):
               </div>
               <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
                 {[
                   { id: 'ALL', label: 'Todas' },
-                  { id: 'BID_ASK', label: 'Bid & Ask (Firme)' },
+                  { id: 'BID_ASK', label: 'Bid & Ask' },
                   { id: 'BID_ONLY', label: 'Apenas Bid' },
                   { id: 'ASK_ONLY', label: 'Apenas Ask' }
                 ].map(opt => (
@@ -1107,8 +1107,8 @@ const CreditDashboard: React.FC = () => {
             </div>
             {/* Frequência B3 (Dias Negociados em 30 Pregões) */}
             <div className="space-y-1 pt-0.5">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                Frequência de Negociação B3 (30 pregões):
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider" title="Frequência de pregões com negócios executados na B3 nos últimos 30 dias úteis">
+                Negociação B3 (Últimos 30 pregões):
               </div>
               <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
                 {[
@@ -1514,7 +1514,7 @@ const CreditDashboard: React.FC = () => {
                 <th className="p-2.5">Indexador</th>
                 <th className="p-2.5">Taxa Emissão</th>
                 <th className="p-2.5">Taxa Mercado</th>
-                <th className="p-2.5">Cotações B3 (Bid / Ask)</th>
+                <th className="p-2.5" title="Taxas indicativas de Compra (Bid) e Venda (Ask) apuradas pela ANBIMA junto aos dealers de mercado secundário">Cotações ANBIMA (Bid / Ask)</th>
                 <th className="p-2.5 text-right">Spread Over (bps)</th>
                 <th className="p-2.5 text-right">Duration (anos)</th>
                 <th className="p-2.5 text-right">PU Mercado</th>
