@@ -53,6 +53,45 @@ export const matchIndexador = (assetIdx: string | undefined | null, selectedIdxs
   })
 }
 
+export const getAssetSpreadDisplay = (a: Asset): { label: string; rawValue: number | null } => {
+  const norm = normalizeIndexador(a.indexador)
+
+  if (norm === '%DI') {
+    const tm = parseFloat(a.taxa_mercado || '')
+    const te = parseFloat(a.taxa_emissao || '')
+    const val = !isNaN(tm) && tm > 0 ? tm : (!isNaN(te) && te > 0 ? te : null)
+    if (val !== null) {
+      return { label: `${val.toFixed(2)}% do CDI`, rawValue: val }
+    }
+    return { label: '-', rawValue: null }
+  }
+
+  if (norm === 'DI+') {
+    const tm = parseFloat(a.taxa_mercado || '')
+    const te = parseFloat(a.taxa_emissao || '')
+    const val = !isNaN(tm) && tm > 0 ? tm : (!isNaN(te) && te > 0 ? te : null)
+    if (val !== null) {
+      return { label: `CDI +${val.toFixed(2)}%`, rawValue: val }
+    }
+    return { label: '-', rawValue: null }
+  }
+
+  // IPCA ou Pré: Spread Over soberano (NTN-B ou DI Futuro) em bps
+  const tm = parseFloat(a.taxa_mercado || a.taxa_emissao || '')
+  const tRef = parseFloat(a.taxa_ntnb || '')
+  if (!isNaN(tm) && !isNaN(tRef) && tRef > 0) {
+    const diffBps = Math.round((tm - tRef) * 100)
+    return { label: `${diffBps >= 0 ? `+${diffBps}` : diffBps} bps`, rawValue: diffBps }
+  }
+  const rawSp = parseFloat(a.spread || '')
+  if (!isNaN(rawSp)) {
+    const bps = Math.abs(rawSp) < 1 ? Math.round(rawSp * 10000) : Math.round(rawSp)
+    return { label: `${bps >= 0 ? `+${bps}` : bps} bps`, rawValue: bps }
+  }
+
+  return { label: '-', rawValue: null }
+}
+
 const formatDateBr = (isoDate?: string | null): string => {
   if (!isoDate) return '-'
   if (isoDate.includes('/')) return isoDate
@@ -578,14 +617,16 @@ const CreditDashboard: React.FC = () => {
     return filteredAssets
       .map(a => {
         const x = durationYears(a)
+        const spDisplay = getAssetSpreadDisplay(a)
         const rawSpread = parseFloat(a.spread || '')
-        const y = !isNaN(rawSpread) ? Number((rawSpread * 100).toFixed(2)) : null
+        const y = !isNaN(rawSpread) ? Number((rawSpread * 100).toFixed(2)) : (spDisplay.rawValue ?? null)
 
         if (x === null || y === null) return null
 
         return {
           x,
           y,
+          spreadLabel: spDisplay.label,
           name: a.ticker,
           issuer: a.issuer,
           indexador: a.indexador,
@@ -678,6 +719,7 @@ const CreditDashboard: React.FC = () => {
         datePretty: string
         ipca?: number
         di?: number
+        diRate?: number
         diPercent?: number
         pre?: number
       }
@@ -693,11 +735,17 @@ const CreditDashboard: React.FC = () => {
         }
       }
       const val = parseFloat(h.spread_mediano_bps || '')
+      const tm = parseFloat(h.taxa_media || '')
       if (!isNaN(val)) {
         const norm = normalizeIndexador(h.indexador)
         if (norm === 'IPCA') dateMap[h.date].ipca = Math.round(val)
-        else if (norm === 'DI+') dateMap[h.date].di = Math.round(val)
-        else if (norm === '%DI') dateMap[h.date].diPercent = Math.round(val)
+        else if (norm === 'DI+') {
+          dateMap[h.date].di = Math.round(val)
+          dateMap[h.date].diRate = Number((val / 100).toFixed(2))
+        }
+        else if (norm === '%DI') {
+          dateMap[h.date].diPercent = !isNaN(tm) && tm > 50 ? Number(tm.toFixed(2)) : Number((100 + val / 100).toFixed(2))
+        }
         else if (norm === 'Pré') dateMap[h.date].pre = Math.round(val)
       }
     })
@@ -752,7 +800,8 @@ const CreditDashboard: React.FC = () => {
       } else if (norm === 'DI+') {
         dateMap[p.date].diValues.push(sp)
       } else if (norm === '%DI') {
-        dateMap[p.date].diPercentValues.push(sp)
+        const yld = parseFloat(String(p.yield || ''))
+        dateMap[p.date].diPercentValues.push(!isNaN(yld) && yld > 50 ? yld : (100 + sp / 100))
       } else if (norm === 'Pré') {
         dateMap[p.date].preValues.push(sp)
       }
@@ -766,14 +815,22 @@ const CreditDashboard: React.FC = () => {
     }
 
     const result = Object.values(dateMap)
-      .map(d => ({
-        date: d.date,
-        datePretty: d.datePretty,
-        ipca: d.ipcaValues.length ? Math.round(median(d.ipcaValues)!) : undefined,
-        di: d.diValues.length ? Math.round(median(d.diValues)!) : undefined,
-        diPercent: d.diPercentValues.length ? Math.round(median(d.diPercentValues)!) : undefined,
-        pre: d.preValues.length ? Math.round(median(d.preValues)!) : undefined
-      }))
+      .map(d => {
+        const ipcaMed = d.ipcaValues.length ? Math.round(median(d.ipcaValues)!) : undefined
+        const diMedBps = d.diValues.length ? Math.round(median(d.diValues)!) : undefined
+        const diPercentMed = d.diPercentValues.length ? Number(median(d.diPercentValues)!.toFixed(2)) : undefined
+        const preMed = d.preValues.length ? Math.round(median(d.preValues)!) : undefined
+
+        return {
+          date: d.date,
+          datePretty: d.datePretty,
+          ipca: ipcaMed,
+          di: diMedBps,
+          diRate: diMedBps !== undefined ? Number((diMedBps / 100).toFixed(2)) : undefined,
+          diPercent: diPercentMed,
+          pre: preMed
+        }
+      })
       .filter(d => d.ipca !== undefined || d.di !== undefined || d.diPercent !== undefined || d.pre !== undefined)
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
@@ -829,6 +886,41 @@ const CreditDashboard: React.FC = () => {
   }, [indexadoresSel, spreadHistIdx, hasActiveFilters, filteredAssets])
 
   const hasAnyVisibleCurve = showIpcaCurve || showDiCurve || showDiPercentCurve || showPreCurve
+
+  const isOnlyDiPlus = showDiCurve && !showIpcaCurve && !showPreCurve && !showDiPercentCurve
+  const isOnlyDiPercent = showDiPercentCurve && !showIpcaCurve && !showPreCurve && !showDiCurve
+  const isOnlyIpca = showIpcaCurve && !showDiCurve && !showDiPercentCurve && !showPreCurve
+  const isOnlyPre = showPreCurve && !showDiCurve && !showDiPercentCurve && !showIpcaCurve
+
+  const chartTitle = isOnlyDiPlus
+    ? 'Evolução Histórica da Taxa DI+ (CDI + % a.a.)'
+    : isOnlyDiPercent
+    ? 'Evolução Histórica da Taxa %DI (% do CDI)'
+    : isOnlyIpca
+    ? 'Evolução Histórica do Spread Over NTN-B (bps)'
+    : isOnlyPre
+    ? 'Evolução Histórica do Spread Over DI Futuro (bps)'
+    : 'Evolução Histórica das Taxas e Spreads de Mercado'
+
+  const chartSubtitle = hasActiveFilters
+    ? `Série temporal recalculada dinamicamente para os ${filteredAssets.length} ativos selecionados.`
+    : isOnlyDiPlus
+    ? 'Acompanhamento do spread pós-fixado sobre o CDI (% ao ano).'
+    : isOnlyDiPercent
+    ? 'Acompanhamento da taxa média negociada no mercado secundário (% do CDI).'
+    : isOnlyIpca
+    ? 'Prêmio de crédito corporativo sobre a taxa soberana da NTN-B correspondente (bps).'
+    : isOnlyPre
+    ? 'Prêmio de crédito corporativo sobre a curva soberana de DI Futuro B3 (bps).'
+    : 'Acompanhamento temporal dos prêmios de crédito e taxas de mercado secundário (ANBIMA / B3).'
+
+  const yAxisUnit = isOnlyDiPlus
+    ? '% a.a.'
+    : isOnlyDiPercent
+    ? '% do CDI'
+    : isOnlyIpca || isOnlyPre
+    ? ' bps'
+    : ''
 
   /* ---------- Tabela Filtrada com Busca ---------- */
 
@@ -1091,7 +1183,7 @@ const CreditDashboard: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-            <span>Spread (bps):</span>
+            <span>Spread / Taxa:</span>
             <input
               type="number"
               placeholder="Min"
@@ -1387,7 +1479,7 @@ const CreditDashboard: React.FC = () => {
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                   <BarChart3 className="text-blue-600" size={20} />
-                  Evolução Histórica do Spread Over de Mercado (bps)
+                  {chartTitle}
                 </h2>
                 {hasActiveFilters && (
                   <span className="text-[11px] font-extrabold px-2 py-0.5 bg-blue-100 text-blue-800 rounded-md">
@@ -1396,9 +1488,7 @@ const CreditDashboard: React.FC = () => {
                 )}
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                {hasActiveFilters
-                  ? `Série temporal recalculada dinamicamente para os ${filteredAssets.length} ativos selecionados.`
-                  : 'Acompanhamento temporal da abertura e compressão de prêmios de crédito no mercado secundário (ANBIMA / B3).'}
+                {chartSubtitle}
               </p>
             </div>
 
@@ -1490,7 +1580,7 @@ const CreditDashboard: React.FC = () => {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                   <XAxis dataKey="datePretty" stroke="#64748b" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} unit=" bps" domain={['auto', 'auto']} />
+                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} unit={yAxisUnit} domain={['auto', 'auto']} />
                   <Tooltip
                     content={({ active, payload }) => {
                       if (active && payload && payload.length) {
@@ -1503,14 +1593,14 @@ const CreditDashboard: React.FC = () => {
                                 Spread IPCA: {d.ipca >= 0 ? `+${d.ipca}` : d.ipca} bps ({d.ipca >= 0 ? `+${(d.ipca / 100).toFixed(2)}` : (d.ipca / 100).toFixed(2)}%)
                               </p>
                             )}
-                            {showDiCurve && d.di !== undefined && (
+                            {showDiCurve && (d.diRate !== undefined || d.di !== undefined) && (
                               <p className="text-emerald-300 font-bold">
-                                Spread DI+: {d.di >= 0 ? `+${d.di}` : d.di} bps ({d.di >= 0 ? `+${(d.di / 100).toFixed(2)}` : (d.di / 100).toFixed(2)}%)
+                                Taxa DI+: CDI +{(d.diRate ?? (d.di ? d.di / 100 : 0)).toFixed(2)}% a.a.
                               </p>
                             )}
                             {showDiPercentCurve && d.diPercent !== undefined && (
                               <p className="text-purple-300 font-bold">
-                                Spread %DI: {d.diPercent >= 0 ? `+${d.diPercent}` : d.diPercent} bps ({d.diPercent >= 0 ? `+${(d.diPercent / 100).toFixed(2)}` : (d.diPercent / 100).toFixed(2)}%)
+                                Taxa %DI: {d.diPercent.toFixed(2)}% do CDI
                               </p>
                             )}
                             {showPreCurve && d.pre !== undefined && (
@@ -1540,8 +1630,8 @@ const CreditDashboard: React.FC = () => {
                   {showDiCurve && (
                     <Area
                       type="monotone"
-                      dataKey="di"
-                      name="Spread DI+ sobre CDI (bps)"
+                      dataKey={isOnlyDiPlus ? "diRate" : "di"}
+                      name="Taxa DI+ sobre CDI (% a.a.)"
                       stroke="#10b981"
                       strokeWidth={2.5}
                       fillOpacity={1}
@@ -1553,7 +1643,7 @@ const CreditDashboard: React.FC = () => {
                     <Area
                       type="monotone"
                       dataKey="diPercent"
-                      name="Spread %DI sobre CDI (bps)"
+                      name="Taxa %DI (% do CDI)"
                       stroke="#8b5cf6"
                       strokeWidth={2.5}
                       fillOpacity={1}
@@ -1640,7 +1730,7 @@ const CreditDashboard: React.FC = () => {
                       <div>Indexador: {p.indexador || '-'}</div>
                       <div>Rating: <span className="font-bold">{p.rating}</span></div>
                       <div>Duration: {p.x.toFixed(2)} anos (DU/252)</div>
-                      <div className="text-emerald-400 font-bold">Spread: +{p.y} bps (+{(p.y / 100).toFixed(2)}%)</div>
+                      <div className="text-emerald-400 font-bold">{p.spreadLabel ? `Spread / Taxa: ${p.spreadLabel}` : `Spread Over: +${p.y} bps (+${(p.y / 100).toFixed(2)}%)`}</div>
                       <div className="text-[10px] text-slate-400 border-t border-slate-800 pt-1 mt-1">
                         Base: {p.fonte}
                       </div>
@@ -1654,7 +1744,7 @@ const CreditDashboard: React.FC = () => {
         </div>
 
         <div className="mt-2 text-xs text-slate-500 pt-2 border-t border-slate-100">
-          * Spread Over calculado para IPCA (vs NTN-B correspondente), DI+ (spread sobre CDI), DI% e Pré-Fixados (vs Curva DI ANBIMA). Duration calculada na convenção DU/252 com cupons semestrais.
+          * Spread Over calculado para IPCA (vs NTN-B correspondente) e Pré-Fixados (vs Curva DI B3) em bps. Para DI+, taxa adicional anual (% a.a.) sobre o CDI; para %DI, percentual da taxa CDI. Duration calculada na convenção DU/252 com cupons semestrais.
         </div>
       </div>
 
@@ -1719,7 +1809,7 @@ const CreditDashboard: React.FC = () => {
                 <th className="p-2.5">Taxa Emissão</th>
                 <th className="p-2.5">Taxa Mercado</th>
                 <th className="p-2.5" title="Taxas indicativas de Compra (Bid) e Venda (Ask) apuradas pela ANBIMA junto aos dealers de mercado secundário">Cotações ANBIMA (Bid / Ask)</th>
-                <th className="p-2.5 text-right">Spread Over (bps)</th>
+                <th className="p-2.5 text-right">Spread / Taxa</th>
                 <th className="p-2.5 text-right">Duration (anos)</th>
                 <th className="p-2.5 text-right">PU Mercado</th>
                 <th className="p-2.5">Último Negócio B3</th>
@@ -1733,7 +1823,7 @@ const CreditDashboard: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100 whitespace-nowrap">
               {displayTableAssets.slice(0, 250).map((a, idx) => {
-                const spreadVal = parseFloat(a.spread || '') * 100
+                const spreadDisplay = getAssetSpreadDisplay(a)
                 const durVal = parseFloat(a.duration || '')
                 const normRating = a.rating_normalizado || normalizeRating(a.rating)
                 const puNum = parseFloat(a.pu_mercado || a.pu || '')
@@ -1802,7 +1892,7 @@ const CreditDashboard: React.FC = () => {
                       )}
                     </td>
                     <td className="p-2.5 text-right font-mono font-bold text-slate-900">
-                      {isNaN(spreadVal) ? '-' : `+${spreadVal.toFixed(0)} bps`}
+                      {spreadDisplay.label}
                     </td>
                     <td className="p-2.5 text-right font-mono text-slate-700">
                       {isNaN(durVal) ? '-' : durVal.toFixed(2)}
