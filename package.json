@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "python3 generate_sitemap.py",
+    "prebuild": "python3 generate_sitemap.py || node scripts/generate-sitemap.js || true",
     "build": "vite build",
     "preview": "vite preview --port 5173"
   },

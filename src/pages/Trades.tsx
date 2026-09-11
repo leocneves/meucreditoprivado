@@ -410,7 +410,7 @@ const Trades: React.FC = () => {
             rating: cadastral?.rating_normalizado || cadastral?.rating || '-',
             vencimento: cadastral?.vencimento || undefined,
             duration: cadastral?.duration || undefined,
-            setor: normalizeSector(cadastral?.setor || cadastral?.sector),
+            setor: normalizeSector(cadastral?.setor || cadastral?.sector || (t as any).setor),
             incentivada: cadastral?.incentivada || (cadastral?.lei?.includes('12.431') ? 'Sim' : undefined)
           };
         });
