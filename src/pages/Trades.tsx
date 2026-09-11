@@ -45,6 +45,7 @@ import {
   Tooltip as RechartsTooltip
 } from 'recharts';
 import { fetchCSV, Asset } from '../utils/csv';
+import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors';
 
 /* ================= TIPOS ================= */
 
@@ -409,7 +410,7 @@ const Trades: React.FC = () => {
             rating: cadastral?.rating_normalizado || cadastral?.rating || '-',
             vencimento: cadastral?.vencimento || undefined,
             duration: cadastral?.duration || undefined,
-            setor: cadastral?.setor || cadastral?.sector || undefined,
+            setor: normalizeSector(cadastral?.setor || cadastral?.sector),
             incentivada: cadastral?.incentivada || (cadastral?.lei?.includes('12.431') ? 'Sim' : undefined)
           };
         });
@@ -444,7 +445,15 @@ const Trades: React.FC = () => {
         set.add(s);
       }
     });
-    return Array.from(set).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    const canonicalOrder = Array.from(CANONICAL_SECTORS);
+    return Array.from(set).sort((a, b) => {
+      const idxA = canonicalOrder.indexOf(a as any);
+      const idxB = canonicalOrder.indexOf(b as any);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.localeCompare(b, 'pt-BR');
+    });
   }, [trades]);
 
   const availableDebtors = useMemo(() => {
@@ -2055,6 +2064,133 @@ const Trades: React.FC = () => {
           </div>
         </div>
 
+        {/* ================= CONTROLES DE VISUALIZAÇÃO DO GRÁFICO (MÉTRICA, VISÃO & MÉDIA MÓVEL) ================= */}
+        <div className="bg-slate-50/90 p-3.5 rounded-2xl border border-slate-200/80 flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 bg-blue-100 text-blue-700 rounded-lg">
+              <LineChart size={14} />
+            </span>
+            <div>
+              <span className="text-xs font-bold text-slate-800 block">
+                Visualização do Gráfico:
+              </span>
+              <span className="text-[11px] text-slate-500 hidden sm:inline">
+                Selecione o modo de agregação, média móvel e métrica exibida na curva
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Toggle Modo: Por Ativo vs Consolidado */}
+            <div className="inline-flex p-1 bg-white rounded-xl border border-slate-200 shadow-xs">
+              <button
+                onClick={() => {
+                  setChartTarget('ticker');
+                  if (includedTickers.length === 0 && availableTickers.length > 0) {
+                    setIncludedTickers([availableTickers[0].ticker]);
+                    setSelectedTicker(availableTickers[0].ticker);
+                  }
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  chartTarget === 'ticker'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Plotar curva individual de ativo selecionado"
+              >
+                <Tag size={12} /> Por Ativo
+              </button>
+              <button
+                onClick={() => {
+                  setChartTarget('market');
+                  setIncludedTickers([]);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  chartTarget === 'market'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Plotar média consolidada dos dados e filtros selecionados"
+              >
+                <Layers size={12} /> Consolidado
+              </button>
+            </div>
+
+            {/* Toggle de Média Móvel */}
+            <div className="inline-flex items-center p-1 bg-amber-50 border border-amber-200/80 rounded-xl shadow-xs">
+              <span className="text-[11px] font-bold text-amber-800 px-2 flex items-center gap-1">
+                <Sparkles size={11} className="text-amber-600" /> MM:
+              </span>
+              <button
+                onClick={() => setMovingAveragePeriod(0)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  movingAveragePeriod === 0
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 hover:text-amber-950'
+                }`}
+              >
+                Sem MM
+              </button>
+              <button
+                onClick={() => setMovingAveragePeriod(3)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  movingAveragePeriod === 3
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 hover:text-amber-950'
+                }`}
+              >
+                3D
+              </button>
+              <button
+                onClick={() => setMovingAveragePeriod(5)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  movingAveragePeriod === 5
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 hover:text-amber-950'
+                }`}
+              >
+                5D
+              </button>
+            </div>
+
+            {/* Toggle de Métrica */}
+            <div className="inline-flex p-1 bg-blue-50 border border-blue-200/80 rounded-xl shadow-xs">
+              <button
+                onClick={() => handleMetricChange('volume')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  chartMetric === 'volume' ? 'bg-blue-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
+                }`}
+              >
+                Volume (R$)
+              </button>
+              <button
+                onClick={() => handleMetricChange('price')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  chartMetric === 'price' ? 'bg-blue-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
+                }`}
+              >
+                Preço (VWAP)
+              </button>
+              <button
+                onClick={() => handleMetricChange('yield')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  chartMetric === 'yield' ? 'bg-blue-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
+                }`}
+              >
+                Taxa (%)
+              </button>
+              <button
+                onClick={() => handleMetricChange('spread')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  chartMetric === 'spread' ? 'bg-amber-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
+                }`}
+              >
+                Spread (bps)
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Resumo de Registros Filtrados e Limpar Filtros */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 pt-2 border-t border-slate-100">
           <div className="flex items-center gap-2">
@@ -2097,8 +2233,8 @@ const Trades: React.FC = () => {
       {/* ================= GRÁFICO INTERATIVO DE PREÇOS E NEGÓCIOS NOS N DIAS ================= */}
       <div id="grafico-precos-section" className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         
-        {/* Cabeçalho do Gráfico */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        {/* Cabeçalho do Gráfico — Apenas Título e Contexto descritivo sem filtros */}
+        <div className="border-b border-slate-100 pb-5">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
               <span className="p-2 bg-blue-100 text-blue-700 rounded-xl">
@@ -2117,115 +2253,6 @@ const Trades: React.FC = () => {
                     ? `Média ponderada do mercado secundário (excluindo distorções: ${excludedTickers.join(', ')})`
                     : `Média ponderada do universo filtrado (${sortedTrades.length.toLocaleString('pt-BR')} negócios${indexerFilter !== 'TODOS' ? ` em ${indexerFilter}` : ''}${instrumentFilter !== 'TODOS' ? ` em ${instrumentFilter}` : ''})`))}
             </p>
-          </div>
-
-          {/* Controles de Visualização do Gráfico: Modo Ativo vs Consolidado, Média Móvel & Métrica */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Toggle Ativo vs Consolidado */}
-            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
-              <button
-                onClick={() => {
-                  setChartTarget('ticker');
-                  if (includedTickers.length === 0 && availableTickers.length > 0) {
-                    setIncludedTickers([availableTickers[0].ticker]);
-                    setSelectedTicker(availableTickers[0].ticker);
-                  }
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  chartTarget === 'ticker'
-                    ? 'bg-white text-blue-700 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Tag size={13} /> Por Ativo
-              </button>
-              <button
-                onClick={() => {
-                  setChartTarget('market');
-                  setIncludedTickers([]);
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  chartTarget === 'market'
-                    ? 'bg-white text-blue-700 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Layers size={13} /> Consolidado
-              </button>
-            </div>
-
-            {/* Toggle de Média Móvel */}
-            <div className="inline-flex items-center p-1 bg-amber-50/80 border border-amber-200 rounded-xl">
-              <span className="text-[11px] font-bold text-amber-800 px-2 flex items-center gap-1">
-                <Sparkles size={12} className="text-amber-600" /> Média Móvel:
-              </span>
-              <button
-                onClick={() => setMovingAveragePeriod(0)}
-                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
-                  movingAveragePeriod === 0
-                    ? 'bg-amber-600 text-white shadow-sm'
-                    : 'text-amber-800 hover:text-amber-950'
-                }`}
-              >
-                Sem MM
-              </button>
-              <button
-                onClick={() => setMovingAveragePeriod(3)}
-                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
-                  movingAveragePeriod === 3
-                    ? 'bg-amber-600 text-white shadow-sm'
-                    : 'text-amber-800 hover:text-amber-950'
-                }`}
-              >
-                MM 3D
-              </button>
-              <button
-                onClick={() => setMovingAveragePeriod(5)}
-                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
-                  movingAveragePeriod === 5
-                    ? 'bg-amber-600 text-white shadow-sm'
-                    : 'text-amber-800 hover:text-amber-950'
-                }`}
-              >
-                MM 5D
-              </button>
-            </div>
-
-            {/* Toggle de Métrica (Volume R$ em destaque como padrão) */}
-            <div className="inline-flex p-1 bg-blue-50 border border-blue-200 rounded-xl">
-              <button
-                onClick={() => handleMetricChange('volume')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'volume' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Volume (R$)
-              </button>
-              <button
-                onClick={() => handleMetricChange('price')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'price' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Preço (VWAP)
-              </button>
-              <button
-                onClick={() => handleMetricChange('yield')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'yield' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Taxa (%)
-              </button>
-              <button
-                onClick={() => handleMetricChange('spread')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'spread' ? 'bg-amber-600 text-white shadow-sm' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Spread Over (bps)
-              </button>
-            </div>
           </div>
         </div>
 

@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
       },
       build: {
         outDir: 'docs',
+        emptyOutDir: false,
       },
       plugins: [react()],
       define: {

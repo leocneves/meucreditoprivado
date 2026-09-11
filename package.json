@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/generate-sitemap.js",
-    "build": "vite build --outDir docs && cp -r public/data docs/",
+    "prebuild": "python3 generate_sitemap.py",
+    "build": "vite build",
     "preview": "vite preview --port 5173"
   },
   "dependencies": {

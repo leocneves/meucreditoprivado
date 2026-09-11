@@ -1,5 +1,5 @@
-
 import Papa from 'papaparse';
+import { normalizeSector } from './sectors';
 
 export interface Asset {
   ticker: string;
@@ -348,8 +348,13 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
           }
           if (normalizedUrl.includes('assets_master.csv')) {
             (results.data as any[]).forEach(row => {
-              if (row && row.issuer) {
-                row.issuer = sanitizeIssuerName(row.issuer);
+              if (row) {
+                if (row.issuer) {
+                  row.issuer = sanitizeIssuerName(row.issuer);
+                }
+                if (row.setor || row.sector) {
+                  row.setor = normalizeSector(row.setor || row.sector);
+                }
               }
             });
           }
