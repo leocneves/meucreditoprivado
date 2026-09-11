@@ -735,7 +735,7 @@ const CreditDashboard: React.FC = () => {
       return {
         label: 'Taxa (% do CDI)',
         unit: '% CDI',
-        domain: ['dataMin - 2', 'dataMax + 2'] as [string, string]
+        domain: ['auto', 'auto'] as [string, string]
       }
     }
     if (effectiveView === 'IPCA') {
@@ -1853,90 +1853,128 @@ const CreditDashboard: React.FC = () => {
           )}
         </div>
 
-        <div className="flex-1 min-h-[380px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis
-                type="number"
-                dataKey="x"
-                stroke="#64748b"
-                fontSize={11}
-                label={{
-                  value: 'Duration (anos úteis DU/252)',
-                  position: 'insideBottom',
-                  offset: -10,
-                  fontSize: 12
-                }}
-              />
-              <YAxis
-                type="number"
-                dataKey="y"
-                stroke="#64748b"
-                fontSize={11}
-                domain={yAxisConfig.domain}
-                label={{
-                  value: yAxisConfig.label,
-                  angle: -90,
-                  position: 'insideLeft',
-                  fontSize: 12
-                }}
-              />
-              <Tooltip
-                cursor={{ strokeDasharray: '3 3' }}
-                content={(props: any) => {
-                  if (!props.active || !props.payload || !props.payload.length) return null
-                  const p = props.payload[0].payload
+        {displayedScatterPoints.length === 0 ? (
+          <div className="h-[460px] flex flex-col items-center justify-center text-slate-400 text-sm gap-2">
+            <BarChart3 size={32} className="text-slate-300" />
+            <span>Nenhum ativo com duration e taxa válidos para os filtros selecionados.</span>
+          </div>
+        ) : (
+          <div className="w-full h-[460px] min-h-[460px]">
+            <ResponsiveContainer width="100%" height={460}>
+              <ScatterChart data={displayedScatterPoints} margin={{ top: 20, right: 20, bottom: 20, left: 10 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis
+                  type="number"
+                  dataKey="x"
+                  stroke="#64748b"
+                  fontSize={11}
+                  domain={['auto', 'auto']}
+                  label={{
+                    value: 'Duration (anos úteis DU/252)',
+                    position: 'insideBottom',
+                    offset: -10,
+                    fontSize: 12
+                  }}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="y"
+                  stroke="#64748b"
+                  fontSize={11}
+                  domain={yAxisConfig.domain}
+                  label={{
+                    value: yAxisConfig.label,
+                    angle: -90,
+                    position: 'insideLeft',
+                    fontSize: 12
+                  }}
+                />
+                <Tooltip
+                  cursor={{ strokeDasharray: '3 3' }}
+                  content={(props: any) => {
+                    if (!props.active || !props.payload || !props.payload.length) return null
+                    const p = props.payload[0].payload
 
-                  const badgeColor =
-                    p.indexador === 'DI+' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' :
-                    p.indexador === '%DI' ? 'bg-purple-500/20 text-purple-400 border-purple-500/40' :
-                    p.indexador === 'IPCA' ? 'bg-blue-500/20 text-blue-400 border-blue-500/40' :
-                    p.indexador === 'Pré' ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' :
-                    'bg-slate-700 text-slate-300 border-slate-600'
+                    const badgeColor =
+                      p.indexador === 'DI+' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' :
+                      p.indexador === '%DI' ? 'bg-purple-500/20 text-purple-400 border-purple-500/40' :
+                      p.indexador === 'IPCA' ? 'bg-blue-500/20 text-blue-400 border-blue-500/40' :
+                      p.indexador === 'Pré' ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' :
+                      'bg-slate-700 text-slate-300 border-slate-600'
 
-                  return (
-                    <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-800 text-xs space-y-1.5 min-w-[220px]">
-                      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5 mb-1">
-                        <span className="font-bold text-blue-400 text-sm">{p.name}</span>
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${badgeColor}`}>
-                          {p.indexador}
-                        </span>
+                    return (
+                      <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-800 text-xs space-y-1.5 min-w-[220px]">
+                        <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5 mb-1">
+                          <span className="font-bold text-blue-400 text-sm">{p.name}</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${badgeColor}`}>
+                            {p.indexador}
+                          </span>
+                        </div>
+                        <div className="text-slate-300">Emissor: <span className="font-semibold text-white">{p.issuer || '-'}</span></div>
+                        <div className="text-slate-300">Tipo: <span className="text-white">{p.tipo || '-'}</span> {p.incentivada === 'Sim' && <span className="text-emerald-400 font-bold ml-1">(Incentivado)</span>}</div>
+                        <div className="text-slate-300">Rating: <span className="font-bold text-amber-300">{p.rating}</span></div>
+                        <div className="text-slate-300">Duration: <span className="font-semibold text-white">{p.x.toFixed(2)} anos</span> <span className="text-[10px] text-slate-400">(DU/252)</span></div>
+                        <div className="pt-1 border-t border-slate-800/80 flex items-center justify-between">
+                          <span className="text-slate-400">Spread / Taxa:</span>
+                          <span className="text-emerald-400 font-extrabold text-sm">{p.spreadLabel || `${p.y}`}</span>
+                        </div>
+                        <div className="text-[10px] text-slate-500 border-t border-slate-800/80 pt-1 mt-1">
+                          Base: {p.fonte}
+                        </div>
                       </div>
-                      <div className="text-slate-300">Emissor: <span className="font-semibold text-white">{p.issuer || '-'}</span></div>
-                      <div className="text-slate-300">Tipo: <span className="text-white">{p.tipo || '-'}</span> {p.incentivada === 'Sim' && <span className="text-emerald-400 font-bold ml-1">(Incentivado)</span>}</div>
-                      <div className="text-slate-300">Rating: <span className="font-bold text-amber-300">{p.rating}</span></div>
-                      <div className="text-slate-300">Duration: <span className="font-semibold text-white">{p.x.toFixed(2)} anos</span> <span className="text-[10px] text-slate-400">(DU/252)</span></div>
-                      <div className="pt-1 border-t border-slate-800/80 flex items-center justify-between">
-                        <span className="text-slate-400">Spread / Taxa:</span>
-                        <span className="text-emerald-400 font-extrabold text-sm">{p.spreadLabel || `${p.y}`}</span>
-                      </div>
-                      <div className="text-[10px] text-slate-500 border-t border-slate-800/80 pt-1 mt-1">
-                        Base: {p.fonte}
-                      </div>
-                    </div>
-                  )
-                }}
-              />
-              <Legend verticalAlign="top" height={36} />
-              {scatterBySeries['IPCA'].length > 0 && (
-                <Scatter name="IPCA (bps)" data={scatterBySeries['IPCA']} fill="#2563eb" />
-              )}
-              {scatterBySeries['DI+'].length > 0 && (
-                <Scatter name="DI+ (% a.a.)" data={scatterBySeries['DI+']} fill="#10b981" />
-              )}
-              {scatterBySeries['%DI'].length > 0 && (
-                <Scatter name="%DI (% do CDI)" data={scatterBySeries['%DI']} fill="#8b5cf6" />
-              )}
-              {scatterBySeries['Pré'].length > 0 && (
-                <Scatter name="Pré (bps)" data={scatterBySeries['Pré']} fill="#f59e0b" />
-              )}
-              {scatterBySeries['Outros'].length > 0 && (
-                <Scatter name="Outros" data={scatterBySeries['Outros']} fill="#64748b" />
-              )}
-            </ScatterChart>
-          </ResponsiveContainer>
-        </div>
+                    )
+                  }}
+                />
+                <Legend verticalAlign="top" height={36} />
+                {scatterBySeries['IPCA'].length > 0 && (
+                  <Scatter
+                    name="IPCA (bps)"
+                    data={scatterBySeries['IPCA']}
+                    fill="#2563eb"
+                    fillOpacity={0.65}
+                    isAnimationActive={false}
+                  />
+                )}
+                {scatterBySeries['DI+'].length > 0 && (
+                  <Scatter
+                    name="DI+ (% a.a.)"
+                    data={scatterBySeries['DI+']}
+                    fill="#10b981"
+                    fillOpacity={0.65}
+                    isAnimationActive={false}
+                  />
+                )}
+                {scatterBySeries['%DI'].length > 0 && (
+                  <Scatter
+                    name="%DI (% do CDI)"
+                    data={scatterBySeries['%DI']}
+                    fill="#8b5cf6"
+                    fillOpacity={0.65}
+                    isAnimationActive={false}
+                  />
+                )}
+                {scatterBySeries['Pré'].length > 0 && (
+                  <Scatter
+                    name="Pré (bps)"
+                    data={scatterBySeries['Pré']}
+                    fill="#f59e0b"
+                    fillOpacity={0.65}
+                    isAnimationActive={false}
+                  />
+                )}
+                {scatterBySeries['Outros'].length > 0 && (
+                  <Scatter
+                    name="Outros"
+                    data={scatterBySeries['Outros']}
+                    fill="#64748b"
+                    fillOpacity={0.65}
+                    isAnimationActive={false}
+                  />
+                )}
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+        )}
 
         <div className="mt-2 text-xs text-slate-500 pt-2 border-t border-slate-100">
           * Spread Over calculado para IPCA (vs NTN-B correspondente) e Pré-Fixados (vs Curva DI B3) em bps. Para DI+, taxa adicional anual (% a.a.) sobre o CDI; para %DI, percentual da taxa CDI contratada. Duration calculada na convenção DU/252 com cupons semestrais.
