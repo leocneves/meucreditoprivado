@@ -44,26 +44,55 @@ export const normalizeIndexador = (idx: string | undefined | null): string => {
   return trimmed
 }
 
-export const matchIndexador = (assetIdx: string | undefined | null, selectedIdxs: string[]): boolean => {
+export const getAssetNormalizedIndexador = (a: { indexador?: string | null; taxa_emissao?: string | null; taxa_mercado?: string | null } | null | undefined): string => {
+  if (!a) return ''
+  let norm = normalizeIndexador(a.indexador)
+  const tm = parseFloat(a.taxa_mercado || '')
+  const te = parseFloat(a.taxa_emissao || '')
+
+  if (norm === 'DI+') {
+    if ((!isNaN(te) && te >= 80 && te <= 200) || (!isNaN(tm) && tm >= 25 && (isNaN(te) || te >= 50))) {
+      return '%DI'
+    }
+  } else if (norm === '%DI') {
+    if (!isNaN(tm) && tm < 25 && tm > 0.05) {
+      return 'DI+'
+    } else if (!isNaN(te) && te < 25 && te > 0.05 && (isNaN(tm) || tm < 50)) {
+      return 'DI+'
+    }
+  }
+  return norm
+}
+
+export const matchIndexador = (assetOrIdx: Asset | string | undefined | null, selectedIdxs: string[]): boolean => {
   if (!selectedIdxs.length) return true
-  const normAsset = normalizeIndexador(assetIdx)
+  const normAsset = typeof assetOrIdx === 'string' || !assetOrIdx
+    ? normalizeIndexador(assetOrIdx as string)
+    : getAssetNormalizedIndexador(assetOrIdx)
+
   return selectedIdxs.some(s => {
     const normS = normalizeIndexador(s)
-    return normAsset === normS || assetIdx === s
+    return normAsset === normS || (typeof assetOrIdx === 'string' && assetOrIdx === s)
   })
 }
 
-export const getAssetSpreadDisplay = (a: Asset): { label: string; rawValue: number | null } => {
-  const norm = normalizeIndexador(a.indexador)
+export interface AssetSpreadDisplayResult {
+  label: string
+  rawValue: number | null
+  unit: 'bps' | '% a.a.' | '% CDI'
+}
+
+export const getAssetSpreadDisplay = (a: Asset): AssetSpreadDisplayResult => {
+  const norm = getAssetNormalizedIndexador(a)
 
   if (norm === '%DI') {
     const tm = parseFloat(a.taxa_mercado || '')
     const te = parseFloat(a.taxa_emissao || '')
     const val = !isNaN(tm) && tm > 0 ? tm : (!isNaN(te) && te > 0 ? te : null)
     if (val !== null) {
-      return { label: `${val.toFixed(2)}% do CDI`, rawValue: val }
+      return { label: `${val.toFixed(2)}% do CDI`, rawValue: val, unit: '% CDI' }
     }
-    return { label: '-', rawValue: null }
+    return { label: '-', rawValue: null, unit: '% CDI' }
   }
 
   if (norm === 'DI+') {
@@ -71,9 +100,9 @@ export const getAssetSpreadDisplay = (a: Asset): { label: string; rawValue: numb
     const te = parseFloat(a.taxa_emissao || '')
     const val = !isNaN(tm) && tm > 0 ? tm : (!isNaN(te) && te > 0 ? te : null)
     if (val !== null) {
-      return { label: `CDI +${val.toFixed(2)}%`, rawValue: val }
+      return { label: `CDI +${val.toFixed(2)}%`, rawValue: val, unit: '% a.a.' }
     }
-    return { label: '-', rawValue: null }
+    return { label: '-', rawValue: null, unit: '% a.a.' }
   }
 
   // IPCA ou Pré: Spread Over soberano (NTN-B ou DI Futuro) em bps
@@ -81,15 +110,15 @@ export const getAssetSpreadDisplay = (a: Asset): { label: string; rawValue: numb
   const tRef = parseFloat(a.taxa_ntnb || '')
   if (!isNaN(tm) && !isNaN(tRef) && tRef > 0) {
     const diffBps = Math.round((tm - tRef) * 100)
-    return { label: `${diffBps >= 0 ? `+${diffBps}` : diffBps} bps`, rawValue: diffBps }
+    return { label: `${diffBps >= 0 ? `+${diffBps}` : diffBps} bps`, rawValue: diffBps, unit: 'bps' }
   }
   const rawSp = parseFloat(a.spread || '')
   if (!isNaN(rawSp)) {
     const bps = Math.abs(rawSp) < 1 ? Math.round(rawSp * 10000) : Math.round(rawSp)
-    return { label: `${bps >= 0 ? `+${bps}` : bps} bps`, rawValue: bps }
+    return { label: `${bps >= 0 ? `+${bps}` : bps} bps`, rawValue: bps, unit: 'bps' }
   }
 
-  return { label: '-', rawValue: null }
+  return { label: '-', rawValue: null, unit: 'bps' }
 }
 
 const formatDateBr = (isoDate?: string | null): string => {
@@ -371,7 +400,7 @@ const CreditDashboard: React.FC = () => {
   const setoresOptions = useMemo(() => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
-    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a, indexadoresSel))
     const activeSectors = new Set(base.map(a => a.setor).filter(Boolean))
     return CANONICAL_SECTORS.filter(s => activeSectors.has(s))
   }, [ativosVivosBase, tiposSel, indexadoresSel])
@@ -383,7 +412,7 @@ const CreditDashboard: React.FC = () => {
 
     const rawSet = new Set<string>()
     base.forEach(a => {
-      const norm = normalizeIndexador(a.indexador)
+      const norm = getAssetNormalizedIndexador(a)
       if (norm) rawSet.add(norm)
     })
 
@@ -397,7 +426,7 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
-    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a, indexadoresSel))
     return unique(base.map(a => a.issuer))
   }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel])
 
@@ -405,7 +434,7 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
-    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a, indexadoresSel))
     if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
     return unique(base.map(a => a.ticker))
   }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel, issuersSel])
@@ -414,7 +443,7 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
-    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a, indexadoresSel))
     if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
     if (tickersSel.length) base = base.filter(a => tickersSel.includes(a.ticker))
 
@@ -453,7 +482,7 @@ const CreditDashboard: React.FC = () => {
       base = base.filter(a => a.em_recuperacao_judicial === 'Sim')
 
     if (indexadoresSel.length) {
-      base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
+      base = base.filter(a => matchIndexador(a, indexadoresSel))
     }
 
     if (issuersSel.length)
@@ -595,7 +624,7 @@ const CreditDashboard: React.FC = () => {
   const pieIndexador = useMemo(() => {
     const counts: Record<string, number> = {}
     filteredAssets.forEach(a => {
-      const idx = normalizeIndexador(a.indexador) || 'Outros'
+      const idx = getAssetNormalizedIndexador(a) || 'Outros'
       counts[idx] = (counts[idx] || 0) + 1
     })
     return toTopPieData(counts, 5)
@@ -613,13 +642,15 @@ const CreditDashboard: React.FC = () => {
 
   /* ---------- Scatter ---------- */
 
+  const [scatterViewIdx, setScatterViewIdx] = useState<string>('AUTO')
+
   const scatterData = useMemo(() => {
     return filteredAssets
       .map(a => {
         const x = durationYears(a)
         const spDisplay = getAssetSpreadDisplay(a)
-        const rawSpread = parseFloat(a.spread || '')
-        const y = !isNaN(rawSpread) ? Number((rawSpread * 100).toFixed(2)) : (spDisplay.rawValue ?? null)
+        const normIdx = getAssetNormalizedIndexador(a)
+        const y = spDisplay.rawValue
 
         if (x === null || y === null) return null
 
@@ -627,17 +658,106 @@ const CreditDashboard: React.FC = () => {
           x,
           y,
           spreadLabel: spDisplay.label,
+          unit: spDisplay.unit,
           name: a.ticker,
           issuer: a.issuer,
-          indexador: a.indexador,
+          indexador: normIdx || a.indexador || 'Outros',
           tipo: a.tipo,
           incentivada: a.incentivada,
           rating: a.rating_normalizado || 'Sem Rating',
           fonte: a.fonte_precificacao || 'Duration Calculada'
         }
       })
-      .filter(Boolean)
+      .filter(Boolean) as Array<{
+        x: number
+        y: number
+        spreadLabel: string
+        unit: 'bps' | '% a.a.' | '% CDI'
+        name: string
+        issuer?: string
+        indexador: string
+        tipo?: string
+        incentivada?: string
+        rating: string
+        fonte: string
+      }>
   }, [filteredAssets])
+
+  const presentScatterIndexers = useMemo(() => {
+    const set = new Set<string>()
+    scatterData.forEach(d => {
+      if (d.indexador) set.add(d.indexador)
+    })
+    const order = ['IPCA', 'DI+', '%DI', 'Pré']
+    const primaries = order.filter(k => set.has(k))
+    const others = Array.from(set).filter(k => !order.includes(k)).sort()
+    return [...primaries, ...others]
+  }, [scatterData])
+
+  const displayedScatterPoints = useMemo(() => {
+    if (scatterViewIdx !== 'AUTO' && scatterViewIdx !== 'ALL') {
+      return scatterData.filter(d => d.indexador === scatterViewIdx)
+    }
+    return scatterData
+  }, [scatterData, scatterViewIdx])
+
+  const scatterBySeries = useMemo(() => {
+    const groups: { [key: string]: typeof scatterData } = {
+      'IPCA': [],
+      'DI+': [],
+      '%DI': [],
+      'Pré': [],
+      'Outros': []
+    }
+    displayedScatterPoints.forEach(p => {
+      if (groups[p.indexador]) {
+        groups[p.indexador].push(p)
+      } else {
+        groups['Outros'].push(p)
+      }
+    })
+    return groups
+  }, [displayedScatterPoints])
+
+  const yAxisConfig = useMemo(() => {
+    const effectiveView = (scatterViewIdx !== 'AUTO' && scatterViewIdx !== 'ALL')
+      ? scatterViewIdx
+      : (presentScatterIndexers.length === 1 ? presentScatterIndexers[0] : 'ALL')
+
+    if (effectiveView === 'DI+') {
+      return {
+        label: 'Taxa / Spread CDI+ (% a.a.)',
+        unit: '% a.a.',
+        domain: [0, 'auto'] as [number, string]
+      }
+    }
+    if (effectiveView === '%DI') {
+      return {
+        label: 'Taxa (% do CDI)',
+        unit: '% CDI',
+        domain: ['dataMin - 2', 'dataMax + 2'] as [string, string]
+      }
+    }
+    if (effectiveView === 'IPCA') {
+      return {
+        label: 'Spread Over Soberano NTN-B (bps)',
+        unit: 'bps',
+        domain: ['auto', 'auto'] as [string, string]
+      }
+    }
+    if (effectiveView === 'Pré') {
+      return {
+        label: 'Spread Over Curva DI B3 (bps)',
+        unit: 'bps',
+        domain: ['auto', 'auto'] as [string, string]
+      }
+    }
+    return {
+      label: 'Taxa / Spread (bps / % a.a. / % CDI)',
+      unit: 'misto',
+      domain: ['auto', 'auto'] as [string, string]
+    }
+  }, [scatterViewIdx, presentScatterIndexers])
 
   /* ---------- Histogram ---------- */
 
@@ -1678,17 +1798,62 @@ const CreditDashboard: React.FC = () => {
       </div>
 
       {/* SCATTER PLOT */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-[540px] flex flex-col">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="font-bold text-slate-900 text-lg">
-            Dispersão: Spread Over x Duration (anos)
-          </h2>
-          <span className="text-xs text-slate-500 font-medium">
-            {scatterData.length} ativos plotados
-          </span>
+      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm min-h-[560px] flex flex-col">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+          <div>
+            <h2 className="font-bold text-slate-900 text-lg">
+              Dispersão: Spread Over x Duration (anos)
+            </h2>
+            <p className="text-xs text-slate-500">
+              Relação de prazo médio ponderado e retorno. {displayedScatterPoints.length} ativos plotados.
+            </p>
+          </div>
+
+          {/* Quick toggle if multiple indexers are present */}
+          {presentScatterIndexers.length > 1 && (
+            <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold self-start md:self-auto">
+              <button
+                type="button"
+                onClick={() => setScatterViewIdx('ALL')}
+                className={`px-2.5 py-1 rounded-lg transition text-xs font-bold ${
+                  (scatterViewIdx === 'ALL' || scatterViewIdx === 'AUTO')
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                Todos ({scatterData.length})
+              </button>
+              {presentScatterIndexers.map(idx => {
+                const count = scatterData.filter(d => d.indexador === idx).length
+                const isSelected = scatterViewIdx === idx
+                const colorClass =
+                  idx === 'DI+' ? (isSelected ? 'bg-emerald-600 text-white shadow-sm' : 'text-emerald-700 hover:bg-emerald-50') :
+                  idx === '%DI' ? (isSelected ? 'bg-purple-600 text-white shadow-sm' : 'text-purple-700 hover:bg-purple-50') :
+                  idx === 'IPCA' ? (isSelected ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-700 hover:bg-blue-50') :
+                  (isSelected ? 'bg-amber-600 text-white shadow-sm' : 'text-amber-700 hover:bg-amber-50')
+
+                const labelUnit =
+                  idx === 'DI+' ? 'DI+ (% a.a.)' :
+                  idx === '%DI' ? '%DI (% CDI)' :
+                  idx === 'IPCA' ? 'IPCA (bps)' :
+                  idx === 'Pré' ? 'Pré (bps)' : idx
+
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setScatterViewIdx(idx)}
+                    className={`px-2.5 py-1 rounded-lg transition text-xs font-bold ${colorClass}`}
+                  >
+                    {labelUnit} ({count})
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 min-h-[380px]">
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -1709,8 +1874,9 @@ const CreditDashboard: React.FC = () => {
                 dataKey="y"
                 stroke="#64748b"
                 fontSize={11}
+                domain={yAxisConfig.domain}
                 label={{
-                  value: 'Spread Over (bps)',
+                  value: yAxisConfig.label,
                   angle: -90,
                   position: 'insideLeft',
                   fontSize: 12
@@ -1722,29 +1888,58 @@ const CreditDashboard: React.FC = () => {
                   if (!props.active || !props.payload || !props.payload.length) return null
                   const p = props.payload[0].payload
 
+                  const badgeColor =
+                    p.indexador === 'DI+' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' :
+                    p.indexador === '%DI' ? 'bg-purple-500/20 text-purple-400 border-purple-500/40' :
+                    p.indexador === 'IPCA' ? 'bg-blue-500/20 text-blue-400 border-blue-500/40' :
+                    p.indexador === 'Pré' ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' :
+                    'bg-slate-700 text-slate-300 border-slate-600'
+
                   return (
-                    <div className="bg-slate-900 text-white p-3 rounded-xl shadow-lg border border-slate-800 text-xs space-y-1">
-                      <div className="font-bold text-blue-400 text-sm">{p.name}</div>
-                      <div>Emissor: {p.issuer || '-'}</div>
-                      <div>Tipo: {p.tipo || '-'} {p.incentivada === 'Sim' && <span className="text-emerald-400 font-bold">(Incentivado)</span>}</div>
-                      <div>Indexador: {p.indexador || '-'}</div>
-                      <div>Rating: <span className="font-bold">{p.rating}</span></div>
-                      <div>Duration: {p.x.toFixed(2)} anos (DU/252)</div>
-                      <div className="text-emerald-400 font-bold">{p.spreadLabel ? `Spread / Taxa: ${p.spreadLabel}` : `Spread Over: +${p.y} bps (+${(p.y / 100).toFixed(2)}%)`}</div>
-                      <div className="text-[10px] text-slate-400 border-t border-slate-800 pt-1 mt-1">
+                    <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-800 text-xs space-y-1.5 min-w-[220px]">
+                      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5 mb-1">
+                        <span className="font-bold text-blue-400 text-sm">{p.name}</span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${badgeColor}`}>
+                          {p.indexador}
+                        </span>
+                      </div>
+                      <div className="text-slate-300">Emissor: <span className="font-semibold text-white">{p.issuer || '-'}</span></div>
+                      <div className="text-slate-300">Tipo: <span className="text-white">{p.tipo || '-'}</span> {p.incentivada === 'Sim' && <span className="text-emerald-400 font-bold ml-1">(Incentivado)</span>}</div>
+                      <div className="text-slate-300">Rating: <span className="font-bold text-amber-300">{p.rating}</span></div>
+                      <div className="text-slate-300">Duration: <span className="font-semibold text-white">{p.x.toFixed(2)} anos</span> <span className="text-[10px] text-slate-400">(DU/252)</span></div>
+                      <div className="pt-1 border-t border-slate-800/80 flex items-center justify-between">
+                        <span className="text-slate-400">Spread / Taxa:</span>
+                        <span className="text-emerald-400 font-extrabold text-sm">{p.spreadLabel || `${p.y}`}</span>
+                      </div>
+                      <div className="text-[10px] text-slate-500 border-t border-slate-800/80 pt-1 mt-1">
                         Base: {p.fonte}
                       </div>
                     </div>
                   )
                 }}
               />
-              <Scatter data={scatterData} fill="#2563eb" />
+              <Legend verticalAlign="top" height={36} />
+              {scatterBySeries['IPCA'].length > 0 && (
+                <Scatter name="IPCA (bps)" data={scatterBySeries['IPCA']} fill="#2563eb" />
+              )}
+              {scatterBySeries['DI+'].length > 0 && (
+                <Scatter name="DI+ (% a.a.)" data={scatterBySeries['DI+']} fill="#10b981" />
+              )}
+              {scatterBySeries['%DI'].length > 0 && (
+                <Scatter name="%DI (% do CDI)" data={scatterBySeries['%DI']} fill="#8b5cf6" />
+              )}
+              {scatterBySeries['Pré'].length > 0 && (
+                <Scatter name="Pré (bps)" data={scatterBySeries['Pré']} fill="#f59e0b" />
+              )}
+              {scatterBySeries['Outros'].length > 0 && (
+                <Scatter name="Outros" data={scatterBySeries['Outros']} fill="#64748b" />
+              )}
             </ScatterChart>
           </ResponsiveContainer>
         </div>
 
         <div className="mt-2 text-xs text-slate-500 pt-2 border-t border-slate-100">
-          * Spread Over calculado para IPCA (vs NTN-B correspondente) e Pré-Fixados (vs Curva DI B3) em bps. Para DI+, taxa adicional anual (% a.a.) sobre o CDI; para %DI, percentual da taxa CDI. Duration calculada na convenção DU/252 com cupons semestrais.
+          * Spread Over calculado para IPCA (vs NTN-B correspondente) e Pré-Fixados (vs Curva DI B3) em bps. Para DI+, taxa adicional anual (% a.a.) sobre o CDI; para %DI, percentual da taxa CDI contratada. Duration calculada na convenção DU/252 com cupons semestrais.
         </div>
       </div>
 
@@ -1860,7 +2055,7 @@ const CreditDashboard: React.FC = () => {
                         {a.setor || 'Outros Serviços'}
                       </span>
                     </td>
-                    <td className="p-2.5 font-semibold text-slate-700">{a.indexador || '-'}</td>
+                    <td className="p-2.5 font-semibold text-slate-700">{getAssetNormalizedIndexador(a) || a.indexador || '-'}</td>
                     <td className="p-2.5 text-slate-600 font-mono">{a.taxa_emissao || '-'}</td>
                     <td className="p-2.5 font-mono font-bold text-blue-700">
                       {a.taxa_mercado ? (
