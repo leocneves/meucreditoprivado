@@ -33,6 +33,26 @@ import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
 
 const unique = (arr: any[]) => Array.from(new Set(arr.filter(Boolean)))
 
+export const normalizeIndexador = (idx: string | undefined | null): string => {
+  if (!idx) return ''
+  const trimmed = idx.trim()
+  const upper = trimmed.toUpperCase()
+  if (trimmed === 'DI%' || trimmed === '%DI' || upper.includes('DI%') || upper.includes('%DI') || upper.includes('% DO CDI') || upper.includes('%DO CDI')) return '%DI'
+  if (upper.includes('PRÉ') || upper.includes('PRE')) return 'Pré'
+  if (upper.includes('IPCA')) return 'IPCA'
+  if (trimmed === 'DI+' || upper.includes('DI+') || upper.includes('CDI +') || upper.includes('CDI+')) return 'DI+'
+  return trimmed
+}
+
+export const matchIndexador = (assetIdx: string | undefined | null, selectedIdxs: string[]): boolean => {
+  if (!selectedIdxs.length) return true
+  const normAsset = normalizeIndexador(assetIdx)
+  return selectedIdxs.some(s => {
+    const normS = normalizeIndexador(s)
+    return normAsset === normS || assetIdx === s
+  })
+}
+
 const formatDateBr = (isoDate?: string | null): string => {
   if (!isoDate) return '-'
   if (isoDate.includes('/')) return isoDate
@@ -231,7 +251,7 @@ const CreditDashboard: React.FC = () => {
   const [tradeDateMin, setTradeDateMin] = useState<string>('')
   const [tradeDateMax, setTradeDateMax] = useState<string>('')
 
-  const [spreadHistIdx, setSpreadHistIdx] = useState<'IPCA' | 'DI+' | 'ALL'>('ALL')
+  const [spreadHistIdx, setSpreadHistIdx] = useState<'ALL' | 'IPCA' | 'DI+' | 'DI%' | 'PRE'>('ALL')
   const [tableSearch, setTableSearch] = useState('')
 
   /* ---------- Load CSVs & B3 Liquidity ---------- */
@@ -312,7 +332,7 @@ const CreditDashboard: React.FC = () => {
   const setoresOptions = useMemo(() => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
-    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
     const activeSectors = new Set(base.map(a => a.setor).filter(Boolean))
     return CANONICAL_SECTORS.filter(s => activeSectors.has(s))
   }, [ativosVivosBase, tiposSel, indexadoresSel])
@@ -321,14 +341,24 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
-    return unique(base.map(a => a.indexador))
+
+    const rawSet = new Set<string>()
+    base.forEach(a => {
+      const norm = normalizeIndexador(a.indexador)
+      if (norm) rawSet.add(norm)
+    })
+
+    const PRIMARY_ORDER = ['IPCA', 'DI+', '%DI', 'Pré']
+    const primaries = PRIMARY_ORDER.filter(p => rawSet.has(p))
+    const others = Array.from(rawSet).filter(x => !PRIMARY_ORDER.includes(x)).sort()
+    return [...primaries, ...others]
   }, [ativosVivosBase, tiposSel, setoresSel])
 
   const issuersOptions = useMemo(() => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
-    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
     return unique(base.map(a => a.issuer))
   }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel])
 
@@ -336,7 +366,7 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
-    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
     if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
     return unique(base.map(a => a.ticker))
   }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel, issuersSel])
@@ -345,7 +375,7 @@ const CreditDashboard: React.FC = () => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
-    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    if (indexadoresSel.length) base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
     if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
     if (tickersSel.length) base = base.filter(a => tickersSel.includes(a.ticker))
 
@@ -384,7 +414,7 @@ const CreditDashboard: React.FC = () => {
       base = base.filter(a => a.em_recuperacao_judicial === 'Sim')
 
     if (indexadoresSel.length) {
-      base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+      base = base.filter(a => matchIndexador(a.indexador, indexadoresSel))
     }
 
     if (issuersSel.length)
@@ -523,10 +553,14 @@ const CreditDashboard: React.FC = () => {
 
   /* ---------- Pies ---------- */
 
-  const pieIndexador = useMemo(
-    () => toTopPieData(countBy(filteredAssets, 'indexador'), 5),
-    [filteredAssets]
-  )
+  const pieIndexador = useMemo(() => {
+    const counts: Record<string, number> = {}
+    filteredAssets.forEach(a => {
+      const idx = normalizeIndexador(a.indexador) || 'Outros'
+      counts[idx] = (counts[idx] || 0) + 1
+    })
+    return toTopPieData(counts, 5)
+  }, [filteredAssets])
 
   const pieIssuer = useMemo(
     () => toTopPieData(countBy(filteredAssets, 'issuer'), 5),
@@ -637,7 +671,17 @@ const CreditDashboard: React.FC = () => {
   const formattedSpreadHistory = useMemo(() => {
     if (!spreadHistory.length) return []
 
-    const dateMap: Record<string, { date: string; datePretty: string; ipca?: number; di?: number; total?: number }> = {}
+    const dateMap: Record<
+      string,
+      {
+        date: string
+        datePretty: string
+        ipca?: number
+        di?: number
+        diPercent?: number
+        pre?: number
+      }
+    > = {}
 
     spreadHistory.forEach(h => {
       if (!h.date) return
@@ -650,8 +694,11 @@ const CreditDashboard: React.FC = () => {
       }
       const val = parseFloat(h.spread_mediano_bps || '')
       if (!isNaN(val)) {
-        if (h.indexador === 'IPCA') dateMap[h.date].ipca = Math.round(val)
-        if (h.indexador === 'DI+' || h.indexador.includes('CDI')) dateMap[h.date].di = Math.round(val)
+        const norm = normalizeIndexador(h.indexador)
+        if (norm === 'IPCA') dateMap[h.date].ipca = Math.round(val)
+        else if (norm === 'DI+') dateMap[h.date].di = Math.round(val)
+        else if (norm === '%DI') dateMap[h.date].diPercent = Math.round(val)
+        else if (norm === 'Pré') dateMap[h.date].pre = Math.round(val)
       }
     })
 
@@ -663,7 +710,17 @@ const CreditDashboard: React.FC = () => {
       return formattedSpreadHistory
     }
 
-    const dateMap: Record<string, { date: string; datePretty: string; ipcaValues: number[]; diValues: number[] }> = {}
+    const dateMap: Record<
+      string,
+      {
+        date: string
+        datePretty: string
+        ipcaValues: number[]
+        diValues: number[]
+        diPercentValues: number[]
+        preValues: number[]
+      }
+    > = {}
 
     const tickerIndexadorMap = new Map<string, string>()
     filteredAssets.forEach(a => {
@@ -675,7 +732,8 @@ const CreditDashboard: React.FC = () => {
       const sp = parseFloat(String(p.spread_over_ref || ''))
       if (isNaN(sp)) return
 
-      const idx = (tickerIndexadorMap.get(p.ticker) || '').toUpperCase()
+      const rawIdx = tickerIndexadorMap.get(p.ticker) || ''
+      const norm = normalizeIndexador(rawIdx)
 
       if (!dateMap[p.date]) {
         const parts = p.date.split('-')
@@ -683,14 +741,20 @@ const CreditDashboard: React.FC = () => {
           date: p.date,
           datePretty: parts.length === 3 ? `${parts[2]}/${parts[1]}` : p.date,
           ipcaValues: [],
-          diValues: []
+          diValues: [],
+          diPercentValues: [],
+          preValues: []
         }
       }
 
-      if (idx.includes('IPCA')) {
+      if (norm === 'IPCA') {
         dateMap[p.date].ipcaValues.push(sp)
-      } else if (idx.includes('DI+') || idx.includes('CDI') || idx.includes('DI%')) {
+      } else if (norm === 'DI+') {
         dateMap[p.date].diValues.push(sp)
+      } else if (norm === '%DI') {
+        dateMap[p.date].diPercentValues.push(sp)
+      } else if (norm === 'Pré') {
+        dateMap[p.date].preValues.push(sp)
       }
     })
 
@@ -706,13 +770,65 @@ const CreditDashboard: React.FC = () => {
         date: d.date,
         datePretty: d.datePretty,
         ipca: d.ipcaValues.length ? Math.round(median(d.ipcaValues)!) : undefined,
-        di: d.diValues.length ? Math.round(median(d.diValues)!) : undefined
+        di: d.diValues.length ? Math.round(median(d.diValues)!) : undefined,
+        diPercent: d.diPercentValues.length ? Math.round(median(d.diPercentValues)!) : undefined,
+        pre: d.preValues.length ? Math.round(median(d.preValues)!) : undefined
       }))
-      .filter(d => d.ipca !== undefined || d.di !== undefined)
+      .filter(d => d.ipca !== undefined || d.di !== undefined || d.diPercent !== undefined || d.pre !== undefined)
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-    return result.length > 0 ? result : formattedSpreadHistory
+    return result
   }, [hasActiveFilters, prices, filteredTickerSet, filteredAssets, formattedSpreadHistory])
+
+  /* ---------- Curvas Ativas no Gráfico de Spread Histórico ---------- */
+
+  const { showIpcaCurve, showDiCurve, showDiPercentCurve, showPreCurve } = useMemo(() => {
+    // 1. Filtro explícito de indexador via multiselect
+    if (indexadoresSel.length > 0) {
+      return {
+        showIpcaCurve: indexadoresSel.some(s => normalizeIndexador(s) === 'IPCA'),
+        showDiCurve: indexadoresSel.some(s => normalizeIndexador(s) === 'DI+'),
+        showDiPercentCurve: indexadoresSel.some(s => normalizeIndexador(s) === '%DI'),
+        showPreCurve: indexadoresSel.some(s => normalizeIndexador(s) === 'Pré')
+      }
+    }
+
+    // 2. Filtro rápido de indexador selecionado no gráfico (spreadHistIdx)
+    if (spreadHistIdx !== 'ALL') {
+      return {
+        showIpcaCurve: spreadHistIdx === 'IPCA',
+        showDiCurve: spreadHistIdx === 'DI+',
+        showDiPercentCurve: spreadHistIdx === 'DI%',
+        showPreCurve: spreadHistIdx === 'PRE'
+      }
+    }
+
+    // 3. spreadHistIdx === 'ALL' e sem indexadoresSel:
+    // Se outros filtros estiverem ativos (ex: emissor ou setor), exibir apenas os indexadores presentes nos ativos filtrados
+    if (hasActiveFilters) {
+      const activeIdxs = new Set<string>()
+      filteredAssets.forEach(a => {
+        const norm = normalizeIndexador(a.indexador)
+        if (norm) activeIdxs.add(norm)
+      })
+      return {
+        showIpcaCurve: activeIdxs.has('IPCA'),
+        showDiCurve: activeIdxs.has('DI+'),
+        showDiPercentCurve: activeIdxs.has('%DI'),
+        showPreCurve: activeIdxs.has('Pré')
+      }
+    }
+
+    // 4. Sem nenhum filtro: exibir todas as 4 curvas separadas do mercado
+    return {
+      showIpcaCurve: true,
+      showDiCurve: true,
+      showDiPercentCurve: true,
+      showPreCurve: true
+    }
+  }, [indexadoresSel, spreadHistIdx, hasActiveFilters, filteredAssets])
+
+  const hasAnyVisibleCurve = showIpcaCurve || showDiCurve || showDiPercentCurve || showPreCurve
 
   /* ---------- Tabela Filtrada com Busca ---------- */
 
@@ -874,15 +990,28 @@ const CreditDashboard: React.FC = () => {
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  CDI / DI+
+                  DI+
                 </button>
                 <button
                   onClick={() => {
-                    setSpreadHistIdx('ALL')
+                    setSpreadHistIdx('DI%')
+                    setIndexadoresSel(['%DI'])
+                  }}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    spreadHistIdx === 'DI%' || (indexadoresSel.length === 1 && (indexadoresSel[0] === '%DI' || indexadoresSel[0] === 'DI%'))
+                      ? 'bg-purple-600 text-white shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  %DI
+                </button>
+                <button
+                  onClick={() => {
+                    setSpreadHistIdx('PRE')
                     setIndexadoresSel(['Pré'])
                   }}
                   className={`px-3 py-1 rounded-lg transition ${
-                    indexadoresSel.length === 1 && indexadoresSel[0] === 'Pré'
+                    spreadHistIdx === 'PRE' || (indexadoresSel.length === 1 && (indexadoresSel[0] === 'Pré' || indexadoresSel[0] === 'PRE'))
                       ? 'bg-amber-600 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
@@ -1273,13 +1402,13 @@ const CreditDashboard: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-bold">
+            <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-bold overflow-x-auto max-w-full">
               <button
                 onClick={() => {
                   setSpreadHistIdx('ALL')
                   setIndexadoresSel([])
                 }}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
                   spreadHistIdx === 'ALL' && indexadoresSel.length === 0 ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -1290,7 +1419,7 @@ const CreditDashboard: React.FC = () => {
                   setSpreadHistIdx('IPCA')
                   setIndexadoresSel(['IPCA'])
                 }}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
                   spreadHistIdx === 'IPCA' || (indexadoresSel.length === 1 && indexadoresSel[0] === 'IPCA') ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -1301,78 +1430,153 @@ const CreditDashboard: React.FC = () => {
                   setSpreadHistIdx('DI+')
                   setIndexadoresSel(['DI+'])
                 }}
-                className={`px-3 py-1.5 rounded-lg transition ${
-                  spreadHistIdx === 'DI+' || (indexadoresSel.length === 1 && indexadoresSel[0] === 'DI+') ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
+                  spreadHistIdx === 'DI+' || (indexadoresSel.length === 1 && indexadoresSel[0] === 'DI+') ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 DI+ (sobre CDI)
               </button>
+              <button
+                onClick={() => {
+                  setSpreadHistIdx('DI%')
+                  setIndexadoresSel(['%DI'])
+                }}
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
+                  spreadHistIdx === 'DI%' || (indexadoresSel.length === 1 && (indexadoresSel[0] === '%DI' || indexadoresSel[0] === 'DI%')) ? 'bg-white text-purple-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                %DI (% do CDI)
+              </button>
+              <button
+                onClick={() => {
+                  setSpreadHistIdx('PRE')
+                  setIndexadoresSel(['Pré'])
+                }}
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
+                  spreadHistIdx === 'PRE' || (indexadoresSel.length === 1 && (indexadoresSel[0] === 'Pré' || indexadoresSel[0] === 'PRE')) ? 'bg-white text-amber-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Pré (Taxa Pré)
+              </button>
             </div>
           </div>
 
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={dynamicSpreadHistory} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorIpca" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0.0} />
-                  </linearGradient>
-                  <linearGradient id="colorDi" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="datePretty" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} unit=" bps" domain={['auto', 'auto']} />
-                <Tooltip
-                  content={({ active, payload, label }) => {
-                    if (active && payload && payload.length) {
-                      const d = payload[0].payload
-                      return (
-                        <div className="bg-slate-900 text-white p-3 rounded-xl shadow-lg text-xs space-y-1">
-                          <p className="font-semibold text-slate-300">Data: {d.date}</p>
-                          {d.ipca !== undefined && (
-                            <p className="text-blue-300 font-bold">Spread IPCA: +{d.ipca} bps (+{(d.ipca / 100).toFixed(2)}%)</p>
-                          )}
-                          {d.di !== undefined && (
-                            <p className="text-emerald-300 font-bold">Spread DI+: +{d.di} bps (+{(d.di / 100).toFixed(2)}%)</p>
-                          )}
-                        </div>
-                      )
-                    }
-                    return null
-                  }}
-                />
-                <Legend />
-                {(spreadHistIdx === 'ALL' || spreadHistIdx === 'IPCA') && (
-                  <Area
-                    type="monotone"
-                    dataKey="ipca"
-                    name="Spread IPCA vs NTN-B (bps)"
-                    stroke="#2563eb"
-                    strokeWidth={2.5}
-                    fillOpacity={1}
-                    fill="url(#colorIpca)"
-                    connectNulls
+          {dynamicSpreadHistory.length === 0 || !hasAnyVisibleCurve ? (
+            <div className="h-72 flex flex-col items-center justify-center text-slate-400 text-sm gap-2">
+              <BarChart3 size={32} className="text-slate-300" />
+              <span>Nenhum histórico de spread disponível para a seleção atual.</span>
+            </div>
+          ) : (
+            <div className="h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={dynamicSpreadHistory} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorIpca" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0.0} />
+                    </linearGradient>
+                    <linearGradient id="colorDi" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
+                    </linearGradient>
+                    <linearGradient id="colorDiPercent" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.0} />
+                    </linearGradient>
+                    <linearGradient id="colorPre" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis dataKey="datePretty" stroke="#64748b" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} unit=" bps" domain={['auto', 'auto']} />
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const d = payload[0].payload
+                        return (
+                          <div className="bg-slate-900 text-white p-3 rounded-xl shadow-lg text-xs space-y-1.5 border border-slate-700">
+                            <p className="font-semibold text-slate-300">Data: {d.date}</p>
+                            {showIpcaCurve && d.ipca !== undefined && (
+                              <p className="text-blue-300 font-bold">
+                                Spread IPCA: {d.ipca >= 0 ? `+${d.ipca}` : d.ipca} bps ({d.ipca >= 0 ? `+${(d.ipca / 100).toFixed(2)}` : (d.ipca / 100).toFixed(2)}%)
+                              </p>
+                            )}
+                            {showDiCurve && d.di !== undefined && (
+                              <p className="text-emerald-300 font-bold">
+                                Spread DI+: {d.di >= 0 ? `+${d.di}` : d.di} bps ({d.di >= 0 ? `+${(d.di / 100).toFixed(2)}` : (d.di / 100).toFixed(2)}%)
+                              </p>
+                            )}
+                            {showDiPercentCurve && d.diPercent !== undefined && (
+                              <p className="text-purple-300 font-bold">
+                                Spread %DI: {d.diPercent >= 0 ? `+${d.diPercent}` : d.diPercent} bps ({d.diPercent >= 0 ? `+${(d.diPercent / 100).toFixed(2)}` : (d.diPercent / 100).toFixed(2)}%)
+                              </p>
+                            )}
+                            {showPreCurve && d.pre !== undefined && (
+                              <p className="text-amber-300 font-bold">
+                                Spread Pré: {d.pre >= 0 ? `+${d.pre}` : d.pre} bps ({d.pre >= 0 ? `+${(d.pre / 100).toFixed(2)}` : (d.pre / 100).toFixed(2)}%)
+                              </p>
+                            )}
+                          </div>
+                        )
+                      }
+                      return null
+                    }}
                   />
-                )}
-                {(spreadHistIdx === 'ALL' || spreadHistIdx === 'DI+') && (
-                  <Area
-                    type="monotone"
-                    dataKey="di"
-                    name="Spread DI+ sobre CDI (bps)"
-                    stroke="#10b981"
-                    strokeWidth={2.5}
-                    fillOpacity={1}
-                    fill="url(#colorDi)"
-                    connectNulls
-                  />
-                )}
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+                  <Legend />
+                  {showIpcaCurve && (
+                    <Area
+                      type="monotone"
+                      dataKey="ipca"
+                      name="Spread IPCA vs NTN-B (bps)"
+                      stroke="#2563eb"
+                      strokeWidth={2.5}
+                      fillOpacity={1}
+                      fill="url(#colorIpca)"
+                      connectNulls
+                    />
+                  )}
+                  {showDiCurve && (
+                    <Area
+                      type="monotone"
+                      dataKey="di"
+                      name="Spread DI+ sobre CDI (bps)"
+                      stroke="#10b981"
+                      strokeWidth={2.5}
+                      fillOpacity={1}
+                      fill="url(#colorDi)"
+                      connectNulls
+                    />
+                  )}
+                  {showDiPercentCurve && (
+                    <Area
+                      type="monotone"
+                      dataKey="diPercent"
+                      name="Spread %DI sobre CDI (bps)"
+                      stroke="#8b5cf6"
+                      strokeWidth={2.5}
+                      fillOpacity={1}
+                      fill="url(#colorDiPercent)"
+                      connectNulls
+                    />
+                  )}
+                  {showPreCurve && (
+                    <Area
+                      type="monotone"
+                      dataKey="pre"
+                      name="Spread Pré sobre DI Futuro (bps)"
+                      stroke="#f59e0b"
+                      strokeWidth={2.5}
+                      fillOpacity={1}
+                      fill="url(#colorPre)"
+                      connectNulls
+                    />
+                  )}
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
       )}
 
