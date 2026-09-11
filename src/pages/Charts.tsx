@@ -26,11 +26,31 @@ import {
 } from 'recharts'
 import PieBox from '../components/PieBox'
 import SearchMultiSelect from '../components/SearchMultiSelect'
-import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database } from 'lucide-react'
+import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter } from 'lucide-react'
+import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
 
 /* ================= HELPERS ================= */
 
 const unique = (arr: any[]) => Array.from(new Set(arr.filter(Boolean)))
+
+const formatDateBr = (isoDate?: string | null): string => {
+  if (!isoDate) return '-'
+  if (isoDate.includes('/')) return isoDate
+  const parts = isoDate.split('-')
+  if (parts.length === 3) {
+    return `${parts[2]}/${parts[1]}/${parts[0]}`
+  }
+  return isoDate
+}
+
+const subtractDaysFromIso = (isoDate: string, days: number): string => {
+  if (!isoDate) return ''
+  const [y, m, d] = isoDate.split('-').map(Number)
+  const dt = new Date(y, m - 1, d)
+  dt.setDate(dt.getDate() - days)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`
+}
 
 const parseNumber = (v: any) => {
   if (v == null) return NaN
@@ -94,6 +114,7 @@ const downloadCSV = (rows: Asset[]) => {
     { key: 'ticker', label: 'ticker' },
     { key: 'tipo', label: 'tipo_ativo' },
     { key: 'issuer', label: 'emissor_devedor' },
+    { key: 'setor', label: 'setor_anbima' },
     { key: 'indexador', label: 'indexador' },
     { key: 'incentivada', label: 'incentivada_lei_12431' },
     { key: 'em_recuperacao_judicial', label: 'em_recuperacao_judicial' },
@@ -106,6 +127,8 @@ const downloadCSV = (rows: Asset[]) => {
     { key: 'duration', label: 'duration_anos_du252' },
     { key: 'pu_emissao', label: 'pu_emissao' },
     { key: 'pu_mercado', label: 'pu_mercado_atual' },
+    { key: 'data_ultimo_negocio', label: 'data_ultimo_negocio_b3' },
+    { key: 'dias_negociados_30d', label: 'dias_negociados_30d_b3' },
     { key: 'volume_emissao', label: 'volume_emissao_brl' },
     { key: 'quantidade_emitida', label: 'quantidade_emitida' },
     { key: 'data_emissao', label: 'data_emissao' },
@@ -117,7 +140,6 @@ const downloadCSV = (rows: Asset[]) => {
     { key: 'rating_original', label: 'rating_original' },
     { key: 'rating_agencia', label: 'rating_agencia' },
     { key: 'rating_data', label: 'rating_data_divulgacao' },
-    { key: 'setor', label: 'setor_emissor' },
     { key: 'cnpj_emissor', label: 'cnpj_emissor' },
     { key: 'agente_fiduciario', label: 'agente_fiduciario' },
     { key: 'coordenador_lider', label: 'coordenador_lider' },
@@ -182,9 +204,11 @@ const CreditDashboard: React.FC = () => {
   const [assets, setAssets] = useState<Asset[]>([])
   const [prices, setPrices] = useState<PriceRecord[]>([])
   const [spreadHistory, setSpreadHistory] = useState<SpreadHistoryRecord[]>([])
+  const [b3Liquidity, setB3Liquidity] = useState<Record<string, { dias: number; last_date: string }>>({})
   const [loading, setLoading] = useState(true)
 
   const [tiposSel, setTiposSel] = useState<string[]>([])
+  const [setoresSel, setSetoresSel] = useState<string[]>([])
   const [incentivadaSel, setIncentivadaSel] = useState<'ALL' | 'SIM' | 'NAO'>('ALL')
   const [rjSel, setRjSel] = useState<'ALL' | 'EXCLUIR_RJ' | 'APENAS_RJ'>('ALL')
   const [indexadoresSel, setIndexadoresSel] = useState<string[]>([])
@@ -195,21 +219,35 @@ const CreditDashboard: React.FC = () => {
   const [spreadMin, setSpreadMin] = useState<number | null>(null)
   const [spreadMax, setSpreadMax] = useState<number | null>(null)
 
+  // Novos Filtros: Duration, Liquidez B3 e Data dos Negócios
+  const [durationPreset, setDurationPreset] = useState<'ALL' | '<1' | '1-3' | '3-5' | '5-7' | '>7' | 'CUSTOM'>('ALL')
+  const [durationMin, setDurationMin] = useState<number | null>(null)
+  const [durationMax, setDurationMax] = useState<number | null>(null)
+
+  const [bidAskFilter, setBidAskFilter] = useState<'ALL' | 'BID_ASK' | 'BID_ONLY' | 'ASK_ONLY'>('ALL')
+  const [minDiasNegociados, setMinDiasNegociados] = useState<number>(0)
+
+  const [tradeRecencyFilter, setTradeRecencyFilter] = useState<'ALL' | 'LATEST' | '3D' | '7D' | '15D' | '30D' | 'CUSTOM'>('ALL')
+  const [tradeDateMin, setTradeDateMin] = useState<string>('')
+  const [tradeDateMax, setTradeDateMax] = useState<string>('')
+
   const [spreadHistIdx, setSpreadHistIdx] = useState<'IPCA' | 'DI+' | 'ALL'>('ALL')
   const [tableSearch, setTableSearch] = useState('')
 
-  /* ---------- Load CSVs ---------- */
+  /* ---------- Load CSVs & B3 Liquidity ---------- */
 
   useEffect(() => {
     Promise.all([
       fetchCSV<Asset>('./data/assets_master.csv'),
       fetchCSV<PriceRecord>('./data/prices.csv').catch(() => []),
-      fetchCSV<SpreadHistoryRecord>('./data/spread_history.csv').catch(() => [])
+      fetchCSV<SpreadHistoryRecord>('./data/spread_history.csv').catch(() => []),
+      fetch('/data/b3_liquidity_summary.json').then(r => r.json()).catch(() => ({}))
     ])
-      .then(([assetsData, pricesData, historyData]) => {
+      .then(([assetsData, pricesData, historyData, b3Data]) => {
         setAssets(assetsData || [])
         setPrices(pricesData || [])
         setSpreadHistory(historyData || [])
+        setB3Liquidity(b3Data || {})
       })
       .finally(() => setLoading(false))
   }, [])
@@ -233,11 +271,36 @@ const CreditDashboard: React.FC = () => {
 
         return d >= hoje
       })
-      .map(a => ({
-        ...a,
-        rating_normalizado: a.rating_normalizado || normalizeRating(a.rating)
-      }))
-  }, [assets])
+      .map(a => {
+        const tKey = (a.ticker || '').trim().toUpperCase()
+        const b3Info = b3Liquidity[tKey]
+        const b3LastDate = b3Info?.last_date
+        const effectiveLastDate = b3LastDate && (!a.data_ultimo_negocio || b3LastDate > a.data_ultimo_negocio)
+          ? b3LastDate
+          : a.data_ultimo_negocio
+        const dias30d = b3Info?.dias || 0
+
+        return {
+          ...a,
+          rating_normalizado: a.rating_normalizado || normalizeRating(a.rating),
+          setor: normalizeSector(a.setor),
+          data_ultimo_negocio: effectiveLastDate,
+          dias_negociados_30d: dias30d
+        }
+      })
+  }, [assets, b3Liquidity])
+
+  /* ---------- Data Máxima de Negócio Disponível ---------- */
+
+  const maxAvailableTradeDate = useMemo(() => {
+    let maxD = ''
+    for (const a of ativosVivosBase) {
+      if (a.data_ultimo_negocio && a.data_ultimo_negocio > maxD) {
+        maxD = a.data_ultimo_negocio
+      }
+    }
+    return maxD || '2026-09-10'
+  }, [ativosVivosBase])
 
   /* ---------- Options encadeadas ---------- */
 
@@ -246,37 +309,56 @@ const CreditDashboard: React.FC = () => {
     [ativosVivosBase]
   )
 
+  const setoresOptions = useMemo(() => {
+    let base = ativosVivosBase
+    if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
+    const activeSectors = new Set(base.map(a => a.setor).filter(Boolean))
+    return CANONICAL_SECTORS.filter(s => activeSectors.has(s))
+  }, [ativosVivosBase, tiposSel, indexadoresSel])
+
   const indexadoresOptions = useMemo(() => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
     return unique(base.map(a => a.indexador))
-  }, [ativosVivosBase, tiposSel])
+  }, [ativosVivosBase, tiposSel, setoresSel])
 
   const issuersOptions = useMemo(() => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
     if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
     return unique(base.map(a => a.issuer))
-  }, [ativosVivosBase, tiposSel, indexadoresSel])
+  }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel])
 
   const tickersOptions = useMemo(() => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
     if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
     if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
     return unique(base.map(a => a.ticker))
-  }, [ativosVivosBase, tiposSel, indexadoresSel, issuersSel])
+  }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel, issuersSel])
 
   const ratingsOptions = useMemo(() => {
     let base = ativosVivosBase
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
+    if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
     if (indexadoresSel.length) base = base.filter(a => indexadoresSel.includes(a.indexador || ''))
     if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
     if (tickersSel.length) base = base.filter(a => tickersSel.includes(a.ticker))
 
     const existingRatings = unique(base.map(a => a.rating_normalizado || 'Sem Rating'))
     return RATING_SCALE_ORDER.filter(r => existingRatings.includes(r))
-  }, [ativosVivosBase, tiposSel, indexadoresSel, issuersSel, tickersSel])
+  }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel, issuersSel, tickersSel])
+
+  /* ---------- Duration Helper ---------- */
+
+  const durationYears = (a: Asset) => {
+    const d = parseFloat(a.duration || '')
+    return isNaN(d) || d <= 0 ? null : d
+  }
 
   /* ---------- Filtered ---------- */
 
@@ -285,6 +367,9 @@ const CreditDashboard: React.FC = () => {
 
     if (tiposSel.length)
       base = base.filter(a => tiposSel.includes(a.tipo || ''))
+
+    if (setoresSel.length)
+      base = base.filter(a => setoresSel.includes(a.setor || ''))
 
     if (incentivadaSel === 'SIM')
       base = base.filter(a => a.incentivada === 'Sim')
@@ -321,10 +406,75 @@ const CreditDashboard: React.FC = () => {
       })
     }
 
+    // Filtro de Duration
+    if (durationMin !== null || durationMax !== null) {
+      base = base.filter(a => {
+        const d = durationYears(a)
+        if (d === null) return false
+        if (durationMin !== null && d < durationMin) return false
+        if (durationMax !== null && d > durationMax) return false
+        return true
+      })
+    }
+
+    // Filtro de Liquidez B3: Cotações Firmes
+    if (bidAskFilter === 'BID_ASK') {
+      base = base.filter(a => {
+        const c = parseFloat(a.taxa_compra || '')
+        const v = parseFloat(a.taxa_venda || '')
+        return !isNaN(c) && !isNaN(v) && c > 0 && v > 0
+      })
+    } else if (bidAskFilter === 'BID_ONLY') {
+      base = base.filter(a => {
+        const c = parseFloat(a.taxa_compra || '')
+        return !isNaN(c) && c > 0
+      })
+    } else if (bidAskFilter === 'ASK_ONLY') {
+      base = base.filter(a => {
+        const v = parseFloat(a.taxa_venda || '')
+        return !isNaN(v) && v > 0
+      })
+    }
+
+    // Filtro de Liquidez B3: Dias Negociados (30D)
+    if (minDiasNegociados > 0) {
+      base = base.filter(a => (a.dias_negociados_30d || 0) >= minDiasNegociados)
+    }
+
+    // Filtro de Data dos Negócios
+    if (tradeRecencyFilter !== 'ALL') {
+      base = base.filter(a => {
+        if (!a.data_ultimo_negocio) return false
+        const d = a.data_ultimo_negocio
+        if (tradeRecencyFilter === 'LATEST') {
+          return d === maxAvailableTradeDate
+        }
+        if (tradeRecencyFilter === '3D') {
+          return d >= subtractDaysFromIso(maxAvailableTradeDate, 3)
+        }
+        if (tradeRecencyFilter === '7D') {
+          return d >= subtractDaysFromIso(maxAvailableTradeDate, 7)
+        }
+        if (tradeRecencyFilter === '15D') {
+          return d >= subtractDaysFromIso(maxAvailableTradeDate, 15)
+        }
+        if (tradeRecencyFilter === '30D') {
+          return d >= subtractDaysFromIso(maxAvailableTradeDate, 30)
+        }
+        if (tradeRecencyFilter === 'CUSTOM') {
+          if (tradeDateMin && d < tradeDateMin) return false
+          if (tradeDateMax && d > tradeDateMax) return false
+          return true
+        }
+        return true
+      })
+    }
+
     return base
   }, [
     ativosVivosBase,
     tiposSel,
+    setoresSel,
     incentivadaSel,
     rjSel,
     indexadoresSel,
@@ -332,15 +482,18 @@ const CreditDashboard: React.FC = () => {
     tickersSel,
     ratingsSel,
     spreadMin,
-    spreadMax
+    spreadMax,
+    durationMin,
+    durationMax,
+    bidAskFilter,
+    minDiasNegociados,
+    tradeRecencyFilter,
+    tradeDateMin,
+    tradeDateMax,
+    maxAvailableTradeDate
   ])
 
   /* ---------- Metrics ---------- */
-
-  const durationYears = (a: Asset) => {
-    const d = parseFloat(a.duration || '')
-    return isNaN(d) || d <= 0 ? null : d
-  }
 
   const ativosVivos = filteredAssets.length
 
@@ -438,6 +591,7 @@ const CreditDashboard: React.FC = () => {
   const hasActiveFilters = useMemo(() => {
     return (
       tiposSel.length > 0 ||
+      setoresSel.length > 0 ||
       incentivadaSel !== 'ALL' ||
       rjSel !== 'ALL' ||
       indexadoresSel.length > 0 ||
@@ -445,9 +599,36 @@ const CreditDashboard: React.FC = () => {
       tickersSel.length > 0 ||
       ratingsSel.length > 0 ||
       spreadMin !== null ||
-      spreadMax !== null
+      spreadMax !== null ||
+      durationPreset !== 'ALL' ||
+      durationMin !== null ||
+      durationMax !== null ||
+      bidAskFilter !== 'ALL' ||
+      minDiasNegociados > 0 ||
+      tradeRecencyFilter !== 'ALL' ||
+      tradeDateMin !== '' ||
+      tradeDateMax !== ''
     )
-  }, [tiposSel, incentivadaSel, rjSel, indexadoresSel, issuersSel, tickersSel, ratingsSel, spreadMin, spreadMax])
+  }, [
+    tiposSel,
+    setoresSel,
+    incentivadaSel,
+    rjSel,
+    indexadoresSel,
+    issuersSel,
+    tickersSel,
+    ratingsSel,
+    spreadMin,
+    spreadMax,
+    durationPreset,
+    durationMin,
+    durationMax,
+    bidAskFilter,
+    minDiasNegociados,
+    tradeRecencyFilter,
+    tradeDateMin,
+    tradeDateMax
+  ])
 
   const filteredTickerSet = useMemo(() => {
     return new Set(filteredAssets.map(a => a.ticker))
@@ -581,6 +762,7 @@ const CreditDashboard: React.FC = () => {
             <button
               onClick={() => {
                 setTiposSel([])
+                setSetoresSel([])
                 setIncentivadaSel('ALL')
                 setRjSel('ALL')
                 setSpreadHistIdx('ALL')
@@ -590,6 +772,14 @@ const CreditDashboard: React.FC = () => {
                 setRatingsSel([])
                 setSpreadMin(null)
                 setSpreadMax(null)
+                setDurationPreset('ALL')
+                setDurationMin(null)
+                setDurationMax(null)
+                setBidAskFilter('ALL')
+                setMinDiasNegociados(0)
+                setTradeRecencyFilter('ALL')
+                setTradeDateMin('')
+                setTradeDateMax('')
               }}
               className="text-xs text-blue-600 font-bold hover:underline"
             >
@@ -599,12 +789,18 @@ const CreditDashboard: React.FC = () => {
         </div>
 
         {/* Linha 1: MultiSelects */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <SearchMultiSelect
             label="Tipo de Ativo"
             options={tiposOptions}
             selected={tiposSel}
             onChange={setTiposSel}
+          />
+          <SearchMultiSelect
+            label="Setor (ANBIMA)"
+            options={setoresOptions}
+            selected={setoresSel}
+            onChange={setSetoresSel}
           />
           <SearchMultiSelect
             label="Indexadores"
@@ -782,6 +978,240 @@ const CreditDashboard: React.FC = () => {
               onChange={e => setSpreadMax(e.target.value === '' ? null : Number(e.target.value))}
               className="border border-slate-300 rounded-lg px-2.5 py-1 w-20 text-xs bg-slate-50 focus:bg-white"
             />
+          </div>
+        </div>
+
+        {/* Linha 3: Filtros Quantitativos de Crédito (Duration, Liquidez B3 e Data dos Negócios) */}
+        <div className="pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Filtro Duration */}
+          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/70 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Clock size={13} className="text-blue-600" />
+                Duration (anos DU/252)
+              </span>
+              {(durationMin !== null || durationMax !== null || durationPreset !== 'ALL') && (
+                <button
+                  onClick={() => {
+                    setDurationPreset('ALL')
+                    setDurationMin(null)
+                    setDurationMax(null)
+                  }}
+                  className="text-[10px] text-blue-600 hover:underline font-bold"
+                >
+                  Limpar
+                </button>
+              )}
+            </div>
+            {/* Presets */}
+            <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+              {[
+                { id: 'ALL', label: 'Todos', min: null, max: null },
+                { id: '<1', label: '< 1a', min: null, max: 1 },
+                { id: '1-3', label: '1-3a', min: 1, max: 3 },
+                { id: '3-5', label: '3-5a', min: 3, max: 5 },
+                { id: '5-7', label: '5-7a', min: 5, max: 7 },
+                { id: '>7', label: '> 7a', min: 7, max: null }
+              ].map(p => (
+                <button
+                  key={p.id}
+                  onClick={() => {
+                    setDurationPreset(p.id as any)
+                    setDurationMin(p.min)
+                    setDurationMax(p.max)
+                  }}
+                  className={`px-2 py-1 rounded-md text-[11px] transition ${
+                    durationPreset === p.id
+                      ? 'bg-blue-600 text-white shadow-xs font-bold'
+                      : 'text-slate-600 hover:bg-slate-100'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+            {/* Min / Max inputs */}
+            <div className="flex items-center gap-2 text-xs text-slate-600 pt-0.5">
+              <span className="text-[11px] font-medium">Faixa:</span>
+              <input
+                type="number"
+                step="0.5"
+                placeholder="Min"
+                value={durationMin ?? ''}
+                onChange={e => {
+                  setDurationPreset('CUSTOM')
+                  setDurationMin(e.target.value === '' ? null : Number(e.target.value))
+                }}
+                className="border border-slate-200 rounded-lg px-2 py-0.5 w-16 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
+              />
+              <span className="text-[11px]">até</span>
+              <input
+                type="number"
+                step="0.5"
+                placeholder="Max"
+                value={durationMax ?? ''}
+                onChange={e => {
+                  setDurationPreset('CUSTOM')
+                  setDurationMax(e.target.value === '' ? null : Number(e.target.value))
+                }}
+                className="border border-slate-200 rounded-lg px-2 py-0.5 w-16 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
+              />
+              <span className="text-[11px] text-slate-400">anos</span>
+            </div>
+          </div>
+
+          {/* Filtro Liquidez B3 (Compra/Venda & Dias Negociados) */}
+          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/70 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Droplets size={13} className="text-emerald-600" />
+                Liquidez Mínima B3
+              </span>
+              {(bidAskFilter !== 'ALL' || minDiasNegociados > 0) && (
+                <button
+                  onClick={() => {
+                    setBidAskFilter('ALL')
+                    setMinDiasNegociados(0)
+                  }}
+                  className="text-[10px] text-blue-600 hover:underline font-bold"
+                >
+                  Limpar
+                </button>
+              )}
+            </div>
+            {/* Cotação Firme Bid/Ask */}
+            <div className="space-y-1">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Cotações Firmes no Secundário:
+              </div>
+              <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                {[
+                  { id: 'ALL', label: 'Todas' },
+                  { id: 'BID_ASK', label: 'Bid & Ask (Firme)' },
+                  { id: 'BID_ONLY', label: 'Apenas Bid' },
+                  { id: 'ASK_ONLY', label: 'Apenas Ask' }
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => setBidAskFilter(opt.id as any)}
+                    className={`px-2 py-1 rounded-md text-[11px] transition ${
+                      bidAskFilter === opt.id
+                        ? 'bg-emerald-600 text-white shadow-xs font-bold'
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {/* Frequência B3 (Dias Negociados em 30 Pregões) */}
+            <div className="space-y-1 pt-0.5">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Frequência de Negociação B3 (30 pregões):
+              </div>
+              <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                {[
+                  { val: 0, label: 'Todos' },
+                  { val: 1, label: '≥ 1d' },
+                  { val: 5, label: '≥ 5d' },
+                  { val: 10, label: '≥ 10d' },
+                  { val: 15, label: '≥ 15d' },
+                  { val: 20, label: '≥ 20d' }
+                ].map(opt => (
+                  <button
+                    key={opt.val}
+                    onClick={() => setMinDiasNegociados(opt.val)}
+                    className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                      minDiasNegociados === opt.val
+                        ? 'bg-emerald-600 text-white shadow-xs font-bold'
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Filtro Data dos Negócios */}
+          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/70 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Calendar size={13} className="text-indigo-600" />
+                Data dos Negócios (Recência)
+              </span>
+              {(tradeRecencyFilter !== 'ALL' || tradeDateMin !== '' || tradeDateMax !== '') && (
+                <button
+                  onClick={() => {
+                    setTradeRecencyFilter('ALL')
+                    setTradeDateMin('')
+                    setTradeDateMax('')
+                  }}
+                  className="text-[10px] text-blue-600 hover:underline font-bold"
+                >
+                  Limpar
+                </button>
+              )}
+            </div>
+            {/* Presets de Recência */}
+            <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+              {[
+                { id: 'ALL', label: 'Todas' },
+                { id: 'LATEST', label: `Último Pregão (${formatDateBr(maxAvailableTradeDate).slice(0, 5)})` },
+                { id: '3D', label: '3 Dias' },
+                { id: '7D', label: '7 Dias' },
+                { id: '15D', label: '15 Dias' },
+                { id: '30D', label: '30 Dias' },
+                { id: 'CUSTOM', label: 'Personalizado' }
+              ].map(opt => (
+                <button
+                  key={opt.id}
+                  onClick={() => setTradeRecencyFilter(opt.id as any)}
+                  className={`px-2 py-1 rounded-md text-[11px] transition ${
+                    tradeRecencyFilter === opt.id
+                      ? 'bg-indigo-600 text-white shadow-xs font-bold'
+                      : 'text-slate-600 hover:bg-slate-100'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+            {/* Custom Date Range if selected */}
+            {tradeRecencyFilter === 'CUSTOM' ? (
+              <div className="flex items-center gap-1.5 text-xs text-slate-600 pt-0.5">
+                <span className="text-[11px]">De:</span>
+                <input
+                  type="date"
+                  value={tradeDateMin}
+                  onChange={e => setTradeDateMin(e.target.value)}
+                  className="border border-slate-200 rounded-lg px-2 py-0.5 text-[11px] bg-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                />
+                <span className="text-[11px]">Até:</span>
+                <input
+                  type="date"
+                  value={tradeDateMax}
+                  onChange={e => setTradeDateMax(e.target.value)}
+                  className="border border-slate-200 rounded-lg px-2 py-0.5 text-[11px] bg-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                />
+              </div>
+            ) : (
+              <p className="text-[11px] text-slate-500 pt-0.5">
+                {tradeRecencyFilter === 'LATEST'
+                  ? `Mostrando ativos negociados no último pregão (${formatDateBr(maxAvailableTradeDate)}).`
+                  : tradeRecencyFilter === '3D'
+                  ? `Negociação registrada nos últimos 3 dias corridos (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 3))}).`
+                  : tradeRecencyFilter === '7D'
+                  ? `Negociação na última semana (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 7))}).`
+                  : tradeRecencyFilter === '15D'
+                  ? `Negociação na quinzena (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 15))}).`
+                  : tradeRecencyFilter === '30D'
+                  ? `Negociação no último mês (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 30))}).`
+                  : 'Filtre por proximidade temporal para comparar ativos sob as mesmas condições macroeconômicas de juros.'}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -1080,16 +1510,19 @@ const CreditDashboard: React.FC = () => {
                 <th className="p-2.5">Tipo</th>
                 <th className="p-2.5">Incentivada</th>
                 <th className="p-2.5">Emissor / Devedor</th>
+                <th className="p-2.5">Setor (ANBIMA)</th>
                 <th className="p-2.5">Indexador</th>
                 <th className="p-2.5">Taxa Emissão</th>
                 <th className="p-2.5">Taxa Mercado</th>
+                <th className="p-2.5">Cotações B3 (Bid / Ask)</th>
                 <th className="p-2.5 text-right">Spread Over (bps)</th>
                 <th className="p-2.5 text-right">Duration (anos)</th>
                 <th className="p-2.5 text-right">PU Mercado</th>
+                <th className="p-2.5">Último Negócio B3</th>
+                <th className="p-2.5 text-center">Dias Negoc. (30D)</th>
                 <th className="p-2.5">Rating Normalizado</th>
                 <th className="p-2.5">Rating Original</th>
                 <th className="p-2.5">Vencimento</th>
-                <th className="p-2.5">Setor</th>
                 <th className="p-2.5">ISIN</th>
                 <th className="p-2.5">Fonte Precificação</th>
               </tr>
@@ -1128,11 +1561,38 @@ const CreditDashboard: React.FC = () => {
                         </span>
                       )}
                     </td>
+                    <td className="p-2.5 text-slate-700 truncate max-w-[160px]" title={a.setor}>
+                      <span className="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded text-[11px] font-medium">
+                        {a.setor || 'Outros Serviços'}
+                      </span>
+                    </td>
                     <td className="p-2.5 font-semibold text-slate-700">{a.indexador || '-'}</td>
                     <td className="p-2.5 text-slate-600 font-mono">{a.taxa_emissao || '-'}</td>
                     <td className="p-2.5 font-mono font-bold text-blue-700">
                       {a.taxa_mercado ? (
                         <span>{a.taxa_mercado}%</span>
+                      ) : (
+                        <span className="text-slate-400 font-normal">-</span>
+                      )}
+                    </td>
+                    <td className="p-2.5 font-mono text-[11px]">
+                      {a.taxa_compra || a.taxa_venda ? (
+                        <div className="flex items-center gap-1">
+                          {a.taxa_compra ? (
+                            <span className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-1 py-0.5 rounded font-bold" title="Taxa Bid (Compra)">
+                              C: {a.taxa_compra}%
+                            </span>
+                          ) : (
+                            <span className="text-slate-300">C: -</span>
+                          )}
+                          {a.taxa_venda ? (
+                            <span className="text-blue-700 bg-blue-50 border border-blue-200 px-1 py-0.5 rounded font-bold" title="Taxa Ask (Venda)">
+                              V: {a.taxa_venda}%
+                            </span>
+                          ) : (
+                            <span className="text-slate-300">V: -</span>
+                          )}
+                        </div>
                       ) : (
                         <span className="text-slate-400 font-normal">-</span>
                       )}
@@ -1146,6 +1606,35 @@ const CreditDashboard: React.FC = () => {
                     <td className="p-2.5 text-right font-mono text-slate-700">
                       {!isNaN(puNum) && puNum > 0 ? `R$ ${puNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
                     </td>
+                    <td className="p-2.5 font-mono text-slate-700">
+                      {a.data_ultimo_negocio ? (
+                        <div className="flex items-center gap-1.5">
+                          <span>{formatDateBr(a.data_ultimo_negocio)}</span>
+                          {a.data_ultimo_negocio === maxAvailableTradeDate && (
+                            <span className="bg-emerald-100 text-emerald-800 text-[9px] font-extrabold px-1.5 py-0.5 rounded">
+                              Último
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-slate-400 font-normal">-</span>
+                      )}
+                    </td>
+                    <td className="p-2.5 text-center">
+                      {(a.dias_negociados_30d || 0) > 0 ? (
+                        <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                          (a.dias_negociados_30d || 0) >= 15
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                            : (a.dias_negociados_30d || 0) >= 5
+                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                            : 'bg-slate-100 text-slate-600'
+                        }`}>
+                          {a.dias_negociados_30d}d / 30
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-[10px] font-medium">-</span>
+                      )}
+                    </td>
                     <td className="p-2.5">
                       <span className={`px-2 py-0.5 rounded-md font-bold text-[10px] border ${getRatingBadgeClass(normRating)}`}>
                         {normRating}
@@ -1155,9 +1644,6 @@ const CreditDashboard: React.FC = () => {
                       {a.rating_original ? `${a.rating_original} (${a.rating_agencia || a.agencia || ''})` : '-'}
                     </td>
                     <td className="p-2.5 text-slate-600 font-mono">{a.vencimento || '-'}</td>
-                    <td className="p-2.5 text-slate-600 truncate max-w-[150px]" title={a.setor}>
-                      {a.setor || '-'}
-                    </td>
                     <td className="p-2.5 text-slate-400 font-mono text-[11px]">{a.isin || '-'}</td>
                     <td className="p-2.5">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${

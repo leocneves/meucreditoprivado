@@ -44,6 +44,8 @@ export interface Asset {
   coordenador_lider?: string;
   ntnb_referencia?: string;
   taxa_ntnb?: string;
+  data_ultimo_negocio?: string;
+  dias_negociados_30d?: number;
   asset_type?: string;
   series?: string;
   seniority?: string;
