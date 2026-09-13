@@ -277,13 +277,63 @@ def generate_asset_html(row):
                 break
 
     page_url = f"{BASE_URL}/asset/{ticker}"
-    title = f"{tipo} {ticker} ({issuer}) — Taxas, Rating {rating_norm}, Spread e Vencimento | FIXDATA"
+    
+    # Prefix para evitar repetição como "CRA CRA02300JG5"
+    tipo_prefix = "" if ticker.upper().startswith(tipo.upper()) else f"{tipo} "
+    
+    # Nome limpo do emissor
+    issuer_display = emitter_info.get('nome_fantasia') if emitter_info and emitter_info.get('nome_fantasia') else issuer
+    if len(issuer_display) > 28:
+        issuer_display = issuer_display[:26].strip() + "…"
+
+    # Ano ou data de vencimento
+    vcto_display = ""
+    if vencimento and vencimento != '-':
+        if len(vencimento) >= 4 and vencimento[:4].isdigit():
+            vcto_display = f"Vcto {vencimento[:4]}"
+        else:
+            vcto_display = f"Vcto {vencimento}"
+
+    # Destaque de métricas estruturais (em vez de taxa diária volátil)
+    features = []
+    if indexador and indexador != '-':
+        features.append(indexador)
+    if vcto_display:
+        features.append(vcto_display)
+    
+    if rating_norm and rating_norm != 'Sem Rating':
+        features.append(f"Rating {rating_norm}")
+    elif spread and spread != '-':
+        features.append("Spread NTN-B")
+    else:
+        features.append("Histórico B3")
+
+    features_str = ", ".join(features)
+    title = f"{tipo_prefix}{ticker} ({issuer_display}) — {features_str} | FIXDATA"
     
     cnpj_desc = f" (CNPJ: {emitter_info['cnpj_formatado']})" if emitter_info and emitter_info.get('cnpj_formatado') else ""
+    
+    vcto_br = vencimento
+    if '-' in vencimento and len(vencimento.split('-')) == 3:
+        p = vencimento.split('-')
+        vcto_br = f"{p[2]}/{p[1]}/{p[0]}"
+
+    rating_phrase = f", rating {rating_norm}" if (rating_norm and rating_norm != 'Sem Rating') else ""
+    spread_phrase = f", spread de {spread}" if (spread and spread != '-') else ""
+    duration_phrase = f", duration de {duration}" if (duration and duration != '-') else ""
+
+    if ticker.upper().startswith(tipo.upper()):
+        asset_label = f"{ticker} ({tipo} emitido por {issuer}{cnpj_desc})"
+    elif tipo.lower().startswith('deb'):
+        asset_label = f"da debênture {ticker} emitida por {issuer}{cnpj_desc}"
+    else:
+        asset_label = f"do {tipo} {ticker} emitido por {issuer}{cnpj_desc}"
+
+    lead_article = "" if asset_label.startswith("da ") else "do "
     description = (
-        f"Análise completa e dados de mercado de {tipo} {ticker} emitida por {issuer}{cnpj_desc}. "
-        f"Indexador: {indexador} (Taxa: {taxa}), Vencimento: {vencimento}, Rating Normalizado: {rating_norm} (Original: {rating} - {agencia}), "
-        f"Duration: {duration}, Spread: {spread}. Acompanhe cotações e gráficos no FIXDATA."
+        f"Consulte dados de mercado {lead_article}{asset_label}. "
+        f"Indexador {indexador}, vencimento em {vcto_br}{rating_phrase}{spread_phrase}{duration_phrase}. "
+        f"Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA."
     )
 
     provider_data = {
@@ -298,14 +348,47 @@ def generate_asset_html(row):
 
     schema_json = json.dumps({
         "@context": "https://schema.org",
-        "@type": "FinancialProduct",
-        "name": f"{tipo} {ticker}",
-        "identifier": ticker,
-        "isin": isin,
-        "description": description,
-        "url": page_url,
-        "category": tipo,
-        "provider": provider_data
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "name": "FIXDATA",
+                "alternateName": ["FixData", "Meu Crédito Privado"],
+                "url": "https://fixdata.netlify.app/"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "FIXDATA",
+                        "item": "https://fixdata.netlify.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": f"{tipo}s",
+                        "item": "https://fixdata.netlify.app/"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 3,
+                        "name": ticker,
+                        "item": page_url
+                    }
+                ]
+            },
+            {
+                "@type": "FinancialProduct",
+                "name": f"{tipo_prefix}{ticker} ({issuer_display})",
+                "identifier": ticker,
+                "isin": isin,
+                "description": description,
+                "url": page_url,
+                "category": tipo,
+                "provider": provider_data
+            }
+        ]
     }, ensure_ascii=False)
 
     # ─── PAYLOAD ESTRUTURADO PARA HYDRATION INSTANTÂNEO & ROTA SPA ────
@@ -467,7 +550,12 @@ def generate_asset_html(row):
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Primary Meta Tags -->
@@ -484,12 +572,14 @@ def generate_asset_html(row):
     <meta property="og:title" content="{title}" />
     <meta property="og:description" content="{description}" />
     <meta property="og:site_name" content="FIXDATA" />
+    <meta property="og:image" content="https://fixdata.netlify.app/icon-512x512.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="{page_url}" />
     <meta property="twitter:title" content="{title}" />
     <meta property="twitter:description" content="{description}" />
+    <meta property="twitter:image" content="https://fixdata.netlify.app/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
     <script type="application/ld+json">
