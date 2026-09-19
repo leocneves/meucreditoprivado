@@ -411,7 +411,7 @@ const Trades: React.FC = () => {
             vencimento: cadastral?.vencimento || undefined,
             duration: cadastral?.duration || undefined,
             setor: normalizeSector(cadastral?.setor || cadastral?.sector || (t as any).setor),
-            incentivada: cadastral?.incentivada || (cadastral?.lei?.includes('12.431') ? 'Sim' : undefined)
+            incentivada: cadastral?.incentivada || (cadastral?.lei === '1' || cadastral?.lei?.includes('12.431') ? 'Sim' : undefined)
           };
         });
 

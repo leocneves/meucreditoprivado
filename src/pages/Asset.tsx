@@ -552,7 +552,11 @@ const AssetPage: React.FC = () => {
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Enquadramento Legal</span>
             <p className="font-semibold text-emerald-400">
-              {asset.incentivada === 'Sim' ? 'Lei 12.431 (Incentivada)' : (asset.lei ? `Lei ${asset.lei}` : 'Comum')}
+              {asset.incentivada === 'Sim'
+                ? 'Lei 12.431 (Incentivada)'
+                : (asset.lei && !['0', '1', 'false', 'none', 'null'].includes(String(asset.lei).toLowerCase().trim())
+                  ? (String(asset.lei).toLowerCase().includes('lei') ? asset.lei : `Lei ${asset.lei}`)
+                  : 'Comum')}
             </p>
           </div>
         </div>
