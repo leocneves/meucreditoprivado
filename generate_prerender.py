@@ -204,15 +204,55 @@ def generate_asset_html(row):
     if indexador.lower() in ('nan', 'none', ''):
         indexador = '-'
 
-    taxa_val = row.get('taxa_mercado') or row.get('taxa_ativo') or row.get('taxa_emissao', '')
-    taxa = str(taxa_val).strip()
-    if taxa.lower() in ('nan', 'none', ''):
-        taxa = '-'
-    else:
+    def format_taxa_py(val, idx):
+        if val is None or pd.isna(val):
+            return None
+        s = str(val).strip()
+        if s.lower() in ('nan', 'none', '', '-'):
+            return None
         try:
-            taxa = f"{float(taxa):.2f}%"
+            num = float(s.replace('%', '').replace(',', '.').strip())
         except:
-            pass
+            return s
+        idx_up = str(idx or '').upper().strip()
+        if 'IPCA' in idx_up or 'IGP' in idx_up:
+            return f"{idx} + {num:.2f}% a.a."
+        if 'DI%' in idx_up or '%CDI' in idx_up or idx_up == '%DI' or '% DI' in idx_up:
+            return f"{num:.2f}% do CDI"
+        if 'DI+' in idx_up or 'CDI+' in idx_up:
+            return f"CDI + {num:.2f}% a.a."
+        if 'PRE' in idx_up or 'PRÉ' in idx_up:
+            return f"{num:.2f}% a.a. Pré"
+        if idx and idx != '-':
+            if num > 25 and ('DI' in idx_up or 'CDI' in idx_up):
+                return f"{num:.2f}% do CDI"
+            return f"{idx} + {num:.2f}%".strip()
+        return f"{num:.2f}% a.a."
+
+    def format_pu_py(val, is_par=False):
+        if val is None or pd.isna(val):
+            return "R$ 1.000,00" if is_par else "-"
+        s = str(val).strip()
+        if s.lower() in ('nan', 'none', '', '-'):
+            return "R$ 1.000,00" if is_par else "-"
+        try:
+            p = float(s.replace(',', '.').strip())
+            if p <= 0:
+                return "R$ 1.000,00" if is_par else "-"
+            return f"R$ {p:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+        except:
+            return s
+
+    t_mercado_raw = row.get('taxa_mercado') or row.get('taxa_negocio_b3') or row.get('taxa_indicativa_anbima')
+    if not t_mercado_raw and row.get('taxa_ativo') and row.get('taxa_ativo') != row.get('taxa_emissao'):
+        t_mercado_raw = row.get('taxa_ativo')
+    taxa_mercado = format_taxa_py(t_mercado_raw, indexador) or "Sem cotação"
+
+    t_emissao_raw = row.get('taxa_emissao') or (row.get('taxa_ativo') if not t_mercado_raw else None)
+    taxa_emissao = format_taxa_py(t_emissao_raw, indexador) or (indexador if indexador != '-' else "-")
+
+    pu_mercado = format_pu_py(row.get('pu_mercado'), is_par=False)
+    pu_emissao = format_pu_py(row.get('pu_emissao') or row.get('pu'), is_par=True)
 
     rating = str(row.get('rating', '')).strip()
     if rating.lower() in ('nan', 'none', ''):
@@ -255,17 +295,6 @@ def generate_asset_html(row):
     serie = str(row.get('serie', '')).strip()
     if serie.lower() in ('nan', 'none', ''):
         serie = '-'
-
-    pu_val = row.get('pu_mercado') or row.get('pu') or row.get('pu_emissao', '')
-    pu = str(pu_val).strip()
-    pu_label = 'PU Negócio' if (row.get('pu_mercado') and str(row.get('pu_mercado')).strip() not in ('nan', 'none', '')) else 'PU Par'
-    if pu.lower() in ('nan', 'none', ''):
-        pu = '-'
-    else:
-        try:
-            pu = f"R$ {float(pu):,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
-        except:
-            pass
 
     # Procurar emissor cadastrado
     issuer_key = issuer.strip().lower()
@@ -658,19 +687,28 @@ def generate_asset_html(row):
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">{ticker}</h1>
               <p class="text-lg text-slate-600 font-semibold">{issuer}</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">{indexador} + {taxa}</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3">
+              <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-left min-w-[180px]">
+                <span class="text-xs font-bold text-blue-700 uppercase tracking-wider block">Taxa de Mercado</span>
+                <p class="text-2xl font-black text-blue-800 font-mono">{taxa_mercado}</p>
+                <span class="text-[11px] text-slate-500 font-medium">Secundário B3 / ANBIMA</span>
+              </div>
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left min-w-[180px]">
+                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Taxa de Emissão</span>
+                <p class="text-2xl font-black text-slate-800 font-mono">{taxa_emissao}</p>
+                <span class="text-[11px] text-slate-500 font-medium">Contratual</span>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 pt-4 border-t border-slate-100 text-xs">
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">{isin}</strong></div>
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">{vencimento}</strong></div>
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">{duration}</strong></div>
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">{spread}</strong></div>
             <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">{emissao}ª / {serie}ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">{pu_label}</span><strong class="text-slate-800">{pu}</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Mercado</span><strong class="text-blue-700 font-mono">{pu_mercado}</strong></div>
+            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Emissão</span><strong class="text-slate-800 font-mono">{pu_emissao}</strong></div>
           </div>
         </div>
 

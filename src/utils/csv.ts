@@ -8,6 +8,8 @@ export interface Asset {
   indexador?: string;
   taxa_emissao?: string;
   taxa_mercado?: string;
+  taxa_negocio_b3?: string;
+  taxa_indicativa_anbima?: string;
   taxa_ativo?: string;
   taxa_compra?: string;
   taxa_venda?: string;

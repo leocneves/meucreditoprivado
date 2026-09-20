@@ -97,11 +97,53 @@ const AssetPage: React.FC = () => {
     return `R$ ${(v / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MM`;
   };
 
-  const formatPUDisplay = (pu?: string | number | null) => {
+  const formatPUParDisplay = (pu?: string | number | null) => {
     if (!pu) return "R$ 1.000,00";
-    const p = Number(pu);
+    const p = Number(String(pu).replace(',', '.'));
     if (isNaN(p) || p <= 0) return "R$ 1.000,00";
     return `R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
+  const formatPUMercadoDisplay = (pu?: string | number | null) => {
+    if (!pu) return "-";
+    const p = Number(String(pu).replace(',', '.'));
+    if (isNaN(p) || p <= 0) return "-";
+    return `R$ ${p.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
+  const formatTaxaValue = (taxa?: string | number | null, indexador?: string | null) => {
+    if (taxa === null || taxa === undefined || taxa === '' || taxa === 'nan' || taxa === 'None') {
+      return null;
+    }
+    const s = String(taxa).trim();
+    if (s.toLowerCase() === 'nan' || s.toLowerCase() === 'none' || s === '-') return null;
+    const taxaNum = Number(s.replace('%', '').replace(',', '.').trim());
+    if (isNaN(taxaNum)) {
+      return s !== '-' && s !== 'nan' ? s : null;
+    }
+
+    const idx = (indexador || '').trim();
+    const idxUp = idx.toUpperCase();
+
+    if (idxUp.includes('IPCA') || idxUp.includes('IGP')) {
+      return `${idx} + ${taxaNum.toFixed(2)}% a.a.`;
+    }
+    if (idx.includes('DI%') || idx.includes('%CDI') || idx === '%DI' || idx.includes('% DI')) {
+      return `${taxaNum.toFixed(2)}% do CDI`;
+    }
+    if (idx.includes('DI+') || idx.includes('CDI+')) {
+      return `CDI + ${taxaNum.toFixed(2)}% a.a.`;
+    }
+    if (idxUp.includes('PRE') || idxUp.includes('PRÉ') || idxUp === 'PRÉ') {
+      return `${taxaNum.toFixed(2)}% a.a. Pré`;
+    }
+    if (idx) {
+      if (taxaNum > 25 && (idxUp.includes('DI') || idxUp.includes('CDI'))) {
+        return `${taxaNum.toFixed(2)}% do CDI`;
+      }
+      return `${idx} + ${taxaNum.toFixed(2)}%`.trim();
+    }
+    return `${taxaNum.toFixed(2)}% a.a.`;
   };
 
   const formatTaxaDisplay = (a: Asset) => {
@@ -117,13 +159,13 @@ const AssetPage: React.FC = () => {
     if (idx.includes('IPCA') || idx.includes('IGP')) {
       return `${idx} + ${taxaNum.toFixed(2)}% a.a.`;
     }
-    if (idx.includes('DI%') || idx.includes('%CDI')) {
+    if (idx.includes('DI%') || idx.includes('%CDI') || idx === '%DI') {
       return `${taxaNum.toFixed(2)}% do CDI`;
     }
     if (idx.includes('DI+') || idx.includes('CDI+')) {
       return `CDI + ${taxaNum.toFixed(2)}% a.a.`;
     }
-    if (idx.includes('PRE') || idx.includes('PRÉ')) {
+    if (idx.includes('PRE') || idx.includes('PRÉ') || idx === 'Pré') {
       return `${taxaNum.toFixed(2)}% a.a. Pré`;
     }
     return `${idx} ${taxaNum > 0 ? `+ ${taxaNum.toFixed(2)}%` : ''}`.trim();
@@ -341,6 +383,12 @@ const AssetPage: React.FC = () => {
 
   const normRating = asset.rating_normalizado || normalizeRating(asset.rating);
 
+  const tMercadoVal = asset.taxa_mercado || asset.taxa_negocio_b3 || asset.taxa_indicativa_anbima || (asset.taxa_ativo && asset.taxa_ativo !== asset.taxa_emissao ? asset.taxa_ativo : null);
+  const taxaMercadoFormatted = formatTaxaValue(tMercadoVal, asset.indexador);
+
+  const tEmissaoVal = asset.taxa_emissao || (asset.taxa_mercado ? null : asset.taxa_ativo);
+  const taxaEmissaoFormatted = formatTaxaValue(tEmissaoVal, asset.indexador);
+
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
 
@@ -415,27 +463,68 @@ const AssetPage: React.FC = () => {
             </div>
           </div>
 
-          {/* SPREAD & RETORNO DESTAQUE */}
-          <div className="flex items-center gap-4 bg-gradient-to-br from-slate-50 to-blue-50/60 p-5 rounded-2xl border border-blue-100 shadow-inner">
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                {asset.taxa_mercado ? 'Taxa Negociada (Mercado Secundário)' : 'Taxa Contratada (Emissão)'}
-              </span>
-              <p className="text-2xl sm:text-3xl font-black text-blue-700 font-mono">
-                {formatTaxaDisplay(asset)}
-              </p>
-              {asset.spread && (
-                <span className="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md border border-emerald-300">
-                  <TrendingUp size={12} className="text-emerald-700" />
-                  Spread: {Number(asset.spread) > 0 ? '+' : ''}{(Number(asset.spread) * 100).toFixed(2)}% bps
+          {/* TAXAS DE MERCADO E EMISSÃO (LADO A LADO) */}
+          <div className="flex flex-col sm:flex-row items-stretch gap-3">
+            {/* CARD TAXA DE MERCADO */}
+            <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-between min-w-[210px]">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-xs font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <TrendingUp size={14} className="text-blue-600" />
+                    Taxa de Mercado
+                  </span>
+                  {asset.data_ultimo_negocio && (
+                    <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">
+                      {formatDatePretty(asset.data_ultimo_negocio)}
+                    </span>
+                  )}
+                </div>
+                <p className="text-2xl sm:text-3xl font-black text-blue-800 font-mono tracking-tight">
+                  {taxaMercadoFormatted || 'Sem cotação'}
+                </p>
+              </div>
+
+              <div className="mt-2 pt-2 border-t border-blue-100/60 flex items-center justify-between text-xs">
+                {asset.spread ? (
+                  <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
+                    Spread: {Number(asset.spread) > 0 ? '+' : ''}{(Number(asset.spread) * 100).toFixed(2)}% bps
+                  </span>
+                ) : (
+                  <span className="text-[11px] text-slate-500 font-medium">
+                    {asset.fonte_precificacao || 'Secundário ANBIMA/B3'}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* CARD TAXA DE EMISSÃO */}
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between min-w-[210px]">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <Percent size={14} className="text-slate-500" />
+                    Taxa de Emissão
+                  </span>
+                  <span className="text-[10px] font-bold bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded">
+                    Contratual
+                  </span>
+                </div>
+                <p className="text-2xl sm:text-3xl font-black text-slate-800 font-mono tracking-tight">
+                  {taxaEmissaoFormatted || (asset.indexador || '-')}
+                </p>
+              </div>
+
+              <div className="mt-2 pt-2 border-t border-slate-200/60 text-xs">
+                <span className="text-[11px] text-slate-500 font-medium">
+                  Escritura original de emissão
                 </span>
-              )}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* GRID DE CARDS KPI (6 MÉTRICAS PRINCIPAIS) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 pt-4 border-t border-slate-100">
+        {/* GRID DE CARDS KPI (7 MÉTRICAS PRINCIPAIS: TAXAS E PUs) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3.5 pt-4 border-t border-slate-100">
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-colors">
             <div className="flex items-center gap-1.5 text-blue-600 mb-1">
               <Percent size={16} />
@@ -485,18 +574,29 @@ const AssetPage: React.FC = () => {
             <span className="text-[11px] text-slate-400 font-medium">{asset.taxa_ntnb ? `${Number(asset.taxa_ntnb).toFixed(2)}% a.a.` : 'Benchmark'}</span>
           </div>
 
+          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-colors">
+            <div className="flex items-center gap-1.5 text-blue-600 mb-1">
+              <TrendingUp size={16} />
+              <span className="text-[11px] font-bold text-slate-400 uppercase">PU Mercado</span>
+            </div>
+            <p className="text-base font-extrabold text-slate-900 font-mono">
+              {formatPUMercadoDisplay(asset.pu_mercado)}
+            </p>
+            <span className="text-[11px] text-slate-400 font-medium">
+              {asset.data_ultimo_negocio ? formatDatePretty(asset.data_ultimo_negocio) : 'Secundário B3'}
+            </span>
+          </div>
+
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-300 transition-colors">
             <div className="flex items-center gap-1.5 text-slate-600 mb-1">
               <Layers size={16} />
-              <span className="text-[11px] font-bold text-slate-400 uppercase">
-                {asset.pu_mercado ? 'PU Negócio' : 'PU Par'}
-              </span>
+              <span className="text-[11px] font-bold text-slate-400 uppercase">PU Emissão</span>
             </div>
-            <p className="text-base font-extrabold text-slate-900">
-              {formatPUDisplay(asset.pu_mercado || asset.pu || asset.pu_emissao)}
+            <p className="text-base font-extrabold text-slate-900 font-mono">
+              {formatPUParDisplay(asset.pu_emissao || asset.pu)}
             </p>
             <span className="text-[11px] text-slate-400 font-medium">
-              {asset.pu_mercado ? 'Mercado B3' : 'Por Título'}
+              PU Par Contratual
             </span>
           </div>
         </div>
@@ -512,6 +612,26 @@ const AssetPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-xs sm:text-sm">
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Taxa de Emissão</span>
+            <p className="font-mono text-sm font-bold text-emerald-400">{taxaEmissaoFormatted || (asset.indexador || '-')}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Taxa de Mercado</span>
+            <p className="font-mono text-sm font-bold text-blue-400">{taxaMercadoFormatted || 'Sem cotação recente'}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">PU de Emissão (Par)</span>
+            <p className="font-mono text-sm font-bold text-slate-200">{formatPUParDisplay(asset.pu_emissao || asset.pu)}</p>
+          </div>
+
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">PU de Mercado</span>
+            <p className="font-mono text-sm font-bold text-blue-300">{formatPUMercadoDisplay(asset.pu_mercado)}</p>
+          </div>
+
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span>
             <p className="font-mono text-sm font-bold text-blue-300">{asset.isin || '-'}</p>
