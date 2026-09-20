@@ -296,6 +296,66 @@ def generate_asset_html(row):
     if serie.lower() in ('nan', 'none', ''):
         serie = '-'
 
+    vol_val = row.get('volume') or row.get('volume_emissao')
+    volume_display = "-"
+    if vol_val is not None and not pd.isna(vol_val):
+        try:
+            v_num = float(str(vol_val).replace(',', '.').strip())
+            if v_num >= 1e9:
+                volume_display = f"R$ {v_num/1e9:.2f} Bi".replace('.', ',')
+            elif v_num > 0:
+                volume_display = f"R$ {v_num/1e6:.2f} MM".replace('.', ',')
+        except:
+            volume_display = str(vol_val)
+
+    dt_emissao = str(row.get('data_emissao', '')).strip()
+    data_emissao_br = "-"
+    if dt_emissao and dt_emissao.lower() not in ('nan', 'none', ''):
+        if '-' in dt_emissao and len(dt_emissao.split('-')) == 3:
+            p = dt_emissao.split('-')
+            data_emissao_br = f"{p[2]}/{p[1]}/{p[0]}"
+        else:
+            data_emissao_br = dt_emissao
+
+    ntnb_ref = str(row.get('ntnb_referencia', '')).strip()
+    taxa_ntnb_val = row.get('taxa_ntnb')
+    if ntnb_ref.lower() in ('nan', 'none', ''):
+        ntnb_ref_display = "-"
+    else:
+        if '-' in ntnb_ref and len(ntnb_ref.split('-')) == 3:
+            p = ntnb_ref.split('-')
+            ntnb_ref_display = f"{p[2]}/{p[1]}/{p[0]}"
+        else:
+            ntnb_ref_display = ntnb_ref
+        if taxa_ntnb_val is not None and not pd.isna(taxa_ntnb_val):
+            try:
+                ntnb_ref_display += f" ({float(taxa_ntnb_val):.2f}%)"
+            except:
+                pass
+
+    setor = str(row.get('setor', '')).strip()
+    if not setor or setor.lower() in ('nan', 'none', ''):
+        setor = 'Crédito Privado'
+
+    agente_fiduciario = str(row.get('agente_fiduciario', '')).strip()
+    if not agente_fiduciario or agente_fiduciario.lower() in ('nan', 'none', ''):
+        agente_fiduciario = '-'
+
+    coordenador_lider = str(row.get('coordenador_lider', '')).strip()
+    if not coordenador_lider or coordenador_lider.lower() in ('nan', 'none', ''):
+        coordenador_lider = '-'
+
+    tipo_up = tipo.upper()
+    incentivada_val = str(row.get('incentivada', '')).strip().lower()
+    if tipo_up in ('CRI', 'CRA'):
+        regime_fiduciario = 'Patrimônio Separado (Sim)'
+    elif incentivada_val in ('sim', 'true', '1'):
+        regime_fiduciario = 'Incentivada (Lei 12.431)'
+    else:
+        regime_fiduciario = 'Padrão'
+
+    spread_badge = f"+{spread} vs NTN-B" if (spread and spread != '-') else "Preço Fechamento"
+
     # Procurar emissor cadastrado
     issuer_key = issuer.strip().lower()
     emitter_info = EMITTERS_MAP.get(issuer_key)
@@ -687,28 +747,74 @@ def generate_asset_html(row):
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">{ticker}</h1>
               <p class="text-lg text-slate-600 font-semibold">{issuer}</p>
             </div>
-            <div class="flex flex-col sm:flex-row items-stretch gap-3">
-              <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-left min-w-[180px]">
-                <span class="text-xs font-bold text-blue-700 uppercase tracking-wider block">Taxa de Mercado</span>
-                <p class="text-2xl font-black text-blue-800 font-mono">{taxa_mercado}</p>
-                <span class="text-[11px] text-slate-500 font-medium">Secundário B3 / ANBIMA</span>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">{taxa_mercado}</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">{pu_mercado}</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">{spread_badge}</span>
+                </div>
               </div>
-              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left min-w-[180px]">
-                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Taxa de Emissão</span>
-                <p class="text-2xl font-black text-slate-800 font-mono">{taxa_emissao}</p>
-                <span class="text-[11px] text-slate-500 font-medium">Contratual</span>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">{taxa_emissao}</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">{pu_emissao}</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">{isin}</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">{vencimento}</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">{duration}</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">{spread}</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">{emissao}ª / {serie}ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Mercado</span><strong class="text-blue-700 font-mono">{pu_mercado}</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Emissão</span><strong class="text-slate-800 font-mono">{pu_emissao}</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">{indexador}</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">{duration}</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">{vcto_br}</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">{volume_display}</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">{isin}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">{emissao}ª Emissão / {serie}ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">{data_emissao_br}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">{ntnb_ref_display}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">{setor}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">{agente_fiduciario}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">{coordenador_lider}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">{regime_fiduciario}</p></div>
           </div>
         </div>
 

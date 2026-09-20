@@ -44,16 +44,48 @@ const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   return null;
 };
 
+// Cache em memória para navegação SPA instantânea (0ms) entre ativos
+const assetMemoryCache = new Map<string, any>();
+
+const getPreloadedPayload = (targetKey: string, cleanTargetKey: string) => {
+  if (typeof document === 'undefined') return null;
+  const preloadedEl = document.getElementById('__PRELOADED_ASSET__');
+  if (preloadedEl && preloadedEl.textContent) {
+    try {
+      const payload = JSON.parse(preloadedEl.textContent);
+      if (payload && payload.asset) {
+        const pTk = (payload.asset.ticker || '').trim().toUpperCase();
+        const pIsin = (payload.asset.isin || '').trim().toUpperCase();
+        const pTkClean = pTk.replace(/[\s\-]/g, '');
+        const pIsinClean = pIsin.replace(/[\s\-]/g, '');
+
+        if (pTk === targetKey || pIsin === targetKey || 
+            (cleanTargetKey && (pTkClean === cleanTargetKey || pIsinClean === cleanTargetKey))) {
+          return payload;
+        }
+      }
+    } catch (e) {}
+  }
+  return null;
+};
+
 const AssetPage: React.FC = () => {
   const { ticker } = useParams<{ ticker: string }>();
-  const [asset, setAsset] = useState<Asset | null>(null);
-  const [emitter, setEmitter] = useState<Emitter | null>(null);
-  const [prices, setPrices] = useState<PriceRecord[]>([]);
-  const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>([]);
-  const [documents, setDocuments] = useState<AssetDocument[]>([]);
+  const targetKey = decodeURIComponent(ticker || '').trim().toUpperCase();
+  const cleanTargetKey = targetKey.replace(/[\s\-]/g, '');
+
+  const initialPayload = assetMemoryCache.get(targetKey) || 
+                         assetMemoryCache.get(cleanTargetKey) || 
+                         getPreloadedPayload(targetKey, cleanTargetKey);
+
+  const [asset, setAsset] = useState<Asset | null>(initialPayload ? initialPayload.asset : null);
+  const [emitter, setEmitter] = useState<Emitter | null>(initialPayload ? initialPayload.emitter : null);
+  const [prices, setPrices] = useState<PriceRecord[]>(initialPayload ? (initialPayload.prices || []) : []);
+  const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>(initialPayload ? (initialPayload.paymentEvents || []) : []);
+  const [documents, setDocuments] = useState<AssetDocument[]>(initialPayload ? (initialPayload.documents || []) : []);
   const [filterType, setFilterType] = useState<'ALL' | 'JUROS' | 'AMORTIZACAO' | 'FUTUROS'>('ALL');
   const [docFilter, setDocFilter] = useState<'ALL' | 'PROSPECTO' | 'RELATORIO' | 'ASSEMBLEIA'>('ALL');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialPayload);
   const [isFavorite, setIsFavorite] = useState(false);
 
   const formatDatePretty = (dateStr?: string | null) => {
@@ -211,60 +243,54 @@ const AssetPage: React.FC = () => {
     let isMounted = true;
 
     const loadData = async () => {
-      const targetKey = decodeURIComponent(ticker || '').trim().toUpperCase();
-      const cleanTargetKey = targetKey.replace(/[\s\-]/g, '');
+      // 1. FAST PATH 1: Cache em memória (0ms - instantâneo entre cliques)
+      const cached = assetMemoryCache.get(targetKey) || assetMemoryCache.get(cleanTargetKey);
+      if (cached && cached.asset) {
+        applyLoadedData(cached);
+        if (!isMounted) return;
+        setLoading(false);
+        return;
+      }
+
+      // 2. FAST PATH 2: Pré-carregado no HTML SSR da página (0ms de rede)
+      const preloaded = getPreloadedPayload(targetKey, cleanTargetKey);
+      if (preloaded && preloaded.asset) {
+        assetMemoryCache.set(targetKey, preloaded);
+        if (cleanTargetKey) assetMemoryCache.set(cleanTargetKey, preloaded);
+        applyLoadedData(preloaded);
+        if (!isMounted) return;
+        setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
 
-        // 1. FAST PATH 1: Leitura instantânea de dados pré-carregados no HTML SSR (0ms, 0 bytes de rede)
-        const preloadedEl = document.getElementById('__PRELOADED_ASSET__');
-        if (preloadedEl && preloadedEl.textContent) {
+        // 3. FAST PATH 3: Busca JSON individual pré-processado (~10 KB em vez de 90 MB)
+        const tryKeys = [cleanTargetKey, targetKey].filter(Boolean);
+        for (const k of tryKeys) {
           try {
-            const payload = JSON.parse(preloadedEl.textContent);
-            if (payload && payload.asset) {
-              const pTk = (payload.asset.ticker || '').trim().toUpperCase();
-              const pIsin = (payload.asset.isin || '').trim().toUpperCase();
-              const pTkClean = pTk.replace(/[\s\-]/g, '');
-              const pIsinClean = pIsin.replace(/[\s\-]/g, '');
-
-              if (pTk === targetKey || pIsin === targetKey || 
-                  (cleanTargetKey && (pTkClean === cleanTargetKey || pIsinClean === cleanTargetKey))) {
+            const jsonResp = await fetch(`/data/assets/${encodeURIComponent(k)}.json`);
+            const cType = jsonResp.headers.get('content-type') || '';
+            if (jsonResp.ok && !cType.includes('text/html')) {
+              const payload = await jsonResp.json();
+              if (payload && payload.asset) {
+                assetMemoryCache.set(targetKey, payload);
+                if (cleanTargetKey) assetMemoryCache.set(cleanTargetKey, payload);
                 applyLoadedData(payload);
                 if (!isMounted) return;
                 setLoading(false);
                 return;
               }
             }
-          } catch (ePre) {
-            console.warn('Falha ao ler __PRELOADED_ASSET__, usando fallback:', ePre);
-          }
+          } catch (eJson) {}
         }
 
-        // 2. FAST PATH 2: Navegação interna (SPA) via JSON individual (~10 KB em vez de 72 MB)
-        try {
-          const jsonKey = cleanTargetKey || targetKey;
-          const jsonResp = await fetch(`/data/assets/${encodeURIComponent(jsonKey)}.json`);
-          if (jsonResp.ok) {
-            const payload = await jsonResp.json();
-            if (payload && payload.asset) {
-              applyLoadedData(payload);
-              if (!isMounted) return;
-              setLoading(false);
-              return;
-            }
-          }
-        } catch (eJson) {
-          // Continua para fallback clássico
-        }
-
-        // 3. FALLBACK DE SEGURANÇA: Se não houver pré-renderização para o ativo, carrega dos CSVs completos
-        const [assetsData, pricesData, emittersData, schedulesData, docsData] = await Promise.all([
+        // 4. FALLBACK RÁPIDO: Se não houver JSON individual, busca APENAS o cadastro mestre (5 MB)
+        // NÃO baixa cricra_documents (47MB) nem schedules (25MB) para não travar a experiência
+        const [assetsData, emittersData] = await Promise.all([
           fetchCSV<Asset>('/data/assets_master.csv').catch(() => []),
-          fetchCSV<PriceRecord>('/data/prices.csv').catch(() => []),
-          fetchCSV<Emitter>('/data/emitters_master.csv').catch(() => []),
-          fetchCSV<PaymentEvent>('/data/payment_schedules.csv').catch(() => []),
-          fetchCSV<AssetDocument>('/data/cricra_documents.csv').catch(() => [])
+          fetchCSV<Emitter>('/data/emitters_master.csv').catch(() => [])
         ]);
 
         if (!isMounted) return;
@@ -279,60 +305,55 @@ const AssetPage: React.FC = () => {
         });
 
         if (found) {
+          const matched = matchEmitter(emittersData || [], found);
+          const minimalPayload = {
+            asset: found,
+            emitter: matched,
+            prices: [],
+            paymentEvents: [],
+            documents: []
+          };
+          applyLoadedData(minimalPayload);
+          setLoading(false);
+
+          // 5. LAZY BACKGROUND: Carrega histórico complementar em segundo plano sem bloquear a tela
           const foundTicker = (found.ticker || '').trim().toUpperCase();
           const foundIsin = (found.isin || '').trim().toUpperCase();
-          const foundTickerClean = foundTicker.replace(/[\s\-]/g, '');
-          const foundIsinClean = foundIsin.replace(/[\s\-]/g, '');
+          Promise.all([
+            fetchCSV<PriceRecord>('/data/prices.csv').catch(() => []),
+            fetchCSV<PaymentEvent>('/data/payment_schedules.csv').catch(() => []),
+            fetchCSV<AssetDocument>('/data/cricra_documents.csv').catch(() => [])
+          ]).then(([pricesData, schedulesData, docsData]) => {
+            if (!isMounted) return;
+            const assetPrices = (pricesData || []).filter(p => {
+              if (!p) return false;
+              const pTk = (p.ticker || '').trim().toUpperCase();
+              const pIsin = (p.isin || '').trim().toUpperCase();
+              return (foundTicker && pTk === foundTicker) || (foundIsin && (pTk === foundIsin || pIsin === foundIsin));
+            });
+            const assetEvents = (schedulesData || []).filter(e => {
+              if (!e) return false;
+              const eTk = (e.ticker || '').trim().toUpperCase();
+              const eIsin = ((e as any).isin || (e as any).ISIN || '').trim().toUpperCase();
+              return (foundTicker && eTk === foundTicker) || (foundIsin && (eTk === foundIsin || eIsin === foundIsin));
+            });
+            const assetDocs = (docsData || []).filter(d => {
+              if (!d) return false;
+              const dTk = (d.ticker || '').trim().toUpperCase();
+              const dIsin = (d.isin || '').trim().toUpperCase();
+              return (foundTicker && dTk === foundTicker) || (foundIsin && (dTk === foundIsin || dIsin === foundIsin));
+            });
 
-          // 1. Preços
-          const assetPrices = (pricesData || []).filter(p => {
-            if (!p) return false;
-            const pTk = (p.ticker || '').trim().toUpperCase();
-            const pIsin = (p.isin || '').trim().toUpperCase();
-            const pTkClean = pTk.replace(/[\s\-]/g, '');
-            const pIsinClean = pIsin.replace(/[\s\-]/g, '');
-            return (foundTicker && pTk === foundTicker) ||
-                   (foundIsin && (pTk === foundIsin || pIsin === foundIsin)) ||
-                   (foundTickerClean && (pTkClean === foundTickerClean || pIsinClean === foundTickerClean)) ||
-                   (foundIsinClean && (pTkClean === foundIsinClean || pIsinClean === foundIsinClean));
-          });
-
-          // 2. Emissor
-          const matched = matchEmitter(emittersData || [], found);
-
-          // 3. Cronograma de Pagamentos
-          const assetEvents = (schedulesData || []).filter(e => {
-            if (!e) return false;
-            const eTk = (e.ticker || '').trim().toUpperCase();
-            const eIsin = ((e as any).isin || (e as any).ISIN || '').trim().toUpperCase();
-            const eTkClean = eTk.replace(/[\s\-]/g, '');
-            const eIsinClean = eIsin.replace(/[\s\-]/g, '');
-            return (foundTicker && eTk === foundTicker) ||
-                   (foundIsin && (eTk === foundIsin || eIsin === foundIsin)) ||
-                   (foundTickerClean && (eTkClean === foundTickerClean || eIsinClean === foundTickerClean)) ||
-                   (foundIsinClean && (eTkClean === foundIsinClean || eIsinClean === foundIsinClean));
-          });
-
-          // 4. Documentos B3
-          const assetDocs = (docsData || []).filter(d => {
-            if (!d) return false;
-            const dTk = (d.ticker || '').trim().toUpperCase();
-            const dIsin = (d.isin || '').trim().toUpperCase();
-            const dTkClean = dTk.replace(/[\s\-]/g, '');
-            const dIsinClean = dIsin.replace(/[\s\-]/g, '');
-            return (foundTicker && dTk === foundTicker) ||
-                   (foundIsin && (dTk === foundIsin || dIsin === foundIsin)) ||
-                   (foundTickerClean && (dTkClean === foundTickerClean || dIsinClean === foundTickerClean)) ||
-                   (foundIsinClean && (dTkClean === foundIsinClean || dIsinClean === foundIsinClean));
-          });
-
-          applyLoadedData({
-            asset: found,
-            prices: assetPrices,
-            emitter: matched,
-            paymentEvents: assetEvents,
-            documents: assetDocs
-          });
+            const fullPayload = {
+              asset: found,
+              emitter: matched,
+              prices: assetPrices,
+              paymentEvents: assetEvents,
+              documents: assetDocs
+            };
+            assetMemoryCache.set(targetKey, fullPayload);
+            applyLoadedData(fullPayload);
+          }).catch(() => {});
         }
 
         const saved = localStorage.getItem('watchlist');
@@ -463,15 +484,15 @@ const AssetPage: React.FC = () => {
             </div>
           </div>
 
-          {/* TAXAS DE MERCADO E EMISSÃO (LADO A LADO) */}
-          <div className="flex flex-col sm:flex-row items-stretch gap-3">
-            {/* CARD TAXA DE MERCADO */}
-            <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-between min-w-[210px]">
+          {/* PAINEL DE CONDIÇÕES COMERCIAIS: MERCADO vs EMISSÃO */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full lg:w-auto">
+            {/* CARD 1: MERCADO SECUNDÁRIO */}
+            <div className="bg-gradient-to-br from-blue-50/90 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm flex flex-col justify-between min-w-[220px]">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
                   <span className="text-xs font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
                     <TrendingUp size={14} className="text-blue-600" />
-                    Taxa de Mercado
+                    Mercado Secundário
                   </span>
                   {asset.data_ultimo_negocio && (
                     <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">
@@ -479,34 +500,33 @@ const AssetPage: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <p className="text-2xl sm:text-3xl font-black text-blue-800 font-mono tracking-tight">
+                <p className="text-2xl sm:text-3xl font-black text-blue-900 font-mono tracking-tight">
                   {taxaMercadoFormatted || 'Sem cotação'}
                 </p>
               </div>
 
-              <div className="mt-2 pt-2 border-t border-blue-100/60 flex items-center justify-between text-xs">
-                {asset.spread ? (
+              <div className="mt-3 pt-2.5 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                <span className="text-slate-600 font-medium">
+                  PU Negócio: <strong className="font-mono text-blue-900">{formatPUMercadoDisplay(asset.pu_mercado)}</strong>
+                </span>
+                {asset.spread && (
                   <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
-                    Spread: {Number(asset.spread) > 0 ? '+' : ''}{(Number(asset.spread) * 100).toFixed(2)}% bps
-                  </span>
-                ) : (
-                  <span className="text-[11px] text-slate-500 font-medium">
-                    {asset.fonte_precificacao || 'Secundário ANBIMA/B3'}
+                    Spread: {Number(asset.spread) > 0 ? '+' : ''}{(Number(asset.spread) * 100).toFixed(2)}%
                   </span>
                 )}
               </div>
             </div>
 
-            {/* CARD TAXA DE EMISSÃO */}
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between min-w-[210px]">
+            {/* CARD 2: EMISSÃO CONTRATUAL */}
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100/80 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between min-w-[220px]">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
                   <span className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
                     <Percent size={14} className="text-slate-500" />
-                    Taxa de Emissão
+                    Emissão Contratual
                   </span>
                   <span className="text-[10px] font-bold bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded">
-                    Contratual
+                    Escritura
                   </span>
                 </div>
                 <p className="text-2xl sm:text-3xl font-black text-slate-800 font-mono tracking-tight">
@@ -514,17 +534,20 @@ const AssetPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="mt-2 pt-2 border-t border-slate-200/60 text-xs">
-                <span className="text-[11px] text-slate-500 font-medium">
-                  Escritura original de emissão
+              <div className="mt-3 pt-2.5 border-t border-slate-200 flex items-center justify-between text-xs">
+                <span className="text-slate-600 font-medium">
+                  PU Par: <strong className="font-mono text-slate-800">{formatPUParDisplay(asset.pu_emissao || asset.pu)}</strong>
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium">
+                  Condição original
                 </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* GRID DE CARDS KPI (7 MÉTRICAS PRINCIPAIS: TAXAS E PUs) */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3.5 pt-4 border-t border-slate-100">
+        {/* GRID DE CARDS KPI (4 MÉTRICAS ESTRUTURAIS LIMPAS - SEM REPETIÇÃO) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-colors">
             <div className="flex items-center gap-1.5 text-blue-600 mb-1">
               <Percent size={16} />
@@ -557,47 +580,12 @@ const AssetPage: React.FC = () => {
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-violet-200 transition-colors">
             <div className="flex items-center gap-1.5 text-violet-600 mb-1">
               <Landmark size={16} />
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Volume</span>
+              <span className="text-[11px] font-bold text-slate-400 uppercase">Volume Total</span>
             </div>
             <p className="text-base font-extrabold text-slate-900">
               {formatVolumeDisplay(asset.volume || asset.volume_emissao)}
             </p>
-            <span className="text-[11px] text-slate-400 font-medium">Série Total</span>
-          </div>
-
-          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-amber-200 transition-colors">
-            <div className="flex items-center gap-1.5 text-amber-600 mb-1">
-              <TrendingUp size={16} />
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Ref. NTN-B</span>
-            </div>
-            <p className="text-base font-extrabold text-slate-900">{asset.ntnb_referencia ? formatDatePretty(asset.ntnb_referencia) : '-'}</p>
-            <span className="text-[11px] text-slate-400 font-medium">{asset.taxa_ntnb ? `${Number(asset.taxa_ntnb).toFixed(2)}% a.a.` : 'Benchmark'}</span>
-          </div>
-
-          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition-colors">
-            <div className="flex items-center gap-1.5 text-blue-600 mb-1">
-              <TrendingUp size={16} />
-              <span className="text-[11px] font-bold text-slate-400 uppercase">PU Mercado</span>
-            </div>
-            <p className="text-base font-extrabold text-slate-900 font-mono">
-              {formatPUMercadoDisplay(asset.pu_mercado)}
-            </p>
-            <span className="text-[11px] text-slate-400 font-medium">
-              {asset.data_ultimo_negocio ? formatDatePretty(asset.data_ultimo_negocio) : 'Secundário B3'}
-            </span>
-          </div>
-
-          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-slate-300 transition-colors">
-            <div className="flex items-center gap-1.5 text-slate-600 mb-1">
-              <Layers size={16} />
-              <span className="text-[11px] font-bold text-slate-400 uppercase">PU Emissão</span>
-            </div>
-            <p className="text-base font-extrabold text-slate-900 font-mono">
-              {formatPUParDisplay(asset.pu_emissao || asset.pu)}
-            </p>
-            <span className="text-[11px] text-slate-400 font-medium">
-              PU Par Contratual
-            </span>
+            <span className="text-[11px] text-slate-400 font-medium">Série Emitida</span>
           </div>
         </div>
       </div>
@@ -607,31 +595,11 @@ const AssetPage: React.FC = () => {
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
           <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-2.5">
             <FileText size={20} className="text-blue-400" />
-            Especificações Técnicas & Detalhes da Emissão
+            Especificações Técnicas da Emissão
           </h3>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-xs sm:text-sm">
-          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Taxa de Emissão</span>
-            <p className="font-mono text-sm font-bold text-emerald-400">{taxaEmissaoFormatted || (asset.indexador || '-')}</p>
-          </div>
-
-          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Taxa de Mercado</span>
-            <p className="font-mono text-sm font-bold text-blue-400">{taxaMercadoFormatted || 'Sem cotação recente'}</p>
-          </div>
-
-          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">PU de Emissão (Par)</span>
-            <p className="font-mono text-sm font-bold text-slate-200">{formatPUParDisplay(asset.pu_emissao || asset.pu)}</p>
-          </div>
-
-          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">PU de Mercado</span>
-            <p className="font-mono text-sm font-bold text-blue-300">{formatPUMercadoDisplay(asset.pu_mercado)}</p>
-          </div>
-
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span>
             <p className="font-mono text-sm font-bold text-blue-300">{asset.isin || '-'}</p>
@@ -648,14 +616,15 @@ const AssetPage: React.FC = () => {
           </div>
 
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Agência & Rating Original</span>
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span>
             <p className="font-semibold text-slate-100">
-              {asset.agencia || '-'} — <span className="text-amber-300 font-bold">{asset.rating || 'Sem Rating'}</span>
+              {asset.ntnb_referencia ? formatDatePretty(asset.ntnb_referencia) : '-'}
+              {asset.taxa_ntnb && <span className="text-blue-300 ml-1 font-mono">({Number(asset.taxa_ntnb).toFixed(2)}%)</span>}
             </p>
           </div>
 
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico</span>
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span>
             <p className="font-semibold text-slate-100">{asset.setor || 'Crédito Privado'}</p>
           </div>
 
@@ -670,13 +639,11 @@ const AssetPage: React.FC = () => {
           </div>
 
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Enquadramento Legal</span>
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span>
             <p className="font-semibold text-emerald-400">
-              {asset.incentivada === 'Sim'
-                ? 'Lei 12.431 (Incentivada)'
-                : (asset.lei && !['0', '1', 'false', 'none', 'null'].includes(String(asset.lei).toLowerCase().trim())
-                  ? (String(asset.lei).toLowerCase().includes('lei') ? asset.lei : `Lei ${asset.lei}`)
-                  : 'Comum')}
+              {asset.tipo === 'CRI' || asset.tipo === 'CRA'
+                ? 'Patrimônio Separado (Sim)'
+                : (asset.incentivada === 'Sim' ? 'Incentivada (Lei 12.431)' : 'Padrão')}
             </p>
           </div>
         </div>
