@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">MULP17</h1>
               <p class="text-lg text-slate-600 font-semibold">MULTIPLAN EMPREENDIMENTOS IMOBILIARIOS S/A</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">%DI + 100.40%</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">100.40% do CDI</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 5.292,79</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">+0.40% vs NTN-B</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">106.00% do CDI</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 10.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRMULTDBS049</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2026-04-25</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">-</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">0.40%</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">7.0ª / 1.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 5.292,79</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">%DI</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">-</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">25/04/2026</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 350,00 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRMULTDBS049</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">7.0ª Emissão / 1.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">25/04/2019</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Serviços Imobiliários</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">OLIVEIRA TRUST DTVM S/A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO BTG PACTUAL S.A.</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Padrão</p></div>
           </div>
         </div>
 
@@ -292,6 +347,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "MULP17", "tipo": "Debênture", "issuer": "MULTIPLAN EMPREENDIMENTOS IMOBILIARIOS S/A", "indexador": "%DI", "taxa_emissao": 106.0, "taxa_negocio_b3": 100.4025, "taxa_indicativa_anbima": null, "taxa_mercado": 100.4025, "taxa_ativo": 100.4025, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "10000.0", "pu": "10000.0", "pu_mercado": "5292.7852", "data_ultimo_negocio": "2026-03-17", "data_anbima": null, "volume_negociado_b3": 285810.4, "volume_emissao": 350000000.0, "volume": 350000000.0, "quantidade_emitida": 35000.0, "quantidade": 35000.0, "data_emissao": "2019-04-25", "vencimento": "2026-04-25", "emissao": 7.0, "serie": 1.0, "isin": "BRMULTDBS049", "lei": null, "cnpj_emissor": 7816890000153.0, "setor": "Serviços Imobiliários", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "BANCO BTG PACTUAL S.A.", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "status_ativo": "Vencido", "duration": null, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-03-17)", "spread": 0.004025}, "prices": [{"date": "2026-03-24", "ticker": "MULP17", "price": 5305.582001, "clean_price": 5305.582001, "yield": 103.1231, "fonte_yield": "ANBIMA", "spread_over_ref": 312.3}, {"date": "2026-03-25", "ticker": "MULP17", "price": 5308.483145, "clean_price": 5308.483145, "yield": 103.2356, "fonte_yield": "ANBIMA", "spread_over_ref": 323.6}, {"date": "2026-03-26", "ticker": "MULP17", "price": 5311.508481, "clean_price": 5311.508481, "yield": 103.1464, "fonte_yield": "ANBIMA", "spread_over_ref": 314.6}, {"date": "2026-03-27", "ticker": "MULP17", "price": 5314.458487, "clean_price": 5314.458487, "yield": 103.1885, "fonte_yield": "ANBIMA", "spread_over_ref": 318.9}, {"date": "2026-03-30", "ticker": "MULP17", "price": 5317.461522, "clean_price": 5317.461522, "yield": 103.1363, "fonte_yield": "ANBIMA", "spread_over_ref": 313.6}, {"date": "2026-03-31", "ticker": "MULP17", "price": 5320.444997, "clean_price": 5320.444997, "yield": 103.1213, "fonte_yield": "ANBIMA", "spread_over_ref": 312.1}, {"date": "2026-04-01", "ticker": "MULP17", "price": 5323.3523, "clean_price": 5323.3523, "yield": 103.2714, "fonte_yield": "ANBIMA", "spread_over_ref": 327.1}, {"date": "2026-04-02", "ticker": "MULP17", "price": 5326.348271, "clean_price": 5326.348271, "yield": 103.244, "fonte_yield": "ANBIMA", "spread_over_ref": 324.4}, {"date": "2026-04-06", "ticker": "MULP17", "price": 5329.325684, "clean_price": 5329.325684, "yield": 103.2591, "fonte_yield": "ANBIMA", "spread_over_ref": 325.9}, {"date": "2026-04-07", "ticker": "MULP17", "price": 5332.231627, "clean_price": 5332.231627, "yield": 103.4733, "fonte_yield": "ANBIMA", "spread_over_ref": 347.3}, {"date": "2026-04-08", "ticker": "MULP17", "price": 5335.219353, "clean_price": 5335.219353, "yield": 103.4919, "fonte_yield": "ANBIMA", "spread_over_ref": 349.2}, {"date": "2026-04-09", "ticker": "MULP17", "price": 5338.238441, "clean_price": 5338.238441, "yield": 103.4205, "fonte_yield": "ANBIMA", "spread_over_ref": 342.1}, {"date": "2026-04-10", "ticker": "MULP17", "price": 5341.248718, "clean_price": 5341.248718, "yield": 103.3713, "fonte_yield": "ANBIMA", "spread_over_ref": 337.1}, {"date": "2026-04-13", "ticker": "MULP17", "price": 5344.266999, "clean_price": 5344.266999, "yield": 103.2869, "fonte_yield": "ANBIMA", "spread_over_ref": 328.7}, {"date": "2026-04-14", "ticker": "MULP17", "price": 5347.225008, "clean_price": 5347.225008, "yield": 103.4488, "fonte_yield": "ANBIMA", "spread_over_ref": 344.9}, {"date": "2026-04-15", "ticker": "MULP17", "price": 5350.255878, "clean_price": 5350.255878, "yield": 103.3043, "fonte_yield": "ANBIMA", "spread_over_ref": 330.4}, {"date": "2026-04-16", "ticker": "MULP17", "price": 5353.262854, "clean_price": 5353.262854, "yield": 103.261, "fonte_yield": "ANBIMA", "spread_over_ref": 326.1}, {"date": "2026-04-17", "ticker": "MULP17", "price": 5356.250525, "clean_price": 5356.250525, "yield": 103.3471, "fonte_yield": "ANBIMA", "spread_over_ref": 334.7}, {"date": "2026-04-20", "ticker": "MULP17", "price": 5359.257705, "clean_price": 5359.257705, "yield": 103.3198, "fonte_yield": "ANBIMA", "spread_over_ref": 332.0}, {"date": "2026-04-22", "ticker": "MULP17", "price": 5362.249888, "clean_price": 5362.249888, "yield": 103.4639, "fonte_yield": "ANBIMA", "spread_over_ref": 346.4}, {"date": "2026-04-23", "ticker": "MULP17", "price": 5365.275491, "clean_price": 5365.275491, "yield": 103.2112, "fonte_yield": "ANBIMA", "spread_over_ref": 321.1}, {"date": "2026-04-24", "ticker": "MULP17", "price": 5368.281694, "clean_price": 5368.281694, "yield": 103.1786, "fonte_yield": "ANBIMA", "spread_over_ref": 317.9}], "emitter": {"cnpj": "7816890000153", "cnpj_formatado": "07.816.890/0001-53", "razao_social": "MULTIPLAN - EMPREEND IMOBILIARIOS S.A.", "nome_fantasia": "MULTIPLAN", "setor": "Emp. Adm. Part. - Const. Civil, Mat. Const. e Decoração", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": null, "municipio": "RIO DE JANEIRO", "uf": "RJ", "descricao": "MULTIPLAN - EMPREEND IMOBILIARIOS S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Emp. Adm. Part. - Const. Civil, Mat. Const. e Decoração."}, "paymentEvents": [{"ticker": "MULP17", "data_evento": "2019-10-25", "data_liquidacao": "2019-10-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2020-04-25", "data_liquidacao": "2020-04-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2020-10-25", "data_liquidacao": "2020-10-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2021-04-25", "data_liquidacao": "2021-04-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2021-10-25", "data_liquidacao": "2021-10-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2022-04-25", "data_liquidacao": "2022-04-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2022-10-25", "data_liquidacao": "2022-10-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2023-04-25", "data_liquidacao": "2023-04-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2023-10-25", "data_liquidacao": "2023-10-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2024-04-25", "data_liquidacao": "2024-04-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2024-10-25", "data_liquidacao": "2024-10-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2025-04-25", "data_liquidacao": "2025-04-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2025-10-25", "data_liquidacao": "2025-10-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2026-04-25", "data_liquidacao": "2026-04-25", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": 10000.0, "valor_projetado": 10000.0, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MULP17", "data_evento": "2026-04-25", "data_liquidacao": "2026-04-25", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

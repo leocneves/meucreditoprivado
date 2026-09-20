@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">EKTRA2</h1>
               <p class="text-lg text-slate-600 font-semibold">ELEKTRO REDES S.A.</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">DI+ + 0.81%</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">CDI + 0.81% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 1.064,16</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">+0.81% vs NTN-B</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">CDI + 1.15% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 1.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BREKTRDBS0Q7</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2029-03-18</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">2.46 anos</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">0.81%</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">12.0ª / 1.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 1.064,16</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">DI+</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">2.46 anos</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">18/03/2029</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 200,00 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BREKTRDBS0Q7</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">12.0ª Emissão / 1.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">18/03/2024</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Energia Elétrica</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">PENTAGONO S/A DTVM</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO SAFRA S/A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Padrão</p></div>
           </div>
         </div>
 
@@ -292,6 +347,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "EKTRA2", "tipo": "Debênture", "issuer": "ELEKTRO REDES S.A.", "indexador": "DI+", "taxa_emissao": 1.15, "taxa_negocio_b3": 0.81, "taxa_indicativa_anbima": null, "taxa_mercado": 0.81, "taxa_ativo": 0.81, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1064.1583", "data_ultimo_negocio": "2026-08-04", "data_anbima": null, "volume_negociado_b3": 91517.61, "volume_emissao": 200000000.0, "volume": 200000000.0, "quantidade_emitida": 200000.0, "quantidade": 200000.0, "data_emissao": "2024-03-18", "vencimento": "2029-03-18", "emissao": 12.0, "serie": 1.0, "isin": "BREKTRDBS0Q7", "lei": null, "cnpj_emissor": 2328280000197.0, "setor": "Energia Elétrica", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "BANCO SAFRA S/A", "rating": "Br.AAA", "rating_original": "Br.AAA", "rating_agencia": "Standard & Poor's", "agencia": "Standard & Poor's", "rating_data": "24/04/2026", "divulgacao": "24/04/2026", "securitizadora": "Pentágono", "status_ativo": "Ativo", "duration": 2.46, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Não", "rating_normalizado": "BR", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-08-04)", "spread": 0.0081}, "prices": [{"date": "2026-04-07", "ticker": "EKTRA2", "price": 1011.7775, "clean_price": 1011.7775, "yield": 0.9833, "fonte_yield": "B3", "spread_over_ref": 98.3}, {"date": "2026-04-08", "ticker": "EKTRA2", "price": 1012.3416, "clean_price": 1012.3416, "yield": 0.9841, "fonte_yield": "B3", "spread_over_ref": 98.4}, {"date": "2026-05-25", "ticker": "EKTRA2", "price": 1034.1077, "clean_price": 1034.1077, "yield": 0.8377, "fonte_yield": "B3", "spread_over_ref": 83.8}, {"date": "2026-05-28", "ticker": "EKTRA2", "price": 1035.9229, "clean_price": 1035.9229, "yield": 0.8601, "fonte_yield": "B3", "spread_over_ref": 86.0}, {"date": "2026-06-09", "ticker": "EKTRA2", "price": 1039.33, "clean_price": 1039.33, "yield": 0.863, "fonte_yield": "B3", "spread_over_ref": 86.3}, {"date": "2026-06-25", "ticker": "EKTRA2", "price": 1046.2277, "clean_price": 1046.2277, "yield": 0.8714, "fonte_yield": "B3", "spread_over_ref": 87.1}, {"date": "2026-07-23", "ticker": "EKTRA2", "price": 1058.2044, "clean_price": 1058.2044, "yield": 0.8627, "fonte_yield": "B3", "spread_over_ref": 86.3}, {"date": "2026-08-04", "ticker": "EKTRA2", "price": 1064.1583, "clean_price": 1064.1583, "yield": 0.81, "fonte_yield": "B3", "spread_over_ref": 81.0}], "emitter": {"cnpj": "2328280000197", "cnpj_formatado": "02.328.280/0001-97", "razao_social": "ELEKTRO REDES S.A.", "nome_fantasia": "ELEKTRO REDES S.A.", "setor": "Energia Elétrica", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://ri.neoenergia.com/", "municipio": "CAMPINAS", "uf": "SP", "descricao": "ELEKTRO REDES S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Energia Elétrica."}, "paymentEvents": [{"ticker": "EKTRA2", "data_evento": "2024-09-18", "data_liquidacao": "2024-09-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": 5.734, "valor_projetado": 5.734, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2025-03-18", "data_liquidacao": "2025-03-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": 5.734, "valor_projetado": 5.734, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2025-09-18", "data_liquidacao": "2025-09-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": 5.734, "valor_projetado": 5.734, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2026-03-18", "data_liquidacao": "2026-03-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": 5.734, "valor_projetado": 5.734, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2026-09-18", "data_liquidacao": "2026-09-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": 5.734, "valor_projetado": 5.734, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2027-03-18", "data_liquidacao": "2027-03-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": NaN, "valor_projetado": 5.734, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2027-09-18", "data_liquidacao": "2027-09-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": NaN, "valor_projetado": 5.734, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2028-03-18", "data_liquidacao": "2028-03-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": NaN, "valor_projetado": 5.734, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2028-09-18", "data_liquidacao": "2028-09-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": NaN, "valor_projetado": 5.734, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2029-03-18", "data_liquidacao": "2029-03-18", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": NaN, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EKTRA2", "data_evento": "2029-03-18", "data_liquidacao": "2029-03-18", "tipo_evento": "Pagamento de Juros", "taxa": 0.5734, "valor_real": NaN, "valor_projetado": 5.734, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

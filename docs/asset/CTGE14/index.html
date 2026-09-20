@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">CTGE14</h1>
               <p class="text-lg text-slate-600 font-semibold">COMPANHIA DE GERACAO E TRANSMISSAO DE ENERGIA ELETRICA DO SUL DO BRASIL ELETROBRAS CGT ELETROSUL</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">DI+ + 1.01%</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">CDI + 1.01% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 1.181,41</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">+1.01% vs NTN-B</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">CDI + 2.20% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 1.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRCTGEDBS036</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2028-08-31</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">1.94 anos</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">1.01%</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">4.0ª / 1.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 1.181,41</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">DI+</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">1.94 anos</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">31/08/2028</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 250,00 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRCTGEDBS036</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">4.0ª Emissão / 1.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">31/08/2023</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Energia Elétrica</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">PENTAGONO S/A DTVM</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BCO VOTORANTIM S/A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Padrão</p></div>
           </div>
         </div>
 
@@ -286,6 +341,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "CTGE14", "tipo": "Debênture", "issuer": "COMPANHIA DE GERACAO E TRANSMISSAO DE ENERGIA ELETRICA DO SUL DO BRASIL ELETROBRAS CGT ELETROSUL", "indexador": "DI+", "taxa_emissao": 2.2, "taxa_negocio_b3": 1.0064, "taxa_indicativa_anbima": null, "taxa_mercado": 1.0064, "taxa_ativo": 1.0064, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1181.4111", "data_ultimo_negocio": "2026-08-28", "data_anbima": null, "volume_negociado_b3": 160671.91, "volume_emissao": 250000000.0, "volume": 250000000.0, "quantidade_emitida": 250000.0, "quantidade": 250000.0, "data_emissao": "2023-08-31", "vencimento": "2028-08-31", "emissao": 4.0, "serie": 1.0, "isin": "BRCTGEDBS036", "lei": null, "cnpj_emissor": 2016507000169.0, "setor": "Energia Elétrica", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "BCO VOTORANTIM S/A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": "Pentágono", "status_ativo": "Ativo", "duration": 1.94, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-08-28)", "spread": 0.010064}, "prices": [{"date": "2026-03-26", "ticker": "CTGE14", "price": 1112.4275, "clean_price": 1112.4275, "yield": 0.9394, "fonte_yield": "B3", "spread_over_ref": 93.9}, {"date": "2026-06-12", "ticker": "CTGE14", "price": 1146.1464, "clean_price": 1146.1464, "yield": 0.9395, "fonte_yield": "B3", "spread_over_ref": 94.0}, {"date": "2026-06-15", "ticker": "CTGE14", "price": 1146.8019, "clean_price": 1146.8019, "yield": 0.9395, "fonte_yield": "B3", "spread_over_ref": 94.0}, {"date": "2026-08-28", "ticker": "CTGE14", "price": 1181.4111, "clean_price": 1181.4111, "yield": 1.0064, "fonte_yield": "B3", "spread_over_ref": 100.6}], "emitter": {"cnpj": "2016507000169", "cnpj_formatado": "02.016.507/0001-69", "razao_social": "AXIA ENERGIA SUL S.A.", "nome_fantasia": "ELETROBRAS CGT ELETROSUL", "setor": "Energia Elétrica", "categoria_cvm": "Categoria B", "situacao_cvm": "ATIVO", "site_ri": "https://www.cgteletrosul.com.br", "municipio": "FLORIANÓPOLIS", "uf": "SC", "descricao": "AXIA ENERGIA SUL S.A. é uma companhia aberta (Categoria B) com registro CVM na situação ATIVO, atuante no setor de Energia Elétrica."}, "paymentEvents": [{"ticker": "CTGE14", "data_evento": "2024-02-28", "data_liquidacao": "2024-02-28", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": 10.94, "valor_projetado": 10.94, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2024-08-28", "data_liquidacao": "2024-08-28", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": 10.94, "valor_projetado": 10.94, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2025-02-28", "data_liquidacao": "2025-02-28", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": 10.94, "valor_projetado": 10.94, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2025-08-28", "data_liquidacao": "2025-08-28", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": 10.94, "valor_projetado": 10.94, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2026-02-28", "data_liquidacao": "2026-02-28", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": 10.94, "valor_projetado": 10.94, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2026-08-28", "data_liquidacao": "2026-08-28", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": 10.94, "valor_projetado": 10.94, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2027-02-28", "data_liquidacao": "2027-02-28", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": NaN, "valor_projetado": 10.94, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2027-08-29", "data_liquidacao": "2027-08-29", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": NaN, "valor_projetado": 10.94, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2028-02-29", "data_liquidacao": "2028-02-29", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": NaN, "valor_projetado": 10.94, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2028-08-31", "data_liquidacao": "2028-08-31", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": NaN, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CTGE14", "data_evento": "2028-08-31", "data_liquidacao": "2028-08-31", "tipo_evento": "Pagamento de Juros", "taxa": 1.094, "valor_real": NaN, "valor_projetado": 10.94, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

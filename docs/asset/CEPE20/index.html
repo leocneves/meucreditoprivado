@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">CEPE20</h1>
               <p class="text-lg text-slate-600 font-semibold">COMPANHIA ENERGETICA DE PERNAMBUCO-CELPE</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">%DI + 106.93%</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">106.93% do CDI</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 5.234,27</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">+6.93% vs NTN-B</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">111.00% do CDI</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 10.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRCEPEDBS0D4</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2026-04-15</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">-</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">6.93%</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">10.0ª / 2.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 5.234,27</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">%DI</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">-</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">15/04/2026</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 200,00 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRCEPEDBS0D4</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">10.0ª Emissão / 2.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">15/04/2019</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Energia Elétrica</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">VX PAVARINI DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BB-BANCO DE INVESTIMENTO S.A.</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Padrão</p></div>
           </div>
         </div>
 
@@ -292,6 +347,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "CEPE20", "tipo": "Debênture", "issuer": "COMPANHIA ENERGETICA DE PERNAMBUCO-CELPE", "indexador": "%DI", "taxa_emissao": 111.0, "taxa_negocio_b3": 106.9282, "taxa_indicativa_anbima": null, "taxa_mercado": 106.9282, "taxa_ativo": 106.9282, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "10000.0", "pu": "10000.0", "pu_mercado": "5234.274", "data_ultimo_negocio": "2026-01-29", "data_anbima": null, "volume_negociado_b3": 1507470.9, "volume_emissao": 200000000.0, "volume": 200000000.0, "quantidade_emitida": 20000.0, "quantidade": 20000.0, "data_emissao": "2019-04-15", "vencimento": "2026-04-15", "emissao": 10.0, "serie": 2.0, "isin": "BRCEPEDBS0D4", "lei": null, "cnpj_emissor": 10835932000108.0, "setor": "Energia Elétrica", "agente_fiduciario": "VX PAVARINI DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA", "coordenador_lider": "BB-BANCO DE INVESTIMENTO S.A.", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "status_ativo": "Vencido", "duration": null, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-01-29)", "spread": 0.069282}, "prices": [{"date": "2026-03-24", "ticker": "CEPE20", "price": 5346.123301, "clean_price": 5346.123301, "yield": 107.5564, "fonte_yield": "ANBIMA", "spread_over_ref": 755.6}, {"date": "2026-03-25", "ticker": "CEPE20", "price": 5349.194558, "clean_price": 5349.194558, "yield": 107.6775, "fonte_yield": "ANBIMA", "spread_over_ref": 767.7}, {"date": "2026-03-26", "ticker": "CEPE20", "price": 5352.334239, "clean_price": 5352.334239, "yield": 107.6405, "fonte_yield": "ANBIMA", "spread_over_ref": 764.1}, {"date": "2026-03-27", "ticker": "CEPE20", "price": 5355.403266, "clean_price": 5355.403266, "yield": 107.8055, "fonte_yield": "ANBIMA", "spread_over_ref": 780.5}, {"date": "2026-03-30", "ticker": "CEPE20", "price": 5358.515861, "clean_price": 5358.515861, "yield": 107.8695, "fonte_yield": "ANBIMA", "spread_over_ref": 787.0}, {"date": "2026-03-31", "ticker": "CEPE20", "price": 5361.640996, "clean_price": 5361.640996, "yield": 107.9094, "fonte_yield": "ANBIMA", "spread_over_ref": 790.9}, {"date": "2026-04-01", "ticker": "CEPE20", "price": 5364.775314, "clean_price": 5364.775314, "yield": 107.9281, "fonte_yield": "ANBIMA", "spread_over_ref": 792.8}, {"date": "2026-04-02", "ticker": "CEPE20", "price": 5368.032522, "clean_price": 5368.032522, "yield": 107.4358, "fonte_yield": "ANBIMA", "spread_over_ref": 743.6}, {"date": "2026-04-06", "ticker": "CEPE20", "price": 5371.224373, "clean_price": 5371.224373, "yield": 107.1283, "fonte_yield": "ANBIMA", "spread_over_ref": 712.8}, {"date": "2026-04-07", "ticker": "CEPE20", "price": 5374.232856, "clean_price": 5374.232856, "yield": 107.7841, "fonte_yield": "ANBIMA", "spread_over_ref": 778.4}, {"date": "2026-04-08", "ticker": "CEPE20", "price": 5377.180771, "clean_price": 5377.180771, "yield": 109.1248, "fonte_yield": "ANBIMA", "spread_over_ref": 912.5}, {"date": "2026-04-09", "ticker": "CEPE20", "price": 5380.43918, "clean_price": 5380.43918, "yield": 108.4908, "fonte_yield": "ANBIMA", "spread_over_ref": 849.1}, {"date": "2026-04-10", "ticker": "CEPE20", "price": 5383.494206, "clean_price": 5383.494206, "yield": 109.7781, "fonte_yield": "ANBIMA", "spread_over_ref": 977.8}, {"date": "2026-04-13", "ticker": "CEPE20", "price": 5386.713973, "clean_price": 5386.713973, "yield": 109.561, "fonte_yield": "ANBIMA", "spread_over_ref": 956.1}, {"date": "2026-04-14", "ticker": "CEPE20", "price": 5389.937456, "clean_price": 5389.937456, "yield": 108.8497, "fonte_yield": "ANBIMA", "spread_over_ref": 885.0}], "emitter": {"cnpj": "10835932000108", "cnpj_formatado": "10.835.932/0001-08", "razao_social": "CIA ENERGÉTICA DE PERNAMBUCO - CELPE", "nome_fantasia": "CELPE", "setor": "Energia Elétrica", "categoria_cvm": "Categoria B", "situacao_cvm": "ATIVO", "site_ri": "https://ri.neoenergia.com/", "municipio": "RECIFE", "uf": "PE", "descricao": "CIA ENERGÉTICA DE PERNAMBUCO - CELPE é uma companhia aberta (Categoria B) com registro CVM na situação ATIVO, atuante no setor de Energia Elétrica."}, "paymentEvents": [{"ticker": "CEPE20", "data_evento": "2019-10-15", "data_liquidacao": "2019-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2020-04-15", "data_liquidacao": "2020-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2020-10-15", "data_liquidacao": "2020-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2021-04-15", "data_liquidacao": "2021-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2021-10-15", "data_liquidacao": "2021-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2022-04-15", "data_liquidacao": "2022-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2022-10-15", "data_liquidacao": "2022-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2023-04-15", "data_liquidacao": "2023-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2023-10-15", "data_liquidacao": "2023-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2024-04-15", "data_liquidacao": "2024-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2024-10-15", "data_liquidacao": "2024-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2025-04-15", "data_liquidacao": "2025-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2025-10-15", "data_liquidacao": "2025-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2026-04-15", "data_liquidacao": "2026-04-15", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": 10000.0, "valor_projetado": 10000.0, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CEPE20", "data_evento": "2026-04-15", "data_liquidacao": "2026-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 295.63, "valor_projetado": 295.63, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">RHOL11</h1>
               <p class="text-lg text-slate-600 font-semibold">INFRA BR V RODOVIAS HOLDING LLL SA</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">DI+ + -</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">Sem cotação</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 1.449,44</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">Preço Fechamento</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">CDI + 3.50% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 1.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRRHOLDBS004</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2026-12-10</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">0.22 anos</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">-</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">1.0ª / 1.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 1.449,44</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">DI+</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">0.22 anos</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">10/12/2026</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 600,00 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRRHOLDBS004</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">1.0ª Emissão / 1.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">10/12/2023</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Empreendimentos e Participações</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">VORTX DTVM LTDA.</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO ITAU-BBA S/A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Padrão</p></div>
           </div>
         </div>
 
@@ -266,6 +321,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "RHOL11", "tipo": "Debênture", "issuer": "INFRA BR V RODOVIAS HOLDING LLL SA", "indexador": "DI+", "taxa_emissao": 3.5, "taxa_negocio_b3": null, "taxa_indicativa_anbima": null, "taxa_mercado": null, "taxa_ativo": 3.5, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1449.4436", "data_ultimo_negocio": "2026-05-19", "data_anbima": null, "volume_negociado_b3": 281192.05, "volume_emissao": 600000000.0, "volume": 600000000.0, "quantidade_emitida": 600000.0, "quantidade": 600000.0, "data_emissao": "2023-12-10", "vencimento": "2026-12-10", "emissao": 1.0, "serie": 1.0, "isin": "BRRHOLDBS004", "lei": null, "cnpj_emissor": 51588411000180.0, "setor": "Empreendimentos e Participações", "agente_fiduciario": "VORTX DTVM LTDA.", "coordenador_lider": "BANCO ITAU-BBA S/A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "status_ativo": "Ativo", "duration": 0.22, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Duration Calculada (DU/252)", "spread": null}, "prices": [{"date": "2026-03-24", "ticker": "RHOL11", "price": 1415.6905, "clean_price": 1415.6905, "yield": 3.2851, "fonte_yield": "B3", "spread_over_ref": 328.5}, {"date": "2026-03-25", "ticker": "RHOL11", "price": 1416.717023, "clean_price": 1416.717023, "yield": 3.2772, "fonte_yield": "ANBIMA", "spread_over_ref": 327.7}, {"date": "2026-03-26", "ticker": "RHOL11", "price": 1417.608408, "clean_price": 1417.608408, "yield": 3.2833, "fonte_yield": "ANBIMA", "spread_over_ref": 328.3}, {"date": "2026-03-27", "ticker": "RHOL11", "price": 1418.5595, "clean_price": 1418.5595, "yield": 3.2833, "fonte_yield": "B3", "spread_over_ref": 328.3}, {"date": "2026-03-30", "ticker": "RHOL11", "price": 1419.550429, "clean_price": 1419.550429, "yield": 3.2792, "fonte_yield": "ANBIMA", "spread_over_ref": 327.9}, {"date": "2026-03-31", "ticker": "RHOL11", "price": 1420.5026, "clean_price": 1420.5026, "yield": 3.2792, "fonte_yield": "B3", "spread_over_ref": 327.9}, {"date": "2026-04-01", "ticker": "RHOL11", "price": 1421.4602, "clean_price": 1421.4602, "yield": 3.2786, "fonte_yield": "B3", "spread_over_ref": 327.9}, {"date": "2026-04-02", "ticker": "RHOL11", "price": 1422.4625, "clean_price": 1422.4625, "yield": 3.2735, "fonte_yield": "B3", "spread_over_ref": 327.3}, {"date": "2026-04-06", "ticker": "RHOL11", "price": 1422.9648, "clean_price": 1422.9648, "yield": 3.3218, "fonte_yield": "B3", "spread_over_ref": 332.2}, {"date": "2026-04-07", "ticker": "RHOL11", "price": 1424.218281, "clean_price": 1424.218281, "yield": 3.2899, "fonte_yield": "ANBIMA", "spread_over_ref": 329.0}, {"date": "2026-04-08", "ticker": "RHOL11", "price": 1425.1865, "clean_price": 1425.1865, "yield": 3.2886, "fonte_yield": "B3", "spread_over_ref": 328.9}, {"date": "2026-04-09", "ticker": "RHOL11", "price": 1426.2357, "clean_price": 1426.2357, "yield": 3.2784, "fonte_yield": "B3", "spread_over_ref": 327.8}, {"date": "2026-04-10", "ticker": "RHOL11", "price": 1426.993661, "clean_price": 1426.993661, "yield": 3.3002, "fonte_yield": "ANBIMA", "spread_over_ref": 330.0}, {"date": "2026-04-13", "ticker": "RHOL11", "price": 1427.952, "clean_price": 1427.952, "yield": 3.3002, "fonte_yield": "B3", "spread_over_ref": 330.0}, {"date": "2026-04-14", "ticker": "RHOL11", "price": 1428.9581, "clean_price": 1428.9581, "yield": 3.295, "fonte_yield": "B3", "spread_over_ref": 329.5}, {"date": "2026-04-15", "ticker": "RHOL11", "price": 1430.040911, "clean_price": 1430.040911, "yield": 3.2813, "fonte_yield": "ANBIMA", "spread_over_ref": 328.1}, {"date": "2026-04-16", "ticker": "RHOL11", "price": 1431.096164, "clean_price": 1431.096164, "yield": 3.2706, "fonte_yield": "ANBIMA", "spread_over_ref": 327.1}, {"date": "2026-04-17", "ticker": "RHOL11", "price": 1432.120726, "clean_price": 1432.120726, "yield": 3.2633, "fonte_yield": "ANBIMA", "spread_over_ref": 326.3}, {"date": "2026-04-20", "ticker": "RHOL11", "price": 1432.920908, "clean_price": 1432.920908, "yield": 3.2813, "fonte_yield": "ANBIMA", "spread_over_ref": 328.1}, {"date": "2026-04-22", "ticker": "RHOL11", "price": 1433.8822, "clean_price": 1433.8822, "yield": 3.2812, "fonte_yield": "B3", "spread_over_ref": 328.1}, {"date": "2026-04-23", "ticker": "RHOL11", "price": 1434.8858, "clean_price": 1434.8858, "yield": 3.2766, "fonte_yield": "B3", "spread_over_ref": 327.7}, {"date": "2026-04-24", "ticker": "RHOL11", "price": 1435.8913, "clean_price": 1435.8913, "yield": 3.2716, "fonte_yield": "B3", "spread_over_ref": 327.2}, {"date": "2026-04-27", "ticker": "RHOL11", "price": 1436.6712, "clean_price": 1436.6712, "yield": 3.2927, "fonte_yield": "B3", "spread_over_ref": 329.3}, {"date": "2026-04-28", "ticker": "RHOL11", "price": 1438.9692, "clean_price": 1438.9692, "yield": 3.1381, "fonte_yield": "B3", "spread_over_ref": 313.8}, {"date": "2026-04-29", "ticker": "RHOL11", "price": 1440.3231, "clean_price": 1440.3231, "yield": 3.0919, "fonte_yield": "B3", "spread_over_ref": 309.2}, {"date": "2026-04-30", "ticker": "RHOL11", "price": 1441.3882, "clean_price": 1441.3882, "yield": 3.0792, "fonte_yield": "B3", "spread_over_ref": 307.9}, {"date": "2026-05-04", "ticker": "RHOL11", "price": 1442.45, "clean_price": 1442.45, "yield": 3.0652, "fonte_yield": "B3", "spread_over_ref": 306.5}, {"date": "2026-05-05", "ticker": "RHOL11", "price": 1443.607767, "clean_price": 1443.607767, "yield": 3.0398, "fonte_yield": "ANBIMA", "spread_over_ref": 304.0}, {"date": "2026-05-06", "ticker": "RHOL11", "price": 1444.5745, "clean_price": 1444.5745, "yield": 3.037, "fonte_yield": "B3", "spread_over_ref": 303.7}, {"date": "2026-05-07", "ticker": "RHOL11", "price": 1445.553572, "clean_price": 1445.553572, "yield": 3.0326, "fonte_yield": "ANBIMA", "spread_over_ref": 303.3}, {"date": "2026-05-08", "ticker": "RHOL11", "price": 1446.497, "clean_price": 1446.497, "yield": 3.0326, "fonte_yield": "B3", "spread_over_ref": 303.3}, {"date": "2026-05-11", "ticker": "RHOL11", "price": 1447.4699, "clean_price": 1447.4699, "yield": 3.0291, "fonte_yield": "B3", "spread_over_ref": 302.9}, {"date": "2026-05-12", "ticker": "RHOL11", "price": 1448.4127, "clean_price": 1448.4127, "yield": 3.0293, "fonte_yield": "B3", "spread_over_ref": 302.9}, {"date": "2026-05-13", "ticker": "RHOL11", "price": 1449.3186, "clean_price": 1449.3186, "yield": 3.0341, "fonte_yield": "B3", "spread_over_ref": 303.4}, {"date": "2026-05-14", "ticker": "RHOL11", "price": 1450.2775, "clean_price": 1450.2775, "yield": 3.0325, "fonte_yield": "B3", "spread_over_ref": 303.2}, {"date": "2026-05-15", "ticker": "RHOL11", "price": 1447.552984, "clean_price": 1447.552984, "yield": 3.0306, "fonte_yield": "ANBIMA", "spread_over_ref": 303.1}, {"date": "2026-05-18", "ticker": "RHOL11", "price": 1448.499185, "clean_price": 1448.499185, "yield": 3.0162, "fonte_yield": "ANBIMA", "spread_over_ref": 301.6}, {"date": "2026-05-19", "ticker": "RHOL11", "price": 1449.443235, "clean_price": 1449.443235, "yield": 3.0226, "fonte_yield": "ANBIMA", "spread_over_ref": 302.3}], "emitter": null, "paymentEvents": [{"ticker": "RHOL11", "data_evento": "2024-06-10", "data_liquidacao": "2024-06-10", "tipo_evento": "Pagamento de Juros", "taxa": 1.7349, "valor_real": 17.349, "valor_projetado": 17.349, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "RHOL11", "data_evento": "2024-12-10", "data_liquidacao": "2024-12-10", "tipo_evento": "Pagamento de Juros", "taxa": 1.7349, "valor_real": 17.349, "valor_projetado": 17.349, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "RHOL11", "data_evento": "2025-06-10", "data_liquidacao": "2025-06-10", "tipo_evento": "Pagamento de Juros", "taxa": 1.7349, "valor_real": 17.349, "valor_projetado": 17.349, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "RHOL11", "data_evento": "2025-12-10", "data_liquidacao": "2025-12-10", "tipo_evento": "Pagamento de Juros", "taxa": 1.7349, "valor_real": 17.349, "valor_projetado": 17.349, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "RHOL11", "data_evento": "2026-06-10", "data_liquidacao": "2026-06-10", "tipo_evento": "Pagamento de Juros", "taxa": 1.7349, "valor_real": 17.349, "valor_projetado": 17.349, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "RHOL11", "data_evento": "2026-12-10", "data_liquidacao": "2026-12-10", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": NaN, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "RHOL11", "data_evento": "2026-12-10", "data_liquidacao": "2026-12-10", "tipo_evento": "Pagamento de Juros", "taxa": 1.7349, "valor_real": NaN, "valor_projetado": 17.349, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

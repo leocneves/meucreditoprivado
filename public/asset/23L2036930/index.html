@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">23L2036930</h1>
               <p class="text-lg text-slate-600 font-semibold">SENADO VII</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">DI+ + -</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">Sem cotação</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">-</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">Preço Fechamento</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">CDI + 1.80% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 1.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRRBRACRILS9</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2024-12-17</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">-</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">-</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">235.0ª / 1.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Par</span><strong class="text-slate-800">-</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">DI+</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">-</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">17/12/2024</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 40,38 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRRBRACRILS9</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">235.0ª Emissão / 1.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">15/12/2023</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Outros Serviços</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Patrimônio Separado (Sim)</p></div>
           </div>
         </div>
 
@@ -209,6 +264,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "23L2036930", "tipo": "CRI", "issuer": "SENADO VII", "indexador": "DI+", "taxa_emissao": 1.8, "taxa_negocio_b3": null, "taxa_indicativa_anbima": null, "taxa_mercado": null, "taxa_ativo": 1.8, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": null, "data_ultimo_negocio": null, "data_anbima": null, "volume_negociado_b3": null, "volume_emissao": 40385000.0, "volume": 40385000.0, "quantidade_emitida": 40385.0, "quantidade": 40385.0, "data_emissao": "2023-12-15", "vencimento": "2024-12-17", "emissao": 235.0, "serie": 1.0, "isin": "BRRBRACRILS9", "lei": 12.431, "cnpj_emissor": null, "setor": "Outros Serviços", "agente_fiduciario": null, "coordenador_lider": null, "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": "RB Capital", "status_ativo": "Vencido", "duration": null, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Sim", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Vencido / Sem Precificação", "spread": null}, "prices": [], "emitter": null, "paymentEvents": [{"ticker": "23L2036930", "data_evento": "2023-12-17", "data_liquidacao": "2023-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 0.896, "valor_real": 8.96, "valor_projetado": 8.96, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23L2036930", "data_evento": "2024-06-17", "data_liquidacao": "2024-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 0.896, "valor_real": 8.96, "valor_projetado": 8.96, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23L2036930", "data_evento": "2024-12-17", "data_liquidacao": "2024-12-17", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": 1000.0, "valor_projetado": 1000.0, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23L2036930", "data_evento": "2024-12-17", "data_liquidacao": "2024-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 0.896, "valor_real": 8.96, "valor_projetado": 8.96, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [{"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2025-12-26 10:47", "data_referencia": "2025-09-30", "categoria_documento": "Informes Periódicos", "tipo_documento": "Demonstrações Financeiras", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1069769"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2025-04-30 19:07", "data_referencia": "2024-12-31", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agente Fiduciário", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=891624"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-12-27 10:20", "data_referencia": "2024-09-30", "categoria_documento": "Informes Periódicos", "tipo_documento": "Demonstrações Financeiras", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=809225"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-12-23 09:56", "data_referencia": "11/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=806903"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-11-26 12:31", "data_referencia": "10/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=787739"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-10-29 15:19", "data_referencia": "09/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=766184"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-09-27 08:48", "data_referencia": "08/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=745820"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-08-27 09:36", "data_referencia": "07/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=726479"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-07-30 09:06", "data_referencia": "06/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=707174"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-06-24 13:06", "data_referencia": "05/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=685273"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-06-19 21:55", "data_referencia": "2024-06-19", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Anúncio de Encerramento de Distribuição Pública", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=683568"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-05-29 10:08", "data_referencia": "04/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=671329"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-04-30 18:14", "data_referencia": "2023-12-31", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agente Fiduciário", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=651348"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-04-29 18:33", "data_referencia": "03/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=648416"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-03-26 12:52", "data_referencia": "02/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=626675"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-02-29 10:47", "data_referencia": "01/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=611349"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2024-01-18 19:15", "data_referencia": "12/2023", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=587475"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2023-12-22 11:46", "data_referencia": "2023-12-22", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Anúncio de Início de Distribuição Pública", "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=574692"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2023-12-22 11:42", "data_referencia": "2023-12-21", "categoria_documento": "Aditamento de Termo de Securitização", "tipo_documento": NaN, "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=574691"}, {"ticker": "23L2036930", "isin": "BRRBRACRILS9", "data_entrega": "2023-12-20 13:53", "data_referencia": "2023-12-15", "categoria_documento": "Termo de Securitização", "tipo_documento": NaN, "securitizadora": "Opea Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=573755"}]}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

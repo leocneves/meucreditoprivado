@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">CSED13</h1>
               <p class="text-lg text-slate-600 font-semibold">CRUZEIRO DO SUL EDUCACIONAL S.A.</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">DI+ + 0.90%</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">CDI + 0.90% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 1.050,51</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">+0.90% vs NTN-B</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">CDI + 0.90% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 1.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRCSEDDBS019</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2030-11-15</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">2.81 anos</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">0.90%</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">3.0ª / 1.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 1.050,51</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">DI+</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">2.81 anos</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">15/11/2030</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 300,00 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRCSEDDBS019</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">3.0ª Emissão / 1.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">15/11/2025</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Educação</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">OLIVEIRA TRUST DTVM S/A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO BRADESCO BBI S/A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Padrão</p></div>
           </div>
         </div>
 
@@ -292,6 +347,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "CSED13", "tipo": "Debênture", "issuer": "CRUZEIRO DO SUL EDUCACIONAL S.A.", "indexador": "DI+", "taxa_emissao": 0.9, "taxa_negocio_b3": 0.9, "taxa_indicativa_anbima": "0,9", "taxa_mercado": 0.9, "taxa_ativo": 0.9, "taxa_compra": "1,0615", "taxa_venda": "0,7556", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1050.508", "data_ultimo_negocio": "2026-09-18", "data_anbima": "2026-09-18", "volume_negociado_b3": 25212.19, "volume_emissao": 300000000.0, "volume": 300000000.0, "quantidade_emitida": 300000.0, "quantidade": 300000.0, "data_emissao": "2025-11-15", "vencimento": "2030-11-15", "emissao": 3.0, "serie": 1.0, "isin": "BRCSEDDBS019", "lei": null, "cnpj_emissor": 62984091000102.0, "setor": "Educação", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "BANCO BRADESCO BBI S/A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "status_ativo": "Ativo", "duration": 2.81, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-09-18)", "spread": 0.009}, "prices": [{"date": "2026-07-21", "ticker": "CSED13", "price": 1026.5292, "clean_price": 1026.5292, "yield": 0.8935, "fonte_yield": "B3", "spread_over_ref": 89.3}, {"date": "2026-07-28", "ticker": "CSED13", "price": 1029.7928, "clean_price": 1029.7928, "yield": 0.9, "fonte_yield": "B3", "spread_over_ref": 90.0}, {"date": "2026-07-31", "ticker": "CSED13", "price": 1032.2148, "clean_price": 1032.2148, "yield": 0.877, "fonte_yield": "B3", "spread_over_ref": 87.7}, {"date": "2026-08-03", "ticker": "CSED13", "price": 1032.7242, "clean_price": 1032.7242, "yield": 0.86, "fonte_yield": "B3", "spread_over_ref": 86.0}, {"date": "2026-08-17", "ticker": "CSED13", "price": 1038.4463, "clean_price": 1038.4463, "yield": 0.86, "fonte_yield": "B3", "spread_over_ref": 86.0}, {"date": "2026-08-19", "ticker": "CSED13", "price": 1039.8694, "clean_price": 1039.8694, "yield": 0.87, "fonte_yield": "B3", "spread_over_ref": 87.0}, {"date": "2026-08-21", "ticker": "CSED13", "price": 1041.2082, "clean_price": 1041.2082, "yield": 0.8635, "fonte_yield": "B3", "spread_over_ref": 86.4}, {"date": "2026-08-24", "ticker": "CSED13", "price": 1041.3116, "clean_price": 1041.3116, "yield": 0.86, "fonte_yield": "B3", "spread_over_ref": 86.0}, {"date": "2026-08-26", "ticker": "CSED13", "price": 1041.294208, "clean_price": 1041.294208, "yield": 0.8995, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-27", "ticker": "CSED13", "price": 1041.842623, "clean_price": 1041.842623, "yield": 0.9004, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-28", "ticker": "CSED13", "price": 1042.4179, "clean_price": 1042.4179, "yield": 0.9004, "fonte_yield": "B3", "spread_over_ref": 90.0}, {"date": "2026-08-31", "ticker": "CSED13", "price": 1043.020013, "clean_price": 1043.020013, "yield": 0.8995, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-09-01", "ticker": "CSED13", "price": 1043.831304, "clean_price": 1043.831304, "yield": 0.8915, "fonte_yield": "ANBIMA", "spread_over_ref": 89.1}, {"date": "2026-09-02", "ticker": "CSED13", "price": 1044.619822, "clean_price": 1044.619822, "yield": 0.8843, "fonte_yield": "ANBIMA", "spread_over_ref": 88.4}, {"date": "2026-09-03", "ticker": "CSED13", "price": 1045.246538, "clean_price": 1045.246538, "yield": 0.8826, "fonte_yield": "ANBIMA", "spread_over_ref": 88.3}, {"date": "2026-09-04", "ticker": "CSED13", "price": 1045.637631, "clean_price": 1045.637631, "yield": 0.8889, "fonte_yield": "ANBIMA", "spread_over_ref": 88.9}, {"date": "2026-09-08", "ticker": "CSED13", "price": 1046.094272, "clean_price": 1046.094272, "yield": 0.893, "fonte_yield": "ANBIMA", "spread_over_ref": 89.3}, {"date": "2026-09-09", "ticker": "CSED13", "price": 1046.374538, "clean_price": 1046.374538, "yield": 0.9031, "fonte_yield": "ANBIMA", "spread_over_ref": 90.3}, {"date": "2026-09-10", "ticker": "CSED13", "price": 1047.084528, "clean_price": 1047.084528, "yield": 0.8986, "fonte_yield": "ANBIMA", "spread_over_ref": 89.9}, {"date": "2026-09-11", "ticker": "CSED13", "price": 1047.756505, "clean_price": 1047.756505, "yield": 0.8954, "fonte_yield": "ANBIMA", "spread_over_ref": 89.5}, {"date": "2026-09-14", "ticker": "CSED13", "price": 1048.3348, "clean_price": 1048.3348, "yield": 0.8954, "fonte_yield": "B3", "spread_over_ref": 89.5}, {"date": "2026-09-15", "ticker": "CSED13", "price": 1048.410353, "clean_price": 1048.410353, "yield": 0.9126, "fonte_yield": "ANBIMA", "spread_over_ref": 91.3}, {"date": "2026-09-16", "ticker": "CSED13", "price": 1049.357946, "clean_price": 1049.357946, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-09-17", "ticker": "CSED13", "price": 1049.93737, "clean_price": 1049.93737, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-09-18", "ticker": "CSED13", "price": 1050.508, "clean_price": 1050.508, "yield": 0.9, "fonte_yield": "B3", "spread_over_ref": 90.0}], "emitter": {"cnpj": "62984091000102", "cnpj_formatado": "62.984.091/0001-02", "razao_social": "CRUZEIRO DO SUL EDUCACIONAL S.A.", "nome_fantasia": "CRUZEIRO DO SUL EDUCACIONAL S.A.", "setor": "Educação", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://www.cruzeirodosul.edu.br/", "municipio": "SÃO PAULO", "uf": "SP", "descricao": "CRUZEIRO DO SUL EDUCACIONAL S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Educação."}, "paymentEvents": [{"ticker": "CSED13", "data_evento": "2026-05-15", "data_liquidacao": "2026-05-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": 4.49, "valor_projetado": 4.49, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2026-11-15", "data_liquidacao": "2026-11-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2027-05-15", "data_liquidacao": "2027-05-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2027-11-15", "data_liquidacao": "2027-11-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2028-05-15", "data_liquidacao": "2028-05-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2028-11-15", "data_liquidacao": "2028-11-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2029-05-15", "data_liquidacao": "2029-05-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2029-11-15", "data_liquidacao": "2029-11-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2030-05-15", "data_liquidacao": "2030-05-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2030-11-15", "data_liquidacao": "2030-11-15", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": NaN, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CSED13", "data_evento": "2030-11-15", "data_liquidacao": "2030-11-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.449, "valor_real": NaN, "valor_projetado": 4.49, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

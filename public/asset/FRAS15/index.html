@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">FRAS15</h1>
               <p class="text-lg text-slate-600 font-semibold">FRAS-LE S.A</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">DI+ + 1.05%</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">CDI + 1.05% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 1.038,91</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">+1.05% vs NTN-B</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">CDI + 1.22% a.a.</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 1.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRFRASDBS028</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2031-12-20</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">3.69 anos</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">1.05%</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">5.0ª / 1.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 1.038,91</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">DI+</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">3.69 anos</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">20/12/2031</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 750,00 MM</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRFRASDBS028</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">5.0ª Emissão / 1.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">20/12/2024</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Indústria e Comércio</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">OLIVEIRA TRUST DTVM S/A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">ITAU UNIBANCO HOLDING S.A</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Padrão</p></div>
           </div>
         </div>
 
@@ -274,6 +329,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "FRAS15", "tipo": "Debênture", "issuer": "FRAS-LE S.A", "indexador": "DI+", "taxa_emissao": 1.22, "taxa_negocio_b3": 1.0498, "taxa_indicativa_anbima": "1,0534", "taxa_mercado": 1.0534, "taxa_ativo": 1.0534, "taxa_compra": "1,3503", "taxa_venda": "0,6949", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1038.9115", "data_ultimo_negocio": "2026-09-09", "data_anbima": "2026-09-18", "volume_negociado_b3": 18700.4, "volume_emissao": 750000000.0, "volume": 750000000.0, "quantidade_emitida": 750000.0, "quantidade": 750000.0, "data_emissao": "2024-12-20", "vencimento": "2031-12-20", "emissao": 5.0, "serie": 1.0, "isin": "BRFRASDBS028", "lei": null, "cnpj_emissor": 88610126000129.0, "setor": "Indústria e Comércio", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "ITAU UNIBANCO HOLDING S.A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "status_ativo": "Ativo", "duration": 3.69, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "ANBIMA Mercado (2026-09-18)", "spread": 0.0105339999999999}, "prices": [{"date": "2026-03-26", "ticker": "FRAS15", "price": 1054.8418, "clean_price": 1054.8418, "yield": 0.83, "fonte_yield": "B3", "spread_over_ref": 83.0}, {"date": "2026-06-23", "ticker": "FRAS15", "price": 1002.2801, "clean_price": 1002.2801, "yield": 1.1755, "fonte_yield": "B3", "spread_over_ref": 117.5}, {"date": "2026-07-09", "ticker": "FRAS15", "price": 1009.1889, "clean_price": 1009.1889, "yield": 1.1755, "fonte_yield": "B3", "spread_over_ref": 117.5}, {"date": "2026-08-17", "ticker": "FRAS15", "price": 1024.8186, "clean_price": 1024.8186, "yield": 1.1755, "fonte_yield": "B3", "spread_over_ref": 117.5}, {"date": "2026-08-24", "ticker": "FRAS15", "price": 1027.714, "clean_price": 1027.714, "yield": 1.1755, "fonte_yield": "B3", "spread_over_ref": 117.5}, {"date": "2026-08-26", "ticker": "FRAS15", "price": 1035.566899, "clean_price": 1035.566899, "yield": 1.0, "fonte_yield": "ANBIMA", "spread_over_ref": 100.0}, {"date": "2026-08-27", "ticker": "FRAS15", "price": 1034.618287, "clean_price": 1034.618287, "yield": 1.0399, "fonte_yield": "ANBIMA", "spread_over_ref": 104.0}, {"date": "2026-08-28", "ticker": "FRAS15", "price": 1034.955411, "clean_price": 1034.955411, "yield": 1.0459, "fonte_yield": "ANBIMA", "spread_over_ref": 104.6}, {"date": "2026-08-31", "ticker": "FRAS15", "price": 1035.5324, "clean_price": 1035.5324, "yield": 1.0459, "fonte_yield": "B3", "spread_over_ref": 104.6}, {"date": "2026-09-01", "ticker": "FRAS15", "price": 1035.8522, "clean_price": 1035.8522, "yield": 1.0526, "fonte_yield": "B3", "spread_over_ref": 105.3}, {"date": "2026-09-02", "ticker": "FRAS15", "price": 1036.774075, "clean_price": 1036.774075, "yield": 1.0443, "fonte_yield": "ANBIMA", "spread_over_ref": 104.4}, {"date": "2026-09-03", "ticker": "FRAS15", "price": 1037.458344, "clean_price": 1037.458344, "yield": 1.0418, "fonte_yield": "ANBIMA", "spread_over_ref": 104.2}, {"date": "2026-09-04", "ticker": "FRAS15", "price": 1037.945552, "clean_price": 1037.945552, "yield": 1.0443, "fonte_yield": "ANBIMA", "spread_over_ref": 104.4}, {"date": "2026-09-08", "ticker": "FRAS15", "price": 1038.332711, "clean_price": 1038.332711, "yield": 1.0498, "fonte_yield": "ANBIMA", "spread_over_ref": 105.0}, {"date": "2026-09-09", "ticker": "FRAS15", "price": 1038.9115, "clean_price": 1038.9115, "yield": 1.0498, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-09-10", "ticker": "FRAS15", "price": 1039.328251, "clean_price": 1039.328251, "yield": 1.0537, "fonte_yield": "ANBIMA", "spread_over_ref": 105.4}, {"date": "2026-09-11", "ticker": "FRAS15", "price": 1039.838327, "clean_price": 1039.838327, "yield": 1.0555, "fonte_yield": "ANBIMA", "spread_over_ref": 105.6}, {"date": "2026-09-14", "ticker": "FRAS15", "price": 1040.566849, "clean_price": 1040.566849, "yield": 1.0515, "fonte_yield": "ANBIMA", "spread_over_ref": 105.2}, {"date": "2026-09-15", "ticker": "FRAS15", "price": 1041.143537, "clean_price": 1041.143537, "yield": 1.0514, "fonte_yield": "ANBIMA", "spread_over_ref": 105.1}, {"date": "2026-09-16", "ticker": "FRAS15", "price": 1041.368236, "clean_price": 1041.368236, "yield": 1.0609, "fonte_yield": "ANBIMA", "spread_over_ref": 106.1}, {"date": "2026-09-17", "ticker": "FRAS15", "price": 1042.131083, "clean_price": 1042.131083, "yield": 1.0563, "fonte_yield": "ANBIMA", "spread_over_ref": 105.6}, {"date": "2026-09-18", "ticker": "FRAS15", "price": 1042.816074, "clean_price": 1042.816074, "yield": 1.0534, "fonte_yield": "ANBIMA", "spread_over_ref": 105.3}], "emitter": null, "paymentEvents": [{"ticker": "FRAS15", "data_evento": "2025-06-20", "data_liquidacao": "2025-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": 6.082, "valor_projetado": 6.082, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2025-12-20", "data_liquidacao": "2025-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": 6.082, "valor_projetado": 6.082, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2026-06-20", "data_liquidacao": "2026-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": 6.082, "valor_projetado": 6.082, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2026-12-20", "data_liquidacao": "2026-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2027-06-20", "data_liquidacao": "2027-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2027-12-20", "data_liquidacao": "2027-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2028-06-20", "data_liquidacao": "2028-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2028-12-20", "data_liquidacao": "2028-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2029-06-20", "data_liquidacao": "2029-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2029-12-20", "data_liquidacao": "2029-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2030-06-20", "data_liquidacao": "2030-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2030-12-20", "data_liquidacao": "2030-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2031-06-20", "data_liquidacao": "2031-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2031-12-20", "data_liquidacao": "2031-12-20", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": NaN, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "FRAS15", "data_evento": "2031-12-20", "data_liquidacao": "2031-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 0.6082, "valor_real": NaN, "valor_projetado": 6.082, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>

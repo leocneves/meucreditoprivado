@@ -110,19 +110,74 @@
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">23F0013602</h1>
               <p class="text-lg text-slate-600 font-semibold">OPEA SEC 142E</p>
             </div>
-            <div class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100 text-right">
-              <span class="text-xs font-bold text-slate-400 uppercase block">Taxa Contratada / Mercado</span>
-              <p class="text-2xl font-black text-blue-700 font-mono">%DI + 93.06%</p>
+            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">93.06% do CDI</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">R$ 1.051,05</strong></span>
+                  <span class="text-[11px] text-blue-700 font-bold">+-6.94% vs NTN-B</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
+                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  </div>
+                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">99.00% do CDI</p>
+                </div>
+                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 1.000,00</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-4 border-t border-slate-100 text-xs">
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">ISIN</span><strong class="text-slate-800 font-mono">BRRBRACRIHD9</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Vencimento</span><strong class="text-slate-800">2029-06-20</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Duration</span><strong class="text-indigo-700 font-bold">2.72 anos</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Spread NTN-B</span><strong class="text-emerald-700 font-bold">-6.94%</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">Emissão / Série</span><strong class="text-slate-800">142.0ª / 2.0ª</strong></div>
-            <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400 font-bold block mb-0.5">PU Negócio</span><strong class="text-slate-800">R$ 1.051,05</strong></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-100">
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Indexador</span>
+              <p class="text-base font-extrabold text-slate-900">%DI</p>
+              <span class="text-[11px] text-slate-400 font-medium">Contratual</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Duration</span>
+              <p class="text-base font-extrabold text-slate-900">2.72 anos</p>
+              <span class="text-[11px] text-indigo-600 font-semibold">DU / 252</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
+              <p class="text-base font-extrabold text-slate-900">20/06/2029</p>
+              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
+              <p class="text-base font-extrabold text-slate-900">R$ 1,00 Bi</p>
+              <span class="text-[11px] text-slate-400 font-medium">Série Emitida</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6 border border-slate-800">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">BRRBRACRIHD9</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">142.0ª Emissão / 2.0ª Série</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">19/06/2023</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Outros Serviços</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">-</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">Patrimônio Separado (Sim)</p></div>
           </div>
         </div>
 
@@ -274,6 +329,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "23F0013602", "tipo": "CRI", "issuer": "OPEA SEC 142E", "indexador": "%DI", "taxa_emissao": 99.0, "taxa_negocio_b3": 93.0572, "taxa_indicativa_anbima": null, "taxa_mercado": 93.0572, "taxa_ativo": 93.0572, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1051.0538", "data_ultimo_negocio": "2026-09-16", "data_anbima": null, "volume_negociado_b3": 159760.16, "volume_emissao": 1000000000.0, "volume": 1000000000.0, "quantidade_emitida": 341400.0, "quantidade": 341400.0, "data_emissao": "2023-06-19", "vencimento": "2029-06-20", "emissao": 142.0, "serie": 2.0, "isin": "BRRBRACRIHD9", "lei": 12.431, "cnpj_emissor": null, "setor": "Outros Serviços", "agente_fiduciario": null, "coordenador_lider": null, "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": "RB Capital", "status_ativo": "Ativo", "duration": 2.72, "ntnb_referencia": null, "taxa_ntnb": null, "incentivada": "Sim", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-09-16)", "spread": -0.069428}, "prices": [{"date": "2026-06-09", "ticker": "23F0013602", "price": 1076.7894, "clean_price": 1076.7894, "yield": 95.5025, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-06-10", "ticker": "23F0013602", "price": 1080.6765, "clean_price": 1080.6765, "yield": 94.3329, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-06-11", "ticker": "23F0013602", "price": 1086.3942, "clean_price": 1086.3942, "yield": 92.8489, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-06-17", "ticker": "23F0013602", "price": 1080.3853, "clean_price": 1080.3853, "yield": 95.0567, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-06-18", "ticker": "23F0013602", "price": 1084.2407, "clean_price": 1084.2407, "yield": 94.0, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-06-26", "ticker": "23F0013602", "price": 1019.1958, "clean_price": 1019.1958, "yield": 94.1538, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-02", "ticker": "23F0013602", "price": 1020.4436, "clean_price": 1020.4436, "yield": 94.3549, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-06", "ticker": "23F0013602", "price": 1027.7076, "clean_price": 1027.7076, "yield": 92.5367, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-07", "ticker": "23F0013602", "price": 1039.8351, "clean_price": 1039.8351, "yield": 89.133, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-08", "ticker": "23F0013602", "price": 1023.1576, "clean_price": 1023.1576, "yield": 94.1625, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-14", "ticker": "23F0013602", "price": 1044.3301, "clean_price": 1044.3301, "yield": 88.5433, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-16", "ticker": "23F0013602", "price": 1021.0081, "clean_price": 1021.0081, "yield": 95.5, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-21", "ticker": "23F0013602", "price": 1029.7147, "clean_price": 1029.7147, "yield": 93.6125, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-22", "ticker": "23F0013602", "price": 1047.6162, "clean_price": 1047.6162, "yield": 88.5695, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-28", "ticker": "23F0013602", "price": 1031.4105, "clean_price": 1031.4105, "yield": 93.855, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-07-31", "ticker": "23F0013602", "price": 1028.9001, "clean_price": 1028.9001, "yield": 95.0, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-03", "ticker": "23F0013602", "price": 1036.3596, "clean_price": 1036.3596, "yield": 92.9, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-04", "ticker": "23F0013602", "price": 1034.3123, "clean_price": 1034.3123, "yield": 93.626, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-05", "ticker": "23F0013602", "price": 1037.3431, "clean_price": 1037.3431, "yield": 92.8665, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-07", "ticker": "23F0013602", "price": 1034.6815, "clean_price": 1034.6815, "yield": 94.0167, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-10", "ticker": "23F0013602", "price": 1038.195, "clean_price": 1038.195, "yield": 92.989, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-20", "ticker": "23F0013602", "price": 1042.1782, "clean_price": 1042.1782, "yield": 93.1625, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-25", "ticker": "23F0013602", "price": 1037.6335, "clean_price": 1037.6335, "yield": 94.9825, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-08-31", "ticker": "23F0013602", "price": 1039.5145, "clean_price": 1039.5145, "yield": 95.0325, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-09-01", "ticker": "23F0013602", "price": 1039.3355, "clean_price": 1039.3355, "yield": 95.25, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-09-02", "ticker": "23F0013602", "price": 1063.4953, "clean_price": 1063.4953, "yield": 87.87, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-09-14", "ticker": "23F0013602", "price": 1043.1623, "clean_price": 1043.1623, "yield": 95.25, "fonte_yield": "B3", "spread_over_ref": NaN}, {"date": "2026-09-16", "ticker": "23F0013602", "price": 1051.0538, "clean_price": 1051.0538, "yield": 93.0572, "fonte_yield": "B3", "spread_over_ref": NaN}], "emitter": null, "paymentEvents": [{"ticker": "23F0013602", "data_evento": "2023-06-20", "data_liquidacao": "2023-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 29.563, "valor_projetado": 29.563, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2023-12-20", "data_liquidacao": "2023-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 29.563, "valor_projetado": 29.563, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2024-06-20", "data_liquidacao": "2024-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 29.563, "valor_projetado": 29.563, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2024-12-20", "data_liquidacao": "2024-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 29.563, "valor_projetado": 29.563, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2025-06-20", "data_liquidacao": "2025-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 29.563, "valor_projetado": 29.563, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2025-12-20", "data_liquidacao": "2025-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 29.563, "valor_projetado": 29.563, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2026-06-20", "data_liquidacao": "2026-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": 29.563, "valor_projetado": 29.563, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2026-12-20", "data_liquidacao": "2026-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": NaN, "valor_projetado": 29.563, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2027-06-20", "data_liquidacao": "2027-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": NaN, "valor_projetado": 29.563, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2027-12-20", "data_liquidacao": "2027-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": NaN, "valor_projetado": 29.563, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2028-06-20", "data_liquidacao": "2028-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": NaN, "valor_projetado": 29.563, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2028-12-20", "data_liquidacao": "2028-12-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": NaN, "valor_projetado": 29.563, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2029-06-20", "data_liquidacao": "2029-06-20", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": NaN, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "23F0013602", "data_evento": "2029-06-20", "data_liquidacao": "2029-06-20", "tipo_evento": "Pagamento de Juros", "taxa": 2.9563, "valor_real": NaN, "valor_projetado": 29.563, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-Bg21cl8H.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bk8Agal8.js"></script>
   </body>
 </html>
