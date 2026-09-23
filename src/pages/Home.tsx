@@ -142,6 +142,11 @@ const Home: React.FC = () => {
     });
   }, [assets]);
 
+  // Ativos Vivos Negociados na B3
+  const ativosVivosB3 = useMemo(() => {
+    return ativosVivos.filter(a => a.flag_b3 === 1 || a.flag_b3 === '1');
+  }, [ativosVivos]);
+
   // Volume Total Não Vencido
   const volumeTotalVivos = useMemo(() => {
     return ativosVivos.reduce((acc, a) => {
@@ -378,7 +383,7 @@ const Home: React.FC = () => {
         </p>
 
         <div className="pt-2">
-          <SearchBar assets={assets} />
+          <SearchBar assets={ativosVivos} />
         </div>
       </section>
 
@@ -392,8 +397,9 @@ const Home: React.FC = () => {
                 <Layers size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Ativos na Base</p>
-                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalAssets.toLocaleString('pt-BR')}</p>
+                <p className="text-xs text-slate-500 font-medium">Ativos Vivos</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{ativosVivos.length.toLocaleString('pt-BR')}</p>
+                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Vigentes na base</p>
               </div>
             </div>
           </div>
@@ -401,11 +407,12 @@ const Home: React.FC = () => {
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
-                <CalendarDays size={22} />
+                <TrendingUp size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Ativos Vivos</p>
-                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{ativosVivos.length.toLocaleString('pt-BR')}</p>
+                <p className="text-xs text-slate-500 font-medium">Mercado B3</p>
+                <p className="text-xl md:text-2xl font-extrabold text-emerald-600">{ativosVivosB3.length.toLocaleString('pt-BR')}</p>
+                <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">Com negócios B3</p>
               </div>
             </div>
           </div>

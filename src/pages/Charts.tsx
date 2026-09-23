@@ -298,6 +298,7 @@ const CreditDashboard: React.FC = () => {
   const [tiposSel, setTiposSel] = useState<string[]>([])
   const [setoresSel, setSetoresSel] = useState<string[]>([])
   const [incentivadaSel, setIncentivadaSel] = useState<'ALL' | 'SIM' | 'NAO'>('ALL')
+  const [b3Filter, setB3Filter] = useState<'ALL' | 'B3_ONLY'>('ALL')
   const [rjSel, setRjSel] = useState<'ALL' | 'EXCLUIR_RJ' | 'APENAS_RJ'>('ALL')
   const [indexadoresSel, setIndexadoresSel] = useState<string[]>([])
   const [issuersSel, setIssuersSel] = useState<string[]>([])
@@ -363,6 +364,12 @@ const CreditDashboard: React.FC = () => {
 
         return d >= hoje
       })
+      .filter(a => {
+        if (b3Filter === 'B3_ONLY') {
+          return a.flag_b3 === 1 || a.flag_b3 === '1'
+        }
+        return true
+      })
       .map(a => {
         const tKey = (a.ticker || '').trim().toUpperCase()
         const b3Info = b3Liquidity[tKey]
@@ -380,7 +387,7 @@ const CreditDashboard: React.FC = () => {
           dias_negociados_30d: dias30d
         }
       })
-  }, [assets, b3Liquidity])
+  }, [assets, b3Liquidity, b3Filter])
 
   /* ---------- Data Máxima de Negócio Disponível ---------- */
 
@@ -806,12 +813,14 @@ const CreditDashboard: React.FC = () => {
       minDiasNegociados > 0 ||
       tradeRecencyFilter !== 'ALL' ||
       tradeDateMin !== '' ||
-      tradeDateMax !== ''
+      tradeDateMax !== '' ||
+      b3Filter !== 'ALL'
     )
   }, [
     tiposSel,
     setoresSel,
     incentivadaSel,
+    b3Filter,
     rjSel,
     indexadoresSel,
     issuersSel,
@@ -1096,6 +1105,7 @@ const CreditDashboard: React.FC = () => {
                 setTiposSel([])
                 setSetoresSel([])
                 setIncentivadaSel('ALL')
+                setB3Filter('ALL')
                 setRjSel('ALL')
                 setSpreadHistIdx('ALL')
                 setIndexadoresSel([])
@@ -1301,6 +1311,32 @@ const CreditDashboard: React.FC = () => {
                   title="Filtra apenas títulos distressed sob regime de recuperação judicial"
                 >
                   <span>⚠️ Apenas em RJ</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Filtro Mercado B3 */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Mercado B3:
+              </span>
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                <button
+                  onClick={() => setB3Filter('ALL')}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    b3Filter === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Todos Vivos
+                </button>
+                <button
+                  onClick={() => setB3Filter('B3_ONLY')}
+                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
+                    b3Filter === 'B3_ONLY' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Filtra apenas títulos com histórico de negócios confirmados na B3"
+                >
+                  <span>🏛️ Apenas B3 ({assets.filter(a => (a.flag_b3 === 1 || a.flag_b3 === '1') && (a.flag_vencido === 0 || a.flag_vencido === '0') && (a.flag_resgatado === 0 || a.flag_resgatado === '0')).length.toLocaleString('pt-BR')})</span>
                 </button>
               </div>
             </div>

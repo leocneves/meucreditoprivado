@@ -56,6 +56,7 @@ export interface Asset {
   status_ativo?: string;
   flag_vencido?: number | string;
   flag_resgatado?: number | string;
+  flag_b3?: number | string;
 }
 
 export interface PaymentEvent {
@@ -340,7 +341,13 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
   }
 
   const promise = new Promise<T[]>((resolve, reject) => {
-    Papa.parse(normalizedUrl, {
+    // Cache buster com timestamp por hora para garantir dados frescos sem sobrecarregar CDN
+    const cacheBuster = Math.floor(Date.now() / 3600000);
+    const fetchTarget = normalizedUrl.includes('?') 
+      ? `${normalizedUrl}&_t=${cacheBuster}` 
+      : `${normalizedUrl}?_t=${cacheBuster}`;
+
+    Papa.parse(fetchTarget, {
       download: true,
       header: true,
       skipEmptyLines: true,
