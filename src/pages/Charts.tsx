@@ -347,6 +347,10 @@ const CreditDashboard: React.FC = () => {
 
     return assets
       .filter(a => {
+        if (a.flag_resgatado === 1 || a.flag_resgatado === '1' || a.status_ativo === 'Resgatado') return false
+        if (a.flag_vencido === 1 || a.flag_vencido === '1' || a.status_ativo === 'Vencido') return false
+        if (a.status_ativo === 'Ativo') return true
+
         if (!a.vencimento) return false
 
         let d: Date

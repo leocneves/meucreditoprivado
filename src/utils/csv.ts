@@ -53,7 +53,9 @@ export interface Asset {
   seniority?: string;
   guarantee?: string;
   issue_date?: string;
-  dt_emissao?: string;
+  status_ativo?: string;
+  flag_vencido?: number | string;
+  flag_resgatado?: number | string;
 }
 
 export interface PaymentEvent {

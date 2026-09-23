@@ -120,10 +120,16 @@ const Home: React.FC = () => {
     return docsoverview.reduce((acc, d) => acc + (parseFloat(d.qtd_documentos) || 0), 0);
   }, [docsoverview]);
 
-  // Ativos Vivos (Não Vencidos)
+  // Ativos Vivos (Não Vencidos e Não Resgatados)
   const ativosVivos = useMemo(() => {
     const hoje = new Date();
     return assets.filter(asset => {
+      // 1. Exclui títulos liquidados/resgatados ou vencidos
+      if (asset.flag_resgatado === 1 || asset.flag_resgatado === '1' || asset.status_ativo === 'Resgatado') return false;
+      if (asset.flag_vencido === 1 || asset.flag_vencido === '1' || asset.status_ativo === 'Vencido') return false;
+      if (asset.status_ativo === 'Ativo') return true;
+
+      // 2. Validação pela data de vencimento contratual
       if (!asset.vencimento) return false;
       let dataVenc: Date;
       if (asset.vencimento.includes('/')) {
