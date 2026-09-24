@@ -85,6 +85,7 @@ const Home: React.FC = () => {
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [distressSummary, setDistressSummary] = useState<DistressSummary | null>(null);
   const [loading, setLoading] = useState(true);
+  const [maturityWallFilter, setMaturityWallFilter] = useState<'ALL' | 'B3_ONLY'>('ALL');
 
   /* ================= LOAD ================= */
 
@@ -277,7 +278,11 @@ const Home: React.FC = () => {
       '2036+': { count: 0, volume: 0 }
     };
 
-    ativosVivos.forEach(a => {
+    const targetList = maturityWallFilter === 'B3_ONLY'
+      ? ativosVivos.filter(a => a.flag_b3 === 1 || a.flag_b3 === '1')
+      : ativosVivos;
+
+    targetList.forEach(a => {
       if (!a.vencimento) return;
       let yr: number;
       if (a.vencimento.includes('/')) {
@@ -318,7 +323,7 @@ const Home: React.FC = () => {
       quantidade: data.count,
       volumeBi: Number(data.volume.toFixed(2))
     }));
-  }, [ativosVivos]);
+  }, [ativosVivos, maturityWallFilter]);
 
   /* ================= TOP DEVEDORES & MAIORES SPREADS ================= */
 
@@ -383,13 +388,13 @@ const Home: React.FC = () => {
         </p>
 
         <div className="pt-2">
-          <SearchBar assets={ativosVivos} />
+          <SearchBar assets={assets} />
         </div>
       </section>
 
       {/* ================= KPI CARDS (METRICAS PRINCIPAIS) ================= */}
       <section className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
           
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
             <div className="flex items-center gap-3">
@@ -397,9 +402,9 @@ const Home: React.FC = () => {
                 <Layers size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Ativos Vivos</p>
-                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{ativosVivos.length.toLocaleString('pt-BR')}</p>
-                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Vigentes na base</p>
+                <p className="text-xs text-slate-500 font-medium">Ativos na Base</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalAssets.toLocaleString('pt-BR')}</p>
+                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Total cadastrado</p>
               </div>
             </div>
           </div>
@@ -407,12 +412,12 @@ const Home: React.FC = () => {
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
-                <TrendingUp size={22} />
+                <CalendarDays size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Mercado B3</p>
-                <p className="text-xl md:text-2xl font-extrabold text-emerald-600">{ativosVivosB3.length.toLocaleString('pt-BR')}</p>
-                <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">Com negócios B3</p>
+                <p className="text-xs text-slate-500 font-medium">Ativos Vivos</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">{ativosVivos.length.toLocaleString('pt-BR')}</p>
+                <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">Vigentes no mercado</p>
               </div>
             </div>
           </div>
@@ -423,10 +428,22 @@ const Home: React.FC = () => {
                 <TrendingUp size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Volume em Estoque</p>
-                <p className="text-xl md:text-2xl font-extrabold text-slate-900">
-                  R$ {(volumeTotalVivos / 1e9).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} bi
-                </p>
+                <p className="text-xs text-slate-500 font-medium">Mercado B3</p>
+                <p className="text-xl md:text-2xl font-extrabold text-indigo-600">{ativosVivosB3.length.toLocaleString('pt-BR')}</p>
+                <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">Com negócios B3</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-purple-50 text-purple-600 rounded-xl">
+                <Coins size={22} />
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 font-medium">Estoque B3</p>
+                <p className="text-xl md:text-2xl font-extrabold text-slate-900">R$ 2,00 tri</p>
+                <p className="text-[10px] text-slate-400 font-medium mt-0.5">R$ {(volumeTotalVivos / 1e9).toFixed(0)} bi emitidos</p>
               </div>
             </div>
           </div>
@@ -673,11 +690,37 @@ const Home: React.FC = () => {
                 </p>
               </div>
 
-              <div className="flex items-center gap-4 text-xs font-semibold text-slate-600">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded bg-blue-600" />
-                  Volume Vencendo (R$ Bi)
-                </span>
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Seletor de Base do Maturity Wall */}
+                <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
+                  <button
+                    onClick={() => setMaturityWallFilter('ALL')}
+                    className={`px-3 py-1 rounded-md transition ${
+                      maturityWallFilter === 'ALL'
+                        ? 'bg-white text-blue-700 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Todos os Vivos ({ativosVivos.length.toLocaleString('pt-BR')})
+                  </button>
+                  <button
+                    onClick={() => setMaturityWallFilter('B3_ONLY')}
+                    className={`px-3 py-1 rounded-md transition ${
+                      maturityWallFilter === 'B3_ONLY'
+                        ? 'bg-white text-emerald-700 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Mercado B3 ({ativosVivosB3.length.toLocaleString('pt-BR')})
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-4 text-xs font-semibold text-slate-600">
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded bg-blue-600" />
+                    Volume Vencendo (R$ Bi)
+                  </span>
+                </div>
               </div>
             </div>
 
