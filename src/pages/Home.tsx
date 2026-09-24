@@ -19,6 +19,7 @@ import {
   Layers,
   TrendingUp,
   CalendarDays,
+  Coins,
   BarChart3,
   FileCheck,
   Building2,
