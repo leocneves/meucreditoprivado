@@ -38,6 +38,7 @@ import {
 
 interface CashflowItem {
   ano: string;
+  label?: string;
   vencimentoBi?: number;
   amortizacaoBi: number;
   principalTotalBi?: number;
@@ -72,6 +73,8 @@ interface ResumoFluxos {
 interface CashflowWallPayload {
   ALL: CashflowItem[];
   B3_ONLY: CashflowItem[];
+  MONTHLY_ALL?: CashflowItem[];
+  MONTHLY_B3?: CashflowItem[];
   cobertura_produtos?: Record<string, CoberturaProduto>;
   resumo_fluxos?: ResumoFluxos;
   metadata?: {
@@ -136,6 +139,7 @@ const Home: React.FC = () => {
   const [cashflowWallData, setCashflowWallData] = useState<CashflowWallPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [maturityWallFilter, setMaturityWallFilter] = useState<'ALL' | 'B3_ONLY'>('ALL');
+  const [cashflowPeriodMode, setCashflowPeriodMode] = useState<'YEARLY' | 'MONTHLY'>('YEARLY');
 
   /* ================= LOAD ================= */
 
@@ -320,8 +324,13 @@ const Home: React.FC = () => {
   /* ================= GRÁFICOS: 4. MATURITY & CASHFLOW WALL ================= */
 
   const maturityWall = useMemo(() => {
-    if (cashflowWallData && cashflowWallData[maturityWallFilter]) {
-      return cashflowWallData[maturityWallFilter];
+    if (cashflowWallData) {
+      if (cashflowPeriodMode === 'MONTHLY') {
+        const key = maturityWallFilter === 'B3_ONLY' ? 'MONTHLY_B3' : 'MONTHLY_ALL';
+        if (cashflowWallData[key]) return cashflowWallData[key];
+      } else {
+        if (cashflowWallData[maturityWallFilter]) return cashflowWallData[maturityWallFilter];
+      }
     }
 
     // Fallback paramétrico se o JSON ainda não tiver sido carregado
@@ -376,7 +385,7 @@ const Home: React.FC = () => {
       jurosBi: Number(data.jurosBi.toFixed(2)),
       totalBi: Number(data.totalBi.toFixed(2))
     }));
-  }, [ativosVivos, maturityWallFilter, cashflowWallData]);
+  }, [ativosVivos, maturityWallFilter, cashflowPeriodMode, cashflowWallData]);
 
   /* ================= TOP DEVEDORES & MAIORES SPREADS ================= */
 
@@ -736,10 +745,10 @@ const Home: React.FC = () => {
               <div>
                 <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
                   <CalendarDays size={22} className="text-blue-600" />
-                  Maturity & Cashflow Wall — Cronograma de Amortizações e Cupons
+                  Maturity & Cashflow Wall
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">
-                  Distribuição anual do fluxo de compromissos da dívida privada (R$ Bilhões), segregando Amortização de Principal vs. Juros e Cupons Projetados.
+                  Distribuição {cashflowPeriodMode === 'MONTHLY' ? 'mês a mês dos próximos 24 meses' : 'anual'} do fluxo de compromissos da dívida privada (R$ Bilhões), segregando Vencimento Bullet vs. Amortizações Parciais vs. Juros e Cupons.
                 </p>
               </div>
 
@@ -810,6 +819,30 @@ const Home: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Seletor de Periodicidade (Ano a Ano vs Mês a Mês) */}
+                <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
+                  <button
+                    onClick={() => setCashflowPeriodMode('YEARLY')}
+                    className={`px-3 py-1 rounded-md transition ${
+                      cashflowPeriodMode === 'YEARLY'
+                        ? 'bg-white text-blue-700 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Ano a Ano
+                  </button>
+                  <button
+                    onClick={() => setCashflowPeriodMode('MONTHLY')}
+                    className={`px-3 py-1 rounded-md transition ${
+                      cashflowPeriodMode === 'MONTHLY'
+                        ? 'bg-white text-blue-700 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Mês a Mês (24M)
+                  </button>
+                </div>
+
                 {/* Seletor de Base do Cashflow Wall */}
                 <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
                   <button
@@ -854,9 +887,18 @@ const Home: React.FC = () => {
 
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={maturityWall} margin={{ top: 20, right: 30, left: 10, bottom: 5 }}>
+                <BarChart data={maturityWall} margin={{ top: 20, right: 30, left: 10, bottom: cashflowPeriodMode === 'MONTHLY' ? 18 : 5 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                  <XAxis dataKey="ano" stroke="#64748b" fontSize={12} tickLine={false} />
+                  <XAxis
+                    dataKey={cashflowPeriodMode === 'MONTHLY' ? 'label' : 'ano'}
+                    stroke="#64748b"
+                    fontSize={cashflowPeriodMode === 'MONTHLY' ? 10 : 12}
+                    tickLine={false}
+                    interval={0}
+                    angle={cashflowPeriodMode === 'MONTHLY' ? -35 : 0}
+                    textAnchor={cashflowPeriodMode === 'MONTHLY' ? 'end' : 'middle'}
+                    height={cashflowPeriodMode === 'MONTHLY' ? 45 : 30}
+                  />
                   <YAxis stroke="#64748b" fontSize={12} tickLine={false} unit=" bi" />
                   <RechartsTooltip
                     cursor={{ fill: '#f8fafc' }}
@@ -866,7 +908,9 @@ const Home: React.FC = () => {
                         return (
                           <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 text-xs space-y-1.5">
                             <div className="flex items-center justify-between border-b border-slate-800 pb-1 gap-4">
-                              <span className="font-bold text-slate-100">Ano {label}</span>
+                              <span className="font-bold text-slate-100">
+                                {cashflowPeriodMode === 'MONTHLY' ? `Mês ${data.label || label}` : `Ano ${label}`}
+                              </span>
                               <span className="text-[10px] text-blue-400 bg-blue-950/80 px-1.5 py-0.5 rounded border border-blue-800/50">
                                 Fluxo Previsto
                               </span>
@@ -897,12 +941,12 @@ const Home: React.FC = () => {
                               <span className="font-semibold text-slate-100">R$ {data.jurosBi} Bi</span>
                             </div>
                             <div className="border-t border-slate-800 pt-1.5 flex items-center justify-between gap-4 font-bold text-slate-100">
-                              <span>Compromisso Anual Total:</span>
+                              <span>Compromisso {cashflowPeriodMode === 'MONTHLY' ? 'Mensal' : 'Anual'} Total:</span>
                               <span className="text-emerald-400">R$ {data.totalBi} Bi</span>
                             </div>
                             <div className="text-[10px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800/60 gap-4">
                               <span className="text-blue-300 font-semibold">
-                                📌 {data.titulosVencendo?.toLocaleString('pt-BR') || 0} títulos vencem no ano
+                                📌 {data.titulosVencendo?.toLocaleString('pt-BR') || 0} títulos vencem {cashflowPeriodMode === 'MONTHLY' ? 'no mês' : 'no ano'}
                               </span>
                               <span>{data.quantidade?.toLocaleString('pt-BR') || 0} com pagamentos</span>
                             </div>
@@ -912,9 +956,9 @@ const Home: React.FC = () => {
                       return null;
                     }}
                   />
-                  <Bar dataKey="vencimentoBi" name="Vencimento (Resgate Bullet)" fill="#1d4ed8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={55} />
-                  <Bar dataKey="amortizacaoBi" name="Amortizações Periódicas" fill="#38bdf8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={55} />
-                  <Bar dataKey="jurosBi" name="Juros & Cupons Projetados" fill="#f59e0b" stackId="cf" radius={[6, 6, 0, 0]} maxBarSize={55} />
+                  <Bar dataKey="vencimentoBi" name="Vencimento (Resgate Bullet)" fill="#1d4ed8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 55} />
+                  <Bar dataKey="amortizacaoBi" name="Amortizações Periódicas" fill="#38bdf8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 55} />
+                  <Bar dataKey="jurosBi" name="Juros & Cupons Projetados" fill="#f59e0b" stackId="cf" radius={[6, 6, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 55} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
