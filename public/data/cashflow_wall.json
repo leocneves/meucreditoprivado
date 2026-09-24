@@ -2,103 +2,145 @@
   "ALL": [
     {
       "ano": "2026",
-      "amortizacaoBi": 63.67,
+      "vencimentoBi": 63.47,
+      "amortizacaoBi": 0.19,
+      "principalTotalBi": 63.67,
       "jurosBi": 74.96,
       "totalBi": 138.62,
-      "quantidade": 6325
+      "quantidade": 6325,
+      "titulosVencendo": 424
     },
     {
       "ano": "2027",
-      "amortizacaoBi": 774.76,
+      "vencimentoBi": 774.2,
+      "amortizacaoBi": 0.56,
+      "principalTotalBi": 774.76,
       "jurosBi": 213.98,
       "totalBi": 988.75,
-      "quantidade": 10047
+      "quantidade": 10047,
+      "titulosVencendo": 1264
     },
     {
       "ano": "2028",
-      "amortizacaoBi": 245.66,
+      "vencimentoBi": 244.93,
+      "amortizacaoBi": 0.73,
+      "principalTotalBi": 245.66,
       "jurosBi": 191.59,
       "totalBi": 437.25,
-      "quantidade": 8801
+      "quantidade": 8801,
+      "titulosVencendo": 1187
     },
     {
       "ano": "2029",
-      "amortizacaoBi": 328.73,
+      "vencimentoBi": 327.69,
+      "amortizacaoBi": 1.04,
+      "principalTotalBi": 328.73,
       "jurosBi": 179.05,
       "totalBi": 507.78,
-      "quantidade": 7623
+      "quantidade": 7623,
+      "titulosVencendo": 1318
     },
     {
       "ano": "2030",
-      "amortizacaoBi": 576.76,
+      "vencimentoBi": 575.94,
+      "amortizacaoBi": 0.83,
+      "principalTotalBi": 576.76,
       "jurosBi": 164.89,
       "totalBi": 741.66,
-      "quantidade": 6326
+      "quantidade": 6326,
+      "titulosVencendo": 1170
     },
     {
       "ano": "2031-2035",
-      "amortizacaoBi": 2398.99,
+      "vencimentoBi": 2396.79,
+      "amortizacaoBi": 2.19,
+      "principalTotalBi": 2398.99,
       "jurosBi": 578.34,
       "totalBi": 2977.33,
-      "quantidade": 5186
+      "quantidade": 5186,
+      "titulosVencendo": 3287
     },
     {
       "ano": "2036+",
-      "amortizacaoBi": 657.41,
+      "vencimentoBi": 657.36,
+      "amortizacaoBi": 0.04,
+      "principalTotalBi": 657.41,
       "jurosBi": 397.8,
       "totalBi": 1055.21,
-      "quantidade": 1905
+      "quantidade": 1905,
+      "titulosVencendo": 1903
     }
   ],
   "B3_ONLY": [
     {
       "ano": "2026",
-      "amortizacaoBi": 22.03,
+      "vencimentoBi": 21.84,
+      "amortizacaoBi": 0.19,
+      "principalTotalBi": 22.03,
       "jurosBi": 48.38,
       "totalBi": 70.41,
-      "quantidade": 2588
+      "quantidade": 2588,
+      "titulosVencendo": 92
     },
     {
       "ano": "2027",
-      "amortizacaoBi": 101.72,
+      "vencimentoBi": 101.21,
+      "amortizacaoBi": 0.5,
+      "principalTotalBi": 101.72,
       "jurosBi": 117.26,
       "totalBi": 218.97,
-      "quantidade": 4213
+      "quantidade": 4213,
+      "titulosVencendo": 364
     },
     {
       "ano": "2028",
-      "amortizacaoBi": 138.22,
+      "vencimentoBi": 137.49,
+      "amortizacaoBi": 0.73,
+      "principalTotalBi": 138.22,
       "jurosBi": 111.31,
       "totalBi": 249.54,
-      "quantidade": 3853
+      "quantidade": 3853,
+      "titulosVencendo": 458
     },
     {
       "ano": "2029",
-      "amortizacaoBi": 231.44,
+      "vencimentoBi": 230.39,
+      "amortizacaoBi": 1.04,
+      "principalTotalBi": 231.44,
       "jurosBi": 104.9,
       "totalBi": 336.34,
-      "quantidade": 3399
+      "quantidade": 3399,
+      "titulosVencendo": 617
     },
     {
       "ano": "2030",
-      "amortizacaoBi": 202.23,
+      "vencimentoBi": 201.4,
+      "amortizacaoBi": 0.83,
+      "principalTotalBi": 202.23,
       "jurosBi": 96.15,
       "totalBi": 298.38,
-      "quantidade": 2785
+      "quantidade": 2785,
+      "titulosVencendo": 522
     },
     {
       "ano": "2031-2035",
-      "amortizacaoBi": 1096.45,
+      "vencimentoBi": 1094.25,
+      "amortizacaoBi": 2.19,
+      "principalTotalBi": 1096.45,
       "jurosBi": 339.05,
       "totalBi": 1435.49,
-      "quantidade": 2268
+      "quantidade": 2268,
+      "titulosVencendo": 1505
     },
     {
       "ano": "2036+",
-      "amortizacaoBi": 337.71,
+      "vencimentoBi": 337.68,
+      "amortizacaoBi": 0.03,
+      "principalTotalBi": 337.71,
       "jurosBi": 117.25,
       "totalBi": 454.96,
-      "quantidade": 766
+      "quantidade": 766,
+      "titulosVencendo": 764
     }
   ],
   "cobertura_produtos": {
@@ -136,7 +178,7 @@
     }
   },
   "metadata": {
-    "gerado_em": "2026-09-24 14:25:10",
+    "gerado_em": "2026-09-24 16:43:48",
     "total_ativos_vivos": 10542,
     "volume_total_futuro_bi": 6846.59
   }

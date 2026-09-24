@@ -38,10 +38,13 @@ import {
 
 interface CashflowItem {
   ano: string;
+  vencimentoBi?: number;
   amortizacaoBi: number;
+  principalTotalBi?: number;
   jurosBi: number;
   totalBi: number;
   quantidade: number;
+  titulosVencendo?: number;
 }
 
 interface CoberturaProduto {
@@ -322,14 +325,14 @@ const Home: React.FC = () => {
     }
 
     // Fallback paramétrico se o JSON ainda não tiver sido carregado
-    const yearsMap: Record<string, { count: number; amortizacaoBi: number; jurosBi: number; totalBi: number }> = {
-      '2026': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2027': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2028': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2029': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2030': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2031-2035': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2036+': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 }
+    const yearsMap: Record<string, { count: number; titulosVencendo: number; vencimentoBi: number; amortizacaoBi: number; jurosBi: number; totalBi: number }> = {
+      '2026': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2027': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2028': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2029': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2030': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2031-2035': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2036+': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 }
     };
 
     const targetList = maturityWallFilter === 'B3_ONLY'
@@ -357,7 +360,8 @@ const Home: React.FC = () => {
       else if (yr >= 2031 && yr <= 2035) bucket = '2031-2035';
 
       yearsMap[bucket].count++;
-      yearsMap[bucket].amortizacaoBi += vol;
+      yearsMap[bucket].titulosVencendo++;
+      yearsMap[bucket].vencimentoBi += vol;
       yearsMap[bucket].jurosBi += vol * 0.08;
       yearsMap[bucket].totalBi += vol * 1.08;
     });
@@ -365,7 +369,10 @@ const Home: React.FC = () => {
     return Object.entries(yearsMap).map(([ano, data]) => ({
       ano,
       quantidade: data.count,
+      titulosVencendo: data.titulosVencendo,
+      vencimentoBi: Number(data.vencimentoBi.toFixed(2)),
       amortizacaoBi: Number(data.amortizacaoBi.toFixed(2)),
+      principalTotalBi: Number((data.vencimentoBi + data.amortizacaoBi).toFixed(2)),
       jurosBi: Number(data.jurosBi.toFixed(2)),
       totalBi: Number(data.totalBi.toFixed(2))
     }));
@@ -828,10 +835,14 @@ const Home: React.FC = () => {
                 </div>
 
                 {/* Legenda das Pilhas */}
-                <div className="flex items-center gap-3 text-xs font-semibold text-slate-600">
+                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-600">
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded bg-blue-600" />
-                    Amortização Principal
+                    <span className="w-3 h-3 rounded bg-blue-700" />
+                    Vencimentos (Resgate Bullet)
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded bg-sky-400" />
+                    Amortizações Periódicas
                   </span>
                   <span className="inline-flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded bg-amber-500" />
@@ -853,7 +864,7 @@ const Home: React.FC = () => {
                       if (active && payload && payload.length) {
                         const data = payload[0].payload as CashflowItem;
                         return (
-                          <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs space-y-1.5">
+                          <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 text-xs space-y-1.5">
                             <div className="flex items-center justify-between border-b border-slate-800 pb-1 gap-4">
                               <span className="font-bold text-slate-100">Ano {label}</span>
                               <span className="text-[10px] text-blue-400 bg-blue-950/80 px-1.5 py-0.5 rounded border border-blue-800/50">
@@ -862,11 +873,22 @@ const Home: React.FC = () => {
                             </div>
                             <div className="flex items-center justify-between gap-4 text-slate-300">
                               <span className="flex items-center gap-1.5">
-                                <span className="w-2 h-2 rounded bg-blue-500" />
-                                Amortização de Principal:
+                                <span className="w-2 h-2 rounded bg-blue-600" />
+                                Vencimento (Resgate Bullet):
                               </span>
-                              <span className="font-semibold text-slate-100">R$ {data.amortizacaoBi} Bi</span>
+                              <span className="font-semibold text-slate-100">
+                                R$ {data.vencimentoBi !== undefined ? data.vencimentoBi : (data.amortizacaoBi || 0)} Bi
+                              </span>
                             </div>
+                            {Boolean(data.amortizacaoBi && data.vencimentoBi !== undefined && data.amortizacaoBi > 0) && (
+                              <div className="flex items-center justify-between gap-4 text-slate-300">
+                                <span className="flex items-center gap-1.5">
+                                  <span className="w-2 h-2 rounded bg-sky-400" />
+                                  Amortizações Periódicas:
+                                </span>
+                                <span className="font-semibold text-slate-100">R$ {data.amortizacaoBi} Bi</span>
+                              </div>
+                            )}
                             <div className="flex items-center justify-between gap-4 text-slate-300">
                               <span className="flex items-center gap-1.5">
                                 <span className="w-2 h-2 rounded bg-amber-500" />
@@ -875,11 +897,14 @@ const Home: React.FC = () => {
                               <span className="font-semibold text-slate-100">R$ {data.jurosBi} Bi</span>
                             </div>
                             <div className="border-t border-slate-800 pt-1.5 flex items-center justify-between gap-4 font-bold text-slate-100">
-                              <span>Compromisso Total:</span>
+                              <span>Compromisso Anual Total:</span>
                               <span className="text-emerald-400">R$ {data.totalBi} Bi</span>
                             </div>
-                            <div className="text-[10px] text-slate-400 text-right pt-0.5">
-                              {data.quantidade.toLocaleString('pt-BR')} papéis com pagamentos no ano
+                            <div className="text-[10px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800/60 gap-4">
+                              <span className="text-blue-300 font-semibold">
+                                📌 {data.titulosVencendo?.toLocaleString('pt-BR') || 0} títulos vencem no ano
+                              </span>
+                              <span>{data.quantidade?.toLocaleString('pt-BR') || 0} com pagamentos</span>
                             </div>
                           </div>
                         );
@@ -887,7 +912,8 @@ const Home: React.FC = () => {
                       return null;
                     }}
                   />
-                  <Bar dataKey="amortizacaoBi" name="Amortização de Principal" fill="#2563eb" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={55} />
+                  <Bar dataKey="vencimentoBi" name="Vencimento (Resgate Bullet)" fill="#1d4ed8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={55} />
+                  <Bar dataKey="amortizacaoBi" name="Amortizações Periódicas" fill="#38bdf8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={55} />
                   <Bar dataKey="jurosBi" name="Juros & Cupons Projetados" fill="#f59e0b" stackId="cf" radius={[6, 6, 0, 0]} maxBarSize={55} />
                 </BarChart>
               </ResponsiveContainer>
