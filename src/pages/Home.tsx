@@ -30,8 +30,53 @@ import {
   Flame,
   Clock,
   AlertTriangle,
-  ExternalLink
+  ExternalLink,
+  Info
 } from 'lucide-react';
+
+/* ================= TIPOS DE FLUXO & COBERTURA ================= */
+
+interface CashflowItem {
+  ano: string;
+  amortizacaoBi: number;
+  jurosBi: number;
+  totalBi: number;
+  quantidade: number;
+}
+
+interface CoberturaProduto {
+  total_ativos: number;
+  cobertos_oficial: number;
+  pct_oficial: number;
+  volume_futuro_bi: number;
+}
+
+interface ResumoFluxos {
+  realizado?: {
+    total_eventos: number;
+    total_ativos: number;
+    qtd_amortizacoes: number;
+    qtd_juros: number;
+  };
+  previsto?: {
+    total_eventos: number;
+    total_ativos: number;
+    qtd_amortizacoes: number;
+    qtd_juros: number;
+  };
+}
+
+interface CashflowWallPayload {
+  ALL: CashflowItem[];
+  B3_ONLY: CashflowItem[];
+  cobertura_produtos?: Record<string, CoberturaProduto>;
+  resumo_fluxos?: ResumoFluxos;
+  metadata?: {
+    gerado_em: string;
+    total_ativos_vivos: number;
+    volume_total_futuro_bi: number;
+  };
+}
 
 /* ================= HELPERS ================= */
 
@@ -85,6 +130,7 @@ const Home: React.FC = () => {
   const [docsoverview, setDocsOverview] = useState<DocsOverview[]>([]);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [distressSummary, setDistressSummary] = useState<DistressSummary | null>(null);
+  const [cashflowWallData, setCashflowWallData] = useState<CashflowWallPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [maturityWallFilter, setMaturityWallFilter] = useState<'ALL' | 'B3_ONLY'>('ALL');
 
@@ -93,17 +139,19 @@ const Home: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [assetsData, metaData, docsoverviewData, distressData] = await Promise.all([
+        const [assetsData, metaData, docsoverviewData, distressData, cashflowData] = await Promise.all([
           fetchCSV<Asset>('./data/assets_master.csv'),
           fetchMetadata(),
           fetchCSV<DocsOverview>('./data/docs_overview.csv'),
-          fetch('./data/distress_summary.json').then(r => r.ok ? r.json() : null).catch(() => null)
+          fetch('./data/distress_summary.json').then(r => r.ok ? r.json() : null).catch(() => null),
+          fetch('./data/cashflow_wall.json').then(r => r.ok ? r.json() : null).catch(() => null)
         ]);
 
         setAssets(assetsData || []);
         setMetadata(metaData);
         setDocsOverview(docsoverviewData || []);
         setDistressSummary(distressData);
+        setCashflowWallData(cashflowData);
       } catch (err) {
         console.error('Erro ao carregar home', err);
       } finally {
@@ -266,17 +314,22 @@ const Home: React.FC = () => {
     }));
   }, [ativosVivos]);
 
-  /* ================= GRÁFICOS: 4. MATURITY WALL (CRONOGRAMA DE VENCIMENTOS) ================= */
+  /* ================= GRÁFICOS: 4. MATURITY & CASHFLOW WALL ================= */
 
   const maturityWall = useMemo(() => {
-    const yearsMap: Record<string, { count: number; volume: number }> = {
-      '2026': { count: 0, volume: 0 },
-      '2027': { count: 0, volume: 0 },
-      '2028': { count: 0, volume: 0 },
-      '2029': { count: 0, volume: 0 },
-      '2030': { count: 0, volume: 0 },
-      '2031-2035': { count: 0, volume: 0 },
-      '2036+': { count: 0, volume: 0 }
+    if (cashflowWallData && cashflowWallData[maturityWallFilter]) {
+      return cashflowWallData[maturityWallFilter];
+    }
+
+    // Fallback paramétrico se o JSON ainda não tiver sido carregado
+    const yearsMap: Record<string, { count: number; amortizacaoBi: number; jurosBi: number; totalBi: number }> = {
+      '2026': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2027': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2028': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2029': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2030': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2031-2035': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
+      '2036+': { count: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 }
     };
 
     const targetList = maturityWallFilter === 'B3_ONLY'
@@ -295,36 +348,28 @@ const Home: React.FC = () => {
       if (isNaN(yr)) return;
       const vol = (Number(a.volume) || 0) / 1e9; // em R$ Bilhões
 
-      if (yr <= 2026) {
-        yearsMap['2026'].count++;
-        yearsMap['2026'].volume += vol;
-      } else if (yr === 2027) {
-        yearsMap['2027'].count++;
-        yearsMap['2027'].volume += vol;
-      } else if (yr === 2028) {
-        yearsMap['2028'].count++;
-        yearsMap['2028'].volume += vol;
-      } else if (yr === 2029) {
-        yearsMap['2029'].count++;
-        yearsMap['2029'].volume += vol;
-      } else if (yr === 2030) {
-        yearsMap['2030'].count++;
-        yearsMap['2030'].volume += vol;
-      } else if (yr >= 2031 && yr <= 2035) {
-        yearsMap['2031-2035'].count++;
-        yearsMap['2031-2035'].volume += vol;
-      } else if (yr >= 2036) {
-        yearsMap['2036+'].count++;
-        yearsMap['2036+'].volume += vol;
-      }
+      let bucket = '2036+';
+      if (yr <= 2026) bucket = '2026';
+      else if (yr === 2027) bucket = '2027';
+      else if (yr === 2028) bucket = '2028';
+      else if (yr === 2029) bucket = '2029';
+      else if (yr === 2030) bucket = '2030';
+      else if (yr >= 2031 && yr <= 2035) bucket = '2031-2035';
+
+      yearsMap[bucket].count++;
+      yearsMap[bucket].amortizacaoBi += vol;
+      yearsMap[bucket].jurosBi += vol * 0.08;
+      yearsMap[bucket].totalBi += vol * 1.08;
     });
 
     return Object.entries(yearsMap).map(([ano, data]) => ({
       ano,
       quantidade: data.count,
-      volumeBi: Number(data.volume.toFixed(2))
+      amortizacaoBi: Number(data.amortizacaoBi.toFixed(2)),
+      jurosBi: Number(data.jurosBi.toFixed(2)),
+      totalBi: Number(data.totalBi.toFixed(2))
     }));
-  }, [ativosVivos, maturityWallFilter]);
+  }, [ativosVivos, maturityWallFilter, cashflowWallData]);
 
   /* ================= TOP DEVEDORES & MAIORES SPREADS ================= */
 
@@ -676,7 +721,7 @@ const Home: React.FC = () => {
         </section>
       )}
 
-      {/* ================= GRÁFICO 4: MATURITY WALL (CRONOGRAMA DE VENCIMENTO / AMORTIZAÇÃO) ================= */}
+      {/* ================= GRÁFICO 4: MATURITY & CASHFLOW WALL (CRONOGRAMA DE AMORTIZAÇÕES E CUPONS) ================= */}
       {!loading && (
         <section className="container mx-auto px-4">
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
@@ -684,15 +729,81 @@ const Home: React.FC = () => {
               <div>
                 <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
                   <CalendarDays size={22} className="text-blue-600" />
-                  Maturity Wall — Cronograma de Vencimento de Dívidas Privadas
+                  Maturity & Cashflow Wall — Cronograma de Amortizações e Cupons
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">
-                  Distribuição do volume financeiro total (R$ Bilhões) e quantidade de papéis com vencimento por ano.
+                  Distribuição anual do fluxo de compromissos da dívida privada (R$ Bilhões), segregando Amortização de Principal vs. Juros e Cupons Projetados.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                {/* Seletor de Base do Maturity Wall */}
+                {/* Bullet Interativo de Cobertura de Ativos por Produto com Tooltip Popover */}
+                <div className="relative group">
+                  <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-semibold transition cursor-pointer">
+                    <Info size={14} className="text-blue-600" />
+                    <span>Cobertura por Produto</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </button>
+
+                  {/* Popover Tooltip no Hover */}
+                  <div className="absolute right-0 top-full mt-2 w-80 md:w-96 bg-slate-900 text-white rounded-xl shadow-2xl p-4 text-xs z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 border border-slate-700">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2.5">
+                      <span className="font-bold text-slate-100 flex items-center gap-1.5">
+                        <ShieldCheck size={16} className="text-emerald-400" />
+                        Cobertura de Ativos por Produto
+                      </span>
+                      <span className="text-[10px] text-slate-400">Base Ativa</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {cashflowWallData?.cobertura_produtos ? (
+                        Object.entries(cashflowWallData.cobertura_produtos).map(([prod, cob]) => (
+                          <div key={prod} className="flex items-center justify-between bg-slate-800/70 p-2 rounded-lg border border-slate-700/50">
+                            <div>
+                              <div className="font-semibold text-slate-200">{prod}</div>
+                              <div className="text-[11px] text-slate-400">
+                                {cob.total_ativos.toLocaleString('pt-BR')} ativos vivos • <span className="text-emerald-400 font-medium">{cob.pct_oficial}%</span> oficial
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-bold text-slate-100">
+                                R$ {cob.volume_futuro_bi.toLocaleString('pt-BR')} Bi
+                              </div>
+                              <div className="text-[10px] text-slate-400">fluxo futuro</div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-slate-400">Carregando métricas de cobertura...</div>
+                      )}
+                    </div>
+
+                    {/* Divisão dos Pagamentos: Realizados no Histórico vs Previstos no Futuro */}
+                    <div className="mt-3 pt-2.5 border-t border-slate-800 text-[11px] space-y-1.5">
+                      <div className="text-slate-400 font-medium">Natureza dos Pagamentos na Base:</div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-emerald-400 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                          Realizados no Histórico:
+                        </span>
+                        <span className="font-semibold text-slate-200">
+                          {cashflowWallData?.resumo_fluxos?.realizado?.total_eventos?.toLocaleString('pt-BR') || '103.845'} eventos liquidados
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-blue-400 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                          Previstos no Futuro:
+                        </span>
+                        <span className="font-semibold text-slate-200">
+                          {cashflowWallData?.resumo_fluxos?.previsto?.total_eventos?.toLocaleString('pt-BR') || '140.055'} eventos a liquidar
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seletor de Base do Cashflow Wall */}
                 <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-semibold">
                   <button
                     onClick={() => setMaturityWallFilter('ALL')}
@@ -716,10 +827,15 @@ const Home: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-semibold text-slate-600">
+                {/* Legenda das Pilhas */}
+                <div className="flex items-center gap-3 text-xs font-semibold text-slate-600">
                   <span className="inline-flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded bg-blue-600" />
-                    Volume Vencendo (R$ Bi)
+                    Amortização Principal
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded bg-amber-500" />
+                    Juros & Cupons
                   </span>
                 </div>
               </div>
@@ -733,12 +849,46 @@ const Home: React.FC = () => {
                   <YAxis stroke="#64748b" fontSize={12} tickLine={false} unit=" bi" />
                   <RechartsTooltip
                     cursor={{ fill: '#f8fafc' }}
-                    formatter={(val: any, name: any, item: any) => [
-                      `R$ ${val} Bilhões (${item.payload.quantidade} ativos)`,
-                      'Volume de Vencimento'
-                    ]}
+                    content={({ active, payload, label }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload as CashflowItem;
+                        return (
+                          <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs space-y-1.5">
+                            <div className="flex items-center justify-between border-b border-slate-800 pb-1 gap-4">
+                              <span className="font-bold text-slate-100">Ano {label}</span>
+                              <span className="text-[10px] text-blue-400 bg-blue-950/80 px-1.5 py-0.5 rounded border border-blue-800/50">
+                                Fluxo Previsto
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between gap-4 text-slate-300">
+                              <span className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded bg-blue-500" />
+                                Amortização de Principal:
+                              </span>
+                              <span className="font-semibold text-slate-100">R$ {data.amortizacaoBi} Bi</span>
+                            </div>
+                            <div className="flex items-center justify-between gap-4 text-slate-300">
+                              <span className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded bg-amber-500" />
+                                Juros & Cupons Projetados:
+                              </span>
+                              <span className="font-semibold text-slate-100">R$ {data.jurosBi} Bi</span>
+                            </div>
+                            <div className="border-t border-slate-800 pt-1.5 flex items-center justify-between gap-4 font-bold text-slate-100">
+                              <span>Compromisso Total:</span>
+                              <span className="text-emerald-400">R$ {data.totalBi} Bi</span>
+                            </div>
+                            <div className="text-[10px] text-slate-400 text-right pt-0.5">
+                              {data.quantidade.toLocaleString('pt-BR')} papéis com pagamentos no ano
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
                   />
-                  <Bar dataKey="volumeBi" fill="#2563eb" radius={[6, 6, 0, 0]} maxBarSize={55} />
+                  <Bar dataKey="amortizacaoBi" name="Amortização de Principal" fill="#2563eb" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={55} />
+                  <Bar dataKey="jurosBi" name="Juros & Cupons Projetados" fill="#f59e0b" stackId="cf" radius={[6, 6, 0, 0]} maxBarSize={55} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

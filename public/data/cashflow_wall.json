@@ -1,0 +1,143 @@
+{
+  "ALL": [
+    {
+      "ano": "2026",
+      "amortizacaoBi": 63.67,
+      "jurosBi": 74.96,
+      "totalBi": 138.62,
+      "quantidade": 6325
+    },
+    {
+      "ano": "2027",
+      "amortizacaoBi": 774.76,
+      "jurosBi": 213.98,
+      "totalBi": 988.75,
+      "quantidade": 10047
+    },
+    {
+      "ano": "2028",
+      "amortizacaoBi": 245.66,
+      "jurosBi": 191.59,
+      "totalBi": 437.25,
+      "quantidade": 8801
+    },
+    {
+      "ano": "2029",
+      "amortizacaoBi": 328.73,
+      "jurosBi": 179.05,
+      "totalBi": 507.78,
+      "quantidade": 7623
+    },
+    {
+      "ano": "2030",
+      "amortizacaoBi": 576.76,
+      "jurosBi": 164.89,
+      "totalBi": 741.66,
+      "quantidade": 6326
+    },
+    {
+      "ano": "2031-2035",
+      "amortizacaoBi": 2398.99,
+      "jurosBi": 578.34,
+      "totalBi": 2977.33,
+      "quantidade": 5186
+    },
+    {
+      "ano": "2036+",
+      "amortizacaoBi": 657.41,
+      "jurosBi": 397.8,
+      "totalBi": 1055.21,
+      "quantidade": 1905
+    }
+  ],
+  "B3_ONLY": [
+    {
+      "ano": "2026",
+      "amortizacaoBi": 22.03,
+      "jurosBi": 48.38,
+      "totalBi": 70.41,
+      "quantidade": 2588
+    },
+    {
+      "ano": "2027",
+      "amortizacaoBi": 101.72,
+      "jurosBi": 117.26,
+      "totalBi": 218.97,
+      "quantidade": 4213
+    },
+    {
+      "ano": "2028",
+      "amortizacaoBi": 138.22,
+      "jurosBi": 111.31,
+      "totalBi": 249.54,
+      "quantidade": 3853
+    },
+    {
+      "ano": "2029",
+      "amortizacaoBi": 231.44,
+      "jurosBi": 104.9,
+      "totalBi": 336.34,
+      "quantidade": 3399
+    },
+    {
+      "ano": "2030",
+      "amortizacaoBi": 202.23,
+      "jurosBi": 96.15,
+      "totalBi": 298.38,
+      "quantidade": 2785
+    },
+    {
+      "ano": "2031-2035",
+      "amortizacaoBi": 1096.45,
+      "jurosBi": 339.05,
+      "totalBi": 1435.49,
+      "quantidade": 2268
+    },
+    {
+      "ano": "2036+",
+      "amortizacaoBi": 337.71,
+      "jurosBi": 117.25,
+      "totalBi": 454.96,
+      "quantidade": 766
+    }
+  ],
+  "cobertura_produtos": {
+    "Debênture": {
+      "total_ativos": 4116,
+      "cobertos_oficial": 3699,
+      "pct_oficial": 89.9,
+      "volume_futuro_bi": 3376.09
+    },
+    "CRI": {
+      "total_ativos": 4991,
+      "cobertos_oficial": 228,
+      "pct_oficial": 4.6,
+      "volume_futuro_bi": 3057.77
+    },
+    "CRA": {
+      "total_ativos": 1450,
+      "cobertos_oficial": 305,
+      "pct_oficial": 21.0,
+      "volume_futuro_bi": 412.73
+    }
+  },
+  "resumo_fluxos": {
+    "realizado": {
+      "total_eventos": 103845,
+      "total_ativos": 13112,
+      "qtd_amortizacoes": 4280,
+      "qtd_juros": 99565
+    },
+    "previsto": {
+      "total_eventos": 140055,
+      "total_ativos": 10680,
+      "qtd_amortizacoes": 10568,
+      "qtd_juros": 129487
+    }
+  },
+  "metadata": {
+    "gerado_em": "2026-09-24 14:25:10",
+    "total_ativos_vivos": 10542,
+    "volume_total_futuro_bi": 6846.59
+  }
+}
