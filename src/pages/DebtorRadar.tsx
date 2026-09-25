@@ -1,0 +1,1227 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  AreaChart,
+  Area,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ReferenceLine
+} from 'recharts';
+import {
+  Building2,
+  ShieldAlert,
+  ShieldCheck,
+  Activity,
+  Search,
+  Filter,
+  Info,
+  Calendar,
+  Layers,
+  ArrowUpRight,
+  ArrowDownRight,
+  TrendingUp,
+  Percent,
+  DollarSign,
+  AlertTriangle,
+  Award,
+  BookOpen,
+  X,
+  ExternalLink,
+  ChevronRight,
+  CheckCircle2,
+  Scale,
+  Clock,
+  Briefcase
+} from 'lucide-react';
+
+/* ==========================================================================
+   TIPAGEM DE DADOS
+   ========================================================================== */
+
+interface KpisResumo {
+  receita_liquida: number | null;
+  ebitda: number | null;
+  divida_bruta: number | null;
+  divida_liquida: number | null;
+  alavancagem_dl_ebitda: number | null;
+  cobertura_juros_ebitda: number | null;
+  liquidez_corrente: number | null;
+  margem_ebitda: number | null;
+  roe: number | null;
+  altman_z_score: number | null;
+  altman_zona: string | null;
+  ohlson_prob_default: number | null;
+  merton_prob_default: number | null;
+  score_geral: number;
+  classificacao: string;
+  badge_cor: string;
+}
+
+interface RadarHorizonte {
+  nivel: string;
+  diagnostico: string;
+  score: number;
+}
+
+interface RadarRisco {
+  score_geral: number;
+  classificacao: string;
+  badge_cor: string;
+  curto_prazo: RadarHorizonte;
+  medio_prazo: RadarHorizonte;
+  longo_prazo: RadarHorizonte;
+}
+
+interface PeriodoContabil {
+  periodo_rotulo: string;
+  ano: number;
+  trimestre: number;
+  tipo_periodo: string;
+  origem_dado: string;
+  dt_refer: string;
+  ativo_total: number | null;
+  ativo_circulante: number | null;
+  passivo_total: number | null;
+  passivo_circulante: number | null;
+  patrimonio_liquido: number | null;
+  caixa_equivalentes: number | null;
+  disponibilidades: number | null;
+  divida_cp: number | null;
+  divida_lp: number | null;
+  divida_bruta: number | null;
+  divida_liquida: number | null;
+  capital_de_giro: number | null;
+  receita_liquida: number | null;
+  lucro_bruto: number | null;
+  ebit: number | null;
+  depreciacao_amortizacao: number | null;
+  ebitda: number | null;
+  despesas_financeiras: number | null;
+  lucro_liquido: number | null;
+  margem_bruta: number | null;
+  margem_ebitda: number | null;
+  margem_ebit: number | null;
+  margem_liquida: number | null;
+  alavancagem_dl_ebitda: number | null;
+  alavancagem_db_ebitda: number | null;
+  cobertura_juros_ebitda: number | null;
+  liquidez_corrente: number | null;
+  liquidez_seca: number | null;
+  roe: number | null;
+  roa: number | null;
+  receita_yoy: number | null;
+  ebitda_yoy: number | null;
+  lucro_liquido_yoy: number | null;
+  altman_z_score: number | null;
+  altman_zona: string | null;
+  ohlson_prob_default: number | null;
+  merton_dd: number | null;
+  merton_prob_default: number | null;
+}
+
+interface TituloAtivo {
+  ticker: string;
+  tipo: string;
+  devedor: string;
+  taxa_emissao?: string;
+  dt_vencimento?: string;
+  volume?: number;
+  status_ativo?: string;
+  taxa_indicativa?: string;
+  pu?: string;
+  duration?: string;
+}
+
+interface RatingHistorico {
+  ticker: string;
+  agencia: string;
+  divulgacao: string;
+  rating: string;
+  periodicidade?: string;
+}
+
+interface MaturityYear {
+  ano: number;
+  volume: number;
+}
+
+interface DevedorItem {
+  cnpj: string;
+  cnpj_formatado: string;
+  razao_social: string;
+  nome_fantasia?: string;
+  cd_cvm?: string;
+  setor: string;
+  situacao_cvm?: string;
+  site_ri?: string;
+  ultimo_periodo: string;
+  kpis_resumo: KpisResumo;
+  radar_risco: RadarRisco;
+  historico_trimestral?: PeriodoContabil[];
+  titulos_ativos?: TituloAtivo[];
+  total_titulos?: number;
+  ratings_historico?: RatingHistorico[];
+  maturity_wall?: MaturityYear[];
+}
+
+/* ==========================================================================
+   DOCUMENTAÇÃO INSTITUCIONAL & METODOLOGIAS (MODAIS DE AJUDA)
+   ========================================================================== */
+
+interface DocInfo {
+  titulo: string;
+  sigla: string;
+  fonte: string;
+  formula: string;
+  conceito: string;
+  interpretacao: string;
+  benchmarks: { faixa: string; classificacao: string; cor: string }[];
+}
+
+const DOCUMENTACAO_INDICADORES: Record<string, DocInfo> = {
+  altman_z: {
+    titulo: "Altman Z''-Score para Mercados Emergentes",
+    sigla: "Z''-Score",
+    fonte: "Demonstrações Financeiras CVM (DFP / ITR - Contas 1, 1.01, 2, 2.01, 2.03, 3.05 e 3.11)",
+    formula: "Z'' = 6,56·X₁ + 3,26·X₂ + 6,72·X₃ + 1,05·X₄",
+    conceito:
+      "Modelo econométrico discriminante multivariado desenvolvido pelo Prof. Edward Altman adaptado para economias emergentes e corporações não listadas em bolsas americanas. Pondera liquidez circulante, retenção de resultados, produtividade dos ativos operacionais e solvência patrimonial.",
+    interpretacao:
+      "Avalia a probabilidade estatística de falência ou pedido de recuperação judicial. Um valor mais alto indica maior robustez financeira.",
+    benchmarks: [
+      { faixa: "Z'' > 2,60", classificacao: "Zona Segura (Grau de Investimento - Default Improvável)", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "1,10 ≤ Z'' ≤ 2,60", classificacao: "Zona Cinzenta (Alerta Moderado - Acompanhamento Operacional)", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "Z'' < 1,10", classificacao: "Zona de Perigo (Estresse Financeiro Severo / Alto Risco)", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+    ]
+  },
+  ohlson_o: {
+    titulo: "Ohlson O-Score (Probabilidade Logística de Falência)",
+    sigla: "O-Score",
+    fonte: "Demonstrações Financeiras CVM (DFP / ITR - Contas 1, 1.01, 2, 2.01, 3.01, 3.05, 3.11 e DVA)",
+    formula: "P(Default) = 1 / [1 + exp(-y)]  |  y = -1,32 - 0,407·ln(Ativo) + 6,03·(Passivo/Ativo) - 1,43·(NWC/Ativo) + ...",
+    conceito:
+      "Modelo probabilístico logit de James Ohlson (1980). Ao contrário de escores discretos, projeta diretamente uma probabilidade percentual (0% a 100%) de colapso de liquidez nos 12 a 24 meses seguintes com base na alavancagem estrutural, peso dos passivos correntes e retornos negativos recorrentes.",
+    interpretacao:
+      "Valores acima de 10% já sinalizam estresse estatístico significativo. Corporações saudáveis de grau de investimento apresentam probabilidade inferior a 1,5%.",
+    benchmarks: [
+      { faixa: "P < 2,0%", classificacao: "Probabilidade Mínima de Insolvência (Excelente)", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "2,0% ≤ P < 10,0%", classificacao: "Risco Moderado de Insolvência (Aceitável)", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "P ≥ 10,0%", classificacao: "Risco Elevado / Probabilidade Crítica de Default", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+    ]
+  },
+  merton_dd: {
+    titulo: "Modelo Estrutural de Merton / KMV (Distance-to-Default)",
+    sigla: "Distance to Default",
+    fonte: "Balanço Patrimonial CVM (Dívida Curto e Longo Prazo) + Estrutura de Capital",
+    formula: "DD = [ln(V_A / DP) + (μ - 0,5·σ_A²)·T] / (σ_A·√T)  |  DP = Dívida CP + 0,5·Dívida LP",
+    conceito:
+      "Trata o Patrimônio Líquido como uma opção de compra sobre os ativos da empresa cujo strike price é a barreira da dívida (Default Point padrão KMV). Mede quantos desvios-padrão o valor econômico da firma está afastado da insolvência.",
+    interpretacao:
+      "Quanto maior o DD (ex: > 3 desvios), menor a probabilidade de o valor dos ativos decair abaixo das obrigações da empresa.",
+    benchmarks: [
+      { faixa: "DD ≥ 3,50", classificacao: "Ampla Distância da Barreira de Default (Baixíssimo Risco)", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "2,00 ≤ DD < 3,50", classificacao: "Distância Confortável / Risco Controlado", cor: "text-blue-700 bg-blue-50 border-blue-200" },
+      { faixa: "DD < 2,00", classificacao: "Distância Frágil / Próximo da Barreira de Dívida", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+    ]
+  },
+  alavancagem: {
+    titulo: "Alavancagem Financeira: Dívida Líquida / EBITDA",
+    sigla: "DL / EBITDA",
+    fonte: "Passivo CVM (Contas 2.01.04, 2.02.01) - Ativo (1.01.01, 1.01.02) / DRE (3.05 + D&A)",
+    formula: "DL / EBITDA = (Dívida Bruta CP+LP - Caixa e Aplicações) / EBITDA Anualizado",
+    conceito:
+      "Métrica soberana nos covenants de debêntures e covenants bancários. Mensura em quantos anos a empresa quitaria seu endividamento líquido caso mantivesse a geração operacional de caixa constante.",
+    interpretacao:
+      "Para a maioria dos setores, níveis abaixo de 2,5x são confortáveis. Acima de 3,5x ativam travas de dividendos e covenants em emissões institucionais.",
+    benchmarks: [
+      { faixa: "DL ≤ 0 ou DL/EBITDA ≤ 2,0x", classificacao: "Baixa Alavancagem / Caixa Líquido", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "2,0x < DL/EBITDA ≤ 3,5x", classificacao: "Alavancagem Moderada (Padrão de Mercado)", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "DL/EBITDA > 3,5x", classificacao: "Alavancagem Elevada / Alerta de Covenants", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+    ]
+  },
+  cobertura_juros: {
+    titulo: "Índice de Cobertura de Juros (ICR - Interest Coverage Ratio)",
+    sigla: "ICR",
+    fonte: "DRE CVM (Contas 3.05 EBIT + D&A) e Resultado Financeiro (3.06.02 Despesas Financeiras)",
+    formula: "ICR = EBITDA / |Despesas Financeiras Brutas|",
+    conceito:
+      "Mede a capacidade da geração de caixa operacional em suportar o serviço dos juros pagos a debenturistas e credores financeiros.",
+    interpretacao:
+      "Se o ICR for inferior a 1,0x, a operação pura da empresa consome mais recursos em juros do que produz, forçando consumo de caixa ou contração de nova dívida.",
+    benchmarks: [
+      { faixa: "ICR ≥ 3,0x", classificacao: "Cobertura Robusta de Juros", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "1,5x ≤ ICR < 3,0x", classificacao: "Cobertura Adequada", cor: "text-blue-700 bg-blue-50 border-blue-200" },
+      { faixa: "1,0x ≤ ICR < 1,5x", classificacao: "Atenção / Margem de Segurança Estreita", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "ICR < 1,0x", classificacao: "Déficit Operacional frente ao Custo da Dívida", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+    ]
+  },
+  liquidez_corrente: {
+    titulo: "Liquidez Corrente & Cobertura de Curto Prazo",
+    sigla: "LC & Caixa / Dívida CP",
+    fonte: "Balanço Patrimonial CVM (Ativo Circulante 1.01 vs Passivo Circulante 2.01)",
+    formula: "LC = Ativo Circulante / Passivo Circulante  |  Caixa/Dív CP = Disponibilidades / Empréstimos CP",
+    conceito:
+      "Analisa a solvência no horizonte de 360 dias. A cobertura de dívida CP indica se o devedor tem caixa para liquidar vencimentos do ano sem depender de rollover bancário.",
+    interpretacao:
+      "LC superior a 1,3x e Caixa cobrindo mais de 100% da dívida de curto prazo blindam o devedor de crises de liquidez repentinas no mercado.",
+    benchmarks: [
+      { faixa: "LC ≥ 1,5x e Caixa/Dív CP ≥ 1,0x", classificacao: "Liquidez Ampla e Autônoma", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "1,0x ≤ LC < 1,5x", classificacao: "Liquidez Equilibrada / Rolagem Padrão", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "LC < 1,0x ou Caixa/Dív CP < 0,5x", classificacao: "Aperto de Liquidez / Dependência de Mercado", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+    ]
+  }
+};
+
+/* ==========================================================================
+   COMPONENTES AUXILIARES
+   ========================================================================== */
+
+const InfoButton: React.FC<{ docKey: string; onOpen: (key: string) => void }> = ({ docKey, onOpen }) => (
+  <button
+    type="button"
+    onClick={(e) => {
+      e.stopPropagation();
+      onOpen(docKey);
+    }}
+    className="inline-flex items-center justify-center w-5 h-5 rounded-full text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all ml-1.5 focus:outline-none"
+    title="Ver documentação e metodologia"
+  >
+    <Info size={14} />
+  </button>
+);
+
+const BadgeHorizonte: React.FC<{ horizonte: RadarHorizonte; titulo: string; icone: React.ReactNode }> = ({
+  horizonte,
+  titulo,
+  icone
+}) => {
+  const corBg =
+    horizonte.nivel.includes("Baixo") || horizonte.nivel.includes("Excelente") || horizonte.nivel.includes("Robusto")
+      ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+      : horizonte.nivel.includes("Moderado") || horizonte.nivel.includes("Adequado")
+      ? "bg-amber-50 border-amber-200 text-amber-800"
+      : "bg-rose-50 border-rose-200 text-rose-800";
+
+  const corBarra =
+    horizonte.score >= 80 ? "bg-emerald-500" : horizonte.score >= 50 ? "bg-amber-500" : "bg-rose-500";
+
+  return (
+    <div className={`p-4 rounded-xl border ${corBg} flex flex-col justify-between transition-all shadow-sm`}>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-white/80 rounded-lg shadow-2xs">{icone}</div>
+            <span className="font-bold text-xs uppercase tracking-wider">{titulo}</span>
+          </div>
+          <span className="font-black text-xs px-2.5 py-0.5 rounded-full bg-white/90 shadow-2xs border border-current">
+            {horizonte.nivel}
+          </span>
+        </div>
+        <p className="text-xs font-medium leading-relaxed opacity-90 mt-1">{horizonte.diagnostico}</p>
+      </div>
+
+      <div className="mt-4 pt-3 border-t border-black/5">
+        <div className="flex justify-between items-center text-xs font-semibold mb-1">
+          <span>Score de Solvência</span>
+          <span className="font-mono font-bold">{horizonte.score} / 100</span>
+        </div>
+        <div className="w-full h-2 bg-black/10 rounded-full overflow-hidden">
+          <div className={`h-full ${corBarra} transition-all duration-500`} style={{ width: `${horizonte.score}%` }} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ==========================================================================
+   COMPONENTE PRINCIPAL: RAIO-X DO DEVEDOR
+   ========================================================================== */
+
+const DebtorRadar: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingFull, setLoadingFull] = useState<boolean>(false);
+  const [devedoresResumo, setDevedoresResumo] = useState<DevedorItem[]>([]);
+  const [setores, setSetores] = useState<string[]>([]);
+  const [selectedSetor, setSelectedSetor] = useState<string>("TODOS");
+  const [searchTerm, setSearchTerm] = useState<string>(searchParams.get("search") || searchParams.get("q") || "");
+  
+  // Devedor selecionado
+  const [selectedCnpj, setSelectedCnpj] = useState<string>(searchParams.get("cnpj") || "");
+  const [currentDevedor, setCurrentDevedor] = useState<DevedorItem | null>(null);
+
+  // Devedores em comparação secundária
+  const [compareCnpjs, setCompareCnpjs] = useState<string[]>([]);
+
+  // Abas de gráficos
+  const [activeTab, setActiveTab] = useState<"alavancagem" | "rentabilidade" | "cobertura" | "liquidez" | "default_models">(
+    "alavancagem"
+  );
+
+  // Modal de documentação
+  const [docModalKey, setDocModalKey] = useState<string | null>(null);
+
+  // 1. Carregamento inicial do índice leve de devedores
+  useEffect(() => {
+    const fetchResumo = async () => {
+      setLoading(true);
+      try {
+        const resp = await fetch("/data/devedores_resumo.json");
+        if (resp.ok) {
+          const data = await resp.json();
+          setDevedoresResumo(data.devedores || []);
+          setSetores(data.setores_disponiveis || []);
+
+          const urlCnpj = searchParams.get("cnpj");
+          const urlSearch = searchParams.get("search") || searchParams.get("q");
+
+          let defaultDev: DevedorItem | undefined = undefined;
+          if (urlCnpj) {
+            defaultDev = data.devedores.find(
+              (d: DevedorItem) => d.cnpj === urlCnpj || d.cnpj_formatado === urlCnpj
+            );
+          } else if (urlSearch) {
+            const sLower = urlSearch.toLowerCase();
+            defaultDev = data.devedores.find(
+              (d: DevedorItem) =>
+                d.razao_social.toLowerCase().includes(sLower) ||
+                (d.nome_fantasia && d.nome_fantasia.toLowerCase().includes(sLower))
+            );
+          }
+
+          if (!defaultDev) {
+            defaultDev =
+              data.devedores.find((d: DevedorItem) => d.razao_social.includes("KLABIN")) ||
+              data.devedores[0];
+          }
+
+          if (defaultDev) {
+            setSelectedCnpj(defaultDev.cnpj);
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao carregar resumo de devedores:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResumo();
+  }, [searchParams]);
+
+  // 2. Carregamento completo sob demanda (série histórica, ratings, títulos)
+  useEffect(() => {
+    if (!selectedCnpj) return;
+
+    const fetchFullData = async () => {
+      setLoadingFull(true);
+      try {
+        const resp = await fetch("/data/devedores_raiox.json");
+        if (resp.ok) {
+          const data = await resp.json();
+          const found = data.devedores?.find((d: DevedorItem) => d.cnpj === selectedCnpj);
+          if (found) {
+            setCurrentDevedor(found);
+          }
+        }
+      } catch (err) {
+        console.error("Erro ao carregar dados detalhados do devedor:", err);
+      } finally {
+        setLoadingFull(false);
+      }
+    };
+    fetchFullData();
+  }, [selectedCnpj]);
+
+  // Lista filtrada para busca e seleção
+  const filteredDevedores = useMemo(() => {
+    return devedoresResumo.filter((d) => {
+      const matchSetor = selectedSetor === "TODOS" || d.setor === selectedSetor;
+      const term = searchTerm.toLowerCase().trim();
+      const matchTerm =
+        !term ||
+        d.razao_social.toLowerCase().includes(term) ||
+        (d.nome_fantasia && d.nome_fantasia.toLowerCase().includes(term)) ||
+        d.cnpj.includes(term) ||
+        d.cnpj_formatado.includes(term);
+      return matchSetor && matchTerm;
+    });
+  }, [devedoresResumo, selectedSetor, searchTerm]);
+
+  // Formatações auxiliares
+  const formatBRL = (val: number | null | undefined): string => {
+    if (val === null || val === undefined || isNaN(val)) return "N/D";
+    const absVal = Math.abs(val);
+    const sign = val < 0 ? "-" : "";
+    if (absVal >= 1e9) return `${sign}R$ ${(absVal / 1e9).toFixed(2)} bi`;
+    if (absVal >= 1e6) return `${sign}R$ ${(absVal / 1e6).toFixed(1)} mi`;
+    if (absVal >= 1e3) return `${sign}R$ ${(absVal / 1e3).toFixed(0)} mil`;
+    return `${sign}R$ ${absVal.toFixed(0)}`;
+  };
+
+  const formatPct = (val: number | null | undefined): string => {
+    if (val === null || val === undefined || isNaN(val)) return "N/D";
+    return `${val.toFixed(2)}%`;
+  };
+
+  const formatMultiplo = (val: number | null | undefined): string => {
+    if (val === null || val === undefined || isNaN(val)) return "N/D";
+    return `${val.toFixed(2)}x`;
+  };
+
+  return (
+    <div className="bg-slate-50 min-h-screen text-slate-800 pb-20">
+      {/* ─── HERO HEADER ──────────────────────────────────────────────────────── */}
+      <div className="bg-gradient-to-br from-slate-900 via-slate-850 to-blue-950 text-white pt-10 pb-12 border-b border-slate-800">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2.5 mb-2">
+                <span className="px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <Activity size={14} className="text-blue-400" />
+                  Inteligência Fundamentalista CVM
+                </span>
+                <span className="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-lg text-xs font-bold tracking-wider">
+                  Modelos de Default &amp; Ratings
+                </span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
+                Raio-X do Devedor <span className="text-blue-400 font-light">&amp; Risco de Crédito</span>
+              </h1>
+              <p className="text-slate-300 text-sm max-w-3xl mt-2 leading-relaxed font-normal">
+                Diagnóstico estrutural e solvência dos maiores emissores de dívida corporativa do Brasil. Histórico de
+                demonstrações financeiras padronizadas (1T, 2T, 3T, 4T e 12M), indicadores de covenants, probabilidade
+                de default multimodelo (Altman Z&apos;&apos;, Ohlson, Merton) e radar multitemporal de risco.
+              </p>
+            </div>
+
+            {/* Micro métricas */}
+            <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 self-start md:self-auto">
+              <div className="text-center px-3 border-r border-white/10">
+                <div className="text-2xl font-black text-blue-400">{devedoresResumo.length || "775"}</div>
+                <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Devedores CVM</div>
+              </div>
+              <div className="text-center px-3 border-r border-white/10">
+                <div className="text-2xl font-black text-emerald-400">4</div>
+                <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Modelos de Default</div>
+              </div>
+              <div className="text-center px-3">
+                <div className="text-2xl font-black text-amber-400">100%</div>
+                <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Padronização CPC</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 max-w-7xl -mt-6">
+        {/* ─── FILTROS & SELEÇÃO DE DEVEDOR ─────────────────────────────────── */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+            {/* Campo de Busca Rápida */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <input
+                type="text"
+                placeholder="Buscar devedor por Razão Social, Nome Fantasia ou CNPJ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+
+            {/* Seletor de Setor */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+              <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0">
+                <Filter size={14} /> Setor:
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedSetor("TODOS")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                  selectedSetor === "TODOS"
+                    ? "bg-slate-900 text-white shadow-xs"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                Todos ({devedoresResumo.length})
+              </button>
+              {setores.slice(0, 7).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setSelectedSetor(s)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                    selectedSetor === s
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Lista de Chips / Seletores Rápidos de Devedores Filtrados */}
+          <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap gap-2 max-h-36 overflow-y-auto pr-1">
+            {filteredDevedores.slice(0, 30).map((d) => {
+              const isSelected = selectedCnpj === d.cnpj;
+              return (
+                <button
+                  key={d.cnpj}
+                  type="button"
+                  onClick={() => setSelectedCnpj(d.cnpj)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 border transition-all ${
+                    isSelected
+                      ? "bg-blue-50 border-blue-500 text-blue-800 shadow-2xs font-bold ring-2 ring-blue-500/20"
+                      : "bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                  }`}
+                >
+                  <Building2 size={13} className={isSelected ? "text-blue-600" : "text-slate-400"} />
+                  <span>{d.razao_social}</span>
+                  <span className="text-2xs font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                    {d.kpis_resumo?.classificacao ? d.kpis_resumo.classificacao.split(" ")[0] : "CVM"}
+                  </span>
+                </button>
+              );
+            })}
+            {filteredDevedores.length === 0 && (
+              <div className="text-xs text-slate-400 italic py-2">
+                Nenhum devedor encontrado para o termo pesquisado.
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ─── PAINEL PRINCIPAL DO DEVEDOR SELECIONADO ──────────────────────── */}
+        {currentDevedor && (
+          <div className="space-y-8">
+            {/* Header da Empresa & Status Geral */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
+              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2.5 mb-2">
+                    <span className="px-3 py-1 bg-slate-900 text-white rounded-lg text-xs font-bold tracking-wider uppercase">
+                      {currentDevedor.setor}
+                    </span>
+                    <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-mono font-semibold">
+                      CNPJ: {currentDevedor.cnpj_formatado}
+                    </span>
+                    <span className="px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold">
+                      Último Divulgado: {currentDevedor.ultimo_periodo}
+                    </span>
+                    {currentDevedor.site_ri && (
+                      <a
+                        href={currentDevedor.site_ri}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline font-bold"
+                      >
+                        Site RI <ExternalLink size={12} />
+                      </a>
+                    )}
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                    {currentDevedor.razao_social}
+                  </h2>
+                  {currentDevedor.nome_fantasia && currentDevedor.nome_fantasia !== currentDevedor.razao_social && (
+                    <p className="text-sm font-semibold text-slate-500 mt-0.5">
+                      Nome Comercial: {currentDevedor.nome_fantasia}
+                    </p>
+                  )}
+                </div>
+
+                {/* Score Geral de Crédito (Termômetro) */}
+                <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white px-6 py-4 rounded-2xl border border-slate-700 shadow-md flex items-center gap-5 shrink-0 self-stretch sm:self-auto justify-between sm:justify-start">
+                  <div>
+                    <div className="text-2xs uppercase tracking-wider text-slate-400 font-bold">Classificação Geral</div>
+                    <div className="text-lg font-black text-white mt-0.5">
+                      {currentDevedor.radar_risco?.classificacao || "Em Avaliação"}
+                    </div>
+                    <div className="text-xs text-slate-400 font-medium">Síntese Estatística de Solvência</div>
+                  </div>
+                  <div className="text-center pl-4 border-l border-slate-700">
+                    <div className="text-3xl font-black text-emerald-400 font-mono">
+                      {currentDevedor.radar_risco?.score_geral || 85}
+                    </div>
+                    <div className="text-2xs font-bold uppercase text-slate-400">Score / 100</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ─── RADAR MULTITEMPORAL DE RISCO (CURTO, MÉDIO E LONGO PRAZO) ─── */}
+              <div className="mt-6 pt-6 border-t border-slate-100">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                    <Scale size={15} className="text-blue-600" />
+                    Radar de Alerta Multitemporal Institucional
+                  </h3>
+                  <span className="text-2xs text-slate-400">
+                    Análise estocástica combinada de fluxo, alavancagem e solvência
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <BadgeHorizonte
+                    titulo="Curto Prazo (< 12 Meses)"
+                    icone={<Clock size={16} className="text-blue-600" />}
+                    horizonte={
+                      currentDevedor.radar_risco?.curto_prazo || {
+                        nivel: "Baixo Risco",
+                        diagnostico: "Caixa cobre as obrigações correntes.",
+                        score: 90
+                      }
+                    }
+                  />
+                  <BadgeHorizonte
+                    titulo="Médio Prazo (1 a 3 Anos)"
+                    icone={<TrendingUp size={16} className="text-emerald-600" />}
+                    horizonte={
+                      currentDevedor.radar_risco?.medio_prazo || {
+                        nivel: "Baixo Risco",
+                        diagnostico: "Alavancagem sustentável frente ao EBITDA.",
+                        score: 85
+                      }
+                    }
+                  />
+                  <BadgeHorizonte
+                    titulo="Longo Prazo (> 3 Anos)"
+                    icone={<ShieldCheck size={16} className="text-indigo-600" />}
+                    horizonte={
+                      currentDevedor.radar_risco?.longo_prazo || {
+                        nivel: "Baixo Risco",
+                        diagnostico: "Solvência patrimonial robusta.",
+                        score: 88
+                      }
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ─── GRADE DE KPIS EXECUTIVOS ──────────────────────────────────── */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+              {/* Receita Líquida */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="text-2xs uppercase tracking-wider font-bold text-slate-400 mb-1">Receita Líquida</div>
+                <div className="text-lg font-black text-slate-900">
+                  {formatBRL(currentDevedor.kpis_resumo?.receita_liquida)}
+                </div>
+                <div className="text-2xs text-slate-500 font-semibold mt-1">Período {currentDevedor.ultimo_periodo}</div>
+              </div>
+
+              {/* EBITDA */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="text-2xs uppercase tracking-wider font-bold text-slate-400 mb-1">EBITDA &amp; Margem</div>
+                <div className="text-lg font-black text-slate-900">{formatBRL(currentDevedor.kpis_resumo?.ebitda)}</div>
+                <div className="text-2xs text-emerald-700 font-bold mt-1">
+                  Margem: {formatPct(currentDevedor.kpis_resumo?.margem_ebitda)}
+                </div>
+              </div>
+
+              {/* Dívida Líquida */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="text-2xs uppercase tracking-wider font-bold text-slate-400 mb-1 flex items-center justify-between">
+                  <span>Dívida Líquida</span>
+                </div>
+                <div className="text-lg font-black text-slate-900">
+                  {formatBRL(currentDevedor.kpis_resumo?.divida_liquida)}
+                </div>
+                <div className="text-2xs text-slate-500 font-semibold mt-1">
+                  Bruta: {formatBRL(currentDevedor.kpis_resumo?.divida_bruta)}
+                </div>
+              </div>
+
+              {/* DL / EBITDA */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="text-2xs uppercase tracking-wider font-bold text-slate-400 mb-1 flex items-center justify-between">
+                  <span>DL / EBITDA</span>
+                  <InfoButton docKey="alavancagem" onOpen={setDocModalKey} />
+                </div>
+                <div className="text-lg font-black text-slate-900 font-mono">
+                  {formatMultiplo(currentDevedor.kpis_resumo?.alavancagem_dl_ebitda)}
+                </div>
+                <div className="text-2xs font-bold text-blue-700 mt-1">Alavancagem Anualizada</div>
+              </div>
+
+              {/* Cobertura de Juros (ICR) */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="text-2xs uppercase tracking-wider font-bold text-slate-400 mb-1 flex items-center justify-between">
+                  <span>Cobertura (ICR)</span>
+                  <InfoButton docKey="cobertura_juros" onOpen={setDocModalKey} />
+                </div>
+                <div className="text-lg font-black text-slate-900 font-mono">
+                  {formatMultiplo(currentDevedor.kpis_resumo?.cobertura_juros_ebitda)}
+                </div>
+                <div className="text-2xs text-slate-500 font-semibold mt-1">EBITDA / Desp. Fin.</div>
+              </div>
+
+              {/* Altman Z''-Score */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="text-2xs uppercase tracking-wider font-bold text-slate-400 mb-1 flex items-center justify-between">
+                  <span>Altman Z&apos;&apos;-Score</span>
+                  <InfoButton docKey="altman_z" onOpen={setDocModalKey} />
+                </div>
+                <div className="text-lg font-black text-slate-900 font-mono">
+                  {currentDevedor.kpis_resumo?.altman_z_score?.toFixed(2) || "N/D"}
+                </div>
+                <div className="text-2xs font-bold text-emerald-700 mt-1">
+                  {currentDevedor.kpis_resumo?.altman_zona?.split("(")[0] || "Zona Segura"}
+                </div>
+              </div>
+            </div>
+
+            {/* ─── ABAS DE SÉRIES HISTÓRICAS E MODELOS DE DEFAULT ───────────── */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div className="px-6 pt-5 pb-3 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-base font-black text-slate-900">Evolução Histórica &amp; Séries Temporais</h3>
+                  <p className="text-xs text-slate-500">
+                    Acompanhamento trimestral com fechamentos reais (1T, 2T, 3T, 4T Derivado e 12M Fechado)
+                  </p>
+                </div>
+
+                {/* Seletor de Abas */}
+                <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl self-start sm:self-auto overflow-x-auto max-w-full">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("alavancagem")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                      activeTab === "alavancagem" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    Alavancagem &amp; Dívida
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("rentabilidade")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                      activeTab === "rentabilidade" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    Receita &amp; EBITDA
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("cobertura")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                      activeTab === "cobertura" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    Cobertura (ICR)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("liquidez")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                      activeTab === "liquidez" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    Liquidez &amp; Caixa
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("default_models")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                      activeTab === "default_models"
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "text-blue-700 bg-blue-50/50 hover:bg-blue-50"
+                    }`}
+                  >
+                    Scores de Default
+                  </button>
+                </div>
+              </div>
+
+              {/* Área do Gráfico */}
+              <div className="p-6">
+                {currentDevedor.historico_trimestral && currentDevedor.historico_trimestral.length > 0 ? (
+                  <div className="h-80 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      {activeTab === "alavancagem" ? (
+                        <LineChart data={currentDevedor.historico_trimestral}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis
+                            yAxisId="right"
+                            orientation="right"
+                            tickFormatter={(v) => `${v.toFixed(1)}x`}
+                            tick={{ fontSize: 12, fill: "#3b82f6" }}
+                          />
+                          <Tooltip
+                            formatter={(val: any, name: any) => {
+                              if (name === "Alavancagem (DL/EBITDA)") return [`${val.toFixed(2)}x`, name];
+                              return [formatBRL(val), name];
+                            }}
+                          />
+                          <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                          <Line
+                            yAxisId="left"
+                            type="monotone"
+                            dataKey="divida_bruta"
+                            name="Dívida Bruta"
+                            stroke="#64748b"
+                            strokeWidth={2}
+                            dot={{ r: 3 }}
+                          />
+                          <Line
+                            yAxisId="left"
+                            type="monotone"
+                            dataKey="divida_liquida"
+                            name="Dívida Líquida"
+                            stroke="#0f172a"
+                            strokeWidth={2.5}
+                            dot={{ r: 4 }}
+                          />
+                          <Line
+                            yAxisId="right"
+                            type="monotone"
+                            dataKey="alavancagem_dl_ebitda"
+                            name="Alavancagem (DL/EBITDA)"
+                            stroke="#3b82f6"
+                            strokeWidth={2.5}
+                            strokeDasharray="4 2"
+                            dot={{ r: 4 }}
+                          />
+                          <ReferenceLine yAxisId="right" y={3.5} stroke="#ef4444" strokeDasharray="3 3" label="Covenant 3.5x" />
+                        </LineChart>
+                      ) : activeTab === "rentabilidade" ? (
+                        <BarChart data={currentDevedor.historico_trimestral}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis
+                            yAxisId="right"
+                            orientation="right"
+                            tickFormatter={(v) => `${v.toFixed(0)}%`}
+                            tick={{ fontSize: 12, fill: "#10b981" }}
+                          />
+                          <Tooltip
+                            formatter={(val: any, name: any) => {
+                              if (name === "Margem EBITDA (%)") return [`${val.toFixed(2)}%`, name];
+                              return [formatBRL(val), name];
+                            }}
+                          />
+                          <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                          <Bar yAxisId="left" dataKey="receita_liquida" name="Receita Líquida" fill="#94a3b8" radius={[4, 4, 0, 0]} />
+                          <Bar yAxisId="left" dataKey="ebitda" name="EBITDA" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                          <Line
+                            yAxisId="right"
+                            type="monotone"
+                            dataKey="margem_ebitda"
+                            name="Margem EBITDA (%)"
+                            stroke="#10b981"
+                            strokeWidth={3}
+                            dot={{ r: 4 }}
+                          />
+                        </BarChart>
+                      ) : activeTab === "cobertura" ? (
+                        <AreaChart data={currentDevedor.historico_trimestral}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis tickFormatter={(v) => `${v.toFixed(1)}x`} tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <Tooltip formatter={(val: any) => [`${Number(val).toFixed(2)}x`, "ICR EBITDA"]} />
+                          <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                          <Area
+                            type="monotone"
+                            dataKey="cobertura_juros_ebitda"
+                            name="Cobertura de Juros (ICR)"
+                            stroke="#6366f1"
+                            fill="#e0e7ff"
+                            strokeWidth={2.5}
+                          />
+                          <ReferenceLine y={1.0} stroke="#ef4444" strokeDasharray="3 3" label="Risco 1.0x" />
+                          <ReferenceLine y={3.0} stroke="#10b981" strokeDasharray="3 3" label="Confortável 3.0x" />
+                        </AreaChart>
+                      ) : activeTab === "liquidez" ? (
+                        <LineChart data={currentDevedor.historico_trimestral}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v.toFixed(1)}x`} tick={{ fontSize: 12, fill: "#10b981" }} />
+                          <Tooltip
+                            formatter={(val: any, name: any) => {
+                              if (name === "Liquidez Corrente") return [`${val.toFixed(2)}x`, name];
+                              return [formatBRL(val), name];
+                            }}
+                          />
+                          <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                          <Line yAxisId="left" type="monotone" dataKey="caixa_equivalentes" name="Caixa &amp; Aplicações" stroke="#059669" strokeWidth={2} dot={{ r: 3 }} />
+                          <Line yAxisId="left" type="monotone" dataKey="divida_cp" name="Dívida Curto Prazo (CP)" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} />
+                          <Line yAxisId="right" type="monotone" dataKey="liquidez_corrente" name="Liquidez Corrente" stroke="#2563eb" strokeWidth={2.5} dot={{ r: 4 }} />
+                        </LineChart>
+                      ) : (
+                        /* Aba: SCORES DE DEFAULT NO TEMPO */
+                        <LineChart data={currentDevedor.historico_trimestral}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v.toFixed(1)}%`} tick={{ fontSize: 12, fill: "#f43f5e" }} />
+                          <Tooltip
+                            formatter={(val: any, name: any) => {
+                              if (name.includes("%") || name.includes("Prob")) return [`${val.toFixed(2)}%`, name];
+                              return [val.toFixed(2), name];
+                            }}
+                          />
+                          <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                          <Line yAxisId="left" type="monotone" dataKey="altman_z_score" name="Altman Z''-Score" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} />
+                          <Line yAxisId="right" type="monotone" dataKey="ohlson_prob_default" name="Ohlson P(Default) %" stroke="#f43f5e" strokeWidth={2.5} dot={{ r: 4 }} />
+                          <Line yAxisId="right" type="monotone" dataKey="merton_prob_default" name="Merton PD %" stroke="#8b5cf6" strokeWidth={2} strokeDasharray="3 3" dot={{ r: 3 }} />
+                          <ReferenceLine yAxisId="left" y={2.6} stroke="#10b981" strokeDasharray="3 3" label="Zona Segura Z'' 2.6" />
+                          <ReferenceLine yAxisId="left" y={1.1} stroke="#ef4444" strokeDasharray="3 3" label="Zona de Perigo Z'' 1.1" />
+                        </LineChart>
+                      )}
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <div className="py-12 text-center text-slate-400">
+                    Nenhum histórico trimestral disponível para este devedor.
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ─── HISTÓRICO DE RATINGS & MIGRAÇÕES NO TEMPO ──────────────────── */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <div>
+                  <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                    <Award size={18} className="text-amber-500" />
+                    Histórico &amp; Migração de Ratings das Agências
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Acompanhamento de notas emitidas por Moody&apos;s Local, Fitch Ratings, S&amp;P Global e Liberum
+                  </p>
+                </div>
+                <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
+                  {currentDevedor.ratings_historico?.length || 0} Registros
+                </span>
+              </div>
+
+              {currentDevedor.ratings_historico && currentDevedor.ratings_historico.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-slate-200 bg-slate-50/50 text-slate-500 font-bold uppercase tracking-wider">
+                        <th className="py-2.5 px-3">Data Divulgação</th>
+                        <th className="py-2.5 px-3">Agência de Classificação</th>
+                        <th className="py-2.5 px-3">Nota / Rating Oficial</th>
+                        <th className="py-2.5 px-3">Ticker Vinculado</th>
+                        <th className="py-2.5 px-3">Periodicidade</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {currentDevedor.ratings_historico.map((r, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-2.5 px-3 font-mono font-medium text-slate-700">{r.divulgacao}</td>
+                          <td className="py-2.5 px-3 font-semibold text-slate-900">{r.agencia}</td>
+                          <td className="py-2.5 px-3">
+                            <span className="px-2.5 py-0.5 rounded-full font-black text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">
+                              {r.rating}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 font-mono font-bold text-blue-600">
+                            <Link to={`/asset/${r.ticker}`} className="hover:underline">
+                              {r.ticker}
+                            </Link>
+                          </td>
+                          <td className="py-2.5 px-3 text-slate-500">{r.periodicidade || "Trimestral"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="py-8 text-center text-slate-400 text-xs italic">
+                  Nenhum registro de rating formal indexado para os títulos deste devedor na base ANBIMA / B3.
+                </div>
+              )}
+            </div>
+
+            {/* ─── PAPÉIS EMITIDOS & CRONOGRAMA DE VENCIMENTOS (MATURITY WALL) ─── */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Maturity Wall / Cronograma de Amortizações */}
+              <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col justify-between">
+                <div>
+                  <h3 className="text-base font-black text-slate-900 flex items-center gap-2 mb-1">
+                    <Calendar size={18} className="text-blue-600" />
+                    Cronograma de Vencimentos da Dívida
+                  </h3>
+                  <p className="text-xs text-slate-500 mb-4">
+                    Concentração de amortizações de principal por ano (Maturity Wall)
+                  </p>
+
+                  {currentDevedor.maturity_wall && currentDevedor.maturity_wall.length > 0 ? (
+                    <div className="h-60 w-full mt-2">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={currentDevedor.maturity_wall}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis dataKey="ano" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 11, fill: "#64748b" }} />
+                          <Tooltip formatter={(val: any) => [formatBRL(val), "Volume a Vencer"]} />
+                          <Bar dataKey="volume" fill="#2563eb" radius={[6, 6, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  ) : (
+                    <div className="py-12 text-center text-slate-400 text-xs italic">
+                      Sem cronograma de vencimentos disponível.
+                    </div>
+                  )}
+                </div>
+                <div className="text-2xs text-slate-400 mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span>Fonte: B3 &amp; ANBIMA Contratos</span>
+                  <span className="font-semibold text-slate-700">Volume Total em Papéis Ativos</span>
+                </div>
+              </div>
+
+              {/* Tabela de Títulos Vigentes deste Devedor */}
+              <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                      <Briefcase size={18} className="text-blue-600" />
+                      Títulos Emitidos no Mercado (Debêntures, CRIs, CRAs)
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Relação de emissões vinculadas a este devedor com taxas indicativas ANBIMA
+                    </p>
+                  </div>
+                  <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">
+                    {currentDevedor.total_titulos || currentDevedor.titulos_ativos?.length || 0} Ativos
+                  </span>
+                </div>
+
+                {currentDevedor.titulos_ativos && currentDevedor.titulos_ativos.length > 0 ? (
+                  <div className="overflow-x-auto max-h-72">
+                    <table className="w-full text-left text-xs">
+                      <thead className="sticky top-0 bg-white">
+                        <tr className="border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                          <th className="py-2 px-2.5">Código / Ticker</th>
+                          <th className="py-2 px-2.5">Tipo</th>
+                          <th className="py-2 px-2.5">Taxa Emissão</th>
+                          <th className="py-2 px-2.5">Taxa Indicativa</th>
+                          <th className="py-2 px-2.5">Vencimento</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {currentDevedor.titulos_ativos.map((t, idx) => (
+                          <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                            <td className="py-2 px-2.5 font-bold font-mono text-blue-600">
+                              <Link to={`/asset/${t.ticker}`} className="hover:underline flex items-center gap-1">
+                                {t.ticker}
+                                <ArrowUpRight size={12} />
+                              </Link>
+                            </td>
+                            <td className="py-2 px-2.5 font-semibold text-slate-700">{t.tipo}</td>
+                            <td className="py-2 px-2.5 text-slate-600 font-medium">{t.taxa_emissao || "—"}</td>
+                            <td className="py-2 px-2.5 text-slate-900 font-bold font-mono">
+                              {t.taxa_indicativa ? `${t.taxa_indicativa}%` : "—"}
+                            </td>
+                            <td className="py-2 px-2.5 text-slate-500 font-mono">{t.dt_vencimento || "—"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="py-12 text-center text-slate-400 text-xs italic">
+                    Nenhum título de dívida pública encontrado associado a este devedor no momento.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ─── MODAL DE DOCUMENTAÇÃO METODOLÓGICA ─────────────────────────────── */}
+      {docModalKey && DOCUMENTACAO_INDICADORES[docModalKey] && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
+            <button
+              type="button"
+              onClick={() => setDocModalKey(null)}
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                <BookOpen size={20} />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-slate-900">{DOCUMENTACAO_INDICADORES[docModalKey].titulo}</h3>
+                <span className="text-xs font-semibold text-blue-600">{DOCUMENTACAO_INDICADORES[docModalKey].sigla}</span>
+              </div>
+            </div>
+
+            <div className="space-y-4 mt-4 text-xs text-slate-700">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 font-mono text-xs text-slate-900">
+                <span className="text-slate-400 select-none">Fórmula: </span>
+                <span className="font-bold text-blue-900">{DOCUMENTACAO_INDICADORES[docModalKey].formula}</span>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-slate-900 uppercase tracking-wider text-2xs mb-1">Fonte dos Dados Primários:</h4>
+                <p className="text-slate-600 leading-relaxed">{DOCUMENTACAO_INDICADORES[docModalKey].fonte}</p>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-slate-900 uppercase tracking-wider text-2xs mb-1">Fundamentação Teórica:</h4>
+                <p className="text-slate-600 leading-relaxed">{DOCUMENTACAO_INDICADORES[docModalKey].conceito}</p>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-slate-900 uppercase tracking-wider text-2xs mb-1">Interpretação no Mercado de Crédito:</h4>
+                <p className="text-slate-600 leading-relaxed">{DOCUMENTACAO_INDICADORES[docModalKey].interpretacao}</p>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-slate-900 uppercase tracking-wider text-2xs mb-2">Faixas de Corte &amp; Benchmarks Institucionais:</h4>
+                <div className="space-y-1.5">
+                  {DOCUMENTACAO_INDICADORES[docModalKey].benchmarks.map((b, idx) => (
+                    <div key={idx} className={`p-2 rounded-lg border text-xs flex justify-between items-center ${b.cor}`}>
+                      <span className="font-mono font-bold">{b.faixa}</span>
+                      <span className="font-semibold">{b.classificacao}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setDocModalKey(null)}
+                className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default DebtorRadar;

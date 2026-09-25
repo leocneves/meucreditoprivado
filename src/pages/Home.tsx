@@ -452,6 +452,19 @@ const Home: React.FC = () => {
         <div className="pt-2">
           <SearchBar assets={assets} />
         </div>
+
+        <div className="pt-1 flex justify-center">
+          <Link
+            to="/raiox-devedor"
+            className="group inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-full text-xs font-semibold text-blue-900 hover:border-blue-400 hover:shadow-sm transition-all"
+          >
+            <span className="px-2 py-0.5 bg-blue-600 text-white rounded-full text-[10px] font-black tracking-wide uppercase">
+              Novo
+            </span>
+            <span>Raio-X do Devedor: Demonstrações CVM, Histórico de Rating & Risco de Default</span>
+            <ArrowUpRight size={14} className="text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </Link>
+        </div>
       </section>
 
       {/* ================= KPI CARDS (METRICAS PRINCIPAIS) ================= */}
@@ -1035,25 +1048,29 @@ const Home: React.FC = () => {
 
               <div className="space-y-2.5">
                 {topEmissores.map((item, idx) => (
-                  <div
+                  <Link
                     key={idx}
-                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition"
+                    to={`/raiox-devedor?search=${encodeURIComponent(item.name)}`}
+                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 transition group cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-bold text-xs flex items-center justify-center">
+                      <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-bold text-xs flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         {idx + 1}
                       </span>
                       <div>
-                        <p className="text-sm font-bold text-slate-800">{item.name}</p>
+                        <p className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors flex items-center gap-1.5">
+                          {item.name}
+                          <ArrowUpRight size={13} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </p>
                         <p className="text-xs text-slate-500">{item.count} títulos emitidos</p>
                       </div>
                     </div>
 
                     <div className="text-right">
                       <p className="text-sm font-extrabold text-slate-900">R$ {item.volumeBi} bi</p>
-                      <p className="text-xs text-slate-400">Volume Total</p>
+                      <p className="text-xs text-slate-400 group-hover:text-blue-600 font-medium">Ver Raio-X &rarr;</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>

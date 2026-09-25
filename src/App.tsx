@@ -8,7 +8,8 @@ import NtnbDashboard from './pages/NtnbDashboard';
 import Primary from './pages/Primary';
 import Contact from './pages/Contact';
 import Trades from './pages/Trades';
-import { LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, ArrowLeftRight } from 'lucide-react';
+import DebtorRadar from './pages/DebtorRadar';
+import { LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, ArrowLeftRight, Building2 } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -16,6 +17,7 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/', label: 'Home', icon: <LayoutDashboard size={18} /> },
+    { path: '/raiox-devedor', label: 'Raio-X Devedor', icon: <Building2 size={18} /> },
     { path: '/negocios', label: 'Negócios B3', icon: <ArrowLeftRight size={18} /> },
     { path: '/charts', label: 'Crédito Privado', icon: <LineChart size={18} /> },
     { path: '/ntnb', label: 'Curva NTN-B', icon: <Landmark size={18} /> },
@@ -93,6 +95,8 @@ const App: React.FC = () => {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/raiox-devedor" element={<DebtorRadar />} />
+            <Route path="/devedor" element={<DebtorRadar />} />
             <Route path="/negocios" element={<Trades />} />
             <Route path="/trades" element={<Trades />} />
             <Route path="/asset/:ticker" element={<AssetPage />} />
