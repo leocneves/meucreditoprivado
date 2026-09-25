@@ -60,6 +60,7 @@ interface KpisResumo {
   altman_zona: string | null;
   ohlson_prob_default: number | null;
   merton_prob_default: number | null;
+  rating_atual?: string | null;
   score_geral: number;
   classificacao: string;
   badge_cor: string;
@@ -146,6 +147,18 @@ interface RatingHistorico {
   divulgacao: string;
   rating: string;
   periodicidade?: string;
+  rating_normalizado?: string;
+  rating_score?: number;
+}
+
+interface RatingEvolucaoPonto {
+  data: string;
+  data_formatada: string;
+  rating: string;
+  score: number;
+  agencias: string;
+  tickers: string[];
+  qtd_emissoes: number;
 }
 
 interface MaturityYear {
@@ -163,11 +176,15 @@ interface DevedorItem {
   situacao_cvm?: string;
   site_ri?: string;
   ultimo_periodo: string;
+  rating_atual?: string | null;
+  rating_score?: number | null;
+  rating_agencia?: string | null;
   kpis_resumo: KpisResumo;
   radar_risco: RadarRisco;
   historico_trimestral?: PeriodoContabil[];
   titulos_ativos?: TituloAtivo[];
   total_titulos?: number;
+  rating_evolucao?: RatingEvolucaoPonto[];
   ratings_historico?: RatingHistorico[];
   maturity_wall?: MaturityYear[];
 }
@@ -277,6 +294,22 @@ const DOCUMENTACAO_INDICADORES: Record<string, DocInfo> = {
       { faixa: "1,0x ≤ LC < 1,5x", classificacao: "Liquidez Equilibrada / Rolagem Padrão", cor: "text-amber-700 bg-amber-50 border-amber-200" },
       { faixa: "LC < 1,0x ou Caixa/Dív CP < 0,5x", classificacao: "Aperto de Liquidez / Dependência de Mercado", cor: "text-rose-700 bg-rose-50 border-rose-200" }
     ]
+  },
+  rating_devedor: {
+    titulo: "Rating Consolidado do Devedor (Aproximação pelo Pior Rating)",
+    sigla: "RATING DEVEDOR",
+    fonte: "Agências Oficiais (Moody's Local, Fitch Ratings, S&P Global, Liberum) via ANBIMA & B3",
+    formula: "Min(Rating das Emissões Ativas na Data t)",
+    conceito:
+      "Em crédito corporativo, o devedor frequentemente possui múltiplas emissões com diferentes subordinações e garantias. Para fins de conservadorismo prudencial, o rating aproximado do devedor é definido pela pior nota vigente entre todas as suas emissões de Debêntures, CRIs e CRAs na data.",
+    interpretacao:
+      "Notas na faixa AAA a BBB- configuram Grau de Investimento (Investment Grade), denotando capacidade muito forte a adequada de honrar compromissos. Notas de BB+ para baixo indicam Grau Especulativo (High Yield).",
+    benchmarks: [
+      { faixa: "AAA a AA-", classificacao: "Grau de Investimento Prime / Alto: Risco de crédito mínimo", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "A+ a BBB-", classificacao: "Grau de Investimento Médio: Solvência satisfatória", cor: "text-blue-700 bg-blue-50 border-blue-200" },
+      { faixa: "BB+ a B-", classificacao: "Grau Especulativo (High Yield): Risco moderado a elevado", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "CCC a D", classificacao: "Alto Risco / Default: Risco iminente de reestruturação", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+    ]
   }
 };
 
@@ -382,6 +415,7 @@ const DebtorRadar: React.FC = () => {
           ...foundResumo,
           historico_trimestral: prev?.cnpj === cnpj ? prev.historico_trimestral : undefined,
           titulos_ativos: prev?.cnpj === cnpj ? prev.titulos_ativos : undefined,
+          rating_evolucao: prev?.cnpj === cnpj ? prev.rating_evolucao : undefined,
           ratings_historico: prev?.cnpj === cnpj ? prev.ratings_historico : undefined,
           maturity_wall: prev?.cnpj === cnpj ? prev.maturity_wall : undefined,
         }));
@@ -729,6 +763,13 @@ const DebtorRadar: React.FC = () => {
                     <span className="px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold">
                       Último Divulgado: {currentDevedor.ultimo_periodo}
                     </span>
+                    {currentDevedor.rating_atual && (
+                      <span className="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-300 rounded-lg text-xs font-black flex items-center gap-1.5 shadow-2xs">
+                        <Award size={13} className="text-amber-600" />
+                        Rating Oficial: {currentDevedor.rating_atual}
+                        {currentDevedor.rating_agencia ? ` (${currentDevedor.rating_agencia.split(',')[0].trim()})` : ''}
+                      </span>
+                    )}
                     {currentDevedor.site_ri && (
                       <a
                         href={currentDevedor.site_ri}
@@ -971,13 +1012,14 @@ const DebtorRadar: React.FC = () => {
                           <YAxis
                             yAxisId="right"
                             orientation="right"
-                            tickFormatter={(v) => `${v.toFixed(1)}x`}
+                            tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}x` : "")}
                             tick={{ fontSize: 12, fill: "#3b82f6" }}
                           />
                           <Tooltip
                             formatter={(val: any, name: any) => {
-                              if (name === "Alavancagem (DL/EBITDA)") return [`${val.toFixed(2)}x`, name];
-                              return [formatBRL(val), name];
+                              const num = typeof val === "number" && !isNaN(val) ? val : null;
+                              if (name === "Alavancagem (DL/EBITDA)") return [num !== null ? `${num.toFixed(2)}x` : "N/D", name];
+                              return [num !== null ? formatBRL(num) : "N/D", name];
                             }}
                           />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
@@ -1019,13 +1061,14 @@ const DebtorRadar: React.FC = () => {
                           <YAxis
                             yAxisId="right"
                             orientation="right"
-                            tickFormatter={(v) => `${v.toFixed(0)}%`}
+                            tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(0)}%` : "")}
                             tick={{ fontSize: 12, fill: "#10b981" }}
                           />
                           <Tooltip
                             formatter={(val: any, name: any) => {
-                              if (name === "Margem EBITDA (%)") return [`${val.toFixed(2)}%`, name];
-                              return [formatBRL(val), name];
+                              const num = typeof val === "number" && !isNaN(val) ? val : null;
+                              if (name === "Margem EBITDA (%)") return [num !== null ? `${num.toFixed(2)}%` : "N/D", name];
+                              return [num !== null ? formatBRL(num) : "N/D", name];
                             }}
                           />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
@@ -1045,8 +1088,16 @@ const DebtorRadar: React.FC = () => {
                         <AreaChart data={currentDevedor.historico_trimestral}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis tickFormatter={(v) => `${v.toFixed(1)}x`} tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <Tooltip formatter={(val: any) => [`${Number(val).toFixed(2)}x`, "ICR EBITDA"]} />
+                          <YAxis
+                            tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}x` : "")}
+                            tick={{ fontSize: 12, fill: "#64748b" }}
+                          />
+                          <Tooltip
+                            formatter={(val: any) => {
+                              const num = typeof val === "number" && !isNaN(val) ? val : null;
+                              return [num !== null ? `${num.toFixed(2)}x` : "N/D", "ICR EBITDA"];
+                            }}
+                          />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
                           <Area
                             type="monotone"
@@ -1064,11 +1115,17 @@ const DebtorRadar: React.FC = () => {
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
                           <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v.toFixed(1)}x`} tick={{ fontSize: 12, fill: "#10b981" }} />
+                          <YAxis
+                            yAxisId="right"
+                            orientation="right"
+                            tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}x` : "")}
+                            tick={{ fontSize: 12, fill: "#10b981" }}
+                          />
                           <Tooltip
                             formatter={(val: any, name: any) => {
-                              if (name === "Liquidez Corrente") return [`${val.toFixed(2)}x`, name];
-                              return [formatBRL(val), name];
+                              const num = typeof val === "number" && !isNaN(val) ? val : null;
+                              if (name === "Liquidez Corrente") return [num !== null ? `${num.toFixed(2)}x` : "N/D", name];
+                              return [num !== null ? formatBRL(num) : "N/D", name];
                             }}
                           />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
@@ -1082,11 +1139,18 @@ const DebtorRadar: React.FC = () => {
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
                           <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v.toFixed(1)}%`} tick={{ fontSize: 12, fill: "#f43f5e" }} />
+                          <YAxis
+                            yAxisId="right"
+                            orientation="right"
+                            tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}%` : "")}
+                            tick={{ fontSize: 12, fill: "#f43f5e" }}
+                          />
                           <Tooltip
                             formatter={(val: any, name: any) => {
-                              if (name.includes("%") || name.includes("Prob")) return [`${val.toFixed(2)}%`, name];
-                              return [val.toFixed(2), name];
+                              const num = typeof val === "number" && !isNaN(val) ? val : null;
+                              if (num === null) return ["N/D", name];
+                              if (name.includes("%") || name.includes("Prob")) return [`${num.toFixed(2)}%`, name];
+                              return [num.toFixed(2), name];
                             }}
                           />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
@@ -1107,33 +1171,129 @@ const DebtorRadar: React.FC = () => {
               </div>
             </div>
 
-            {/* ─── HISTÓRICO DE RATINGS & MIGRAÇÕES NO TEMPO ──────────────────── */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            {/* ─── HISTÓRICO DE RATINGS & MIGRAÇÕES NO TEMPO (COM GRÁFICO E REGRA DO PIOR RATING) ─── */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-100">
                 <div>
-                  <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                    <Award size={18} className="text-amber-500" />
-                    Histórico &amp; Migração de Ratings das Agências
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Acompanhamento de notas emitidas por Moody&apos;s Local, Fitch Ratings, S&amp;P Global e Liberum
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                      <Award size={18} className="text-amber-500" />
+                      Rating Oficial de Crédito &amp; Trajetória no Tempo
+                    </h3>
+                    <InfoButton docKey="rating_devedor" onOpen={setDocModalKey} />
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Metodologia prudencial: aproximação pelo <strong>pior rating entre as emissões ativas</strong> a cada data de corte/divulgação
                   </p>
                 </div>
-                <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
-                  {currentDevedor.ratings_historico?.length || 0} Registros
-                </span>
+
+                <div className="flex items-center gap-2.5">
+                  {currentDevedor.rating_atual && (
+                    <div className="flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 rounded-xl">
+                      <span className="text-2xs uppercase tracking-wider font-bold text-amber-700">Rating Vigente:</span>
+                      <span className="text-sm font-black text-amber-900 px-2 py-0.5 bg-amber-200/70 rounded-md font-mono">
+                        {currentDevedor.rating_atual}
+                      </span>
+                    </div>
+                  )}
+                  <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
+                    {currentDevedor.ratings_historico?.length || 0} Registros
+                  </span>
+                </div>
               </div>
 
+              {/* GRÁFICO DE EVOLUÇÃO TEMPORAL DO RATING (PIOR RATING ENTRE EMISSÕES) */}
               {loadingFull ? (
                 <div className="py-12 flex flex-col items-center justify-center gap-3">
                   <div className="w-7 h-7 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
                   <span className="text-xs font-semibold text-slate-500">Carregando histórico de ratings...</span>
                 </div>
-              ) : currentDevedor.ratings_historico && currentDevedor.ratings_historico.length > 0 ? (
-                <div className="overflow-x-auto">
+              ) : currentDevedor.rating_evolucao && currentDevedor.rating_evolucao.length > 0 ? (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-600">
+                    <span className="font-bold flex items-center gap-1.5">
+                      <TrendingUp size={14} className="text-blue-600" />
+                      Curva de Rating do Devedor no Tempo (Consolidado Conservador)
+                    </span>
+                    <span className="text-2xs text-slate-400">
+                      Grau de Investimento acima do patamar 11 (BBB-) • Fonte: Moody&apos;s, Fitch, S&amp;P, Liberum
+                    </span>
+                  </div>
+
+                  <div className="h-64 w-full bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={currentDevedor.rating_evolucao}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                        <XAxis
+                          dataKey="data_formatada"
+                          tick={{ fontSize: 11, fill: "#64748b" }}
+                        />
+                        <YAxis
+                          domain={[6, 20]}
+                          ticks={[8, 11, 14, 16, 18, 20]}
+                          tickFormatter={(v) => {
+                            const map: Record<number, string> = {
+                              20: "AAA",
+                              18: "AA",
+                              16: "A+",
+                              14: "A-",
+                              11: "BBB-",
+                              8: "BB-",
+                            };
+                            return map[v] || `${v}`;
+                          }}
+                          tick={{ fontSize: 11, fill: "#64748b" }}
+                        />
+                        <Tooltip
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length) {
+                              const p = payload[0].payload as RatingEvolucaoPonto;
+                              return (
+                                <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl text-xs space-y-1 border border-slate-700">
+                                  <div className="font-bold text-slate-300">Data: {p.data_formatada}</div>
+                                  <div className="text-amber-400 font-black text-sm flex items-center gap-1.5">
+                                    <Award size={14} />
+                                    Pior Rating: {p.rating}
+                                  </div>
+                                  <div className="text-slate-300 text-2xs">
+                                    Agências: <span className="text-white font-semibold">{p.agencias}</span>
+                                  </div>
+                                  <div className="text-slate-300 text-2xs">
+                                    Emissões Consideradas: <span className="font-mono text-blue-300">{p.tickers?.join(", ")}</span> ({p.qtd_emissoes} papéis)
+                                  </div>
+                                </div>
+                              );
+                            }
+                            return null;
+                          }}
+                        />
+                        <ReferenceLine
+                          y={11}
+                          stroke="#10b981"
+                          strokeDasharray="3 3"
+                          label={{ value: "Grau de Investimento (BBB-)", position: "insideBottomRight", fill: "#10b981", fontSize: 10 }}
+                        />
+                        <Line
+                          type="stepAfter"
+                          dataKey="score"
+                          name="Rating do Devedor"
+                          stroke="#f59e0b"
+                          strokeWidth={3}
+                          dot={{ r: 5, fill: "#f59e0b", strokeWidth: 2, stroke: "#fff" }}
+                          activeDot={{ r: 7 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              ) : null}
+
+              {/* TABELA DETALHADA DE RELATÓRIOS DAS AGÊNCIAS */}
+              {loadingFull ? null : currentDevedor.ratings_historico && currentDevedor.ratings_historico.length > 0 ? (
+                <div className="overflow-x-auto max-h-72 border border-slate-100 rounded-xl">
                   <table className="w-full text-left text-xs">
-                    <thead>
-                      <tr className="border-b border-slate-200 bg-slate-50/50 text-slate-500 font-bold uppercase tracking-wider">
+                    <thead className="sticky top-0 bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                      <tr>
                         <th className="py-2.5 px-3">Data Divulgação</th>
                         <th className="py-2.5 px-3">Agência de Classificação</th>
                         <th className="py-2.5 px-3">Nota / Rating Oficial</th>
@@ -1243,6 +1403,7 @@ const DebtorRadar: React.FC = () => {
                           <th className="py-2 px-2.5">Taxa Emissão</th>
                           <th className="py-2 px-2.5">Taxa Indicativa</th>
                           <th className="py-2 px-2.5">Vencimento</th>
+                          <th className="py-2 px-2.5">Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
@@ -1260,6 +1421,17 @@ const DebtorRadar: React.FC = () => {
                               {t.taxa_indicativa ? `${t.taxa_indicativa}%` : "—"}
                             </td>
                             <td className="py-2 px-2.5 text-slate-500 font-mono">{t.dt_vencimento || "—"}</td>
+                            <td className="py-2 px-2.5">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                t.status_ativo === "Ativo"
+                                  ? "bg-emerald-100 text-emerald-800"
+                                  : t.status_ativo === "Resgatado"
+                                  ? "bg-purple-100 text-purple-800"
+                                  : "bg-slate-100 text-slate-600"
+                              }`}>
+                                {t.status_ativo || "Ativo"}
+                              </span>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
