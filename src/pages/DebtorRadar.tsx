@@ -39,7 +39,8 @@ import {
   CheckCircle2,
   Scale,
   Clock,
-  Briefcase
+  Briefcase,
+  Newspaper
 } from 'lucide-react';
 
 /* ==========================================================================
@@ -64,6 +65,13 @@ interface KpisResumo {
   score_geral: number;
   classificacao: string;
   badge_cor: string;
+}
+
+interface NewsItem {
+  title: string;
+  source: string;
+  link: string;
+  pubDate: string;
 }
 
 interface RadarHorizonte {
@@ -391,6 +399,11 @@ const DebtorRadar: React.FC = () => {
   const [selectedCnpj, setSelectedCnpj] = useState<string>(searchParams.get("cnpj") || "");
   const [currentDevedor, setCurrentDevedor] = useState<DevedorItem | null>(null);
 
+  // Notícias Recentes (Google News RSS)
+  const [newsList, setNewsList] = useState<NewsItem[]>([]);
+  const [newsLoading, setNewsLoading] = useState<boolean>(false);
+  const newsCache = useRef<Record<string, NewsItem[]>>({});
+
   // Cache em memória para os arquivos individuais de 30KB
   const fullCache = useRef<Record<string, DevedorItem>>({});
 
@@ -542,6 +555,81 @@ const DebtorRadar: React.FC = () => {
     fetchFullData();
     return () => { isMounted = false; };
   }, [selectedCnpj]);
+
+  // Termo de busca de notícias limpo para a empresa atual
+  const companyNewsQuery = useMemo(() => {
+    if (!currentDevedor) return "";
+    if (currentDevedor.nome_fantasia && currentDevedor.nome_fantasia.trim().length >= 3) {
+      return currentDevedor.nome_fantasia.trim();
+    }
+    let name = currentDevedor.razao_social || "";
+    name = name.replace(/\s*-\s*EM RECUPERA[CÇ][AÃ]O JUDICIAL.*/i, "");
+    name = name.replace(/\bS\.?A\.?\b/gi, "").replace(/\bLTDA\.?\b/gi, "").trim();
+    return name || currentDevedor.razao_social;
+  }, [currentDevedor]);
+
+  const googleNewsUrl = useMemo(() => {
+    if (!companyNewsQuery) return "https://news.google.com";
+    return `https://news.google.com/search?q=${encodeURIComponent(`"${companyNewsQuery}" when:7d`)}&hl=pt-BR&gl=BR&ceid=BR:pt-419`;
+  }, [companyNewsQuery]);
+
+  // Carregamento de notícias recentes (Google News RSS)
+  useEffect(() => {
+    if (!companyNewsQuery) {
+      setNewsList([]);
+      return;
+    }
+
+    const qKey = companyNewsQuery.toLowerCase();
+    if (newsCache.current[qKey]) {
+      setNewsList(newsCache.current[qKey]);
+      return;
+    }
+
+    let isMounted = true;
+    setNewsLoading(true);
+
+    const fetchNews = async () => {
+      try {
+        const resp = await fetch(`/api/news?q=${encodeURIComponent(companyNewsQuery)}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (isMounted && data.items) {
+            newsCache.current[qKey] = data.items;
+            setNewsList(data.items);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("Não foi possível carregar o feed RSS de notícias:", err);
+      } finally {
+        if (isMounted) setNewsLoading(false);
+      }
+    };
+
+    fetchNews();
+    return () => {
+      isMounted = false;
+    };
+  }, [companyNewsQuery]);
+
+  const formatNewsDate = (dateStr: string): string => {
+    if (!dateStr) return "";
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      const now = new Date();
+      const diffHours = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60));
+      if (diffHours < 1) return "Há menos de 1h";
+      if (diffHours < 24) return `Há ${diffHours}h`;
+      const diffDays = Math.floor(diffHours / 24);
+      if (diffDays === 1) return "Ontem";
+      if (diffDays < 7) return `Há ${diffDays} dias`;
+      return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+    } catch {
+      return dateStr;
+    }
+  };
 
   // Lista filtrada para busca e seleção
   const filteredDevedores = useMemo(() => {
@@ -1016,6 +1104,100 @@ const DebtorRadar: React.FC = () => {
                 <div className="text-2xs font-bold text-emerald-700 mt-1">
                   {currentDevedor.kpis_resumo?.altman_zona?.split("(")[0] || "Zona Segura"}
                 </div>
+              </div>
+            </div>
+
+            {/* ─── BOX DE NOTÍCIAS RECENTES (GOOGLE NEWS RSS) ───────────────── */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div className="px-5 py-3.5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100/70 text-blue-700 flex items-center justify-center shrink-0">
+                    <Newspaper className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-sm font-black text-slate-900">
+                        Notícias &amp; Fatos Recentes (Últimos 7 dias)
+                      </h3>
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-3xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/50">
+                        Google News RSS
+                      </span>
+                    </div>
+                    <p className="text-2xs text-slate-500">
+                      Monitoramento em tempo real de notícias sobre <span className="font-semibold text-slate-700">{companyNewsQuery}</span> para acompanhamento contínuo de risco de crédito
+                    </p>
+                  </div>
+                </div>
+
+                <a
+                  href={googleNewsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 rounded-lg transition-colors border border-blue-200/80 shadow-2xs self-start sm:self-auto shrink-0"
+                  title="Abrir pesquisa de 7 dias diretamente no Google News"
+                >
+                  <span>Abrir no Google News</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              {/* Lista com Altura Fixa e Scroll Vertical */}
+              <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
+                {newsLoading ? (
+                  <div className="p-5 space-y-3.5 animate-pulse">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="flex flex-col gap-1.5">
+                        <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div className="flex gap-2">
+                          <div className="h-3 bg-slate-100 rounded w-20"></div>
+                          <div className="h-3 bg-slate-100 rounded w-16"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : newsList.length > 0 ? (
+                  newsList.map((item, idx) => (
+                    <a
+                      key={idx}
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3.5 sm:px-5 hover:bg-slate-50/80 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 group block"
+                    >
+                      <div className="flex-1 min-w-0 pr-2">
+                        <div className="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-2">
+                          {item.title}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-3xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200/60 shrink-0">
+                          {item.source}
+                        </span>
+                        {item.pubDate && (
+                          <span className="text-3xs font-medium text-slate-400 whitespace-nowrap shrink-0">
+                            {formatNewsDate(item.pubDate)}
+                          </span>
+                        )}
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-400 opacity-40 group-hover:opacity-100 group-hover:text-blue-600 transition-all shrink-0 ml-1" />
+                      </div>
+                    </a>
+                  ))
+                ) : (
+                  <div className="p-8 text-center">
+                    <p className="text-xs text-slate-500 mb-2">
+                      Nenhuma matéria indexada nos últimos 7 dias especificamente para &ldquo;{companyNewsQuery}&rdquo;.
+                    </p>
+                    <a
+                      href={googleNewsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 underline"
+                    >
+                      Pesquisar menções e histórico no Google News
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
