@@ -19,7 +19,7 @@ export default defineConfig(({ mode, command }) => {
         {
           name: 'local-news-api-middleware',
           configureServer(server) {
-            server.middlewares.use('/api/news', async (req, res) => {
+            const newsHandler = async (req: any, res: any) => {
               try {
                 const urlObj = new URL(req.url || '', 'http://localhost');
                 const q = urlObj.searchParams.get('q');
@@ -39,7 +39,9 @@ export default defineConfig(({ mode, command }) => {
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify({ error: err?.message || 'Server error' }));
               }
-            });
+            };
+            server.middlewares.use('/api/news', newsHandler);
+            server.middlewares.use('/.netlify/functions/news', newsHandler);
           }
         }
       ],

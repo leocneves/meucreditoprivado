@@ -591,13 +591,19 @@ const DebtorRadar: React.FC = () => {
 
     const fetchNews = async () => {
       try {
-        const resp = await fetch(`/api/news?q=${encodeURIComponent(companyNewsQuery)}`);
+        let resp = await fetch(`/.netlify/functions/news?q=${encodeURIComponent(companyNewsQuery)}`);
+        if (!resp.ok) {
+          resp = await fetch(`/api/news?q=${encodeURIComponent(companyNewsQuery)}`);
+        }
         if (resp.ok) {
-          const data = await resp.json();
-          if (isMounted && data.items) {
-            newsCache.current[qKey] = data.items;
-            setNewsList(data.items);
-            return;
+          const contentType = resp.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const data = await resp.json();
+            if (isMounted && data.items) {
+              newsCache.current[qKey] = data.items;
+              setNewsList(data.items);
+              return;
+            }
           }
         }
       } catch (err) {
