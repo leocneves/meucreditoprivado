@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   ResponsiveContainer,
@@ -358,8 +358,8 @@ const DebtorRadar: React.FC = () => {
   const [selectedCnpj, setSelectedCnpj] = useState<string>(searchParams.get("cnpj") || "");
   const [currentDevedor, setCurrentDevedor] = useState<DevedorItem | null>(null);
 
-  // Devedores em comparação secundária
-  const [compareCnpjs, setCompareCnpjs] = useState<string[]>([]);
+  // Cache em memória para os arquivos individuais de 30KB
+  const fullCache = useRef<Record<string, DevedorItem>>({});
 
   // Abas de gráficos
   const [activeTab, setActiveTab] = useState<"alavancagem" | "rentabilidade" | "cobertura" | "liquidez" | "default_models">(
@@ -369,6 +369,26 @@ const DebtorRadar: React.FC = () => {
   // Modal de documentação
   const [docModalKey, setDocModalKey] = useState<string | null>(null);
 
+  // Função central de seleção de devedor com atualização instantânea (0ms)
+  const handleSelectDevedor = (cnpj: string) => {
+    setSelectedCnpj(cnpj);
+    const foundResumo = devedoresResumo.find((d) => d.cnpj === cnpj);
+    if (foundResumo) {
+      if (fullCache.current[cnpj]) {
+        setCurrentDevedor(fullCache.current[cnpj]);
+      } else {
+        // Exibir imediatamente com KPIs e cabeçalhos enquanto o arquivo de 30KB baixa
+        setCurrentDevedor((prev) => ({
+          ...foundResumo,
+          historico_trimestral: prev?.cnpj === cnpj ? prev.historico_trimestral : undefined,
+          titulos_ativos: prev?.cnpj === cnpj ? prev.titulos_ativos : undefined,
+          ratings_historico: prev?.cnpj === cnpj ? prev.ratings_historico : undefined,
+          maturity_wall: prev?.cnpj === cnpj ? prev.maturity_wall : undefined,
+        }));
+      }
+    }
+  };
+
   // 1. Carregamento inicial do índice leve de devedores
   useEffect(() => {
     const fetchResumo = async () => {
@@ -377,7 +397,8 @@ const DebtorRadar: React.FC = () => {
         const resp = await fetch("/data/devedores_resumo.json");
         if (resp.ok) {
           const data = await resp.json();
-          setDevedoresResumo(data.devedores || []);
+          const devs: DevedorItem[] = data.devedores || [];
+          setDevedoresResumo(devs);
           setSetores(data.setores_disponiveis || []);
 
           const urlCnpj = searchParams.get("cnpj");
@@ -385,12 +406,12 @@ const DebtorRadar: React.FC = () => {
 
           let defaultDev: DevedorItem | undefined = undefined;
           if (urlCnpj) {
-            defaultDev = data.devedores.find(
+            defaultDev = devs.find(
               (d: DevedorItem) => d.cnpj === urlCnpj || d.cnpj_formatado === urlCnpj
             );
           } else if (urlSearch) {
             const sLower = urlSearch.toLowerCase();
-            defaultDev = data.devedores.find(
+            defaultDev = devs.find(
               (d: DevedorItem) =>
                 d.razao_social.toLowerCase().includes(sLower) ||
                 (d.nome_fantasia && d.nome_fantasia.toLowerCase().includes(sLower))
@@ -399,12 +420,13 @@ const DebtorRadar: React.FC = () => {
 
           if (!defaultDev) {
             defaultDev =
-              data.devedores.find((d: DevedorItem) => d.razao_social.includes("KLABIN")) ||
-              data.devedores[0];
+              devs.find((d: DevedorItem) => d.razao_social.includes("KLABIN")) ||
+              devs[0];
           }
 
           if (defaultDev) {
             setSelectedCnpj(defaultDev.cnpj);
+            setCurrentDevedor(defaultDev);
           }
         }
       } catch (err) {
@@ -416,28 +438,49 @@ const DebtorRadar: React.FC = () => {
     fetchResumo();
   }, [searchParams]);
 
-  // 2. Carregamento completo sob demanda (série histórica, ratings, títulos)
+  // 2. Carregamento completo sob demanda (série histórica, ratings, títulos) com arquivo ultra-rápido de 30KB
   useEffect(() => {
     if (!selectedCnpj) return;
 
+    if (fullCache.current[selectedCnpj]) {
+      setCurrentDevedor(fullCache.current[selectedCnpj]);
+      return;
+    }
+
+    let isMounted = true;
     const fetchFullData = async () => {
       setLoadingFull(true);
       try {
+        // Tentar primeiro arquivo individual por empresa (30KB)
+        const respIndiv = await fetch(`/data/devedores/${selectedCnpj}.json`);
+        if (respIndiv.ok) {
+          const indivData = await respIndiv.json();
+          if (isMounted && indivData && indivData.cnpj === selectedCnpj) {
+            fullCache.current[selectedCnpj] = indivData;
+            setCurrentDevedor(indivData);
+            setLoadingFull(false);
+            return;
+          }
+        }
+
+        // Fallback para arquivo consolidado caso necessário
         const resp = await fetch("/data/devedores_raiox.json");
         if (resp.ok) {
           const data = await resp.json();
           const found = data.devedores?.find((d: DevedorItem) => d.cnpj === selectedCnpj);
-          if (found) {
+          if (isMounted && found) {
+            fullCache.current[selectedCnpj] = found;
             setCurrentDevedor(found);
           }
         }
       } catch (err) {
         console.error("Erro ao carregar dados detalhados do devedor:", err);
       } finally {
-        setLoadingFull(false);
+        if (isMounted) setLoadingFull(false);
       }
     };
     fetchFullData();
+    return () => { isMounted = false; };
   }, [selectedCnpj]);
 
   // Lista filtrada para busca e seleção
@@ -505,7 +548,7 @@ const DebtorRadar: React.FC = () => {
             {/* Micro métricas */}
             <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 self-start md:self-auto">
               <div className="text-center px-3 border-r border-white/10">
-                <div className="text-2xl font-black text-blue-400">{devedoresResumo.length || "775"}</div>
+                <div className="text-2xl font-black text-blue-400">{devedoresResumo.length || "800+"}</div>
                 <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Devedores CVM</div>
               </div>
               <div className="text-center px-3 border-r border-white/10">
@@ -522,54 +565,102 @@ const DebtorRadar: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-4 max-w-7xl -mt-6">
-        {/* ─── FILTROS & SELEÇÃO DE DEVEDOR ─────────────────────────────────── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
-            {/* Campo de Busca Rápida */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+        {/* ─── BARRA DE BUSCA CENTRAL & FILTROS ─────────────────────────────────── */}
+        <div className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 md:p-8 mb-8 space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-1.5">
+            <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+              <Search className="text-blue-600" size={24} />
+              Buscar Devedor ou Emissor de Crédito
+            </h2>
+            <p className="text-xs md:text-sm text-slate-500 font-normal">
+              Pesquise entre as <strong>{devedoresResumo.length || "800+"} companhias abertas</strong> que divulgam balanços na CVM e emitem Debêntures, CRIs e CRAs.
+            </p>
+          </div>
+
+          {/* Campo de Busca Grande e Central */}
+          <div className="max-w-3xl mx-auto relative">
+            <div className="relative flex items-center">
+              <Search className="absolute left-4 text-blue-500 pointer-events-none" size={22} />
               <input
                 type="text"
-                placeholder="Buscar devedor por Razão Social, Nome Fantasia ou CNPJ..."
+                placeholder="Digite o nome da empresa ou CNPJ (ex: Klabin, Petrobras, Vale, 89.637...)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                className="w-full pl-12 pr-12 py-3.5 sm:py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-sm sm:text-base font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 transition-all shadow-inner"
               />
               {searchTerm && (
                 <button
                   type="button"
                   onClick={() => setSearchTerm("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-4 p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition cursor-pointer"
                 >
-                  <X size={16} />
+                  <X size={20} />
                 </button>
               )}
             </div>
 
-            {/* Seletor de Setor */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
-              <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0">
-                <Filter size={14} /> Setor:
-              </span>
+            {/* Dropdown de sugestões instantâneas quando há termo digitado */}
+            {searchTerm.trim().length > 1 && (
+              <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 max-h-80 overflow-y-auto z-50 divide-y divide-slate-100">
+                {filteredDevedores.slice(0, 10).map((d) => (
+                  <button
+                    key={d.cnpj}
+                    type="button"
+                    onClick={() => {
+                      handleSelectDevedor(d.cnpj);
+                      setSearchTerm("");
+                    }}
+                    className="w-full text-left p-3.5 hover:bg-blue-50/70 transition flex items-center justify-between group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">
+                        <Building2 size={16} />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                          {d.razao_social}
+                        </div>
+                        <div className="text-xs text-slate-400 font-mono">
+                          CNPJ: {d.cnpj_formatado} {d.setor ? `• ${d.setor}` : ""}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="text-2xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                        {d.kpis_resumo?.classificacao || "CVM"}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Filtro por Setor Centrado */}
+          <div className="space-y-2">
+            <div className="text-center text-2xs font-bold text-slate-400 uppercase tracking-wider">
+              Filtrar por Setor de Atuação
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
               <button
                 type="button"
                 onClick={() => setSelectedSetor("TODOS")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   selectedSetor === "TODOS"
-                    ? "bg-slate-900 text-white shadow-xs"
+                    ? "bg-slate-900 text-white shadow-xs scale-105"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
                 Todos ({devedoresResumo.length})
               </button>
-              {setores.slice(0, 7).map((s) => (
+              {setores.slice(0, 8).map((s) => (
                 <button
                   key={s}
                   type="button"
                   onClick={() => setSelectedSetor(s)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     selectedSetor === s
-                      ? "bg-blue-600 text-white shadow-xs"
+                      ? "bg-blue-600 text-white shadow-xs scale-105"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
@@ -579,39 +670,50 @@ const DebtorRadar: React.FC = () => {
             </div>
           </div>
 
-          {/* Lista de Chips / Seletores Rápidos de Devedores Filtrados */}
-          <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap gap-2 max-h-36 overflow-y-auto pr-1">
-            {filteredDevedores.slice(0, 30).map((d) => {
-              const isSelected = selectedCnpj === d.cnpj;
-              return (
-                <button
-                  key={d.cnpj}
-                  type="button"
-                  onClick={() => setSelectedCnpj(d.cnpj)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 border transition-all ${
-                    isSelected
-                      ? "bg-blue-50 border-blue-500 text-blue-800 shadow-2xs font-bold ring-2 ring-blue-500/20"
-                      : "bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  <Building2 size={13} className={isSelected ? "text-blue-600" : "text-slate-400"} />
-                  <span>{d.razao_social}</span>
-                  <span className="text-2xs font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
-                    {d.kpis_resumo?.classificacao ? d.kpis_resumo.classificacao.split(" ")[0] : "CVM"}
-                  </span>
-                </button>
-              );
-            })}
-            {filteredDevedores.length === 0 && (
-              <div className="text-xs text-slate-400 italic py-2">
-                Nenhum devedor encontrado para o termo pesquisado.
-              </div>
-            )}
+          {/* Devedores em Destaque / Filtrados */}
+          <div className="pt-3 border-t border-slate-100">
+            <div className="flex items-center justify-between text-xs text-slate-500 mb-2.5">
+              <span className="font-bold text-slate-700">Devedores Disponíveis ({filteredDevedores.length})</span>
+              <span className="text-2xs text-slate-400 hidden sm:inline">Clique no emissor para abrir o Raio-X completo</span>
+            </div>
+            <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-1">
+              {filteredDevedores.slice(0, 36).map((d) => {
+                const isSelected = selectedCnpj === d.cnpj;
+                return (
+                  <button
+                    key={d.cnpj}
+                    type="button"
+                    onClick={() => handleSelectDevedor(d.cnpj)}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 border transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-blue-600 border-blue-600 text-white shadow-md font-bold ring-2 ring-blue-400/40 scale-105"
+                        : "bg-white border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-blue-50/50"
+                    }`}
+                  >
+                    <Building2 size={13} className={isSelected ? "text-white" : "text-blue-500"} />
+                    <span className="truncate max-w-[200px]">{d.razao_social}</span>
+                    <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                      isSelected ? "bg-blue-700 text-blue-100" : "bg-slate-100 text-slate-600"
+                    }`}>
+                      {d.kpis_resumo?.classificacao ? d.kpis_resumo.classificacao.split(" ")[0] : "CVM"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* ─── PAINEL PRINCIPAL DO DEVEDOR SELECIONADO ──────────────────────── */}
-        {currentDevedor && (
+        {loading ? (
+          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-4 my-8">
+            <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div>
+              <h3 className="text-base font-bold text-slate-800">Carregando Raio-X dos Devedores...</h3>
+              <p className="text-xs text-slate-500 mt-1">Carregando cadastro, balanços CVM e ratings oficiais</p>
+            </div>
+          </div>
+        ) : currentDevedor ? (
           <div className="space-y-8">
             {/* Header da Empresa & Status Geral */}
             <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
@@ -851,7 +953,14 @@ const DebtorRadar: React.FC = () => {
 
               {/* Área do Gráfico */}
               <div className="p-6">
-                {currentDevedor.historico_trimestral && currentDevedor.historico_trimestral.length > 0 ? (
+                {loadingFull ? (
+                  <div className="h-80 flex flex-col items-center justify-center gap-3 bg-slate-50/70 rounded-2xl border-2 border-dashed border-blue-200">
+                    <div className="w-9 h-9 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                    <span className="text-xs font-bold text-slate-600">
+                      Carregando séries históricas e demonstrações CVM de {currentDevedor?.razao_social}...
+                    </span>
+                  </div>
+                ) : currentDevedor.historico_trimestral && currentDevedor.historico_trimestral.length > 0 ? (
                   <div className="h-80 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       {activeTab === "alavancagem" ? (
@@ -1015,7 +1124,12 @@ const DebtorRadar: React.FC = () => {
                 </span>
               </div>
 
-              {currentDevedor.ratings_historico && currentDevedor.ratings_historico.length > 0 ? (
+              {loadingFull ? (
+                <div className="py-12 flex flex-col items-center justify-center gap-3">
+                  <div className="w-7 h-7 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs font-semibold text-slate-500">Carregando histórico de ratings...</span>
+                </div>
+              ) : currentDevedor.ratings_historico && currentDevedor.ratings_historico.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
@@ -1068,7 +1182,12 @@ const DebtorRadar: React.FC = () => {
                     Concentração de amortizações de principal por ano (Maturity Wall)
                   </p>
 
-                  {currentDevedor.maturity_wall && currentDevedor.maturity_wall.length > 0 ? (
+                  {loadingFull ? (
+                    <div className="h-60 flex flex-col items-center justify-center gap-2">
+                      <div className="w-7 h-7 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                      <span className="text-xs text-slate-400">Calculando cronograma de vencimentos...</span>
+                    </div>
+                  ) : currentDevedor.maturity_wall && currentDevedor.maturity_wall.length > 0 ? (
                     <div className="h-60 w-full mt-2">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={currentDevedor.maturity_wall}>
@@ -1109,7 +1228,12 @@ const DebtorRadar: React.FC = () => {
                   </span>
                 </div>
 
-                {currentDevedor.titulos_ativos && currentDevedor.titulos_ativos.length > 0 ? (
+                {loadingFull ? (
+                  <div className="py-16 flex flex-col items-center justify-center gap-2">
+                    <div className="w-7 h-7 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                    <span className="text-xs text-slate-400">Carregando carteira de títulos e taxas...</span>
+                  </div>
+                ) : currentDevedor.titulos_ativos && currentDevedor.titulos_ativos.length > 0 ? (
                   <div className="overflow-x-auto max-h-72">
                     <table className="w-full text-left text-xs">
                       <thead className="sticky top-0 bg-white">
@@ -1149,7 +1273,7 @@ const DebtorRadar: React.FC = () => {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* ─── MODAL DE DOCUMENTAÇÃO METODOLÓGICA ─────────────────────────────── */}
