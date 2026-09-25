@@ -381,6 +381,7 @@ const CreditDashboard: React.FC = () => {
 
         return {
           ...a,
+          issuer: (a.issuer || '').trim().toUpperCase(),
           rating_normalizado: a.rating_normalizado || normalizeRating(a.rating),
           setor: normalizeSector(a.setor),
           data_ultimo_negocio: effectiveLastDate,
@@ -438,7 +439,12 @@ const CreditDashboard: React.FC = () => {
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
     if (indexadoresSel.length) base = base.filter(a => matchIndexador(a, indexadoresSel))
-    return unique(base.map(a => a.issuer))
+    const set = new Set<string>()
+    base.forEach(a => {
+      const name = (a.issuer || '').trim().toUpperCase()
+      if (name && name !== '-' && name !== 'N/D') set.add(name)
+    })
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'pt-BR'))
   }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel])
 
   const tickersOptions = useMemo(() => {
@@ -446,7 +452,7 @@ const CreditDashboard: React.FC = () => {
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
     if (indexadoresSel.length) base = base.filter(a => matchIndexador(a, indexadoresSel))
-    if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
+    if (issuersSel.length) base = base.filter(a => issuersSel.includes((a.issuer || '').trim().toUpperCase()))
     return unique(base.map(a => a.ticker))
   }, [ativosVivosBase, tiposSel, setoresSel, indexadoresSel, issuersSel])
 
@@ -455,7 +461,7 @@ const CreditDashboard: React.FC = () => {
     if (tiposSel.length) base = base.filter(a => tiposSel.includes(a.tipo || ''))
     if (setoresSel.length) base = base.filter(a => setoresSel.includes(a.setor || ''))
     if (indexadoresSel.length) base = base.filter(a => matchIndexador(a, indexadoresSel))
-    if (issuersSel.length) base = base.filter(a => issuersSel.includes(a.issuer || ''))
+    if (issuersSel.length) base = base.filter(a => issuersSel.includes((a.issuer || '').trim().toUpperCase()))
     if (tickersSel.length) base = base.filter(a => tickersSel.includes(a.ticker))
 
     const existingRatings = unique(base.map(a => a.rating_normalizado || 'Sem Rating'))
@@ -497,7 +503,7 @@ const CreditDashboard: React.FC = () => {
     }
 
     if (issuersSel.length)
-      base = base.filter(a => issuersSel.includes(a.issuer || ''))
+      base = base.filter(a => issuersSel.includes((a.issuer || '').trim().toUpperCase()))
 
     if (tickersSel.length)
       base = base.filter(a => tickersSel.includes(a.ticker))
@@ -2121,7 +2127,13 @@ const CreditDashboard: React.FC = () => {
                       )}
                     </td>
                     <td className="p-2.5 font-medium text-slate-800 truncate max-w-[200px]" title={a.issuer}>
-                      <span>{a.issuer || '-'}</span>
+                      <Link
+                        to={`/raiox-devedor?cnpj=${(a.cnpj_emissor || '').replace(/\D/g, '')}&search=${encodeURIComponent(a.issuer || '')}`}
+                        className="hover:text-blue-600 hover:underline transition font-bold"
+                        title="Ver análise completa no Raio-X do Devedor"
+                      >
+                        {(a.issuer || '-').toUpperCase()}
+                      </Link>
                       {a.em_recuperacao_judicial === 'Sim' && (
                         <span className="ml-1.5 px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-[9px] font-extrabold" title="Emissor em Recuperação Judicial / Falência">
                           ⚠️ Em RJ

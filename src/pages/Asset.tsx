@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, AssetDocument, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
 import ChartComponent from '../components/ChartComponent';
-import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen } from 'lucide-react';
+import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen, ArrowRight, Activity, ArrowLeftRight } from 'lucide-react';
 
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   const issuerName = (asset.issuer || '').trim();
@@ -358,8 +358,11 @@ const AssetPage: React.FC = () => {
 
         const saved = localStorage.getItem('watchlist');
         if (saved) {
-          const watchlist = JSON.parse(saved) as string[];
-          setIsFavorite(watchlist.includes(ticker || ''));
+          const watchlist = (JSON.parse(saved) as string[]).map(t => (t || '').trim().toUpperCase());
+          const curTicker = (ticker || '').trim().toUpperCase();
+          const cachedAsset = assetMemoryCache.get(targetKey)?.asset;
+          const curIsin = (cachedAsset?.isin || '').trim().toUpperCase();
+          setIsFavorite(watchlist.includes(curTicker) || (!!curIsin && watchlist.includes(curIsin)));
         }
       } catch (err) {
         console.error("Error loading asset detail", err);
@@ -376,19 +379,28 @@ const AssetPage: React.FC = () => {
   }, [ticker]);
 
   const toggleFavorite = () => {
-    if (!ticker) return;
+    const targetTicker = (asset?.ticker || ticker || '').trim().toUpperCase();
+    if (!targetTicker) return;
 
     const saved = localStorage.getItem('watchlist');
     let watchlist = saved ? (JSON.parse(saved) as string[]) : [];
+    const isinTarget = (asset?.isin || '').trim().toUpperCase();
 
     if (isFavorite) {
-      watchlist = watchlist.filter(t => t !== ticker);
+      watchlist = watchlist.filter(t => {
+        const up = (t || '').trim().toUpperCase();
+        return up !== targetTicker && up !== isinTarget;
+      });
     } else {
-      watchlist.push(ticker);
+      const upList = watchlist.map(t => (t || '').trim().toUpperCase());
+      if (!upList.includes(targetTicker)) {
+        watchlist.push(targetTicker);
+      }
     }
 
     localStorage.setItem('watchlist', JSON.stringify(watchlist));
     setIsFavorite(!isFavorite);
+    window.dispatchEvent(new Event('fixdata-watchlist-update'));
   };
 
   if (loading) return <div className="p-10 text-center text-slate-600 font-semibold">Carregando dados do ativo...</div>;
@@ -410,28 +422,83 @@ const AssetPage: React.FC = () => {
   const tEmissaoVal = asset.taxa_emissao || (asset.taxa_mercado ? null : asset.taxa_ativo);
   const taxaEmissaoFormatted = formatTaxaValue(tEmissaoVal, asset.indexador);
 
+  const debtorCnpjClean = (emitter?.cnpj || asset.cnpj_emissor || '').replace(/\D/g, '');
+  const debtorSearchQuery = (emitter?.nome_fantasia || emitter?.razao_social || asset.issuer || '').trim();
+  const debtorRaioXLink = `/raiox-devedor?cnpj=${debtorCnpjClean}&search=${encodeURIComponent(debtorSearchQuery)}`;
+
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
 
-      {/* BARRA DE NAVEGAÇÃO SUPERIOR */}
-      <div className="flex items-center justify-between">
+      {/* BARRA DE NAVEGAÇÃO SUPERIOR & ABAS DO ATIVO */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-xs">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-blue-600 hover:border-blue-300 font-bold text-sm transition-all shadow-sm group"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:text-blue-600 hover:border-blue-300 font-bold text-xs sm:text-sm transition-all group shrink-0"
         >
-          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform text-blue-600" />
-          Voltar para a busca
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform text-blue-600" />
+          Voltar para busca
         </Link>
+
+        {/* ABAS / ATALHOS DO ATIVO */}
+        <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto py-1">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-700 text-xs font-black shadow-xs border border-blue-200">
+            <Tag size={13} />
+            Ficha do Ativo
+          </span>
+
+          <Link
+            to={debtorRaioXLink}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-xs font-bold transition border border-slate-200 hover:border-indigo-300 group"
+            title="Ir para o Raio-X e Balanço do Devedor"
+          >
+            <Building2 size={13} className="text-indigo-600 group-hover:scale-110 transition-transform" />
+            <span>Raio-X do Devedor</span>
+            <span className="px-1.5 py-0.2 bg-indigo-600 text-white text-[9px] font-black rounded-full uppercase">Novo</span>
+          </Link>
+
+          <Link
+            to={`/negocios?search=${encodeURIComponent(asset.ticker)}`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold transition border border-slate-200 hover:border-blue-300"
+            title="Ver histórico de negócios B3 deste ativo"
+          >
+            <ArrowLeftRight size={13} className="text-blue-600" />
+            Negócios B3
+          </Link>
+
+          <a
+            href="#secao-precos"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 text-xs font-semibold transition border border-slate-200"
+          >
+            <TrendingUp size={13} className="text-slate-500" />
+            Preços & Taxas
+          </a>
+
+          <a
+            href="#secao-cronograma"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 text-xs font-semibold transition border border-slate-200"
+          >
+            <Receipt size={13} className="text-slate-500" />
+            Cronograma
+          </a>
+
+          <a
+            href="#secao-documentos"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 text-xs font-semibold transition border border-slate-200"
+          >
+            <FileText size={13} className="text-slate-500" />
+            Documentos CVM
+          </a>
+        </div>
 
         <button
           onClick={toggleFavorite}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-sm ${
+          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs shrink-0 ${
             isFavorite
               ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
-              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
+              : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <Star size={18} className={isFavorite ? 'text-amber-500 fill-amber-400' : 'text-slate-400'} />
+          <Star size={16} className={isFavorite ? 'text-amber-500 fill-amber-400' : 'text-slate-400'} />
           {isFavorite ? 'Ativo Salvo' : 'Seguir Ativo'}
         </button>
       </div>
@@ -665,18 +732,30 @@ const AssetPage: React.FC = () => {
                 )}
               </div>
 
-              {emitter.site_ri && (
-                <a
-                  href={emitter.site_ri}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-xl transition border border-blue-200 shadow-sm"
+              <div className="flex flex-wrap items-center gap-2.5">
+                <Link
+                  to={debtorRaioXLink}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-extrabold rounded-xl transition shadow-xs hover:shadow-md active:scale-95 group"
+                  title="Abrir Demonstrações Financeiras, Balanço, Ratings e Risco no Raio-X do Devedor"
                 >
-                  <Globe size={16} />
-                  Portal de RI / Website Oficial
-                  <ExternalLink size={14} />
-                </a>
-              )}
+                  <Activity size={16} className="text-blue-200 group-hover:scale-110 transition-transform" />
+                  <span>Ir para análise do devedor</span>
+                  <ArrowRight size={14} className="text-blue-200 group-hover:translate-x-1 transition-transform" />
+                </Link>
+
+                {emitter.site_ri && (
+                  <a
+                    href={emitter.site_ri}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold rounded-xl transition border border-slate-200 shadow-xs"
+                  >
+                    <Globe size={15} />
+                    Portal RI
+                    <ExternalLink size={13} />
+                  </a>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -718,14 +797,16 @@ const AssetPage: React.FC = () => {
         )}
 
         {/* ================= HISTÓRICO DE PREÇOS E TAXAS ================= */}
-        <ChartComponent 
-          prices={prices} 
-          ticker={asset.ticker} 
-          indexador={asset.indexador}
-        />
+        <div id="secao-precos">
+          <ChartComponent 
+            prices={prices} 
+            ticker={asset.ticker} 
+            indexador={asset.indexador}
+          />
+        </div>
 
         {/* ================= CRONOGRAMA DE CUPONS E AMORTIZAÇÕES ================= */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div id="secao-cronograma" className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div>
               <span className="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-md uppercase tracking-wider">
@@ -857,7 +938,7 @@ const AssetPage: React.FC = () => {
         </div>
 
         {/* ================= DOCUMENTOS OFICIAIS (CRI / CRA / DEBÊNTURES) ================= */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div id="secao-documentos" className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
                 <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-md uppercase tracking-wider">
