@@ -467,10 +467,10 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* ================= KPI CARDS (METRICAS PRINCIPAIS) ================= */}
-      <section className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          
+      {/* ================= KPI CARDS (METRICAS PRINCIPAIS EM 2 FILEIRAS) ================= */}
+      <section className="container mx-auto px-4 space-y-4">
+        {/* Fileira 1: Universo de Ativos & Volume (4 cards) */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
@@ -522,7 +522,10 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
 
+        {/* Fileira 2: Métricas Analíticas & Cobertura (3 cards) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
@@ -531,6 +534,7 @@ const Home: React.FC = () => {
               <div>
                 <p className="text-xs text-slate-500 font-medium">Duration Média</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{durationMedia.toFixed(2)} anos</p>
+                <p className="text-[10px] text-amber-600 font-semibold mt-0.5">Maturidade ponderada</p>
               </div>
             </div>
           </div>
@@ -543,6 +547,7 @@ const Home: React.FC = () => {
               <div>
                 <p className="text-xs text-slate-500 font-medium">Emissores Únicos</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalEmissores.toLocaleString('pt-BR')}</p>
+                <p className="text-[10px] text-sky-600 font-semibold mt-0.5">Companhias devedoras</p>
               </div>
             </div>
           </div>
@@ -555,10 +560,10 @@ const Home: React.FC = () => {
               <div>
                 <p className="text-xs text-slate-500 font-medium">Docs Monitorados</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalDocs.toLocaleString('pt-BR')}</p>
+                <p className="text-[10px] text-purple-600 font-semibold mt-0.5">Relatórios & CVM</p>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 

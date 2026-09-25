@@ -29,13 +29,10 @@ const Navbar = () => {
     <nav className="bg-white border-b border-slate-200 sticky top-0 z-[100]">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-base shadow-sm">
+          <Link to="/" className="flex items-center shrink-0" title="FIXDATA — Página Inicial">
+            <div className="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-sm sm:text-base shadow-xs hover:bg-blue-700 transition">
               FIX<span className="text-blue-200 font-extrabold">DATA</span>
             </div>
-            <span className="font-extrabold text-lg tracking-tight text-slate-800 hidden sm:block">
-              FIX<span className="text-blue-600">DATA</span>
-            </span>
           </Link>
 
           {/* Mobile Menu Button */}
@@ -44,19 +41,19 @@ const Navbar = () => {
           </button>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex gap-1">
+          <div className="hidden md:flex items-center gap-0.5 lg:gap-1">
             {navItems.map(item => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${
+                className={`flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all ${
                   location.pathname === item.path 
                   ? 'bg-blue-50 text-blue-600' 
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                 }`}
               >
                 {item.icon}
-                {item.label}
+                <span>{item.label}</span>
               </Link>
             ))}
           </div>
