@@ -404,25 +404,26 @@ const DebtorRadar: React.FC = () => {
 
   // Função central de seleção de devedor com atualização instantânea (0ms)
   const handleSelectDevedor = (cnpj: string) => {
-    setSelectedCnpj(cnpj);
+    const clean = String(cnpj).replace(/\D/g, "");
+    setSelectedCnpj(clean);
     try {
       const newUrl = new URL(window.location.href);
-      newUrl.searchParams.set("cnpj", cnpj);
+      newUrl.searchParams.set("cnpj", clean);
       window.history.replaceState({}, "", newUrl.toString());
     } catch {}
-    const foundResumo = devedoresResumo.find((d) => d.cnpj === cnpj);
+    const foundResumo = devedoresResumo.find((d) => d.cnpj === clean || d.cnpj === cnpj);
     if (foundResumo) {
-      if (fullCache.current[cnpj]) {
-        setCurrentDevedor(fullCache.current[cnpj]);
+      if (fullCache.current[clean]) {
+        setCurrentDevedor(fullCache.current[clean]);
       } else {
         // Exibir imediatamente com KPIs e cabeçalhos enquanto o arquivo de 30KB baixa
         setCurrentDevedor((prev) => ({
           ...foundResumo,
-          historico_trimestral: prev?.cnpj === cnpj ? prev.historico_trimestral : undefined,
-          titulos_ativos: prev?.cnpj === cnpj ? prev.titulos_ativos : undefined,
-          rating_evolucao: prev?.cnpj === cnpj ? prev.rating_evolucao : undefined,
-          ratings_historico: prev?.cnpj === cnpj ? prev.ratings_historico : undefined,
-          maturity_wall: prev?.cnpj === cnpj ? prev.maturity_wall : undefined,
+          historico_trimestral: (prev?.cnpj === clean || prev?.cnpj === cnpj) ? prev.historico_trimestral : undefined,
+          titulos_ativos: (prev?.cnpj === clean || prev?.cnpj === cnpj) ? prev.titulos_ativos : undefined,
+          rating_evolucao: (prev?.cnpj === clean || prev?.cnpj === cnpj) ? prev.rating_evolucao : undefined,
+          ratings_historico: (prev?.cnpj === clean || prev?.cnpj === cnpj) ? prev.ratings_historico : undefined,
+          maturity_wall: (prev?.cnpj === clean || prev?.cnpj === cnpj) ? prev.maturity_wall : undefined,
         }));
       }
     }
@@ -435,7 +436,9 @@ const DebtorRadar: React.FC = () => {
       try {
         const resp = await fetch("/data/devedores_resumo.json");
         if (resp.ok) {
-          const data = await resp.json();
+          const rawText = await resp.text();
+          const safeText = rawText.replace(/:\s*NaN\b/g, ": null").replace(/:\s*Infinity\b/g, ": null");
+          const data = JSON.parse(safeText);
           const devs: DevedorItem[] = data.devedores || [];
           setDevedoresResumo(devs);
           setSetores(data.setores_disponiveis || []);
@@ -445,8 +448,9 @@ const DebtorRadar: React.FC = () => {
 
           let defaultDev: DevedorItem | undefined = undefined;
           if (urlCnpj) {
+            const cleanUrl = urlCnpj.replace(/\D/g, "");
             defaultDev = devs.find(
-              (d: DevedorItem) => d.cnpj === urlCnpj || d.cnpj_formatado === urlCnpj
+              (d: DevedorItem) => d.cnpj === cleanUrl || d.cnpj === urlCnpj || d.cnpj_formatado === urlCnpj
             );
           } else if (urlSearch) {
             const sLower = urlSearch.toLowerCase();
@@ -481,9 +485,11 @@ const DebtorRadar: React.FC = () => {
   // 2. Carregamento completo sob demanda (série histórica, ratings, títulos) com arquivo ultra-rápido de 30KB
   useEffect(() => {
     if (!selectedCnpj) return;
+    const cleanCnpj = String(selectedCnpj).replace(/\D/g, "");
+    if (!cleanCnpj) return;
 
-    if (fullCache.current[selectedCnpj]) {
-      setCurrentDevedor(fullCache.current[selectedCnpj]);
+    if (fullCache.current[cleanCnpj]) {
+      setCurrentDevedor(fullCache.current[cleanCnpj]);
       return;
     }
 
@@ -492,13 +498,15 @@ const DebtorRadar: React.FC = () => {
       setLoadingFull(true);
       try {
         // Tentar primeiro arquivo individual por empresa (30KB)
-        const respIndiv = await fetch(`/data/devedores/${selectedCnpj}.json`);
+        const respIndiv = await fetch(`/data/devedores/${cleanCnpj}.json`);
         if (respIndiv.ok) {
           const contentType = respIndiv.headers.get("content-type");
           if (!contentType || !contentType.includes("text/html")) {
-            const indivData = await respIndiv.json();
-            if (isMounted && indivData && indivData.cnpj === selectedCnpj) {
-              fullCache.current[selectedCnpj] = indivData;
+            const rawText = await respIndiv.text();
+            const safeText = rawText.replace(/:\s*NaN\b/g, ": null").replace(/:\s*Infinity\b/g, ": null");
+            const indivData = JSON.parse(safeText);
+            if (isMounted && indivData && (indivData.cnpj === cleanCnpj || indivData.cnpj === selectedCnpj)) {
+              fullCache.current[cleanCnpj] = indivData;
               setCurrentDevedor(indivData);
               setLoadingFull(false);
               return;
@@ -513,10 +521,14 @@ const DebtorRadar: React.FC = () => {
           const resp = await fetch("/data/devedores_raiox.json", { signal: controller.signal });
           clearTimeout(timeoutId);
           if (resp.ok) {
-            const data = await resp.json();
-            const found = data.devedores?.find((d: DevedorItem) => d.cnpj === selectedCnpj);
+            const rawText = await resp.text();
+            const safeText = rawText.replace(/:\s*NaN\b/g, ": null").replace(/:\s*Infinity\b/g, ": null");
+            const data = JSON.parse(safeText);
+            const found = data.devedores?.find(
+              (d: DevedorItem) => d.cnpj === cleanCnpj || d.cnpj === selectedCnpj
+            );
             if (isMounted && found) {
-              fullCache.current[selectedCnpj] = found;
+              fullCache.current[cleanCnpj] = found;
               setCurrentDevedor(found);
             }
           }
@@ -567,7 +579,7 @@ const DebtorRadar: React.FC = () => {
     return `${val.toFixed(2)}x`;
   };
 
-  // Séries filtradas exclusivamente por trimestres para evitar oscilações anuais 12M
+  // Séries filtradas exclusivamente por trimestres para evitar oscilações anuais 12M e ordenadas cronologicamente
   const dadosGraficos = useMemo(() => {
     if (!currentDevedor?.historico_trimestral || currentDevedor.historico_trimestral.length === 0) {
       return [];
@@ -575,7 +587,11 @@ const DebtorRadar: React.FC = () => {
     const trimestrais = currentDevedor.historico_trimestral.filter(
       (h) => h.trimestre >= 1 && h.trimestre <= 4
     );
-    return trimestrais.length > 0 ? trimestrais : currentDevedor.historico_trimestral;
+    const series = trimestrais.length > 0 ? trimestrais : currentDevedor.historico_trimestral;
+    return [...series].sort((a, b) => {
+      if (a.ano !== b.ano) return a.ano - b.ano;
+      return (a.trimestre || 0) - (b.trimestre || 0);
+    });
   }, [currentDevedor]);
 
   // Curva de evolução temporal do rating com persistência
