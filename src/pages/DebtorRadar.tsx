@@ -405,6 +405,11 @@ const DebtorRadar: React.FC = () => {
   // Função central de seleção de devedor com atualização instantânea (0ms)
   const handleSelectDevedor = (cnpj: string) => {
     setSelectedCnpj(cnpj);
+    try {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set("cnpj", cnpj);
+      window.history.replaceState({}, "", newUrl.toString());
+    } catch {}
     const foundResumo = devedoresResumo.find((d) => d.cnpj === cnpj);
     if (foundResumo) {
       if (fullCache.current[cnpj]) {
@@ -454,7 +459,8 @@ const DebtorRadar: React.FC = () => {
 
           if (!defaultDev) {
             defaultDev =
-              devs.find((d: DevedorItem) => d.razao_social.includes("KLABIN")) ||
+              devs.find((d: DevedorItem) => d.razao_social.includes("PETROBRAS")) ||
+              devs.find((d: DevedorItem) => d.razao_social.includes("VALE")) ||
               devs[0];
           }
 
@@ -488,25 +494,33 @@ const DebtorRadar: React.FC = () => {
         // Tentar primeiro arquivo individual por empresa (30KB)
         const respIndiv = await fetch(`/data/devedores/${selectedCnpj}.json`);
         if (respIndiv.ok) {
-          const indivData = await respIndiv.json();
-          if (isMounted && indivData && indivData.cnpj === selectedCnpj) {
-            fullCache.current[selectedCnpj] = indivData;
-            setCurrentDevedor(indivData);
-            setLoadingFull(false);
-            return;
+          const contentType = respIndiv.headers.get("content-type");
+          if (!contentType || !contentType.includes("text/html")) {
+            const indivData = await respIndiv.json();
+            if (isMounted && indivData && indivData.cnpj === selectedCnpj) {
+              fullCache.current[selectedCnpj] = indivData;
+              setCurrentDevedor(indivData);
+              setLoadingFull(false);
+              return;
+            }
           }
         }
 
-        // Fallback para arquivo consolidado caso necessário
-        const resp = await fetch("/data/devedores_raiox.json");
-        if (resp.ok) {
-          const data = await resp.json();
-          const found = data.devedores?.find((d: DevedorItem) => d.cnpj === selectedCnpj);
-          if (isMounted && found) {
-            fullCache.current[selectedCnpj] = found;
-            setCurrentDevedor(found);
+        // Fallback para arquivo consolidado com timeout seguro
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        try {
+          const resp = await fetch("/data/devedores_raiox.json", { signal: controller.signal });
+          clearTimeout(timeoutId);
+          if (resp.ok) {
+            const data = await resp.json();
+            const found = data.devedores?.find((d: DevedorItem) => d.cnpj === selectedCnpj);
+            if (isMounted && found) {
+              fullCache.current[selectedCnpj] = found;
+              setCurrentDevedor(found);
+            }
           }
-        }
+        } catch {}
       } catch (err) {
         console.error("Erro ao carregar dados detalhados do devedor:", err);
       } finally {
@@ -552,6 +566,65 @@ const DebtorRadar: React.FC = () => {
     if (val === null || val === undefined || isNaN(val)) return "N/D";
     return `${val.toFixed(2)}x`;
   };
+
+  // Séries filtradas exclusivamente por trimestres para evitar oscilações anuais 12M
+  const dadosGraficos = useMemo(() => {
+    if (!currentDevedor?.historico_trimestral || currentDevedor.historico_trimestral.length === 0) {
+      return [];
+    }
+    const trimestrais = currentDevedor.historico_trimestral.filter(
+      (h) => h.trimestre >= 1 && h.trimestre <= 4
+    );
+    return trimestrais.length > 0 ? trimestrais : currentDevedor.historico_trimestral;
+  }, [currentDevedor]);
+
+  // Curva de evolução temporal do rating com persistência
+  const ratingCurveData = useMemo(() => {
+    if (currentDevedor?.rating_evolucao && currentDevedor.rating_evolucao.length > 0) {
+      if (currentDevedor.rating_evolucao.length === 1) {
+        const p = currentDevedor.rating_evolucao[0];
+        return [
+          { ...p, data_formatada: "Corte Anterior" },
+          { ...p, data_formatada: p.data_formatada || "Corte Atual" },
+          { ...p, data_formatada: "Vigente (2026)" },
+        ];
+      }
+      return currentDevedor.rating_evolucao;
+    }
+    if (currentDevedor?.rating_atual) {
+      const scoreMap: Record<string, number> = {
+        AAA: 20, "AA+": 19, AA: 18, "AA-": 17,
+        "A+": 16, A: 15, "A-": 14,
+        "BBB+": 13, BBB: 12, "BBB-": 11,
+        "BB+": 10, BB: 9, "BB-": 8,
+        "B+": 7, B: 6, "B-": 5,
+        CCC: 4, CC: 3, C: 2, D: 0
+      };
+      const cleanR = currentDevedor.rating_atual.replace(/[^A-Za-z+-]/g, "");
+      const score = scoreMap[cleanR] || 16;
+      return [
+        {
+          data: "2024-01-01",
+          data_formatada: "2024",
+          rating: currentDevedor.rating_atual,
+          score,
+          agencias: "Consolidado Conservador",
+          tickers: currentDevedor.titulos_ativos?.map((t) => t.ticker) || [],
+          qtd_emissoes: currentDevedor.titulos_ativos?.length || 1,
+        },
+        {
+          data: "2026-06-30",
+          data_formatada: "Vigente (2026)",
+          rating: currentDevedor.rating_atual,
+          score,
+          agencias: "Consolidado Conservador",
+          tickers: currentDevedor.titulos_ativos?.map((t) => t.ticker) || [],
+          qtd_emissoes: currentDevedor.titulos_ativos?.length || 1,
+        }
+      ];
+    }
+    return [];
+  }, [currentDevedor]);
 
   return (
     <div className="bg-slate-50 min-h-screen text-slate-800 pb-20">
@@ -1001,14 +1074,14 @@ const DebtorRadar: React.FC = () => {
                       Carregando séries históricas e demonstrações CVM de {currentDevedor?.razao_social}...
                     </span>
                   </div>
-                ) : currentDevedor.historico_trimestral && currentDevedor.historico_trimestral.length > 0 ? (
-                  <div className="h-80 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                ) : dadosGraficos && dadosGraficos.length > 0 ? (
+                  <div className="w-full" style={{ width: "100%", height: 340, minHeight: 340 }}>
+                    <ResponsiveContainer width="100%" height={340}>
                       {activeTab === "alavancagem" ? (
-                        <LineChart data={currentDevedor.historico_trimestral}>
+                        <LineChart data={dadosGraficos}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 11, fill: "#64748b" }} />
                           <YAxis
                             yAxisId="right"
                             orientation="right"
@@ -1031,6 +1104,7 @@ const DebtorRadar: React.FC = () => {
                             stroke="#64748b"
                             strokeWidth={2}
                             dot={{ r: 3 }}
+                            connectNulls
                           />
                           <Line
                             yAxisId="left"
@@ -1040,6 +1114,7 @@ const DebtorRadar: React.FC = () => {
                             stroke="#0f172a"
                             strokeWidth={2.5}
                             dot={{ r: 4 }}
+                            connectNulls
                           />
                           <Line
                             yAxisId="right"
@@ -1050,14 +1125,15 @@ const DebtorRadar: React.FC = () => {
                             strokeWidth={2.5}
                             strokeDasharray="4 2"
                             dot={{ r: 4 }}
+                            connectNulls
                           />
                           <ReferenceLine yAxisId="right" y={3.5} stroke="#ef4444" strokeDasharray="3 3" label="Covenant 3.5x" />
                         </LineChart>
                       ) : activeTab === "rentabilidade" ? (
-                        <BarChart data={currentDevedor.historico_trimestral}>
+                        <BarChart data={dadosGraficos}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 11, fill: "#64748b" }} />
                           <YAxis
                             yAxisId="right"
                             orientation="right"
@@ -1082,15 +1158,16 @@ const DebtorRadar: React.FC = () => {
                             stroke="#10b981"
                             strokeWidth={3}
                             dot={{ r: 4 }}
+                            connectNulls
                           />
                         </BarChart>
                       ) : activeTab === "cobertura" ? (
-                        <AreaChart data={currentDevedor.historico_trimestral}>
+                        <AreaChart data={dadosGraficos}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
                           <YAxis
                             tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}x` : "")}
-                            tick={{ fontSize: 12, fill: "#64748b" }}
+                            tick={{ fontSize: 11, fill: "#64748b" }}
                           />
                           <Tooltip
                             formatter={(val: any) => {
@@ -1106,20 +1183,21 @@ const DebtorRadar: React.FC = () => {
                             stroke="#6366f1"
                             fill="#e0e7ff"
                             strokeWidth={2.5}
+                            connectNulls
                           />
                           <ReferenceLine y={1.0} stroke="#ef4444" strokeDasharray="3 3" label="Risco 1.0x" />
                           <ReferenceLine y={3.0} stroke="#10b981" strokeDasharray="3 3" label="Confortável 3.0x" />
                         </AreaChart>
                       ) : activeTab === "liquidez" ? (
-                        <LineChart data={currentDevedor.historico_trimestral}>
+                        <LineChart data={dadosGraficos}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tickFormatter={(v) => formatBRL(v)} tick={{ fontSize: 11, fill: "#64748b" }} />
                           <YAxis
                             yAxisId="right"
                             orientation="right"
                             tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}x` : "")}
-                            tick={{ fontSize: 12, fill: "#10b981" }}
+                            tick={{ fontSize: 11, fill: "#10b981" }}
                           />
                           <Tooltip
                             formatter={(val: any, name: any) => {
@@ -1129,21 +1207,21 @@ const DebtorRadar: React.FC = () => {
                             }}
                           />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
-                          <Line yAxisId="left" type="monotone" dataKey="caixa_equivalentes" name="Caixa &amp; Aplicações" stroke="#059669" strokeWidth={2} dot={{ r: 3 }} />
-                          <Line yAxisId="left" type="monotone" dataKey="divida_cp" name="Dívida Curto Prazo (CP)" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} />
-                          <Line yAxisId="right" type="monotone" dataKey="liquidez_corrente" name="Liquidez Corrente" stroke="#2563eb" strokeWidth={2.5} dot={{ r: 4 }} />
+                          <Line yAxisId="left" type="monotone" dataKey="caixa_equivalentes" name="Caixa &amp; Aplicações" stroke="#059669" strokeWidth={2} dot={{ r: 3 }} connectNulls />
+                          <Line yAxisId="left" type="monotone" dataKey="divida_cp" name="Dívida Curto Prazo (CP)" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} connectNulls />
+                          <Line yAxisId="right" type="monotone" dataKey="liquidez_corrente" name="Liquidez Corrente" stroke="#2563eb" strokeWidth={2.5} dot={{ r: 4 }} connectNulls />
                         </LineChart>
                       ) : (
                         /* Aba: SCORES DE DEFAULT NO TEMPO */
-                        <LineChart data={currentDevedor.historico_trimestral}>
+                        <LineChart data={dadosGraficos}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#64748b" }} />
+                          <YAxis yAxisId="left" tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? v.toFixed(1) : "")} tick={{ fontSize: 11, fill: "#64748b" }} />
                           <YAxis
                             yAxisId="right"
                             orientation="right"
                             tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}%` : "")}
-                            tick={{ fontSize: 12, fill: "#f43f5e" }}
+                            tick={{ fontSize: 11, fill: "#f43f5e" }}
                           />
                           <Tooltip
                             formatter={(val: any, name: any) => {
@@ -1154,9 +1232,9 @@ const DebtorRadar: React.FC = () => {
                             }}
                           />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
-                          <Line yAxisId="left" type="monotone" dataKey="altman_z_score" name="Altman Z''-Score" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} />
-                          <Line yAxisId="right" type="monotone" dataKey="ohlson_prob_default" name="Ohlson P(Default) %" stroke="#f43f5e" strokeWidth={2.5} dot={{ r: 4 }} />
-                          <Line yAxisId="right" type="monotone" dataKey="merton_prob_default" name="Merton PD %" stroke="#8b5cf6" strokeWidth={2} strokeDasharray="3 3" dot={{ r: 3 }} />
+                          <Line yAxisId="left" type="monotone" dataKey="altman_z_score" name="Altman Z''-Score" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} connectNulls />
+                          <Line yAxisId="right" type="monotone" dataKey="ohlson_prob_default" name="Ohlson P(Default) %" stroke="#f43f5e" strokeWidth={2.5} dot={{ r: 4 }} connectNulls />
+                          <Line yAxisId="right" type="monotone" dataKey="merton_prob_default" name="Merton PD %" stroke="#8b5cf6" strokeWidth={2} strokeDasharray="3 3" dot={{ r: 3 }} connectNulls />
                           <ReferenceLine yAxisId="left" y={2.6} stroke="#10b981" strokeDasharray="3 3" label="Zona Segura Z'' 2.6" />
                           <ReferenceLine yAxisId="left" y={1.1} stroke="#ef4444" strokeDasharray="3 3" label="Zona de Perigo Z'' 1.1" />
                         </LineChart>
@@ -1171,7 +1249,7 @@ const DebtorRadar: React.FC = () => {
               </div>
             </div>
 
-            {/* ─── HISTÓRICO DE RATINGS & MIGRAÇÕES NO TEMPO (COM GRÁFICO E REGRA DO PIOR RATING) ─── */}
+            {/* ─── HISTÓRICO DE RATINGS & MIGRAÇÕES NO TEMPO (EXCLUSIVAMENTE GRÁFICO DE TRAJETÓRIA) ─── */}
             <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-100">
                 <div>
@@ -1196,19 +1274,21 @@ const DebtorRadar: React.FC = () => {
                       </span>
                     </div>
                   )}
-                  <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
-                    {currentDevedor.ratings_historico?.length || 0} Registros
-                  </span>
+                  {ratingCurveData.length > 0 && (
+                    <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
+                      {ratingCurveData.length} Pontos de Trajetória
+                    </span>
+                  )}
                 </div>
               </div>
 
-              {/* GRÁFICO DE EVOLUÇÃO TEMPORAL DO RATING (PIOR RATING ENTRE EMISSÕES) */}
+              {/* GRÁFICO EXCLUSIVO DE EVOLUÇÃO TEMPORAL DO RATING (PIOR RATING ENTRE EMISSÕES) */}
               {loadingFull ? (
                 <div className="py-12 flex flex-col items-center justify-center gap-3">
                   <div className="w-7 h-7 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
                   <span className="text-xs font-semibold text-slate-500">Carregando histórico de ratings...</span>
                 </div>
-              ) : currentDevedor.rating_evolucao && currentDevedor.rating_evolucao.length > 0 ? (
+              ) : ratingCurveData && ratingCurveData.length > 0 ? (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs text-slate-600">
                     <span className="font-bold flex items-center gap-1.5">
@@ -1220,9 +1300,9 @@ const DebtorRadar: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="h-64 w-full bg-slate-50/50 p-4 rounded-xl border border-slate-100">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={currentDevedor.rating_evolucao}>
+                  <div className="w-full bg-slate-50/50 p-4 rounded-xl border border-slate-100" style={{ width: "100%", height: 280, minHeight: 280 }}>
+                    <ResponsiveContainer width="100%" height={260}>
+                      <LineChart data={ratingCurveData}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                         <XAxis
                           dataKey="data_formatada"
@@ -1258,9 +1338,11 @@ const DebtorRadar: React.FC = () => {
                                   <div className="text-slate-300 text-2xs">
                                     Agências: <span className="text-white font-semibold">{p.agencias}</span>
                                   </div>
-                                  <div className="text-slate-300 text-2xs">
-                                    Emissões Consideradas: <span className="font-mono text-blue-300">{p.tickers?.join(", ")}</span> ({p.qtd_emissoes} papéis)
-                                  </div>
+                                  {p.tickers && p.tickers.length > 0 && (
+                                    <div className="text-slate-300 text-2xs">
+                                      Emissões Consideradas: <span className="font-mono text-blue-300">{p.tickers?.join(", ")}</span> ({p.qtd_emissoes} papéis)
+                                    </div>
+                                  )}
                                 </div>
                               );
                             }
@@ -1286,45 +1368,9 @@ const DebtorRadar: React.FC = () => {
                     </ResponsiveContainer>
                   </div>
                 </div>
-              ) : null}
-
-              {/* TABELA DETALHADA DE RELATÓRIOS DAS AGÊNCIAS */}
-              {loadingFull ? null : currentDevedor.ratings_historico && currentDevedor.ratings_historico.length > 0 ? (
-                <div className="overflow-x-auto max-h-72 border border-slate-100 rounded-xl">
-                  <table className="w-full text-left text-xs">
-                    <thead className="sticky top-0 bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
-                      <tr>
-                        <th className="py-2.5 px-3">Data Divulgação</th>
-                        <th className="py-2.5 px-3">Agência de Classificação</th>
-                        <th className="py-2.5 px-3">Nota / Rating Oficial</th>
-                        <th className="py-2.5 px-3">Ticker Vinculado</th>
-                        <th className="py-2.5 px-3">Periodicidade</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {currentDevedor.ratings_historico.map((r, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50/70 transition-colors">
-                          <td className="py-2.5 px-3 font-mono font-medium text-slate-700">{r.divulgacao}</td>
-                          <td className="py-2.5 px-3 font-semibold text-slate-900">{r.agencia}</td>
-                          <td className="py-2.5 px-3">
-                            <span className="px-2.5 py-0.5 rounded-full font-black text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">
-                              {r.rating}
-                            </span>
-                          </td>
-                          <td className="py-2.5 px-3 font-mono font-bold text-blue-600">
-                            <Link to={`/asset/${r.ticker}`} className="hover:underline">
-                              {r.ticker}
-                            </Link>
-                          </td>
-                          <td className="py-2.5 px-3 text-slate-500">{r.periodicidade || "Trimestral"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
               ) : (
                 <div className="py-8 text-center text-slate-400 text-xs italic">
-                  Nenhum registro de rating formal indexado para os títulos deste devedor na base ANBIMA / B3.
+                  Companhia sem emissões com rating formal indexado por agências (S&amp;P, Moody&apos;s, Fitch ou Liberum) na base ANBIMA / B3.
                 </div>
               )}
             </div>
@@ -1348,8 +1394,8 @@ const DebtorRadar: React.FC = () => {
                       <span className="text-xs text-slate-400">Calculando cronograma de vencimentos...</span>
                     </div>
                   ) : currentDevedor.maturity_wall && currentDevedor.maturity_wall.length > 0 ? (
-                    <div className="h-60 w-full mt-2">
-                      <ResponsiveContainer width="100%" height="100%">
+                    <div className="w-full mt-2" style={{ width: "100%", height: 240, minHeight: 240 }}>
+                      <ResponsiveContainer width="100%" height={240}>
                         <BarChart data={currentDevedor.maturity_wall}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="ano" tick={{ fontSize: 12, fill: "#64748b" }} />
