@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, AssetDocument, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
 import ChartComponent from '../components/ChartComponent';
-import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen, ArrowRight, Activity, ArrowLeftRight } from 'lucide-react';
+import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen, ArrowRight, Activity, ArrowLeftRight, Calculator } from 'lucide-react';
 
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   const issuerName = (asset.issuer || '').trim();
@@ -490,17 +490,30 @@ const AssetPage: React.FC = () => {
           </a>
         </div>
 
-        <button
-          onClick={toggleFavorite}
-          className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs shrink-0 ${
-            isFavorite
-              ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
-              : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <Star size={16} className={isFavorite ? 'text-amber-500 fill-amber-400' : 'text-slate-400'} />
-          {isFavorite ? 'Ativo Salvo' : 'Seguir Ativo'}
-        </button>
+        <div className="flex items-center gap-2">
+          {asset && (
+            <Link
+              to={`/calculadora?ticker=${encodeURIComponent(asset.ticker)}`}
+              className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 transition shadow-xs"
+              title="Simular este ativo na Calculadora de Equivalência e Gross-up"
+            >
+              <Calculator size={15} />
+              <span>Simular na Calculadora</span>
+            </Link>
+          )}
+
+          <button
+            onClick={toggleFavorite}
+            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-xs shrink-0 ${
+              isFavorite
+                ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
+                : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <Star size={16} className={isFavorite ? 'text-amber-500 fill-amber-400' : 'text-slate-400'} />
+            {isFavorite ? 'Ativo Salvo' : 'Seguir Ativo'}
+          </button>
+        </div>
       </div>
 
       {/* ================= HERO CARD PRINCIPAL DO ATIVO ================= */}
