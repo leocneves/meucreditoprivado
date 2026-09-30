@@ -368,19 +368,18 @@ export const fetchCSV = <T,>(url: string): Promise<T[]> => {
                 if (row.setor || row.sector) {
                   row.setor = normalizeSector(row.setor || row.sector);
                 }
-                // Normalize indexer for misregistered assets (ANBIMA/B3 cadastral quirks)
+                // Normalize indexer with canonical priority (never use taxa_mercado, as stressed bonds trade at 30%+, which is not %DI)
                 const te = parseFloat(row.taxa_emissao || '');
-                const tm = parseFloat(row.taxa_mercado || '');
                 const idxUpper = (row.indexador || '').trim().toUpperCase();
                 
-                if (idxUpper === 'DI+' || idxUpper === 'DI' || idxUpper === 'CDI+' || idxUpper === 'CDI +') {
-                  if ((!isNaN(te) && te >= 80 && te <= 200) || (!isNaN(tm) && tm >= 25 && (isNaN(te) || te >= 50))) {
+                if (idxUpper === 'DI+' || idxUpper === 'CDI+' || idxUpper === 'CDI +' || idxUpper === 'DI +' || (idxUpper.includes('DI') && idxUpper.includes('+'))) {
+                  row.indexador = 'DI+';
+                } else if (idxUpper === 'DI%' || idxUpper === '%DI' || idxUpper.includes('% DO CDI') || idxUpper.includes('%DO CDI')) {
+                  row.indexador = '%DI';
+                } else if (idxUpper === 'DI' || idxUpper === 'CDI') {
+                  if (!isNaN(te) && te >= 70 && te <= 200) {
                     row.indexador = '%DI';
-                  }
-                } else if (idxUpper === 'DI%' || idxUpper === '%DI' || idxUpper.includes('% DO CDI')) {
-                  if (!isNaN(tm) && tm < 25 && tm > 0.05) {
-                    row.indexador = 'DI+';
-                  } else if (!isNaN(te) && te < 25 && te > 0.05 && (isNaN(tm) || tm < 50)) {
+                  } else {
                     row.indexador = 'DI+';
                   }
                 }
