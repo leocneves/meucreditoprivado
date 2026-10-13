@@ -70,13 +70,13 @@ export const LeadGate: React.FC<LeadGateProps> = ({
       <div className="absolute inset-0 flex items-center justify-center p-4 bg-gradient-to-t from-slate-50/90 via-slate-50/60 to-transparent">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl border border-slate-200/80 p-6 sm:p-8 text-center backdrop-blur-md">
           {/* Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 border border-blue-100 shadow-xs">
-            <Sparkles size={14} className="text-blue-600" />
-            <span>Ferramenta Exclusiva FixData</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-extrabold mb-4 border border-emerald-200 shadow-xs">
+            <CheckCircle2 size={14} className="text-emerald-600" />
+            <span>100% GRATUITO • SEM CARTÃO DE CRÉDITO</span>
           </div>
 
-          {/* Ícone de Cadeado */}
-          <div className="mx-auto w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20 mb-4">
+          {/* Ícone */}
+          <div className="mx-auto w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20 mb-3">
             <Lock size={22} />
           </div>
 
@@ -84,23 +84,34 @@ export const LeadGate: React.FC<LeadGateProps> = ({
           <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mb-2">
             {title}
           </h3>
-          <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+          <p className="text-sm text-slate-600 mb-4 leading-relaxed">
             {subtitle}
           </p>
 
+          {/* Destaque de Acesso Gratuito */}
+          <div className="flex items-start gap-2.5 p-3 bg-emerald-50/90 text-emerald-900 rounded-xl text-xs font-medium border border-emerald-200/80 mb-5 text-left">
+            <CheckCircle2 size={18} className="text-emerald-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-emerald-950">Acesso totalmente livre após o login</p>
+              <p className="text-emerald-800 text-[11px] mt-0.5 leading-snug">
+                Não há planos pagos, assinaturas ou cobranças ocultas. Todas as ferramentas analíticas são 100% liberadas e gratuitas.
+              </p>
+            </div>
+          </div>
+
           {/* Benefícios */}
-          <div className="text-left space-y-2.5 mb-6 bg-slate-50/80 rounded-xl p-3.5 border border-slate-100 text-xs sm:text-sm text-slate-700">
+          <div className="text-left space-y-2 mb-6 bg-slate-50/80 rounded-xl p-3 border border-slate-100 text-xs sm:text-sm text-slate-700">
             <div className="flex items-center gap-2">
-              <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
+              <CheckCircle2 size={15} className="text-blue-600 shrink-0" />
               <span>Acesso ilimitado ao <strong>Raio-X de Devedores</strong></span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
+              <CheckCircle2 size={15} className="text-blue-600 shrink-0" />
               <span>Curvas de juros NTN-B e Spreads em tempo real</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
-              <span>100% gratuito para investidores e analistas</span>
+              <CheckCircle2 size={15} className="text-blue-600 shrink-0" />
+              <span>Gratuito para sempre para investidores e analistas</span>
             </div>
           </div>
 
@@ -135,9 +146,10 @@ export const LeadGate: React.FC<LeadGateProps> = ({
             <span className="text-sm sm:text-base">Continuar com o Google</span>
           </button>
 
-          <p className="mt-4 text-[11px] text-slate-400">
-            Não enviamos spam. Seus dados cadastrais permanecem seguros.
+          <p className="mt-3.5 text-[11px] text-slate-400">
+            Acesso liberado instantaneamente. Não enviamos spam.
           </p>
+
         </div>
       </div>
     </div>
