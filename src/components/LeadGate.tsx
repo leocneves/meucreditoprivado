@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Lock, Sparkles, CheckCircle2, Loader2 } from 'lucide-react';
+import { posthog } from '../utils/posthog';
 
 interface LeadGateProps {
   children: React.ReactNode;
@@ -17,6 +18,15 @@ export const LeadGate: React.FC<LeadGateProps> = ({
 }) => {
   const { user, loading, isConfigured, loginWithGoogle } = useAuth();
   const [isLoggingIn, setIsLoggingIn] = React.useState(false);
+
+  useEffect(() => {
+    if (!loading && !user && isConfigured) {
+      posthog.capture('lead_gate_viewed', {
+        feature: featureOrigin,
+        title
+      });
+    }
+  }, [loading, user, isConfigured, featureOrigin, title]);
 
   // Se o Firebase não estiver configurado no ambiente de dev, permite ver sem quebrar
   if (!isConfigured) {
@@ -38,6 +48,10 @@ export const LeadGate: React.FC<LeadGateProps> = ({
 
   const handleGoogleLogin = async () => {
     setIsLoggingIn(true);
+    posthog.capture('lead_gate_login_clicked', {
+      feature: featureOrigin,
+      title
+    });
     try {
       await loginWithGoogle(featureOrigin);
     } finally {

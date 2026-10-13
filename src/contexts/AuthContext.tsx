@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db, googleProvider, isFirebaseConfigured } from '../utils/firebase';
+import { posthog } from '../utils/posthog';
 
 interface AuthContextType {
   user: User | null;
@@ -37,6 +38,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+
+      if (currentUser) {
+        posthog.identify(currentUser.uid, {
+          email: currentUser.email,
+          name: currentUser.displayName
+        });
+      }
     });
 
     return () => unsubscribe();
@@ -76,6 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       setUser(loggedUser);
+      posthog.identify(loggedUser.uid, {
+        email: loggedUser.email,
+        name: loggedUser.displayName,
+        origin
+      });
+      posthog.capture('user_logged_in', { origin });
       return loggedUser;
     } catch (error: any) {
       if (error?.code !== 'auth/popup-closed-by-user') {
@@ -91,6 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!auth) return;
     try {
       await signOut(auth);
+      posthog.reset();
       setUser(null);
     } catch (err) {
       console.error('Erro ao sair:', err);
