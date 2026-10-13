@@ -25,6 +25,21 @@ const AuthContext = createContext<AuthContextType>({
   logout: async () => {}
 });
 
+const ADMIN_EMAILS = ['neves.leonardoc@gmail.com'];
+
+const checkAndHandleAdmin = (user: User | null): boolean => {
+  if (!user?.email) return false;
+  const isAdm = ADMIN_EMAILS.includes(user.email.toLowerCase().trim());
+  if (isAdm) {
+    try {
+      localStorage.setItem('fixdata_is_admin', 'true');
+      posthog.opt_out_capturing();
+    } catch (_) {}
+    return true;
+  }
+  return false;
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(isFirebaseConfigured);
@@ -40,10 +55,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
 
       if (currentUser) {
-        posthog.identify(currentUser.uid, {
-          email: currentUser.email,
-          name: currentUser.displayName
-        });
+        const isAdmin = checkAndHandleAdmin(currentUser);
+        if (!isAdmin) {
+          posthog.identify(currentUser.uid, {
+            email: currentUser.email,
+            name: currentUser.displayName
+          });
+        }
       }
     });
 
@@ -84,12 +102,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       setUser(loggedUser);
-      posthog.identify(loggedUser.uid, {
-        email: loggedUser.email,
-        name: loggedUser.displayName,
-        origin
-      });
-      posthog.capture('user_logged_in', { origin });
+      const isAdmin = checkAndHandleAdmin(loggedUser);
+      if (!isAdmin) {
+        posthog.identify(loggedUser.uid, {
+          email: loggedUser.email,
+          name: loggedUser.displayName,
+          origin
+        });
+        posthog.capture('user_logged_in', { origin });
+      }
       return loggedUser;
     } catch (error: any) {
       if (error?.code !== 'auth/popup-closed-by-user') {

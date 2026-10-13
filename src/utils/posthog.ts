@@ -8,6 +8,12 @@ let isInitialized = false;
 export const initPostHog = () => {
   if (isInitialized || typeof window === 'undefined') return;
 
+  // Se este navegador já foi identificado como administrador, bloqueia imediatamente
+  if (localStorage.getItem('fixdata_is_admin') === 'true') {
+    posthog.opt_out_capturing();
+    return;
+  }
+
   if (POSTHOG_KEY) {
     try {
       posthog.init(POSTHOG_KEY, {
