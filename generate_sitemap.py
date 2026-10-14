@@ -12,6 +12,7 @@ garantindo execução rápida e 100% confiável no Netlify, Docker e ambientes C
 
 import csv
 import os
+import re
 from datetime import datetime, timedelta, timezone
 
 BASE_URL = "https://fixdata.netlify.app"
@@ -60,20 +61,43 @@ def build_sitemap_index(sitemaps):
     return "\n".join(lines)
 
 
+def is_valid_ticker(ticker: str) -> bool:
+    if not ticker:
+        return False
+    t = ticker.strip()
+    if t.lower() in ("nan", "none", "n/a", "null", "", "-", "0"):
+        return False
+    # Rejeita ISINs estruturados (ISO 6166 de 12 caracteres: ex: BRBRAMDBS001, BRCEDBCRI002)
+    # Preserva debêntures e ativos legítimos cujo código comece com 'BR' (ex: BRFS31, BRKP28, BRAM11)
+    if len(t) == 12 and re.match(r'^BR[A-Z0-9]{4}(DBS|DBC|DBN|CRI|CRA|NC0|CTF|LFI)[A-Z0-9]{2}\d$', t):
+        return False
+    # Rejeita prefixos sintéticos gerados por crawlers
+    if t.startswith(("CRI_", "CRA_", "DEB_")):
+        return False
+    # Rejeita puramente numérico ou contendo espaços/barras
+    if t.isdigit() or " " in t or "/" in t or "\\" in t:
+        return False
+    return True
+
+
 def main():
-    print("📄 Lendo assets_master.csv...")
+    print("📄 Lendo assets_master.csv...", flush=True)
     all_tickers = []
     seen = set()
     if os.path.exists(ASSETS_CSV):
         with open(ASSETS_CSV, "r", encoding="utf-8", errors="ignore") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                ticker = (row.get("ticker") or "").strip()
-                if ticker and ticker.lower() not in ("nan", "none", "n/a", "null", ""):
-                    if ticker not in seen:
-                        seen.add(ticker)
-                        all_tickers.append(ticker)
-    print(f"✅ {len(all_tickers)} ativos únicos carregados")
+            r = csv.reader(f)
+            header = next(r, None)
+            if header and "ticker" in header:
+                idx_tk = header.index("ticker")
+                for row in r:
+                    if len(row) > idx_tk:
+                        ticker = row[idx_tk].strip()
+                        if is_valid_ticker(ticker):
+                            if ticker not in seen:
+                                seen.add(ticker)
+                                all_tickers.append(ticker)
+    print(f"✅ {len(all_tickers)} ativos únicos carregados", flush=True)
 
     print("📈 Lendo b3_trades_summary.csv...")
     hot_tickers = set()
@@ -86,16 +110,22 @@ def main():
             cutoff_year = f"{now.year}-01-01"
 
             with open(TRADES_CSV, "r", encoding="utf-8", errors="ignore") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    dt = (row.get("data_negocio") or "")[:10]
-                    tk = (row.get("ticker") or "").strip()
-                    if not tk or not dt:
-                        continue
-                    if dt >= cutoff_30:
-                        hot_tickers.add(tk)
-                    elif dt >= cutoff_year:
-                        year_tickers.add(tk)
+                r = csv.reader(f)
+                header = next(r, None)
+                if header:
+                    idx_dt = header.index("data_negocio") if "data_negocio" in header else -1
+                    idx_tk = header.index("ticker") if "ticker" in header else -1
+                    if idx_dt >= 0 and idx_tk >= 0:
+                        max_idx = max(idx_dt, idx_tk)
+                        for row in r:
+                            if len(row) > max_idx:
+                                dt = row[idx_dt][:10]
+                                tk = row[idx_tk].strip()
+                                if tk and dt:
+                                    if dt >= cutoff_30:
+                                        hot_tickers.add(tk)
+                                    elif dt >= cutoff_year:
+                                        year_tickers.add(tk)
 
             # Garante exclusividade de hot vs year
             year_tickers = year_tickers - hot_tickers
@@ -165,14 +195,14 @@ def main():
         for d in OUTPUT_DIRS:
             write_xml(f"{d}/{sm['filename']}", content)
         index_entries.append({"loc": f"{BASE_URL}/{sm['filename']}", "lastmod": lastmod_today})
-        print(f"   ✅ {sm['filename']} — {sm['label']}")
+        print(f"   ✅ {sm['filename']} — {sm['label']}", flush=True)
 
     index_content = build_sitemap_index(index_entries)
     for d in OUTPUT_DIRS:
         write_xml(f"{d}/sitemap.xml", index_content)
 
     total = len(hot_urls) + len(year_urls) + len(rest_urls)
-    print(f"\n🗺️  Sitemap index gerado com 3 sitemaps ({total} URLs totais)")
+    print(f"\n🗺️  Sitemap index gerado com 3 sitemaps ({total} URLs totais)", flush=True)
 
 
 if __name__ == "__main__":

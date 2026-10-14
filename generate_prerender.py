@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import shutil
 import sqlite3
 import pandas as pd
 from datetime import datetime
@@ -11,6 +12,25 @@ DB_PATH = "/home/home/airflow/src/data/credito_privado.db"
 CSV_PATH = "public/data/assets_master.csv"
 OUTPUT_DIR = "public/asset"
 DOCS_OUTPUT_DIR = "docs/asset"
+
+def is_valid_ticker(ticker: str) -> bool:
+    if not ticker:
+        return False
+    t = str(ticker).strip()
+    if t.lower() in ('nan', 'none', 'n/a', 'null', '', '-', '0'):
+        return False
+    # Rejeita ISINs estruturados (ISO 6166 de 12 caracteres: ex: BRBRAMDBS001, BRCEDBCRI002)
+    # Preserva debêntures e ativos legítimos cujo código comece com 'BR' (ex: BRFS31, BRKP28, BRAM11)
+    if len(t) == 12 and re.match(r'^BR[A-Z0-9]{4}(DBS|DBC|DBN|CRI|CRA|NC0|CTF|LFI)[A-Z0-9]{2}\d$', t):
+        return False
+    # Rejeita prefixos sintéticos gerados por crawlers
+    if t.startswith(('CRI_', 'CRA_', 'DEB_')):
+        return False
+    # Rejeita puramente numérico ou caracteres inválidos para rota URL
+    if t.isdigit() or ' ' in t or '/' in t or '\\' in t:
+        return False
+    return True
+
 
 def normalize_rating(val):
     if not val or not isinstance(val, str):
@@ -203,7 +223,7 @@ DOCS_MAP = get_docs_map()
 
 def generate_asset_html(row):
     ticker = str(row.get('ticker', '')).strip()
-    if not ticker or ticker.lower() in ('nan', 'none', 'n/a', ''):
+    if not is_valid_ticker(ticker):
         return None
 
     tipo = str(row.get('tipo', 'Título')).strip()
@@ -373,6 +393,30 @@ def generate_asset_html(row):
         regime_fiduciario = 'Padrão'
 
     spread_badge = f"+{spread} vs NTN-B" if (spread and spread != '-') else "Preço Fechamento"
+
+    publico_alvo_val = str(row.get('publico_alvo') or '').strip()
+    publico_alvo = publico_alvo_val if publico_alvo_val and publico_alvo_val.lower() not in ('nan', 'none', '') else 'Não Informado'
+
+    periodicidade_cupom_val = str(row.get('periodicidade_cupom') or '').strip()
+    periodicidade_cupom = periodicidade_cupom_val if periodicidade_cupom_val and periodicidade_cupom_val.lower() not in ('nan', 'none', '') else 'Não Informado'
+
+    dt_prox_cupom = str(row.get('data_proximo_cupom') or '').strip()[:10]
+    dt_prox_cupom_display = 'Não mapeado / Bullet'
+    if dt_prox_cupom and '-' in dt_prox_cupom and len(dt_prox_cupom.split('-')) == 3:
+        p = dt_prox_cupom.split('-')
+        dt_prox_cupom_display = f"{p[2]}/{p[1]}/{p[0]}"
+
+    def safe_fmt_pu(v):
+        if pd.isna(v) or v is None: return "-"
+        s = str(v).replace(',', '.').strip()
+        try:
+            flt = float(s)
+            return f"R$ {flt:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.') if flt > 0 else "-"
+        except:
+            return "-"
+
+    vna_display = safe_fmt_pu(row.get('vna'))
+    pu_par_display = safe_fmt_pu(row.get('pu_par'))
 
     # Procurar emissor cadastrado
     issuer_key = issuer.strip().lower()
@@ -845,6 +889,10 @@ def generate_asset_html(row):
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">{emissao}ª Emissão / {serie}ª Série</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">{data_emissao_br}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">{ntnb_ref_display}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Público-Alvo (CVM)</span><p class="font-semibold text-blue-200">{publico_alvo}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Periodicidade de Cupons</span><p class="font-semibold text-slate-100">{periodicidade_cupom}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Próximo Cupom</span><p class="font-semibold text-emerald-400">{dt_prox_cupom_display}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">VNA / PU Par</span><p class="font-mono text-xs font-bold text-slate-100">VNA: {vna_display}<br /><span class="text-indigo-300">Par: {pu_par_display}</span></p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">{setor}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">{agente_fiduciario}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">{coordenador_lider}</p></div>
@@ -877,7 +925,7 @@ DOCS_ASSETS_JSON_DIR = "docs/data/assets"
 
 def write_asset(args):
     ticker, html_content, payload = args
-    if not ticker:
+    if not is_valid_ticker(ticker):
         return
 
     # 1. Grava páginas HTML pré-renderizadas
@@ -915,6 +963,46 @@ def write_asset(args):
             if isin and isin != '-' and len(isin) == 12:
                 safe_write_json(d_dir, isin)
 
+def prune_orphaned_assets(valid_tickers: set):
+    print("🧹 Verificando e podando diretórios órfãos e inválidos...")
+    for out_dir in (OUTPUT_DIR, DOCS_OUTPUT_DIR):
+        if not os.path.exists(out_dir):
+            continue
+        try:
+            subdirs = os.listdir(out_dir)
+        except Exception as e:
+            print(f"Erro ao listar {out_dir}: {e}")
+            continue
+
+        removed_count = 0
+        for name in subdirs:
+            full_path = os.path.join(out_dir, name)
+            if not os.path.isdir(full_path):
+                continue
+            # Remove se for inválido ou não fizer parte dos tickers válidos
+            if not is_valid_ticker(name) or name not in valid_tickers:
+                try:
+                    shutil.rmtree(full_path)
+                    removed_count += 1
+                except Exception as e:
+                    print(f"Erro ao remover {full_path}: {e}")
+        if removed_count > 0:
+            print(f"🗑️ Removidos {removed_count} diretórios órfãos/inválidos de {out_dir}")
+
+    # Limpeza de JSONs órfãos sintéticos em public/data/assets e docs/data/assets
+    for j_dir in (ASSETS_JSON_DIR, DOCS_ASSETS_JSON_DIR):
+        if not os.path.exists(j_dir):
+            continue
+        try:
+            for f in os.listdir(j_dir):
+                if f.startswith(('CRI_', 'CRA_', 'DEB_')) and f.endswith('.json'):
+                    try:
+                        os.remove(os.path.join(j_dir, f))
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
 def main():
     print("Iniciando pré-renderização estática de HTMLs para SEO...")
     df = get_assets()
@@ -922,10 +1010,12 @@ def main():
     print(f"Processando {len(rows)} ativos...")
 
     tasks = []
+    valid_tickers = set()
     for r in rows:
         res = generate_asset_html(r)
         if res:
             tasks.append(res)
+            valid_tickers.add(res[0])
 
     print(f"Gravando {len(tasks)} páginas HTML estáticas...")
     with ThreadPoolExecutor(max_workers=16) as executor:
@@ -933,5 +1023,9 @@ def main():
 
     print(f"Pré-renderização concluída com sucesso para {len(tasks)} ativos!")
 
+    # Pruna páginas órfãs antigas
+    prune_orphaned_assets(valid_tickers)
+
 if __name__ == "__main__":
     main()
+

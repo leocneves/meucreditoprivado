@@ -57,6 +57,13 @@ export interface Asset {
   flag_vencido?: number | string;
   flag_resgatado?: number | string;
   flag_b3?: number | string;
+  publico_alvo?: string;
+  periodicidade_cupom?: string;
+  data_proximo_cupom?: string;
+  vna?: string | number;
+  pu_par?: string | number;
+  pu_mercado_mediano?: string | number;
+  agio_desagio_pct?: string | number;
 }
 
 export interface PaymentEvent {
