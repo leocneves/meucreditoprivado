@@ -595,165 +595,128 @@ const AssetPage: React.FC = () => {
       {/* ================= HERO CARD PRINCIPAL DO ATIVO ================= */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3">
-            {/* BADGES SUPERIORES COM CORES VIBRANTES E ALTO CONTRASTE */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider ${getTipoBadgeClass(asset.tipo)}`}>
-                <Tag size={13} />
-                {asset.tipo || 'Título de Crédito'}
-              </span>
-
-              {/* PÚBLICO-ALVO (REGULAÇÃO CVM 160 / 476) */}
-              {(() => {
-                const paInfo = getPublicoAlvoBadge(asset.publico_alvo);
-                return (
-                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold border shadow-xs ${paInfo.className}`}>
-                    <Users size={13} />
-                    <span>{paInfo.label}</span>
-                    <InfoTooltip text="Regulação CVM 160 / 476: Define a classe de investidores habilitada para subscrição e negociação. Ofertas restritas (CVM 476) contam com período de lock-up secundário de 90 dias após a distribuição, após o qual ficam liberadas para Investidores Qualificados." />
-                  </span>
-                );
-              })()}
-
-              {asset.incentivada === 'Sim' && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-extrabold bg-emerald-100 text-emerald-950 border border-emerald-300 shadow-sm">
-                  <Sparkles size={13} className="text-emerald-700" />
-                  Isento de IR (Lei 12.431)
-                </span>
-              )}
-
-              {asset.em_recuperacao_judicial === 'Sim' && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-black bg-rose-600 text-white shadow-sm animate-pulse">
-                  <AlertTriangle size={13} />
-                  Em Recuperação Judicial
-                </span>
-              )}
-
-              {/* RATING BADGE DE ALTO DESTAQUE */}
-              <div className="inline-flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold shadow-sm">
-                <span className="text-slate-400 text-[11px] uppercase font-semibold">Rating:</span>
-                <span className={`px-2 py-0.5 rounded text-xs font-black ${getRatingBadgeClass(normRating)}`}>
-                  {normRating}
-                </span>
-                {asset.agencia && asset.agencia !== '-' && (
-                  <span className="text-slate-300 text-[11px] font-medium">({asset.agencia})</span>
-                )}
-              </div>
-            </div>
-
-            {/* TICKER E EMISSOR */}
-            <div>
-              <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
-                {asset.ticker}
-              </h1>
-              <p className="text-lg sm:text-xl font-semibold text-slate-600 mt-0.5">
-                {asset.issuer || 'Emissor Privado'}
-              </p>
-            </div>
+          {/* IDENTIFICAÇÃO DO ATIVO (SEM TAGS POLUINDO O TOPO DO TICKER) */}
+          <div className="space-y-1">
+            <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block">
+              {asset.isin || 'Código do Ativo'}
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
+              {asset.ticker}
+            </h1>
+            <p className="text-lg sm:text-xl font-semibold text-slate-600 mt-1">
+              {asset.issuer || 'Emissor Privado'}
+            </p>
           </div>
 
-          {/* PAINEL DE CONDIÇÕES COMERCIAIS: MERCADO vs EMISSÃO */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full lg:w-auto">
-            {/* CARD 1: MERCADO SECUNDÁRIO */}
-            <div className="bg-gradient-to-br from-blue-50/90 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm flex flex-col justify-between min-w-[240px]">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <span className="text-xs font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <TrendingUp size={14} className="text-blue-600" />
-                    Mercado Secundário (Mediana)
-                    <InfoTooltip text="Calculada com base na mediana dos negócios confirmados na B3 ou taxa indicativa ANBIMA. O uso da mediana protege o investidor contra distorções causadas por transações institucionais em bloco ('cross-trades')." />
-                  </span>
-                  {asset.data_ultimo_negocio && (
-                    <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">
-                      {formatDatePretty(asset.data_ultimo_negocio)}
-                    </span>
-                  )}
-                </div>
-                <p className="text-2xl sm:text-3xl font-black text-blue-900 font-mono tracking-tight">
-                  {taxaMercadoFormatted || 'Sem cotação'}
-                </p>
-              </div>
+          {/* PAINEL DE COTAÇÕES E TAXAS (LAYOUT INSTITUCIONAL LIMPO E PROFISSIONAL) */}
+          <div className="w-full lg:w-auto min-w-[320px] sm:min-w-[500px]">
+            <div className="bg-slate-50/80 border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-200 gap-4 sm:gap-6">
+                {/* COLUNA 1: MERCADO SECUNDÁRIO */}
+                <div className="flex flex-col justify-between space-y-3 sm:pr-2">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <TrendingUp size={14} className="text-blue-600" />
+                        Mercado Secundário
+                        <InfoTooltip text="Taxa apurada com base na mediana dos negócios na B3 ou taxa indicativa de fechamento ANBIMA." />
+                      </span>
+                      {asset.data_ultimo_negocio && (
+                        <span className="text-[10px] font-semibold text-slate-600 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
+                          {formatDatePretty(asset.data_ultimo_negocio)}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 tracking-tight">
+                      {taxaMercadoFormatted || 'Sem cotação'}
+                    </p>
+                  </div>
 
-              <div className="mt-3 pt-2.5 border-t border-blue-200/60 flex flex-col gap-1.5 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-600 font-medium inline-flex items-center">
-                    PU Negócio (Mediana):
-                    <InfoTooltip text="Preço Unitário (PU) mediano de negociação apurado na B3 ou precificação a mercado ANBIMA." />
-                  </span>
-                  <strong className="font-mono text-blue-900">
-                    {formatPUMercadoDisplay(asset.pu_mercado_mediano || asset.pu_mercado || asset.pu)}
-                  </strong>
-                </div>
+                  <div className="pt-2.5 border-t border-slate-200 space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 font-medium inline-flex items-center">
+                        PU Mercado:
+                        <InfoTooltip text="Preço Unitário (PU) apurado nas negociações da B3 ou fechamento a mercado ANBIMA." />
+                      </span>
+                      <strong className="font-mono text-slate-900">
+                        {formatPUMercadoDisplay(asset.pu_mercado_mediano || asset.pu_mercado || asset.pu)}
+                      </strong>
+                    </div>
 
-                <div className="flex items-center justify-between">
-                  {asset.agio_desagio_pct !== undefined && asset.agio_desagio_pct !== null && asset.agio_desagio_pct !== '' ? (
-                    <span className="inline-flex items-center">
-                      <span className="text-slate-600 font-medium">Ágio/Deságio:</span>
-                      <InfoTooltip text="Ágio ou Deságio percentual em relação ao PU Par patrimonial ((PU Mercado / PU Par) - 1). Deságio significa que o título negocia abaixo do saldo patrimonial corrigido (maior retorno implícito); ágio reflete prêmio sobre o patrimônio." />
-                    </span>
-                  ) : (
-                    <span className="text-slate-600 font-medium">Spread s/ NTN-B:</span>
-                  )}
-
-                  <div className="flex items-center gap-1.5">
                     {asset.agio_desagio_pct !== undefined && asset.agio_desagio_pct !== null && asset.agio_desagio_pct !== '' && (
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-black border ${
-                        Number(asset.agio_desagio_pct) > 0 
-                          ? 'bg-blue-100 text-blue-800 border-blue-300' 
-                          : (Number(asset.agio_desagio_pct) < 0 
-                              ? 'bg-amber-100 text-amber-900 border-amber-300' 
-                              : 'bg-slate-100 text-slate-800 border-slate-300')
-                      }`}>
-                        {Number(asset.agio_desagio_pct) > 0 ? '+' : ''}{Number(asset.agio_desagio_pct).toFixed(2)}% {Number(asset.agio_desagio_pct) >= 0 ? 'Ágio' : 'Deságio'}
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 font-medium inline-flex items-center">
+                          Ágio / Deságio:
+                          <InfoTooltip text="Variação percentual do PU de mercado em relação ao PU Par patrimonial ((PU Mercado / PU Par) - 1)." />
+                        </span>
+                        <span className={`font-mono text-[11px] font-bold px-1.5 py-0.5 rounded ${
+                          Number(asset.agio_desagio_pct) > 0 
+                            ? 'text-blue-700 bg-blue-50 border border-blue-200' 
+                            : (Number(asset.agio_desagio_pct) < 0 
+                                ? 'text-amber-800 bg-amber-50 border border-amber-200' 
+                                : 'text-slate-700 bg-slate-100 border border-slate-200')
+                        }`}>
+                          {Number(asset.agio_desagio_pct) > 0 ? '+' : ''}{Number(asset.agio_desagio_pct).toFixed(2)}%
+                        </span>
+                      </div>
                     )}
+
                     {asset.spread && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
-                        Spread: {Number(asset.spread) > 0 ? '+' : ''}{(Number(asset.spread) * 100).toFixed(2)}%
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 font-medium inline-flex items-center">
+                          Spread vs NTN-B:
+                          <InfoTooltip text="Prêmio de crédito em relação à taxa soberana da NTN-B de vencimento equivalente." />
+                        </span>
+                        <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                          +{Number(asset.spread) > 0 ? (Number(asset.spread) * 100).toFixed(2) : Number(asset.spread).toFixed(2)}%
+                        </span>
+                      </div>
                     )}
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* CARD 2: EMISSÃO CONTRATUAL */}
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100/80 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between min-w-[240px]">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
-                    <Percent size={14} className="text-slate-500" />
-                    Emissão Contratual
-                    <InfoTooltip text="Condições de remuneração pactuadas na escritura original do ativo." />
-                  </span>
-                  <span className="text-[10px] font-bold bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded">
-                    Escritura
-                  </span>
-                </div>
-                <p className="text-2xl sm:text-3xl font-black text-slate-800 font-mono tracking-tight">
-                  {taxaEmissaoFormatted || (asset.indexador || '-')}
-                </p>
-              </div>
-
-              <div className="mt-3 pt-2.5 border-t border-slate-200 flex flex-col gap-1 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-600 font-medium inline-flex items-center">
-                    PU Par (Dirty Price):
-                    <InfoTooltip text="PU Par ('Dirty Price'): Valor patrimonial integral do título na data corrente. É a soma do VNA (saldo devedor amortizado) com os juros contratuais e correção monetária acumulados pro-rata die desde o último pagamento de cupom." />
-                  </span>
-                  <strong className="font-mono text-slate-800">
-                    {formatPUParDisplay(asset.pu_par || asset.pu_emissao || asset.pu)}
-                  </strong>
-                </div>
-                {asset.vna && (
-                  <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-500 inline-flex items-center">
-                      VNA (Saldo Principal):
-                      <InfoTooltip text="VNA (Valor Nominal Atualizado): Saldo devedor limpo do principal do título após todas as amortizações realizadas ('Clean Price', sem juros correntes acruados)." />
-                    </span>
-                    <span className="font-mono text-slate-700 font-semibold">{formatPUParDisplay(asset.vna)}</span>
+                {/* COLUNA 2: EMISSÃO CONTRATUAL */}
+                <div className="flex flex-col justify-between space-y-3 pt-3 sm:pt-0 sm:pl-6">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <Percent size={14} className="text-slate-500" />
+                        Emissão Contratual
+                        <InfoTooltip text="Remuneração estipulada na escritura original do ativo." />
+                      </span>
+                      <span className="text-[10px] font-semibold text-slate-600 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
+                        Escritura
+                      </span>
+                    </div>
+                    <p className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 tracking-tight">
+                      {taxaEmissaoFormatted || (asset.indexador || '-')}
+                    </p>
                   </div>
-                )}
+
+                  <div className="pt-2.5 border-t border-slate-200 space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 font-medium inline-flex items-center">
+                        PU Par:
+                        <InfoTooltip text="Valor patrimonial integral do título na data presente (saldo principal amortizado somado aos juros e correção acumulados pro-rata die)." />
+                      </span>
+                      <strong className="font-mono text-slate-900">
+                        {formatPUParDisplay(asset.pu_par || asset.pu_emissao || asset.pu)}
+                      </strong>
+                    </div>
+
+                    {asset.vna && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-500 font-medium inline-flex items-center">
+                          VNA Principal:
+                          <InfoTooltip text="Valor Nominal Atualizado: Saldo devedor do principal do título após amortizações, sem juros acruados." />
+                        </span>
+                        <span className="font-mono text-slate-700 font-semibold">
+                          {formatPUParDisplay(asset.vna)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -812,7 +775,80 @@ const AssetPage: React.FC = () => {
           </h3>
         </div>
 
+        {/* ALERTA DE RECUPERAÇÃO JUDICIAL SE APLICÁVEL */}
+        {asset.em_recuperacao_judicial === 'Sim' && (
+          <div className="flex items-center gap-3 p-4 bg-rose-950/80 border border-rose-500/60 text-rose-200 rounded-2xl text-xs font-semibold">
+            <AlertTriangle size={20} className="text-rose-400 shrink-0" />
+            <div>
+              <span className="font-black text-rose-300 uppercase tracking-wide mr-1.5">Alerta Crítico:</span>
+              Emissor em Processo de Recuperação Judicial (RJ). Título sujeito a risco de reestruturação de dívida, haircut ou moratória contratual de fluxos.
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+          {/* 1. INSTRUMENTO */}
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1.5">
+              Instrumento
+              <InfoTooltipDark text="Classe e modalidade jurídica do título de renda fixa corporativa (Debênture, CRI, CRA ou Nota Comercial)." />
+            </span>
+            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-black uppercase tracking-wider ${getTipoBadgeClass(asset.tipo)}`}>
+              <Tag size={12} />
+              {asset.tipo || 'Título de Crédito'}
+            </span>
+          </div>
+
+          {/* 2. RATING DE CRÉDITO */}
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1.5">
+              Rating de Crédito
+              <InfoTooltipDark text="Classificação de risco de crédito concedida por agência independente (S&P, Fitch, Moody's ou Austin)." />
+            </span>
+            <div className="flex items-center gap-2">
+              <span className={`px-2 py-0.5 rounded text-xs font-black ${getRatingBadgeClass(normRating)}`}>
+                {normRating}
+              </span>
+              {asset.agencia && asset.agencia !== '-' && (
+                <span className="text-slate-300 text-xs font-medium">({asset.agencia})</span>
+              )}
+            </div>
+          </div>
+
+          {/* 3. TRATAMENTO TRIBUTÁRIO */}
+          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+            <span className="text-slate-400 text-xs font-bold uppercase block mb-1.5">
+              Tratamento Tributário
+              <InfoTooltipDark text="Títulos enquadrados na Lei 12.431/2011 contam com isenção total de Imposto de Renda para pessoas físicas residentes no Brasil." />
+            </span>
+            {asset.incentivada === 'Sim' ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                <Sparkles size={12} className="text-emerald-400" />
+                Isento de IR (Lei 12.431)
+              </span>
+            ) : (
+              <span className="text-xs text-slate-300 font-medium">Tributado (Regressivo)</span>
+            )}
+          </div>
+
+          {/* 4. PÚBLICO-ALVO CVM */}
+          {(() => {
+            const paInfo = getPublicoAlvoBadge(asset.publico_alvo);
+            return (
+              <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+                <span className="text-slate-400 text-xs font-bold uppercase block mb-1.5">
+                  Público-Alvo (CVM)
+                  <InfoTooltipDark text="Regulação CVM 160 / 476: Define a classe de investidores habilitada para subscrição e negociação. Ofertas restritas (CVM 476) contam com período de lock-up secundário de 90 dias após a distribuição, após o qual ficam liberadas para Investidores Qualificados." />
+                </span>
+                <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold border ${paInfo.className}`}>
+                  <Users size={12} />
+                  <span>{paInfo.label}</span>
+                </span>
+              </div>
+            );
+          })()}
+
+          {/* 5. CÓDIGO ISIN */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Código ISIN
@@ -821,6 +857,7 @@ const AssetPage: React.FC = () => {
             <p className="font-mono text-sm font-bold text-blue-300">{asset.isin || '-'}</p>
           </div>
 
+          {/* 6. EMISSÃO / SÉRIE */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Emissão / Série
@@ -829,6 +866,7 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100">{asset.emissao ? `${asset.emissao}ª Emissão` : '-'} / {asset.serie ? `${asset.serie}ª Série` : '-'}</p>
           </div>
 
+          {/* 7. DATA DE EMISSÃO */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Data de Emissão
@@ -837,6 +875,7 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100">{formatDatePretty(asset.data_emissao)}</p>
           </div>
 
+          {/* 8. REF. NTN-B (BENCHMARK) */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Ref. NTN-B (Benchmark)
@@ -848,14 +887,7 @@ const AssetPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
-              Público-Alvo (CVM)
-              <InfoTooltipDark text="Classificação regulatória da CVM (Res. 160 / 476 / 400). Papéis emitidos com esforços restritos possuem restrição de negociação (lock-up de 90 dias após distribuição), após o qual ficam liberados para Investidores Qualificados." />
-            </span>
-            <p className="font-semibold text-blue-200">{asset.publico_alvo || 'Não Informado'}</p>
-          </div>
-
+          {/* 9. PERIODICIDADE DE CUPONS */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Periodicidade de Cupons
@@ -864,6 +896,7 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100">{asset.periodicidade_cupom || 'Não Informado'}</p>
           </div>
 
+          {/* 10. PRÓXIMO CUPOM */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Próximo Cupom
@@ -874,6 +907,7 @@ const AssetPage: React.FC = () => {
             </p>
           </div>
 
+          {/* 11. VNA / PU PAR */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               VNA / PU Par
@@ -886,6 +920,7 @@ const AssetPage: React.FC = () => {
             </p>
           </div>
 
+          {/* 12. SETOR ECONÔMICO (ANBIMA) */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Setor Econômico (ANBIMA)
@@ -894,6 +929,7 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100">{asset.setor || 'Crédito Privado'}</p>
           </div>
 
+          {/* 13. AGENTE FIDUCIÁRIO */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Agente Fiduciário
@@ -902,6 +938,7 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100 truncate" title={asset.agente_fiduciario}>{asset.agente_fiduciario || '-'}</p>
           </div>
 
+          {/* 14. COORDENADOR LÍDER */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Coordenador Líder
@@ -910,10 +947,11 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100 truncate" title={asset.coordenador_lider}>{asset.coordenador_lider || '-'}</p>
           </div>
 
+          {/* 15. REGIME FIDUCIÁRIO */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
               Regime Fiduciário
-              <InfoTooltipDark text="Patrimônio separado (em securitizações de CRI/CRA) ou regime legal de isenção tributária para pessoas físicas (Lei 12.431)." />
+              <InfoTooltipDark text="Patrimônio separado (em securitizações de CRI/CRA) ou regime legal de emissão padrão." />
             </span>
             <p className="font-semibold text-emerald-400">
               {asset.tipo === 'CRI' || asset.tipo === 'CRA'

@@ -395,9 +395,21 @@ const Home: React.FC = () => {
     ativosVivos.forEach(a => {
       const issuer = a.issuer?.trim();
       if (!issuer || issuer.toLowerCase() in { nan: 1, none: 1, '': 1 }) return;
-      // Excluir nomes genéricos de securitizadoras para focar em devedores corporativos reais
+      // Excluir nomes genéricos de securitizadoras e placeholders para focar em devedores corporativos reais
       const up = issuer.toUpperCase();
-      if (up.includes('SECURITIZADORA') || up.includes('SECURITIZACAO') || up.includes('COMPANHIA DE SECURITIZACAO')) {
+      if (
+        up.includes('SECURITIZADORA') ||
+        up.includes('SECURITIZACAO') ||
+        up.includes('SECURITIZAÇÃO') ||
+        up.includes('COMPANHIA DE SECURITIZACAO') ||
+        up.includes('PULVERIZAD') ||
+        up.includes('NÃO INFORMADO') ||
+        up.includes('NAO INFORMADO') ||
+        up.includes('INDEFINIDO') ||
+        up.includes('TRUSTEE') ||
+        up === 'N/D' ||
+        up === '-'
+      ) {
         return;
       }
 
@@ -418,12 +430,14 @@ const Home: React.FC = () => {
       }));
   }, [ativosVivos]);
 
-  // Top Oportunidades / Spreads Mais Altos (IPCA com rating Grau de Investimento ou Geral)
+  // Top Oportunidades / Spreads Mais Altos (IPCA com rating AAA)
   const topSpreads = useMemo(() => {
     return ativosVivos
       .filter(a => {
         const s = parseFloat(a.spread || '');
-        return !isNaN(s) && s > 0 && s < 0.25 && a.indexador === 'IPCA';
+        if (isNaN(s) || s <= 0 || s >= 0.25 || a.indexador !== 'IPCA') return false;
+        const norm = (a.rating_normalizado || normalizeRating(a.rating) || '').toUpperCase();
+        return norm === 'AAA';
       })
       .sort((a, b) => parseFloat(b.spread || '0') - parseFloat(a.spread || '0'))
       .slice(0, 5);
@@ -451,19 +465,6 @@ const Home: React.FC = () => {
 
         <div className="pt-2">
           <SearchBar assets={assets} />
-        </div>
-
-        <div className="pt-1 flex justify-center">
-          <Link
-            to="/raiox-devedor"
-            className="group inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-full text-xs font-semibold text-blue-900 hover:border-blue-400 hover:shadow-sm transition-all"
-          >
-            <span className="px-2 py-0.5 bg-blue-600 text-white rounded-full text-[10px] font-black tracking-wide uppercase">
-              Novo
-            </span>
-            <span>Raio-X do Devedor: Demonstrações CVM, Histórico de Rating & Risco de Default</span>
-            <ArrowUpRight size={14} className="text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </Link>
         </div>
       </section>
 
@@ -996,7 +997,9 @@ const Home: React.FC = () => {
                   <Flame size={20} className="text-amber-500" />
                   Maiores Spreads Indicativos (IPCA + Prêmio vs NTN-B)
                 </h3>
-                <span className="text-xs text-slate-500 font-medium">Mercado Secundário</span>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                  Rating AAA
+                </span>
               </div>
 
               <div className="overflow-x-auto">

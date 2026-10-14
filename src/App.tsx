@@ -23,8 +23,6 @@ interface SubNavItem {
   label: string;
   desc: string;
   icon: React.ReactNode;
-  badge?: string;
-  badgeColor?: string;
 }
 
 interface NavGroup {
@@ -54,12 +52,10 @@ const Navbar = () => {
           label: 'Negócios B3',
           desc: 'Trades em tempo real, volume diário e VWAP',
           icon: <ArrowLeftRight size={17} className="text-blue-600" />,
-          badge: 'Ao Vivo',
-          badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
         },
         {
           path: '/charts',
-          label: 'Crédito Privado',
+          label: 'Dashboard Secundário',
           desc: 'Spreads ANBIMA, dispersão de PU e taxas indicativas',
           icon: <LineChart size={17} className="text-emerald-600" />,
         },
@@ -68,16 +64,12 @@ const Navbar = () => {
           label: 'Curva NTN-B',
           desc: 'Estrutura a termo do juro real e prêmios de risco',
           icon: <Landmark size={17} className="text-amber-600" />,
-          badge: 'Tesouro',
-          badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
         },
         {
           path: '/primary',
           label: 'Mercado Primário',
           desc: 'Ofertas públicas CVM 160 e emissões em andamento',
           icon: <Tag size={17} className="text-purple-600" />,
-          badge: 'CVM',
-          badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
         },
       ],
     },
@@ -91,16 +83,12 @@ const Navbar = () => {
           label: 'Raio-X do Devedor',
           desc: 'Demonstrações CVM, solvência, ratings e dívida',
           icon: <Building2 size={17} className="text-indigo-600" />,
-          badge: 'Dossiê CVM',
-          badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
         },
         {
           path: '/calculadora',
           label: 'Calculadora de Renda Fixa',
-          desc: 'Simulador de Duration, PU, Cupom e Gross-up',
+          desc: 'Simulador de Duration, PU, cupom e equivalência',
           icon: <Calculator size={17} className="text-teal-600" />,
-          badge: 'Simulador',
-          badgeColor: 'bg-teal-50 text-teal-700 border-teal-200',
         },
       ],
     },
@@ -244,26 +232,15 @@ const Navbar = () => {
                                   {sub.icon}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center justify-between gap-1.5">
-                                    <span
-                                      className={`text-xs lg:text-sm font-bold ${
-                                        itemActive
-                                          ? 'text-blue-600'
-                                          : 'text-slate-800 group-hover/item:text-blue-600 transition-colors'
-                                      }`}
-                                    >
-                                      {sub.label}
-                                    </span>
-                                    {sub.badge && (
-                                      <span
-                                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border ${
-                                          sub.badgeColor || 'bg-slate-100 text-slate-600 border-slate-200'
-                                        }`}
-                                      >
-                                        {sub.badge}
-                                      </span>
-                                    )}
-                                  </div>
+                                  <span
+                                    className={`text-xs lg:text-sm font-bold block ${
+                                      itemActive
+                                        ? 'text-blue-600'
+                                        : 'text-slate-800 group-hover/item:text-blue-600 transition-colors'
+                                    }`}
+                                  >
+                                    {sub.label}
+                                  </span>
                                   <p className="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">
                                     {sub.desc}
                                   </p>
@@ -451,17 +428,6 @@ const Navbar = () => {
                             <span className={itemActive ? 'text-white' : ''}>{sub.icon}</span>
                             <span>{sub.label}</span>
                           </div>
-                          {sub.badge && (
-                            <span
-                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                                itemActive
-                                  ? 'bg-blue-700 text-blue-100'
-                                  : 'bg-white text-slate-500 border border-slate-200'
-                              }`}
-                            >
-                              {sub.badge}
-                            </span>
-                          )}
                         </Link>
                       );
                     })}
