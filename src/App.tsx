@@ -10,30 +10,150 @@ import Contact from './pages/Contact';
 import Trades from './pages/Trades';
 import DebtorRadar from './pages/DebtorRadar';
 import CalculatorPage from './pages/Calculator';
-import { LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, ArrowLeftRight, Building2, Calculator, LogOut, User as UserIcon } from 'lucide-react';
+import { 
+  LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, 
+  ArrowLeftRight, Building2, Calculator, LogOut, User as UserIcon, 
+  ChevronDown, TrendingUp, Sparkles 
+} from 'lucide-react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LeadGate } from './components/LeadGate';
+
+interface SubNavItem {
+  path: string;
+  label: string;
+  desc: string;
+  icon: React.ReactNode;
+  badge?: string;
+  badgeColor?: string;
+}
+
+interface NavGroup {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  items: SubNavItem[];
+}
 
 const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
+  const [mobileExpandedGroup, setMobileExpandedGroup] = React.useState<string | null>(null);
+  const navContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const { user, loginWithGoogle, logout, isConfigured } = useAuth();
 
-  const navItems = [
-    { path: '/', label: 'Home', icon: <LayoutDashboard size={18} /> },
-    { path: '/raiox-devedor', label: 'Raio-X Devedor', icon: <Building2 size={18} /> },
-    { path: '/calculadora', label: 'Calculadora', icon: <Calculator size={18} /> },
-    { path: '/negocios', label: 'Negócios B3', icon: <ArrowLeftRight size={18} /> },
-    { path: '/charts', label: 'Crédito Privado', icon: <LineChart size={18} /> },
-    { path: '/ntnb', label: 'Curva NTN-B', icon: <Landmark size={18} /> },
-    { path: '/primary', label: 'Mercado Primário', icon: <Tag size={18} /> },
-    { path: '/contact', label: 'Contato & Apoio', icon: <Coffee size={18} /> },
+  const navGroups: NavGroup[] = [
+    {
+      id: 'mercados',
+      label: 'Mercados',
+      icon: <TrendingUp size={16} />,
+      items: [
+        {
+          path: '/negocios',
+          label: 'Negócios B3',
+          desc: 'Trades em tempo real, volume diário e VWAP',
+          icon: <ArrowLeftRight size={17} className="text-blue-600" />,
+          badge: 'Ao Vivo',
+          badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        },
+        {
+          path: '/charts',
+          label: 'Crédito Privado',
+          desc: 'Spreads ANBIMA, dispersão de PU e taxas indicativas',
+          icon: <LineChart size={17} className="text-emerald-600" />,
+        },
+        {
+          path: '/ntnb',
+          label: 'Curva NTN-B',
+          desc: 'Estrutura a termo do juro real e prêmios de risco',
+          icon: <Landmark size={17} className="text-amber-600" />,
+          badge: 'Tesouro',
+          badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
+        },
+        {
+          path: '/primary',
+          label: 'Mercado Primário',
+          desc: 'Ofertas públicas CVM 160 e emissões em andamento',
+          icon: <Tag size={17} className="text-purple-600" />,
+          badge: 'CVM',
+          badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
+        },
+      ],
+    },
+    {
+      id: 'ferramentas',
+      label: 'Ferramentas',
+      icon: <Calculator size={16} />,
+      items: [
+        {
+          path: '/raiox-devedor',
+          label: 'Raio-X do Devedor',
+          desc: 'Demonstrações CVM, solvência, ratings e dívida',
+          icon: <Building2 size={17} className="text-indigo-600" />,
+          badge: 'Dossiê CVM',
+          badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+        },
+        {
+          path: '/calculadora',
+          label: 'Calculadora de Renda Fixa',
+          desc: 'Simulador de Duration, PU, Cupom e Gross-up',
+          icon: <Calculator size={17} className="text-teal-600" />,
+          badge: 'Simulador',
+          badgeColor: 'bg-teal-50 text-teal-700 border-teal-200',
+        },
+      ],
+    },
   ];
+
+  const isPathActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    if (path === '/negocios') return location.pathname === '/negocios' || location.pathname === '/trades';
+    if (path === '/ntnb') return location.pathname === '/ntnb' || location.pathname === '/dashboard-ntnb';
+    if (path === '/raiox-devedor') return location.pathname === '/raiox-devedor' || location.pathname === '/devedor';
+    if (path === '/calculadora') return location.pathname === '/calculadora' || location.pathname === '/calculator' || location.pathname === '/grossup';
+    if (path === '/contact') return location.pathname === '/contact' || location.pathname === '/apoiar';
+    return location.pathname === path || location.pathname.startsWith(path + '/');
+  };
+
+  const isGroupActive = (group: NavGroup) => {
+    return group.items.some(it => isPathActive(it.path));
+  };
+
+  const handleMouseEnter = (id: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpenDropdown(id);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 150);
+  };
+
+  // Fecha dropdowns em mudanças de rota
+  React.useEffect(() => {
+    setOpenDropdown(null);
+    setIsOpen(false);
+    setMobileExpandedGroup(null);
+  }, [location.pathname]);
+
+  // Fecha dropdown ao clicar fora
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navContainerRef.current && !navContainerRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-white border-b border-slate-200 sticky top-0 z-[100]">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
+          {/* Logo Brand */}
           <Link to="/" className="flex items-center shrink-0" title="FIXDATA — Página Inicial">
             <div className="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-sm sm:text-base shadow-xs hover:bg-blue-700 transition">
               FIX<span className="text-blue-200 font-extrabold">DATA</span>
@@ -41,26 +161,136 @@ const Navbar = () => {
           </Link>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 text-slate-600" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X /> : <Menu />}
+          <button 
+            className="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition" 
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Abrir menu de navegação"
+          >
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-0.5 lg:gap-1">
-            {navItems.map(item => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all ${
-                  location.pathname === item.path 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                }`}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            ))}
+          {/* Desktop Nav Organizada */}
+          <div ref={navContainerRef} className="hidden md:flex items-center gap-1 lg:gap-1.5">
+            {/* Link Direto: Início */}
+            <Link
+              to="/"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all ${
+                isPathActive('/')
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <LayoutDashboard size={17} />
+              <span>Início</span>
+            </Link>
+
+            {/* Menus Expansíveis (Dropdowns) */}
+            {navGroups.map(group => {
+              const active = isGroupActive(group);
+              const isOpenMenu = openDropdown === group.id;
+
+              return (
+                <div
+                  key={group.id}
+                  className="relative"
+                  onMouseEnter={() => handleMouseEnter(group.id)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenDropdown(isOpenMenu ? null : group.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer ${
+                      active || isOpenMenu
+                        ? 'bg-blue-50 text-blue-600 shadow-xs'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    }`}
+                    aria-expanded={isOpenMenu}
+                  >
+                    {group.icon}
+                    <span>{group.label}</span>
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-200 ${
+                        isOpenMenu ? 'rotate-180 text-blue-600' : 'text-slate-400'
+                      }`}
+                    />
+                  </button>
+
+                  {/* Dropdown Panel com Hover Bridge */}
+                  {isOpenMenu && (
+                    <div className="absolute top-full left-0 pt-1.5 z-[110]">
+                      <div className="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5 animate-in fade-in slide-in-from-top-1 duration-150">
+                        <div className="space-y-1">
+                          {group.items.map(sub => {
+                            const itemActive = isPathActive(sub.path);
+                            return (
+                              <Link
+                                key={sub.path}
+                                to={sub.path}
+                                onClick={() => setOpenDropdown(null)}
+                                className={`flex items-start gap-3 p-2.5 rounded-xl transition-all group/item ${
+                                  itemActive
+                                    ? 'bg-blue-50/80 text-blue-900'
+                                    : 'hover:bg-slate-50 text-slate-700'
+                                }`}
+                              >
+                                <div
+                                  className={`p-2 rounded-lg shrink-0 transition-colors ${
+                                    itemActive
+                                      ? 'bg-blue-600 text-white shadow-xs'
+                                      : 'bg-slate-100 text-slate-600 group-hover/item:bg-blue-50 group-hover/item:text-blue-600'
+                                  }`}
+                                >
+                                  {sub.icon}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-1.5">
+                                    <span
+                                      className={`text-xs lg:text-sm font-bold ${
+                                        itemActive
+                                          ? 'text-blue-600'
+                                          : 'text-slate-800 group-hover/item:text-blue-600 transition-colors'
+                                      }`}
+                                    >
+                                      {sub.label}
+                                    </span>
+                                    {sub.badge && (
+                                      <span
+                                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border ${
+                                          sub.badgeColor || 'bg-slate-100 text-slate-600 border-slate-200'
+                                        }`}
+                                      >
+                                        {sub.badge}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">
+                                    {sub.desc}
+                                  </p>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Link Direto: Contato & Apoio (mantido como exceção) */}
+            <Link
+              to="/contact"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all ${
+                isPathActive('/contact')
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <Coffee size={17} className="text-amber-500" />
+              <span>Contato & Apoio</span>
+            </Link>
 
             {/* Auth Button Desktop */}
             {isConfigured && (
@@ -110,13 +340,14 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Nav Dropdown */}
+      {/* Mobile Nav Accordions */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+        <div className="md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg animate-in fade-in duration-150">
+          {/* Auth Card Mobile */}
           {isConfigured && (
             <div className="pb-3 mb-2 border-b border-slate-100">
               {user ? (
-                <div className="flex items-center justify-between p-2 bg-slate-50 rounded-xl">
+                <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
                   <div className="flex items-center gap-3">
                     {user.photoURL ? (
                       <img
@@ -158,21 +389,101 @@ const Navbar = () => {
               )}
             </div>
           )}
-          {navItems.map(item => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center gap-4 p-3 rounded-xl font-bold transition-all ${
-                location.pathname === item.path 
-                ? 'bg-blue-50 text-blue-600' 
-                : 'text-slate-600'
-              }`}
-            >
-              {item.icon}
-              {item.label}
-            </Link>
-          ))}
+
+          {/* Link Direto: Início Mobile */}
+          <Link
+            to="/"
+            onClick={() => setIsOpen(false)}
+            className={`flex items-center gap-3 p-3 rounded-xl font-bold transition-all ${
+              isPathActive('/')
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <LayoutDashboard size={18} />
+            <span>Início</span>
+          </Link>
+
+          {/* Sanfonas Expansíveis Mobile */}
+          {navGroups.map(group => {
+            const isExpanded = mobileExpandedGroup === group.id;
+            const active = isGroupActive(group);
+
+            return (
+              <div key={group.id} className="border border-slate-100 rounded-xl overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setMobileExpandedGroup(isExpanded ? null : group.id)}
+                  className={`w-full flex items-center justify-between p-3 font-bold transition-colors ${
+                    active || isExpanded
+                      ? 'bg-blue-50/60 text-blue-600'
+                      : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    {group.icon}
+                    <span>{group.label}</span>
+                  </div>
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${
+                      isExpanded ? 'rotate-180 text-blue-600' : 'text-slate-400'
+                    }`}
+                  />
+                </button>
+
+                {isExpanded && (
+                  <div className="bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+                    {group.items.map(sub => {
+                      const itemActive = isPathActive(sub.path);
+                      return (
+                        <Link
+                          key={sub.path}
+                          to={sub.path}
+                          onClick={() => setIsOpen(false)}
+                          className={`flex items-center justify-between p-2.5 rounded-lg text-xs font-bold transition-all ${
+                            itemActive
+                              ? 'bg-blue-600 text-white shadow-xs'
+                              : 'text-slate-700 hover:bg-white hover:text-blue-600'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <span className={itemActive ? 'text-white' : ''}>{sub.icon}</span>
+                            <span>{sub.label}</span>
+                          </div>
+                          {sub.badge && (
+                            <span
+                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
+                                itemActive
+                                  ? 'bg-blue-700 text-blue-100'
+                                  : 'bg-white text-slate-500 border border-slate-200'
+                              }`}
+                            >
+                              {sub.badge}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Link Direto: Contato & Apoio Mobile */}
+          <Link
+            to="/contact"
+            onClick={() => setIsOpen(false)}
+            className={`flex items-center gap-3 p-3 rounded-xl font-bold transition-all ${
+              isPathActive('/contact')
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            <Coffee size={18} className="text-amber-500" />
+            <span>Contato & Apoio</span>
+          </Link>
         </div>
       )}
     </nav>
