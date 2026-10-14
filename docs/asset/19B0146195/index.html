@@ -113,45 +113,42 @@
         </div>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-2">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="px-3 py-1 bg-blue-600 text-white text-xs font-black rounded-lg uppercase tracking-wider">CRI</span>
-                <div class="inline-flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold">
-                  <span class="text-slate-400 text-[11px] uppercase">Rating:</span>
-                  <span class="px-2 py-0.5 rounded text-xs font-black bg-emerald-600 text-white">BB</span>
-                  <span class="text-slate-300 text-[11px]">(Austin Rating)</span>
-                </div>
-              </div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div class="space-y-1">
+              <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest block">-</span>
               <h1 class="text-4xl font-black text-slate-900 tracking-tight">19B0146195</h1>
               <p class="text-lg text-slate-600 font-semibold">PULVERIZADO / NÃO INFORMADO</p>
             </div>
-            <div class="flex flex-col sm:flex-row items-stretch gap-3.5">
-              <div class="bg-gradient-to-br from-blue-50 to-indigo-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-sm min-w-[210px] flex flex-col justify-between">
-                <div>
-                  <div class="flex items-center justify-between mb-1.5">
-                    <span class="text-xs font-black text-blue-800 uppercase tracking-wider">Mercado Secundário</span>
-                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-extrabold rounded-full">ANBIMA / B3</span>
+            <div class="w-full sm:w-auto min-w-[320px] sm:min-w-[480px]">
+              <div class="bg-slate-50/80 border border-slate-200 rounded-2xl p-4 sm:p-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-200 gap-4 sm:gap-6">
+                  <div class="flex flex-col justify-between space-y-2 sm:pr-2">
+                    <div>
+                      <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">Mercado Secundário</span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 text-slate-600 text-[10px] font-semibold rounded-md">ANBIMA / B3</span>
+                      </div>
+                      <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">Sem cotação</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                      <span class="text-slate-500 font-medium">PU Mercado: <strong class="font-mono text-slate-900">-</strong></span>
+                      <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">Preço Fechamento</span>
+                    </div>
                   </div>
-                  <p class="text-2xl sm:text-3xl font-black text-blue-950 font-mono tracking-tight my-1">Sem cotação</p>
-                </div>
-                <div class="pt-2 mt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
-                  <span class="text-slate-500 font-semibold">PU Mercado: <strong class="font-mono text-blue-900">-</strong></span>
-                  <span class="text-[11px] text-blue-700 font-bold">Preço Fechamento</span>
-                </div>
-              </div>
 
-              <div class="bg-gradient-to-br from-slate-50 to-slate-100/70 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm min-w-[210px] flex flex-col justify-between">
-                <div>
-                  <div class="flex items-center justify-between mb-1.5">
-                    <span class="text-xs font-black text-slate-700 uppercase tracking-wider">Taxa de Emissão</span>
-                    <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-full">Originação</span>
+                  <div class="flex flex-col justify-between space-y-2 pt-3 sm:pt-0 sm:pl-6">
+                    <div>
+                      <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">Taxa de Emissão</span>
+                        <span class="px-2 py-0.5 bg-white border border-slate-200 text-slate-600 text-[10px] font-semibold rounded-md">Escritura</span>
+                      </div>
+                      <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">IGP-M + 11.86% a.a.</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                      <span class="text-slate-500 font-medium">PU Emissão: <strong class="font-mono text-slate-900">R$ 10.001,58</strong></span>
+                      <span class="text-[11px] text-slate-400 font-medium">Originação</span>
+                    </div>
                   </div>
-                  <p class="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight my-1">IGP-M + 11.86% a.a.</p>
-                </div>
-                <div class="pt-2 mt-2 border-t border-slate-200 flex items-center justify-between text-xs">
-                  <span class="text-slate-500 font-semibold">PU Emissão: <strong class="font-mono text-slate-900">R$ 10.001,58</strong></span>
-                  <span class="text-[11px] text-slate-400 font-medium">Condição original</span>
                 </div>
               </div>
             </div>
@@ -186,6 +183,8 @@
             <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Instrumento</span><span class="px-2 py-0.5 bg-blue-600 text-white text-xs font-black rounded uppercase tracking-wider">CRI</span></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Rating de Crédito</span><span class="px-2 py-0.5 rounded text-xs font-black bg-emerald-600 text-white mr-1.5">BB</span><span class="text-slate-300 text-xs">(Austin Rating)</span></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">-</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">1.0ª Emissão / 68.0ª Série</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">18/02/2019</p></div>
@@ -316,6 +315,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "19B0146195", "tipo": "CRI", "issuer": "PULVERIZADO / NÃO INFORMADO", "indexador": "IGP-M", "taxa_emissao": 11.8636, "taxa_negocio_b3": null, "taxa_indicativa_anbima": null, "taxa_mercado": null, "taxa_ativo": 11.8636, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "10001.58", "pu": "10001.58", "pu_mercado": null, "data_ultimo_negocio": null, "data_anbima": null, "volume_negociado_b3": null, "volume_emissao": 24313831.78, "volume": 24313831.78, "quantidade_emitida": 2431.0, "quantidade": 2431.0, "data_emissao": "2019-02-18", "vencimento": "2033-08-10", "emissao": 1.0, "serie": 68.0, "isin": null, "lei": 12.431, "cnpj_emissor": null, "setor": "Outros Serviços", "agente_fiduciario": null, "coordenador_lider": null, "rating": "BB+", "rating_original": "BB+", "rating_agencia": "Austin Rating", "agencia": "Austin Rating", "rating_data": "06/08/2020", "divulgacao": "06/08/2020", "securitizadora": "Bari", "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 0, "status_ativo": "Ativo", "duration": 5.03, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": null, "data_proximo_cupom": "2027-02-10", "vna": null, "pu_par": null, "incentivada": "Sim", "rating_normalizado": "BB+", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Duration Calculada (DU/252)", "spread": null, "pu_mercado_mediano": 10001.58, "agio_desagio_pct": null}, "prices": [], "emitter": null, "paymentEvents": [{"ticker": "19B0146195", "data_evento": "2019-08-10", "data_liquidacao": "2019-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2020-02-10", "data_liquidacao": "2020-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2020-08-10", "data_liquidacao": "2020-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2021-02-10", "data_liquidacao": "2021-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2021-08-10", "data_liquidacao": "2021-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2022-02-10", "data_liquidacao": "2022-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2022-08-10", "data_liquidacao": "2022-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2023-02-10", "data_liquidacao": "2023-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2023-08-10", "data_liquidacao": "2023-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2024-02-10", "data_liquidacao": "2024-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2024-08-10", "data_liquidacao": "2024-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2025-02-10", "data_liquidacao": "2025-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2025-08-10", "data_liquidacao": "2025-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2026-02-10", "data_liquidacao": "2026-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2026-08-10", "data_liquidacao": "2026-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": 576.6511, "valor_projetado": 576.6511, "status": "Liquidado", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2027-02-10", "data_liquidacao": "2027-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2027-08-10", "data_liquidacao": "2027-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2028-02-10", "data_liquidacao": "2028-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2028-08-10", "data_liquidacao": "2028-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2029-02-10", "data_liquidacao": "2029-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2029-08-10", "data_liquidacao": "2029-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2030-02-10", "data_liquidacao": "2030-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2030-08-10", "data_liquidacao": "2030-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2031-02-10", "data_liquidacao": "2031-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2031-08-10", "data_liquidacao": "2031-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2032-02-10", "data_liquidacao": "2032-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2032-08-10", "data_liquidacao": "2032-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2033-02-10", "data_liquidacao": "2033-02-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2033-08-10", "data_liquidacao": "2033-08-10", "tipo_evento": "Amortização", "taxa": NaN, "valor_real": NaN, "valor_projetado": 10001.58, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "19B0146195", "data_evento": "2033-08-10", "data_liquidacao": "2033-08-10", "tipo_evento": "Pagamento de Juros", "taxa": 5.7656, "valor_real": NaN, "valor_projetado": 576.6511, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
     </script>
-    <script type="module" crossorigin src="/assets/index-DKt9abv0.js"></script>
+    <script type="module" crossorigin src="/assets/index-DS4hQocU.js"></script>
   </body>
 </html>
