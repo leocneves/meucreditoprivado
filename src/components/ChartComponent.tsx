@@ -9,7 +9,7 @@ import {
   CartesianGrid,
   Tooltip
 } from 'recharts';
-import { TrendingUp, Calendar, Table } from 'lucide-react';
+import { TrendingUp, Calendar } from 'lucide-react';
 
 interface ChartComponentProps {
   prices: PriceRecord[];
@@ -51,8 +51,6 @@ const ChartComponent: React.FC<ChartComponentProps> = ({ prices, ticker, indexad
   const hasYields = validRecords.some(r => !isNaN(r.yield) && r.yield > 0);
   const hasPrices = validRecords.some(r => !isNaN(r.price) && r.price > 0);
   const effectiveMode = (viewMode === 'yield' && !hasYields && hasPrices) ? 'price' : viewMode;
-
-  const recentRecords = [...validRecords].reverse().slice(0, 5);
 
   return (
     <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
@@ -172,31 +170,7 @@ const ChartComponent: React.FC<ChartComponentProps> = ({ prices, ticker, indexad
         </ResponsiveContainer>
       </div>
 
-      {/* TABELA DE ÚLTIMOS FECHAMENTOS */}
-      <div className="pt-4 border-t border-slate-100 space-y-3">
-        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-          <Table size={14} className="text-blue-600" />
-          Últimas Sessões de Negociação
-        </h4>
-
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-          {recentRecords.map(r => (
-            <div key={r.date} className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
-              <span className="text-[11px] text-slate-400 font-semibold block">{r.datePretty}</span>
-              {!isNaN(r.yield) && (
-                <p className="font-bold text-blue-700 mt-0.5">{r.yield.toFixed(4)}% a.a.</p>
-              )}
-              {!isNaN(r.price) && (
-                <p className="text-[11px] text-slate-600 font-medium">
-                  R$ {r.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+      <div className="flex flex-wrap items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
         <span>Fonte: ANBIMA / B3 Mercado Secundário</span>
         <span>{validRecords.length} sessões de negociação registradas</span>
       </div>
