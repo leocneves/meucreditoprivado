@@ -68,6 +68,37 @@ const getPublicoAlvoBadge = (pa?: string) => {
   };
 };
 
+const cleanIntegerStr = (val?: string | number) => {
+  if (val === undefined || val === null || val === '') return '';
+  const s = String(val).trim();
+  if (s === '-' || s.toLowerCase() === 'nan' || s.toLowerCase() === 'none') return '';
+  if (s.endsWith('.0')) return s.slice(0, -2);
+  const n = Number(s);
+  if (!isNaN(n) && Number.isInteger(n)) return String(n);
+  return s;
+};
+
+const getPrazoAnosInfo = (vctoStr?: string) => {
+  if (!vctoStr) return null;
+  const parts = vctoStr.split('-');
+  if (parts.length < 3) return null;
+  const y = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10) - 1;
+  const d = parseInt(parts[2], 10);
+  const vcto = new Date(y, m, d);
+  if (isNaN(vcto.getTime())) return null;
+  const now = new Date();
+  const diffMs = vcto.getTime() - now.getTime();
+  if (diffMs <= 0) return { anosStr: 'Vencido', diasStr: '0 dias', isVencido: true };
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  const diffYears = diffDays / 365.25;
+  return {
+    anosStr: `${diffYears.toFixed(1).replace('.', ',')} anos`,
+    diasStr: `${diffDays} dias corridos`,
+    isVencido: false
+  };
+};
+
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   const issuerName = (asset.issuer || '').trim();
   const cnpjClean = (asset.cnpj_emissor || '').replace(/\D/g, '');
@@ -501,6 +532,7 @@ const AssetPage: React.FC = () => {
   const debtorCnpjClean = (emitter?.cnpj || asset.cnpj_emissor || '').replace(/\D/g, '');
   const debtorSearchQuery = (emitter?.nome_fantasia || emitter?.razao_social || asset.issuer || '').trim();
   const debtorRaioXLink = `/raiox-devedor?cnpj=${debtorCnpjClean}&search=${encodeURIComponent(debtorSearchQuery)}`;
+  const prazoInfo = getPrazoAnosInfo(asset.vencimento);
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
@@ -734,14 +766,17 @@ const AssetPage: React.FC = () => {
           </div>
 
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-200 transition-colors">
-            <div className="flex items-center gap-1.5 text-indigo-600 mb-1">
-              <Clock size={16} />
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Duration</span>
+            <div className="flex items-center justify-between gap-1 mb-1">
+              <div className="flex items-center gap-1.5 text-indigo-600">
+                <Clock size={16} />
+                <span className="text-[11px] font-bold text-slate-400 uppercase">Duration</span>
+              </div>
+              <InfoTooltip text="Calculada pelo FIXDATA com base no fluxo de amortizações e cupons, ou obtida diretamente da ANBIMA quando disponível na precificação indicativa oficial." />
             </div>
             <p className="text-base font-extrabold text-slate-900">
               {formatDurationDisplay(asset.duration)}
             </p>
-            <span className="text-[11px] text-indigo-600 font-semibold">{asset.fonte_precificacao || 'DU / 252'}</span>
+            <span className="text-[11px] text-slate-400 font-medium">Dias Úteis / 252</span>
           </div>
 
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-200 transition-colors">
@@ -750,7 +785,9 @@ const AssetPage: React.FC = () => {
               <span className="text-[11px] font-bold text-slate-400 uppercase">Vencimento</span>
             </div>
             <p className="text-base font-extrabold text-slate-900">{formatDatePretty(asset.vencimento)}</p>
-            <span className="text-[11px] text-slate-400 font-medium">Data Final</span>
+            <span className="text-[11px] text-emerald-700 font-bold">
+              {prazoInfo ? `Prazo: ${prazoInfo.anosStr}` : 'Data Final'}
+            </span>
           </div>
 
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-violet-200 transition-colors">
@@ -793,17 +830,17 @@ const AssetPage: React.FC = () => {
               Instrumento
               <InfoTooltipDark text="Classe e modalidade jurídica do título de renda fixa corporativa (Debênture, CRI, CRA ou Nota Comercial)." />
             </span>
-            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-black uppercase tracking-wider ${getTipoBadgeClass(asset.tipo)}`}>
-              <Tag size={12} />
-              {asset.tipo || 'Título de Crédito'}
-            </span>
+            <p className="text-sm font-bold text-blue-400 flex items-center gap-1.5">
+              <Tag size={13} className="text-blue-400 shrink-0" />
+              <span>{asset.tipo || 'Título de Crédito'}</span>
+            </p>
           </div>
 
           {/* 2. RATING DE CRÉDITO */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1.5">
               Rating de Crédito
-              <InfoTooltipDark text="Classificação de risco de crédito concedida por agência independente (S&P, Fitch, Moody's ou Austin)." />
+              <InfoTooltipDark text="Rating de crédito normalizado na escala nacional pelo FIXDATA (S&P, Fitch, Moody's ou Austin), unificando variações e sufixos (.br, bra, etc.) para permitir comparação homogênea de risco de crédito." />
             </span>
             <div className="flex items-center gap-2">
               <span className={`px-2 py-0.5 rounded text-xs font-black ${getRatingBadgeClass(normRating)}`}>
@@ -813,6 +850,7 @@ const AssetPage: React.FC = () => {
                 <span className="text-slate-300 text-xs font-medium">({asset.agencia})</span>
               )}
             </div>
+            <span className="text-[10px] text-slate-400 font-medium block mt-1">Normalizado nacional</span>
           </div>
 
           {/* 3. TRATAMENTO TRIBUTÁRIO */}
@@ -822,28 +860,34 @@ const AssetPage: React.FC = () => {
               <InfoTooltipDark text="Títulos enquadrados na Lei 12.431/2011 contam com isenção total de Imposto de Renda para pessoas físicas residentes no Brasil." />
             </span>
             {asset.incentivada === 'Sim' ? (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                <Sparkles size={12} className="text-emerald-400" />
-                Isento de IR (Lei 12.431)
-              </span>
+              <p className="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+                <Sparkles size={13} className="text-emerald-400 shrink-0" />
+                <span>Isento de IR (Lei 12.431)</span>
+              </p>
             ) : (
-              <span className="text-xs text-slate-300 font-medium">Tributado (Regressivo)</span>
+              <p className="text-sm font-semibold text-slate-300">
+                Tributado (Regressivo)
+              </p>
             )}
           </div>
 
           {/* 4. PÚBLICO-ALVO CVM */}
           {(() => {
-            const paInfo = getPublicoAlvoBadge(asset.publico_alvo);
+            const pa = asset.publico_alvo?.trim() || 'Não Informado';
+            const isGeral = pa.toLowerCase().includes('geral') || pa.toLowerCase().includes('varejo');
+            const isProf = pa.toLowerCase().includes('prof');
             return (
               <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
                 <span className="text-slate-400 text-xs font-bold uppercase block mb-1.5">
                   Público-Alvo (CVM)
-                  <InfoTooltipDark text="Regulação CVM 160 / 476: Define a classe de investidores habilitada para subscrição e negociação. Ofertas restritas (CVM 476) contam com período de lock-up secundário de 90 dias após a distribuição, após o qual ficam liberadas para Investidores Qualificados." />
+                  <InfoTooltipDark text="Regulação CVM 160 / 476: Define a classe de investidores habilitada para subscrição e negociação. Ofertas restritas contam com lock-up de 90 dias após distribuição para Investidores Qualificados." />
                 </span>
-                <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold border ${paInfo.className}`}>
-                  <Users size={12} />
-                  <span>{paInfo.label}</span>
-                </span>
+                <p className={`text-sm font-bold flex items-center gap-1.5 ${
+                  isGeral ? 'text-emerald-400' : (isProf ? 'text-purple-300' : 'text-blue-300')
+                }`}>
+                  <Users size={13} className="shrink-0" />
+                  <span>{pa}</span>
+                </p>
               </div>
             );
           })()}
@@ -858,13 +902,21 @@ const AssetPage: React.FC = () => {
           </div>
 
           {/* 6. EMISSÃO / SÉRIE */}
-          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
-              Emissão / Série
-              <InfoTooltipDark text="Número da emissão da companhia e série específica do título conforme averbado na CVM e B3." />
-            </span>
-            <p className="font-semibold text-slate-100">{asset.emissao ? `${asset.emissao}ª Emissão` : '-'} / {asset.serie ? `${asset.serie}ª Série` : '-'}</p>
-          </div>
+          {(() => {
+            const em = cleanIntegerStr(asset.emissao);
+            const se = cleanIntegerStr(asset.serie);
+            const emText = em ? `${em}ª Emissão` : '-';
+            const seText = se ? `${se}ª Série` : '-';
+            return (
+              <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+                <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
+                  Emissão / Série
+                  <InfoTooltipDark text="Número da emissão da companhia e série específica do título conforme averbado na CVM e B3." />
+                </span>
+                <p className="font-semibold text-slate-100">{emText} / {seText}</p>
+              </div>
+            );
+          })()}
 
           {/* 7. DATA DE EMISSÃO */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
@@ -947,16 +999,14 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100 truncate" title={asset.coordenador_lider}>{asset.coordenador_lider || '-'}</p>
           </div>
 
-          {/* 15. REGIME FIDUCIÁRIO */}
+          {/* 15. PRAZO ATÉ VENCIMENTO */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
             <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
-              Regime Fiduciário
-              <InfoTooltipDark text="Patrimônio separado (em securitizações de CRI/CRA) ou regime legal de emissão padrão." />
+              Prazo até Vencimento
+              <InfoTooltipDark text="Tempo remanescente em anos corridos e dias até o vencimento e liquidação final do título." />
             </span>
             <p className="font-semibold text-emerald-400">
-              {asset.tipo === 'CRI' || asset.tipo === 'CRA'
-                ? 'Patrimônio Separado (Sim)'
-                : (asset.incentivada === 'Sim' ? 'Incentivada (Lei 12.431)' : 'Padrão')}
+              {prazoInfo ? `${prazoInfo.anosStr} (${prazoInfo.diasStr})` : '-'}
             </p>
           </div>
         </div>

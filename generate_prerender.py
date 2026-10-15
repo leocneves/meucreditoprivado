@@ -329,10 +329,26 @@ def generate_asset_html(row):
     emissao = str(row.get('emissao', '')).strip()
     if emissao.lower() in ('nan', 'none', ''):
         emissao = '-'
+    elif emissao.endswith('.0'):
+        emissao = emissao[:-2]
 
     serie = str(row.get('serie', '')).strip()
     if serie.lower() in ('nan', 'none', ''):
         serie = '-'
+    elif serie.endswith('.0'):
+        serie = serie[:-2]
+
+    prazo_anos_display = "-"
+    if vencimento != '-' and '-' in vencimento:
+        try:
+            v_dt = datetime.strptime(vencimento[:10], '%Y-%m-%d')
+            diff_days = (v_dt - datetime.now()).days
+            if diff_days <= 0:
+                prazo_anos_display = "Vencido"
+            else:
+                prazo_anos_display = f"{diff_days / 365.25:.1f} anos ({diff_days} dias corridos)".replace('.', ',')
+        except:
+            pass
 
     vol_val = row.get('volume') or row.get('volume_emissao')
     volume_display = "-"
@@ -867,7 +883,7 @@ def generate_asset_html(row):
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">{vcto_br}</p>
-              <span class="text-[11px] text-slate-400 font-medium">Data Final</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: {prazo_anos_display}</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -882,20 +898,20 @@ def generate_asset_html(row):
             <h3 class="text-lg sm:text-xl font-black text-white">Especificações Técnicas da Emissão</h3>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Instrumento</span><span class="px-2 py-0.5 bg-blue-600 text-white text-xs font-black rounded uppercase tracking-wider">{tipo}</span></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Rating de Crédito</span><span class="px-2 py-0.5 rounded text-xs font-black bg-emerald-600 text-white mr-1.5">{rating_norm}</span><span class="text-slate-300 text-xs">({agencia})</span></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Instrumento</span><p class="font-bold text-blue-400 text-sm">{tipo}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Rating de Crédito</span><div class="flex items-center gap-1.5"><span class="px-2 py-0.5 rounded text-xs font-black bg-emerald-600 text-white">{rating_norm}</span><span class="text-slate-300 text-xs">({agencia})</span></div><span class="text-[10px] text-slate-400 block mt-0.5">Normalizado nacional</span></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Código ISIN</span><p class="font-mono text-sm font-bold text-blue-300">{isin}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Emissão / Série</span><p class="font-semibold text-slate-100">{emissao}ª Emissão / {serie}ª Série</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Data de Emissão</span><p class="font-semibold text-slate-100">{data_emissao_br}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Ref. NTN-B (Benchmark)</span><p class="font-semibold text-slate-100">{ntnb_ref_display}</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Público-Alvo (CVM)</span><p class="font-semibold text-blue-200">{publico_alvo}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Público-Alvo (CVM)</span><p class="font-semibold text-blue-200 text-sm">{publico_alvo}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Periodicidade de Cupons</span><p class="font-semibold text-slate-100">{periodicidade_cupom}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Próximo Cupom</span><p class="font-semibold text-emerald-400">{dt_prox_cupom_display}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">VNA / PU Par</span><p class="font-mono text-xs font-bold text-slate-100">VNA: {vna_display}<br /><span class="text-indigo-300">Par: {pu_par_display}</span></p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">{setor}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">{agente_fiduciario}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">{coordenador_lider}</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Regime Fiduciário</span><p class="font-semibold text-emerald-400">{regime_fiduciario}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">{prazo_anos_display}</p></div>
           </div>
         </div>
 
