@@ -142,7 +142,7 @@ BUNDLE_SCRIPT_TAG = get_bundle_script()
 
 def get_assets():
     if os.path.exists(CSV_PATH):
-        df = pd.read_csv(CSV_PATH)
+        df = pd.read_csv(CSV_PATH, low_memory=False)
     elif os.path.exists(DB_PATH):
         conn = sqlite3.connect(DB_PATH)
         df = pd.read_sql_query("SELECT * FROM tb_cadastro_ativos", conn)
@@ -216,15 +216,28 @@ def get_docs_map():
         print(f"Erro ao carregar mapa de documentos: {err}")
         return {}
 
-EMITTERS_MAP = get_emitters_map()
-PRICES_MAP = get_prices_map()
-PAYMENTS_MAP = get_payments_map()
-DOCS_MAP = get_docs_map()
+EMITTERS_MAP = None
+PRICES_MAP = None
+PAYMENTS_MAP = None
+DOCS_MAP = None
+
+def init_maps():
+    global EMITTERS_MAP, PRICES_MAP, PAYMENTS_MAP, DOCS_MAP
+    if EMITTERS_MAP is None:
+        print("📊 Carregando bases analíticas em memória...")
+        EMITTERS_MAP = get_emitters_map()
+        PRICES_MAP = get_prices_map()
+        PAYMENTS_MAP = get_payments_map()
+        DOCS_MAP = get_docs_map()
+        print("✅ Bases analíticas carregadas!")
 
 def generate_asset_html(row):
+    if EMITTERS_MAP is None:
+        init_maps()
     ticker = str(row.get('ticker', '')).strip()
     if not is_valid_ticker(ticker):
         return None
+
 
     tipo = str(row.get('tipo', 'Título')).strip()
     if tipo.lower() in ('nan', 'none', ''):
@@ -443,7 +456,7 @@ def generate_asset_html(row):
                 emitter_info = v
                 break
 
-    page_url = f"{BASE_URL}/asset/{ticker}"
+    page_url = f"{BASE_URL}/asset/{ticker.lower()}/"
     
     # Prefix para evitar repetição como "CRA CRA02300JG5"
     tipo_prefix = "" if ticker.upper().startswith(tipo.upper()) else f"{tipo} "
@@ -731,6 +744,7 @@ def generate_asset_html(row):
     <meta name="description" content="{description}" />
     <meta name="keywords" content="{ticker}, {issuer}, {tipo}, {isin}, debênture, CRI, CRA, renda fixa, taxa {indexador}, rating {rating}, spread de crédito, FIXDATA" />
     <meta name="robots" content="index, follow" />
+    <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
     <link rel="canonical" href="{page_url}" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
@@ -946,7 +960,7 @@ def write_asset(args):
     # 1. Grava páginas HTML pré-renderizadas
     if html_content:
         for out_dir in (OUTPUT_DIR, DOCS_OUTPUT_DIR):
-            target_dir = os.path.join(out_dir, ticker)
+            target_dir = os.path.join(out_dir, ticker.lower())
             os.makedirs(target_dir, exist_ok=True)
             file_path = os.path.join(target_dir, "index.html")
             with open(file_path, "w", encoding="utf-8") as f:
@@ -978,6 +992,145 @@ def write_asset(args):
             if isin and isin != '-' and len(isin) == 12:
                 safe_write_json(d_dir, isin)
 
+STATIC_PAGES_META = [
+    {
+        "slug": "negocios",
+        "title": "Negócios B3 em Tempo Real — Mercado Secundário de Crédito Privado | FIXDATA",
+        "description": "Acompanhe trades em tempo real de Debêntures, CRIs e CRAs na B3 com volume financeiro, taxa média ponderada (VWAP), PU e quantidade negociada.",
+        "keywords": "negócios B3, debêntures secundário, mercado secundário, trades crédito privado, volume b3, vwap debentures",
+        "h1": "Negócios B3 em Tempo Real",
+        "lead": "Monitoramento contínuo de negociações no mercado secundário de renda fixa corporativa brasileira.",
+    },
+    {
+        "slug": "charts",
+        "title": "Painel Analítico de Spreads e Mercado Secundário ANBIMA | FIXDATA",
+        "description": "Gráficos interativos de spreads sobre a curva NTN-B, dispersão de PU, duration e prêmios de risco de crédito privado no Brasil.",
+        "keywords": "spreads anbima, dispersão de taxas, ntn-b spread, duration crédito privado, gráficos de renda fixa",
+        "h1": "Dashboard Analítico de Mercado Secundário",
+        "lead": "Análise quantitativa de taxas indicativas ANBIMA, dispersão de preços unitários e prêmios de risco.",
+    },
+    {
+        "slug": "ntnb",
+        "title": "Curva de Juros Real NTN-B e Estrutura a Termo | FIXDATA",
+        "description": "Estrutura a termo da curva soberana NTN-B (IPCA+), parâmetros Svensson e benchmarks para cálculo de spread de crédito privado.",
+        "keywords": "curva ntn-b, juros real brasil, taxa ipca+, curva soberana, parâmetros ntnb",
+        "h1": "Estrutura a Termo da Curva NTN-B",
+        "lead": "Curva soberana de juros reais e prêmios de inflação para marcação a mercado e benchmark de spreads.",
+    },
+    {
+        "slug": "primary",
+        "title": "Emissões Primárias de Debêntures, CRIs e CRAs | FIXDATA",
+        "description": "Radar de ofertas públicas e emissões primárias de crédito privado registradas na CVM e ANBIMA com prazos, taxas e garantias.",
+        "keywords": "emissões primárias, ofertas públicas cvm, ipo de debêntures, novas emissões cri cra",
+        "h1": "Emissões Primárias de Renda Fixa",
+        "lead": "Acompanhamento de novas ofertas públicas de dívida corporativa registradas na CVM.",
+    },
+    {
+        "slug": "raiox-devedor",
+        "title": "Raio-X do Devedor e Solvência de Emissores CVM | FIXDATA",
+        "description": "Dossiê executivo e solvência de mais de 800 companhias emissoras com modelo Altman Z'', índice de cobertura de juros (ICR), ratings e dívidas.",
+        "keywords": "raio-x devedor, solvência empresas cvm, altman z score, icr cobertura de juros, dívida líquida ebitda, rating devedor",
+        "h1": "Raio-X e Solvência do Devedor",
+        "lead": "Análise fundamentalista de solvência contábil, alavancagem financeira e histórico de notas de crédito.",
+    },
+    {
+        "slug": "calculadora",
+        "title": "Calculadora de Equivalência e Gross-up de Renda Fixa | FIXDATA",
+        "description": "Calcule a equivalência de taxas isentas de IR (CRIs, CRAs, Debêntures Incentivadas Lei 12.431) contra títulos tributados e CDI.",
+        "keywords": "calculadora renda fixa, gross up debentures incentivadas, equivalencia cri cra cdi, isenção ir renda fixa",
+        "h1": "Calculadora de Gross-up e Equivalência",
+        "lead": "Ferramenta analítica para comparar a rentabilidade real de papéis incentivados isentos contra ativos tributados.",
+    },
+    {
+        "slug": "contact",
+        "title": "Contato, Parcerias e Apoio ao Projeto | FIXDATA",
+        "description": "Entre em contato com a equipe de desenvolvimento do FIXDATA para sugestões, dados adicionais ou parcerias institucionais.",
+        "keywords": "contato fixdata, feedback, apoio projeto, dados renda fixa brasil",
+        "h1": "Contato e Apoio ao Projeto",
+        "lead": "Canal oficial para dúvidas, sugestões analíticas e parcerias.",
+    },
+]
+
+def render_static_pages():
+    print("📄 Gerando páginas estáticas institucionais para SEO...")
+    for p in STATIC_PAGES_META:
+        slug = p["slug"]
+        page_url = f"{BASE_URL}/{slug}/"
+        html = f"""<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{p['title']}</title>
+    <meta name="title" content="{p['title']}" />
+    <meta name="description" content="{p['description']}" />
+    <meta name="keywords" content="{p['keywords']}" />
+    <meta name="robots" content="index, follow" />
+    <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
+    <link rel="canonical" href="{page_url}" />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{page_url}" />
+    <meta property="og:title" content="{p['title']}" />
+    <meta property="og:description" content="{p['description']}" />
+    <meta property="og:site_name" content="FIXDATA" />
+    <meta property="og:image" content="https://fixdata.netlify.app/icon-512x512.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="{page_url}" />
+    <meta property="twitter:title" content="{p['title']}" />
+    <meta property="twitter:description" content="{p['description']}" />
+    <meta property="twitter:image" content="https://fixdata.netlify.app/icon-512x512.png" />
+
+    <link rel="stylesheet" href="/index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    {BUNDLE_SCRIPT_TAG}
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
+    <div id="root">
+      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+        <div class="container mx-auto px-4">
+          <div class="flex justify-between items-center h-16">
+            <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
+              <div class="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-sm sm:text-base shadow-xs hover:bg-blue-700 transition">
+                FIX<span class="text-blue-200 font-extrabold">DATA</span>
+              </div>
+            </a>
+            <div class="text-xs text-slate-500 font-medium">Plataforma de Renda Fixa e Crédito Privado</div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 max-w-4xl mx-auto space-y-4">
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{p['h1']}</h1>
+          <p class="text-base sm:text-lg text-slate-600 leading-relaxed">{p['lead']}</p>
+          <div class="pt-4 border-t border-slate-100 flex items-center gap-2 text-sm text-slate-500">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Carregando dados interativos em tempo real...</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>"""
+        for base_dir in ("public", "docs"):
+            target_dir = os.path.join(base_dir, slug)
+            os.makedirs(target_dir, exist_ok=True)
+            with open(os.path.join(target_dir, "index.html"), "w", encoding="utf-8") as f:
+                f.write(html)
+        print(f"   ✅ /{slug}/ gerada em public/ e docs/", flush=True)
+
 def prune_orphaned_assets(valid_tickers: set):
     print("🧹 Verificando e podando diretórios órfãos e inválidos...")
     for out_dir in (OUTPUT_DIR, DOCS_OUTPUT_DIR):
@@ -995,7 +1148,7 @@ def prune_orphaned_assets(valid_tickers: set):
             if not os.path.isdir(full_path):
                 continue
             # Remove se for inválido ou não fizer parte dos tickers válidos
-            if not is_valid_ticker(name) or name not in valid_tickers:
+            if not is_valid_ticker(name) or name.lower() not in valid_tickers:
                 try:
                     shutil.rmtree(full_path)
                     removed_count += 1
@@ -1020,6 +1173,10 @@ def prune_orphaned_assets(valid_tickers: set):
 
 def main():
     print("Iniciando pré-renderização estática de HTMLs para SEO...")
+
+    # Gera imediatamente páginas institucionais com canonical e SEO próprio
+    render_static_pages()
+
     df = get_assets()
     rows = [row for _, row in df.iterrows()]
     print(f"Processando {len(rows)} ativos...")
@@ -1030,7 +1187,7 @@ def main():
         res = generate_asset_html(r)
         if res:
             tasks.append(res)
-            valid_tickers.add(res[0])
+            valid_tickers.add(res[0].lower())
 
     print(f"Gravando {len(tasks)} páginas HTML estáticas...")
     with ThreadPoolExecutor(max_workers=16) as executor:
@@ -1041,6 +1198,8 @@ def main():
     # Pruna páginas órfãs antigas
     prune_orphaned_assets(valid_tickers)
 
+
 if __name__ == "__main__":
     main()
+
 

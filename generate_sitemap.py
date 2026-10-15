@@ -144,18 +144,19 @@ def main():
     lastmod_week = (now - timedelta(days=7)).strftime("%Y-%m-%d")
     lastmod_old = (now - timedelta(days=30)).strftime("%Y-%m-%d")
 
-    static_pages = ["/", "/negocios", "/charts", "/ntnb", "/primary", "/contact"]
+    static_pages = ["/", "/negocios/", "/charts/", "/ntnb/", "/primary/", "/contact/", "/raiox-devedor/", "/calculadora/"]
 
     def make_urls(tickers, changefreq, priority, lm):
         return [
             {
-                "loc": f"{BASE_URL}/asset/{t}",
+                "loc": f"{BASE_URL}/asset/{t.strip().lower()}/",
                 "lastmod": lm,
                 "changefreq": changefreq,
                 "priority": priority,
             }
             for t in tickers
         ]
+
 
     static_urls = [
         {
