@@ -945,7 +945,9 @@ const AssetPage: React.FC = () => {
               Periodicidade de Cupons
               <InfoTooltipDark text="Frequência contratual de fluxo de pagamentos de juros estipulada na escritura (Semestral, Mensal, Anual ou No Vencimento/Bullet)." />
             </span>
-            <p className="font-semibold text-slate-100">{asset.periodicidade_cupom || 'Não Informado'}</p>
+            <p className="font-semibold text-slate-100">
+              {(!asset.periodicidade_cupom || asset.periodicidade_cupom.toLowerCase() === 'nan' || asset.periodicidade_cupom.toLowerCase() === 'null' || asset.periodicidade_cupom.trim() === '' || asset.periodicidade_cupom === 'Não Informado') ? '-' : asset.periodicidade_cupom}
+            </p>
           </div>
 
           {/* 10. PRÓXIMO CUPOM */}
