@@ -11,6 +11,8 @@ import {
   Tooltip as RechartsTooltip,
   BarChart,
   Bar,
+  Line,
+  ComposedChart,
   XAxis,
   YAxis,
   CartesianGrid
@@ -44,6 +46,7 @@ interface CashflowItem {
   principalTotalBi?: number;
   jurosBi: number;
   totalBi: number;
+  acumuladoBi?: number;
   quantidade: number;
   titulosVencendo?: number;
 }
@@ -324,67 +327,74 @@ const Home: React.FC = () => {
   /* ================= GRÁFICOS: 4. MATURITY & CASHFLOW WALL ================= */
 
   const maturityWall = useMemo(() => {
+    let list: CashflowItem[] = [];
     if (cashflowWallData) {
       if (cashflowPeriodMode === 'MONTHLY') {
         const key = maturityWallFilter === 'B3_ONLY' ? 'MONTHLY_B3' : 'MONTHLY_ALL';
-        if (cashflowWallData[key]) return cashflowWallData[key];
+        if (cashflowWallData[key]) list = [...cashflowWallData[key]];
       } else {
-        if (cashflowWallData[maturityWallFilter]) return cashflowWallData[maturityWallFilter];
+        if (cashflowWallData[maturityWallFilter]) list = [...cashflowWallData[maturityWallFilter]];
       }
     }
 
-    // Fallback paramétrico se o JSON ainda não tiver sido carregado
-    const yearsMap: Record<string, { count: number; titulosVencendo: number; vencimentoBi: number; amortizacaoBi: number; jurosBi: number; totalBi: number }> = {
-      '2026': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2027': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2028': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2029': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2030': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2031-2035': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 },
-      '2036+': { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 }
-    };
-
-    const targetList = maturityWallFilter === 'B3_ONLY'
-      ? ativosVivos.filter(a => a.flag_b3 === 1 || a.flag_b3 === '1')
-      : ativosVivos;
-
-    targetList.forEach(a => {
-      if (!a.vencimento) return;
-      let yr: number;
-      if (a.vencimento.includes('/')) {
-        yr = parseInt(a.vencimento.split('/')[2], 10);
-      } else {
-        yr = parseInt(a.vencimento.split('-')[0], 10);
+    if (list.length === 0) {
+      // Fallback paramétrico se o JSON ainda não tiver sido carregado
+      const yearsMap: Record<string, { count: number; titulosVencendo: number; vencimentoBi: number; amortizacaoBi: number; jurosBi: number; totalBi: number }> = {};
+      for (let y = 2026; y <= 2045; y++) {
+        yearsMap[String(y)] = { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 };
       }
+      yearsMap['2046+'] = { count: 0, titulosVencendo: 0, vencimentoBi: 0, amortizacaoBi: 0, jurosBi: 0, totalBi: 0 };
 
-      if (isNaN(yr)) return;
-      const vol = (Number(a.volume) || 0) / 1e9; // em R$ Bilhões
+      const targetList = maturityWallFilter === 'B3_ONLY'
+        ? ativosVivos.filter(a => a.flag_b3 === 1 || a.flag_b3 === '1')
+        : ativosVivos;
 
-      let bucket = '2036+';
-      if (yr <= 2026) bucket = '2026';
-      else if (yr === 2027) bucket = '2027';
-      else if (yr === 2028) bucket = '2028';
-      else if (yr === 2029) bucket = '2029';
-      else if (yr === 2030) bucket = '2030';
-      else if (yr >= 2031 && yr <= 2035) bucket = '2031-2035';
+      targetList.forEach(a => {
+        if (!a.vencimento) return;
+        let yr: number;
+        if (a.vencimento.includes('/')) {
+          yr = parseInt(a.vencimento.split('/')[2], 10);
+        } else {
+          yr = parseInt(a.vencimento.split('-')[0], 10);
+        }
 
-      yearsMap[bucket].count++;
-      yearsMap[bucket].titulosVencendo++;
-      yearsMap[bucket].vencimentoBi += vol;
-      yearsMap[bucket].jurosBi += vol * 0.08;
-      yearsMap[bucket].totalBi += vol * 1.08;
+        if (isNaN(yr)) return;
+        const vol = (Number(a.volume) || 0) / 1e9; // em R$ Bilhões
+
+        let bucket = '2046+';
+        if (yr <= 2026) bucket = '2026';
+        else if (yr >= 2027 && yr <= 2045) bucket = String(yr);
+
+        if (yearsMap[bucket]) {
+          yearsMap[bucket].count++;
+          yearsMap[bucket].titulosVencendo++;
+          yearsMap[bucket].vencimentoBi += vol;
+          yearsMap[bucket].jurosBi += vol * 0.08;
+          yearsMap[bucket].totalBi += vol * 1.08;
+        }
+      });
+
+      list = Object.entries(yearsMap).map(([ano, data]) => ({
+        ano,
+        quantidade: data.count,
+        titulosVencendo: data.titulosVencendo,
+        vencimentoBi: Number(data.vencimentoBi.toFixed(2)),
+        amortizacaoBi: Number(data.amortizacaoBi.toFixed(2)),
+        principalTotalBi: Number((data.vencimentoBi + data.amortizacaoBi).toFixed(2)),
+        jurosBi: Number(data.jurosBi.toFixed(2)),
+        totalBi: Number(data.totalBi.toFixed(2))
+      }));
+    }
+
+    // Garante o cálculo do acumulado em linha
+    let running = 0;
+    return list.map(item => {
+      running += (Number(item.totalBi) || 0);
+      return {
+        ...item,
+        acumuladoBi: item.acumuladoBi !== undefined ? item.acumuladoBi : Number(running.toFixed(2))
+      };
     });
-
-    return Object.entries(yearsMap).map(([ano, data]) => ({
-      ano,
-      quantidade: data.count,
-      titulosVencendo: data.titulosVencendo,
-      vencimentoBi: Number(data.vencimentoBi.toFixed(2)),
-      amortizacaoBi: Number(data.amortizacaoBi.toFixed(2)),
-      principalTotalBi: Number((data.vencimentoBi + data.amortizacaoBi).toFixed(2)),
-      jurosBi: Number(data.jurosBi.toFixed(2)),
-      totalBi: Number(data.totalBi.toFixed(2))
-    }));
   }, [ativosVivos, maturityWallFilter, cashflowPeriodMode, cashflowWallData]);
 
   /* ================= TOP DEVEDORES & MAIORES SPREADS ================= */
@@ -764,10 +774,10 @@ const Home: React.FC = () => {
               <div>
                 <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
                   <CalendarDays size={22} className="text-blue-600" />
-                  Maturity & Cashflow Wall
+                  Fluxo de Vencimentos & Pagamentos da Dívida
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">
-                  Distribuição {cashflowPeriodMode === 'MONTHLY' ? 'mês a mês dos próximos 24 meses' : 'anual'} do fluxo de compromissos da dívida privada (R$ Bilhões), segregando Vencimento Bullet vs. Amortizações Parciais vs. Juros e Cupons.
+                  Distribuição {cashflowPeriodMode === 'MONTHLY' ? 'mês a mês dos próximos 24 meses' : 'ano a ano (2026 a 2045+)'} do fluxo de compromissos da dívida privada (R$ Bilhões), segregando Vencimento Bullet vs. Amortizações Parciais vs. Juros e Cupons, com curva de volume acumulado.
                 </p>
               </div>
 
@@ -886,7 +896,7 @@ const Home: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Legenda das Pilhas */}
+                {/* Legenda das Pilhas e Linha de Acumulado */}
                 <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-600">
                   <span className="inline-flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded bg-blue-700" />
@@ -900,25 +910,37 @@ const Home: React.FC = () => {
                     <span className="w-3 h-3 rounded bg-amber-500" />
                     Juros & Cupons
                   </span>
+                  <span className="inline-flex items-center gap-1.5 text-emerald-600 font-bold">
+                    <span className="w-4 h-0.5 rounded-full bg-emerald-500" />
+                    Acumulado (Eixo Dir.)
+                  </span>
                 </div>
               </div>
             </div>
 
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={maturityWall} margin={{ top: 20, right: 30, left: 10, bottom: cashflowPeriodMode === 'MONTHLY' ? 18 : 5 }}>
+                <ComposedChart data={maturityWall} margin={{ top: 20, right: 35, left: 10, bottom: cashflowPeriodMode === 'MONTHLY' ? 18 : 5 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                   <XAxis
                     dataKey={cashflowPeriodMode === 'MONTHLY' ? 'label' : 'ano'}
                     stroke="#64748b"
-                    fontSize={cashflowPeriodMode === 'MONTHLY' ? 10 : 12}
+                    fontSize={cashflowPeriodMode === 'MONTHLY' ? 10 : 11}
                     tickLine={false}
                     interval={0}
-                    angle={cashflowPeriodMode === 'MONTHLY' ? -35 : 0}
-                    textAnchor={cashflowPeriodMode === 'MONTHLY' ? 'end' : 'middle'}
-                    height={cashflowPeriodMode === 'MONTHLY' ? 45 : 30}
+                    angle={cashflowPeriodMode === 'MONTHLY' ? -35 : (cashflowPeriodMode === 'YEARLY' ? -45 : 0)}
+                    textAnchor={cashflowPeriodMode === 'MONTHLY' || cashflowPeriodMode === 'YEARLY' ? 'end' : 'middle'}
+                    height={cashflowPeriodMode === 'MONTHLY' ? 45 : 35}
                   />
-                  <YAxis stroke="#64748b" fontSize={12} tickLine={false} unit=" bi" />
+                  <YAxis yAxisId="left" stroke="#64748b" fontSize={12} tickLine={false} unit=" bi" />
+                  <YAxis
+                    yAxisId="right"
+                    orientation="right"
+                    stroke="#10b981"
+                    fontSize={12}
+                    tickLine={false}
+                    unit=" bi"
+                  />
                   <RechartsTooltip
                     cursor={{ fill: '#f8fafc' }}
                     content={({ active, payload, label }) => {
@@ -961,8 +983,17 @@ const Home: React.FC = () => {
                             </div>
                             <div className="border-t border-slate-800 pt-1.5 flex items-center justify-between gap-4 font-bold text-slate-100">
                               <span>Compromisso {cashflowPeriodMode === 'MONTHLY' ? 'Mensal' : 'Anual'} Total:</span>
-                              <span className="text-emerald-400">R$ {data.totalBi} Bi</span>
+                              <span className="text-blue-400">R$ {data.totalBi} Bi</span>
                             </div>
+                            {data.acumuladoBi !== undefined && (
+                              <div className="flex items-center justify-between gap-4 font-bold text-emerald-400 pt-1 border-t border-slate-800/80">
+                                <span className="flex items-center gap-1.5">
+                                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                                  Volume Acumulado até o período:
+                                </span>
+                                <span>R$ {data.acumuladoBi.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bi</span>
+                              </div>
+                            )}
                             <div className="text-[10px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800/60 gap-4">
                               <span className="text-blue-300 font-semibold">
                                 📌 {data.titulosVencendo?.toLocaleString('pt-BR') || 0} títulos vencem {cashflowPeriodMode === 'MONTHLY' ? 'no mês' : 'no ano'}
@@ -975,10 +1006,20 @@ const Home: React.FC = () => {
                       return null;
                     }}
                   />
-                  <Bar dataKey="vencimentoBi" name="Vencimento (Resgate Bullet)" fill="#1d4ed8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 55} />
-                  <Bar dataKey="amortizacaoBi" name="Amortizações Periódicas" fill="#38bdf8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 55} />
-                  <Bar dataKey="jurosBi" name="Juros & Cupons Projetados" fill="#f59e0b" stackId="cf" radius={[6, 6, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 55} />
-                </BarChart>
+                  <Bar yAxisId="left" dataKey="vencimentoBi" name="Vencimento (Resgate Bullet)" fill="#1d4ed8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 36} />
+                  <Bar yAxisId="left" dataKey="amortizacaoBi" name="Amortizações Periódicas" fill="#38bdf8" stackId="cf" radius={[0, 0, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 36} />
+                  <Bar yAxisId="left" dataKey="jurosBi" name="Juros & Cupons Projetados" fill="#f59e0b" stackId="cf" radius={[4, 4, 0, 0]} maxBarSize={cashflowPeriodMode === 'MONTHLY' ? 22 : 36} />
+                  <Line
+                    yAxisId="right"
+                    type="monotone"
+                    dataKey="acumuladoBi"
+                    name="Volume Acumulado"
+                    stroke="#10b981"
+                    strokeWidth={2.5}
+                    dot={{ r: 2.5, fill: '#10b981' }}
+                    activeDot={{ r: 5, fill: '#10b981', stroke: '#fff', strokeWidth: 2 }}
+                  />
+                </ComposedChart>
               </ResponsiveContainer>
             </div>
           </div>

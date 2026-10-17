@@ -957,7 +957,13 @@ const AssetPage: React.FC = () => {
               <InfoTooltipDark text="Data prevista para o próximo evento de pagamento de juros ou amortização de principal creditado em conta na CBLC." />
             </span>
             <p className="font-semibold text-emerald-400">
-              {asset.data_proximo_cupom ? formatDatePretty(asset.data_proximo_cupom) : 'Não mapeado / Bullet'}
+              {asset.data_proximo_cupom ? (
+                formatDatePretty(asset.data_proximo_cupom)
+              ) : (asset.periodicidade_cupom && (asset.periodicidade_cupom.toLowerCase().includes('bullet') || asset.periodicidade_cupom.toLowerCase().includes('vencimento'))) ? (
+                `No Vencimento (${asset.vencimento ? formatDatePretty(asset.vencimento) : '-'})`
+              ) : (
+                '-'
+              )}
             </p>
           </div>
 

@@ -430,10 +430,18 @@ def generate_asset_html(row):
     periodicidade_cupom = periodicidade_cupom_val if periodicidade_cupom_val and periodicidade_cupom_val.lower() not in ('nan', 'none', '') else 'Não Informado'
 
     dt_prox_cupom = str(row.get('data_proximo_cupom') or '').strip()[:10]
-    dt_prox_cupom_display = 'Não mapeado / Bullet'
+    periodicidade_lower = str(periodicidade_cupom or '').lower()
     if dt_prox_cupom and '-' in dt_prox_cupom and len(dt_prox_cupom.split('-')) == 3:
         p = dt_prox_cupom.split('-')
         dt_prox_cupom_display = f"{p[2]}/{p[1]}/{p[0]}"
+    elif 'bullet' in periodicidade_lower or 'vencimento' in periodicidade_lower:
+        v_br = vencimento
+        if '-' in vencimento and len(vencimento.split('-')) == 3:
+            vp = vencimento.split('-')
+            v_br = f"{vp[2]}/{vp[1]}/{vp[0]}"
+        dt_prox_cupom_display = f"No Vencimento ({v_br})" if v_br != '-' else 'No Vencimento'
+    else:
+        dt_prox_cupom_display = '-'
 
     def safe_fmt_pu(v):
         if pd.isna(v) or v is None: return "-"
