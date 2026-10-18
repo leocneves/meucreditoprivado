@@ -345,6 +345,9 @@ const Trades: React.FC = () => {
   const [marketSeries, setMarketSeries] = useState<B3MarketSeriesPayload | null>(null);
   const [noRatePayload, setNoRatePayload] = useState<B3NoRatePayload | null>(null);
 
+  // Controle de colapso de gestão de outliers
+  const [showOutlierSection, setShowOutlierSection] = useState<boolean>(false);
+
   // Estados para Papéis Negociados a PU (Sem Taxa B3)
   const [noRateSearch, setNoRateSearch] = useState('');
   const [noRateTipoFilter, setNoRateTipoFilter] = useState('TODOS');
@@ -352,7 +355,21 @@ const Trades: React.FC = () => {
   const [noRateRatingFilter, setNoRateRatingFilter] = useState('TODOS');
   const [noRatePage, setNoRatePage] = useState(1);
   const [noRatePageSize, setNoRatePageSize] = useState(25);
-  const [noRateSortField, setNoRateSortField] = useState<'volume' | 'trades' | 'pu' | 'ticker' | 'pregao'>('volume');
+  const [noRateSortField, setNoRateSortField] = useState<
+    | 'volume'
+    | 'trades'
+    | 'pu'
+    | 'ticker'
+    | 'pregao'
+    | 'tipo'
+    | 'devedor'
+    | 'setor'
+    | 'indexador'
+    | 'taxa_emissao'
+    | 'rating'
+    | 'duration'
+    | 'vencimento'
+  >('volume');
   const [noRateSortDirection, setNoRateSortDirection] = useState<'asc' | 'desc'>('desc');
 
   // Ordenação da Tabela
@@ -1239,43 +1256,85 @@ const Trades: React.FC = () => {
     });
   }, [noRatePayload, noRateTipoFilter, noRateIndexerFilter, noRateRatingFilter, noRateSearch]);
 
+  const handleNoRateSort = (
+    field:
+      | 'volume'
+      | 'trades'
+      | 'pu'
+      | 'ticker'
+      | 'pregao'
+      | 'tipo'
+      | 'devedor'
+      | 'setor'
+      | 'indexador'
+      | 'taxa_emissao'
+      | 'rating'
+      | 'duration'
+      | 'vencimento'
+  ) => {
+    if (noRateSortField === field) {
+      setNoRateSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setNoRateSortField(field);
+      setNoRateSortDirection(
+        ['volume', 'trades', 'pu', 'duration', 'taxa_emissao'].includes(field) ? 'desc' : 'asc'
+      );
+    }
+  };
+
   const sortedNoRateAssets = useMemo(() => {
     const list = [...filteredNoRateAssets];
     return list.sort((a, b) => {
-      let valA: number | string = 0;
-      let valB: number | string = 0;
+      let comparison = 0;
 
       switch (noRateSortField) {
         case 'volume':
-          valA = a.total_volume || 0;
-          valB = b.total_volume || 0;
+          comparison = (a.total_volume || 0) - (b.total_volume || 0);
           break;
         case 'trades':
-          valA = a.total_trades || 0;
-          valB = b.total_trades || 0;
+          comparison = (a.total_trades || 0) - (b.total_trades || 0);
           break;
         case 'pu':
-          valA = a.ultimo_pu || a.vwap_medio || 0;
-          valB = b.ultimo_pu || a.vwap_medio || 0;
+          comparison = (a.ultimo_pu || a.vwap_medio || 0) - (b.ultimo_pu || b.vwap_medio || 0);
           break;
         case 'pregao':
-          valA = a.ultimo_pregao || '';
-          valB = b.ultimo_pregao || '';
-          return noRateSortDirection === 'asc' 
-            ? String(valA).localeCompare(String(valB)) 
-            : String(valB).localeCompare(String(valA));
+          comparison = String(a.ultimo_pregao || '').localeCompare(String(b.ultimo_pregao || ''));
+          break;
         case 'ticker':
-          valA = a.ticker || '';
-          valB = b.ticker || '';
-          return noRateSortDirection === 'asc' 
-            ? String(valA).localeCompare(String(valB)) 
-            : String(valB).localeCompare(String(valA));
+          comparison = String(a.ticker || '').localeCompare(String(b.ticker || ''));
+          break;
+        case 'tipo':
+          comparison = String(a.tipo || '').localeCompare(String(b.tipo || ''));
+          break;
+        case 'devedor':
+          comparison = String(a.devedor || '').localeCompare(String(b.devedor || ''));
+          break;
+        case 'setor':
+          comparison = String(a.setor || '').localeCompare(String(b.setor || ''));
+          break;
+        case 'indexador':
+          comparison = String(a.indexador || '').localeCompare(String(b.indexador || ''));
+          break;
+        case 'taxa_emissao': {
+          const txA = typeof a.taxa_emissao === 'number' ? a.taxa_emissao : parseFloat(String(a.taxa_emissao || 0).replace(',', '.'));
+          const txB = typeof b.taxa_emissao === 'number' ? b.taxa_emissao : parseFloat(String(b.taxa_emissao || 0).replace(',', '.'));
+          comparison = (isNaN(txA) ? 0 : txA) - (isNaN(txB) ? 0 : txB);
+          break;
+        }
+        case 'rating':
+          comparison = String(a.rating || '').localeCompare(String(b.rating || ''));
+          break;
+        case 'duration':
+          comparison = (Number(a.duration) || 0) - (Number(b.duration) || 0);
+          break;
+        case 'vencimento':
+          comparison = String(a.vencimento || '').localeCompare(String(b.vencimento || ''));
+          break;
         default:
-          valA = a.total_volume || 0;
-          valB = b.total_volume || 0;
+          comparison = (a.total_volume || 0) - (b.total_volume || 0);
       }
 
-      return noRateSortDirection === 'asc' ? (valA as number) - (valB as number) : (valB as number) - (valA as number);
+      return noRateSortDirection === 'asc' ? comparison : -comparison;
     });
   }, [filteredNoRateAssets, noRateSortField, noRateSortDirection]);
 
@@ -1365,12 +1424,12 @@ const Trades: React.FC = () => {
             </h1>
           </div>
           <p className="text-slate-600 text-sm sm:text-base">
-            Acompanhamento diário de trades confirmados na B3 com cruzamento cadastral, VWAP e taxas negociadas.
+            Fluxo diário de operações em Debêntures, CRIs e CRAs registrados na B3 com cruzamento cadastral, VWAP e taxas praticadas.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl flex items-center gap-2">
+          <div className="bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-2xs">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-bold text-emerald-800">
               Último Pregão: {formatDateBR(latestDate)}
@@ -1380,7 +1439,7 @@ const Trades: React.FC = () => {
           <button
             onClick={exportFilteredCSV}
             disabled={!sortedTrades.length}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl font-bold text-xs sm:text-sm shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
             title="Exportar dados da tabela filtrada para CSV"
           >
             <Download size={16} />
@@ -1398,11 +1457,11 @@ const Trades: React.FC = () => {
             <div className="flex items-center gap-2">
               <Sparkles size={18} className="text-amber-400" />
               <h2 className="text-lg sm:text-xl font-black tracking-tight text-white">
-                Destaques & Principais Indicadores do Mercado
+                Panorama de Liquidez &amp; Negociação B3
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-400">
-              Métricas mais monitoradas por gestoras, mesas de operações e investidores institucionais
+              Métricas consolidadas de volume e giro no mercado secundário de renda fixa privada
             </p>
           </div>
 
@@ -1665,25 +1724,26 @@ const Trades: React.FC = () => {
         </div>
       </div>
 
-      {/* ================= BARRA DE FILTROS REATIVOS (APLICADOS AO GRÁFICO, TABELA E DOWNLOAD) ================= */}
-      <div id="filtros-mercado-section" className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+      {/* ================= BARRA DE FILTROS REATIVOS (CLEAN WORKSPACE) ================= */}
+      <div id="filtros-mercado-section" className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
         
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          
+        {/* Linha 1: Busca Textual, Seletor de Período e Download */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
           {/* Busca textual */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-3 text-slate-400" size={18} />
+            <Search className="absolute left-3.5 top-3 text-slate-400 pointer-events-none" size={17} />
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Buscar por Ticker (ex: RENTQ8), Emissor, Setor ou ISIN..."
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-2xs"
             />
             {search && (
               <button
+                type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-3 top-3 text-xs font-bold text-slate-400 hover:text-slate-600"
+                className="absolute right-3 top-2.5 text-xs font-bold text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
               >
                 Limpar
               </button>
@@ -1695,66 +1755,77 @@ const Trades: React.FC = () => {
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">
               Período:
             </span>
-            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200 shadow-2xs">
               <button
+                type="button"
                 onClick={() => setPeriodFilter('ultimo')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   periodFilter === 'ultimo'
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-600 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
+                title={`Exibir exclusivamente negócios do pregão mais recente (${formatDateBR(latestDate)})`}
               >
-                Último Pregão ({formatDateBR(latestDate)})
+                Último Pregão
               </button>
               <button
+                type="button"
                 onClick={() => setPeriodFilter('7d')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   periodFilter === '7d'
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-600 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
+                title="Janela recente dos últimos 5 pregões (~7 dias corridos)"
               >
-                Últimos 7 Dias
+                7 Dias
               </button>
               <button
+                type="button"
                 onClick={() => setPeriodFilter('15d')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   periodFilter === '15d'
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-600 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
+                title="Janela de 11 pregões (~15 dias corridos)"
               >
                 15 Dias
               </button>
               <button
+                type="button"
                 onClick={() => setPeriodFilter('30d')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   periodFilter === '30d'
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-600 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
+                title="Janela mensal de 22 pregões (~30 dias corridos)"
               >
-                Últimos 30 Dias
+                30 Dias
               </button>
               <button
+                type="button"
                 onClick={() => setPeriodFilter('ytd')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                   periodFilter === 'ytd'
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-600 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
+                title="Série acumulada no ano corrente (YTD 2026)"
               >
                 <Sparkles size={11} className={periodFilter === 'ytd' ? 'text-amber-500' : 'text-slate-400'} />
-                Ano 2026 (YTD)
+                Ano 2026
               </button>
             </div>
 
             {/* Botão de Download CSV em destaque nos filtros */}
             <button
+              type="button"
               onClick={exportFilteredCSV}
               disabled={!sortedTrades.length}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all disabled:opacity-50"
-              title="Exportar dados de cada trade filtrado para CSV"
+              className="flex items-center gap-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
+              title="Exportar todos os registros filtrados para planilha CSV"
             >
               <Download size={14} />
               Exportar CSV ({sortedTrades.length.toLocaleString('pt-BR')})
@@ -1762,156 +1833,276 @@ const Trades: React.FC = () => {
           </div>
         </div>
 
-        {/* ================= FILTRO CONSOLIDADO DE ATIVOS & GESTÃO DE DISTORÇÕES ================= */}
-        <div className="bg-slate-50/90 p-3.5 rounded-2xl border border-slate-200/80 space-y-2.5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className="p-1 bg-blue-100 text-blue-700 rounded-lg">
-                <Tag size={13} />
-              </span>
-              <span className="text-xs font-bold text-slate-800">
-                Filtro de Ativos & Gestão de Outliers:
-              </span>
-              <span className="text-[11px] text-slate-500 hidden sm:inline">
-                Selecione papéis para focar o gráfico e a tabela ou exclua negócios atípicos que distorcem as médias
-              </span>
-            </div>
-
-            {(includedTickers.length > 0 || excludedTickers.length > 0) && (
-              <button
-                onClick={() => {
-                  setIncludedTickers([]);
-                  setExcludedTickers([]);
-                  setChartTarget('market');
-                }}
-                className="text-[11px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 self-start sm:self-auto"
-              >
-                <RefreshCw size={11} /> Limpar Seleção de Ativos
-              </button>
-            )}
+        {/* Linha 2: Grade de Filtros de Mercado com Tooltips Informativos */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-2 border-t border-slate-100 text-xs">
+          {/* Instrumento */}
+          <div title="Filtrar por tipo de título de crédito privado: Debêntures Corporativas, CRIs ou CRAs">
+            <label className="block font-bold text-slate-500 uppercase tracking-wider text-2xs mb-1">
+              Instrumento
+            </label>
+            <select
+              value={instrumentFilter}
+              onChange={e => setInstrumentFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="TODOS">Todos (DEB/CRI/CRA)</option>
+              <option value="DEB">Apenas Debêntures</option>
+              <option value="CRI">Apenas CRIs</option>
+              <option value="CRA">Apenas CRAs</option>
+            </select>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Seletor Dropdown Direto de Ativos */}
-            <div className="relative flex-1 min-w-[200px] max-w-xs">
-              <select
-                value={includedTickers.length === 1 ? includedTickers[0] : ''}
-                onChange={e => {
-                  const val = e.target.value;
-                  if (val && val !== 'TODOS') {
-                    setIncludedTickers([val]);
-                    setSelectedTicker(val);
-                    setChartTarget('ticker');
-                  } else {
-                    setIncludedTickers([]);
-                    setChartTarget('market');
-                  }
-                }}
-                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
-              >
-                <option value="">{includedTickers.length === 0 ? `Todos os Ativos (${availableTickers.length})` : 'Alterar Ativo Selecionado...'}</option>
-                {availableTickers.slice(0, 200).map(t => (
-                  <option key={t.ticker} value={t.ticker}>
-                    {t.ticker} ({t.tipo}) — {t.devedor ? t.devedor.slice(0, 25) : 'Emissor'}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Campo para digitar ou escolher Ticker */}
-            <div className="relative flex-1 min-w-[150px] max-w-xs">
-              <input
-                type="text"
-                list="b3-tickers-list"
-                value={tickerInputValue}
-                onChange={e => setTickerInputValue(e.target.value.toUpperCase())}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (tickerInputValue.trim()) {
-                      const clean = tickerInputValue.trim().toUpperCase();
-                      handleAddIncludedTicker(clean);
-                      setSelectedTicker(clean);
-                      setChartTarget('ticker');
-                    }
-                  }
-                }}
-                placeholder="Digitar ticker (ex: RENTQ8)..."
-                className="w-full pl-3 pr-2 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase shadow-xs"
-              />
-              <datalist id="b3-tickers-list">
-                {availableTickers.slice(0, 150).map(t => (
-                  <option key={t.ticker} value={t.ticker}>{t.ticker} — {t.devedor || t.tipo}</option>
-                ))}
-              </datalist>
-            </div>
-
-            {/* Botão Incluir Ativo */}
-            <button
-              onClick={() => {
-                if (tickerInputValue.trim()) {
-                  const clean = tickerInputValue.trim().toUpperCase();
-                  handleAddIncludedTicker(clean);
-                  setSelectedTicker(clean);
-                  setChartTarget('ticker');
-                }
+          {/* Indexador */}
+          <div title="Filtrar pelo regime de remuneração da emissão: CDI+, IPCA+, Pré-Fixado ou % do CDI">
+            <label className="block font-bold text-slate-500 uppercase tracking-wider text-2xs mb-1">
+              Indexador
+            </label>
+            <select
+              value={indexerFilter}
+              onChange={e => {
+                const val = e.target.value;
+                setIndexerFilter(val);
+                setNoRateIndexerFilter(val === 'TODOS' ? 'TODOS' : (val === 'DI+' ? 'DI+' : val === 'DI%' ? 'DI%' : val));
               }}
-              disabled={!tickerInputValue.trim()}
-              className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-xs font-bold rounded-xl transition-all shadow-xs"
-              title="Filtrar por este papel no gráfico e tabela"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
             >
-              <Plus size={13} /> Filtrar Ativo
-            </button>
-
-            {/* Botão Excluir Distorção / Outlier */}
-            <button
-              onClick={() => handleAddExcludedTicker(tickerInputValue)}
-              disabled={!tickerInputValue.trim()}
-              className="flex items-center gap-1 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-40 text-white text-xs font-bold rounded-xl transition-all shadow-xs"
-              title="Excluir papel das agregações de volume e médias de mercado"
-            >
-              <Minus size={13} /> Excluir Outlier
-            </button>
+              <option value="TODOS">Todos Indexadores</option>
+              <option value="DI+">CDI+ (Spread)</option>
+              <option value="IPCA">IPCA+ (Inflação)</option>
+              <option value="PRE">Pré-Fixado</option>
+              <option value="DI%">% do CDI</option>
+            </select>
           </div>
 
-          {/* Pílulas rápidas com top ativos mais negociados */}
-          <div className="flex flex-wrap items-center gap-1.5 pt-1">
-            <span className="text-[11px] font-bold uppercase text-slate-400 mr-1 flex items-center gap-1">
-              <Sparkles size={11} className="text-amber-500" /> Mais negociados:
-            </span>
-            {availableTickers.slice(0, 8).map(t => {
-              const isSelected = includedTickers.includes(t.ticker);
-              return (
-                <button
-                  key={`quick-pill-${t.ticker}`}
-                  onClick={() => {
-                    if (isSelected) {
-                      handleRemoveIncludedTicker(t.ticker);
-                      if (includedTickers.length <= 1) {
-                        setChartTarget('market');
-                      }
-                    } else {
-                      setIncludedTickers([t.ticker]);
-                      setSelectedTicker(t.ticker);
+          {/* Setor */}
+          <div title="Filtrar pelo setor econômico e de atividade do emissor">
+            <label className="block font-bold text-slate-500 uppercase tracking-wider text-2xs mb-1">
+              Setor
+            </label>
+            <select
+              value={sectorFilter}
+              onChange={e => setSectorFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="TODOS">Todos os Setores ({availableSectors.length})</option>
+              {availableSectors.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Devedor / Emissor */}
+          <div title="Filtrar por companhia emissora ou devedora principal">
+            <label className="block font-bold text-slate-500 uppercase tracking-wider text-2xs mb-1">
+              Devedor / Emissor
+            </label>
+            <select
+              value={debtorFilter}
+              onChange={e => setDebtorFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="TODOS">Todos os Devedores</option>
+              {availableDebtors.slice(0, 100).map(d => (
+                <option key={d} value={d}>{d.length > 25 ? `${d.slice(0, 25)}...` : d}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Rating */}
+          <div title="Filtrar por faixa de nota de crédito oficial atribuída por agências autorizadas">
+            <label className="block font-bold text-slate-500 uppercase tracking-wider text-2xs mb-1">
+              Rating Cadastral
+            </label>
+            <select
+              value={ratingFilter}
+              onChange={e => setRatingFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="TODOS">Todos os Ratings</option>
+              <option value="AAA">Apenas AAA (Prime)</option>
+              <option value="AA">Grau Alto (AAA e AA)</option>
+              <option value="OUTROS">Outros / Sem Rating</option>
+            </select>
+          </div>
+
+          {/* Incentivada */}
+          <div title="Debêntures de infraestrutura enquadradas na Lei 12.431 com isenção de IR para pessoas físicas">
+            <label className="block font-bold text-slate-500 uppercase tracking-wider text-2xs mb-1">
+              Isenção de IR (12.431)
+            </label>
+            <select
+              value={taxFreeFilter}
+              onChange={e => setTaxFreeFilter(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            >
+              <option value="TODOS">Todas as Emissões</option>
+              <option value="SIM">Apenas Isentas (12.431)</option>
+              <option value="NAO">Tributadas Padrão</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Linha 3: Seleção Direta de Ativos, Mais Negociados e Gestão Compacta de Outliers */}
+        <div className="pt-2 border-t border-slate-100 space-y-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[280px]">
+              {/* Dropdown de Ativos */}
+              <div className="relative min-w-[190px] max-w-xs flex-1">
+                <select
+                  value={includedTickers.length === 1 ? includedTickers[0] : ''}
+                  onChange={e => {
+                    const val = e.target.value;
+                    if (val && val !== 'TODOS') {
+                      setIncludedTickers([val]);
+                      setSelectedTicker(val);
                       setChartTarget('ticker');
+                    } else {
+                      setIncludedTickers([]);
+                      setChartTarget('market');
                     }
                   }}
-                  className={`px-2.5 py-0.5 rounded-lg text-xs font-bold font-mono transition-all ${
-                    isSelected
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-blue-50'
-                  }`}
-                  title={`${t.ticker} (${t.tipo}) — ${t.devedor || 'Emissor'}`}
+                  className="w-full bg-white border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-2xs cursor-pointer"
                 >
-                  {t.ticker}
-                </button>
-              );
-            })}
+                  <option value="">{includedTickers.length === 0 ? `Filtrar por Ativo (${availableTickers.length})` : 'Alterar Ativo...'}</option>
+                  {availableTickers.slice(0, 200).map(t => (
+                    <option key={t.ticker} value={t.ticker}>
+                      {t.ticker} ({t.tipo}) — {t.devedor ? t.devedor.slice(0, 24) : 'Emissor'}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Input Rápido por Ticker */}
+              <div className="relative w-36">
+                <input
+                  type="text"
+                  list="b3-tickers-list"
+                  value={tickerInputValue}
+                  onChange={e => setTickerInputValue(e.target.value.toUpperCase())}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      if (tickerInputValue.trim()) {
+                        const clean = tickerInputValue.trim().toUpperCase();
+                        handleAddIncludedTicker(clean);
+                        setSelectedTicker(clean);
+                        setChartTarget('ticker');
+                      }
+                    }
+                  }}
+                  placeholder="Ticker (ex: RENTQ8)..."
+                  className="w-full pl-2.5 pr-2 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase shadow-2xs"
+                />
+                <datalist id="b3-tickers-list">
+                  {availableTickers.slice(0, 150).map(t => (
+                    <option key={t.ticker} value={t.ticker}>{t.ticker} — {t.devedor || t.tipo}</option>
+                  ))}
+                </datalist>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (tickerInputValue.trim()) {
+                    const clean = tickerInputValue.trim().toUpperCase();
+                    handleAddIncludedTicker(clean);
+                    setSelectedTicker(clean);
+                    setChartTarget('ticker');
+                  }
+                }}
+                disabled={!tickerInputValue.trim()}
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-xs font-bold rounded-xl transition-all shadow-2xs cursor-pointer"
+                title="Filtrar por este papel específico no gráfico e tabela"
+              >
+                Filtrar
+              </button>
+
+              {/* Botão de Toggle para Gestão de Outliers */}
+              <button
+                type="button"
+                onClick={() => setShowOutlierSection(prev => !prev)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${
+                  showOutlierSection || excludedTickers.length > 0
+                    ? 'bg-rose-50 border-rose-300 text-rose-800'
+                    : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-700'
+                }`}
+                title="Abrir controle para excluir negócios atípicos que distorcem as médias de mercado"
+              >
+                <SlidersHorizontal size={13} className={excludedTickers.length > 0 ? 'text-rose-600' : 'text-slate-500'} />
+                <span>Outliers / Exclusões {excludedTickers.length > 0 ? `(${excludedTickers.length})` : ''}</span>
+              </button>
+            </div>
+
+            {/* Pílulas rápidas com top ativos mais negociados */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-3xs font-bold uppercase text-slate-400 mr-0.5">Top Liquidez:</span>
+              {availableTickers.slice(0, 6).map(t => {
+                const isSelected = includedTickers.includes(t.ticker);
+                return (
+                  <button
+                    key={`quick-pill-${t.ticker}`}
+                    type="button"
+                    onClick={() => {
+                      if (isSelected) {
+                        handleRemoveIncludedTicker(t.ticker);
+                        if (includedTickers.length <= 1) {
+                          setChartTarget('market');
+                        }
+                      } else {
+                        setIncludedTickers([t.ticker]);
+                        setSelectedTicker(t.ticker);
+                        setChartTarget('ticker');
+                      }
+                    }}
+                    className={`px-2 py-0.5 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-blue-600 text-white shadow-2xs'
+                        : 'bg-slate-100 hover:bg-blue-50 text-slate-700 border border-slate-200/80 hover:border-blue-300'
+                    }`}
+                    title={`${t.ticker} (${t.tipo}) — ${t.devedor || 'Emissor'}`}
+                  >
+                    {t.ticker}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Tags de Ativos Selecionados */}
+          {/* Painel Colapsável de Gestão de Outliers */}
+          {showOutlierSection && (
+            <div className="p-3 bg-rose-50/60 rounded-xl border border-rose-200/70 space-y-2 animate-in fade-in duration-200">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-rose-900 flex items-center gap-1.5">
+                  <AlertCircle size={14} className="text-rose-600" />
+                  Exclusão de Ativos Outliers / Negócios Atípicos
+                </span>
+                <span className="text-2xs text-rose-700">
+                  Os ativos excluídos são expurgados do cálculo das médias ponderadas e volumes
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Digitar ticker para excluir das agregações (ex: ABC12)..."
+                  value={tickerInputValue}
+                  onChange={e => setTickerInputValue(e.target.value.toUpperCase())}
+                  className="flex-1 max-w-sm pl-2.5 pr-2 py-1 bg-white border border-rose-300 rounded-lg text-xs font-mono font-bold text-rose-900 uppercase"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleAddExcludedTicker(tickerInputValue)}
+                  disabled={!tickerInputValue.trim()}
+                  className="px-3 py-1 bg-rose-600 hover:bg-rose-700 disabled:opacity-40 text-white text-xs font-bold rounded-lg transition shadow-2xs cursor-pointer"
+                >
+                  Excluir Ativo
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Tags de Ativos Selecionados ou Excluídos */}
           {(includedTickers.length > 0 || excludedTickers.length > 0) && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-200/60">
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
               {includedTickers.map(tk => (
                 <span
                   key={`inc-${tk}`}
@@ -1920,13 +2111,14 @@ const Trades: React.FC = () => {
                   <Check size={11} className="text-blue-600" />
                   <span>{tk}</span>
                   <button
+                    type="button"
                     onClick={() => {
                       handleRemoveIncludedTicker(tk);
                       if (includedTickers.length <= 1) {
                         setChartTarget('market');
                       }
                     }}
-                    className="ml-0.5 text-blue-500 hover:text-blue-900 rounded hover:bg-blue-200/60"
+                    className="ml-0.5 text-blue-500 hover:text-blue-900 rounded hover:bg-blue-200/60 cursor-pointer"
                     title={`Remover filtro de ${tk}`}
                   >
                     <X size={12} />
@@ -1942,8 +2134,9 @@ const Trades: React.FC = () => {
                   <AlertCircle size={11} className="text-rose-600" />
                   <span>Excluído: {tk}</span>
                   <button
+                    type="button"
                     onClick={() => handleRemoveExcludedTicker(tk)}
-                    className="ml-0.5 text-rose-500 hover:text-rose-900 rounded hover:bg-rose-200/60"
+                    className="ml-0.5 text-rose-500 hover:text-rose-900 rounded hover:bg-rose-200/60 cursor-pointer"
                     title={`Restaurar ${tk}`}
                   >
                     <X size={12} />
@@ -1954,252 +2147,15 @@ const Trades: React.FC = () => {
           )}
         </div>
 
-        {/* Linha de Sub-Filtros: Instrumento, Indexador, Setor, Devedor, Rating, Incentivada */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-3 border-t border-slate-100 text-xs">
-          
-          {/* Instrumento */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Instrumento
-            </label>
-            <select
-              value={instrumentFilter}
-              onChange={e => setInstrumentFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos (DEB/CRI/CRA)</option>
-              <option value="DEB">Apenas Debêntures</option>
-              <option value="CRI">Apenas CRIs</option>
-              <option value="CRA">Apenas CRAs</option>
-            </select>
-          </div>
-
-          {/* Indexador */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Indexador
-            </label>
-            <select
-              value={indexerFilter}
-              onChange={e => {
-                const val = e.target.value;
-                setIndexerFilter(val);
-                setNoRateIndexerFilter(val === 'TODOS' ? 'TODOS' : (val === 'DI+' ? 'DI+' : val === 'DI%' ? 'DI%' : val));
-              }}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos Indexadores</option>
-              <option value="DI+">CDI+ (Spread)</option>
-              <option value="IPCA">IPCA+ (Inflação)</option>
-              <option value="PRE">Pré-Fixado</option>
-              <option value="DI%">% do CDI</option>
-            </select>
-          </div>
-
-          {/* Setor */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Setor
-            </label>
-            <select
-              value={sectorFilter}
-              onChange={e => setSectorFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos os Setores ({availableSectors.length})</option>
-              {availableSectors.map(s => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Devedor / Emissor */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Devedor / Emissor
-            </label>
-            <select
-              value={debtorFilter}
-              onChange={e => setDebtorFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos os Devedores</option>
-              {availableDebtors.slice(0, 100).map(d => (
-                <option key={d} value={d}>{d.length > 25 ? `${d.slice(0, 25)}...` : d}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Rating */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Rating Cadastral
-            </label>
-            <select
-              value={ratingFilter}
-              onChange={e => setRatingFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todos os Ratings</option>
-              <option value="AAA">Apenas AAA (Top Tier)</option>
-              <option value="AA">Grau Alto (AAA e AA)</option>
-              <option value="OUTROS">Outros / Sem Rating</option>
-            </select>
-          </div>
-
-          {/* Incentivada */}
-          <div>
-            <label className="block font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Isenção de IR (12.431)
-            </label>
-            <select
-              value={taxFreeFilter}
-              onChange={e => setTaxFreeFilter(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="TODOS">Todas as Emissões</option>
-              <option value="SIM">Apenas Incentivadas</option>
-              <option value="NAO">Não Incentivadas</option>
-            </select>
-          </div>
-        </div>
-
-        {/* ================= CONTROLES DE VISUALIZAÇÃO DO GRÁFICO (MÉTRICA, VISÃO & MÉDIA MÓVEL) ================= */}
-        <div className="bg-slate-50/90 p-3.5 rounded-2xl border border-slate-200/80 flex flex-col xl:flex-row xl:items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 bg-blue-100 text-blue-700 rounded-lg">
-              <LineChart size={14} />
-            </span>
-            <div>
-              <span className="text-xs font-bold text-slate-800 block">
-                Visualização do Gráfico:
-              </span>
-              <span className="text-[11px] text-slate-500 hidden sm:inline">
-                Selecione o modo de agregação, média móvel e métrica exibida na curva
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Toggle Modo: Por Ativo vs Consolidado */}
-            <div className="inline-flex p-1 bg-white rounded-xl border border-slate-200 shadow-xs">
-              <button
-                onClick={() => {
-                  setChartTarget('ticker');
-                  if (includedTickers.length === 0 && availableTickers.length > 0) {
-                    setIncludedTickers([availableTickers[0].ticker]);
-                    setSelectedTicker(availableTickers[0].ticker);
-                  }
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  chartTarget === 'ticker'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Plotar curva individual de ativo selecionado"
-              >
-                <Tag size={12} /> Por Ativo
-              </button>
-              <button
-                onClick={() => {
-                  setChartTarget('market');
-                  setIncludedTickers([]);
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  chartTarget === 'market'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Plotar média consolidada dos dados e filtros selecionados"
-              >
-                <Layers size={12} /> Consolidado
-              </button>
-            </div>
-
-            {/* Toggle de Média Móvel */}
-            <div className="inline-flex items-center p-1 bg-amber-50 border border-amber-200/80 rounded-xl shadow-xs">
-              <span className="text-[11px] font-bold text-amber-800 px-2 flex items-center gap-1">
-                <Sparkles size={11} className="text-amber-600" /> MM:
-              </span>
-              <button
-                onClick={() => setMovingAveragePeriod(0)}
-                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
-                  movingAveragePeriod === 0
-                    ? 'bg-amber-600 text-white shadow-xs'
-                    : 'text-amber-800 hover:text-amber-950'
-                }`}
-              >
-                Sem MM
-              </button>
-              <button
-                onClick={() => setMovingAveragePeriod(3)}
-                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
-                  movingAveragePeriod === 3
-                    ? 'bg-amber-600 text-white shadow-xs'
-                    : 'text-amber-800 hover:text-amber-950'
-                }`}
-              >
-                3D
-              </button>
-              <button
-                onClick={() => setMovingAveragePeriod(5)}
-                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
-                  movingAveragePeriod === 5
-                    ? 'bg-amber-600 text-white shadow-xs'
-                    : 'text-amber-800 hover:text-amber-950'
-                }`}
-              >
-                5D
-              </button>
-            </div>
-
-            {/* Toggle de Métrica */}
-            <div className="inline-flex p-1 bg-blue-50 border border-blue-200/80 rounded-xl shadow-xs">
-              <button
-                onClick={() => handleMetricChange('volume')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'volume' ? 'bg-blue-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Volume (R$)
-              </button>
-              <button
-                onClick={() => handleMetricChange('price')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'price' ? 'bg-blue-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Preço (VWAP)
-              </button>
-              <button
-                onClick={() => handleMetricChange('yield')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'yield' ? 'bg-blue-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Taxa (%)
-              </button>
-              <button
-                onClick={() => handleMetricChange('spread')}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  chartMetric === 'spread' ? 'bg-amber-600 text-white shadow-xs' : 'text-blue-800 hover:text-blue-950'
-                }`}
-              >
-                Spread (bps)
-              </button>
-            </div>
-          </div>
-        </div>
-
         {/* Resumo de Registros Filtrados e Limpar Filtros */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 pt-2 border-t border-slate-100">
           <div className="flex items-center gap-2">
             <Filter size={13} className="text-blue-600" />
             <span>
-              Filtros ativos: <strong>{sortedTrades.length.toLocaleString('pt-BR')}</strong> negócios aplicados ao <strong>Gráfico</strong>, à <strong>Tabela</strong> e ao <strong>Download CSV</strong>
+              Universo filtrado: <strong>{sortedTrades.length.toLocaleString('pt-BR')}</strong> negócios aplicados à <strong>Tabela</strong> e ao <strong>Download CSV</strong>
               {excludedTickers.length > 0 && (
                 <span className="text-rose-600 font-bold ml-1.5">
-                  ({excludedTickers.length} outlier{excludedTickers.length > 1 ? 's' : ''} excluído{excludedTickers.length > 1 ? 's' : ''})
+                  ({excludedTickers.length} outlier{excludedTickers.length > 1 ? 's' : ''} expurgado{excludedTickers.length > 1 ? 's' : ''})
                 </span>
               )}
             </span>
@@ -2207,6 +2163,7 @@ const Trades: React.FC = () => {
 
           {(instrumentFilter !== 'TODOS' || indexerFilter !== 'TODOS' || sectorFilter !== 'TODOS' || debtorFilter !== 'TODOS' || ratingFilter !== 'TODOS' || taxFreeFilter !== 'TODOS' || search || periodFilter !== '7d' || includedTickers.length > 0 || excludedTickers.length > 0) && (
             <button
+              type="button"
               onClick={() => {
                 setPeriodFilter('7d');
                 setInstrumentFilter('TODOS');
@@ -2222,7 +2179,7 @@ const Trades: React.FC = () => {
                 setTickerInputValue('');
                 setChartTarget('market');
               }}
-              className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 self-start sm:self-auto"
+              className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 self-start sm:self-auto cursor-pointer"
             >
               <RefreshCw size={12} /> Limpar Todos os Filtros
             </button>
@@ -2230,18 +2187,18 @@ const Trades: React.FC = () => {
         </div>
       </div>
 
-      {/* ================= GRÁFICO INTERATIVO DE PREÇOS E NEGÓCIOS NOS N DIAS ================= */}
-      <div id="grafico-precos-section" className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+      {/* ================= GRÁFICO INTERATIVO COM CONTROLES INTEGRADOS ================= */}
+      <div id="grafico-precos-section" className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
         
-        {/* Cabeçalho do Gráfico — Apenas Título e Contexto descritivo sem filtros */}
-        <div className="border-b border-slate-100 pb-5">
+        {/* Cabeçalho do Gráfico — Título + Controles Integrados */}
+        <div className="border-b border-slate-100 pb-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
               <span className="p-2 bg-blue-100 text-blue-700 rounded-xl">
                 <LineChart size={20} />
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                Evolução de Preços, Taxas & Spread {periodFilter === 'ytd' ? 'em 2026 (YTD)' : periodFilter === '7d' ? 'nos 7 Dias' : periodFilter === '15d' ? 'nos 15 Dias' : periodFilter === 'ultimo' ? 'no Último Pregão' : 'nos 30 Dias'}
+                Evolução de Preços, Taxas &amp; Spread {periodFilter === 'ytd' ? 'em 2026 (YTD)' : periodFilter === '7d' ? 'nos 7 Dias' : periodFilter === '15d' ? 'nos 15 Dias' : periodFilter === 'ultimo' ? 'no Último Pregão' : 'nos 30 Dias'}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-500">
@@ -2253,6 +2210,126 @@ const Trades: React.FC = () => {
                     ? `Média ponderada do mercado secundário (excluindo distorções: ${excludedTickers.join(', ')})`
                     : `Média ponderada do universo filtrado (${sortedTrades.length.toLocaleString('pt-BR')} negócios${indexerFilter !== 'TODOS' ? ` em ${indexerFilter}` : ''}${instrumentFilter !== 'TODOS' ? ` em ${instrumentFilter}` : ''})`))}
             </p>
+          </div>
+
+          {/* Controles de Visualização Integrados ao Gráfico */}
+          <div className="flex flex-wrap items-center gap-2.5 self-start xl:self-auto">
+            {/* Toggle Modo: Por Ativo vs Consolidado */}
+            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => {
+                  setChartTarget('ticker');
+                  if (includedTickers.length === 0 && availableTickers.length > 0) {
+                    setIncludedTickers([availableTickers[0].ticker]);
+                    setSelectedTicker(availableTickers[0].ticker);
+                  }
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  chartTarget === 'ticker'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Plotar curva individual do ativo selecionado"
+              >
+                <Tag size={12} /> Por Ativo
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setChartTarget('market');
+                  setIncludedTickers([]);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  chartTarget === 'market'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Plotar média consolidada dos dados e filtros selecionados"
+              >
+                <Layers size={12} /> Consolidado
+              </button>
+            </div>
+
+            {/* Toggle de Média Móvel */}
+            <div className="inline-flex items-center p-1 bg-amber-50 border border-amber-200/80 rounded-xl shadow-2xs">
+              <span className="text-[11px] font-bold text-amber-800 px-2 flex items-center gap-1">
+                <Sparkles size={11} className="text-amber-600" /> MM:
+              </span>
+              <button
+                type="button"
+                onClick={() => setMovingAveragePeriod(0)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  movingAveragePeriod === 0
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 hover:text-amber-950'
+                }`}
+              >
+                Sem MM
+              </button>
+              <button
+                type="button"
+                onClick={() => setMovingAveragePeriod(3)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  movingAveragePeriod === 3
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 hover:text-amber-950'
+                }`}
+              >
+                3D
+              </button>
+              <button
+                type="button"
+                onClick={() => setMovingAveragePeriod(5)}
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  movingAveragePeriod === 5
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 hover:text-amber-950'
+                }`}
+              >
+                5D
+              </button>
+            </div>
+
+            {/* Toggle de Métrica */}
+            <div className="inline-flex p-1 bg-slate-100 border border-slate-200 rounded-xl shadow-2xs">
+              <button
+                type="button"
+                onClick={() => handleMetricChange('volume')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  chartMetric === 'volume' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-700 hover:text-slate-900'
+                }`}
+              >
+                Volume (R$)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleMetricChange('price')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  chartMetric === 'price' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-700 hover:text-slate-900'
+                }`}
+              >
+                Preço (VWAP)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleMetricChange('yield')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  chartMetric === 'yield' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-700 hover:text-slate-900'
+                }`}
+              >
+                Taxa (%)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleMetricChange('spread')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  chartMetric === 'spread' ? 'bg-amber-600 text-white shadow-xs' : 'text-slate-700 hover:text-slate-900'
+                }`}
+              >
+                Spread (bps)
+              </button>
+            </div>
           </div>
         </div>
 
@@ -2959,29 +3036,64 @@ const Trades: React.FC = () => {
             <thead className="sticky top-0 bg-slate-100 z-10 shadow-sm">
               <tr className="bg-slate-100 text-slate-700 uppercase text-[11px] font-black border-b border-slate-200">
                 <th 
-                  className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors"
-                  onClick={() => {
-                    setNoRateSortField('ticker');
-                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                  }}
+                  className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('ticker')}
+                  title="Clique para ordenar por Ticker / Instrumento"
                 >
                   <div className="flex items-center gap-1.5">
                     Ticker / Tipo
-                    <ArrowUpDown size={12} className={noRateSortField === 'ticker' ? 'text-blue-600' : 'text-slate-400'} />
+                    <ArrowUpDown size={12} className={noRateSortField === 'ticker' || noRateSortField === 'tipo' ? 'text-blue-600' : 'text-slate-400'} />
                   </div>
                 </th>
 
-                <th className="p-3.5">Emissor / Devedor & Setor</th>
-                <th className="p-3.5">Indexador & Emissão</th>
-                <th className="p-3.5">Rating</th>
-                <th className="p-3.5">Duration / Venc.</th>
+                <th 
+                  className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('devedor')}
+                  title="Clique para ordenar por Emissor / Devedor"
+                >
+                  <div className="flex items-center gap-1.5">
+                    Emissor / Devedor &amp; Setor
+                    <ArrowUpDown size={12} className={noRateSortField === 'devedor' || noRateSortField === 'setor' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
 
                 <th 
-                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors"
-                  onClick={() => {
-                    setNoRateSortField('pu');
-                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                  }}
+                  className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('indexador')}
+                  title="Clique para ordenar por Indexador e Taxa de Emissão"
+                >
+                  <div className="flex items-center gap-1.5">
+                    Indexador &amp; Emissão
+                    <ArrowUpDown size={12} className={noRateSortField === 'indexador' || noRateSortField === 'taxa_emissao' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th 
+                  className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('rating')}
+                  title="Clique para ordenar por Rating Oficial"
+                >
+                  <div className="flex items-center gap-1.5">
+                    Rating
+                    <ArrowUpDown size={12} className={noRateSortField === 'rating' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th 
+                  className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('duration')}
+                  title="Clique para ordenar por Duration (anos) ou Vencimento"
+                >
+                  <div className="flex items-center gap-1.5">
+                    Duration / Venc.
+                    <ArrowUpDown size={12} className={noRateSortField === 'duration' || noRateSortField === 'vencimento' ? 'text-blue-600' : 'text-slate-400'} />
+                  </div>
+                </th>
+
+                <th 
+                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('pu')}
+                  title="Clique para ordenar por Preço Médio (VWAP)"
                 >
                   <div className="flex items-center justify-end gap-1.5">
                     Último PU (VWAP)
@@ -2990,11 +3102,9 @@ const Trades: React.FC = () => {
                 </th>
 
                 <th 
-                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors"
-                  onClick={() => {
-                    setNoRateSortField('volume');
-                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                  }}
+                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('volume')}
+                  title="Clique para ordenar por Volume Total Negociado"
                 >
                   <div className="flex items-center justify-end gap-1.5">
                     Volume Total (R$)
@@ -3003,11 +3113,9 @@ const Trades: React.FC = () => {
                 </th>
 
                 <th 
-                  className="p-3.5 text-center cursor-pointer hover:bg-slate-200/70 transition-colors"
-                  onClick={() => {
-                    setNoRateSortField('trades');
-                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                  }}
+                  className="p-3.5 text-center cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('trades')}
+                  title="Clique para ordenar por Quantidade de Trades"
                 >
                   <div className="flex items-center justify-center gap-1.5">
                     Trades
@@ -3016,11 +3124,9 @@ const Trades: React.FC = () => {
                 </th>
 
                 <th 
-                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors"
-                  onClick={() => {
-                    setNoRateSortField('pregao');
-                    setNoRateSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                  }}
+                  className="p-3.5 text-right cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                  onClick={() => handleNoRateSort('pregao')}
+                  title="Clique para ordenar por Data do Último Pregão"
                 >
                   <div className="flex items-center justify-end gap-1.5">
                     Último Pregão
