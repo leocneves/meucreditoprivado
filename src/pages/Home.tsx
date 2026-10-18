@@ -33,7 +33,10 @@ import {
   Clock,
   AlertTriangle,
   ExternalLink,
-  Info
+  Info,
+  Sparkles,
+  X,
+  ArrowRight
 } from 'lucide-react';
 
 /* ================= TIPOS DE FLUXO & COBERTURA ================= */
@@ -143,6 +146,25 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [maturityWallFilter, setMaturityWallFilter] = useState<'ALL' | 'B3_ONLY'>('ALL');
   const [cashflowPeriodMode, setCashflowPeriodMode] = useState<'YEARLY' | 'MONTHLY'>('YEARLY');
+  const [showPrimaryModal, setShowPrimaryModal] = useState(false);
+
+  useEffect(() => {
+    try {
+      const hasSeen = localStorage.getItem('fixdata_primary_modal_v1');
+      if (!hasSeen) {
+        setShowPrimaryModal(true);
+      }
+    } catch (e) {
+      // Ignora erro se localStorage restrito
+    }
+  }, []);
+
+  const handleClosePrimaryModal = () => {
+    try {
+      localStorage.setItem('fixdata_primary_modal_v1', 'true');
+    } catch (e) {}
+    setShowPrimaryModal(false);
+  };
 
   /* ================= LOAD ================= */
 
@@ -1267,6 +1289,71 @@ const Home: React.FC = () => {
 
         {!loading && <Watchlist assets={assets} />}
       </section>
+
+      {/* ================= MODAL DE AVISO: MERCADO PRIMÁRIO ================= */}
+      {showPrimaryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 md:p-8 space-y-6 relative overflow-hidden">
+            {/* Efeito decorativo sutil de fundo */}
+            <div className="absolute top-0 right-0 -mt-12 -mr-12 w-48 h-48 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full blur-2xl opacity-60 pointer-events-none" />
+
+            <div className="flex items-start justify-between relative z-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold tracking-wide">
+                <Sparkles size={14} className="text-blue-600" />
+                NOVIDADE NO FIXDATA
+              </div>
+              <button
+                onClick={handleClosePrimaryModal}
+                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition"
+                title="Fechar"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-2 relative z-10">
+              <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                Novo Módulo de Mercado Primário
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Agora o FixData monitora as ofertas públicas de <strong className="text-slate-900 font-semibold">Debêntures, CRIs e CRAs</strong> diretamente da CVM. Acompanhe as emissões antes mesmo da listagem no mercado secundário.
+              </p>
+            </div>
+
+            <div className="space-y-3 bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-xs text-slate-700 relative z-10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0" />
+                <span><strong>Pipeline em Tempo Real:</strong> Ofertas em andamento, em análise e bookbuildings agendados.</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full bg-indigo-600 flex-shrink-0" />
+                <span><strong>Analytics DCM:</strong> Volumes históricos consolidados, ticket médio e mix de instrumentos.</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full bg-emerald-600 flex-shrink-0" />
+                <span><strong>Inteligência Documental:</strong> Extração automática de devedor real, indexador e prospectos oficiais.</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 relative z-10">
+              <Link
+                to="/primary"
+                onClick={handleClosePrimaryModal}
+                className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm hover:shadow transition"
+              >
+                <span>Explorar Mercado Primário</span>
+                <ArrowRight size={16} />
+              </Link>
+              <button
+                onClick={handleClosePrimaryModal}
+                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition"
+              >
+                Continuar na Home
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

@@ -23,25 +23,449 @@
       }
     },
     "por_ano": {
-      "2026": {
-        "total": 859,
-        "volume_bi": 280.81
-      },
-      "2025": {
-        "total": 1291,
-        "volume_bi": 552.56
+      "2023": {
+        "total": 936,
+        "volume_bi": 329.86
       },
       "2024": {
         "total": 1395,
         "volume_bi": 586.63
       },
-      "2023": {
-        "total": 936,
-        "volume_bi": 329.86
+      "2025": {
+        "total": 1291,
+        "volume_bi": 552.56
+      },
+      "2026": {
+        "total": 859,
+        "volume_bi": 280.81
       }
     },
-    "data_atualizacao": "2026-10-17 21:28:23"
+    "data_atualizacao": "2026-10-17 22:01:11"
   },
+  "evolucao_anual": [
+    {
+      "ano": "2023",
+      "volume_bi": 329.86,
+      "total_ofertas": 936,
+      "ticket_medio_mi": 352.4,
+      "yoy_volume_pct": null,
+      "yoy_qtd_pct": null,
+      "mix_instrumentos": {
+        "deb_pct": 70.7,
+        "cri_pct": 15.4,
+        "cra_pct": 13.9
+      }
+    },
+    {
+      "ano": "2024",
+      "volume_bi": 586.63,
+      "total_ofertas": 1395,
+      "ticket_medio_mi": 420.5,
+      "yoy_volume_pct": 77.8,
+      "yoy_qtd_pct": 49.0,
+      "mix_instrumentos": {
+        "deb_pct": 82.1,
+        "cri_pct": 10.7,
+        "cra_pct": 7.1
+      }
+    },
+    {
+      "ano": "2025",
+      "volume_bi": 552.56,
+      "total_ofertas": 1291,
+      "ticket_medio_mi": 428.0,
+      "yoy_volume_pct": -5.8,
+      "yoy_qtd_pct": -7.5,
+      "mix_instrumentos": {
+        "deb_pct": 82.7,
+        "cri_pct": 9.2,
+        "cra_pct": 8.1
+      }
+    },
+    {
+      "ano": "2026",
+      "volume_bi": 280.81,
+      "total_ofertas": 859,
+      "ticket_medio_mi": 326.9,
+      "yoy_volume_pct": -49.2,
+      "yoy_qtd_pct": -33.5,
+      "mix_instrumentos": {
+        "deb_pct": 82.6,
+        "cri_pct": 13.3,
+        "cra_pct": 4.1
+      }
+    }
+  ],
+  "serie_mensal": [
+    {
+      "mes": "2023-01",
+      "volume_bi": 14.67,
+      "vol_deb_bi": 13.97,
+      "vol_cri_bi": 0.3,
+      "vol_cra_bi": 0.4,
+      "total_ofertas": 19
+    },
+    {
+      "mes": "2023-02",
+      "volume_bi": 6.99,
+      "vol_deb_bi": 3.68,
+      "vol_cri_bi": 1.31,
+      "vol_cra_bi": 2.0,
+      "total_ofertas": 33
+    },
+    {
+      "mes": "2023-03",
+      "volume_bi": 24.96,
+      "vol_deb_bi": 17.13,
+      "vol_cri_bi": 4.59,
+      "vol_cra_bi": 3.24,
+      "total_ofertas": 90
+    },
+    {
+      "mes": "2023-04",
+      "volume_bi": 9.29,
+      "vol_deb_bi": 6.52,
+      "vol_cri_bi": 1.53,
+      "vol_cra_bi": 1.24,
+      "total_ofertas": 35
+    },
+    {
+      "mes": "2023-05",
+      "volume_bi": 22.02,
+      "vol_deb_bi": 16.36,
+      "vol_cri_bi": 1.11,
+      "vol_cra_bi": 4.56,
+      "total_ofertas": 75
+    },
+    {
+      "mes": "2023-06",
+      "volume_bi": 36.65,
+      "vol_deb_bi": 24.64,
+      "vol_cri_bi": 5.51,
+      "vol_cra_bi": 6.5,
+      "total_ofertas": 100
+    },
+    {
+      "mes": "2023-07",
+      "volume_bi": 16.79,
+      "vol_deb_bi": 11.96,
+      "vol_cri_bi": 3.52,
+      "vol_cra_bi": 1.31,
+      "total_ofertas": 64
+    },
+    {
+      "mes": "2023-08",
+      "volume_bi": 26.99,
+      "vol_deb_bi": 14.22,
+      "vol_cri_bi": 7.46,
+      "vol_cra_bi": 5.32,
+      "total_ofertas": 82
+    },
+    {
+      "mes": "2023-09",
+      "volume_bi": 35.67,
+      "vol_deb_bi": 29.34,
+      "vol_cri_bi": 5.82,
+      "vol_cra_bi": 0.51,
+      "total_ofertas": 75
+    },
+    {
+      "mes": "2023-10",
+      "volume_bi": 41.15,
+      "vol_deb_bi": 29.58,
+      "vol_cri_bi": 3.29,
+      "vol_cra_bi": 8.28,
+      "total_ofertas": 93
+    },
+    {
+      "mes": "2023-11",
+      "volume_bi": 32.37,
+      "vol_deb_bi": 21.76,
+      "vol_cri_bi": 5.86,
+      "vol_cra_bi": 4.74,
+      "total_ofertas": 99
+    },
+    {
+      "mes": "2023-12",
+      "volume_bi": 62.31,
+      "vol_deb_bi": 43.94,
+      "vol_cri_bi": 10.66,
+      "vol_cra_bi": 7.7,
+      "total_ofertas": 171
+    },
+    {
+      "mes": "2024-01",
+      "volume_bi": 16.77,
+      "vol_deb_bi": 7.98,
+      "vol_cri_bi": 5.95,
+      "vol_cra_bi": 2.84,
+      "total_ofertas": 72
+    },
+    {
+      "mes": "2024-02",
+      "volume_bi": 32.0,
+      "vol_deb_bi": 23.93,
+      "vol_cri_bi": 3.49,
+      "vol_cra_bi": 4.59,
+      "total_ofertas": 81
+    },
+    {
+      "mes": "2024-03",
+      "volume_bi": 56.56,
+      "vol_deb_bi": 46.13,
+      "vol_cri_bi": 5.93,
+      "vol_cra_bi": 4.5,
+      "total_ofertas": 111
+    },
+    {
+      "mes": "2024-04",
+      "volume_bi": 41.63,
+      "vol_deb_bi": 35.37,
+      "vol_cri_bi": 4.92,
+      "vol_cra_bi": 1.34,
+      "total_ofertas": 100
+    },
+    {
+      "mes": "2024-05",
+      "volume_bi": 57.87,
+      "vol_deb_bi": 48.47,
+      "vol_cri_bi": 5.36,
+      "vol_cra_bi": 4.04,
+      "total_ofertas": 125
+    },
+    {
+      "mes": "2024-06",
+      "volume_bi": 73.91,
+      "vol_deb_bi": 63.13,
+      "vol_cri_bi": 7.29,
+      "vol_cra_bi": 3.49,
+      "total_ofertas": 152
+    },
+    {
+      "mes": "2024-07",
+      "volume_bi": 40.9,
+      "vol_deb_bi": 33.91,
+      "vol_cri_bi": 3.33,
+      "vol_cra_bi": 3.65,
+      "total_ofertas": 102
+    },
+    {
+      "mes": "2024-08",
+      "volume_bi": 34.23,
+      "vol_deb_bi": 28.42,
+      "vol_cri_bi": 3.82,
+      "vol_cra_bi": 2.0,
+      "total_ofertas": 86
+    },
+    {
+      "mes": "2024-09",
+      "volume_bi": 46.28,
+      "vol_deb_bi": 38.17,
+      "vol_cri_bi": 6.09,
+      "vol_cra_bi": 2.01,
+      "total_ofertas": 131
+    },
+    {
+      "mes": "2024-10",
+      "volume_bi": 65.1,
+      "vol_deb_bi": 56.33,
+      "vol_cri_bi": 5.54,
+      "vol_cra_bi": 3.22,
+      "total_ofertas": 133
+    },
+    {
+      "mes": "2024-11",
+      "volume_bi": 40.94,
+      "vol_deb_bi": 31.65,
+      "vol_cri_bi": 3.72,
+      "vol_cra_bi": 5.57,
+      "total_ofertas": 102
+    },
+    {
+      "mes": "2024-12",
+      "volume_bi": 80.45,
+      "vol_deb_bi": 68.38,
+      "vol_cri_bi": 7.51,
+      "vol_cra_bi": 4.55,
+      "total_ofertas": 200
+    },
+    {
+      "mes": "2025-01",
+      "volume_bi": 29.4,
+      "vol_deb_bi": 24.92,
+      "vol_cri_bi": 2.64,
+      "vol_cra_bi": 1.84,
+      "total_ofertas": 82
+    },
+    {
+      "mes": "2025-02",
+      "volume_bi": 43.82,
+      "vol_deb_bi": 39.52,
+      "vol_cri_bi": 2.56,
+      "vol_cra_bi": 1.74,
+      "total_ofertas": 87
+    },
+    {
+      "mes": "2025-03",
+      "volume_bi": 39.67,
+      "vol_deb_bi": 34.33,
+      "vol_cri_bi": 3.58,
+      "vol_cra_bi": 1.76,
+      "total_ofertas": 86
+    },
+    {
+      "mes": "2025-04",
+      "volume_bi": 26.36,
+      "vol_deb_bi": 20.19,
+      "vol_cri_bi": 3.02,
+      "vol_cra_bi": 3.15,
+      "total_ofertas": 82
+    },
+    {
+      "mes": "2025-05",
+      "volume_bi": 33.54,
+      "vol_deb_bi": 28.26,
+      "vol_cri_bi": 3.64,
+      "vol_cra_bi": 1.64,
+      "total_ofertas": 95
+    },
+    {
+      "mes": "2025-06",
+      "volume_bi": 45.74,
+      "vol_deb_bi": 38.09,
+      "vol_cri_bi": 4.21,
+      "vol_cra_bi": 3.44,
+      "total_ofertas": 121
+    },
+    {
+      "mes": "2025-07",
+      "volume_bi": 51.79,
+      "vol_deb_bi": 44.5,
+      "vol_cri_bi": 3.17,
+      "vol_cra_bi": 4.12,
+      "total_ofertas": 98
+    },
+    {
+      "mes": "2025-08",
+      "volume_bi": 39.46,
+      "vol_deb_bi": 30.03,
+      "vol_cri_bi": 5.26,
+      "vol_cra_bi": 4.17,
+      "total_ofertas": 99
+    },
+    {
+      "mes": "2025-09",
+      "volume_bi": 50.24,
+      "vol_deb_bi": 40.85,
+      "vol_cri_bi": 3.61,
+      "vol_cra_bi": 5.78,
+      "total_ofertas": 113
+    },
+    {
+      "mes": "2025-10",
+      "volume_bi": 68.14,
+      "vol_deb_bi": 60.59,
+      "vol_cri_bi": 3.79,
+      "vol_cra_bi": 3.75,
+      "total_ofertas": 129
+    },
+    {
+      "mes": "2025-11",
+      "volume_bi": 57.94,
+      "vol_deb_bi": 46.55,
+      "vol_cri_bi": 5.04,
+      "vol_cra_bi": 6.34,
+      "total_ofertas": 106
+    },
+    {
+      "mes": "2025-12",
+      "volume_bi": 66.47,
+      "vol_deb_bi": 49.18,
+      "vol_cri_bi": 10.07,
+      "vol_cra_bi": 7.22,
+      "total_ofertas": 193
+    },
+    {
+      "mes": "2026-01",
+      "volume_bi": 30.0,
+      "vol_deb_bi": 27.95,
+      "vol_cri_bi": 1.6,
+      "vol_cra_bi": 0.44,
+      "total_ofertas": 79
+    },
+    {
+      "mes": "2026-02",
+      "volume_bi": 26.72,
+      "vol_deb_bi": 23.06,
+      "vol_cri_bi": 2.25,
+      "vol_cra_bi": 1.41,
+      "total_ofertas": 71
+    },
+    {
+      "mes": "2026-03",
+      "volume_bi": 46.15,
+      "vol_deb_bi": 40.02,
+      "vol_cri_bi": 4.91,
+      "vol_cra_bi": 1.22,
+      "total_ofertas": 126
+    },
+    {
+      "mes": "2026-04",
+      "volume_bi": 23.52,
+      "vol_deb_bi": 19.81,
+      "vol_cri_bi": 3.39,
+      "vol_cra_bi": 0.32,
+      "total_ofertas": 78
+    },
+    {
+      "mes": "2026-05",
+      "volume_bi": 18.81,
+      "vol_deb_bi": 13.69,
+      "vol_cri_bi": 3.22,
+      "vol_cra_bi": 1.9,
+      "total_ofertas": 81
+    },
+    {
+      "mes": "2026-06",
+      "volume_bi": 28.09,
+      "vol_deb_bi": 22.17,
+      "vol_cri_bi": 4.43,
+      "vol_cra_bi": 1.48,
+      "total_ofertas": 92
+    },
+    {
+      "mes": "2026-07",
+      "volume_bi": 29.63,
+      "vol_deb_bi": 23.86,
+      "vol_cri_bi": 3.84,
+      "vol_cra_bi": 1.93,
+      "total_ofertas": 86
+    },
+    {
+      "mes": "2026-08",
+      "volume_bi": 20.88,
+      "vol_deb_bi": 13.3,
+      "vol_cri_bi": 6.23,
+      "vol_cra_bi": 1.35,
+      "total_ofertas": 78
+    },
+    {
+      "mes": "2026-09",
+      "volume_bi": 46.93,
+      "vol_deb_bi": 40.78,
+      "vol_cri_bi": 5.2,
+      "vol_cra_bi": 0.94,
+      "total_ofertas": 122
+    },
+    {
+      "mes": "2026-10",
+      "volume_bi": 10.09,
+      "vol_deb_bi": 7.43,
+      "vol_cri_bi": 2.15,
+      "vol_cra_bi": 0.51,
+      "total_ofertas": 46
+    }
+  ],
   "league_table": [
     {
       "coordenador": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
@@ -567,7 +991,7 @@
       "status_oferta": "Aguardando Bookbuilding",
       "nome_emissor": "B.SEC Companhia de Securitização",
       "cnpj_emissor": "03767538000114",
-      "nome_devedor_real": "BTG PACTUAL SECURITIZADORA S.A",
+      "nome_devedor_real": "BTG PACTUAL HOLDING PARTICIPAÇÕES S.A.",
       "cnpj_devedor_real": "07.110.438/0001-71",
       "nome_coordenador_lider": "BTG PACTUAL INVESTMENT BANKING LTDA.",
       "cnpj_coordenador_lider": "46482072000113",
