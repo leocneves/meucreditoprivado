@@ -794,7 +794,7 @@ const Home: React.FC = () => {
                   Fluxo de Vencimentos & Pagamentos da Dívida
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">
-                  Distribuição {cashflowPeriodMode === 'MONTHLY' ? 'mês a mês dos próximos 24 meses' : 'ano a ano (2026 a 2045+)'} do fluxo de compromissos da dívida privada (R$ Bilhões), segregando Vencimento Bullet vs. Amortizações Parciais vs. Juros e Cupons, com curva de volume acumulado.
+                  Distribuição {cashflowPeriodMode === 'MONTHLY' ? 'mês a mês dos próximos 24 meses' : 'ano a ano (2026 a 2045+)'} dos fluxos de compromissos da dívida privada viva (R$ Bi), segregando Vencimento Bullet vs. Amortizações Parciais vs. Juros/Cupons com base no saldo em aberto e emissão.
                 </p>
               </div>
 
@@ -803,7 +803,7 @@ const Home: React.FC = () => {
                 <div className="relative group">
                   <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-semibold transition cursor-pointer">
                     <Info size={14} className="text-blue-600" />
-                    <span>Cobertura por Produto</span>
+                    <span>Cobertura & Metodologia</span>
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   </button>
 
@@ -861,6 +861,17 @@ const Home: React.FC = () => {
                           {cashflowWallData?.resumo_fluxos?.previsto?.total_eventos?.toLocaleString('pt-BR') || '140.055'} eventos a liquidar
                         </span>
                       </div>
+                    </div>
+
+                    {/* Nota Metodológica Institucional */}
+                    <div className="mt-3 pt-2.5 border-t border-slate-800 text-[11px] space-y-1">
+                      <div className="text-slate-300 font-semibold flex items-center gap-1.5">
+                        <Info size={13} className="text-blue-400" />
+                        <span>Metodologia FixData:</span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 leading-relaxed">
+                        Estoque e cronograma calculados sobre o saldo devedor e quantidade de mercado (com expurgo de resgates antecipados). Para títulos sem posição secundária divulgada, adota-se o volume de emissão oficial como proxy paramétrico.
+                      </p>
                     </div>
                   </div>
                 </div>
