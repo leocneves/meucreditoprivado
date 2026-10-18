@@ -236,50 +236,38 @@ const NtnbDashboard: React.FC = () => {
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-12">
       {/* HEADER DA PÁGINA */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs font-bold rounded-full uppercase tracking-wider">
-              Títulos Públicos Federais
+              Curva Soberana ANBIMA
             </span>
             <span className="text-xs text-slate-500 font-medium">
-              Fechamento: <strong>{formatDatePretty(latestDate)}</strong>
+              Fechamento de Mercado: <strong>{formatDatePretty(latestDate)}</strong>
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Curva de Juros Real & Taxas de NTN-B (Tesouro IPCA+)
+            Curva de Juros Real &amp; Taxas de NTN-B (Tesouro IPCA+)
           </h1>
-          <p className="text-sm text-slate-500 mt-1 max-w-3xl">
-            Acompanhe a estrutura a termo da taxa de juros real no Brasil da ANBIMA, com a evolução diária das taxas indicativas de mercado secundário e marcação a mercado dos PUs para todos os vencimentos.
+          <p className="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+            Estrutura a termo da taxa de juros real apurada pela ANBIMA no mercado secundário. Acompanhe a marcação a mercado diária das taxas indicativas (IPCA + spread) e preços unitários (PU), benchmark soberano de precificação para debêntures de infraestrutura, CRIs e CRAs.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center self-start md:self-auto shrink-0">
           <Link
             to="/charts"
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition"
+            className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition inline-flex items-center gap-1.5 shadow-2xs"
           >
-            &larr; Spreads de Crédito Privado
+            <span>Ver Spreads de Crédito</span>
+            <ArrowUpRight size={14} />
           </Link>
-          <div className="p-1 bg-slate-100 rounded-xl flex items-center gap-1 text-xs font-bold">
-            {(['30', '90', '180', 'ALL'] as const).map(rng => (
-              <button
-                key={rng}
-                onClick={() => setTimeRange(rng)}
-                className={`px-3 py-1.5 rounded-lg transition ${
-                  timeRange === rng ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {rng === 'ALL' ? 'Tudo' : `${rng}D`}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
       {/* KPIS DE TAXAS DE NTN-B */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">NTN-B Curta (2029)</span>
           <div className="flex items-baseline gap-2 mt-1">
             <strong className="text-2xl font-extrabold text-slate-900">
@@ -290,12 +278,12 @@ const NtnbDashboard: React.FC = () => {
           {kpiCurta && kpiCurta.var1mBps !== null && (
             <span className={`text-xs font-bold mt-1 inline-flex items-center gap-0.5 ${kpiCurta.var1mBps >= 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
               {kpiCurta.var1mBps >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-              {Math.abs(kpiCurta.var1mBps).toFixed(0)} bps (30d)
+              {kpiCurta.var1mBps >= 0 ? `+${kpiCurta.var1mBps.toFixed(0)}` : kpiCurta.var1mBps.toFixed(0)} bps (30d)
             </span>
           )}
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">NTN-B Média (2035)</span>
           <div className="flex items-baseline gap-2 mt-1">
             <strong className="text-2xl font-extrabold text-slate-900">
@@ -306,12 +294,12 @@ const NtnbDashboard: React.FC = () => {
           {kpiMedia && kpiMedia.var1mBps !== null && (
             <span className={`text-xs font-bold mt-1 inline-flex items-center gap-0.5 ${kpiMedia.var1mBps >= 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
               {kpiMedia.var1mBps >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-              {Math.abs(kpiMedia.var1mBps).toFixed(0)} bps (30d)
+              {kpiMedia.var1mBps >= 0 ? `+${kpiMedia.var1mBps.toFixed(0)}` : kpiMedia.var1mBps.toFixed(0)} bps (30d)
             </span>
           )}
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">NTN-B Longa (2045)</span>
           <div className="flex items-baseline gap-2 mt-1">
             <strong className="text-2xl font-extrabold text-slate-900">
@@ -322,12 +310,12 @@ const NtnbDashboard: React.FC = () => {
           {kpiLonga && kpiLonga.var1mBps !== null && (
             <span className={`text-xs font-bold mt-1 inline-flex items-center gap-0.5 ${kpiLonga.var1mBps >= 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
               {kpiLonga.var1mBps >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-              {Math.abs(kpiLonga.var1mBps).toFixed(0)} bps (30d)
+              {kpiLonga.var1mBps >= 0 ? `+${kpiLonga.var1mBps.toFixed(0)}` : kpiLonga.var1mBps.toFixed(0)} bps (30d)
             </span>
           )}
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Ultra-Longa (2055/60)</span>
           <div className="flex items-baseline gap-2 mt-1">
             <strong className="text-2xl font-extrabold text-slate-900">
@@ -335,10 +323,17 @@ const NtnbDashboard: React.FC = () => {
             </strong>
             <span className="text-xs text-slate-500 font-semibold">IPCA +</span>
           </div>
-          <span className="text-xs text-slate-400 font-medium mt-1 block">Vencimento em 30+ anos</span>
+          {kpiUltra && kpiUltra.var1mBps !== null ? (
+            <span className={`text-xs font-bold mt-1 inline-flex items-center gap-0.5 ${kpiUltra.var1mBps >= 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
+              {kpiUltra.var1mBps >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+              {kpiUltra.var1mBps >= 0 ? `+${kpiUltra.var1mBps.toFixed(0)}` : kpiUltra.var1mBps.toFixed(0)} bps (30d)
+            </span>
+          ) : (
+            <span className="text-xs text-slate-400 font-medium mt-1 block">Vencimento de 30+ anos</span>
+          )}
         </div>
 
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-2xl border border-blue-100 shadow-sm">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-2xl border border-blue-100 shadow-xs">
           <span className="text-xs font-bold text-blue-700 uppercase tracking-wider block">Inclinação (2045 - 2029)</span>
           <div className="flex items-baseline gap-1 mt-1">
             <strong className="text-2xl font-extrabold text-blue-900">
@@ -346,7 +341,15 @@ const NtnbDashboard: React.FC = () => {
             </strong>
             <span className="text-xs text-blue-700 font-bold">bps</span>
           </div>
-          <span className="text-[11px] text-blue-600 font-medium mt-1 block">Spread de prazo longo vs curto</span>
+          <span className="text-[11px] text-blue-700 font-semibold mt-1 block leading-tight">
+            {slopeBps !== null
+              ? parseFloat(slopeBps) > 15
+                ? 'Curva Normal (+ prêmio de prazo)'
+                : parseFloat(slopeBps) < -15
+                ? 'Curva Invertida (Aperto monetário)'
+                : 'Curva Achatada (Flat)'
+              : 'Spread longo vs curto'}
+          </span>
         </div>
       </div>
 
@@ -458,20 +461,36 @@ const NtnbDashboard: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Seletor de Janela Temporal */}
+            <div className="p-1 bg-slate-100 rounded-xl flex items-center gap-1 text-xs font-bold">
+              {(['30', '90', '180', 'ALL'] as const).map(rng => (
+                <button
+                  key={rng}
+                  onClick={() => setTimeRange(rng)}
+                  className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                    timeRange === rng ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {rng === 'ALL' ? 'Tudo' : `${rng}D`}
+                </button>
+              ))}
+            </div>
+
+            {/* Seletor de Métrica (Taxa vs PU) */}
             <div className="p-1 bg-slate-100 rounded-xl flex items-center text-xs font-bold">
               <button
                 onClick={() => setMetricMode('yield')}
-                className={`px-3 py-1.5 rounded-lg transition ${
-                  metricMode === 'yield' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  metricMode === 'yield' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Taxas (% a.a.)
               </button>
               <button
                 onClick={() => setMetricMode('pu')}
-                className={`px-3 py-1.5 rounded-lg transition ${
-                  metricMode === 'pu' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                  metricMode === 'pu' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Preço Unitário (PU)
@@ -481,13 +500,13 @@ const NtnbDashboard: React.FC = () => {
             <div className="flex items-center gap-1.5">
               <button
                 onClick={selectBenchmarkVertices}
-                className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200"
+                className="px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 cursor-pointer transition"
               >
                 Vértices Principais
               </button>
               <button
                 onClick={selectAllVertices}
-                className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200"
+                className="px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 cursor-pointer transition"
               >
                 Todos
               </button>
