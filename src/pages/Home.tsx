@@ -480,11 +480,6 @@ const Home: React.FC = () => {
 
       {/* ================= HERO SECTION ================= */}
       <section className="text-center space-y-6 px-4 max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold uppercase tracking-wider">
-          <Activity size={14} className="text-blue-600" />
-          Panorama do Mercado de Crédito Privado
-        </div>
-
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
           FIX<span className="text-blue-600">DATA</span>
         </h1>
@@ -1292,63 +1287,45 @@ const Home: React.FC = () => {
 
       {/* ================= MODAL DE AVISO: MERCADO PRIMÁRIO ================= */}
       {showPrimaryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 md:p-8 space-y-6 relative overflow-hidden">
-            {/* Efeito decorativo sutil de fundo */}
-            <div className="absolute top-0 right-0 -mt-12 -mr-12 w-48 h-48 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full blur-2xl opacity-60 pointer-events-none" />
-
-            <div className="flex items-start justify-between relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold tracking-wide">
-                <Sparkles size={14} className="text-blue-600" />
-                NOVIDADE NO FIXDATA
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-xl p-6 space-y-4 relative">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-blue-600 font-bold text-xs uppercase tracking-wider">
+                <Sparkles size={14} />
+                <span>Novo Módulo</span>
               </div>
               <button
                 onClick={handleClosePrimaryModal}
-                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-100 transition"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer"
                 title="Fechar"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
-            <div className="space-y-2 relative z-10">
-              <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                Novo Módulo de Mercado Primário
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-bold text-slate-900">
+                Mercado Primário
               </h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Agora o FixData monitora as ofertas públicas de <strong className="text-slate-900 font-semibold">Debêntures, CRIs e CRAs</strong> diretamente da CVM. Acompanhe as emissões antes mesmo da listagem no mercado secundário.
+                Acompanhe o pipeline de ofertas públicas de Debêntures, CRIs e CRAs registradas na CVM antes mesmo da listagem no secundário.
               </p>
             </div>
 
-            <div className="space-y-3 bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-xs text-slate-700 relative z-10">
-              <div className="flex items-center gap-2.5">
-                <div className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0" />
-                <span><strong>Pipeline em Tempo Real:</strong> Ofertas em andamento, em análise e bookbuildings agendados.</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-2 h-2 rounded-full bg-indigo-600 flex-shrink-0" />
-                <span><strong>Analytics DCM:</strong> Volumes históricos consolidados, ticket médio e mix de instrumentos.</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-2 h-2 rounded-full bg-emerald-600 flex-shrink-0" />
-                <span><strong>Inteligência Documental:</strong> Extração automática de devedor real, indexador e prospectos oficiais.</span>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 relative z-10">
+            <div className="flex items-center gap-2.5 pt-1">
               <Link
                 to="/primary"
                 onClick={handleClosePrimaryModal}
-                className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm hover:shadow transition"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition"
               >
-                <span>Explorar Mercado Primário</span>
-                <ArrowRight size={16} />
+                <span>Acessar Primário</span>
+                <ArrowRight size={15} />
               </Link>
               <button
                 onClick={handleClosePrimaryModal}
-                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition"
+                className="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition cursor-pointer"
               >
-                Continuar na Home
+                Agora não
               </button>
             </div>
           </div>
