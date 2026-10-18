@@ -33,7 +33,9 @@ import {
   Sparkles,
   AlertCircle,
   Percent,
-  Coins
+  Coins,
+  Landmark,
+  Globe
 } from 'lucide-react';
 
 /* ================= TIPOS DE DADOS CVM SRE ================= */
@@ -93,10 +95,51 @@ interface SREOffer {
   series?: SRESerie[];
   documentos?: SREDocumento[];
   participantes?: SREParticipante[];
+  sindicato_distribuicao?: {
+    banco_id: string;
+    banco_nome: string;
+    portal_url: string;
+    badge_bg: string;
+    dot_color: string;
+    papel: string;
+    is_lead: boolean;
+    razao_social: string;
+  }[];
   ativo_secundario?: {
     ticker: string;
     isin: string;
   } | null;
+}
+
+interface DistribuicaoItem {
+  id_requerimento?: string;
+  banco_id: string;
+  banco_nome: string;
+  papel_banco: string;
+  portal_url: string;
+  badge_bg: string;
+  dot_color: string;
+  devedor: string;
+  tipo_ativo: string;
+  valor_total_reais?: number | null;
+  data_vencimento?: string | null;
+  data_liquidacao?: string | null;
+  taxas_indicativas?: string | null;
+  origem: string;
+  documentos?: { nome_documento?: string; titulo?: string; url?: string; url_download?: string }[];
+}
+
+interface DistribuicaoBancos {
+  bancos_disponiveis: {
+    id: string;
+    nome: string;
+    portal_url: string;
+    badge_bg: string;
+    dot_color: string;
+    total_ofertas: number;
+    volume_total_reais: number;
+  }[];
+  todas_ofertas_distribuicao: DistribuicaoItem[];
 }
 
 interface LeagueTableItem {
@@ -145,6 +188,7 @@ interface PrimaryData {
   evolucao_anual?: EvolucaoAnualItem[];
   serie_mensal?: SerieMensalItem[];
   league_table?: LeagueTableItem[];
+  distribuicao_bancos?: DistribuicaoBancos;
   ofertas_em_andamento: SREOffer[];
   ofertas_recentes: SREOffer[];
 }
@@ -152,7 +196,10 @@ interface PrimaryData {
 const Primary: React.FC = () => {
   const [data, setData] = useState<PrimaryData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'ANDAMENTO' | 'ENCERRADAS' | 'LEAGUE'>('ANDAMENTO');
+  const [activeTab, setActiveTab] = useState<'ANDAMENTO' | 'DISTRIBUICAO' | 'ENCERRADAS' | 'LEAGUE'>('ANDAMENTO');
+  const [selectedBank, setSelectedBank] = useState<string>('TODOS');
+  const [bankSearch, setBankSearch] = useState<string>('');
+  const [bankFilterTipo, setBankFilterTipo] = useState<string>('TODOS');
   const [filterTipo, setFilterTipo] = useState<string>('TODOS');
   const [filterAno, setFilterAno] = useState<string>('TODOS');
   const [filterIndexador, setFilterIndexador] = useState<string>('TODOS');
@@ -283,6 +330,38 @@ const Primary: React.FC = () => {
     if (activeTab === 'ANDAMENTO') return ofertasFiltradas;
     return ofertasFiltradas.slice((page - 1) * pageSize, page * pageSize);
   }, [ofertasFiltradas, activeTab, page]);
+
+  /* ================= FILTRAGEM DA ESTEIRA DE DISTRIBUIÇÃO BANCÁRIA ================= */
+
+  const ofertasBancoFiltradas = useMemo(() => {
+    if (!data?.distribuicao_bancos?.todas_ofertas_distribuicao) return [];
+    let list = data.distribuicao_bancos.todas_ofertas_distribuicao;
+
+    if (selectedBank !== 'TODOS') {
+      list = list.filter(item => item.banco_id === selectedBank);
+    }
+
+    if (bankFilterTipo !== 'TODOS') {
+      list = list.filter(item => {
+        if (bankFilterTipo === 'DEB') return item.tipo_ativo === 'DEB' || item.tipo_ativo === 'DEBÊNTURE' || item.tipo_ativo === 'DEBENTURE';
+        if (bankFilterTipo === 'CRI') return item.tipo_ativo === 'CRI';
+        if (bankFilterTipo === 'CRA') return item.tipo_ativo === 'CRA';
+        if (bankFilterTipo === 'FII_FIAGRO') return item.tipo_ativo === 'FII' || item.tipo_ativo === 'FIAGRO';
+        return true;
+      });
+    }
+
+    const q = bankSearch.toLowerCase().trim();
+    if (!q) return list;
+
+    return list.filter(item =>
+      (item.devedor || '').toLowerCase().includes(q) ||
+      (item.banco_nome || '').toLowerCase().includes(q) ||
+      (item.papel_banco || '').toLowerCase().includes(q) ||
+      (item.tipo_ativo || '').toLowerCase().includes(q) ||
+      (item.taxas_indicativas || '').toLowerCase().includes(q)
+    );
+  }, [data, selectedBank, bankFilterTipo, bankSearch]);
 
   /* ================= DADOS DO GRÁFICO MENSAL ================= */
 
@@ -612,6 +691,24 @@ const Primary: React.FC = () => {
 
               <button
                 onClick={() => {
+                  setActiveTab('DISTRIBUICAO');
+                  setPage(1);
+                }}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  activeTab === 'DISTRIBUICAO'
+                    ? 'bg-white text-indigo-700 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Landmark size={14} className="text-indigo-600" />
+                Distribuição Bancária
+                <span className="px-1.5 py-0.2 rounded-full bg-indigo-100 text-indigo-800 text-[10px]">
+                  {data?.distribuicao_bancos?.todas_ofertas_distribuicao?.length || 0}
+                </span>
+              </button>
+
+              <button
+                onClick={() => {
                   setActiveTab('ENCERRADAS');
                   setPage(1);
                 }}
@@ -643,7 +740,7 @@ const Primary: React.FC = () => {
             </div>
 
             {/* Controles de Busca e Filtros */}
-            {activeTab !== 'LEAGUE' && (
+            {activeTab !== 'LEAGUE' && activeTab !== 'DISTRIBUICAO' && (
               <div className="flex flex-wrap items-center gap-2.5">
                 {/* Filtro por Instrumento */}
                 <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold text-slate-600">
@@ -793,6 +890,261 @@ const Primary: React.FC = () => {
                 </table>
               </div>
             </section>
+          ) : activeTab === 'DISTRIBUICAO' ? (
+            /* ================= VIEW: ESTEIRA DE DISTRIBUIÇÃO BANCÁRIA ================= */
+            <section className="space-y-6">
+              {/* Header da Esteira */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                      <Landmark size={20} className="text-indigo-600" />
+                      Esteira de Distribuição por Instituição Financeira
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1 max-w-3xl">
+                      Consórcios de distribuição, sindicatos bancários regulatórios (Resolução CVM 160) e ofertas
+                      públicas ativas disponibilizadas nos portais das principais instituições financeiras.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/80">
+                    <Globe size={14} className="text-indigo-500" />
+                    <span>{data?.distribuicao_bancos?.bancos_disponiveis?.length || 0} Bancos Mapeados</span>
+                  </div>
+                </div>
+
+                {/* Seletor de Bancos */}
+                <div className="pt-5 space-y-3">
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block">
+                    Selecione a Instituição Financeira:
+                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={() => setSelectedBank('TODOS')}
+                      className={`px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-2 border ${
+                        selectedBank === 'TODOS'
+                          ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                          : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      <span>Todos os Bancos</span>
+                      <span
+                        className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                          selectedBank === 'TODOS' ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {data?.distribuicao_bancos?.todas_ofertas_distribuicao?.length || 0}
+                      </span>
+                    </button>
+
+                    {data?.distribuicao_bancos?.bancos_disponiveis?.map(b => (
+                      <button
+                        key={b.id}
+                        onClick={() => setSelectedBank(b.id)}
+                        className={`px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-2 border ${
+                          selectedBank === b.id
+                            ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                            : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                        }`}
+                      >
+                        <span className={`w-2 h-2 rounded-full ${b.dot_color}`} />
+                        <span>{b.nome}</span>
+                        <span
+                          className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                            selectedBank === b.id ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'
+                          }`}
+                        >
+                          {b.total_ofertas}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Filtros Internos da Esteira */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-5 mt-5 border-t border-slate-100">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {['TODOS', 'DEB', 'CRI', 'CRA', 'FII_FIAGRO'].map(t => (
+                      <button
+                        key={t}
+                        onClick={() => setBankFilterTipo(t)}
+                        className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                          bankFilterTipo === t
+                            ? 'bg-indigo-50 text-indigo-700 font-bold border border-indigo-200'
+                            : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                        }`}
+                      >
+                        {t === 'TODOS'
+                          ? 'Todos os Ativos'
+                          : t === 'DEB'
+                          ? 'Debêntures'
+                          : t === 'FII_FIAGRO'
+                          ? 'FIIs & FIAGROs'
+                          : t}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="relative min-w-[240px]">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input
+                      type="text"
+                      value={bankSearch}
+                      onChange={e => setBankSearch(e.target.value)}
+                      placeholder="Buscar por devedor, taxa ou papel..."
+                      className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 bg-slate-50 focus:bg-white transition"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Box de Scroll de Ofertas Distribuídas */}
+              <div className="bg-slate-50/70 p-3 sm:p-4 rounded-3xl border border-slate-200/80 shadow-xs">
+                <div className="flex items-center justify-between text-xs text-slate-500 font-semibold px-2 pb-2.5">
+                  <span>
+                    Exibindo <strong>{ofertasBancoFiltradas.length}</strong> ofertas distribuídas
+                    {selectedBank !== 'TODOS' &&
+                      ` por ${
+                        data?.distribuicao_bancos?.bancos_disponiveis?.find(b => b.id === selectedBank)?.nome ||
+                        selectedBank
+                      }`}
+                  </span>
+                  <span className="text-[11px] text-slate-400">Painel com rolagem independente</span>
+                </div>
+
+                {ofertasBancoFiltradas.length === 0 ? (
+                  <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center space-y-3">
+                    <AlertCircle size={32} className="mx-auto text-slate-400" />
+                    <p className="text-slate-700 font-semibold">Nenhuma oferta encontrada para os filtros selecionados.</p>
+                    <p className="text-xs text-slate-400">
+                      Tente alternar o banco selecionado ou limpar a busca.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="max-h-[620px] overflow-y-auto pr-1 sm:pr-2 grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    {ofertasBancoFiltradas.map((item, bIdx) => (
+                      <div
+                        key={bIdx}
+                        className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 shadow-xs transition flex flex-col justify-between space-y-3"
+                      >
+                        <div className="space-y-2.5">
+                          {/* Badges Topo */}
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <span
+                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-extrabold border ${item.badge_bg}`}
+                              >
+                                <span className={`w-1.5 h-1.5 rounded-full ${item.dot_color}`} />
+                                {item.banco_nome}
+                              </span>
+
+                              <span
+                                className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                                  item.papel_banco === 'Coordenador Líder'
+                                    ? 'bg-amber-50 text-amber-900 border-amber-300'
+                                    : 'bg-slate-100 text-slate-700 border-slate-200'
+                                }`}
+                              >
+                                {item.papel_banco === 'Coordenador Líder' ? '👑 ' : ''}
+                                {item.papel_banco}
+                              </span>
+                            </div>
+
+                            <span
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border ${getTipoBadgeClass(
+                                item.tipo_ativo
+                              )}`}
+                            >
+                              {item.tipo_ativo === 'DEB' ? 'Debênture' : item.tipo_ativo}
+                            </span>
+                          </div>
+
+                          {/* Nome do Devedor */}
+                          <div>
+                            <h4 className="text-base font-extrabold text-slate-900 tracking-tight leading-snug">
+                              {item.devedor}
+                            </h4>
+                          </div>
+
+                          {/* Metadados Financeiros */}
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-slate-50/80 p-2.5 rounded-xl border border-slate-100 text-xs">
+                            <div>
+                              <span className="text-[10px] text-slate-400 block font-semibold">Volume Total</span>
+                              <span className="font-bold text-slate-800">
+                                {item.valor_total_reais ? formatBRL(item.valor_total_reais) : 'A definir'}
+                              </span>
+                            </div>
+
+                            <div>
+                              <span className="text-[10px] text-slate-400 block font-semibold">Vencimento</span>
+                              <span className="font-bold text-slate-800">
+                                {item.data_vencimento
+                                  ? formatDate(item.data_vencimento)
+                                  : item.data_liquidacao
+                                  ? `Liq. ${formatDate(item.data_liquidacao)}`
+                                  : '-'}
+                              </span>
+                            </div>
+
+                            <div className="col-span-2 sm:col-span-1">
+                              <span className="text-[10px] text-slate-400 block font-semibold">Taxa Indicativa</span>
+                              <span
+                                className="font-bold text-purple-700 truncate block"
+                                title={item.taxas_indicativas || 'Sob consulta'}
+                              >
+                                {item.taxas_indicativas || 'Ver prospecto'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Ações / Links */}
+                        <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+                          <a
+                            href={item.portal_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
+                          >
+                            <span>Acessar Portal do Banco</span>
+                            <ExternalLink size={12} />
+                          </a>
+
+                          <div className="flex items-center gap-1.5">
+                            {item.documentos && item.documentos.length > 0 && item.documentos[0].url && (
+                              <a
+                                href={item.documentos[0].url || item.documentos[0].url_download}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+                                title="Download de Lâmina / Prospecto"
+                              >
+                                <FileText size={12} className="text-slate-500" />
+                                <span>Prospecto CVM</span>
+                              </a>
+                            )}
+
+                            {item.id_requerimento && (
+                              <button
+                                onClick={() => {
+                                  setActiveTab('ANDAMENTO');
+                                  setSearch(item.devedor);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 transition cursor-pointer"
+                                title="Ver no Bookbuilding"
+                              >
+                                <span>Ver Bookbuilding</span>
+                                <ArrowUpRight size={12} />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
           ) : (
             /* ================= VIEW 1 & 2: LISTA DE OFERTAS EM BOX SCROLLÁVEL ================= */
             <div className="space-y-4">
@@ -814,6 +1166,49 @@ const Primary: React.FC = () => {
                     </span>
                     <span className="text-[11px] text-slate-400">Painel com rolagem independente</span>
                   </div>
+
+                  {/* Banner de Bancos Coordenadores no Bookbuilding */}
+                  {activeTab === 'ANDAMENTO' &&
+                    data?.distribuicao_bancos?.bancos_disponiveis &&
+                    data.distribuicao_bancos.bancos_disponiveis.length > 0 && (
+                      <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2 mb-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                          <div className="flex items-center gap-1.5">
+                            <Landmark size={15} className="text-indigo-600" />
+                            <span className="text-xs font-bold text-slate-800">
+                              Instituições Financeiras com Distribuição Ativa
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => setActiveTab('DISTRIBUICAO')}
+                            className="text-xs font-bold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1 self-start sm:self-auto cursor-pointer"
+                          >
+                            <span>Ver esteira completa por banco</span>
+                            <ChevronRight size={13} />
+                          </button>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                          {data.distribuicao_bancos.bancos_disponiveis.map(b => (
+                            <button
+                              key={b.id}
+                              onClick={() => {
+                                setSelectedBank(b.id);
+                                setActiveTab('DISTRIBUICAO');
+                              }}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition cursor-pointer hover:shadow-xs ${b.badge_bg}`}
+                              title={`Ver ofertas coordenadas ou distribuídas por ${b.nome}`}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full ${b.dot_color}`} />
+                              <span>{b.nome}</span>
+                              <span className="px-1 py-0.2 rounded-full bg-white/80 text-slate-700 text-[10px]">
+                                {b.total_ofertas}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                   <div className="max-h-[660px] overflow-y-auto pr-1 sm:pr-2 space-y-3.5">
                     {paginatedOfertas.map(oferta => {
@@ -857,7 +1252,7 @@ const Primary: React.FC = () => {
                                   </span>
 
                                   {/* Vínculo com Ativo Secundário (apenas em ofertas já encerradas e com ticker oficial de mercado) */}
-                                  {activeTab === 'RECENTES' && oferta.ativo_secundario && (
+                                  {activeTab === 'ENCERRADAS' && oferta.ativo_secundario && (
                                     <Link
                                       to={`/asset/${oferta.ativo_secundario.ticker}`}
                                       className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold transition shadow-xs"
@@ -911,6 +1306,35 @@ const Primary: React.FC = () => {
                                     </span>
                                   )}
                                 </div>
+
+                                {/* Tags do Sindicato de Distribuição */}
+                                {oferta.sindicato_distribuicao && oferta.sindicato_distribuicao.length > 0 && (
+                                  <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
+                                    <span className="text-[11px] font-bold text-slate-500 flex items-center gap-1 mr-0.5">
+                                      <Landmark size={12} className="text-indigo-500" />
+                                      Sindicato:
+                                    </span>
+                                    {oferta.sindicato_distribuicao.map(b => (
+                                      <button
+                                        key={b.banco_id}
+                                        onClick={() => {
+                                          setSelectedBank(b.banco_id);
+                                          setActiveTab('DISTRIBUICAO');
+                                        }}
+                                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border transition cursor-pointer hover:shadow-2xs ${
+                                          b.is_lead
+                                            ? 'bg-amber-50 text-amber-900 border-amber-300 font-extrabold'
+                                            : `${b.badge_bg} hover:brightness-95`
+                                        }`}
+                                        title={`Filtrar esteira de ofertas distribuídas por ${b.banco_nome}`}
+                                      >
+                                        <span className={`w-1.5 h-1.5 rounded-full ${b.dot_color}`} />
+                                        <span>{b.banco_nome}</span>
+                                        <span className="text-[9px] opacity-75 font-normal">({b.papel})</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
 
                               {/* Volume Total e Ações */}
