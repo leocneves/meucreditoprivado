@@ -4,6 +4,8 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip as RechartsTooltip,
@@ -129,6 +131,38 @@ interface DistribuicaoItem {
   documentos?: { nome_documento?: string; titulo?: string; url?: string; url_download?: string }[];
 }
 
+interface EsteiraRankingItem {
+  banco_id: string;
+  banco_nome: string;
+  volume_bi: number;
+  total_ofertas: number;
+  share_pct: number;
+  cor: string;
+  badge_bg: string;
+  dot_color: string;
+}
+
+interface MarketShareSerieItem {
+  periodo: string;
+  label: string;
+  total_bi: number;
+  [key: string]: any;
+}
+
+interface BancoMetaItem {
+  nome: string;
+  cor: string;
+  dot: string;
+}
+
+interface DistribuicaoAnalytics {
+  esteira_ranking: EsteiraRankingItem[];
+  volume_total_esteira_bi: number;
+  series_anuais: MarketShareSerieItem[];
+  series_trimestrais: MarketShareSerieItem[];
+  bancos_meta: BancoMetaItem[];
+}
+
 interface DistribuicaoBancos {
   bancos_disponiveis: {
     id: string;
@@ -140,6 +174,7 @@ interface DistribuicaoBancos {
     volume_total_reais: number;
   }[];
   todas_ofertas_distribuicao: DistribuicaoItem[];
+  analytics?: DistribuicaoAnalytics;
 }
 
 interface LeagueTableItem {
@@ -204,6 +239,10 @@ const Primary: React.FC = () => {
   const [filterAno, setFilterAno] = useState<string>('TODOS');
   const [filterIndexador, setFilterIndexador] = useState<string>('TODOS');
   const [chartPeriod, setChartPeriod] = useState<'ALL' | '24M' | '12M'>('24M');
+  const [msGranularity, setMsGranularity] = useState<'TRIMESTRAL' | 'ANUAL'>('TRIMESTRAL');
+  const [msMetric, setMsMetric] = useState<'SHARE' | 'VOLUME'>('SHARE');
+  const [msChartType, setMsChartType] = useState<'BAR' | 'AREA'>('BAR');
+  const [msHistoryRange, setMsHistoryRange] = useState<'8T' | 'ALL'>('8T');
   const [search, setSearch] = useState<string>('');
   const [expandedOffer, setExpandedOffer] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
@@ -377,6 +416,21 @@ const Primary: React.FC = () => {
       labelMes: formatMesLabel(item.mes)
     }));
   }, [data, chartPeriod]);
+
+  /* ================= DADOS DO GRÁFICO DE MARKET SHARE ================= */
+
+  const dadosGraficoMarketShare = useMemo(() => {
+    if (!data?.distribuicao_bancos?.analytics) return [];
+    const an = data.distribuicao_bancos.analytics;
+    if (msGranularity === 'ANUAL') {
+      return an.series_anuais || [];
+    }
+    const series = an.series_trimestrais || [];
+    if (msHistoryRange === '8T') {
+      return series.slice(-8);
+    }
+    return series;
+  }, [data, msGranularity, msHistoryRange]);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl space-y-8">
@@ -892,6 +946,477 @@ const Primary: React.FC = () => {
           ) : activeTab === 'DISTRIBUICAO' ? (
             /* ================= VIEW: ESTEIRA DE DISTRIBUIÇÃO BANCÁRIA ================= */
             <section className="space-y-6">
+              {/* Painel Quantitativo: Market Share da Esteira & Dinâmica Temporal */}
+              {data?.distribuicao_bancos?.analytics && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  {/* Card 1: Market Share da Esteira Ativa (5 colunas) */}
+                  <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                              <Landmark size={18} className="text-indigo-600" />
+                              Market Share da Esteira Ativa
+                            </h4>
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                              Live Pipeline
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1">
+                            Distribuição das ofertas públicas ativas nos sites dos bancos (R$ {data.distribuicao_bancos.analytics.volume_total_esteira_bi.toFixed(2)} Bi em carteira).
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Barra de Distribuição Empilhada Horizontal */}
+                      <div className="pt-4 pb-1">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-1.5">
+                          <span>Composição do Volume Ativo</span>
+                          <span>100% da Esteira</span>
+                        </div>
+                        <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+                          {data.distribuicao_bancos.analytics.esteira_ranking.map(b => (
+                            <div
+                              key={b.banco_id}
+                              style={{ width: `${b.share_pct}%`, backgroundColor: b.cor }}
+                              title={`${b.banco_nome}: ${b.share_pct}% (R$ ${b.volume_bi} Bi)`}
+                              className="h-full transition-all hover:opacity-80 cursor-pointer"
+                              onClick={() => setSelectedBank(b.banco_id)}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Ranking Detalhado da Esteira com Clique para Filtrar */}
+                      <div className="space-y-2.5 pt-4">
+                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block">
+                          Ranking por Volume & Share Ativo (Clique para filtrar):
+                        </span>
+
+                        <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                          {data.distribuicao_bancos.analytics.esteira_ranking.map((b, idx) => {
+                            const isSelected = selectedBank === b.banco_id;
+                            return (
+                              <div
+                                key={b.banco_id}
+                                onClick={() => setSelectedBank(isSelected ? 'TODOS' : b.banco_id)}
+                                className={`p-2.5 rounded-xl border transition cursor-pointer flex flex-col gap-1.5 ${
+                                  isSelected
+                                    ? 'bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-500/20 shadow-xs'
+                                    : 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200/80'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between text-xs">
+                                  <div className="flex items-center gap-2">
+                                    <span className="w-5 h-5 rounded-md bg-white border border-slate-200 text-slate-700 font-black text-[10px] flex items-center justify-center shrink-0">
+                                      {idx + 1}º
+                                    </span>
+                                    <span className={`w-2 h-2 rounded-full shrink-0 ${b.dot_color}`} />
+                                    <span className="font-bold text-slate-900 truncate">{b.banco_nome}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-slate-500 text-[11px]">
+                                      R$ {b.volume_bi.toFixed(2)} Bi
+                                    </span>
+                                    <span className="text-[10px] font-medium text-slate-400">
+                                      ({b.total_ofertas} {b.total_ofertas === 1 ? 'oferta' : 'ofertas'})
+                                    </span>
+                                    <span className="font-extrabold text-slate-900 font-mono text-xs w-12 text-right">
+                                      {b.share_pct.toFixed(1)}%
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {/* Barra de progresso do share */}
+                                <div className="h-1.5 w-full bg-slate-200/70 rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full rounded-full transition-all duration-500"
+                                    style={{
+                                      width: `${Math.min(100, b.share_pct)}%`,
+                                      backgroundColor: b.cor
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Rodapé do Card da Esteira */}
+                    <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <span className="text-slate-500 font-medium">
+                        Total:{' '}
+                        <strong className="text-slate-900">
+                          R$ {data.distribuicao_bancos.analytics.volume_total_esteira_bi.toFixed(2)} Bi
+                        </strong>{' '}
+                        em {data.distribuicao_bancos.todas_ofertas_distribuicao.length} ofertas ativas
+                      </span>
+                      {selectedBank !== 'TODOS' && (
+                        <button
+                          onClick={() => setSelectedBank('TODOS')}
+                          className="text-xs text-indigo-600 hover:text-indigo-800 font-bold transition cursor-pointer"
+                        >
+                          Limpar filtro
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Card 2: Dinâmica Temporal & Evolução no Primário (7 colunas) */}
+                  <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                      {/* Header com Título e Controles */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                        <div>
+                          <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <TrendingUp size={18} className="text-indigo-600" />
+                            Evolução Temporal no Mercado Primário
+                          </h4>
+                          <p className="text-xs text-slate-500 mt-1">
+                            Dinâmica de aceleração e desaceleração dos 7 maiores bancos como Coordenador Líder (4.485 ofertas).
+                          </p>
+                        </div>
+
+                        {/* Controles: Granularidade, Métrica e Formato */}
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {/* Granularidade */}
+                          <div className="flex items-center bg-slate-100 p-0.5 rounded-lg text-xs">
+                            <button
+                              onClick={() => setMsGranularity('TRIMESTRAL')}
+                              className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
+                                msGranularity === 'TRIMESTRAL'
+                                  ? 'bg-white text-indigo-700 shadow-xs'
+                                  : 'text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              Trimestral
+                            </button>
+                            <button
+                              onClick={() => setMsGranularity('ANUAL')}
+                              className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
+                                msGranularity === 'ANUAL'
+                                  ? 'bg-white text-indigo-700 shadow-xs'
+                                  : 'text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              Anual
+                            </button>
+                          </div>
+
+                          {/* Métrica: Share vs Volume */}
+                          <div className="flex items-center bg-slate-100 p-0.5 rounded-lg text-xs">
+                            <button
+                              onClick={() => setMsMetric('SHARE')}
+                              className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
+                                msMetric === 'SHARE'
+                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  : 'text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              Share (%)
+                            </button>
+                            <button
+                              onClick={() => setMsMetric('VOLUME')}
+                              className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
+                                msMetric === 'VOLUME'
+                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  : 'text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              R$ Bi
+                            </button>
+                          </div>
+
+                          {/* Formato: Barra vs Área */}
+                          <div className="flex items-center bg-slate-100 p-0.5 rounded-lg text-xs">
+                            <button
+                              onClick={() => setMsChartType('BAR')}
+                              title="Barras Empilhadas"
+                              className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
+                                msChartType === 'BAR'
+                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  : 'text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              Barras
+                            </button>
+                            <button
+                              onClick={() => setMsChartType('AREA')}
+                              title="Área Contínua Empilhada"
+                              className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
+                                msChartType === 'AREA'
+                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  : 'text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              Área
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Sub-filtro para Trimestral: 8T vs Completo */}
+                      {msGranularity === 'TRIMESTRAL' && (
+                        <div className="flex items-center justify-between pt-3 pb-1 text-xs">
+                          <span className="text-[11px] text-slate-400 font-medium">
+                            {msHistoryRange === '8T' ? 'Exibindo últimos 8 trimestres (2 anos)' : 'Exibindo série histórica completa (16 trimestres)'}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => setMsHistoryRange('8T')}
+                              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition cursor-pointer ${
+                                msHistoryRange === '8T'
+                                  ? 'bg-slate-200 text-slate-800'
+                                  : 'text-slate-400 hover:text-slate-600'
+                              }`}
+                            >
+                              Últimos 8T
+                            </button>
+                            <button
+                              onClick={() => setMsHistoryRange('ALL')}
+                              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition cursor-pointer ${
+                                msHistoryRange === 'ALL'
+                                  ? 'bg-slate-200 text-slate-800'
+                                  : 'text-slate-400 hover:text-slate-600'
+                              }`}
+                            >
+                              Todos (16T)
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Área do Gráfico Recharts */}
+                      <div className="h-64 w-full pt-3">
+                        <ResponsiveContainer width="100%" height="100%">
+                          {msChartType === 'BAR' ? (
+                            <BarChart
+                              data={dadosGraficoMarketShare}
+                              margin={{ top: 10, right: 10, left: -15, bottom: 0 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                              <XAxis
+                                dataKey="label"
+                                tick={{ fill: '#64748b', fontSize: 10 }}
+                                axisLine={{ stroke: '#cbd5e1' }}
+                                tickLine={false}
+                              />
+                              <YAxis
+                                domain={msMetric === 'SHARE' ? [0, 100] : ['auto', 'auto']}
+                                tick={{ fill: '#64748b', fontSize: 10 }}
+                                axisLine={false}
+                                tickLine={false}
+                                tickFormatter={val => (msMetric === 'SHARE' ? `${val}%` : `${val}B`)}
+                              />
+                              <RechartsTooltip
+                                content={({ active, payload, label }) => {
+                                  if (!active || !payload || !payload.length) return null;
+                                  const totalBi = payload[0]?.payload?.total_bi || 0;
+                                  return (
+                                    <div className="bg-white/95 backdrop-blur-md p-3 rounded-xl border border-slate-200 shadow-xl text-xs space-y-1.5 min-w-[230px]">
+                                      <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                        <span className="font-bold text-slate-900">{label}</span>
+                                        <span className="text-[10px] text-slate-500 font-semibold">
+                                          Total: R$ {totalBi.toFixed(2)} Bi
+                                        </span>
+                                      </div>
+                                      <div className="space-y-1 pt-1">
+                                        {payload.map((entry: any, idx: number) => {
+                                          const rawBancoName = entry.dataKey.replace('_share', '');
+                                          const isShare = msMetric === 'SHARE';
+                                          const valNum = Number(entry.value || 0);
+                                          const valBi = entry.payload[rawBancoName] || 0;
+                                          const sharePct = entry.payload[`${rawBancoName}_share`] || 0;
+
+                                          return (
+                                            <div key={idx} className="flex items-center justify-between gap-3 text-[11px]">
+                                              <div className="flex items-center gap-1.5 truncate">
+                                                <span
+                                                  className="w-2 h-2 rounded-full shrink-0"
+                                                  style={{ backgroundColor: entry.color }}
+                                                />
+                                                <span className="text-slate-700 truncate">{rawBancoName}</span>
+                                              </div>
+                                              <div className="flex items-center gap-2 font-mono font-medium">
+                                                {isShare ? (
+                                                  <>
+                                                    <span className="text-slate-900 font-bold">
+                                                      {valNum.toFixed(1)}%
+                                                    </span>
+                                                    <span className="text-slate-400 text-[10px]">
+                                                      ({valBi.toFixed(1)}B)
+                                                    </span>
+                                                  </>
+                                                ) : (
+                                                  <>
+                                                    <span className="text-slate-900 font-bold">
+                                                      R$ {valNum.toFixed(2)} Bi
+                                                    </span>
+                                                    <span className="text-slate-400 text-[10px]">
+                                                      ({sharePct.toFixed(1)}%)
+                                                    </span>
+                                                  </>
+                                                )}
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  );
+                                }}
+                              />
+                              {data.distribuicao_bancos.analytics.bancos_meta.map(banco => (
+                                <Bar
+                                  key={banco.nome}
+                                  dataKey={msMetric === 'SHARE' ? `${banco.nome}_share` : banco.nome}
+                                  name={banco.nome}
+                                  stackId="a"
+                                  fill={banco.cor}
+                                />
+                              ))}
+                            </BarChart>
+                          ) : (
+                            <AreaChart
+                              data={dadosGraficoMarketShare}
+                              margin={{ top: 10, right: 10, left: -15, bottom: 0 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                              <XAxis
+                                dataKey="label"
+                                tick={{ fill: '#64748b', fontSize: 10 }}
+                                axisLine={{ stroke: '#cbd5e1' }}
+                                tickLine={false}
+                              />
+                              <YAxis
+                                domain={msMetric === 'SHARE' ? [0, 100] : ['auto', 'auto']}
+                                tick={{ fill: '#64748b', fontSize: 10 }}
+                                axisLine={false}
+                                tickLine={false}
+                                tickFormatter={val => (msMetric === 'SHARE' ? `${val}%` : `${val}B`)}
+                              />
+                              <RechartsTooltip
+                                content={({ active, payload, label }) => {
+                                  if (!active || !payload || !payload.length) return null;
+                                  const totalBi = payload[0]?.payload?.total_bi || 0;
+                                  return (
+                                    <div className="bg-white/95 backdrop-blur-md p-3 rounded-xl border border-slate-200 shadow-xl text-xs space-y-1.5 min-w-[230px]">
+                                      <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                                        <span className="font-bold text-slate-900">{label}</span>
+                                        <span className="text-[10px] text-slate-500 font-semibold">
+                                          Total: R$ {totalBi.toFixed(2)} Bi
+                                        </span>
+                                      </div>
+                                      <div className="space-y-1 pt-1">
+                                        {payload.map((entry: any, idx: number) => {
+                                          const rawBancoName = entry.dataKey.replace('_share', '');
+                                          const isShare = msMetric === 'SHARE';
+                                          const valNum = Number(entry.value || 0);
+                                          const valBi = entry.payload[rawBancoName] || 0;
+                                          const sharePct = entry.payload[`${rawBancoName}_share`] || 0;
+
+                                          return (
+                                            <div key={idx} className="flex items-center justify-between gap-3 text-[11px]">
+                                              <div className="flex items-center gap-1.5 truncate">
+                                                <span
+                                                  className="w-2 h-2 rounded-full shrink-0"
+                                                  style={{ backgroundColor: entry.color }}
+                                                />
+                                                <span className="text-slate-700 truncate">{rawBancoName}</span>
+                                              </div>
+                                              <div className="flex items-center gap-2 font-mono font-medium">
+                                                {isShare ? (
+                                                  <>
+                                                    <span className="text-slate-900 font-bold">
+                                                      {valNum.toFixed(1)}%
+                                                    </span>
+                                                    <span className="text-slate-400 text-[10px]">
+                                                      ({valBi.toFixed(1)}B)
+                                                    </span>
+                                                  </>
+                                                ) : (
+                                                  <>
+                                                    <span className="text-slate-900 font-bold">
+                                                      R$ {valNum.toFixed(2)} Bi
+                                                    </span>
+                                                    <span className="text-slate-400 text-[10px]">
+                                                      ({sharePct.toFixed(1)}%)
+                                                    </span>
+                                                  </>
+                                                )}
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  );
+                                }}
+                              />
+                              {data.distribuicao_bancos.analytics.bancos_meta.map(banco => (
+                                <Area
+                                  key={banco.nome}
+                                  type="monotone"
+                                  dataKey={msMetric === 'SHARE' ? `${banco.nome}_share` : banco.nome}
+                                  name={banco.nome}
+                                  stackId="1"
+                                  stroke={banco.cor}
+                                  fill={banco.cor}
+                                  fillOpacity={0.8}
+                                />
+                              ))}
+                            </AreaChart>
+                          )}
+                        </ResponsiveContainer>
+                      </div>
+
+                      {/* Legenda Customizada com Cores dos Bancos */}
+                      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 pt-3 border-t border-slate-100 mt-2 text-[11px] font-semibold text-slate-600">
+                        {data.distribuicao_bancos.analytics.bancos_meta.map(b => (
+                          <div key={b.nome} className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: b.cor }} />
+                            <span>{b.nome}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Destaques de Dinâmica / DCM Insights */}
+                    <div className="pt-3 mt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+                      <div className="p-2 rounded-lg bg-rose-50/70 border border-rose-100 text-rose-900 flex flex-col justify-between">
+                        <span className="font-extrabold text-[10px] uppercase tracking-wider text-rose-600">
+                          Aceleração Bradesco BBI
+                        </span>
+                        <p className="mt-0.5 leading-tight">
+                          Evolução contínua de <strong>9,3%</strong> (2023) para <strong>14,1%</strong> (2025) e <strong>15,8%</strong> em 2026.
+                        </p>
+                      </div>
+
+                      <div className="p-2 rounded-lg bg-orange-50/70 border border-orange-100 text-orange-900 flex flex-col justify-between">
+                        <span className="font-extrabold text-[10px] uppercase tracking-wider text-orange-600">
+                          Liderança Histórica Itaú
+                        </span>
+                        <p className="mt-0.5 leading-tight">
+                          Maior coordenador do primário, sustentando entre <strong>24,6% e 32,9%</strong> de share em volume.
+                        </p>
+                      </div>
+
+                      <div className="p-2 rounded-lg bg-amber-50/70 border border-amber-100 text-amber-900 flex flex-col justify-between">
+                        <span className="font-extrabold text-[10px] uppercase tracking-wider text-amber-600">
+                          Disputa Top 3 (XP & BTG)
+                        </span>
+                        <p className="mt-0.5 leading-tight">
+                          Forte equilíbrio no primário com <strong>11,1%</strong> (XP) vs <strong>11,9%</strong> (BTG) em 2026.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               {/* Header da Esteira */}
               <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
