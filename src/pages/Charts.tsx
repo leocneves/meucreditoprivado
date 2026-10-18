@@ -26,7 +26,7 @@ import {
 } from 'recharts'
 import PieBox from '../components/PieBox'
 import SearchMultiSelect from '../components/SearchMultiSelect'
-import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter, SlidersHorizontal, Info, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
+import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter, SlidersHorizontal, Info, ChevronDown, ChevronUp, RotateCcw, ArrowUpDown } from 'lucide-react'
 import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
 
 /* ================= HELPERS ================= */
@@ -331,6 +331,8 @@ const CreditDashboard: React.FC = () => {
 
   const [spreadHistIdx, setSpreadHistIdx] = useState<'ALL' | 'IPCA' | 'DI+' | 'DI%' | 'PRE'>('ALL')
   const [tableSearch, setTableSearch] = useState('')
+  const [tableSortCol, setTableSortCol] = useState<string>('ticker')
+  const [tableSortDir, setTableSortDir] = useState<'asc' | 'desc'>('asc')
   const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false)
 
   const activeAdvancedCount = useMemo(() => {
@@ -1083,19 +1085,153 @@ const CreditDashboard: React.FC = () => {
     ? ' bps'
     : ''
 
-  /* ---------- Tabela Filtrada com Busca ---------- */
+  /* ---------- Tabela Filtrada com Busca e Ordenação Dinâmica ---------- */
 
   const displayTableAssets = useMemo(() => {
-    if (!tableSearch.trim()) return filteredAssets
-    const q = tableSearch.toLowerCase().trim()
-    return filteredAssets.filter(a =>
-      (a.ticker && a.ticker.toLowerCase().includes(q)) ||
-      (a.issuer && a.issuer.toLowerCase().includes(q)) ||
-      (a.setor && a.setor.toLowerCase().includes(q)) ||
-      (a.isin && a.isin.toLowerCase().includes(q)) ||
-      (a.indexador && a.indexador.toLowerCase().includes(q))
+    let list = filteredAssets
+    if (tableSearch.trim()) {
+      const q = tableSearch.toLowerCase().trim()
+      list = list.filter(a =>
+        (a.ticker && a.ticker.toLowerCase().includes(q)) ||
+        (a.issuer && a.issuer.toLowerCase().includes(q)) ||
+        (a.setor && a.setor.toLowerCase().includes(q)) ||
+        (a.isin && a.isin.toLowerCase().includes(q)) ||
+        (a.indexador && a.indexador.toLowerCase().includes(q))
+      )
+    }
+
+    if (!tableSortCol) return list
+
+    return [...list].sort((a, b) => {
+      let comp = 0
+      switch (tableSortCol) {
+        case 'ticker':
+          comp = (a.ticker || '').localeCompare(b.ticker || '')
+          break
+        case 'tipo':
+          comp = (a.tipo || '').localeCompare(b.tipo || '')
+          break
+        case 'incentivada':
+          comp = (a.incentivada || '').localeCompare(b.incentivada || '')
+          break
+        case 'issuer':
+          comp = (a.issuer || '').localeCompare(b.issuer || '')
+          break
+        case 'setor':
+          comp = (a.setor || '').localeCompare(b.setor || '')
+          break
+        case 'indexador':
+          comp = (getAssetNormalizedIndexador(a) || a.indexador || '').localeCompare(getAssetNormalizedIndexador(b) || b.indexador || '')
+          break
+        case 'taxa_emissao': {
+          const valA = parseFloat((a.taxa_emissao || '').replace(/[^\d.-]/g, '')) || 0
+          const valB = parseFloat((b.taxa_emissao || '').replace(/[^\d.-]/g, '')) || 0
+          comp = valA - valB
+          break
+        }
+        case 'taxa_mercado': {
+          const valA = parseFloat(a.taxa_mercado || '') || 0
+          const valB = parseFloat(b.taxa_mercado || '') || 0
+          comp = valA - valB
+          break
+        }
+        case 'taxa_compra': {
+          const valA = parseFloat(a.taxa_compra || a.taxa_venda || '') || 0
+          const valB = parseFloat(b.taxa_compra || b.taxa_venda || '') || 0
+          comp = valA - valB
+          break
+        }
+        case 'spread': {
+          const valA = a.spread != null && a.spread !== '' ? parseFloat(a.spread) : (getAssetSpreadDisplay(a).rawValue ?? -999999)
+          const valB = b.spread != null && b.spread !== '' ? parseFloat(b.spread) : (getAssetSpreadDisplay(b).rawValue ?? -999999)
+          comp = (valA || 0) - (valB || 0)
+          break
+        }
+        case 'duration': {
+          const valA = parseFloat(a.duration || '') || 0
+          const valB = parseFloat(b.duration || '') || 0
+          comp = valA - valB
+          break
+        }
+        case 'pu': {
+          const valA = parseFloat(a.pu_mercado || a.pu || '') || 0
+          const valB = parseFloat(b.pu_mercado || b.pu || '') || 0
+          comp = valA - valB
+          break
+        }
+        case 'data_ultimo_negocio':
+          comp = (a.data_ultimo_negocio || '').localeCompare(b.data_ultimo_negocio || '')
+          break
+        case 'dias_negociados_30d': {
+          const valA = Number(a.dias_negociados_30d) || 0
+          const valB = Number(b.dias_negociados_30d) || 0
+          comp = valA - valB
+          break
+        }
+        case 'rating_normalizado': {
+          const rA = a.rating_normalizado || normalizeRating(a.rating)
+          const rB = b.rating_normalizado || normalizeRating(b.rating)
+          const idxA = RATING_SCALE_ORDER.indexOf(rA)
+          const idxB = RATING_SCALE_ORDER.indexOf(rB)
+          comp = (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB)
+          break
+        }
+        case 'rating_original':
+          comp = (a.rating || a.rating_original || '').localeCompare(b.rating || b.rating_original || '')
+          break
+        case 'vencimento':
+          comp = (a.vencimento || '').localeCompare(b.vencimento || '')
+          break
+        case 'isin':
+          comp = (a.isin || '').localeCompare(b.isin || '')
+          break
+        case 'fonte_precificacao':
+          comp = (a.fonte_precificacao || '').localeCompare(b.fonte_precificacao || '')
+          break
+        default:
+          comp = 0
+      }
+      return tableSortDir === 'asc' ? comp : -comp
+    })
+  }, [filteredAssets, tableSearch, tableSortCol, tableSortDir])
+
+  const handleSort = (colKey: string) => {
+    if (tableSortCol === colKey) {
+      setTableSortDir(prev => (prev === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setTableSortCol(colKey)
+      const isNumericByDefault = ['taxa_mercado', 'taxa_compra', 'spread', 'duration', 'pu', 'dias_negociados_30d'].includes(colKey)
+      setTableSortDir(isNumericByDefault ? 'desc' : 'asc')
+    }
+  }
+
+  const renderSortTh = (label: string, colKey: string, align: 'left' | 'right' | 'center' = 'left', titleTooltip?: string) => {
+    const isSorted = tableSortCol === colKey
+    return (
+      <th
+        onClick={() => handleSort(colKey)}
+        className={`p-2.5 cursor-pointer hover:bg-slate-200 transition select-none ${
+          align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'
+        }`}
+        title={titleTooltip || `Clique para ordenar por ${label}`}
+      >
+        <div className={`inline-flex items-center gap-1.5 ${
+          align === 'right' ? 'justify-end' : align === 'center' ? 'justify-center' : 'justify-start'
+        }`}>
+          <span>{label}</span>
+          {isSorted ? (
+            tableSortDir === 'asc' ? (
+              <ChevronUp size={13} className="text-blue-600 font-bold shrink-0" />
+            ) : (
+              <ChevronDown size={13} className="text-blue-600 font-bold shrink-0" />
+            )
+          ) : (
+            <ArrowUpDown size={11} className="text-slate-400 opacity-50 shrink-0" />
+          )}
+        </div>
+      </th>
     )
-  }, [filteredAssets, tableSearch])
+  }
 
   if (loading) {
     return (
@@ -2197,7 +2333,7 @@ const CreditDashboard: React.FC = () => {
               Tabela Completa de Ativos ({displayTableAssets.length.toLocaleString('pt-BR')} de {filteredAssets.length.toLocaleString('pt-BR')})
             </h2>
             <p className="text-xs text-slate-500">
-              Detalhamento de taxas de emissão vs mercado atual, PUs, debêntures 12.431, ratings normalizados e spreads.
+              Detalhamento de taxas de emissão vs mercado atual, PUs, debêntures 12.431, ratings e spreads. Clique nos cabeçalhos para ordenar.
             </p>
           </div>
 
@@ -2223,29 +2359,29 @@ const CreditDashboard: React.FC = () => {
           <table className="w-full text-xs text-left">
             <thead className="sticky top-0 bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider whitespace-nowrap">
               <tr>
-                <th className="p-2.5">Ticker</th>
-                <th className="p-2.5">Tipo</th>
-                <th className="p-2.5">Incentivada</th>
-                <th className="p-2.5">Emissor / Devedor</th>
-                <th className="p-2.5">Setor (ANBIMA)</th>
-                <th className="p-2.5">Indexador</th>
-                <th className="p-2.5">Taxa Emissão</th>
-                <th className="p-2.5">Taxa Mercado</th>
-                <th className="p-2.5" title="Taxas indicativas de Compra (Bid) e Venda (Ask) apuradas pela ANBIMA junto aos dealers de mercado secundário">Cotações ANBIMA (Bid / Ask)</th>
-                <th className="p-2.5 text-right">Spread / Taxa</th>
-                <th className="p-2.5 text-right">Duration (anos)</th>
-                <th className="p-2.5 text-right">PU Mercado</th>
-                <th className="p-2.5">Último Negócio B3</th>
-                <th className="p-2.5 text-center">Dias Negoc. (30D)</th>
-                <th className="p-2.5">Rating Normalizado</th>
-                <th className="p-2.5">Rating Original</th>
-                <th className="p-2.5">Vencimento</th>
-                <th className="p-2.5">ISIN</th>
-                <th className="p-2.5">Fonte Precificação</th>
+                {renderSortTh('Ticker', 'ticker')}
+                {renderSortTh('Tipo', 'tipo')}
+                {renderSortTh('Incentivada', 'incentivada')}
+                {renderSortTh('Emissor / Devedor', 'issuer')}
+                {renderSortTh('Setor (ANBIMA)', 'setor')}
+                {renderSortTh('Indexador', 'indexador')}
+                {renderSortTh('Taxa Emissão', 'taxa_emissao')}
+                {renderSortTh('Taxa Mercado', 'taxa_mercado')}
+                {renderSortTh('Cotações ANBIMA (Bid / Ask)', 'taxa_compra', 'left', 'Taxas indicativas de Compra (Bid) e Venda (Ask) apuradas pela ANBIMA')}
+                {renderSortTh('Spread / Taxa', 'spread', 'right')}
+                {renderSortTh('Duration (anos)', 'duration', 'right')}
+                {renderSortTh('PU Mercado', 'pu', 'right')}
+                {renderSortTh('Último Negócio B3', 'data_ultimo_negocio')}
+                {renderSortTh('Dias Negoc. (30D)', 'dias_negociados_30d', 'center')}
+                {renderSortTh('Rating Normalizado', 'rating_normalizado')}
+                {renderSortTh('Rating Original', 'rating_original')}
+                {renderSortTh('Vencimento', 'vencimento')}
+                {renderSortTh('ISIN', 'isin')}
+                {renderSortTh('Fonte Precificação', 'fonte_precificacao')}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 whitespace-nowrap">
-              {displayTableAssets.slice(0, 250).map((a, idx) => {
+              {displayTableAssets.slice(0, 300).map((a, idx) => {
                 const spreadDisplay = getAssetSpreadDisplay(a)
                 const durVal = parseFloat(a.duration || '')
                 const normRating = a.rating_normalizado || normalizeRating(a.rating)
