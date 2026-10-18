@@ -901,7 +901,7 @@ const Primary: React.FC = () => {
                       Esteira de Distribuição por Instituição Financeira
                     </h3>
                     <p className="text-xs text-slate-500 mt-1 max-w-3xl">
-                      Consórcios de distribuição, sindicatos bancários regulatórios (Resolução CVM 160) e ofertas
+                      Consórcios de distribuição, instituições coordenadoras (Resolução CVM 160) e ofertas
                       públicas ativas disponibilizadas nos portais das principais instituições financeiras.
                     </p>
                   </div>
@@ -1309,7 +1309,7 @@ const Primary: React.FC = () => {
                                   <div className="flex flex-wrap items-center gap-1.5 pt-1.5">
                                     <span className="text-[11px] font-bold text-slate-500 flex items-center gap-1 mr-0.5">
                                       <Landmark size={12} className="text-indigo-500" />
-                                      Sindicato:
+                                      Distribuição:
                                     </span>
                                     {oferta.sindicato_distribuicao.map(b => (
                                       <button
@@ -1533,7 +1533,7 @@ const Primary: React.FC = () => {
                                 <div>
                                   <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">
                                     <Users size={14} className="text-emerald-600" />
-                                    Participantes & Sindicato de Distribuição
+                                    Consórcio de Distribuição & Coordenadores
                                   </h4>
 
                                   <div className="flex flex-wrap gap-2 text-xs">
