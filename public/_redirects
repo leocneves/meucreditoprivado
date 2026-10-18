@@ -22,6 +22,7 @@ http://meucreditoprivado.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
 /sitemap-year.xml  /sitemap-year.xml   200
 /sitemap-all.xml   /sitemap-all.xml    200
 /robots.txt        /robots.txt         200
+/llms.txt          /llms.txt           200
 /api/news          /.netlify/functions/news 200
 
 # 4. Fallback SPA
