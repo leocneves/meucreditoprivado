@@ -190,9 +190,13 @@ const Primary: React.FC = () => {
     return `R$ ${(val / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Mi`;
   };
 
-  const formatDate = (dtStr?: string) => {
+  const formatDate = (dtStr?: string, dtEmissao?: string) => {
     if (!dtStr) return '-';
     const s = dtStr.trim();
+    // Se vencimento for menor ou igual à data de emissão, trata-se de inconsistência cadastral
+    if (dtEmissao && s <= dtEmissao.trim()) {
+      return 'A definir';
+    }
     if (s.includes('-')) {
       const p = s.split('-');
       if (p.length === 3) return `${p[2]}/${p[1]}/${p[0]}`;
@@ -942,7 +946,7 @@ const Primary: React.FC = () => {
                                       <span className="truncate pr-1">{serie.descricao_serie}</span>
                                       {serie.data_vencimento && (
                                         <span className="text-[10px] text-slate-400 whitespace-nowrap">
-                                          Venc. {formatDate(serie.data_vencimento)}
+                                          Venc. {formatDate(serie.data_vencimento, serie.data_emissao)}
                                         </span>
                                       )}
                                     </div>
@@ -1039,7 +1043,7 @@ const Primary: React.FC = () => {
                                           <div className="flex justify-between">
                                             <span className="text-slate-500">Vencimento:</span>
                                             <span className="font-semibold text-slate-800">
-                                              {formatDate(s.data_vencimento)}
+                                              {formatDate(s.data_vencimento, s.data_emissao)}
                                             </span>
                                           </div>
 
