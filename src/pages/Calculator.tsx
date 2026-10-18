@@ -467,7 +467,7 @@ const CalculatorPage: React.FC = () => {
 • *Resultado no Bolso:* R$ ${Math.round(heroCpResult.futureValueNet).toLocaleString('pt-BR')} líquidos
 • *Diferença contra o Governo:* ${heroExcessNetR$ >= 0 ? `+R$ ${Math.round(heroExcessNetR$).toLocaleString('pt-BR')}` : `-R$ ${Math.round(Math.abs(heroExcessNetR$)).toLocaleString('pt-BR')}`}
 
-🔍 Simule grátis em: https://meucreditoprivado.netlify.app/calculadora`;
+🔍 Simule grátis em: https://fixdatabrasil.com.br/calculadora`;
 
     navigator.clipboard.writeText(text);
     setCopied(true);

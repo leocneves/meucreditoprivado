@@ -15,7 +15,7 @@ import os
 import re
 from datetime import datetime, timedelta, timezone
 
-BASE_URL = "https://fixdata.netlify.app"
+BASE_URL = "https://fixdatabrasil.com.br"
 ASSETS_CSV = "public/data/assets_master.csv"
 TRADES_CSV = "public/data/b3_trades_summary.csv"
 OUTPUT_DIRS = ["public", "docs"]
