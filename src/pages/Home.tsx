@@ -256,21 +256,21 @@ const Home: React.FC = () => {
   const ratingDistribution = useMemo(() => {
     const buckets: Record<string, number> = {
       'AAA': 0,
-      'Grau AA': 0,
-      'Grau A': 0,
-      'Grau BBB': 0,
-      'High Yield (BB/B/CCC/D)': 0,
+      'AA': 0,
+      'A': 0,
+      'BBB': 0,
+      'High Yield (BB a D)': 0,
       'Sem Rating': 0
     };
 
     ativosVivos.forEach(a => {
       const norm = a.rating_normalizado || normalizeRating(a.rating);
       if (norm === 'AAA') buckets['AAA']++;
-      else if (norm.startsWith('AA')) buckets['Grau AA']++;
-      else if (norm.startsWith('A')) buckets['Grau A']++;
-      else if (norm.startsWith('BBB')) buckets['Grau BBB']++;
+      else if (norm.startsWith('AA')) buckets['AA']++;
+      else if (norm.startsWith('A')) buckets['A']++;
+      else if (norm.startsWith('BBB')) buckets['BBB']++;
       else if (['BB+', 'BB', 'BB-', 'B+', 'B', 'B-', 'CCC+', 'CCC', 'CCC-', 'CC', 'C', 'D'].includes(norm)) {
-        buckets['High Yield (BB/B/CCC/D)']++;
+        buckets['High Yield (BB a D)']++;
       } else {
         buckets['Sem Rating']++;
       }
@@ -481,8 +481,8 @@ const Home: React.FC = () => {
       {/* ================= HERO SECTION ================= */}
       <section className="text-center space-y-6 px-4 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold uppercase tracking-wider">
-          <Activity size={14} className="text-blue-600 animate-pulse" />
-          Inteligência de Mercado em Tempo Real
+          <Activity size={14} className="text-blue-600" />
+          Panorama do Mercado de Crédito Privado
         </div>
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
@@ -490,9 +490,9 @@ const Home: React.FC = () => {
         </h1>
 
         <p className="text-slate-600 text-lg md:text-xl font-normal leading-relaxed">
-          A maior plataforma aberta de inteligência e dados de{' '}
-          <strong className="text-slate-900 font-semibold">Debêntures, CRIs e CRAs</strong> do Brasil.
-          Acompanhe cotações, spreads contra NTN-B, ratings normalizados e cronogramas de vencimento.
+          Plataforma aberta de inteligência e dados de mercado para{' '}
+          <strong className="text-slate-900 font-semibold">Debêntures, CRIs e CRAs</strong>.
+          Acompanhe taxas indicativas ANBIMA, negócios secundários na B3, spreads sobre NTN-B e curvas de vencimento.
         </p>
 
         <div className="pt-2">
@@ -510,9 +510,9 @@ const Home: React.FC = () => {
                 <Layers size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Ativos na Base</p>
+                <p className="text-xs text-slate-500 font-medium">Universo Mapeado</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalAssets.toLocaleString('pt-BR')}</p>
-                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Total cadastrado</p>
+                <p className="text-[10px] text-slate-400 font-medium mt-0.5">Emissões cadastradas</p>
               </div>
             </div>
           </div>
@@ -523,9 +523,9 @@ const Home: React.FC = () => {
                 <CalendarDays size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Ativos Vivos</p>
+                <p className="text-xs text-slate-500 font-medium">Títulos em Circulação</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{ativosVivos.length.toLocaleString('pt-BR')}</p>
-                <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">Vigentes no mercado</p>
+                <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">Títulos vigentes</p>
               </div>
             </div>
           </div>
@@ -536,9 +536,9 @@ const Home: React.FC = () => {
                 <TrendingUp size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Mercado B3</p>
+                <p className="text-xs text-slate-500 font-medium">Negociados na B3</p>
                 <p className="text-xl md:text-2xl font-extrabold text-indigo-600">{ativosVivosB3.length.toLocaleString('pt-BR')}</p>
-                <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">Com negócios B3</p>
+                <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">Com liquidez secundária</p>
               </div>
             </div>
           </div>
@@ -549,9 +549,9 @@ const Home: React.FC = () => {
                 <Coins size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Estoque B3</p>
+                <p className="text-xs text-slate-500 font-medium">Volume em Circulação</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">R$ 2,00 tri</p>
-                <p className="text-[10px] text-slate-400 font-medium mt-0.5">R$ {(volumeTotalVivos / 1e9).toFixed(0)} bi emitidos</p>
+                <p className="text-[10px] text-slate-400 font-medium mt-0.5">R$ {(volumeTotalVivos / 1e9).toFixed(0)} bi de estoque vivo</p>
               </div>
             </div>
           </div>
@@ -567,7 +567,7 @@ const Home: React.FC = () => {
               <div>
                 <p className="text-xs text-slate-500 font-medium">Duration Média</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{durationMedia.toFixed(2)} anos</p>
-                <p className="text-[10px] text-amber-600 font-semibold mt-0.5">Maturidade ponderada</p>
+                <p className="text-[10px] text-amber-600 font-semibold mt-0.5">Prazo médio ponderado</p>
               </div>
             </div>
           </div>
@@ -578,9 +578,9 @@ const Home: React.FC = () => {
                 <Building2 size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Emissores Únicos</p>
+                <p className="text-xs text-slate-500 font-medium">Companhias Emissoras</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalEmissores.toLocaleString('pt-BR')}</p>
-                <p className="text-[10px] text-sky-600 font-semibold mt-0.5">Companhias devedoras</p>
+                <p className="text-[10px] text-sky-600 font-semibold mt-0.5">Devedores mapeados</p>
               </div>
             </div>
           </div>
@@ -591,9 +591,9 @@ const Home: React.FC = () => {
                 <FileCheck size={22} />
               </div>
               <div>
-                <p className="text-xs text-slate-500 font-medium">Docs Monitorados</p>
+                <p className="text-xs text-slate-500 font-medium">Documentos CVM</p>
                 <p className="text-xl md:text-2xl font-extrabold text-slate-900">{totalDocs.toLocaleString('pt-BR')}</p>
-                <p className="text-[10px] text-purple-600 font-semibold mt-0.5">Relatórios & CVM</p>
+                <p className="text-[10px] text-purple-600 font-semibold mt-0.5">Informes e relatórios</p>
               </div>
             </div>
           </div>
@@ -610,7 +610,7 @@ const Home: React.FC = () => {
                 Estrutura e Qualidade do Mercado de Crédito
               </h2>
               <p className="text-sm text-slate-500 mt-0.5">
-                Composição dos {ativosVivos.length.toLocaleString('pt-BR')} ativos vivos por régua de rating, tipo de instrumento e indexador.
+                Composição dos {ativosVivos.length.toLocaleString('pt-BR')} ativos em circulação por régua de rating, tipo de instrumento e indexador.
               </p>
             </div>
 
@@ -904,7 +904,7 @@ const Home: React.FC = () => {
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Todos os Vivos ({ativosVivos.length.toLocaleString('pt-BR')})
+                    Títulos em Circulação ({ativosVivos.length.toLocaleString('pt-BR')})
                   </button>
                   <button
                     onClick={() => setMaturityWallFilter('B3_ONLY')}
