@@ -40,7 +40,7 @@
         "volume_bi": 280.81
       }
     },
-    "data_atualizacao": "2026-10-17 23:03:31"
+    "data_atualizacao": "2026-10-17 23:46:52"
   },
   "evolucao_anual": [
     {
@@ -521,15 +521,6 @@
   "distribuicao_bancos": {
     "bancos_disponiveis": [
       {
-        "id": "ITAU",
-        "nome": "Itaú BBA / Corretora",
-        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "total_ofertas": 10,
-        "volume_total_reais": 1702925000.0
-      },
-      {
         "id": "BRADESCO",
         "nome": "Bradesco BBI",
         "portal_url": "https://www.bradescobbi.com.br/",
@@ -537,6 +528,15 @@
         "dot_color": "bg-rose-600",
         "total_ofertas": 3,
         "volume_total_reais": 1902925000.0
+      },
+      {
+        "id": "ITAU",
+        "nome": "Itaú BBA / Corretora",
+        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
+        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
+        "dot_color": "bg-orange-500",
+        "total_ofertas": 3,
+        "volume_total_reais": 1702925000.0
       },
       {
         "id": "SANTANDER",
@@ -598,7 +598,7 @@
         "valor_total_reais": 255000000.0,
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": "AAA: IPCA + 9,48% ou NTN-B35 + 115bps a.a.\nAA+: IPCA + 9,60% ou NTN-B35 + 125bps a.a.",
+        "taxas_indicativas": "IPCA + 9,48% (AAA) / IPCA + 9,60% (AA+)",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -624,7 +624,7 @@
         "valor_total_reais": 200000000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-10-22",
-        "taxas_indicativas": "CDI + 1,25% a.a.",
+        "taxas_indicativas": "CDI + 1,25%",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -646,7 +646,7 @@
         "valor_total_reais": 400000000.0,
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": "CDI + 1,18% a.a.",
+        "taxas_indicativas": "CDI + 1,18%",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -668,7 +668,7 @@
         "valor_total_reais": 400000000.0,
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": "CDI + 1,18% a.a.",
+        "taxas_indicativas": "CDI + 1,18%",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -712,7 +712,7 @@
         "valor_total_reais": 500000000.0,
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": "CDI + 0,80% a.a. (exp. 252)",
+        "taxas_indicativas": "CDI + 0,80%",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -734,7 +734,7 @@
         "valor_total_reais": 650000000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-10-26",
-        "taxas_indicativas": "correspondentes a 100% (cem por cento) da variação acumulada das taxas médias diárias dos DI – Depósitos Interfinanceiros de um dia, over extragrupo, na forma percentual ao ano, base 252 (duzentos e cinquenta e dois) Dias Úteis, calculadas e divulgadas diariamente pela B3, no informativo diário disponível em sua página na internet (http://www.b3.com.br/) (“Taxa DI”), acrescida de um spread (sobretaxa) correspondente a 0,69% (zero inteiros e sessenta e nove centésimos por cento) ao ano, base 252 (duzentos e cinquenta e dois) Dias Úteis.",
+        "taxas_indicativas": "CDI + 0,69%",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -786,7 +786,7 @@
         "valor_total_reais": 200000000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-10-20",
-        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% a.a. | 99% CDI",
+        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% | 99% CDI",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -812,7 +812,7 @@
         "valor_total_reais": 200000000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-10-20",
-        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% a.a. | 99% CDI",
+        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% | 99% CDI",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -838,7 +838,7 @@
         "valor_total_reais": 200000000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-10-20",
-        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% a.a. | 99% CDI",
+        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% | 99% CDI",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -864,7 +864,7 @@
         "valor_total_reais": 200000000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-10-20",
-        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% a.a. | 99% CDI",
+        "taxas_indicativas": "97% CDI | O maior entre pré jan31 - 40bps e 13,55% | 99% CDI",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -890,7 +890,7 @@
         "valor_total_reais": 1002925000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-09-10",
-        "taxas_indicativas": "CDI + 0,50% a.a. | CDI + 0,45% a.a.",
+        "taxas_indicativas": "CDI + 0,50% | CDI + 0,45%",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -916,7 +916,7 @@
         "valor_total_reais": 1002925000.0,
         "data_vencimento": null,
         "data_liquidacao": "2026-09-10",
-        "taxas_indicativas": "CDI + 0,50% a.a. | CDI + 0,45% a.a.",
+        "taxas_indicativas": "CDI + 0,50% | CDI + 0,45%",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -926,181 +926,6 @@
           {
             "nome_documento": "Prospecto Preliminar",
             "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2c6bf278-1212-4819-8d2c-38b03b292298"
-          }
-        ]
-      },
-      {
-        "banco_id": "ITAU",
-        "banco_nome": "Itaú BBA / Corretora",
-        "papel_banco": "Distribuição no Varejo/Private",
-        "portal_url": "https://itaucorretora.com.br/IonWeb?path=investir/ofertaspublicas/bc295db2-c139-4a25-b54e-f130d2d3578b",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "devedor": "ITAÚBA FIAGRO",
-        "tipo_ativo": "FIAGRO",
-        "valor_total_reais": null,
-        "data_vencimento": null,
-        "data_liquidacao": null,
-        "taxas_indicativas": "Ver prospecto da emissão",
-        "origem": "PORTAL_ITAU",
-        "documentos": [
-          {
-            "titulo": "Regulamento do Fundo",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/Fiagro-Itauba-Regulamento.pdf"
-          },
-          {
-            "titulo": "Prospecto",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/Prospecto_KNUQ_5emssao.pdf"
-          }
-        ]
-      },
-      {
-        "banco_id": "ITAU",
-        "banco_nome": "Itaú BBA / Corretora",
-        "papel_banco": "Distribuição no Varejo/Private",
-        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "devedor": "BOCAINA INFRA SÊNIOR I FIC INFRAESTRUTURA RENDA FIXA",
-        "tipo_ativo": "FII",
-        "valor_total_reais": null,
-        "data_vencimento": null,
-        "data_liquidacao": null,
-        "taxas_indicativas": "Ver prospecto da emissão",
-        "origem": "PORTAL_ITAU",
-        "documentos": [
-          {
-            "titulo": "Prospecto Definitivo",
-            "url": "https://ww69.itau.com.br/fileserver/images/BocainaInfraSeniorFICFIInfra-ProspectoDefinitivo.pdf"
-          },
-          {
-            "titulo": "Anúncio de Início",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/Anuncio-de-Inicio-V-DIVULGACAO.pdf"
-          }
-        ]
-      },
-      {
-        "banco_id": "ITAU",
-        "banco_nome": "Itaú BBA / Corretora",
-        "papel_banco": "Distribuição no Varejo/Private",
-        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "devedor": "KINEA CRÉDITO RESIDENCIAL PULVERIZADO FUNDO DE INVESTIMENTO IMOBILIÁRIO RESPONSABILIDADE LIMITADA (1",
-        "tipo_ativo": "FII",
-        "valor_total_reais": null,
-        "data_vencimento": null,
-        "data_liquidacao": null,
-        "taxas_indicativas": "Ver prospecto da emissão",
-        "origem": "PORTAL_ITAU",
-        "documentos": [
-          {
-            "titulo": "Prospecto Definitivo",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/ProspectoDefinitivo-KCRP-18062025.pdf"
-          },
-          {
-            "titulo": "Lâmina da Oferta",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/LaminaKCRP18062026.pdf"
-          }
-        ]
-      },
-      {
-        "banco_id": "ITAU",
-        "banco_nome": "Itaú BBA / Corretora",
-        "papel_banco": "Distribuição no Varejo/Private",
-        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "devedor": "LCP ITÁU RENDA CDI FEEDER FII (1ª EMISSÃO) Prospecto Definitivo Anúncio de Início Comunicado ao Merc",
-        "tipo_ativo": "FII",
-        "valor_total_reais": null,
-        "data_vencimento": null,
-        "data_liquidacao": null,
-        "taxas_indicativas": "Ver prospecto da emissão",
-        "origem": "PORTAL_ITAU",
-        "documentos": [
-          {
-            "titulo": "Prospecto Definitivo",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/67689649000132-OPD14072026V01-001246592.pdf"
-          },
-          {
-            "titulo": "Anúncio de Início",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/FII-LCP-IBBA-Feeder-Anuncio-de-Inicio-v-divulgacao.pdf"
-          }
-        ]
-      },
-      {
-        "banco_id": "ITAU",
-        "banco_nome": "Itaú BBA / Corretora",
-        "papel_banco": "Distribuição no Varejo/Private",
-        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "devedor": "VALORA AGRO PRÉ II FEEDER FUNDO DE INVESTIMENTO EM COTAS DE FUNDO DE INVESTIMENTO NAS CADEIAS PRODUT",
-        "tipo_ativo": "FIAGRO",
-        "valor_total_reais": null,
-        "data_vencimento": null,
-        "data_liquidacao": null,
-        "taxas_indicativas": "Ver prospecto da emissão",
-        "origem": "PORTAL_ITAU",
-        "documentos": [
-          {
-            "titulo": "Prospecto Definitivo",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/6681726CL1-1emissao-Prospecto-Definitivo.pdf"
-          },
-          {
-            "titulo": "Anúncio de Início",
-            "url": "https://ww69.itau.com.br/fileserver/Prospectos/6681726CL1-1emissao-Anuncio-de-Inicio.pdf"
-          }
-        ]
-      },
-      {
-        "banco_id": "ITAU",
-        "banco_nome": "Itaú BBA / Corretora",
-        "papel_banco": "Distribuição no Varejo/Private",
-        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "devedor": "MAXI RENDA FUNDO DE INVESTIMENTO IMOBILIÁRIO RESPONSABILIDADE LIMITADA (12ª EMISSÃO) Prospecto Defin",
-        "tipo_ativo": "FII",
-        "valor_total_reais": null,
-        "data_vencimento": null,
-        "data_liquidacao": null,
-        "taxas_indicativas": "Ver prospecto da emissão",
-        "origem": "PORTAL_ITAU",
-        "documentos": [
-          {
-            "titulo": "Prospecto Definitivo",
-            "url": "https://ww69.itau.com.br/fileserver/images/MXRF11-12a-Emissao-Prospecto-Definitivo-v.-divulgacao-Modificacao-da-Oferta.pdf"
-          },
-          {
-            "titulo": "Anúncio de Início",
-            "url": "https://ww69.itau.com.br/fileserver/images/12a-Emissao-MXRF-Anuncio-de-Inicio-v.-divulgacao.pdf"
-          }
-        ]
-      },
-      {
-        "banco_id": "ITAU",
-        "banco_nome": "Itaú BBA / Corretora",
-        "papel_banco": "Distribuição no Varejo/Private",
-        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-        "dot_color": "bg-orange-500",
-        "devedor": "ITAÚ LOG CP  FUNDO DE INVESTIMENTO IMOBILIÁRIO RESPONSABILIDADE LIMITADA (1ª EMISSÃO) Regulamento An",
-        "tipo_ativo": "FII",
-        "valor_total_reais": null,
-        "data_vencimento": null,
-        "data_liquidacao": null,
-        "taxas_indicativas": "Ver prospecto da emissão",
-        "origem": "PORTAL_ITAU",
-        "documentos": [
-          {
-            "titulo": "Regulamento",
-            "url": "https://ww69.itau.com.br/fileserver/relatorios/Fii_log_novo_REG.pdf"
-          },
-          {
-            "titulo": "Anúncio de Início",
-            "url": "https://ww69.itau.com.br/fileserver/relatorios/FII%20Log%20-%20An%c3%bancio%20de%20In%c3%adcio.pdf"
           }
         ]
       }
@@ -1136,8 +961,8 @@
           "quantidade_ativos": 255000.0,
           "pu_nominal": 1000.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "AAA: IPCA + 9,48% ou NTN-B35 + 115bps a.a.\nAA+: IPCA + 9,60% ou NTN-B35 + 125bps a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "IPCA + 9,48% (AAA) / IPCA + 9,60% (AA+)",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2041-10-15",
           "forma_amortizacao": "Customizada",
@@ -1223,8 +1048,8 @@
           "quantidade_ativos": 200000.0,
           "pu_nominal": 1000.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "CDI + 1,25% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "CDI + 1,25%",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-20",
           "data_vencimento": null,
           "forma_amortizacao": "Trimestralmente, a partir do 36º mês (inclusive) contado da Data de Emissão",
@@ -1305,8 +1130,8 @@
           "quantidade_ativos": 4000000.0,
           "pu_nominal": 100.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "CDI + 1,18% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "CDI + 1,18%",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-11-06",
           "data_vencimento": "2031-11-06",
           "forma_amortizacao": "Amortização em 3 (três) parcelas anuais e consecutivas, sendo o primeiro pagamento em 06 de novembro de 2029 e o último em 06 de novembro de 2031",
@@ -1403,7 +1228,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "CDI + 1,40%",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2028-10-15",
           "forma_amortizacao": "No vencimento(bullet)",
@@ -1419,7 +1244,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "CDI + 1,75%",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2033-10-15",
           "forma_amortizacao": "Ao final do 5, 6 e 7 anos",
@@ -1500,8 +1325,8 @@
           "quantidade_ativos": 500000.0,
           "pu_nominal": 1000.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "CDI + 0,80% a.a. (exp. 252)",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "CDI + 0,80%",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2029-10-15",
           "forma_amortizacao": "O Valor Nominal Unitário das Debêntures será amortizado em uma única parcela na Data de Vencimento das Debêntures",
@@ -1582,8 +1407,8 @@
           "quantidade_ativos": 650000.0,
           "pu_nominal": 1000.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "correspondentes a 100% (cem por cento) da variação acumulada das taxas médias diárias dos DI – Depósitos Interfinanceiros de um dia, over extragrupo, na forma percentual ao ano, base 252 (duzentos e cinquenta e dois) Dias Úteis, calculadas e divulgadas diariamente pela B3, no informativo diário disponível em sua página na internet (http://www.b3.com.br/) (“Taxa DI”), acrescida de um spread (sobretaxa) correspondente a 0,69% (zero inteiros e sessenta e nove centésimos por cento) ao ano, base 252 (duzentos e cinquenta e dois) Dias Úteis.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "CDI + 0,69%",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2032-10-15",
           "forma_amortizacao": "o pagamento da amortização das Debêntures será realizado anualmente, a partir do 4º (quarto) ano (inclusive), contado da Data de Emissão, sendo certo que o pagamento da primeira parcela de amortização das Debêntures deverá ocorrer em 15 de outubro de 2030 e a última, na Data de Vencimento.",
@@ -1670,7 +1495,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "97% CDI",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2036-10-15",
           "forma_amortizacao": "Bullet",
@@ -1686,7 +1511,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "PréxDI Jan/32 - 0,40%",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2036-10-15",
           "forma_amortizacao": "Bullet",
@@ -1702,7 +1527,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "NTN-B37 - 0,40%",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2036-10-15",
           "forma_amortizacao": "Bullet",
@@ -1718,7 +1543,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "98% CDI",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2041-10-15",
           "forma_amortizacao": "Bullet",
@@ -1734,7 +1559,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "PréxDI Jan-33 - 0,25%",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2041-10-15",
           "forma_amortizacao": "Bulllet",
@@ -1750,7 +1575,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "NTN-B40 - 0,25%",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2041-10-15",
           "forma_amortizacao": "Bullet",
@@ -1862,7 +1687,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "97% CDI",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2032-10-15",
           "forma_amortizacao": "No final do 5º e 6 º anos",
@@ -1877,8 +1702,8 @@
           "quantidade_ativos": 200000.0,
           "pu_nominal": 1000.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "O maior entre pré jan31 - 40bps e 13,55% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "O maior entre pré jan31 - 40bps e 13,55%",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2032-10-15",
           "forma_amortizacao": "No final do 5º e 6º anos.",
@@ -1894,7 +1719,7 @@
           "pu_nominal": 1000.0,
           "book_taxa": "",
           "taxa_remuneracao_maxima": "99% CDI",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-15",
           "data_vencimento": "2036-10-15",
           "forma_amortizacao": "No final do 8º, 9º e 10º anos",
@@ -2055,8 +1880,8 @@
           "quantidade_ativos": 716501.0,
           "pu_nominal": 1000.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "CDI + 0,50% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "CDI + 0,50%",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-05",
           "data_vencimento": "2031-08-25",
           "forma_amortizacao": "Bullet, no vencimento",
@@ -2071,8 +1896,8 @@
           "quantidade_ativos": 286424.0,
           "pu_nominal": 1000.0,
           "book_taxa": "",
-          "taxa_remuneracao_maxima": "CDI + 0,45% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_maxima": "CDI + 0,45%",
+          "taxa_remuneracao_final": "",
           "data_emissao": "2026-10-05",
           "data_vencimento": "2031-08-25",
           "forma_amortizacao": "Bullet, no vencimento",
@@ -2218,7 +2043,7 @@
           "descricao_serie": "1ª Série CRI",
           "volume_serie_reais": 227270000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2029-12-12",
           "avaliacao_risco": null,
           "isin": "BRLSECCRI7D2",
@@ -2229,7 +2054,7 @@
           "descricao_serie": "2ª Série CRI",
           "volume_serie_reais": 227270000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2029-12-12",
           "avaliacao_risco": null,
           "isin": "BRLSECCRI7E0",
@@ -2277,7 +2102,7 @@
           "descricao_serie": "CRI da 1ª Série",
           "volume_serie_reais": 500000000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-15",
           "avaliacao_risco": "Os CRI não possuem classificação de risco.",
           "isin": "BRRBRACIR5E4",
@@ -2288,7 +2113,7 @@
           "descricao_serie": "CRI da 2ª Série",
           "volume_serie_reais": 500000000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-15",
           "avaliacao_risco": "Os CRI não possuem classificação de risco.",
           "isin": "BRRBRACIR5F1",
@@ -2299,7 +2124,7 @@
           "descricao_serie": "CRI da 3ª Série",
           "volume_serie_reais": 500000000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-15",
           "avaliacao_risco": "Os CRI não possuem classificação de risco.",
           "isin": "BRRBRACIR5G9",
@@ -2342,7 +2167,7 @@
           "descricao_serie": "Série Única",
           "volume_serie_reais": 334000000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2050-07-15",
           "avaliacao_risco": null,
           "isin": "BRMEZ6DBS019",
@@ -2390,7 +2215,7 @@
           "descricao_serie": "Certificado de Recebíveis Imobiliários",
           "volume_serie_reais": 261756000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-22",
           "avaliacao_risco": "N/A",
           "isin": "BRLSECCRI7C4",
@@ -2433,7 +2258,7 @@
           "descricao_serie": "DEBÊNTURES SIMPLES",
           "volume_serie_reais": 750000000.0,
           "book_taxa": "CDI + 1,80% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2030-10-16",
           "avaliacao_risco": null,
           "isin": "BRLMTPDBS0I5",
@@ -2484,7 +2309,7 @@
           "descricao_serie": "Debêntures",
           "volume_serie_reais": 300000000.0,
           "book_taxa": "CDI + 0,65% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-15",
           "avaliacao_risco": "Fitch",
           "isin": "BRVIVADBS010",
@@ -2540,7 +2365,7 @@
           "descricao_serie": "Debêntures",
           "volume_serie_reais": 300000000.0,
           "book_taxa": "DI + 1,45% a.a.",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-16",
           "avaliacao_risco": "Não será contratada agência de classificação de risco no âmbito da Oferta",
           "isin": "BRPFRMDBS029",
@@ -2591,7 +2416,7 @@
           "descricao_serie": "CLASSE SÊNIOR EM SÉRIE ÚNICA DA 1a EMISSÃO DEB",
           "volume_serie_reais": 60000000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2030-10-30",
           "avaliacao_risco": null,
           "isin": null,
@@ -2602,7 +2427,7 @@
           "descricao_serie": "SUBCLASSE MEZANINO DA CLASSE SUB. DA 1 EMISSÃO DEB",
           "volume_serie_reais": 60000000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2030-10-30",
           "avaliacao_risco": null,
           "isin": null,
@@ -2670,7 +2495,7 @@
           "descricao_serie": "Debêntures",
           "volume_serie_reais": 400000000.0,
           "book_taxa": "99,00% a.a. da variação do DI",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2034-10-13",
           "avaliacao_risco": "N/A",
           "isin": "BRCYREDBS0A4",
@@ -2726,7 +2551,7 @@
           "descricao_serie": "Debêntures",
           "volume_serie_reais": 27810000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-15",
           "avaliacao_risco": null,
           "isin": null,
@@ -2763,7 +2588,7 @@
           "descricao_serie": "Certificado de Recebíveis Imobiliários - CRI",
           "volume_serie_reais": 60000000.0,
           "book_taxa": "",
-          "taxa_remuneracao_final": "Sim",
+          "taxa_remuneracao_final": "",
           "data_vencimento": "2031-10-13",
           "avaliacao_risco": null,
           "isin": "BRPVSCCRICG9",

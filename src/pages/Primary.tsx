@@ -346,7 +346,6 @@ const Primary: React.FC = () => {
         if (bankFilterTipo === 'DEB') return item.tipo_ativo === 'DEB' || item.tipo_ativo === 'DEBÊNTURE' || item.tipo_ativo === 'DEBENTURE';
         if (bankFilterTipo === 'CRI') return item.tipo_ativo === 'CRI';
         if (bankFilterTipo === 'CRA') return item.tipo_ativo === 'CRA';
-        if (bankFilterTipo === 'FII_FIAGRO') return item.tipo_ativo === 'FII' || item.tipo_ativo === 'FIAGRO';
         return true;
       });
     }
@@ -964,7 +963,7 @@ const Primary: React.FC = () => {
                 {/* Filtros Internos da Esteira */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-5 mt-5 border-t border-slate-100">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    {['TODOS', 'DEB', 'CRI', 'CRA', 'FII_FIAGRO'].map(t => (
+                    {['TODOS', 'DEB', 'CRI', 'CRA'].map(t => (
                       <button
                         key={t}
                         onClick={() => setBankFilterTipo(t)}
@@ -978,8 +977,6 @@ const Primary: React.FC = () => {
                           ? 'Todos os Ativos'
                           : t === 'DEB'
                           ? 'Debêntures'
-                          : t === 'FII_FIAGRO'
-                          ? 'FIIs & FIAGROs'
                           : t}
                       </button>
                     ))}
@@ -1089,7 +1086,7 @@ const Primary: React.FC = () => {
                             <div className="col-span-2 sm:col-span-1">
                               <span className="text-[10px] text-slate-400 block font-semibold">Taxa Indicativa</span>
                               <span
-                                className="font-bold text-purple-700 truncate block"
+                                className="font-bold text-purple-700 block text-xs leading-tight"
                                 title={item.taxas_indicativas || 'Sob consulta'}
                               >
                                 {item.taxas_indicativas || 'Ver prospecto'}
