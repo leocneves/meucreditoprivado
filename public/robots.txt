@@ -1,4 +1,30 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fixdata.netlify.app/sitemap.xml
+# Motores de IA e Busca Conversacional (Permissão Total e Alta Prioridade)
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemaps Oficiais
+Sitemap: https://fixdatabrasil.com.br/sitemap.xml
+Sitemap: https://fixdatabrasil.com.br/sitemap-hot.xml
+Sitemap: https://fixdatabrasil.com.br/sitemap-year.xml
+Sitemap: https://fixdatabrasil.com.br/sitemap-all.xml

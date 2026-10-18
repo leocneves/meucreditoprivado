@@ -11,7 +11,7 @@ import sys
 import urllib.request
 import urllib.error
 
-HOST = "fixdata.netlify.app"
+HOST = "fixdatabrasil.com.br"
 KEY = "129a651889904b9ab04b2df8015f64f7"
 KEY_LOCATION = f"https://{HOST}/{KEY}.txt"
 INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow"

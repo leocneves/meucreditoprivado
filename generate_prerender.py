@@ -7,7 +7,7 @@ import pandas as pd
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 
-BASE_URL = "https://fixdata.netlify.app"
+BASE_URL = "https://fixdatabrasil.com.br"
 DB_PATH = "/home/home/airflow/src/data/credito_privado.db"
 CSV_PATH = "public/data/assets_master.csv"
 OUTPUT_DIR = "public/asset"
@@ -524,6 +524,23 @@ def generate_asset_html(row):
         f"Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA."
     )
 
+    # ─── RESUMO EXECUTIVO PARA IA & ANALISTAS (GEO / LLMs) ─────────
+    taxa_emissao_str = f"com taxa de emissão de {taxa_emissao}" if taxa_emissao and taxa_emissao != '-' else f"indexado ao {indexador}"
+    status_raw = str(row.get('status_ativo', '') or row.get('status', '')).strip()
+    status_str = f"encontra-se {status_raw.lower()}" if status_raw and status_raw.lower() not in ('nan', 'none', '') else "está ativo"
+    incentivada_str = "incentivado (isenção fiscal Lei 12.431/11)" if str(row.get('incentivada', '')).strip().lower() in ('sim', 'true', '1') else "comum"
+    volume_emissao_val = safe_fmt_pu(row.get('volume_emissao') or row.get('volume'))
+    vol_str = f", com volume emitido de {volume_emissao_val}" if volume_emissao_val != '-' else ""
+    spread_str = f" e spread indicativo de {spread} sobre a NTN-B soberana" if spread and spread != '-' else ""
+    duration_str = f" (duration modificada de {duration} anos)" if duration and duration != '-' else ""
+    rating_str = f", avaliado com rating {rating_norm} em escala nacional" if rating_norm and rating_norm != 'Sem Rating' else ""
+
+    ai_executive_summary = (
+        f"O ativo {ticker} é um título de crédito privado do tipo {tipo} ({incentivada_str}) emitido por {issuer}{cnpj_desc}, "
+        f"{taxa_emissao_str} e data de vencimento em {vcto_br}. O título {status_str}{rating_str}{duration_str}{spread_str}{vol_str}. "
+        f"Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br)."
+    )
+
     provider_data = {
         "@type": "Organization",
         "name": issuer
@@ -541,7 +558,7 @@ def generate_asset_html(row):
                 "@type": "WebSite",
                 "name": "FIXDATA",
                 "alternateName": ["FixData", "Meu Crédito Privado"],
-                "url": "https://fixdata.netlify.app/"
+                "url": f"{BASE_URL}/"
             },
             {
                 "@type": "BreadcrumbList",
@@ -550,13 +567,13 @@ def generate_asset_html(row):
                         "@type": "ListItem",
                         "position": 1,
                         "name": "FIXDATA",
-                        "item": "https://fixdata.netlify.app/"
+                        "item": f"{BASE_URL}/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": f"{tipo}s",
-                        "item": "https://fixdata.netlify.app/"
+                        "item": f"{BASE_URL}/"
                     },
                     {
                         "@type": "ListItem",
@@ -572,6 +589,7 @@ def generate_asset_html(row):
                 "identifier": ticker,
                 "isin": isin,
                 "description": description,
+                "abstract": ai_executive_summary,
                 "url": page_url,
                 "category": tipo,
                 "provider": provider_data
@@ -761,14 +779,14 @@ def generate_asset_html(row):
     <meta property="og:title" content="{title}" />
     <meta property="og:description" content="{description}" />
     <meta property="og:site_name" content="FIXDATA" />
-    <meta property="og:image" content="https://fixdata.netlify.app/icon-512x512.png" />
+    <meta property="og:image" content="{BASE_URL}/icon-512x512.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="{page_url}" />
     <meta property="twitter:title" content="{title}" />
     <meta property="twitter:description" content="{description}" />
-    <meta property="twitter:image" content="https://fixdata.netlify.app/icon-512x512.png" />
+    <meta property="twitter:image" content="{BASE_URL}/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
     <script type="application/ld+json">
@@ -848,6 +866,17 @@ def generate_asset_html(row):
           <a href="/" class="hover:underline">{tipo}s</a> &gt;
           <span class="text-slate-800 font-bold">{ticker}</span>
         </div>
+
+        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
+        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
+            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
+          </div>
+          <p class="font-normal text-slate-700">
+            {ai_executive_summary}
+          </p>
+        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -1091,14 +1120,14 @@ def render_static_pages():
     <meta property="og:title" content="{p['title']}" />
     <meta property="og:description" content="{p['description']}" />
     <meta property="og:site_name" content="FIXDATA" />
-    <meta property="og:image" content="https://fixdata.netlify.app/icon-512x512.png" />
+    <meta property="og:image" content="{BASE_URL}/icon-512x512.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="{page_url}" />
     <meta property="twitter:title" content="{p['title']}" />
     <meta property="twitter:description" content="{p['description']}" />
-    <meta property="twitter:image" content="https://fixdata.netlify.app/icon-512x512.png" />
+    <meta property="twitter:image" content="{BASE_URL}/icon-512x512.png" />
 
     <link rel="stylesheet" href="/index.css">
     <script src="https://cdn.tailwindcss.com"></script>
