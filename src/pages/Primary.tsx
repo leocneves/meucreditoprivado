@@ -122,11 +122,17 @@ interface DistribuicaoItem {
   badge_bg: string;
   dot_color: string;
   devedor: string;
+  emissor_tecnico?: string | null;
   tipo_ativo: string;
   valor_total_reais?: number | null;
+  data_processo?: string | null;
   data_vencimento?: string | null;
   data_liquidacao?: string | null;
   taxas_indicativas?: string | null;
+  status_oferta?: string;
+  fase_oferta?: 'EM_BOOKBUILDING' | 'DISTRIBUICAO_ATIVA' | 'CONCLUIDA_RECENTE' | string;
+  fase_label?: string;
+  badge_fase?: string;
   origem: string;
   documentos?: { nome_documento?: string; titulo?: string; url?: string; url_download?: string }[];
 }
@@ -235,6 +241,7 @@ const Primary: React.FC = () => {
   const [selectedBank, setSelectedBank] = useState<string>('TODOS');
   const [bankSearch, setBankSearch] = useState<string>('');
   const [bankFilterTipo, setBankFilterTipo] = useState<string>('TODOS');
+  const [bankFilterFase, setBankFilterFase] = useState<string>('TODOS');
   const [filterTipo, setFilterTipo] = useState<string>('TODOS');
   const [filterAno, setFilterAno] = useState<string>('TODOS');
   const [filterIndexador, setFilterIndexador] = useState<string>('TODOS');
@@ -372,12 +379,38 @@ const Primary: React.FC = () => {
 
   /* ================= FILTRAGEM DA ESTEIRA DE DISTRIBUIÇÃO BANCÁRIA ================= */
 
+  const countsPorFase = useMemo(() => {
+    if (!data?.distribuicao_bancos?.todas_ofertas_distribuicao) {
+      return { TODOS: 0, DISTRIBUICAO_ATIVA: 0, EM_BOOKBUILDING: 0, CONCLUIDA_RECENTE: 0 };
+    }
+    let baseList = data.distribuicao_bancos.todas_ofertas_distribuicao;
+    if (selectedBank !== 'TODOS') {
+      baseList = baseList.filter(item => item.banco_id === selectedBank);
+    }
+    const counts = {
+      TODOS: baseList.length,
+      DISTRIBUICAO_ATIVA: 0,
+      EM_BOOKBUILDING: 0,
+      CONCLUIDA_RECENTE: 0
+    };
+    baseList.forEach(item => {
+      if (item.fase_oferta === 'DISTRIBUICAO_ATIVA') counts.DISTRIBUICAO_ATIVA++;
+      else if (item.fase_oferta === 'EM_BOOKBUILDING') counts.EM_BOOKBUILDING++;
+      else if (item.fase_oferta === 'CONCLUIDA_RECENTE') counts.CONCLUIDA_RECENTE++;
+    });
+    return counts;
+  }, [data, selectedBank]);
+
   const ofertasBancoFiltradas = useMemo(() => {
     if (!data?.distribuicao_bancos?.todas_ofertas_distribuicao) return [];
     let list = data.distribuicao_bancos.todas_ofertas_distribuicao;
 
     if (selectedBank !== 'TODOS') {
       list = list.filter(item => item.banco_id === selectedBank);
+    }
+
+    if (bankFilterFase !== 'TODOS') {
+      list = list.filter(item => item.fase_oferta === bankFilterFase);
     }
 
     if (bankFilterTipo !== 'TODOS') {
@@ -394,12 +427,15 @@ const Primary: React.FC = () => {
 
     return list.filter(item =>
       (item.devedor || '').toLowerCase().includes(q) ||
+      (item.emissor_tecnico || '').toLowerCase().includes(q) ||
       (item.banco_nome || '').toLowerCase().includes(q) ||
       (item.papel_banco || '').toLowerCase().includes(q) ||
       (item.tipo_ativo || '').toLowerCase().includes(q) ||
-      (item.taxas_indicativas || '').toLowerCase().includes(q)
+      (item.taxas_indicativas || '').toLowerCase().includes(q) ||
+      (item.status_oferta || '').toLowerCase().includes(q) ||
+      (item.fase_label || '').toLowerCase().includes(q)
     );
-  }, [data, selectedBank, bankFilterTipo, bankSearch]);
+  }, [data, selectedBank, bankFilterFase, bankFilterTipo, bankSearch]);
 
   /* ================= DADOS DO GRÁFICO MENSAL ================= */
 
@@ -1485,16 +1521,69 @@ const Primary: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Filtros Internos da Esteira */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-5 mt-5 border-t border-slate-100">
+                {/* Filtros Internos da Esteira: Fase Operacional, Instrumento e Busca */}
+                <div className="flex flex-col gap-3.5 pt-5 mt-5 border-t border-slate-100">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                    {/* Filtro por Fase Operacional */}
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mr-1">
+                        Fase:
+                      </span>
+                      {[
+                        { id: 'TODOS', label: 'Todas as Fases', count: countsPorFase.TODOS },
+                        { id: 'DISTRIBUICAO_ATIVA', label: 'Distribuição Ativa', count: countsPorFase.DISTRIBUICAO_ATIVA, pulse: true },
+                        { id: 'EM_BOOKBUILDING', label: 'Em Bookbuilding', count: countsPorFase.EM_BOOKBUILDING },
+                        { id: 'CONCLUIDA_RECENTE', label: 'Concluídas Recentes', count: countsPorFase.CONCLUIDA_RECENTE }
+                      ].map(f => (
+                        <button
+                          key={f.id}
+                          onClick={() => setBankFilterFase(f.id)}
+                          className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 border ${
+                            bankFilterFase === f.id
+                              ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs font-bold'
+                              : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                          }`}
+                        >
+                          {f.pulse && bankFilterFase !== f.id && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          )}
+                          <span>{f.label}</span>
+                          <span
+                            className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                              bankFilterFase === f.id ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
+                            }`}
+                          >
+                            {f.count}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Busca Textual */}
+                    <div className="relative min-w-[260px]">
+                      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="text"
+                        value={bankSearch}
+                        onChange={e => setBankSearch(e.target.value)}
+                        placeholder="Buscar por devedor, emissor, taxa ou papel..."
+                        className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 bg-slate-50 focus:bg-white transition"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Filtro por Instrumento */}
                   <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mr-1">
+                      Ativo:
+                    </span>
                     {['TODOS', 'DEB', 'CRI', 'CRA'].map(t => (
                       <button
                         key={t}
                         onClick={() => setBankFilterTipo(t)}
-                        className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
                           bankFilterTipo === t
-                            ? 'bg-indigo-50 text-indigo-700 font-bold border border-indigo-200'
+                            ? 'bg-slate-900 text-white font-bold'
                             : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
                         }`}
                       >
@@ -1505,17 +1594,6 @@ const Primary: React.FC = () => {
                           : t}
                       </button>
                     ))}
-                  </div>
-
-                  <div className="relative min-w-[240px]">
-                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type="text"
-                      value={bankSearch}
-                      onChange={e => setBankSearch(e.target.value)}
-                      placeholder="Buscar por devedor, taxa ou papel..."
-                      className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 bg-slate-50 focus:bg-white transition"
-                    />
                   </div>
                 </div>
               </div>
@@ -1539,18 +1617,18 @@ const Primary: React.FC = () => {
                     <AlertCircle size={32} className="mx-auto text-slate-400" />
                     <p className="text-slate-700 font-semibold">Nenhuma oferta encontrada para os filtros selecionados.</p>
                     <p className="text-xs text-slate-400">
-                      Tente alternar o banco selecionado ou limpar a busca.
+                      Tente alternar o banco selecionado, a fase operacional ou limpar a busca.
                     </p>
                   </div>
                 ) : (
-                  <div className="max-h-[620px] overflow-y-auto pr-1 sm:pr-2 grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  <div className="max-h-[640px] overflow-y-auto pr-1 sm:pr-2 grid grid-cols-1 md:grid-cols-2 gap-3.5">
                     {ofertasBancoFiltradas.map((item, bIdx) => (
                       <div
                         key={bIdx}
                         className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 shadow-xs transition flex flex-col justify-between space-y-3"
                       >
                         <div className="space-y-2.5">
-                          {/* Badges Topo */}
+                          {/* Badges Topo: Banco, Papel, Fase e Ativo */}
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <div className="flex flex-wrap items-center gap-1.5">
                               <span
@@ -1570,6 +1648,18 @@ const Primary: React.FC = () => {
                                 {item.papel_banco === 'Coordenador Líder' ? '👑 ' : ''}
                                 {item.papel_banco}
                               </span>
+
+                              {/* Badge da Fase Operacional */}
+                              <span
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${
+                                  item.badge_fase || 'bg-slate-100 text-slate-700 border-slate-200'
+                                }`}
+                              >
+                                {item.fase_oferta === 'DISTRIBUICAO_ATIVA' && (
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                )}
+                                {item.fase_label || (item.status_oferta === 'Aguardando Bookbuilding' ? 'Em Bookbuilding' : item.status_oferta || 'Distribuição')}
+                              </span>
                             </div>
 
                             <span
@@ -1581,11 +1671,16 @@ const Primary: React.FC = () => {
                             </span>
                           </div>
 
-                          {/* Nome do Devedor */}
+                          {/* Nome do Devedor e Emissor CVM */}
                           <div>
                             <h4 className="text-base font-extrabold text-slate-900 tracking-tight leading-snug">
                               {item.devedor}
                             </h4>
+                            {item.emissor_tecnico && (
+                              <p className="text-[11px] text-slate-400 font-medium truncate mt-0.5" title={`Securitizadora / Emissor CVM: ${item.emissor_tecnico}`}>
+                                <span className="text-slate-400 font-semibold">Emissor CVM:</span> {item.emissor_tecnico}
+                              </p>
+                            )}
                           </div>
 
                           {/* Metadados Financeiros */}
@@ -1633,7 +1728,7 @@ const Primary: React.FC = () => {
                           </a>
 
                           <div className="flex items-center gap-1.5">
-                            {item.documentos && item.documentos.length > 0 && item.documentos[0].url && (
+                            {item.documentos && item.documentos.length > 0 && (item.documentos[0].url || item.documentos[0].url_download) && (
                               <a
                                 href={item.documentos[0].url || item.documentos[0].url_download}
                                 target="_blank"
@@ -1649,13 +1744,22 @@ const Primary: React.FC = () => {
                             {item.id_requerimento && (
                               <button
                                 onClick={() => {
-                                  setActiveTab('ANDAMENTO');
-                                  setSearch(item.devedor);
+                                  if (item.fase_oferta === 'EM_BOOKBUILDING') {
+                                    setActiveTab('ANDAMENTO');
+                                    setSearch(item.devedor);
+                                  } else {
+                                    setActiveTab('ENCERRADAS');
+                                    setSearch(item.devedor);
+                                  }
                                 }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 transition cursor-pointer"
-                                title="Ver no Bookbuilding"
+                                className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition cursor-pointer ${
+                                  item.fase_oferta === 'EM_BOOKBUILDING'
+                                    ? 'text-purple-700 bg-purple-50 hover:bg-purple-100 border-purple-200'
+                                    : 'text-slate-700 bg-slate-100 hover:bg-slate-200 border-slate-200'
+                                }`}
+                                title={item.fase_oferta === 'EM_BOOKBUILDING' ? 'Ver no Bookbuilding' : 'Ver Registro CVM'}
                               >
-                                <span>Ver Bookbuilding</span>
+                                <span>{item.fase_oferta === 'EM_BOOKBUILDING' ? 'Ver Bookbuilding' : 'Ver Registro CVM'}</span>
                                 <ArrowUpRight size={12} />
                               </button>
                             )}
