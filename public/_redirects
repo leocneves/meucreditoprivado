@@ -1,3 +1,17 @@
+# 1. Arquivos de Verificação do Google e Bing (permanecem 200)
+/google5ed1f75e95ab450f.html /google5ed1f75e95ab450f.html 200
+/google*.html      /:splat             200
+/129a651889904b9ab04b2df8015f64f7.txt /129a651889904b9ab04b2df8015f64f7.txt 200
+/BingSiteAuth.xml    /BingSiteAuth.xml   200
+
+# 2. Redirecionamento 301 Permanente Oficial exigido pelo Google Search Console
+# Transfere todo o tráfego, sitemaps e ranking de fixdata.netlify.app para fixdatabrasil.com.br
+https://fixdata.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
+http://fixdata.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
+https://meucreditoprivado.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
+http://meucreditoprivado.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
+
+# 3. Assets estáticos, APIs e sitemaps
 /data/*            /data/:splat        200
 /assets/*          /assets/:splat      200
 /index.css         /index.css          200
@@ -7,10 +21,8 @@
 /sitemap-year.xml  /sitemap-year.xml   200
 /sitemap-all.xml   /sitemap-all.xml    200
 /robots.txt        /robots.txt         200
-/google5ed1f75e95ab450f.html /google5ed1f75e95ab450f.html 200
-/google*.html      /:splat             200
-/129a651889904b9ab04b2df8015f64f7.txt /129a651889904b9ab04b2df8015f64f7.txt 200
-/BingSiteAuth.xml    /BingSiteAuth.xml   200
 /api/news          /.netlify/functions/news 200
+
+# 4. Fallback SPA
 /*                 /index.html         200
 

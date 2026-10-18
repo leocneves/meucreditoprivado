@@ -4,6 +4,34 @@
   functions = "netlify/functions"
 
 [[redirects]]
+  from = "/google5ed1f75e95ab450f.html"
+  to = "/google5ed1f75e95ab450f.html"
+  status = 200
+
+[[redirects]]
+  from = "/BingSiteAuth.xml"
+  to = "/BingSiteAuth.xml"
+  status = 200
+
+[[redirects]]
+  from = "https://fixdata.netlify.app/*"
+  to = "https://fixdatabrasil.com.br/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://fixdata.netlify.app/*"
+  to = "https://fixdatabrasil.com.br/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://meucreditoprivado.netlify.app/*"
+  to = "https://fixdatabrasil.com.br/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/api/news"
   to = "/.netlify/functions/news"
   status = 200
