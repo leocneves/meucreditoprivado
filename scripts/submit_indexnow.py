@@ -7,7 +7,7 @@ import sys
 import requests
 import xml.etree.ElementTree as ET
 
-INDEXNOW_KEY = "129a651889904b9ab04b2df8015f64f7"
+INDEXNOW_KEY = "7f61b8b4e8e1413181366735aa41e1ac"
 HOST = "fixdatabrasil.com.br"
 KEY_LOCATION = f"https://{HOST}/{INDEXNOW_KEY}.txt"
 SITEMAP_PATH = "/home/home/Documents/fixdata/public/sitemap-hot.xml"
