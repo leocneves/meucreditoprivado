@@ -1426,6 +1426,13 @@ const Trades: React.FC = () => {
           <p className="text-slate-600 text-sm sm:text-base">
             Fluxo diário de operações em Debêntures, CRIs e CRAs registrados na B3 com cruzamento cadastral, VWAP e taxas praticadas.
           </p>
+          <div className="mt-2.5 flex items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100/90 border border-slate-200 rounded-lg text-xs text-slate-700">
+              <Info size={14} className="text-blue-600 shrink-0" />
+              <span className="font-semibold text-slate-900">Metodologia FixData:</span>
+              <span className="text-slate-600">Volume e contagem expurgados de dupla contagem bilateral (pontas casadas compra/venda) e quebras de lotes da B3 para refletir a liquidez econômica real.</span>
+            </div>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
