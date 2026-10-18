@@ -26,7 +26,7 @@ import {
 } from 'recharts'
 import PieBox from '../components/PieBox'
 import SearchMultiSelect from '../components/SearchMultiSelect'
-import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter } from 'lucide-react'
+import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter, SlidersHorizontal, Info, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
 import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
 
 /* ================= HELPERS ================= */
@@ -267,16 +267,25 @@ const KPIBox = ({
   title,
   value,
   subtitle,
-  icon: Icon
+  icon: Icon,
+  info
 }: {
   title: string
   value: any
   subtitle?: string
   icon?: any
+  info?: string
 }) => (
   <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
     <div className="flex items-center justify-between">
-      <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">{title}</p>
+      <div className="flex items-center gap-1.5">
+        <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">{title}</p>
+        {info && (
+          <span className="text-slate-400 hover:text-blue-600 cursor-help" title={info}>
+            <Info size={13} />
+          </span>
+        )}
+      </div>
       {Icon && <Icon size={18} className="text-blue-600" />}
     </div>
     <div className="mt-3">
@@ -322,6 +331,19 @@ const CreditDashboard: React.FC = () => {
 
   const [spreadHistIdx, setSpreadHistIdx] = useState<'ALL' | 'IPCA' | 'DI+' | 'DI%' | 'PRE'>('ALL')
   const [tableSearch, setTableSearch] = useState('')
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false)
+
+  const activeAdvancedCount = useMemo(() => {
+    let count = 0
+    if (rjSel !== 'ALL') count++
+    if (b3Filter !== 'ALL') count++
+    if (spreadMin !== null || spreadMax !== null) count++
+    if (durationPreset !== 'ALL' || durationMin !== null || durationMax !== null) count++
+    if (bidAskFilter !== 'ALL') count++
+    if (minDiasNegociados > 0) count++
+    if (tradeRecencyFilter !== 'ALL' || tradeDateMin !== '' || tradeDateMax !== '') count++
+    return count
+  }, [rjSel, b3Filter, spreadMin, spreadMax, durationPreset, durationMin, durationMax, bidAskFilter, minDiasNegociados, tradeRecencyFilter, tradeDateMin, tradeDateMax])
 
   /* ---------- Load CSVs & B3 Liquidity ---------- */
 
@@ -1091,20 +1113,50 @@ const CreditDashboard: React.FC = () => {
       {/* HEADER */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
-            <Activity className="text-blue-600" size={30} />
-            Dashboard Analítico de Crédito Privado
-          </h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
+              <Activity className="text-blue-600" size={30} />
+              Dashboard do Mercado Secundário
+            </h1>
+            <span
+              className="text-slate-400 hover:text-blue-600 cursor-help"
+              title="Visão consolidada das curvas de spread over, durations (DU/252), cotações secundárias ANBIMA e negociações registradas na B3 para debêntures, CRIs e CRAs."
+            >
+              <Info size={16} />
+            </span>
+          </div>
           <p className="text-sm text-slate-500 mt-1">
-            Visão consolidada de spreads over, durations calculadas (DU/252), debêntures incentivadas (Lei 12.431), recuperação judicial e cotações secundárias.
+            Curvas de spread over, dispersão duration x retorno, cotações secundárias ANBIMA e histórico de negociações B3.
           </p>
+        </div>
+
+        {/* Resumo do Universo Filtrado */}
+        <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs">
+          <div>
+            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Universo Filtrado</div>
+            <div className="font-bold text-slate-800">
+              {filteredAssets.length.toLocaleString('pt-BR')}{' '}
+              <span className="text-slate-400 font-normal">de {assets.length.toLocaleString('pt-BR')} ativos</span>
+            </div>
+          </div>
+          <div className="h-6 w-px bg-slate-200" />
+          <div>
+            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Volume Emitido</div>
+            <div className="font-bold text-slate-800">
+              R$ {(volumeVivo / 1e9).toFixed(1)} Bi
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* FILTROS */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      {/* FILTROS DINÂMICOS */}
+      <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        {/* Topo dos Filtros: Título e Botão de Limpar */}
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filtros Dinâmicos</h3>
+          <div className="flex items-center gap-2">
+            <Filter size={15} className="text-blue-600" />
+            <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Filtros de Mercado</h3>
+          </div>
           {hasActiveFilters && (
             <button
               onClick={() => {
@@ -1129,14 +1181,15 @@ const CreditDashboard: React.FC = () => {
                 setTradeDateMin('')
                 setTradeDateMax('')
               }}
-              className="text-xs text-blue-600 font-bold hover:underline"
+              className="text-xs text-blue-600 font-bold hover:underline flex items-center gap-1.5"
             >
+              <RotateCcw size={13} />
               Limpar todos os filtros
             </button>
           )}
         </div>
 
-        {/* Linha 1: MultiSelects */}
+        {/* Linha 1: 6 SearchMultiSelects principais */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <SearchMultiSelect
             label="Tipo de Ativo"
@@ -1176,12 +1229,12 @@ const CreditDashboard: React.FC = () => {
           />
         </div>
 
-        {/* Linha 2: Indexador Rápido, Incentivada (Lei 12.431), Recuperação Judicial e Faixas de Spread */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
+        {/* Linha 2: Barra Rápida com Indexadores, Incentivadas e Gatilho de Filtros Avançados */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
           <div className="flex flex-wrap items-center gap-4">
-            {/* Filtro Rápido de Indexador */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            {/* Indexador Rápido */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
                 Indexador:
               </span>
               <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
@@ -1253,11 +1306,19 @@ const CreditDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Filtro Incentivadas */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Incentivadas:
-              </span>
+            {/* Incentivadas */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
+                  Incentivadas:
+                </span>
+                <span
+                  className="text-slate-400 hover:text-blue-600 cursor-help"
+                  title="Debêntures e títulos emitidos com amparo da Lei 12.431/11 (isenção de IR para pessoas físicas residentes no país)."
+                >
+                  <Info size={12} />
+                </span>
+              </div>
               <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
                 <button
                   onClick={() => setIncentivadaSel('ALL')}
@@ -1269,11 +1330,11 @@ const CreditDashboard: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setIncentivadaSel('SIM')}
-                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
+                  className={`px-3 py-1 rounded-lg transition ${
                     incentivadaSel === 'SIM' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  <span>⚡ 12.431 / Isentos</span>
+                  Isentos (12.431)
                 </button>
                 <button
                   onClick={() => setIncentivadaSel('NAO')}
@@ -1285,322 +1346,400 @@ const CreditDashboard: React.FC = () => {
                 </button>
               </div>
             </div>
-
-            {/* Filtro Recuperação Judicial */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Recuperação Judicial:
-              </span>
-              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                <button
-                  onClick={() => setRjSel('ALL')}
-                  className={`px-3 py-1 rounded-lg transition ${
-                    rjSel === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Todos
-                </button>
-                <button
-                  onClick={() => setRjSel('EXCLUIR_RJ')}
-                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
-                    rjSel === 'EXCLUIR_RJ' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="Oculta títulos de devedores que estão em recuperação judicial ou falência"
-                >
-                  <span>🛡️ Excluir em RJ</span>
-                </button>
-                <button
-                  onClick={() => setRjSel('APENAS_RJ')}
-                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
-                    rjSel === 'APENAS_RJ' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="Filtra apenas títulos distressed sob regime de recuperação judicial"
-                >
-                  <span>⚠️ Apenas em RJ</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Filtro Mercado B3 */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Mercado B3:
-              </span>
-              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                <button
-                  onClick={() => setB3Filter('ALL')}
-                  className={`px-3 py-1 rounded-lg transition ${
-                    b3Filter === 'ALL' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Todos Vivos
-                </button>
-                <button
-                  onClick={() => setB3Filter('B3_ONLY')}
-                  className={`px-3 py-1 rounded-lg transition flex items-center gap-1 ${
-                    b3Filter === 'B3_ONLY' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="Filtra apenas títulos com histórico de negócios confirmados na B3"
-                >
-                  <span>🏛️ Apenas B3 ({assets.filter(a => (a.flag_b3 === 1 || a.flag_b3 === '1') && (a.flag_vencido === 0 || a.flag_vencido === '0') && (a.flag_resgatado === 0 || a.flag_resgatado === '0')).length.toLocaleString('pt-BR')})</span>
-                </button>
-              </div>
-            </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-            <span>Spread / Taxa:</span>
-            <input
-              type="number"
-              placeholder="Min"
-              value={spreadMin ?? ''}
-              onChange={e => setSpreadMin(e.target.value === '' ? null : Number(e.target.value))}
-              className="border border-slate-300 rounded-lg px-2.5 py-1 w-20 text-xs bg-slate-50 focus:bg-white"
-            />
-            <span>até</span>
-            <input
-              type="number"
-              placeholder="Max"
-              value={spreadMax ?? ''}
-              onChange={e => setSpreadMax(e.target.value === '' ? null : Number(e.target.value))}
-              className="border border-slate-300 rounded-lg px-2.5 py-1 w-20 text-xs bg-slate-50 focus:bg-white"
-            />
-          </div>
-        </div>
-
-        {/* Linha 3: Filtros Quantitativos de Crédito (Duration, Liquidez B3 e Data dos Negócios) */}
-        <div className="pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Filtro Duration */}
-          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/70 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Clock size={13} className="text-blue-600" />
-                Duration (anos DU/252)
+          {/* Botão Retrátil de Filtros Avançados */}
+          <button
+            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition ${
+              showAdvancedFilters || activeAdvancedCount > 0
+                ? 'bg-blue-50 border-blue-200 text-blue-700 shadow-xs'
+                : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <SlidersHorizontal size={14} className={activeAdvancedCount > 0 ? 'text-blue-600' : 'text-slate-500'} />
+            <span>Filtros Avançados</span>
+            {activeAdvancedCount > 0 && (
+              <span className="bg-blue-600 text-white rounded-full px-1.5 py-0.2 text-[10px] font-extrabold">
+                {activeAdvancedCount}
               </span>
-              {(durationMin !== null || durationMax !== null || durationPreset !== 'ALL') && (
-                <button
-                  onClick={() => {
-                    setDurationPreset('ALL')
-                    setDurationMin(null)
-                    setDurationMax(null)
-                  }}
-                  className="text-[10px] text-blue-600 hover:underline font-bold"
-                >
-                  Limpar
-                </button>
-              )}
-            </div>
-            {/* Presets */}
-            <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
-              {[
-                { id: 'ALL', label: 'Todos', min: null, max: null },
-                { id: '<1', label: '< 1a', min: null, max: 1 },
-                { id: '1-3', label: '1-3a', min: 1, max: 3 },
-                { id: '3-5', label: '3-5a', min: 3, max: 5 },
-                { id: '5-7', label: '5-7a', min: 5, max: 7 },
-                { id: '>7', label: '> 7a', min: 7, max: null }
-              ].map(p => (
-                <button
-                  key={p.id}
-                  onClick={() => {
-                    setDurationPreset(p.id as any)
-                    setDurationMin(p.min)
-                    setDurationMax(p.max)
-                  }}
-                  className={`px-2 py-1 rounded-md text-[11px] transition ${
-                    durationPreset === p.id
-                      ? 'bg-blue-600 text-white shadow-xs font-bold'
-                      : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-            {/* Min / Max inputs */}
-            <div className="flex items-center gap-2 text-xs text-slate-600 pt-0.5">
-              <span className="text-[11px] font-medium">Faixa:</span>
-              <input
-                type="number"
-                step="0.5"
-                placeholder="Min"
-                value={durationMin ?? ''}
-                onChange={e => {
-                  setDurationPreset('CUSTOM')
-                  setDurationMin(e.target.value === '' ? null : Number(e.target.value))
-                }}
-                className="border border-slate-200 rounded-lg px-2 py-0.5 w-16 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
-              />
-              <span className="text-[11px]">até</span>
-              <input
-                type="number"
-                step="0.5"
-                placeholder="Max"
-                value={durationMax ?? ''}
-                onChange={e => {
-                  setDurationPreset('CUSTOM')
-                  setDurationMax(e.target.value === '' ? null : Number(e.target.value))
-                }}
-                className="border border-slate-200 rounded-lg px-2 py-0.5 w-16 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
-              />
-              <span className="text-[11px] text-slate-400">anos</span>
-            </div>
-          </div>
-
-          {/* Filtro Liquidez & Cotações (ANBIMA Compra/Venda & B3 Dias Negociados) */}
-          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/70 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Droplets size={13} className="text-emerald-600" />
-                Liquidez & Cotações
-              </span>
-              {(bidAskFilter !== 'ALL' || minDiasNegociados > 0) && (
-                <button
-                  onClick={() => {
-                    setBidAskFilter('ALL')
-                    setMinDiasNegociados(0)
-                  }}
-                  className="text-[10px] text-blue-600 hover:underline font-bold"
-                >
-                  Limpar
-                </button>
-              )}
-            </div>
-            {/* Cotação Firme Bid/Ask ANBIMA */}
-            <div className="space-y-1">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider" title="Taxas de Compra (Bid) e Venda (Ask) informadas pelos formadores de mercado à ANBIMA">
-                Cotações ANBIMA (Bid / Ask Firme):
-              </div>
-              <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
-                {[
-                  { id: 'ALL', label: 'Todas' },
-                  { id: 'BID_ASK', label: 'Bid & Ask' },
-                  { id: 'BID_ONLY', label: 'Apenas Bid' },
-                  { id: 'ASK_ONLY', label: 'Apenas Ask' }
-                ].map(opt => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setBidAskFilter(opt.id as any)}
-                    className={`px-2 py-1 rounded-md text-[11px] transition ${
-                      bidAskFilter === opt.id
-                        ? 'bg-emerald-600 text-white shadow-xs font-bold'
-                        : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            {/* Frequência B3 (Dias Negociados em 30 Pregões) */}
-            <div className="space-y-1 pt-0.5">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider" title="Frequência de pregões com negócios executados na B3 nos últimos 30 dias úteis">
-                Negociação B3 (Últimos 30 pregões):
-              </div>
-              <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
-                {[
-                  { val: 0, label: 'Todos' },
-                  { val: 1, label: '≥ 1d' },
-                  { val: 5, label: '≥ 5d' },
-                  { val: 10, label: '≥ 10d' },
-                  { val: 15, label: '≥ 15d' },
-                  { val: 20, label: '≥ 20d' }
-                ].map(opt => (
-                  <button
-                    key={opt.val}
-                    onClick={() => setMinDiasNegociados(opt.val)}
-                    className={`px-2 py-0.5 rounded-md text-[11px] transition ${
-                      minDiasNegociados === opt.val
-                        ? 'bg-emerald-600 text-white shadow-xs font-bold'
-                        : 'text-slate-600 hover:bg-slate-100'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Filtro Data dos Negócios */}
-          <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/70 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Calendar size={13} className="text-indigo-600" />
-                Data dos Negócios (Recência)
-              </span>
-              {(tradeRecencyFilter !== 'ALL' || tradeDateMin !== '' || tradeDateMax !== '') && (
-                <button
-                  onClick={() => {
-                    setTradeRecencyFilter('ALL')
-                    setTradeDateMin('')
-                    setTradeDateMax('')
-                  }}
-                  className="text-[10px] text-blue-600 hover:underline font-bold"
-                >
-                  Limpar
-                </button>
-              )}
-            </div>
-            {/* Presets de Recência */}
-            <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
-              {[
-                { id: 'ALL', label: 'Todas' },
-                { id: 'LATEST', label: `Último Pregão (${formatDateBr(maxAvailableTradeDate).slice(0, 5)})` },
-                { id: '3D', label: '3 Dias' },
-                { id: '7D', label: '7 Dias' },
-                { id: '15D', label: '15 Dias' },
-                { id: '30D', label: '30 Dias' },
-                { id: 'CUSTOM', label: 'Personalizado' }
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => setTradeRecencyFilter(opt.id as any)}
-                  className={`px-2 py-1 rounded-md text-[11px] transition ${
-                    tradeRecencyFilter === opt.id
-                      ? 'bg-indigo-600 text-white shadow-xs font-bold'
-                      : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            {/* Custom Date Range if selected */}
-            {tradeRecencyFilter === 'CUSTOM' ? (
-              <div className="flex items-center gap-1.5 text-xs text-slate-600 pt-0.5">
-                <span className="text-[11px]">De:</span>
-                <input
-                  type="date"
-                  value={tradeDateMin}
-                  onChange={e => setTradeDateMin(e.target.value)}
-                  className="border border-slate-200 rounded-lg px-2 py-0.5 text-[11px] bg-white focus:ring-1 focus:ring-indigo-500 outline-none"
-                />
-                <span className="text-[11px]">Até:</span>
-                <input
-                  type="date"
-                  value={tradeDateMax}
-                  onChange={e => setTradeDateMax(e.target.value)}
-                  className="border border-slate-200 rounded-lg px-2 py-0.5 text-[11px] bg-white focus:ring-1 focus:ring-indigo-500 outline-none"
-                />
-              </div>
-            ) : (
-              <p className="text-[11px] text-slate-500 pt-0.5">
-                {tradeRecencyFilter === 'LATEST'
-                  ? `Mostrando ativos negociados no último pregão (${formatDateBr(maxAvailableTradeDate)}).`
-                  : tradeRecencyFilter === '3D'
-                  ? `Negociação registrada nos últimos 3 dias corridos (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 3))}).`
-                  : tradeRecencyFilter === '7D'
-                  ? `Negociação na última semana (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 7))}).`
-                  : tradeRecencyFilter === '15D'
-                  ? `Negociação na quinzena (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 15))}).`
-                  : tradeRecencyFilter === '30D'
-                  ? `Negociação no último mês (desde ${formatDateBr(subtractDaysFromIso(maxAvailableTradeDate, 30))}).`
-                  : 'Filtre por proximidade temporal para comparar ativos sob as mesmas condições macroeconômicas de juros.'}
-              </p>
             )}
-          </div>
+            {showAdvancedFilters ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
         </div>
+
+        {/* PAINEL RETRÁTIL DE FILTROS AVANÇADOS */}
+        {showAdvancedFilters && (
+          <div className="pt-4 border-t border-slate-200 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Quadrante 1: Duration (anos DU/252) */}
+              <div className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/80 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Clock size={13} className="text-blue-600" />
+                    <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Duration (anos DU/252)
+                    </span>
+                    <span
+                      className="text-slate-400 hover:text-blue-600 cursor-help"
+                      title="Duration em anos úteis (DU/252) calculada pelos fluxos de caixa descontados a valor presente pela curva de juros a termo."
+                    >
+                      <Info size={12} />
+                    </span>
+                  </div>
+                  {(durationMin !== null || durationMax !== null || durationPreset !== 'ALL') && (
+                    <button
+                      onClick={() => {
+                        setDurationPreset('ALL')
+                        setDurationMin(null)
+                        setDurationMax(null)
+                      }}
+                      className="text-[10px] text-blue-600 hover:underline font-bold"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                </div>
+                {/* Presets */}
+                <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                  {[
+                    { id: 'ALL', label: 'Todos', min: null, max: null },
+                    { id: '<1', label: '< 1a', min: null, max: 1 },
+                    { id: '1-3', label: '1-3a', min: 1, max: 3 },
+                    { id: '3-5', label: '3-5a', min: 3, max: 5 },
+                    { id: '5-7', label: '5-7a', min: 5, max: 7 },
+                    { id: '>7', label: '> 7a', min: 7, max: null }
+                  ].map(p => (
+                    <button
+                      key={p.id}
+                      onClick={() => {
+                        setDurationPreset(p.id as any)
+                        setDurationMin(p.min)
+                        setDurationMax(p.max)
+                      }}
+                      className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                        durationPreset === p.id
+                          ? 'bg-blue-600 text-white shadow-xs font-bold'
+                          : 'text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+                {/* Min / Max inputs */}
+                <div className="flex items-center gap-2 text-xs text-slate-600 pt-0.5">
+                  <span className="text-[11px] font-medium">Faixa:</span>
+                  <input
+                    type="number"
+                    step="0.5"
+                    placeholder="Min"
+                    value={durationMin ?? ''}
+                    onChange={e => {
+                      setDurationPreset('CUSTOM')
+                      setDurationMin(e.target.value === '' ? null : Number(e.target.value))
+                    }}
+                    className="border border-slate-200 rounded-lg px-2 py-0.5 w-16 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
+                  />
+                  <span className="text-[11px]">até</span>
+                  <input
+                    type="number"
+                    step="0.5"
+                    placeholder="Max"
+                    value={durationMax ?? ''}
+                    onChange={e => {
+                      setDurationPreset('CUSTOM')
+                      setDurationMax(e.target.value === '' ? null : Number(e.target.value))
+                    }}
+                    className="border border-slate-200 rounded-lg px-2 py-0.5 w-16 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
+                  />
+                  <span className="text-[11px] text-slate-400">anos</span>
+                </div>
+              </div>
+
+              {/* Quadrante 2: Faixa de Spread / Taxa Over */}
+              <div className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/80 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <TrendingUp size={13} className="text-emerald-600" />
+                    <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Faixa de Spread / Taxa
+                    </span>
+                    <span
+                      className="text-slate-400 hover:text-blue-600 cursor-help"
+                      title="Filtro numérico para taxa indicativa de mercado ou spread over em percentual ao ano."
+                    >
+                      <Info size={12} />
+                    </span>
+                  </div>
+                  {(spreadMin !== null || spreadMax !== null) && (
+                    <button
+                      onClick={() => {
+                        setSpreadMin(null)
+                        setSpreadMax(null)
+                      }}
+                      className="text-[10px] text-blue-600 hover:underline font-bold"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-600 pt-1">
+                  <span className="text-[11px] font-medium">Mínimo:</span>
+                  <input
+                    type="number"
+                    placeholder="Ex: 5.5"
+                    value={spreadMin ?? ''}
+                    onChange={e => setSpreadMin(e.target.value === '' ? null : Number(e.target.value))}
+                    className="border border-slate-200 rounded-lg px-2 py-1 w-24 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
+                  />
+                  <span className="text-[11px]">até</span>
+                  <input
+                    type="number"
+                    placeholder="Ex: 9.0"
+                    value={spreadMax ?? ''}
+                    onChange={e => setSpreadMax(e.target.value === '' ? null : Number(e.target.value))}
+                    className="border border-slate-200 rounded-lg px-2 py-1 w-24 text-xs bg-white focus:ring-1 focus:ring-blue-500 outline-none"
+                  />
+                  <span className="text-[11px] text-slate-400">% a.a.</span>
+                </div>
+                <p className="text-[10px] text-slate-400">
+                  Aplica-se à taxa de mercado informada pela ANBIMA para o indexador selecionado.
+                </p>
+              </div>
+
+              {/* Quadrante 3: Mercado & Risco (RJ e B3) */}
+              <div className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/80 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck size={13} className="text-amber-600" />
+                    <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Mercado & Risco Especial
+                    </span>
+                  </div>
+                  {(rjSel !== 'ALL' || b3Filter !== 'ALL') && (
+                    <button
+                      onClick={() => {
+                        setRjSel('ALL')
+                        setB3Filter('ALL')
+                      }}
+                      className="text-[10px] text-blue-600 hover:underline font-bold"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                </div>
+                {/* Recuperação Judicial */}
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Recuperação Judicial:
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                    {[
+                      { id: 'ALL', label: 'Todos' },
+                      { id: 'EXCLUIR_RJ', label: 'Excluir em RJ' },
+                      { id: 'APENAS_RJ', label: 'Apenas em RJ' }
+                    ].map(opt => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setRjSel(opt.id as any)}
+                        className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                          rjSel === opt.id
+                            ? opt.id === 'APENAS_RJ'
+                              ? 'bg-rose-600 text-white shadow-xs font-bold'
+                              : 'bg-emerald-600 text-white shadow-xs font-bold'
+                            : 'text-slate-600 hover:bg-slate-100'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/* Mercado B3 */}
+                <div className="space-y-1 pt-0.5">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Execução B3:
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                    <button
+                      onClick={() => setB3Filter('ALL')}
+                      className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                        b3Filter === 'ALL' ? 'bg-blue-600 text-white shadow-xs font-bold' : 'text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      Todos Vivos
+                    </button>
+                    <button
+                      onClick={() => setB3Filter('B3_ONLY')}
+                      className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                        b3Filter === 'B3_ONLY' ? 'bg-indigo-600 text-white shadow-xs font-bold' : 'text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      Apenas com Negócios B3
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quadrante 4: Liquidez & Cotações ANBIMA / B3 */}
+              <div className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/80 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Droplets size={13} className="text-emerald-600" />
+                    <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Liquidez & Cotações
+                    </span>
+                    <span
+                      className="text-slate-400 hover:text-blue-600 cursor-help"
+                      title="Cotações firmes de compra/venda informadas pelos formadores de mercado à ANBIMA e frequência de pregões com fechamento na B3."
+                    >
+                      <Info size={12} />
+                    </span>
+                  </div>
+                  {(bidAskFilter !== 'ALL' || minDiasNegociados > 0) && (
+                    <button
+                      onClick={() => {
+                        setBidAskFilter('ALL')
+                        setMinDiasNegociados(0)
+                      }}
+                      className="text-[10px] text-blue-600 hover:underline font-bold"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                </div>
+                {/* Cotação Firme Bid/Ask ANBIMA */}
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Cotações ANBIMA (Bid / Ask):
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                    {[
+                      { id: 'ALL', label: 'Todas' },
+                      { id: 'BID_ASK', label: 'Bid & Ask' },
+                      { id: 'BID_ONLY', label: 'Apenas Bid' },
+                      { id: 'ASK_ONLY', label: 'Apenas Ask' }
+                    ].map(opt => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setBidAskFilter(opt.id as any)}
+                        className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                          bidAskFilter === opt.id
+                            ? 'bg-emerald-600 text-white shadow-xs font-bold'
+                            : 'text-slate-600 hover:bg-slate-100'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/* Frequência B3 (30 Pregões) */}
+                <div className="space-y-1 pt-0.5">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Frequência B3 (Últimos 30 pregões):
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                    {[
+                      { val: 0, label: 'Todos' },
+                      { val: 1, label: '≥ 1d' },
+                      { val: 5, label: '≥ 5d' },
+                      { val: 10, label: '≥ 10d' },
+                      { val: 15, label: '≥ 15d' },
+                      { val: 20, label: '≥ 20d' }
+                    ].map(opt => (
+                      <button
+                        key={opt.val}
+                        onClick={() => setMinDiasNegociados(opt.val)}
+                        className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                          minDiasNegociados === opt.val
+                            ? 'bg-emerald-600 text-white shadow-xs font-bold'
+                            : 'text-slate-600 hover:bg-slate-100'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Quadrante 5: Recência dos Negócios B3 */}
+              <div className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/80 space-y-2 md:col-span-2 lg:col-span-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={13} className="text-indigo-600" />
+                    <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Recência de Negociação B3
+                    </span>
+                    <span
+                      className="text-slate-400 hover:text-blue-600 cursor-help"
+                      title="Filtro temporal para isolar títulos com negócios recentes, garantindo comparabilidade sob as mesmas condições macroeconômicas de juros."
+                    >
+                      <Info size={12} />
+                    </span>
+                  </div>
+                  {(tradeRecencyFilter !== 'ALL' || tradeDateMin !== '' || tradeDateMax !== '') && (
+                    <button
+                      onClick={() => {
+                        setTradeRecencyFilter('ALL')
+                        setTradeDateMin('')
+                        setTradeDateMax('')
+                      }}
+                      className="text-[10px] text-blue-600 hover:underline font-bold"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                </div>
+                {/* Presets de Recência */}
+                <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
+                  {[
+                    { id: 'ALL', label: 'Todas as Datas' },
+                    { id: 'LATEST', label: `Último Pregão (${formatDateBr(maxAvailableTradeDate).slice(0, 5)})` },
+                    { id: '3D', label: '3 Dias' },
+                    { id: '7D', label: '7 Dias' },
+                    { id: '15D', label: '15 Dias' },
+                    { id: '30D', label: '30 Dias' },
+                    { id: 'CUSTOM', label: 'Personalizado' }
+                  ].map(opt => (
+                    <button
+                      key={opt.id}
+                      onClick={() => setTradeRecencyFilter(opt.id as any)}
+                      className={`px-2 py-0.5 rounded-md text-[11px] transition ${
+                        tradeRecencyFilter === opt.id
+                          ? 'bg-indigo-600 text-white shadow-xs font-bold'
+                          : 'text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                {/* Intervalo personalizado */}
+                {tradeRecencyFilter === 'CUSTOM' && (
+                  <div className="flex items-center gap-2 text-xs text-slate-600 pt-1">
+                    <span className="text-[11px]">De:</span>
+                    <input
+                      type="date"
+                      value={tradeDateMin}
+                      onChange={e => setTradeDateMin(e.target.value)}
+                      className="border border-slate-200 rounded-lg px-2 py-0.5 text-xs bg-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                    />
+                    <span className="text-[11px]">Até:</span>
+                    <input
+                      type="date"
+                      value={tradeDateMax}
+                      onChange={e => setTradeDateMax(e.target.value)}
+                      className="border border-slate-200 rounded-lg px-2 py-0.5 text-xs bg-white focus:ring-1 focus:ring-indigo-500 outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* KPIS */}
@@ -1608,32 +1747,37 @@ const CreditDashboard: React.FC = () => {
         <KPIBox
           title="Ativos Vivos"
           value={ativosVivos.toLocaleString('pt-BR')}
-          subtitle={`Total filtrado`}
+          subtitle="Total filtrado"
           icon={TrendingUp}
+          info="Quantidade de títulos de crédito privado em circulação (vivos) que atendem aos filtros selecionados."
         />
         <KPIBox
           title="Incentivados (12.431)"
           value={totalIncentivados.toLocaleString('pt-BR')}
           subtitle={`${Math.round((totalIncentivados / (ativosVivos || 1)) * 100)}% dos ativos`}
           icon={ShieldCheck}
+          info="Debêntures e ativos enquadrados na Lei 12.431/11 com isenção de imposto de renda para pessoa física."
         />
         <KPIBox
           title="Volume Emitido"
           value={`R$ ${(volumeVivo / 1e9).toFixed(1)}B`}
           subtitle="Volume total emitido"
           icon={Database}
+          info="Somatório do volume financeiro total emitido no mercado primário dos ativos selecionados."
         />
         <KPIBox
           title="Duration Média"
           value={`${durationMedia.toFixed(2)}a`}
           subtitle="Média ponderada DU/252"
           icon={Clock}
+          info="Prazo médio ponderado de recebimento dos fluxos de amortização e juros, calculado em anos úteis (DU/252)."
         />
         <KPIBox
           title="Com Preço Mercado"
           value={totalComPrecoMercado.toLocaleString('pt-BR')}
           subtitle={`${Math.round((totalComPrecoMercado / (ativosVivos || 1)) * 100)}% com taxa secundária`}
           icon={Activity}
+          info="Ativos que possuem taxa indicativa de mercado apurada e divulgada pela ANBIMA no mercado secundário."
         />
       </div>
 
