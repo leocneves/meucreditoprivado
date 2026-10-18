@@ -17,8 +17,8 @@ import {
 } from 'recharts';
 import {
   Building2,
-  ShieldAlert,
   ShieldCheck,
+  ShieldAlert,
   Activity,
   Search,
   Filter,
@@ -26,7 +26,6 @@ import {
   Calendar,
   Layers,
   ArrowUpRight,
-  ArrowDownRight,
   TrendingUp,
   Percent,
   DollarSign,
@@ -40,7 +39,11 @@ import {
   Scale,
   Clock,
   Briefcase,
-  Newspaper
+  Newspaper,
+  Users,
+  SlidersHorizontal,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 
 /* ==========================================================================
@@ -59,12 +62,10 @@ interface KpisResumo {
   roe: number | null;
   altman_z_score: number | null;
   altman_zona: string | null;
-  ohlson_prob_default: number | null;
-  merton_prob_default: number | null;
   rating_atual?: string | null;
-  score_geral: number;
-  classificacao: string;
-  badge_cor: string;
+  score_geral?: number;
+  classificacao?: string;
+  badge_cor?: string;
 }
 
 interface NewsItem {
@@ -72,21 +73,6 @@ interface NewsItem {
   source: string;
   link: string;
   pubDate: string;
-}
-
-interface RadarHorizonte {
-  nivel: string;
-  diagnostico: string;
-  score: number;
-}
-
-interface RadarRisco {
-  score_geral: number;
-  classificacao: string;
-  badge_cor: string;
-  curto_prazo: RadarHorizonte;
-  medio_prazo: RadarHorizonte;
-  longo_prazo: RadarHorizonte;
 }
 
 interface PeriodoContabil {
@@ -131,9 +117,6 @@ interface PeriodoContabil {
   lucro_liquido_yoy: number | null;
   altman_z_score: number | null;
   altman_zona: string | null;
-  ohlson_prob_default: number | null;
-  merton_dd: number | null;
-  merton_prob_default: number | null;
 }
 
 interface TituloAtivo {
@@ -188,7 +171,6 @@ interface DevedorItem {
   rating_score?: number | null;
   rating_agencia?: string | null;
   kpis_resumo: KpisResumo;
-  radar_risco: RadarRisco;
   historico_trimestral?: PeriodoContabil[];
   titulos_ativos?: TituloAtivo[];
   total_titulos?: number;
@@ -215,59 +197,29 @@ const DOCUMENTACAO_INDICADORES: Record<string, DocInfo> = {
   altman_z: {
     titulo: "Altman Z''-Score para Mercados Emergentes",
     sigla: "Z''-Score",
-    fonte: "Demonstrações Financeiras CVM (DFP / ITR - Contas 1, 1.01, 2, 2.01, 2.03, 3.05 e 3.11)",
+    fonte: "Demonstrações Financeiras CVM (DFP / ITR - Balanço Patrimonial e DRE)",
     formula: "Z'' = 6,56·X₁ + 3,26·X₂ + 6,72·X₃ + 1,05·X₄",
     conceito:
-      "Modelo econométrico discriminante multivariado desenvolvido pelo Prof. Edward Altman adaptado para economias emergentes e corporações não listadas em bolsas americanas. Pondera liquidez circulante, retenção de resultados, produtividade dos ativos operacionais e solvência patrimonial.",
+      "Modelo econométrico discriminante multivariado desenvolvido pelo Prof. Edward Altman (NYU Stern), calibrado especificamente para mercados emergentes e companhias de capital intensivo. O modelo pondera: X₁ = Capital Circulante Líquido / Ativo Total; X₂ = Lucros Retidos / Ativo Total; X₃ = EBIT / Ativo Total; X₄ = Patrimônio Líquido / Passivo Total.",
     interpretacao:
-      "Avalia a probabilidade estatística de falência ou pedido de recuperação judicial. Um valor mais alto indica maior robustez financeira.",
+      "Avalia a robustez do balanço patrimonial e a solvência estrutural frente ao risco de estresse financeiro. Valores acima de 2,60 posicionam o emissor na Zona Segura.",
     benchmarks: [
-      { faixa: "Z'' > 2,60", classificacao: "Zona Segura (Grau de Investimento - Default Improvável)", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { faixa: "1,10 ≤ Z'' ≤ 2,60", classificacao: "Zona Cinzenta (Alerta Moderado - Acompanhamento Operacional)", cor: "text-amber-700 bg-amber-50 border-amber-200" },
-      { faixa: "Z'' < 1,10", classificacao: "Zona de Perigo (Estresse Financeiro Severo / Alto Risco)", cor: "text-rose-700 bg-rose-50 border-rose-200" }
-    ]
-  },
-  ohlson_o: {
-    titulo: "Ohlson O-Score (Probabilidade Logística de Falência)",
-    sigla: "O-Score",
-    fonte: "Demonstrações Financeiras CVM (DFP / ITR - Contas 1, 1.01, 2, 2.01, 3.01, 3.05, 3.11 e DVA)",
-    formula: "P(Default) = 1 / [1 + exp(-y)]  |  y = -1,32 - 0,407·ln(Ativo) + 6,03·(Passivo/Ativo) - 1,43·(NWC/Ativo) + ...",
-    conceito:
-      "Modelo probabilístico logit de James Ohlson (1980). Ao contrário de escores discretos, projeta diretamente uma probabilidade percentual (0% a 100%) de colapso de liquidez nos 12 a 24 meses seguintes com base na alavancagem estrutural, peso dos passivos correntes e retornos negativos recorrentes.",
-    interpretacao:
-      "Valores acima de 10% já sinalizam estresse estatístico significativo. Corporações saudáveis de grau de investimento apresentam probabilidade inferior a 1,5%.",
-    benchmarks: [
-      { faixa: "P < 2,0%", classificacao: "Probabilidade Mínima de Insolvência (Excelente)", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { faixa: "2,0% ≤ P < 10,0%", classificacao: "Risco Moderado de Insolvência (Aceitável)", cor: "text-amber-700 bg-amber-50 border-amber-200" },
-      { faixa: "P ≥ 10,0%", classificacao: "Risco Elevado / Probabilidade Crítica de Default", cor: "text-rose-700 bg-rose-50 border-rose-200" }
-    ]
-  },
-  merton_dd: {
-    titulo: "Modelo Estrutural de Merton / KMV (Distance-to-Default)",
-    sigla: "Distance to Default",
-    fonte: "Balanço Patrimonial CVM (Dívida Curto e Longo Prazo) + Estrutura de Capital",
-    formula: "DD = [ln(V_A / DP) + (μ - 0,5·σ_A²)·T] / (σ_A·√T)  |  DP = Dívida CP + 0,5·Dívida LP",
-    conceito:
-      "Trata o Patrimônio Líquido como uma opção de compra sobre os ativos da empresa cujo strike price é a barreira da dívida (Default Point padrão KMV). Mede quantos desvios-padrão o valor econômico da firma está afastado da insolvência.",
-    interpretacao:
-      "Quanto maior o DD (ex: > 3 desvios), menor a probabilidade de o valor dos ativos decair abaixo das obrigações da empresa.",
-    benchmarks: [
-      { faixa: "DD ≥ 3,50", classificacao: "Ampla Distância da Barreira de Default (Baixíssimo Risco)", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { faixa: "2,00 ≤ DD < 3,50", classificacao: "Distância Confortável / Risco Controlado", cor: "text-blue-700 bg-blue-50 border-blue-200" },
-      { faixa: "DD < 2,00", classificacao: "Distância Frágil / Próximo da Barreira de Dívida", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+      { faixa: "Z'' > 2,60", classificacao: "Zona Segura (Solvência Robusta / Baixo Risco de Estresse)", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "1,10 ≤ Z'' ≤ 2,60", classificacao: "Zona Cinzenta (Atenção Operacional / Monitoramento)", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "Z'' < 1,10", classificacao: "Zona de Perigo (Estresse Financeiro Severo)", cor: "text-rose-700 bg-rose-50 border-rose-200" }
     ]
   },
   alavancagem: {
     titulo: "Alavancagem Financeira: Dívida Líquida / EBITDA",
     sigla: "DL / EBITDA",
-    fonte: "Passivo CVM (Contas 2.01.04, 2.02.01) - Ativo (1.01.01, 1.01.02) / DRE (3.05 + D&A)",
-    formula: "DL / EBITDA = (Dívida Bruta CP+LP - Caixa e Aplicações) / EBITDA Anualizado",
+    fonte: "Demonstrações Contábeis CVM (Passivo Circulante + Não Circulante - Disponibilidades / EBITDA 12M)",
+    formula: "DL / EBITDA = (Dívida Bruta CP+LP - Caixa e Equivalentes) / EBITDA 12 Meses",
     conceito:
-      "Métrica soberana nos covenants de debêntures e covenants bancários. Mensura em quantos anos a empresa quitaria seu endividamento líquido caso mantivesse a geração operacional de caixa constante.",
+      "Métrica soberana para aferição de covenants financeiros em escrituras de debêntures e empréstimos sindicados. Indica quantos anos de geração operacional de caixa (EBITDA) seriam necessários para quitar o endividamento líquido.",
     interpretacao:
-      "Para a maioria dos setores, níveis abaixo de 2,5x são confortáveis. Acima de 3,5x ativam travas de dividendos e covenants em emissões institucionais.",
+      "Níveis abaixo de 2,5x são considerados conservadores. Índices superiores a 3,5x tipicamente ativam cláusulas de vencimento antecipado ou restrições de distribuição de proventos em escrituras institucionais.",
     benchmarks: [
-      { faixa: "DL ≤ 0 ou DL/EBITDA ≤ 2,0x", classificacao: "Baixa Alavancagem / Caixa Líquido", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "DL ≤ 0 ou DL/EBITDA ≤ 2,0x", classificacao: "Alavancagem Baixa / Posição Confortável", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
       { faixa: "2,0x < DL/EBITDA ≤ 3,5x", classificacao: "Alavancagem Moderada (Padrão de Mercado)", cor: "text-amber-700 bg-amber-50 border-amber-200" },
       { faixa: "DL/EBITDA > 3,5x", classificacao: "Alavancagem Elevada / Alerta de Covenants", cor: "text-rose-700 bg-rose-50 border-rose-200" }
     ]
@@ -275,43 +227,43 @@ const DOCUMENTACAO_INDICADORES: Record<string, DocInfo> = {
   cobertura_juros: {
     titulo: "Índice de Cobertura de Juros (ICR - Interest Coverage Ratio)",
     sigla: "ICR",
-    fonte: "DRE CVM (Contas 3.05 EBIT + D&A) e Resultado Financeiro (3.06.02 Despesas Financeiras)",
+    fonte: "DRE CVM (EBITDA Operacional / Despesas Financeiras Brutas)",
     formula: "ICR = EBITDA / |Despesas Financeiras Brutas|",
     conceito:
-      "Mede a capacidade da geração de caixa operacional em suportar o serviço dos juros pagos a debenturistas e credores financeiros.",
+      "Avalia a capacidade da geração de caixa operacional em suportar o serviço dos juros devidos a debenturistas e instituições financeiras no exercício.",
     interpretacao:
-      "Se o ICR for inferior a 1,0x, a operação pura da empresa consome mais recursos em juros do que produz, forçando consumo de caixa ou contração de nova dívida.",
+      "ICR inferior a 1,0x sinaliza que a operação não gera recursos suficientes para pagar os juros da dívida sem consumir caixa pré-existente ou contrair novos passivos.",
     benchmarks: [
-      { faixa: "ICR ≥ 3,0x", classificacao: "Cobertura Robusta de Juros", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "ICR ≥ 3,0x", classificacao: "Cobertura Confortável do Serviço da Dívida", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
       { faixa: "1,5x ≤ ICR < 3,0x", classificacao: "Cobertura Adequada", cor: "text-blue-700 bg-blue-50 border-blue-200" },
-      { faixa: "1,0x ≤ ICR < 1,5x", classificacao: "Atenção / Margem de Segurança Estreita", cor: "text-amber-700 bg-amber-50 border-amber-200" },
-      { faixa: "ICR < 1,0x", classificacao: "Déficit Operacional frente ao Custo da Dívida", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+      { faixa: "1,0x ≤ ICR < 1,5x", classificacao: "Margem Estreita / Atenção aos Custos Financeiros", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "ICR < 1,0x", classificacao: "Déficit Operacional frente aos Juros", cor: "text-rose-700 bg-rose-50 border-rose-200" }
     ]
   },
   liquidez_corrente: {
-    titulo: "Liquidez Corrente & Cobertura de Curto Prazo",
+    titulo: "Liquidez Corrente & Autonomia de Caixa de Curto Prazo",
     sigla: "LC & Caixa / Dívida CP",
-    fonte: "Balanço Patrimonial CVM (Ativo Circulante 1.01 vs Passivo Circulante 2.01)",
-    formula: "LC = Ativo Circulante / Passivo Circulante  |  Caixa/Dív CP = Disponibilidades / Empréstimos CP",
+    fonte: "Balanço Patrimonial CVM (Ativo Circulante vs Passivo Circulante | Caixa vs Empréstimos CP)",
+    formula: "LC = Ativo Circulante / Passivo Circulante  |  Autonomia = Disponibilidades / Dívida de Curto Prazo",
     conceito:
-      "Analisa a solvência no horizonte de 360 dias. A cobertura de dívida CP indica se o devedor tem caixa para liquidar vencimentos do ano sem depender de rollover bancário.",
+      "Mede a solvência para os próximos 12 meses. A razão Caixa / Dívida CP indica a capacidade do emissor de honrar os vencimentos de principal e juros do ano sem depender de novas captações bancárias ou de mercado.",
     interpretacao:
-      "LC superior a 1,3x e Caixa cobrindo mais de 100% da dívida de curto prazo blindam o devedor de crises de liquidez repentinas no mercado.",
+      "Uma cobertura de dívida de curto prazo acima de 1,0x garante autonomia financeira frente a fechamentos transitórios do mercado de capitais.",
     benchmarks: [
-      { faixa: "LC ≥ 1,5x e Caixa/Dív CP ≥ 1,0x", classificacao: "Liquidez Ampla e Autônoma", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { faixa: "1,0x ≤ LC < 1,5x", classificacao: "Liquidez Equilibrada / Rolagem Padrão", cor: "text-amber-700 bg-amber-50 border-amber-200" },
-      { faixa: "LC < 1,0x ou Caixa/Dív CP < 0,5x", classificacao: "Aperto de Liquidez / Dependência de Mercado", cor: "text-rose-700 bg-rose-50 border-rose-200" }
+      { faixa: "LC ≥ 1,5x e Caixa/Dív CP ≥ 1,0x", classificacao: "Autonomia de Liquidez Confortável", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+      { faixa: "1,0x ≤ LC < 1,5x", classificacao: "Liquidez Equilibrada / Rolagem Habitual", cor: "text-amber-700 bg-amber-50 border-amber-200" },
+      { faixa: "LC < 1,0x ou Caixa/Dív CP < 0,5x", classificacao: "Dependência de Rolagem de Curto Prazo", cor: "text-rose-700 bg-rose-50 border-rose-200" }
     ]
   },
   rating_devedor: {
-    titulo: "Rating Consolidado do Devedor (Aproximação pelo Pior Rating)",
+    titulo: "Rating Consolidado do Devedor (Abordagem Prudencial)",
     sigla: "RATING DEVEDOR",
     fonte: "Agências Oficiais (Moody's Local, Fitch Ratings, S&P Global, Liberum) via ANBIMA & B3",
     formula: "Min(Rating das Emissões Ativas na Data t)",
     conceito:
-      "Em crédito corporativo, o devedor frequentemente possui múltiplas emissões com diferentes subordinações e garantias. Para fins de conservadorismo prudencial, o rating aproximado do devedor é definido pela pior nota vigente entre todas as suas emissões de Debêntures, CRIs e CRAs na data.",
+      "Em crédito corporativo, emissores frequentemente possuem múltiplas séries com estruturas de garantia e subordinações distintas. Pela regra de conservadorismo prudencial, o rating consolidado adotado é o menor rating vigente entre os papéis ativos na data.",
     interpretacao:
-      "Notas na faixa AAA a BBB- configuram Grau de Investimento (Investment Grade), denotando capacidade muito forte a adequada de honrar compromissos. Notas de BB+ para baixo indicam Grau Especulativo (High Yield).",
+      "Emissões classificadas de AAA a BBB- enquadram-se como Grau de Investimento (Investment Grade). Notas de BB+ a D representam Grau Especulativo (High Yield / Distressed).",
     benchmarks: [
       { faixa: "AAA a AA-", classificacao: "Grau de Investimento Prime / Alto: Risco de crédito mínimo", cor: "text-emerald-700 bg-emerald-50 border-emerald-200" },
       { faixa: "A+ a BBB-", classificacao: "Grau de Investimento Médio: Solvência satisfatória", cor: "text-blue-700 bg-blue-50 border-blue-200" },
@@ -332,55 +284,12 @@ const InfoButton: React.FC<{ docKey: string; onOpen: (key: string) => void }> = 
       e.stopPropagation();
       onOpen(docKey);
     }}
-    className="inline-flex items-center justify-center w-5 h-5 rounded-full text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all ml-1.5 focus:outline-none"
-    title="Ver documentação e metodologia"
+    className="inline-flex items-center justify-center w-5 h-5 rounded-full text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all ml-1.5 focus:outline-none cursor-pointer"
+    title="Ver metodologia e fundamentação técnica"
   >
     <Info size={14} />
   </button>
 );
-
-const BadgeHorizonte: React.FC<{ horizonte: RadarHorizonte; titulo: string; icone: React.ReactNode }> = ({
-  horizonte,
-  titulo,
-  icone
-}) => {
-  const corBg =
-    horizonte.nivel.includes("Baixo") || horizonte.nivel.includes("Excelente") || horizonte.nivel.includes("Robusto")
-      ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-      : horizonte.nivel.includes("Moderado") || horizonte.nivel.includes("Adequado")
-      ? "bg-amber-50 border-amber-200 text-amber-800"
-      : "bg-rose-50 border-rose-200 text-rose-800";
-
-  const corBarra =
-    horizonte.score >= 80 ? "bg-emerald-500" : horizonte.score >= 50 ? "bg-amber-500" : "bg-rose-500";
-
-  return (
-    <div className={`p-4 rounded-xl border ${corBg} flex flex-col justify-between transition-all shadow-sm`}>
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-white/80 rounded-lg shadow-2xs">{icone}</div>
-            <span className="font-bold text-xs uppercase tracking-wider">{titulo}</span>
-          </div>
-          <span className="font-black text-xs px-2.5 py-0.5 rounded-full bg-white/90 shadow-2xs border border-current">
-            {horizonte.nivel}
-          </span>
-        </div>
-        <p className="text-xs font-medium leading-relaxed opacity-90 mt-1">{horizonte.diagnostico}</p>
-      </div>
-
-      <div className="mt-4 pt-3 border-t border-black/5">
-        <div className="flex justify-between items-center text-xs font-semibold mb-1">
-          <span>Score de Solvência</span>
-          <span className="font-mono font-bold">{horizonte.score} / 100</span>
-        </div>
-        <div className="w-full h-2 bg-black/10 rounded-full overflow-hidden">
-          <div className={`h-full ${corBarra} transition-all duration-500`} style={{ width: `${horizonte.score}%` }} />
-        </div>
-      </div>
-    </div>
-  );
-};
 
 /* ==========================================================================
    COMPONENTE PRINCIPAL: RAIO-X DO DEVEDOR
@@ -399,6 +308,10 @@ const DebtorRadar: React.FC = () => {
   const [selectedCnpj, setSelectedCnpj] = useState<string>(searchParams.get("cnpj") || "");
   const [currentDevedor, setCurrentDevedor] = useState<DevedorItem | null>(null);
 
+  // Pares setoriais selecionados para o benchmark de mercado
+  const [selectedPeersCnpjs, setSelectedPeersCnpjs] = useState<string[]>([]);
+  const [showPeersModal, setShowPeersModal] = useState<boolean>(false);
+
   // Notícias Recentes (Google News RSS)
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState<boolean>(false);
@@ -408,7 +321,7 @@ const DebtorRadar: React.FC = () => {
   const fullCache = useRef<Record<string, DevedorItem>>({});
 
   // Abas de gráficos
-  const [activeTab, setActiveTab] = useState<"alavancagem" | "rentabilidade" | "cobertura" | "liquidez" | "default_models">(
+  const [activeTab, setActiveTab] = useState<"alavancagem" | "rentabilidade" | "cobertura" | "liquidez" | "solvencia">(
     "alavancagem"
   );
 
@@ -429,7 +342,7 @@ const DebtorRadar: React.FC = () => {
       if (fullCache.current[clean]) {
         setCurrentDevedor(fullCache.current[clean]);
       } else {
-        // Exibir imediatamente com KPIs e cabeçalhos enquanto o arquivo de 30KB baixa
+        // Exibir imediatamente com KPIs e cabeçalhos enquanto o arquivo detalhado baixa
         setCurrentDevedor((prev) => ({
           ...foundResumo,
           historico_trimestral: (prev?.cnpj === clean || prev?.cnpj === cnpj) ? prev.historico_trimestral : undefined,
@@ -442,7 +355,7 @@ const DebtorRadar: React.FC = () => {
     }
   };
 
-  // 1. Carregamento inicial do índice leve de devedores
+  // 1. Carregamento inicial do índice de devedores
   useEffect(() => {
     const fetchResumo = async () => {
       setLoading(true);
@@ -495,7 +408,7 @@ const DebtorRadar: React.FC = () => {
     fetchResumo();
   }, [searchParams]);
 
-  // 2. Carregamento completo sob demanda (série histórica, ratings, títulos) com arquivo ultra-rápido de 30KB
+  // 2. Carregamento completo sob demanda (série histórica, ratings, títulos)
   useEffect(() => {
     if (!selectedCnpj) return;
     const cleanCnpj = String(selectedCnpj).replace(/\D/g, "");
@@ -510,7 +423,6 @@ const DebtorRadar: React.FC = () => {
     const fetchFullData = async () => {
       setLoadingFull(true);
       try {
-        // Tentar primeiro arquivo individual por empresa (30KB)
         const respIndiv = await fetch(`/data/devedores/${cleanCnpj}.json`);
         if (respIndiv.ok) {
           const contentType = respIndiv.headers.get("content-type");
@@ -527,7 +439,6 @@ const DebtorRadar: React.FC = () => {
           }
         }
 
-        // Fallback para arquivo consolidado com timeout seguro
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 6000);
         try {
@@ -555,6 +466,45 @@ const DebtorRadar: React.FC = () => {
     fetchFullData();
     return () => { isMounted = false; };
   }, [selectedCnpj]);
+
+  // Empresas do mesmo setor para benchmark
+  const empresasSetor = useMemo(() => {
+    if (!currentDevedor?.setor) return [];
+    return devedoresResumo.filter((d) => d.setor === currentDevedor.setor);
+  }, [devedoresResumo, currentDevedor?.setor]);
+
+  // Sincronizar pares selecionados com todas as empresas do setor ao trocar de devedor/setor
+  useEffect(() => {
+    if (empresasSetor.length > 0) {
+      setSelectedPeersCnpjs(empresasSetor.map((e) => e.cnpj));
+    }
+  }, [currentDevedor?.setor, empresasSetor.length]);
+
+  // Cálculo da Mediana dos Pares Setoriais Selecionados
+  const medianasSetor = useMemo(() => {
+    if (empresasSetor.length === 0) return null;
+    const peers = empresasSetor.filter((e) => selectedPeersCnpjs.includes(e.cnpj));
+    if (peers.length === 0) return null;
+
+    const calcMedian = (values: (number | null | undefined)[]): number | null => {
+      const valid = values
+        .filter((v): v is number => typeof v === "number" && !isNaN(v) && isFinite(v))
+        .sort((a, b) => a - b);
+      if (valid.length === 0) return null;
+      const mid = Math.floor(valid.length / 2);
+      return valid.length % 2 !== 0 ? valid[mid] : (valid[mid - 1] + valid[mid]) / 2;
+    };
+
+    return {
+      totalPares: peers.length,
+      totalSetor: empresasSetor.length,
+      alavancagem: calcMedian(peers.map((p) => p.kpis_resumo?.alavancagem_dl_ebitda)),
+      margemEbitda: calcMedian(peers.map((p) => p.kpis_resumo?.margem_ebitda)),
+      coberturaJuros: calcMedian(peers.map((p) => p.kpis_resumo?.cobertura_juros_ebitda)),
+      liquidezCorrente: calcMedian(peers.map((p) => p.kpis_resumo?.liquidez_corrente)),
+      altmanZ: calcMedian(peers.map((p) => p.kpis_resumo?.altman_z_score)),
+    };
+  }, [empresasSetor, selectedPeersCnpjs]);
 
   // Termo de busca de notícias limpo para a empresa atual
   const companyNewsQuery = useMemo(() => {
@@ -673,7 +623,7 @@ const DebtorRadar: React.FC = () => {
     return `${val.toFixed(2)}x`;
   };
 
-  // Séries filtradas exclusivamente por trimestres para evitar oscilações anuais 12M e ordenadas cronologicamente
+  // Séries trimestrais ordenadas
   const dadosGraficos = useMemo(() => {
     if (!currentDevedor?.historico_trimestral || currentDevedor.historico_trimestral.length === 0) {
       return [];
@@ -688,7 +638,41 @@ const DebtorRadar: React.FC = () => {
     });
   }, [currentDevedor]);
 
-  // Curva de evolução temporal do rating com persistência
+  // Dados do último período divulgado para análise de estrutura de capital
+  const ultimoFechamento = useMemo(() => {
+    if (dadosGraficos && dadosGraficos.length > 0) {
+      return dadosGraficos[dadosGraficos.length - 1];
+    }
+    return null;
+  }, [dadosGraficos]);
+
+  // Estrutura de Dívida e Autonomia de Caixa
+  const perfilDividaLiquidez = useMemo(() => {
+    const dividaBruta = ultimoFechamento?.divida_bruta ?? currentDevedor?.kpis_resumo?.divida_bruta ?? 0;
+    const dividaCp = ultimoFechamento?.divida_cp ?? 0;
+    const dividaLp = ultimoFechamento?.divida_lp ?? (dividaBruta > dividaCp ? dividaBruta - dividaCp : 0);
+    const caixa =
+      ultimoFechamento?.caixa_equivalentes ??
+      ultimoFechamento?.disponibilidades ??
+      (dividaBruta - (currentDevedor?.kpis_resumo?.divida_liquida ?? 0));
+
+    const totalDivida = dividaCp + dividaLp > 0 ? dividaCp + dividaLp : dividaBruta;
+    const pctCp = totalDivida > 0 ? (dividaCp / totalDivida) * 100 : 0;
+    const pctLp = totalDivida > 0 ? (dividaLp / totalDivida) * 100 : 100;
+    const razaoCaixaCp = dividaCp > 0 && caixa !== null && caixa !== undefined ? caixa / dividaCp : null;
+
+    return {
+      dividaBruta: totalDivida,
+      dividaCp,
+      dividaLp,
+      pctCp,
+      pctLp,
+      caixa,
+      razaoCaixaCp,
+    };
+  }, [ultimoFechamento, currentDevedor]);
+
+  // Curva de evolução temporal do rating
   const ratingCurveData = useMemo(() => {
     if (currentDevedor?.rating_evolucao && currentDevedor.rating_evolucao.length > 0) {
       if (currentDevedor.rating_evolucao.length === 1) {
@@ -736,9 +720,44 @@ const DebtorRadar: React.FC = () => {
     return [];
   }, [currentDevedor]);
 
+  // Determinar status do Altman Z''-Score
+  const altmanZVal = currentDevedor?.kpis_resumo?.altman_z_score;
+  const altmanInfo = useMemo(() => {
+    if (altmanZVal === null || altmanZVal === undefined || isNaN(altmanZVal)) {
+      return {
+        label: "Em Avaliação CVM",
+        corTexto: "text-slate-400",
+        corBadge: "bg-slate-800 text-slate-300 border-slate-700",
+        descricao: "Demonstrações insuficientes para apuração do modelo",
+      };
+    }
+    if (altmanZVal > 2.60) {
+      return {
+        label: "Zona Segura",
+        corTexto: "text-emerald-400",
+        corBadge: "bg-emerald-500/20 text-emerald-300 border-emerald-400/30",
+        descricao: "Solvência robusta • Risco de estresse improvável",
+      };
+    }
+    if (altmanZVal >= 1.10) {
+      return {
+        label: "Zona Cinzenta",
+        corTexto: "text-amber-400",
+        corBadge: "bg-amber-500/20 text-amber-300 border-amber-400/30",
+        descricao: "Alerta moderado • Acompanhamento operacional",
+      };
+    }
+    return {
+      label: "Zona de Perigo",
+      corTexto: "text-rose-400",
+      corBadge: "bg-rose-500/20 text-rose-300 border-rose-400/30",
+      descricao: "Estresse financeiro severo • Risco de crédito crítico",
+    };
+  }, [altmanZVal]);
+
   return (
     <div className="bg-slate-50 min-h-screen text-slate-800 pb-20">
-      {/* ─── HERO HEADER ──────────────────────────────────────────────────────── */}
+      {/* ─── HERO HEADER INSTITUCIONAL ───────────────────────────────────────── */}
       <div className="bg-gradient-to-br from-slate-900 via-slate-850 to-blue-950 text-white pt-10 pb-12 border-b border-slate-800">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -746,19 +765,19 @@ const DebtorRadar: React.FC = () => {
               <div className="flex items-center gap-2.5 mb-2">
                 <span className="px-3 py-1 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                   <Activity size={14} className="text-blue-400" />
-                  Inteligência Fundamentalista CVM
+                  Análise Fundamentalista CVM
                 </span>
                 <span className="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-lg text-xs font-bold tracking-wider">
-                  Modelos de Default &amp; Ratings
+                  Solvência &amp; Perfil da Dívida
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
                 Raio-X do Devedor <span className="text-blue-400 font-light">&amp; Risco de Crédito</span>
               </h1>
               <p className="text-slate-300 text-sm max-w-3xl mt-2 leading-relaxed font-normal">
-                Diagnóstico estrutural e solvência dos maiores emissores de dívida corporativa do Brasil. Histórico de
-                demonstrações financeiras padronizadas (1T, 2T, 3T, 4T e 12M), indicadores de covenants, probabilidade
-                de default multimodelo (Altman Z&apos;&apos;, Ohlson, Merton) e radar multitemporal de risco.
+                Diagnóstico de balanço e solvência dos maiores emissores de dívida corporativa do Brasil. Demonstrações
+                contábeis padronizadas (DFP e ITR), cronograma de vencimentos, estrutura de liquidez, indicadores de
+                covenants e modelo econométrico Altman Z&apos;&apos;-Score para mercados emergentes.
               </p>
             </div>
 
@@ -769,12 +788,12 @@ const DebtorRadar: React.FC = () => {
                 <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Devedores CVM</div>
               </div>
               <div className="text-center px-3 border-r border-white/10">
-                <div className="text-2xl font-black text-emerald-400">4</div>
-                <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Modelos de Default</div>
+                <div className="text-2xl font-black text-emerald-400">Altman Z&apos;&apos;</div>
+                <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Modelo de Solvência</div>
               </div>
               <div className="text-center px-3">
                 <div className="text-2xl font-black text-amber-400">100%</div>
-                <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Padronização CPC</div>
+                <div className="text-2xs uppercase tracking-wider text-slate-400 font-semibold">Padrão CVM / CPC</div>
               </div>
             </div>
           </div>
@@ -932,7 +951,7 @@ const DebtorRadar: React.FC = () => {
           </div>
         ) : currentDevedor ? (
           <div className="space-y-8">
-            {/* Header da Empresa & Status Geral */}
+            {/* Header da Empresa & Altman Z''-Score */}
             <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
@@ -974,69 +993,224 @@ const DebtorRadar: React.FC = () => {
                   )}
                 </div>
 
-                {/* Score Geral de Crédito (Termômetro) */}
-                <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white px-6 py-4 rounded-2xl border border-slate-700 shadow-md flex items-center gap-5 shrink-0 self-stretch sm:self-auto justify-between sm:justify-start">
+                {/* Card Institucional de Solvência: Altman Z''-Score (Edward Altman) */}
+                <div className="bg-gradient-to-br from-slate-900 to-slate-850 text-white px-6 py-4 rounded-2xl border border-slate-700 shadow-md flex items-center gap-5 shrink-0 self-stretch sm:self-auto justify-between sm:justify-start">
                   <div>
-                    <div className="text-2xs uppercase tracking-wider text-slate-400 font-bold">Classificação Geral</div>
-                    <div className="text-lg font-black text-white mt-0.5">
-                      {currentDevedor.radar_risco?.classificacao || "Em Avaliação"}
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-2xs uppercase tracking-wider text-slate-400 font-bold">Solvência Estrutural</span>
+                      <button
+                        type="button"
+                        onClick={() => setDocModalKey("altman_z")}
+                        className="text-slate-400 hover:text-blue-400 transition cursor-pointer"
+                        title="Ver metodologia Altman Z''-Score"
+                      >
+                        <Info size={13} />
+                      </button>
                     </div>
-                    <div className="text-xs text-slate-400 font-medium">Síntese Estatística de Solvência</div>
+                    <div className="text-lg font-black text-white mt-0.5 flex items-center gap-2">
+                      <span>{altmanInfo.label}</span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${altmanInfo.corBadge}`}>
+                        Mercados Emergentes
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-400 font-medium mt-0.5">
+                      {altmanInfo.descricao}
+                    </div>
                   </div>
                   <div className="text-center pl-4 border-l border-slate-700">
-                    <div className="text-3xl font-black text-emerald-400 font-mono">
-                      {currentDevedor.radar_risco?.score_geral || 85}
+                    <div className={`text-3xl font-black font-mono ${altmanInfo.corTexto}`}>
+                      {altmanZVal !== null && altmanZVal !== undefined && !isNaN(altmanZVal)
+                        ? altmanZVal.toFixed(2)
+                        : "N/D"}
                     </div>
-                    <div className="text-2xs font-bold uppercase text-slate-400">Score / 100</div>
+                    <div className="text-2xs font-bold uppercase text-slate-400">Altman Z&apos;&apos;</div>
                   </div>
                 </div>
               </div>
 
-              {/* ─── RADAR MULTITEMPORAL DE RISCO (CURTO, MÉDIO E LONGO PRAZO) ─── */}
+              {/* ─── PAINEL DE ESTRUTURA DE LIQUIDEZ & PERFIL DA DÍVIDA ─────────── */}
               <div className="mt-6 pt-6 border-t border-slate-100">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-2">
                     <Scale size={15} className="text-blue-600" />
-                    Radar de Alerta Multitemporal Institucional
+                    Estrutura de Liquidez &amp; Perfil da Dívida ({currentDevedor.ultimo_periodo})
                   </h3>
                   <span className="text-2xs text-slate-400">
-                    Análise estocástica combinada de fluxo, alavancagem e solvência
+                    Demonstrações financeiras padronizadas CVM • Balanço Patrimonial e DRE
                   </span>
                 </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <BadgeHorizonte
-                    titulo="Curto Prazo (< 12 Meses)"
-                    icone={<Clock size={16} className="text-blue-600" />}
-                    horizonte={
-                      currentDevedor.radar_risco?.curto_prazo || {
-                        nivel: "Baixo Risco",
-                        diagnostico: "Caixa cobre as obrigações correntes.",
-                        score: 90
-                      }
-                    }
-                  />
-                  <BadgeHorizonte
-                    titulo="Médio Prazo (1 a 3 Anos)"
-                    icone={<TrendingUp size={16} className="text-emerald-600" />}
-                    horizonte={
-                      currentDevedor.radar_risco?.medio_prazo || {
-                        nivel: "Baixo Risco",
-                        diagnostico: "Alavancagem sustentável frente ao EBITDA.",
-                        score: 85
-                      }
-                    }
-                  />
-                  <BadgeHorizonte
-                    titulo="Longo Prazo (> 3 Anos)"
-                    icone={<ShieldCheck size={16} className="text-indigo-600" />}
-                    horizonte={
-                      currentDevedor.radar_risco?.longo_prazo || {
-                        nivel: "Baixo Risco",
-                        diagnostico: "Solvência patrimonial robusta.",
-                        score: 88
-                      }
-                    }
-                  />
+                  {/* Bloco 1: Perfil de Vencimento da Dívida (Curto vs Longo Prazo) */}
+                  <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                          <Clock size={14} className="text-blue-600" />
+                          Perfil de Vencimento
+                        </span>
+                        <span className={`text-2xs font-bold px-2 py-0.5 rounded-md ${
+                          perfilDividaLiquidez.pctCp <= 25
+                            ? "bg-emerald-100 text-emerald-800"
+                            : perfilDividaLiquidez.pctCp <= 40
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-amber-100 text-amber-800"
+                        }`}>
+                          {perfilDividaLiquidez.pctCp <= 25 ? "Perfil Alongado" : perfilDividaLiquidez.pctCp <= 40 ? "Perfil Equilibrado" : "Pressão de Curto Prazo"}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1.5 mt-2">
+                        <div className="flex justify-between items-baseline text-xs">
+                          <span className="text-slate-500 font-medium">Curto Prazo (≤ 12 meses):</span>
+                          <span className="font-mono font-bold text-slate-900">
+                            {formatBRL(perfilDividaLiquidez.dividaCp)} ({perfilDividaLiquidez.pctCp.toFixed(1)}%)
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-baseline text-xs">
+                          <span className="text-slate-500 font-medium">Longo Prazo (&gt; 12 meses):</span>
+                          <span className="font-mono font-bold text-slate-900">
+                            {formatBRL(perfilDividaLiquidez.dividaLp)} ({perfilDividaLiquidez.pctLp.toFixed(1)}%)
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-2.5 border-t border-slate-200/80">
+                      {/* Barra visual bicolor de composição */}
+                      <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden flex">
+                        <div
+                          className="bg-amber-500 transition-all duration-500"
+                          style={{ width: `${Math.min(100, Math.max(0, perfilDividaLiquidez.pctCp))}%` }}
+                          title={`Curto Prazo: ${perfilDividaLiquidez.pctCp.toFixed(1)}%`}
+                        />
+                        <div
+                          className="bg-blue-600 transition-all duration-500"
+                          style={{ width: `${Math.min(100, Math.max(0, perfilDividaLiquidez.pctLp))}%` }}
+                          title={`Longo Prazo: ${perfilDividaLiquidez.pctLp.toFixed(1)}%`}
+                        />
+                      </div>
+                      <div className="flex justify-between text-3xs text-slate-400 mt-1">
+                        <span>CP: {perfilDividaLiquidez.pctCp.toFixed(0)}%</span>
+                        <span>LP: {perfilDividaLiquidez.pctLp.toFixed(0)}%</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bloco 2: Autonomia de Caixa & Cobertura de Curto Prazo */}
+                  <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                          <TrendingUp size={14} className="text-emerald-600" />
+                          Autonomia de Caixa
+                        </span>
+                        <span className={`text-2xs font-bold px-2 py-0.5 rounded-md ${
+                          perfilDividaLiquidez.razaoCaixaCp && perfilDividaLiquidez.razaoCaixaCp >= 1.0
+                            ? "bg-emerald-100 text-emerald-800"
+                            : perfilDividaLiquidez.razaoCaixaCp && perfilDividaLiquidez.razaoCaixaCp >= 0.5
+                            ? "bg-amber-100 text-amber-800"
+                            : "bg-rose-100 text-rose-800"
+                        }`}>
+                          {perfilDividaLiquidez.razaoCaixaCp && perfilDividaLiquidez.razaoCaixaCp >= 1.0
+                            ? "Caixa Confortável"
+                            : perfilDividaLiquidez.razaoCaixaCp && perfilDividaLiquidez.razaoCaixaCp >= 0.5
+                            ? "Rolagem Moderada"
+                            : "Aperto de Caixa"}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1.5 mt-2">
+                        <div className="flex justify-between items-baseline text-xs">
+                          <span className="text-slate-500 font-medium">Caixa &amp; Aplicações:</span>
+                          <span className="font-mono font-bold text-emerald-700">
+                            {formatBRL(perfilDividaLiquidez.caixa)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-baseline text-xs">
+                          <span className="text-slate-500 font-medium">Razão Caixa / Dívida CP:</span>
+                          <span className="font-mono font-bold text-slate-900">
+                            {perfilDividaLiquidez.razaoCaixaCp !== null
+                              ? `${perfilDividaLiquidez.razaoCaixaCp.toFixed(2)}x (${(perfilDividaLiquidez.razaoCaixaCp * 100).toFixed(0)}%)`
+                              : "N/D"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-2.5 border-t border-slate-200/80 text-xs text-slate-600">
+                      {perfilDividaLiquidez.razaoCaixaCp && perfilDividaLiquidez.razaoCaixaCp >= 1.0 ? (
+                        <p className="text-2xs leading-relaxed text-emerald-700 font-medium">
+                          ✓ O caixa líquido cobre 100%+ das amortizações dos próximos 12 meses sem necessidade de captação.
+                        </p>
+                      ) : perfilDividaLiquidez.razaoCaixaCp && perfilDividaLiquidez.razaoCaixaCp >= 0.5 ? (
+                        <p className="text-2xs leading-relaxed text-amber-700 font-medium">
+                          ⚠ Caixa cobre parcela parcial dos vencimentos de curto prazo; depende da geração operacional ou rolagem.
+                        </p>
+                      ) : (
+                        <p className="text-2xs leading-relaxed text-rose-700 font-medium">
+                          ⚡ Dependência crítica de rolagem bancária ou novas emissões para honrar os compromissos de 12 meses.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bloco 3: Posição Relativa no Setor (Benchmark de Alavancagem) */}
+                  <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                          <Users size={14} className="text-indigo-600" />
+                          Posição Relativa no Setor
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setShowPeersModal(true)}
+                          className="text-2xs font-bold text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                        >
+                          Ver {medianasSetor?.totalPares || 0} Pares
+                        </button>
+                      </div>
+
+                      <div className="space-y-1.5 mt-2">
+                        <div className="flex justify-between items-baseline text-xs">
+                          <span className="text-slate-500 font-medium">Alavancagem da Empresa:</span>
+                          <span className="font-mono font-bold text-slate-900">
+                            {formatMultiplo(currentDevedor.kpis_resumo?.alavancagem_dl_ebitda)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-baseline text-xs">
+                          <span className="text-slate-500 font-medium">Mediana do Setor ({currentDevedor.setor}):</span>
+                          <span className="font-mono font-bold text-indigo-700">
+                            {medianasSetor?.alavancagem !== null && medianasSetor?.alavancagem !== undefined
+                              ? `${medianasSetor.alavancagem.toFixed(2)}x`
+                              : "N/D"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-2.5 border-t border-slate-200/80 text-xs text-slate-600">
+                      {currentDevedor.kpis_resumo?.alavancagem_dl_ebitda !== null &&
+                      currentDevedor.kpis_resumo?.alavancagem_dl_ebitda !== undefined &&
+                      medianasSetor?.alavancagem !== null &&
+                      medianasSetor?.alavancagem !== undefined ? (
+                        currentDevedor.kpis_resumo.alavancagem_dl_ebitda <= medianasSetor.alavancagem ? (
+                          <p className="text-2xs leading-relaxed text-emerald-700 font-medium">
+                            ✓ Mais desalavancada que a mediana dos pares ({Math.abs(medianasSetor.alavancagem - currentDevedor.kpis_resumo.alavancagem_dl_ebitda).toFixed(2)}x abaixo da média setorial).
+                          </p>
+                        ) : (
+                          <p className="text-2xs leading-relaxed text-amber-700 font-medium">
+                            ⚠ Alavancagem superior à mediana setorial (+{(currentDevedor.kpis_resumo.alavancagem_dl_ebitda - medianasSetor.alavancagem).toFixed(2)}x acima dos concorrentes do setor).
+                          </p>
+                        )
+                      ) : (
+                        <p className="text-2xs leading-relaxed text-slate-500">
+                          Comparativo setorial baseado nos pares com balanços CVM vigentes.
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1107,71 +1281,92 @@ const DebtorRadar: React.FC = () => {
                 <div className="text-lg font-black text-slate-900 font-mono">
                   {currentDevedor.kpis_resumo?.altman_z_score?.toFixed(2) || "N/D"}
                 </div>
-                <div className="text-2xs font-bold text-emerald-700 mt-1">
-                  {currentDevedor.kpis_resumo?.altman_zona?.split("(")[0] || "Zona Segura"}
+                <div className={`text-2xs font-bold mt-1 ${altmanInfo.corTexto.replace('text-', 'text-slate-800 ')}`}>
+                  {currentDevedor.kpis_resumo?.altman_zona?.split("(")[0] || altmanInfo.label}
                 </div>
               </div>
             </div>
 
-            {/* ─── ABAS DE SÉRIES HISTÓRICAS E MODELOS DE DEFAULT ───────────── */}
+            {/* ─── ABAS DE SÉRIES HISTÓRICAS E BENCHMARK SETORIAL ───────────── */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-              <div className="px-6 pt-5 pb-3 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="px-6 pt-5 pb-3 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-base font-black text-slate-900">Evolução Histórica &amp; Séries Temporais</h3>
-                  <p className="text-xs text-slate-500">
-                    Acompanhamento trimestral com fechamentos reais (1T, 2T, 3T, 4T Derivado e 12M Fechado)
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-black text-slate-900">Evolução Histórica &amp; Séries Temporais</h3>
+                    {medianasSetor && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-3xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                        <Users size={11} className="text-amber-600" />
+                        Linha Tracejada: Mediana Setorial ({medianasSetor.totalPares} pares)
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Acompanhamento trimestral com fechamentos reais CVM (1T, 2T, 3T, 4T e 12M Fechado)
                   </p>
                 </div>
 
-                {/* Seletor de Abas */}
-                <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl self-start sm:self-auto overflow-x-auto max-w-full">
+                {/* Controles: Seletor de Pares & Abas */}
+                <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => setActiveTab("alavancagem")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
-                      activeTab === "alavancagem" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
-                    }`}
+                    onClick={() => setShowPeersModal(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer shrink-0"
+                    title="Ajustar quais companhias compõem a mediana setorial nos gráficos"
                   >
-                    Alavancagem &amp; Dívida
+                    <SlidersHorizontal size={13} className="text-blue-600" />
+                    <span>Pares do Setor ({medianasSetor?.totalPares || 0}/{medianasSetor?.totalSetor || 0})</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("rentabilidade")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
-                      activeTab === "rentabilidade" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Receita &amp; EBITDA
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("cobertura")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
-                      activeTab === "cobertura" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Cobertura (ICR)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("liquidez")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
-                      activeTab === "liquidez" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    Liquidez &amp; Caixa
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("default_models")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
-                      activeTab === "default_models"
-                        ? "bg-blue-600 text-white shadow-xs"
-                        : "text-blue-700 bg-blue-50/50 hover:bg-blue-50"
-                    }`}
-                  >
-                    Scores de Default
-                  </button>
+
+                  {/* Seletor de Abas */}
+                  <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl overflow-x-auto max-w-full">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("alavancagem")}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                        activeTab === "alavancagem" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      Alavancagem &amp; Dívida
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("rentabilidade")}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                        activeTab === "rentabilidade" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      Receita &amp; EBITDA
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("cobertura")}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                        activeTab === "cobertura" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      Cobertura (ICR)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("liquidez")}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                        activeTab === "liquidez" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      Liquidez &amp; Caixa
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("solvencia")}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                        activeTab === "solvencia"
+                          ? "bg-blue-600 text-white shadow-xs"
+                          : "text-blue-700 bg-blue-50/50 hover:bg-blue-50"
+                      }`}
+                    >
+                      Solvência (Altman Z&apos;&apos;)
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1238,6 +1433,21 @@ const DebtorRadar: React.FC = () => {
                             connectNulls
                           />
                           <ReferenceLine yAxisId="right" y={3.5} stroke="#ef4444" strokeDasharray="3 3" label="Covenant 3.5x" />
+                          {medianasSetor?.alavancagem !== null && medianasSetor?.alavancagem !== undefined && (
+                            <ReferenceLine
+                              yAxisId="right"
+                              y={medianasSetor.alavancagem}
+                              stroke="#f59e0b"
+                              strokeDasharray="4 4"
+                              strokeWidth={2}
+                              label={{
+                                value: `Mediana Setor: ${medianasSetor.alavancagem.toFixed(2)}x`,
+                                fill: "#d97706",
+                                fontSize: 11,
+                                position: "insideBottomLeft",
+                              }}
+                            />
+                          )}
                         </LineChart>
                       ) : activeTab === "rentabilidade" ? (
                         <BarChart data={dadosGraficos}>
@@ -1270,6 +1480,21 @@ const DebtorRadar: React.FC = () => {
                             dot={{ r: 4 }}
                             connectNulls
                           />
+                          {medianasSetor?.margemEbitda !== null && medianasSetor?.margemEbitda !== undefined && (
+                            <ReferenceLine
+                              yAxisId="right"
+                              y={medianasSetor.margemEbitda}
+                              stroke="#f59e0b"
+                              strokeDasharray="4 4"
+                              strokeWidth={2}
+                              label={{
+                                value: `Mediana Setor: ${medianasSetor.margemEbitda.toFixed(1)}%`,
+                                fill: "#d97706",
+                                fontSize: 11,
+                                position: "insideBottomLeft",
+                              }}
+                            />
+                          )}
                         </BarChart>
                       ) : activeTab === "cobertura" ? (
                         <AreaChart data={dadosGraficos}>
@@ -1297,6 +1522,20 @@ const DebtorRadar: React.FC = () => {
                           />
                           <ReferenceLine y={1.0} stroke="#ef4444" strokeDasharray="3 3" label="Risco 1.0x" />
                           <ReferenceLine y={3.0} stroke="#10b981" strokeDasharray="3 3" label="Confortável 3.0x" />
+                          {medianasSetor?.coberturaJuros !== null && medianasSetor?.coberturaJuros !== undefined && (
+                            <ReferenceLine
+                              y={medianasSetor.coberturaJuros}
+                              stroke="#f59e0b"
+                              strokeDasharray="4 4"
+                              strokeWidth={2}
+                              label={{
+                                value: `Mediana Setor: ${medianasSetor.coberturaJuros.toFixed(2)}x`,
+                                fill: "#d97706",
+                                fontSize: 11,
+                                position: "insideTopLeft",
+                              }}
+                            />
+                          )}
                         </AreaChart>
                       ) : activeTab === "liquidez" ? (
                         <LineChart data={dadosGraficos}>
@@ -1320,33 +1559,64 @@ const DebtorRadar: React.FC = () => {
                           <Line yAxisId="left" type="monotone" dataKey="caixa_equivalentes" name="Caixa &amp; Aplicações" stroke="#059669" strokeWidth={2} dot={{ r: 3 }} connectNulls />
                           <Line yAxisId="left" type="monotone" dataKey="divida_cp" name="Dívida Curto Prazo (CP)" stroke="#f43f5e" strokeWidth={2} dot={{ r: 3 }} connectNulls />
                           <Line yAxisId="right" type="monotone" dataKey="liquidez_corrente" name="Liquidez Corrente" stroke="#2563eb" strokeWidth={2.5} dot={{ r: 4 }} connectNulls />
+                          {medianasSetor?.liquidezCorrente !== null && medianasSetor?.liquidezCorrente !== undefined && (
+                            <ReferenceLine
+                              yAxisId="right"
+                              y={medianasSetor.liquidezCorrente}
+                              stroke="#f59e0b"
+                              strokeDasharray="4 4"
+                              strokeWidth={2}
+                              label={{
+                                value: `Mediana Setor LC: ${medianasSetor.liquidezCorrente.toFixed(2)}x`,
+                                fill: "#d97706",
+                                fontSize: 11,
+                                position: "insideTopLeft",
+                              }}
+                            />
+                          )}
                         </LineChart>
                       ) : (
-                        /* Aba: SCORES DE DEFAULT NO TEMPO */
+                        /* Aba: SOLVÊNCIA EXCLUSIVA (ALTMAN Z''-SCORE) */
                         <LineChart data={dadosGraficos}>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                           <XAxis dataKey="periodo_rotulo" tick={{ fontSize: 12, fill: "#64748b" }} />
-                          <YAxis yAxisId="left" tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? v.toFixed(1) : "")} tick={{ fontSize: 11, fill: "#64748b" }} />
                           <YAxis
-                            yAxisId="right"
-                            orientation="right"
-                            tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? `${v.toFixed(1)}%` : "")}
-                            tick={{ fontSize: 11, fill: "#f43f5e" }}
+                            tickFormatter={(v) => (typeof v === "number" && !isNaN(v) ? v.toFixed(1) : "")}
+                            tick={{ fontSize: 11, fill: "#64748b" }}
                           />
                           <Tooltip
                             formatter={(val: any, name: any) => {
                               const num = typeof val === "number" && !isNaN(val) ? val : null;
                               if (num === null) return ["N/D", name];
-                              if (name.includes("%") || name.includes("Prob")) return [`${num.toFixed(2)}%`, name];
                               return [num.toFixed(2), name];
                             }}
                           />
                           <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
-                          <Line yAxisId="left" type="monotone" dataKey="altman_z_score" name="Altman Z''-Score" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} connectNulls />
-                          <Line yAxisId="right" type="monotone" dataKey="ohlson_prob_default" name="Ohlson P(Default) %" stroke="#f43f5e" strokeWidth={2.5} dot={{ r: 4 }} connectNulls />
-                          <Line yAxisId="right" type="monotone" dataKey="merton_prob_default" name="Merton PD %" stroke="#8b5cf6" strokeWidth={2} strokeDasharray="3 3" dot={{ r: 3 }} connectNulls />
-                          <ReferenceLine yAxisId="left" y={2.6} stroke="#10b981" strokeDasharray="3 3" label="Zona Segura Z'' 2.6" />
-                          <ReferenceLine yAxisId="left" y={1.1} stroke="#ef4444" strokeDasharray="3 3" label="Zona de Perigo Z'' 1.1" />
+                          <Line
+                            type="monotone"
+                            dataKey="altman_z_score"
+                            name="Altman Z''-Score (Mercados Emergentes)"
+                            stroke="#10b981"
+                            strokeWidth={3}
+                            dot={{ r: 4 }}
+                            connectNulls
+                          />
+                          <ReferenceLine y={2.6} stroke="#10b981" strokeDasharray="3 3" label="Zona Segura (Z'' ≥ 2,60)" />
+                          <ReferenceLine y={1.1} stroke="#ef4444" strokeDasharray="3 3" label="Zona de Perigo (Z'' < 1,10)" />
+                          {medianasSetor?.altmanZ !== null && medianasSetor?.altmanZ !== undefined && (
+                            <ReferenceLine
+                              y={medianasSetor.altmanZ}
+                              stroke="#f59e0b"
+                              strokeDasharray="4 4"
+                              strokeWidth={2}
+                              label={{
+                                value: `Mediana Setorial Z'': ${medianasSetor.altmanZ.toFixed(2)}`,
+                                fill: "#d97706",
+                                fontSize: 11,
+                                position: "insideBottomLeft",
+                              }}
+                            />
+                          )}
                         </LineChart>
                       )}
                     </ResponsiveContainer>
@@ -1359,7 +1629,7 @@ const DebtorRadar: React.FC = () => {
               </div>
             </div>
 
-            {/* ─── HISTÓRICO DE RATINGS & MIGRAÇÕES NO TEMPO (EXCLUSIVAMENTE GRÁFICO DE TRAJETÓRIA) ─── */}
+            {/* ─── HISTÓRICO DE RATINGS & MIGRAÇÕES NO TEMPO ─── */}
             <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-100">
                 <div>
@@ -1392,7 +1662,7 @@ const DebtorRadar: React.FC = () => {
                 </div>
               </div>
 
-              {/* GRÁFICO EXCLUSIVO DE EVOLUÇÃO TEMPORAL DO RATING (PIOR RATING ENTRE EMISSÕES) */}
+              {/* GRÁFICO DE EVOLUÇÃO TEMPORAL DO RATING */}
               {loadingFull ? (
                 <div className="py-12 flex flex-col items-center justify-center gap-3">
                   <div className="w-7 h-7 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
@@ -1580,10 +1850,10 @@ const DebtorRadar: React.FC = () => {
                             <td className="py-2 px-2.5">
                               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                                 t.status_ativo === "Ativo"
-                                  ? "bg-emerald-100 text-emerald-800"
-                                  : t.status_ativo === "Resgatado"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : "bg-slate-100 text-slate-600"
+                                   ? "bg-emerald-100 text-emerald-800"
+                                   : t.status_ativo === "Resgatado"
+                                   ? "bg-purple-100 text-purple-800"
+                                   : "bg-slate-100 text-slate-600"
                               }`}>
                                 {t.status_ativo || "Ativo"}
                               </span>
@@ -1618,7 +1888,7 @@ const DebtorRadar: React.FC = () => {
                       </span>
                     </div>
                     <p className="text-2xs text-slate-500">
-                      Monitoramento em tempo real de matérias sobre <span className="font-semibold text-slate-700">{companyNewsQuery}</span> para acompanhamento contínuo de risco corporativo
+                      Monitoramento de matérias sobre <span className="font-semibold text-slate-700">{companyNewsQuery}</span> para acompanhamento contínuo de eventos corporativos
                     </p>
                   </div>
                 </div>
@@ -1698,6 +1968,130 @@ const DebtorRadar: React.FC = () => {
         ) : null}
       </div>
 
+      {/* ─── MODAL SELETOR DE PARES SETORIAIS (BENCHMARK) ───────────────────── */}
+      {showPeersModal && currentDevedor && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
+            <button
+              type="button"
+              onClick={() => setShowPeersModal(false)}
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                <Users size={20} />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-slate-900">
+                  Composição dos Pares Setoriais
+                </h3>
+                <span className="text-xs font-semibold text-blue-600">
+                  Setor: {currentDevedor.setor} ({selectedPeersCnpjs.length} de {empresasSetor.length} ativos)
+                </span>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">
+              Marque ou desmarque os emissores do setor para recalcular instantaneamente a linha de <strong>Mediana Setorial</strong> exibida nos gráficos históricos.
+            </p>
+
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 text-xs">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedPeersCnpjs(empresasSetor.map((e) => e.cnpj))}
+                  className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-bold transition cursor-pointer"
+                >
+                  Selecionar Todos
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedPeersCnpjs([])}
+                  className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 font-bold transition cursor-pointer"
+                >
+                  Limpar Seleção
+                </button>
+              </div>
+              <span className="text-2xs text-slate-400 font-mono">
+                {selectedPeersCnpjs.length} selecionados
+              </span>
+            </div>
+
+            {/* Lista com checkboxes */}
+            <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 my-2 pr-1">
+              {empresasSetor.map((peer) => {
+                const isSelected = selectedPeersCnpjs.includes(peer.cnpj);
+                const isCurrent = peer.cnpj === currentDevedor.cnpj;
+                return (
+                  <button
+                    key={peer.cnpj}
+                    type="button"
+                    onClick={() => {
+                      setSelectedPeersCnpjs((prev) =>
+                        isSelected ? prev.filter((c) => c !== peer.cnpj) : [...prev, peer.cnpj]
+                      );
+                    }}
+                    className={`w-full text-left p-3 rounded-xl flex items-center justify-between transition cursor-pointer ${
+                      isSelected ? "bg-blue-50/50 hover:bg-blue-50" : "hover:bg-slate-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0 pr-2">
+                      <div className="text-blue-600 shrink-0">
+                        {isSelected ? <CheckSquare size={18} /> : <Square size={18} className="text-slate-300" />}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-slate-800 truncate flex items-center gap-1.5">
+                          <span>{peer.razao_social}</span>
+                          {isCurrent && (
+                            <span className="text-3xs font-black bg-blue-600 text-white px-1.5 py-0.2 rounded uppercase">
+                              Atual
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-2xs text-slate-400 font-mono">
+                          CNPJ: {peer.cnpj_formatado}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0 text-right">
+                      <div>
+                        <div className="text-2xs text-slate-400 font-semibold">DL/EBITDA</div>
+                        <div className="text-xs font-bold font-mono text-slate-800">
+                          {formatMultiplo(peer.kpis_resumo?.alavancagem_dl_ebitda)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-2xs text-slate-400 font-semibold">Altman Z&apos;&apos;</div>
+                        <div className="text-xs font-bold font-mono text-emerald-700">
+                          {peer.kpis_resumo?.altman_z_score?.toFixed(2) || "—"}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-2xs text-slate-400">
+                A mediana recalcula automaticamente em tempo real.
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowPeersModal(false)}
+                className="px-5 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                Concluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ─── MODAL DE DOCUMENTAÇÃO METODOLÓGICA ─────────────────────────────── */}
       {docModalKey && DOCUMENTACAO_INDICADORES[docModalKey] && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
@@ -1705,7 +2099,7 @@ const DebtorRadar: React.FC = () => {
             <button
               type="button"
               onClick={() => setDocModalKey(null)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -1758,7 +2152,7 @@ const DebtorRadar: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setDocModalKey(null)}
-                className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors"
+                className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 Entendido
               </button>
