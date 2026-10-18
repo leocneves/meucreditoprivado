@@ -40,7 +40,7 @@
         "volume_bi": 280.81
       }
     },
-    "data_atualizacao": "2026-10-17 22:33:05"
+    "data_atualizacao": "2026-10-17 22:41:18"
   },
   "evolucao_anual": [
     {
@@ -592,10 +592,7 @@
           "cnpj": "53462483000102"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "ENEY11",
-        "isin": "BRENEYDBS004"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28347",
@@ -616,8 +613,8 @@
       "data_vencimento_doc": null,
       "possui_book": 0,
       "resumo_oferta": null,
-      "matched_ticker": "VLIDA1",
-      "matched_isin": "BRVLIDDBS0B6",
+      "matched_ticker": null,
+      "matched_isin": null,
       "series": [
         {
           "id_serie": "28347_45366",
@@ -665,10 +662,7 @@
           "cnpj": "33113309000147"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "VLIDA1",
-        "isin": "BRVLIDDBS0B6"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28346",
@@ -689,8 +683,8 @@
       "data_vencimento_doc": null,
       "possui_book": 0,
       "resumo_oferta": null,
-      "matched_ticker": "SBFC15",
-      "matched_isin": "BRSBFCDBS044",
+      "matched_ticker": null,
+      "matched_isin": null,
       "series": [
         {
           "id_serie": "28346_45365",
@@ -743,10 +737,7 @@
           "cnpj": "06347409000165"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "SBFC15",
-        "isin": "BRSBFCDBS044"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28286",
@@ -767,8 +758,8 @@
       "data_vencimento_doc": null,
       "possui_book": 0,
       "resumo_oferta": null,
-      "matched_ticker": "ORMA19",
-      "matched_isin": "BRORMADBS072",
+      "matched_ticker": null,
+      "matched_isin": null,
       "series": [
         {
           "id_serie": "28286_45279",
@@ -832,10 +823,7 @@
           "cnpj": "03279285000130"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "ORMA19",
-        "isin": "BRORMADBS072"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28337",
@@ -856,8 +844,8 @@
       "data_vencimento_doc": null,
       "possui_book": 0,
       "resumo_oferta": null,
-      "matched_ticker": "CEAB14",
-      "matched_isin": "BRCEABDBS086",
+      "matched_ticker": null,
+      "matched_isin": null,
       "series": [
         {
           "id_serie": "28337_45348",
@@ -905,10 +893,7 @@
           "cnpj": "45242914000105"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "CEAB14",
-        "isin": "BRCEABDBS086"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28256",
@@ -929,8 +914,8 @@
       "data_vencimento_doc": null,
       "possui_book": 0,
       "resumo_oferta": "11ª (DÉCIMA PRIMEIRA) EMISSÃO DE DEBÊNTURES SIMPLES, NÃO CONVERSÍVEIS EM AÇÕES, DA ESPÉCIE QUIROGRAFÁRIA, COM GARANTIA ADICIONAL FIDEJUSSÓRIA, EM SÉRIE ÚNICA, PARA DISTRIBUIÇÃO PÚBLICA, EM RITO DE REGISTRO AUTOMÁTICO DE DISTRIBUIÇÃO, DA COMPANHIA DE ELETRICIDADE DO AMAPÁ – CEA",
-      "matched_ticker": "CEAPA0",
-      "matched_isin": "BRCEAPDBS094",
+      "matched_ticker": null,
+      "matched_isin": null,
       "series": [
         {
           "id_serie": "28256_45234",
@@ -983,10 +968,7 @@
           "cnpj": "05965546000109"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "CEAPA0",
-        "isin": "BRCEAPDBS094"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28163",
@@ -1187,8 +1169,8 @@
       "data_vencimento_doc": null,
       "possui_book": 0,
       "resumo_oferta": null,
-      "matched_ticker": "25B0013406",
-      "matched_isin": "BRRBRACRIT76",
+      "matched_ticker": null,
+      "matched_isin": null,
       "series": [
         {
           "id_serie": "27870_44663",
@@ -1318,10 +1300,7 @@
           "cnpj": "08769451000108"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "25B0013406",
-        "isin": "BRRBRACRIT76"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27478",
@@ -1343,7 +1322,7 @@
       "possui_book": 0,
       "resumo_oferta": null,
       "matched_ticker": null,
-      "matched_isin": "BRRBRACIR3R1",
+      "matched_isin": null,
       "series": [
         {
           "id_serie": "27478_44070",
@@ -1462,10 +1441,7 @@
           "cnpj": "02773542000122"
         }
       ],
-      "ativo_secundario": {
-        "ticker": null,
-        "isin": "BRRBRACIR3R1"
-      }
+      "ativo_secundario": null
     }
   ],
   "ofertas_recentes": [
@@ -1639,10 +1615,7 @@
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/b58ac699-b398-4780-9936-06351223a5b6"
         }
       ],
-      "ativo_secundario": {
-        "ticker": "MEZ611",
-        "isin": "BRMEZ6DBS001"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28334",
@@ -1685,10 +1658,7 @@
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/845faaad-daf7-4d2e-927e-cd0468aa00ea"
         }
       ],
-      "ativo_secundario": {
-        "ticker": null,
-        "isin": "BRLSECCRI7C4"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27959",
@@ -2061,10 +2031,7 @@
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/920c0078-e2b1-485a-ac6a-fdde0eb3ab93"
         }
       ],
-      "ativo_secundario": {
-        "ticker": null,
-        "isin": "BRPVSCCRICG9"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28114",
@@ -2114,10 +2081,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "NIGP11",
-        "isin": "BRNTSDDBS014"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28240",
@@ -2217,10 +2181,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "OMTX11",
-        "isin": "BROMTXDBS005"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28173",
@@ -2395,10 +2356,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "PLPL11",
-        "isin": "BRPLPLDBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28183",
@@ -2448,10 +2406,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "PAXS11",
-        "isin": "BRPAXSDBS009"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28226",
@@ -2476,10 +2431,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "FTER12",
-        "isin": "BRFTERDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28159",
@@ -2504,10 +2456,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "TEPA11",
-        "isin": "BRTEPADBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28127",
@@ -2532,10 +2481,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SBSPB3",
-        "isin": "BRSBSPDBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28015",
@@ -2560,10 +2506,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "LGAM12",
-        "isin": "BRLGAMDBS014"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28190",
@@ -2738,10 +2681,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "LOCF11",
-        "isin": "BRLOCFDBS000"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27935",
@@ -2766,10 +2706,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "DIRR16",
-        "isin": "BRDIRRDBS010"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28165",
@@ -2919,10 +2856,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "BKBR18",
-        "isin": "BRBKBRDBS048"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27821",
@@ -2947,10 +2881,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CMTC11",
-        "isin": "BRCMTCDBS004"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27888",
@@ -2975,10 +2906,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CIEL16",
-        "isin": "BRCIELDBS021"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27648",
@@ -3003,10 +2931,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CSMG27",
-        "isin": "BRCSMGDBS064"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28142",
@@ -3181,10 +3106,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "AXIA18",
-        "isin": "BRAXIADBS0C8"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28023",
@@ -3209,10 +3131,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CESE11",
-        "isin": "BRCESEDBS009"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27973",
@@ -3237,10 +3156,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ACCO11",
-        "isin": "BRACCODBS000"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28011",
@@ -3265,10 +3181,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "OGHD14",
-        "isin": "BROGHDDBS020"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28069",
@@ -3468,10 +3381,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SBSPB3",
-        "isin": "BRSBSPDBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27812",
@@ -3496,10 +3406,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "BRDT11",
-        "isin": "BRBRDTDBS003"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27887",
@@ -3524,10 +3431,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CECG11",
-        "isin": "BRCECGDBS008"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28041",
@@ -3552,10 +3456,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "GVSP11",
-        "isin": "BRGVSPDBS000"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28005",
@@ -3605,10 +3506,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "GSEB21",
-        "isin": "BRGSEBDBS014"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28076",
@@ -3633,10 +3531,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "AMTR11",
-        "isin": "BRAMTRDBS006"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28002",
@@ -3661,10 +3556,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "EVME11",
-        "isin": "BREVMEDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28064",
@@ -3739,10 +3631,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ACOV14",
-        "isin": "BRACOVDBS018"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27999",
@@ -3767,10 +3656,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "MOVI11",
-        "isin": "BRMOVIDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27783",
@@ -3795,10 +3681,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "HYPE18",
-        "isin": "BRHYPEDBS0C7"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27861",
@@ -3823,10 +3706,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ALPG21",
-        "isin": "BRALPADBS010"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27677",
@@ -3876,10 +3756,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CTGE11",
-        "isin": "BRCTGEDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28049",
@@ -3929,10 +3806,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "TRRR11",
-        "isin": "BRTRRRDBS009"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27990",
@@ -4007,10 +3881,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "VACR11",
-        "isin": "BRVACRDBS003"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "28024",
@@ -4110,10 +3981,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CVCB12",
-        "isin": "BRCVCBDBS011"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27948",
@@ -4138,10 +4006,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "RMVE11",
-        "isin": "BRRMVEDBS004"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27976",
@@ -4291,10 +4156,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CMED13",
-        "isin": "BRCMEDDBS012"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27868",
@@ -4319,10 +4181,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "BLIM11",
-        "isin": "BRBLIMDBS000"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27879",
@@ -4347,10 +4206,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CNLM15",
-        "isin": "BRCNLMDBS0F2"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27894",
@@ -4375,10 +4231,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "GSTS12",
-        "isin": "BRGSTSDBS016"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27969",
@@ -4428,10 +4281,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "HAAS11",
-        "isin": "BRHAASDBS004"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27902",
@@ -4456,10 +4306,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "BPCH11",
-        "isin": "BRBPCHDBS004"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27903",
@@ -4484,10 +4331,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "BSBE11",
-        "isin": "BRBSBEDBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27904",
@@ -4512,10 +4356,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ELRV11",
-        "isin": "BRELRVDBS006"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27855",
@@ -4540,10 +4381,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SUMI11",
-        "isin": "BRSUMIDBS005"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27845",
@@ -4568,10 +4406,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ETVG11",
-        "isin": "BRETVGDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27597",
@@ -4596,10 +4431,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CLUZ11",
-        "isin": "BRCLUZDBS005"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27844",
@@ -4624,10 +4456,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "TENG13",
-        "isin": "BRTENGDBS017"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27886",
@@ -4652,10 +4481,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ECTE14",
-        "isin": "BRECTEDBS031"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27885",
@@ -4680,10 +4506,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ENTE12",
-        "isin": "BRENTEDBS012"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27884",
@@ -4708,10 +4531,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "EATE17",
-        "isin": "BREATEDBS035"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27849",
@@ -4786,10 +4606,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "AXIA18",
-        "isin": "BRAXIADBS0C8"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27909",
@@ -4839,10 +4656,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ATGS11",
-        "isin": "BRATGSDBS006"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27897",
@@ -4892,10 +4706,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SRFC11",
-        "isin": "BRSRFADBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27792",
@@ -4920,10 +4731,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ASCY13",
-        "isin": "BRASCYDBS021"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27791",
@@ -4948,10 +4756,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ASCY13",
-        "isin": "BRASCYDBS021"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27790",
@@ -4976,10 +4781,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ASCY13",
-        "isin": "BRASCYDBS021"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27787",
@@ -5004,10 +4806,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ASCY13",
-        "isin": "BRASCYDBS021"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27786",
@@ -5032,10 +4831,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CSRI11",
-        "isin": "BRCSRIDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27785",
@@ -5060,10 +4856,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CLGE11",
-        "isin": "BRCLGEDBS009"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27453",
@@ -5163,10 +4956,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "PALF10",
-        "isin": "BRPALFDBS001"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27771",
@@ -5191,10 +4981,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SNTI14",
-        "isin": "BRSNTIDBS047"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27826",
@@ -5269,10 +5056,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "NATU36",
-        "isin": "BRNATUDBS065"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27818",
@@ -5472,10 +5256,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "COOV11",
-        "isin": "BRCOOVDBS001"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27715",
@@ -5500,10 +5281,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SPEJ11",
-        "isin": "BRSPEJDBS000"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27714",
@@ -5528,10 +5306,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ARPR11",
-        "isin": "BRARPRDBS003"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27712",
@@ -5556,10 +5331,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SRNJ11",
-        "isin": "BRSRNJDBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27708",
@@ -5584,10 +5356,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "BRKT14",
-        "isin": "BRBRKTDBS008"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27707",
@@ -5612,10 +5381,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "GTSA11",
-        "isin": "BRGTSADBS006"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27511",
@@ -5640,10 +5406,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ECCR12",
-        "isin": "BRERDVDBS037"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27515",
@@ -5668,10 +5431,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CMTR15",
-        "isin": "BRCMGTDBS088"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27507",
@@ -5696,10 +5456,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CMDT23",
-        "isin": "BRCMGDDBS033"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27767",
@@ -5824,10 +5581,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "NDRA11",
-        "isin": "BRNDRADBS008"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27119",
@@ -5877,10 +5631,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "IPSA11",
-        "isin": "BRINPSDBS003"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27496",
@@ -5905,10 +5656,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "TOTS11",
-        "isin": "BRTOTSDBS000"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27584",
@@ -6158,10 +5906,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "PGMN16",
-        "isin": "BRPGMNDBS059"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27700",
@@ -6286,10 +6031,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "RSAN24",
-        "isin": "BRRSANDBS030"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27682",
@@ -6439,10 +6181,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "URBE12",
-        "isin": "BRURBBDBS005"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27624",
@@ -6517,10 +6256,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ZXEI11",
-        "isin": "BRZXEIDBS001"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27586",
@@ -6595,10 +6331,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ESTC12",
-        "isin": "BRESTCDBS015"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27533",
@@ -6623,10 +6356,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SBSPB3",
-        "isin": "BRSBSPDBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27552",
@@ -6651,10 +6381,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "FSII12",
-        "isin": "BRFSIIDBS004"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27618",
@@ -6704,10 +6431,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "BAME11",
-        "isin": "BRBAMEDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27517",
@@ -6732,10 +6456,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SBSPB3",
-        "isin": "BRSBSPDBS007"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27536",
@@ -6760,10 +6481,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "GECR11",
-        "isin": "BRGECRDBS006"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27551",
@@ -6813,10 +6531,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "GENI11",
-        "isin": "BRGENIDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27574",
@@ -6891,10 +6606,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ESCE13",
-        "isin": "BRESCEDBS025"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27454",
@@ -6919,10 +6631,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "TCBC13",
-        "isin": "BRTCBCDBS023"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27553",
@@ -7047,10 +6756,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "FLRY12",
-        "isin": "BRFLRYDBS023"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27558",
@@ -7250,10 +6956,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "EGTI11",
-        "isin": "BREGTIDBS009"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27270",
@@ -7278,10 +6981,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "SMFT13",
-        "isin": "BRSMFTDBS011"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27436",
@@ -7381,10 +7081,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CASN12",
-        "isin": "BRCASNDBS040"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27313",
@@ -7409,10 +7106,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "MDOE11",
-        "isin": "BRMDOEDBS009"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27362",
@@ -7437,10 +7131,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "LWAT11",
-        "isin": "BRLWATDBS008"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27412",
@@ -7465,10 +7156,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ZEPP11",
-        "isin": "BRZEPPDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27411",
@@ -7493,10 +7181,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CASN12",
-        "isin": "BRCASNDBS040"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27348",
@@ -7521,10 +7206,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "VACR11",
-        "isin": "BRVACRDBS003"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27346",
@@ -7549,10 +7231,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "MOVI11",
-        "isin": "BRMOVIDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27435",
@@ -7702,10 +7381,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "GGSH12",
-        "isin": "BRGGSHDBS016"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27421",
@@ -7805,10 +7481,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "CERN11",
-        "isin": "BRCERNDBS002"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27408",
@@ -7833,10 +7506,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "RTTP11",
-        "isin": "BRRTTPDBS009"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27402",
@@ -7986,10 +7656,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "IHSB13",
-        "isin": "BRIHSBDBS005"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27395",
@@ -8014,10 +7681,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "IHSB13",
-        "isin": "BRIHSBDBS005"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27370",
@@ -8092,10 +7756,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "TMAQ12",
-        "isin": "BRTMAQDBS008"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27053",
@@ -8195,10 +7856,7 @@
       "matched_isin": null,
       "series": [],
       "documentos": [],
-      "ativo_secundario": {
-        "ticker": "ALMC12",
-        "isin": "BRALMCDBS005"
-      }
+      "ativo_secundario": null
     },
     {
       "id_requerimento": "27335",
