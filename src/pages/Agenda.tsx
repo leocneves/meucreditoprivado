@@ -16,7 +16,9 @@ import {
   ChevronRight,
   Download,
   Layers,
-  Sparkles
+  Sparkles,
+  X,
+  Coins
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -49,6 +51,8 @@ interface EventoProximo {
   tipo_evento: string;
   volume: number;
   pu_evento: number;
+  percentual_amortizacao?: number;
+  unidade?: string;
   status: string;
   fonte: string;
 }
@@ -67,6 +71,7 @@ export default function AgendaPage() {
   const [data, setData] = useState<AgendaData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showMethodologyModal, setShowMethodologyModal] = useState(false);
 
   // Filtros
   const [searchTerm, setSearchTerm] = useState('');
@@ -74,7 +79,7 @@ export default function AgendaPage() {
   const [eventoFilter, setEventoFilter] = useState('ALL');
   const [periodoFilter, setPeriodoFilter] = useState('30'); // '15', '30', '60', '90'
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 30;
+  const itemsPerPage = 25;
 
   useEffect(() => {
     document.title = 'Agenda de Pagamentos & Cupons de Crédito Privado | FIXDATA';
@@ -183,12 +188,26 @@ export default function AgendaPage() {
       }
     });
 
+    // Próxima data de liquidação
+    let proximaData = '-';
+    let proximoVolume = 0;
+    let proximoAtivos = 0;
+    if (filteredEvents.length > 0) {
+      proximaData = filteredEvents[0].data_evento;
+      const eventosMesmoDia = filteredEvents.filter(e => e.data_evento === proximaData);
+      proximoVolume = eventosMesmoDia.reduce((acc, e) => acc + (e.volume || 0), 0);
+      proximoAtivos = new Set(eventosMesmoDia.map(e => e.ticker)).size;
+    }
+
     return {
       volTotal,
       jurosVol,
       amortVol,
       totalEventos: filteredEvents.length,
-      totalAtivos: uniqueTickers.size
+      totalAtivos: uniqueTickers.size,
+      proximaData,
+      proximoVolume,
+      proximoAtivos
     };
   }, [filteredEvents]);
 
@@ -209,64 +228,82 @@ export default function AgendaPage() {
   }, [data]);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl space-y-8 animate-fade-in font-sans">
+    <div className="container mx-auto px-4 py-8 max-w-7xl space-y-6 animate-fade-in font-sans">
       {/* Cabeçalho */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-bold border border-blue-100">
-              <Calendar size={14} />
-              <span>Cronograma & Fluxo de Caixa</span>
+            <div className="flex items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-bold border border-blue-100">
+                <Calendar size={14} />
+                <span>Cronograma de Liquidação Financeira</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowMethodologyModal(true)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition"
+                title="Nota metodológica sobre cálculo de curvas e valores nominais"
+              >
+                <Info size={13} className="text-slate-500" />
+                <span>Nota de Projeção</span>
+              </button>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               Agenda de Pagamentos & Cupons de Crédito Privado
             </h1>
-            <p className="text-sm sm:text-base text-slate-600 font-medium max-w-3xl">
-              Acompanhe o cronograma de liquidação de cupons de juros, amortizações parciais e vencimentos de Debêntures, CRIs e CRAs registrados na ANBIMA e B3.
+            <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-3xl">
+              Cronograma de liquidação de cupons de juros, amortizações parciais e vencimentos de Debêntures, CRIs e CRAs registrados na ANBIMA e B3.
             </p>
           </div>
 
           {data && (
-            <div className="text-right shrink-0">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Base Atualizada</span>
-              <span className="text-xs font-mono font-semibold text-slate-700">{data.atualizado_em}</span>
+            <div className="text-left md:text-right shrink-0">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Atualização da Base</span>
+              <span className="text-xs font-mono font-bold text-slate-700">{data.atualizado_em}</span>
             </div>
           )}
         </div>
 
-        {/* Cards de Métricas do Período Selecionado */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 pt-2">
-          <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Volume Projetado</span>
+        {/* 3 KPIs Enxutos & Focados no que Importa */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
+          <div className="p-4 bg-slate-50/90 rounded-2xl border border-slate-200/80">
+            <div className="flex items-center justify-between text-slate-500 mb-1">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Próxima Liquidação</span>
+              <Clock size={15} className="text-blue-500" />
+            </div>
+            <p className="text-xl sm:text-2xl font-black text-slate-900 font-mono tracking-tight">
+              {formatDateBR(kpis.proximaData)}
+            </p>
+            <span className="text-[11px] text-slate-500 font-medium block mt-1">
+              {formatCurrency(kpis.proximoVolume)} em {kpis.proximoAtivos} ativos
+            </span>
+          </div>
+
+          <div className="p-4 bg-slate-50/90 rounded-2xl border border-slate-200/80">
+            <div className="flex items-center justify-between text-slate-500 mb-1">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Volume nos Próximos {periodoFilter} Dias</span>
+              <DollarSign size={15} className="text-emerald-500" />
+            </div>
             <p className="text-xl sm:text-2xl font-black text-slate-900 font-mono tracking-tight">
               {formatCurrency(kpis.volTotal)}
             </p>
-            <span className="text-[11px] text-slate-400 font-semibold block mt-1">Próximos {periodoFilter} dias</span>
+            <span className="text-[11px] text-slate-500 font-medium block mt-1">
+              Juros: {formatCurrency(kpis.jurosVol)} | Amort: {formatCurrency(kpis.amortVol)}
+            </span>
           </div>
 
-          <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Juros & Rendimentos</span>
-            <p className="text-xl sm:text-2xl font-black text-blue-600 font-mono tracking-tight">
-              {formatCurrency(kpis.jurosVol)}
-            </p>
-            <span className="text-[11px] text-blue-500/80 font-semibold block mt-1">Cupons contratuais</span>
-          </div>
-
-          <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Amortizações & Vctos</span>
-            <p className="text-xl sm:text-2xl font-black text-emerald-600 font-mono tracking-tight">
-              {formatCurrency(kpis.amortVol)}
-            </p>
-            <span className="text-[11px] text-emerald-600/80 font-semibold block mt-1">Devolução de principal</span>
-          </div>
-
-          <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Eventos & Títulos</span>
+          <div className="p-4 bg-slate-50/90 rounded-2xl border border-slate-200/80">
+            <div className="flex items-center justify-between text-slate-500 mb-1">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Eventos Programados</span>
+              <Coins size={15} className="text-purple-500" />
+            </div>
             <p className="text-xl sm:text-2xl font-black text-slate-900 font-mono tracking-tight">
               {kpis.totalEventos}{' '}
-              <span className="text-xs font-sans text-slate-500 font-normal">({kpis.totalAtivos} ativos)</span>
+              <span className="text-xs font-sans text-slate-500 font-normal">eventos</span>
             </p>
-            <span className="text-[11px] text-slate-400 font-semibold block mt-1">Liquidações previstas</span>
+            <span className="text-[11px] text-slate-500 font-medium block mt-1">
+              Distribuídos em {kpis.totalAtivos} títulos distintos
+            </span>
           </div>
         </div>
       </div>
@@ -275,12 +312,12 @@ export default function AgendaPage() {
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
           <div>
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Visão Multitemporal</span>
-            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900">
+            <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
               Fluxo Consolidado de Pagamentos nos Próximos 12 Meses (R$ Bi)
             </h2>
+            <p className="text-xs text-slate-500 mt-0.5">Valores contratuais agrupados por competência mensal</p>
           </div>
-          <span className="text-xs text-slate-400 font-medium">Dados agregados por competência</span>
+          <span className="text-xs text-slate-400 font-medium">Juros, Amortizações e Vencimentos</span>
         </div>
 
         <div className="h-64 sm:h-72 w-full pt-2">
@@ -306,17 +343,6 @@ export default function AgendaPage() {
         </div>
       </div>
 
-      {/* Nota Metodológica de Curva & Projeção */}
-      <div className="bg-slate-900 text-slate-200 rounded-2xl p-5 border border-slate-800 shadow-sm flex items-start gap-3.5">
-        <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
-        <div className="space-y-1 text-xs sm:text-sm leading-relaxed">
-          <strong className="text-white font-bold block text-sm">Nota Metodológica & Projeção de Valores:</strong>
-          <p className="text-slate-300">
-            Os fluxos de cupons e amortizações são calculados a partir das condições contratuais pactuadas na escritura do ativo e registradas na ANBIMA e B3. Para títulos indexados a taxas flutuantes (CDI / DI) e inflação (IPCA / IGP-M), os pagamentos futuros refletem o valor contratual nominal de emissão, <strong>sem projeção dinâmica das curvas a termo futuras de fechamento diário</strong>. Ativos resgatados antecipadamente ou com quitação integral deliberada em assembleia são excluídos do cronograma.
-          </p>
-        </div>
-      </div>
-
       {/* Barra de Filtros e Busca */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -325,7 +351,7 @@ export default function AgendaPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
             <input
               type="text"
-              placeholder="Buscar por Ticker ou Devedor..."
+              placeholder="Buscar Ticker ou Devedor..."
               value={searchTerm}
               onChange={e => {
                 setSearchTerm(e.target.value);
@@ -352,7 +378,7 @@ export default function AgendaPage() {
             </select>
           </div>
 
-          {/* Filtro de Tipo */}
+          {/* Filtro de Tipo de Ativo */}
           <div>
             <select
               value={tipoFilter}
@@ -362,7 +388,7 @@ export default function AgendaPage() {
               }}
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="ALL">Todos os Tipos</option>
+              <option value="ALL">Todos os Tipos (Deb, CRI, CRA)</option>
               <option value="DEB">Apenas Debêntures</option>
               <option value="CRI">Apenas CRIs</option>
               <option value="CRA">Apenas CRAs</option>
@@ -388,7 +414,7 @@ export default function AgendaPage() {
         </div>
 
         <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
-          <span>Mostrando <strong>{filteredEvents.length}</strong> eventos previstos</span>
+          <span>Mostrando <strong>{filteredEvents.length}</strong> eventos no período</span>
           {(searchTerm || tipoFilter !== 'ALL' || eventoFilter !== 'ALL' || periodoFilter !== '30') && (
             <button
               onClick={() => {
@@ -406,20 +432,30 @@ export default function AgendaPage() {
         </div>
       </div>
 
-      {/* Tabela de Eventos Próximos */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
-        <div className="overflow-x-auto">
+      {/* Tabela de Eventos: Box fixo menor com scroll vertical interno */}
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden space-y-3 p-4">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">Cronograma Detalhado</span>
+            <span className="text-[11px] text-slate-400">({filteredEvents.length} registros)</span>
+          </div>
+          <span className="text-[11px] text-slate-400 hidden sm:inline">Use o scroll vertical para navegar</span>
+        </div>
+
+        {/* Box delimitado com rolagem interna e sticky header */}
+        <div className="max-h-[460px] overflow-y-auto overflow-x-auto relative rounded-2xl border border-slate-200/90 shadow-2xs">
           <table className="w-full text-left text-xs text-slate-600">
-            <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[11px]">
+            <thead className="sticky top-0 bg-slate-100/95 backdrop-blur-xs text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[11px] z-10">
               <tr>
-                <th className="px-4 py-3">Data</th>
-                <th className="px-4 py-3">Ativo</th>
-                <th className="px-4 py-3">Tipo</th>
-                <th className="px-4 py-3">Devedor / Emissor</th>
-                <th className="px-4 py-3">Indexador</th>
-                <th className="px-4 py-3">Evento</th>
-                <th className="px-4 py-3 text-right">Volume Projetado</th>
-                <th className="px-4 py-3 text-center">Status</th>
+                <th className="px-3.5 py-3">Data</th>
+                <th className="px-3.5 py-3">Ativo</th>
+                <th className="px-3.5 py-3">Tipo</th>
+                <th className="px-3.5 py-3">Devedor / Emissor</th>
+                <th className="px-3.5 py-3">Indexador</th>
+                <th className="px-3.5 py-3">Evento</th>
+                <th className="px-3.5 py-3 text-right">Valor Unitário</th>
+                <th className="px-3.5 py-3 text-right">Volume Total</th>
+                <th className="px-3.5 py-3 text-center">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white">
@@ -442,10 +478,10 @@ export default function AgendaPage() {
 
                   return (
                     <tr key={`${ev.ticker}-${ev.data_evento}-${idx}`} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="px-4 py-3 font-semibold text-slate-900 font-mono whitespace-nowrap">
+                      <td className="px-3.5 py-2.5 font-semibold text-slate-900 font-mono whitespace-nowrap">
                         {formatDateBR(ev.data_evento)}
                       </td>
-                      <td className="px-4 py-3 font-bold">
+                      <td className="px-3.5 py-2.5 font-bold">
                         <Link
                           to={`/asset/${ev.ticker}`}
                           className="text-blue-600 hover:text-blue-800 hover:underline font-mono text-xs"
@@ -453,29 +489,32 @@ export default function AgendaPage() {
                           {ev.ticker}
                         </Link>
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-3.5 py-2.5">
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${tipoBadge}`}>
                           {ev.tipo}
                         </span>
                       </td>
-                      <td className="px-4 py-3 font-medium text-slate-700 max-w-xs truncate" title={ev.devedor}>
+                      <td className="px-3.5 py-2.5 font-medium text-slate-700 max-w-xs truncate" title={ev.devedor}>
                         {ev.devedor}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
+                      <td className="px-3.5 py-2.5 whitespace-nowrap">
                         <span className="font-semibold text-slate-800">{ev.indexador}</span>
                         {ev.taxa_emissao && ev.taxa_emissao !== '-' && (
                           <span className="text-[11px] text-slate-400 block">+{ev.taxa_emissao}%</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
+                      <td className="px-3.5 py-2.5 whitespace-nowrap">
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${badgeColor}`}>
                           {ev.tipo_evento}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right font-black text-slate-900 font-mono whitespace-nowrap">
+                      <td className="px-3.5 py-2.5 text-right font-mono font-medium text-slate-700 whitespace-nowrap">
+                        {ev.unidade || (ev.pu_evento ? `R$ ${ev.pu_evento.toFixed(2)}` : '-')}
+                      </td>
+                      <td className="px-3.5 py-2.5 text-right font-black text-slate-900 font-mono whitespace-nowrap">
                         {formatCurrency(ev.volume)}
                       </td>
-                      <td className="px-4 py-3 text-center whitespace-nowrap">
+                      <td className="px-3.5 py-2.5 text-center whitespace-nowrap">
                         <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600">
                           {ev.status}
                         </span>
@@ -485,8 +524,8 @@ export default function AgendaPage() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-slate-400">
-                    Nenhum evento de pagamento encontrado para os filtros selecionados.
+                  <td colSpan={9} className="px-4 py-8 text-center text-slate-400">
+                    Nenhum evento futuro encontrado com os filtros selecionados.
                   </td>
                 </tr>
               )}
@@ -496,29 +535,70 @@ export default function AgendaPage() {
 
         {/* Paginação */}
         {totalPages > 1 && (
-          <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <div className="flex items-center justify-between pt-2 px-1 text-xs font-semibold text-slate-600">
             <span>
-              Página <strong>{currentPage}</strong> de <strong>{totalPages}</strong> ({filteredEvents.length} resultados)
+              Página <strong>{currentPage}</strong> de <strong>{totalPages}</strong> ({filteredEvents.length} registros)
             </span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-semibold flex items-center gap-1"
+                className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
               >
-                <ChevronLeft size={14} /> Anterior
+                <ChevronLeft size={16} />
               </button>
               <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-semibold flex items-center gap-1"
+                className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
               >
-                Próxima <ChevronRight size={14} />
+                <ChevronRight size={16} />
               </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Popover / Modal Sutil de Metodologia */}
+      {showMethodologyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-200 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
+                <Info size={16} className="text-blue-600" />
+                <span>Nota Metodológica & Projeção de Valores</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowMethodologyModal(false)}
+                className="p-1 text-slate-400 hover:text-slate-700 rounded-lg"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Os fluxos de cupons e amortizações são calculados a partir das condições contratuais pactuadas na escritura do ativo e registradas na ANBIMA e B3.
+            </p>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Para títulos indexados a taxas flutuantes (CDI / DI) e inflação (IPCA / IGP-M), os pagamentos futuros refletem o valor contratual nominal de emissão, <strong>sem projeção dinâmica das curvas a termo futuras de fechamento diário</strong> (DI Futuro / Estrutura a Termo NTN-B).
+            </p>
+            <p className="text-xs text-slate-500 leading-relaxed border-t border-slate-100 pt-2">
+              Ativos resgatados antecipadamente ou com quitação integral confirmada em assembleia foram devidamente expurgados deste cronograma.
+            </p>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowMethodologyModal(false)}
+                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition"
+              >
+                Entendi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

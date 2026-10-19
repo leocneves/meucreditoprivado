@@ -18,18 +18,36 @@ import {
   ExternalLink,
   Building2,
   Check,
-  X
+  X,
+  AlertTriangle,
+  HelpCircle,
+  Plus
 } from 'lucide-react';
 import { fetchCSV, Asset, normalizeRating } from '../utils/csv';
+
+interface DevedorKPIs {
+  altman_z_score?: number;
+  altman_zona?: string;
+  alavancagem_dl_ebitda?: number;
+  cobertura_juros_ebitda?: number;
+}
+
+interface DevedorItem {
+  cnpj?: string;
+  razao_social?: string;
+  nome_fantasia?: string;
+  kpis_resumo?: DevedorKPIs;
+}
 
 export default function ComparatorPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [devedoresMap, setDevedoresMap] = useState<Record<string, DevedorKPIs>>({});
   const [loading, setLoading] = useState(true);
 
-  // Seleção de ativos
-  const [ticker1, setTicker1] = useState(searchParams.get('ativo1')?.toUpperCase() || 'VALE38');
-  const [ticker2, setTicker2] = useState(searchParams.get('ativo2')?.toUpperCase() || 'VALEC0');
+  // Seleção de ativos (por padrão VAZIO, a menos que venha na URL)
+  const [ticker1, setTicker1] = useState(searchParams.get('ativo1')?.toUpperCase() || '');
+  const [ticker2, setTicker2] = useState(searchParams.get('ativo2')?.toUpperCase() || '');
 
   // Modais de busca
   const [isSearching1, setIsSearching1] = useState(false);
@@ -38,13 +56,31 @@ export default function ComparatorPage() {
 
   useEffect(() => {
     document.title = 'Comparador de Debêntures, CRIs e CRAs | FIXDATA';
-    fetchCSV<Asset>('/data/assets_master.csv')
-      .then(data => {
-        setAssets(data);
+    
+    // Carrega assets_master.csv e devedores_raiox.json em paralelo
+    Promise.all([
+      fetchCSV<Asset>('/data/assets_master.csv'),
+      fetch('/data/devedores_raiox.json')
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null)
+    ])
+      .then(([assetsData, raioxData]) => {
+        setAssets(assetsData || []);
+
+        if (raioxData?.devedores && Array.isArray(raioxData.devedores)) {
+          const map: Record<string, DevedorKPIs> = {};
+          raioxData.devedores.forEach((d: DevedorItem) => {
+            if (d.cnpj && d.kpis_resumo) {
+              const cleanCnpj = d.cnpj.replace(/\D/g, '');
+              map[cleanCnpj] = d.kpis_resumo;
+            }
+          });
+          setDevedoresMap(map);
+        }
         setLoading(false);
       })
       .catch(err => {
-        console.error('Erro ao carregar ativos para comparador:', err);
+        console.error('Erro ao carregar dados do comparador:', err);
         setLoading(false);
       });
   }, []);
@@ -53,18 +89,23 @@ export default function ComparatorPage() {
   const updateTickers = (t1: string, t2: string) => {
     setTicker1(t1);
     setTicker2(t2);
-    setSearchParams({ ativo1: t1, ativo2: t2 });
+    const params: { ativo1?: string; ativo2?: string } = {};
+    if (t1) params.ativo1 = t1;
+    if (t2) params.ativo2 = t2;
+    setSearchParams(params);
   };
 
   const asset1 = useMemo(() => {
+    if (!ticker1) return null;
     return assets.find(a => a.ticker?.toUpperCase() === ticker1);
   }, [assets, ticker1]);
 
   const asset2 = useMemo(() => {
+    if (!ticker2) return null;
     return assets.find(a => a.ticker?.toUpperCase() === ticker2);
   }, [assets, ticker2]);
 
-  // Lista para busca
+  // Lista para busca com priorização por ticker e emissor
   const searchResults = useMemo(() => {
     if (!searchQuery.trim() || !assets.length) return [];
     const term = searchQuery.trim().toLowerCase();
@@ -74,10 +115,10 @@ export default function ComparatorPage() {
         const matchIssuer = (a.issuer || '').toLowerCase().includes(term);
         return matchTicker || matchIssuer;
       })
-      .slice(0, 15);
+      .slice(0, 20);
   }, [assets, searchQuery]);
 
-  // Hierarquia de Ratings para comparação (quanto menor o índice, melhor)
+  // Hierarquia de Ratings para comparação (quanto menor o índice, melhor a nota)
   const ratingRank = (rStr?: string): number => {
     if (!rStr) return 999;
     const r = rStr.toUpperCase().replace(/\s+/g, '');
@@ -98,490 +139,658 @@ export default function ComparatorPage() {
 
   // Funções de extração numérica
   const parseNum = (val?: string | number): number | null => {
-    if (val === undefined || val === null) return null;
-    const s = String(val).replace('%', '').replace(',', '.').trim();
-    const flt = parseFloat(s);
-    return isNaN(flt) ? null : flt;
+    if (val === undefined || val === null || val === '') return null;
+    if (typeof val === 'number') return isNaN(val) ? null : val;
+    const clean = String(val).replace('%', '').replace(',', '.').trim();
+    const n = parseFloat(clean);
+    return isNaN(n) ? null : n;
   };
 
-  // Comparação de métricas
-  const comparison = useMemo(() => {
-    if (!asset1 || !asset2) return null;
+  const formatCurrency = (val?: number | string | null) => {
+    const n = parseNum(val);
+    if (n === null) return 'N/D';
+    return `R$ ${n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
 
-    // 1. Taxa Indicativa / Taxa Ativo
-    const taxa1 = parseNum(asset1.taxa_mercado || asset1.taxa_indicativa_anbima || asset1.taxa_ativo || asset1.taxa_emissao);
-    const taxa2 = parseNum(asset2.taxa_mercado || asset2.taxa_indicativa_anbima || asset2.taxa_ativo || asset2.taxa_emissao);
-    const taxaWinner = taxa1 !== null && taxa2 !== null ? (taxa1 > taxa2 ? 1 : taxa2 > taxa1 ? 2 : 0) : null;
-    const taxaDiff = taxa1 !== null && taxa2 !== null ? Math.abs(taxa1 - taxa2) : 0;
+  // Calcula prazo restante em anos a partir da data de vencimento
+  const getPrazoAnosDesc = (vctoStr?: string) => {
+    if (!vctoStr) return '';
+    try {
+      let targetDate: Date;
+      if (vctoStr.includes('/')) {
+        const [d, m, y] = vctoStr.split('/');
+        targetDate = new Date(`${y}-${m}-${d}`);
+      } else {
+        targetDate = new Date(vctoStr);
+      }
+      const diffMs = targetDate.getTime() - new Date().getTime();
+      const anos = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+      if (anos <= 0) return '(Vencido)';
+      return `(${anos.toFixed(1).replace('.', ',')} anos)`;
+    } catch {
+      return '';
+    }
+  };
 
-    // 2. Spread vs NTN-B
-    const spread1 = parseNum(asset1.spread);
-    const spread2 = parseNum(asset2.spread);
-    const spreadWinner = spread1 !== null && spread2 !== null ? (spread1 > spread2 ? 1 : spread2 > spread1 ? 2 : 0) : null;
-    const spreadDiff = spread1 !== null && spread2 !== null ? Math.abs(spread1 - spread2) * 100 : 0;
+  // Validação de compatibilidade de indexador
+  const normalizaIndexador = (idx?: string) => {
+    if (!idx) return '';
+    const up = idx.toUpperCase().trim();
+    if (up.includes('IPCA')) return 'IPCA';
+    if (up.includes('DI+') || up.includes('CDI+') || up === 'DI' || up === 'CDI') return 'CDI+';
+    if (up.includes('DI%') || up.includes('%DI') || up.includes('% DO CDI')) return '%CDI';
+    if (up.includes('PRÉ') || up.includes('PRE')) return 'Pré';
+    if (up.includes('IGP')) return 'IGP-M';
+    return up;
+  };
 
-    // 3. Rating de Crédito (Menor rank = menor risco de inadimplência)
-    const rank1 = ratingRank(asset1.rating_normalizado || asset1.rating);
-    const rank2 = ratingRank(asset2.rating_normalizado || asset2.rating);
-    const ratingWinner = rank1 < 900 && rank2 < 900 ? (rank1 < rank2 ? 1 : rank2 < rank1 ? 2 : 0) : null;
+  const idx1 = normalizaIndexador(asset1?.indexador);
+  const idx2 = normalizaIndexador(asset2?.indexador);
+  const indexadoresIncompatíveis = Boolean(asset1 && asset2 && idx1 && idx2 && idx1 !== idx2);
 
-    // 4. Duration (Menor duration = menor risco de mercado / taxa)
-    const dur1 = parseNum(asset1.duration);
-    const dur2 = parseNum(asset2.duration);
-    const durWinner = dur1 !== null && dur2 !== null ? (dur1 < dur2 ? 1 : dur2 < dur1 ? 2 : 0) : null;
+  // Financials / Altman Z-Score dos emissores
+  const financials1 = useMemo(() => {
+    if (!asset1?.cnpj_emissor) return null;
+    const clean = String(asset1.cnpj_emissor).replace(/\D/g, '');
+    return devedoresMap[clean] || null;
+  }, [asset1, devedoresMap]);
 
-    // 5. Isenção Fiscal (Lei 12.431/11)
-    const isento1 = String(asset1.incentivada || '').toLowerCase() === 'sim' || String(asset1.lei || '') === '12.431';
-    const isento2 = String(asset2.incentivada || '').toLowerCase() === 'sim' || String(asset2.lei || '') === '12.431';
-    const isencaoWinner = isento1 !== isento2 ? (isento1 ? 1 : 2) : 0;
-
-    // 6. Liquidez B3 (Volume recente)
-    const vol1 = parseNum(asset1.volume_negociado_b3 || asset1.volume);
-    const vol2 = parseNum(asset2.volume_negociado_b3 || asset2.volume);
-    const volWinner = vol1 !== null && vol2 !== null ? (vol1 > vol2 ? 1 : vol2 > vol1 ? 2 : 0) : null;
-
-    // Destaques objetivos de cada um
-    const vantagens1: string[] = [];
-    const vantagens2: string[] = [];
-
-    if (taxaWinner === 1) vantagens1.push(`Taxa indicativa superior (+${taxaDiff.toFixed(2)}% a.a.)`);
-    if (taxaWinner === 2) vantagens2.push(`Taxa indicativa superior (+${taxaDiff.toFixed(2)}% a.a.)`);
-
-    if (spreadWinner === 1) vantagens1.push(`Maior spread sobre NTN-B (+${spreadDiff.toFixed(2)}% a.a.)`);
-    if (spreadWinner === 2) vantagens2.push(`Maior spread sobre NTN-B (+${spreadDiff.toFixed(2)}% a.a.)`);
-
-    if (ratingWinner === 1) vantagens1.push(`Rating de crédito superior (${asset1.rating_normalizado || asset1.rating})`);
-    if (ratingWinner === 2) vantagens2.push(`Rating de crédito superior (${asset2.rating_normalizado || asset2.rating})`);
-
-    if (durWinner === 1 && dur1 !== null) vantagens1.push(`Menor duration (${dur1.toFixed(1)} anos) — menor risco de taxa`);
-    if (durWinner === 2 && dur2 !== null) vantagens2.push(`Menor duration (${dur2.toFixed(1)} anos) — menor risco de taxa`);
-
-    if (isencaoWinner === 1) vantagens1.push('Isenção fiscal de IR para Pessoa Física (Lei 12.431)');
-    if (isencaoWinner === 2) vantagens2.push('Isenção fiscal de IR para Pessoa Física (Lei 12.431)');
-
-    if (volWinner === 1) vantagens1.push('Maior volume recente negociado na B3');
-    if (volWinner === 2) vantagens2.push('Maior volume recente negociado na B3');
-
-    return {
-      taxaWinner,
-      spreadWinner,
-      ratingWinner,
-      durWinner,
-      isencaoWinner,
-      volWinner,
-      vantagens1,
-      vantagens2
-    };
-  }, [asset1, asset2]);
+  const financials2 = useMemo(() => {
+    if (!asset2?.cnpj_emissor) return null;
+    const clean = String(asset2.cnpj_emissor).replace(/\D/g, '');
+    return devedoresMap[clean] || null;
+  }, [asset2, devedoresMap]);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8 animate-fade-in font-sans">
+    <div className="container mx-auto px-4 py-8 max-w-7xl space-y-6 animate-fade-in font-sans">
       {/* Cabeçalho */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
           <div className="space-y-1.5">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-bold border border-blue-100">
               <Scale size={14} />
-              <span>Análise Comparativa Direta</span>
+              <span>Análise Quantitativa Lado a Lado</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Comparador de Debêntures, CRIs e CRAs
+              Comparador de Títulos de Crédito Privado
             </h1>
-            <p className="text-sm sm:text-base text-slate-600 font-medium max-w-2xl">
-              Compare lado a lado rentabilidade, spread sobre NTN-B, rating de crédito, duration e enquadramento tributário de dois títulos de renda fixa.
+            <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-3xl">
+              Selecione dois ativos para comparar taxas indicativas, prêmio sobre NTN-B, notas de rating, duration modificada e solidez de crédito do emissor.
             </p>
           </div>
 
-          {/* Sugestões Rápidas */}
-          <div className="space-y-1.5 sm:text-right">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Pares Sugeridos</span>
-            <div className="flex flex-wrap gap-1.5 sm:justify-end">
-              <button
-                onClick={() => updateTickers('VALE38', 'VALEC0')}
-                className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition"
-              >
-                VALE38 vs VALEC0
-              </button>
-              <button
-                onClick={() => updateTickers('PETR28', 'PETR19')}
-                className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition"
-              >
-                PETR28 vs PETR19
-              </button>
-              <button
-                onClick={() => updateTickers('BBRK12', 'BBRK13')}
-                className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition"
-              >
-                BBRK12 vs BBRK13
-              </button>
+          {(asset1 || asset2) && (
+            <button
+              onClick={() => updateTickers('', '')}
+              className="px-3.5 py-1.5 text-xs font-bold text-slate-500 hover:text-red-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition shrink-0"
+            >
+              Limpar Comparação
+            </button>
+          )}
+        </div>
+
+        {/* Seleção dos 2 Ativos */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          {/* Card Ativo 1 */}
+          <div className={`p-5 rounded-2xl border transition-all ${asset1 ? 'bg-slate-50/80 border-blue-300 shadow-2xs' : 'bg-slate-50 border-dashed border-slate-300 hover:border-blue-400'}`}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Ativo 1</span>
+              {asset1 && (
+                <button
+                  onClick={() => updateTickers('', ticker2)}
+                  className="text-slate-400 hover:text-red-500 p-1"
+                  title="Remover Ativo 1"
+                >
+                  <X size={16} />
+                </button>
+              )}
             </div>
+
+            {asset1 ? (
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-black text-slate-900 font-mono tracking-tight">{asset1.ticker}</h2>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">
+                      {asset1.tipo}
+                    </span>
+                  </div>
+                  <p className="text-xs font-semibold text-slate-700 mt-1 truncate max-w-sm" title={asset1.issuer}>
+                    {asset1.issuer}
+                  </p>
+                </div>
+                <button
+                  onClick={() => { setSearchQuery(''); setIsSearching1(true); }}
+                  className="px-3 py-1.5 bg-white border border-slate-300 hover:border-blue-500 rounded-xl text-xs font-bold text-slate-700 transition shrink-0 shadow-2xs"
+                >
+                  Trocar
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setSearchQuery(''); setIsSearching1(true); }}
+                className="w-full py-6 flex flex-col items-center justify-center gap-2 text-slate-500 hover:text-blue-600 transition"
+              >
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                  <Plus size={20} />
+                </div>
+                <span className="text-xs font-bold">Clique para selecionar o primeiro ativo</span>
+              </button>
+            )}
+          </div>
+
+          {/* Card Ativo 2 */}
+          <div className={`p-5 rounded-2xl border transition-all ${asset2 ? 'bg-slate-50/80 border-indigo-300 shadow-2xs' : 'bg-slate-50 border-dashed border-slate-300 hover:border-indigo-400'}`}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Ativo 2</span>
+              {asset2 && (
+                <button
+                  onClick={() => updateTickers(ticker1, '')}
+                  className="text-slate-400 hover:text-red-500 p-1"
+                  title="Remover Ativo 2"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+
+            {asset2 ? (
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-black text-slate-900 font-mono tracking-tight">{asset2.ticker}</h2>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800">
+                      {asset2.tipo}
+                    </span>
+                  </div>
+                  <p className="text-xs font-semibold text-slate-700 mt-1 truncate max-w-sm" title={asset2.issuer}>
+                    {asset2.issuer}
+                  </p>
+                </div>
+                <button
+                  onClick={() => { setSearchQuery(''); setIsSearching2(true); }}
+                  className="px-3 py-1.5 bg-white border border-slate-300 hover:border-indigo-500 rounded-xl text-xs font-bold text-slate-700 transition shrink-0 shadow-2xs"
+                >
+                  Trocar
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setSearchQuery(''); setIsSearching2(true); }}
+                className="w-full py-6 flex flex-col items-center justify-center gap-2 text-slate-500 hover:text-indigo-600 transition"
+              >
+                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                  <Plus size={20} />
+                </div>
+                <span className="text-xs font-bold">Clique para selecionar o segundo ativo</span>
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Seletores dos 2 Ativos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          {/* Seletor Ativo 1 */}
-          <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Ativo 1</span>
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setIsSearching1(true);
-                }}
-                className="text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
-              >
-                <Search size={13} /> Trocar ativo
-              </button>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <div>
-                <h3 className="text-2xl font-black text-slate-900 font-mono tracking-tight">{asset1?.ticker || ticker1}</h3>
-                <p className="text-xs text-slate-600 font-semibold truncate max-w-xs">{asset1?.issuer || 'Não localizado'}</p>
-              </div>
-              <span className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700">
-                {asset1?.tipo || 'Título'}
-              </span>
+        {/* Aviso de Incompatibilidade de Indexador */}
+        {indexadoresIncompatíveis && (
+          <div className="bg-amber-50 text-amber-900 rounded-2xl p-4 border border-amber-200 shadow-2xs flex items-start gap-3 animate-fade-in">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="text-xs leading-relaxed space-y-0.5">
+              <strong className="block font-bold">Incompatibilidade Metodológica de Indexadores:</strong>
+              <p>
+                Os papéis selecionados possuem bases de remuneração distintas (<strong>{asset1?.indexador}</strong> vs <strong>{asset2?.indexador}</strong>).
+                A comparação matemática direta de taxas e prêmio de risco é restrita a ativos do mesmo indexador (ex: IPCA vs IPCA ou CDI vs CDI). As métricas de taxa e spread estão sinalizadas como não comparáveis.
+              </p>
             </div>
           </div>
-
-          {/* Seletor Ativo 2 */}
-          <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Ativo 2</span>
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setIsSearching2(true);
-                }}
-                className="text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
-              >
-                <Search size={13} /> Trocar ativo
-              </button>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <div>
-                <h3 className="text-2xl font-black text-slate-900 font-mono tracking-tight">{asset2?.ticker || ticker2}</h3>
-                <p className="text-xs text-slate-600 font-semibold truncate max-w-xs">{asset2?.issuer || 'Não localizado'}</p>
-              </div>
-              <span className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700">
-                {asset2?.tipo || 'Título'}
-              </span>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
 
-      {/* Quadro de Destaques Objetivos (O que cada um tem de melhor) */}
-      {comparison && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Vantagens Ativo 1 */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-              <div className="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs">
-                1
-              </div>
-              <h3 className="font-extrabold text-slate-900 text-base">
-                Destaques de {asset1?.ticker}:
-              </h3>
+      {/* Tabela Comparativa Lado a Lado */}
+      {asset1 && asset2 ? (
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h2 className="text-base sm:text-lg font-black text-slate-900">
+              Quadro Comparativo de Indicadores
+            </h2>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+                <Check size={14} className="text-emerald-600 stroke-[3]" /> Vantagem Relativa
+              </span>
+              <span className="inline-flex items-center gap-1 font-semibold text-rose-700">
+                <X size={14} className="text-rose-500 stroke-[3]" /> Desvantagem
+              </span>
             </div>
-            {comparison.vantagens1.length > 0 ? (
-              <ul className="space-y-2 text-xs sm:text-sm">
-                {comparison.vantagens1.map((v, i) => (
-                  <li key={i} className="flex items-center gap-2 text-slate-700 font-medium">
-                    <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-                    <span>{v}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-xs text-slate-400 italic">Nenhuma métrica com superioridade evidente contra o Ativo 2.</p>
-            )}
           </div>
 
-          {/* Vantagens Ativo 2 */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-              <div className="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xs">
-                2
-              </div>
-              <h3 className="font-extrabold text-slate-900 text-base">
-                Destaques de {asset2?.ticker}:
-              </h3>
-            </div>
-            {comparison.vantagens2.length > 0 ? (
-              <ul className="space-y-2 text-xs sm:text-sm">
-                {comparison.vantagens2.map((v, i) => (
-                  <li key={i} className="flex items-center gap-2 text-slate-700 font-medium">
-                    <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-                    <span>{v}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-xs text-slate-400 italic">Nenhuma métrica com superioridade evidente contra o Ativo 1.</p>
-            )}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-slate-100/90 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-slate-200">
+                  <th className="px-4 py-3 w-2/5">Indicador</th>
+                  <th className="px-4 py-3 w-[30%] text-center font-mono text-xs text-blue-700">
+                    {asset1.ticker}
+                  </th>
+                  <th className="px-4 py-3 w-[30%] text-center font-mono text-xs text-indigo-700">
+                    {asset2.ticker}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {/* 1. Taxa Indicativa de Mercado */}
+                {(() => {
+                  const t1 = parseNum(asset1.taxa_mercado) ?? parseNum(asset1.taxa_emissao);
+                  const t2 = parseNum(asset2.taxa_mercado) ?? parseNum(asset2.taxa_emissao);
+                  const canCompare = !indexadoresIncompatíveis && t1 !== null && t2 !== null;
+                  const win1 = canCompare && t1! > t2!;
+                  const win2 = canCompare && t2! > t1!;
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Taxa indicativa apurada pela ANBIMA ou taxa contratual de emissão.">
+                          <span>Taxa Indicativa</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold whitespace-nowrap ${win1 ? 'bg-emerald-50/60 text-emerald-900' : win2 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{t1 !== null ? `${t1.toFixed(2)}% a.a.` : 'N/D'}</span>
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold whitespace-nowrap ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{t2 !== null ? `${t2.toFixed(2)}% a.a.` : 'N/D'}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 2. Spread sobre a Curva Soberana NTN-B */}
+                {(() => {
+                  const s1 = parseNum(asset1.spread);
+                  const s2 = parseNum(asset2.spread);
+                  const isIpca = idx1 === 'IPCA' && idx2 === 'IPCA';
+                  const canCompare = isIpca && s1 !== null && s2 !== null;
+                  const win1 = canCompare && s1! > s2!;
+                  const win2 = canCompare && s2! > s1!;
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Prêmio de risco adicional sobre a taxa da NTN-B soberana interpolada na mesma duration.">
+                          <span>Spread vs NTN-B</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold whitespace-nowrap ${win1 ? 'bg-emerald-50/60 text-emerald-900' : win2 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{s1 !== null ? `${s1 > 0 ? '+' : ''}${s1.toFixed(2)}%` : 'N/A'}</span>
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold whitespace-nowrap ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{s2 !== null ? `${s2 > 0 ? '+' : ''}${s2.toFixed(2)}%` : 'N/A'}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 3. Rating de Crédito */}
+                {(() => {
+                  const r1 = normalizeRating(asset1.rating);
+                  const r2 = normalizeRating(asset2.rating);
+                  const rank1 = ratingRank(r1);
+                  const rank2 = ratingRank(r2);
+                  const canCompare = rank1 !== 999 && rank2 !== 999;
+                  const win1 = canCompare && rank1 < rank2;
+                  const win2 = canCompare && rank2 < rank1;
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Classificação de risco de crédito unificada das agências Fitch, Moody's e S&P.">
+                          <span>Rating de Crédito</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold ${win1 ? 'bg-emerald-50/60 text-emerald-900' : win2 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{r1 || 'Sem Rating'}</span>
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{r2 || 'Sem Rating'}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 4. Solvência do Emissor (Altman Z'' Score) */}
+                {(() => {
+                  const z1 = financials1?.altman_z_score;
+                  const z2 = financials2?.altman_z_score;
+                  const canCompare = z1 !== undefined && z2 !== undefined;
+                  const win1 = canCompare && z1 > z2;
+                  const win2 = canCompare && z2 > z1;
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Modelo de previsão de solvência Altman Z'' (valores acima de 2,6 indicam zona segura; abaixo de 1,1 indicam estresse).">
+                          <span>Solvência do Emissor (Altman Z'')</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold ${win1 ? 'bg-emerald-50/60 text-emerald-900' : win2 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{z1 !== undefined ? `${z1.toFixed(2)} (${financials1?.altman_zona?.split(' ')[0] || ''})` : 'N/D'}</span>
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{z2 !== undefined ? `${z2.toFixed(2)} (${financials2?.altman_zona?.split(' ')[0] || ''})` : 'N/D'}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 5. Isenção Fiscal de Imposto de Renda */}
+                {(() => {
+                  const isIsento1 = asset1.tipo === 'CRI' || asset1.tipo === 'CRA' || asset1.incentivada_lei_12431 === '1' || asset1.incentivada_lei_12431 === 1;
+                  const isIsento2 = asset2.tipo === 'CRI' || asset2.tipo === 'CRA' || asset2.incentivada_lei_12431 === '1' || asset2.incentivada_lei_12431 === 1;
+                  const win1 = isIsento1 && !isIsento2;
+                  const win2 = isIsento2 && !isIsento1;
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Isenção de IR para pessoa física (Lei 12.431/11 ou lastros imobiliários/agrícolas CRI/CRA).">
+                          <span>Isenção de IR (Pessoa Física)</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-bold ${win1 ? 'bg-emerald-50/60 text-emerald-900' : win2 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{isIsento1 ? 'Isento de IR' : 'Tributado (15%-22,5%)'}</span>
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-bold ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{isIsento2 ? 'Isento de IR' : 'Tributado (15%-22,5%)'}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 6. Duration Modificada */}
+                {(() => {
+                  const d1 = parseNum(asset1.duration);
+                  const d2 = parseNum(asset2.duration);
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Prazo médio ponderado de recebimento dos fluxos de caixa em anos (mede sensibilidade à curva de juros).">
+                          <span>Duration Modificada</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                        {d1 !== null ? `${d1.toFixed(2)} anos` : 'N/D'}
+                      </td>
+                      <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                        {d2 !== null ? `${d2.toFixed(2)} anos` : 'N/D'}
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 7. Data de Vencimento & Anos Restantes */}
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-slate-800">
+                    <div className="flex items-center gap-1.5" title="Data final de vencimento do título com o prazo remanescente em anos.">
+                      <span>Vencimento</span>
+                      <HelpCircle size={13} className="text-slate-400" />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {asset1.vencimento ? `${asset1.vencimento} ${getPrazoAnosDesc(asset1.vencimento)}` : 'N/D'}
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {asset2.vencimento ? `${asset2.vencimento} ${getPrazoAnosDesc(asset2.vencimento)}` : 'N/D'}
+                  </td>
+                </tr>
+
+                {/* 8. PU Par do Dia */}
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-slate-800">
+                    <div className="flex items-center gap-1.5" title="Preço Unitário Par teórico atualizado com juros e amortizações contratuais.">
+                      <span>PU Par do Dia</span>
+                      <HelpCircle size={13} className="text-slate-400" />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {formatCurrency(asset1.pu_par || asset1.pu)}
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {formatCurrency(asset2.pu_par || asset2.pu)}
+                  </td>
+                </tr>
+
+                {/* 9. PU Médio de Mercado (B3) */}
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-slate-800">
+                    <div className="flex items-center gap-1.5" title="Preço Unitário mediano apurado nas negociações executadas na B3.">
+                      <span>PU Médio de Mercado</span>
+                      <HelpCircle size={13} className="text-slate-400" />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {formatCurrency(asset1.pu_mercado_mediano || asset1.pu_mercado)}
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {formatCurrency(asset2.pu_mercado_mediano || asset2.pu_mercado)}
+                  </td>
+                </tr>
+
+                {/* 10. Ágio / Deságio sobre o Par */}
+                {(() => {
+                  const ad1 = parseNum(asset1.agio_desagio_pct);
+                  const ad2 = parseNum(asset2.agio_desagio_pct);
+                  const canCompare = ad1 !== null && ad2 !== null;
+                  // Deságio (ad < 0) é compra com desconto = vantagem
+                  const win1 = canCompare && ad1! < ad2!;
+                  const win2 = canCompare && ad2! < ad1!;
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Relação percentual entre o preço praticado de mercado e o PU Par (valores negativos indicam desconto/deságio).">
+                          <span>Ágio / Deságio vs Par</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold ${win1 ? 'bg-emerald-50/60 text-emerald-900' : win2 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{ad1 !== null ? `${ad1 > 0 ? '+' : ''}${ad1.toFixed(2)}%` : 'N/D'}</span>
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-mono font-bold ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{ad2 !== null ? `${ad2 > 0 ? '+' : ''}${ad2.toFixed(2)}%` : 'N/D'}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 11. Liquidez Secundária na B3 */}
+                {(() => {
+                  const b3_1 = asset1.flag_b3 === 1 || asset1.flag_b3 === '1';
+                  const b3_2 = asset2.flag_b3 === 1 || asset2.flag_b3 === '1';
+                  const win1 = b3_1 && !b3_2;
+                  const win2 = b3_2 && !b3_1;
+
+                  return (
+                    <tr className="hover:bg-slate-50/80 transition-colors">
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        <div className="flex items-center gap-1.5" title="Indica se o título registra negócios secundários e liquidez custodiada na B3.">
+                          <span>Negociado na B3</span>
+                          <HelpCircle size={13} className="text-slate-400" />
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-bold ${win1 ? 'bg-emerald-50/60 text-emerald-900' : win2 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{b3_1 ? 'Sim (Mercado Secundário)' : 'Apenas Balcão / Custódia'}</span>
+                        </div>
+                      </td>
+                      <td className={`px-4 py-3 text-center font-bold ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
+                        <div className="flex items-center justify-center gap-1.5">
+                          {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
+                          {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
+                          <span>{b3_2 ? 'Sim (Mercado Secundário)' : 'Apenas Balcão / Custódia'}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })()}
+
+                {/* 12. Indexador Contratual */}
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-slate-800">
+                    <div className="flex items-center gap-1.5" title="Índice de atualização monetária contratual estipulado na escritura.">
+                      <span>Indexador</span>
+                      <HelpCircle size={13} className="text-slate-400" />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {asset1.indexador || 'N/D'}
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono font-medium text-slate-800">
+                    {asset2.indexador || 'N/D'}
+                  </td>
+                </tr>
+
+                {/* 13. Código ISIN */}
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-slate-800">
+                    <div className="flex items-center gap-1.5" title="Código de identificação internacional do ativo (ISO 6166).">
+                      <span>Código ISIN</span>
+                      <HelpCircle size={13} className="text-slate-400" />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono text-[11px] text-slate-600">
+                    {asset1.isin || 'N/D'}
+                  </td>
+                  <td className="px-4 py-3 text-center font-mono text-[11px] text-slate-600">
+                    {asset2.isin || 'N/D'}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+
+          <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+            <span>Para consultar o dossiê contábil completo do emissor, acesse o Raio-X do Devedor.</span>
+            <div className="flex items-center gap-3">
+              <Link to={`/asset/${asset1.ticker}`} className="text-blue-600 hover:underline font-bold">
+                Raio-X {asset1.ticker} →
+              </Link>
+              <Link to={`/asset/${asset2.ticker}`} className="text-indigo-600 hover:underline font-bold">
+                Raio-X {asset2.ticker} →
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-12 text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 mx-auto flex items-center justify-center">
+            <Scale size={24} />
+          </div>
+          <h2 className="text-lg font-bold text-slate-900">Selecione os dois títulos para iniciar a comparação</h2>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+            Utilize os cartões acima para buscar por código de negociação (ticker) ou nome da companhia emissora.
+          </p>
         </div>
       )}
 
-      {/* Tabela de Comparação Lado a Lado */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-lg font-extrabold text-slate-900">Métricas Comparativas Detalhadas</h2>
-          <p className="text-xs text-slate-500">Valores consolidados de taxas, prêmios de risco e condições contratuais.</p>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead>
-              <tr className="bg-slate-100 text-slate-700 font-bold text-[11px] uppercase tracking-wider border-b border-slate-200">
-                <th className="px-6 py-3.5 w-1/3">Métrica Analítica</th>
-                <th className="px-6 py-3.5 w-1/3 font-mono text-blue-700">{asset1?.ticker || 'Ativo 1'}</th>
-                <th className="px-6 py-3.5 w-1/3 font-mono text-indigo-700">{asset2?.ticker || 'Ativo 2'}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-800">
-              {/* Emissor */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Emissor / Devedor</td>
-                <td className="px-6 py-3.5 font-medium">{asset1?.issuer || '-'}</td>
-                <td className="px-6 py-3.5 font-medium">{asset2?.issuer || '-'}</td>
-              </tr>
-
-              {/* Indexador & Taxa */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Taxa Indicativa (Mercado)</td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold font-mono text-base text-slate-900">
-                      {asset1?.taxa_mercado || asset1?.taxa_ativo || asset1?.taxa_emissao || '-'}
-                    </span>
-                    {comparison?.taxaWinner === 1 && (
-                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">
-                        Maior Taxa
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold font-mono text-base text-slate-900">
-                      {asset2?.taxa_mercado || asset2?.taxa_ativo || asset2?.taxa_emissao || '-'}
-                    </span>
-                    {comparison?.taxaWinner === 2 && (
-                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">
-                        Maior Taxa
-                      </span>
-                    )}
-                  </div>
-                </td>
-              </tr>
-
-              {/* Spread NTN-B */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Spread sobre NTN-B</td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold font-mono">
-                      {asset1?.spread ? `${(parseFloat(asset1.spread) * 100).toFixed(2)}% a.a.` : '-'}
-                    </span>
-                    {comparison?.spreadWinner === 1 && (
-                      <span className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-[10px] font-bold">
-                        Maior Prêmio
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold font-mono">
-                      {asset2?.spread ? `${(parseFloat(asset2.spread) * 100).toFixed(2)}% a.a.` : '-'}
-                    </span>
-                    {comparison?.spreadWinner === 2 && (
-                      <span className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-[10px] font-bold">
-                        Maior Prêmio
-                      </span>
-                    )}
-                  </div>
-                </td>
-              </tr>
-
-              {/* Rating */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Rating de Crédito</td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 bg-slate-100 rounded text-xs font-black text-slate-900">
-                      {asset1?.rating_normalizado || asset1?.rating || 'Sem Rating'}
-                    </span>
-                    {comparison?.ratingWinner === 1 && (
-                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">
-                        Menor Risco
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 bg-slate-100 rounded text-xs font-black text-slate-900">
-                      {asset2?.rating_normalizado || asset2?.rating || 'Sem Rating'}
-                    </span>
-                    {comparison?.ratingWinner === 2 && (
-                      <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">
-                        Menor Risco
-                      </span>
-                    )}
-                  </div>
-                </td>
-              </tr>
-
-              {/* Duration */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Duration Modificada</td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold font-mono">
-                      {asset1?.duration ? `${parseFloat(asset1.duration).toFixed(2)} anos` : '-'}
-                    </span>
-                    {comparison?.durWinner === 1 && (
-                      <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded text-[10px] font-bold">
-                        Menor Sensibilidade
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold font-mono">
-                      {asset2?.duration ? `${parseFloat(asset2.duration).toFixed(2)} anos` : '-'}
-                    </span>
-                    {comparison?.durWinner === 2 && (
-                      <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded text-[10px] font-bold">
-                        Menor Sensibilidade
-                      </span>
-                    )}
-                  </div>
-                </td>
-              </tr>
-
-              {/* Isenção Fiscal */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Isenção Fiscal (IR PF)</td>
-                <td className="px-6 py-3.5">
-                  {String(asset1?.incentivada || '').toLowerCase() === 'sim' || String(asset1?.lei || '') === '12.431' ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md font-bold text-xs">
-                      <Check size={13} /> Isento (Lei 12.431)
-                    </span>
-                  ) : (
-                    <span className="text-slate-500 text-xs font-medium">Tributado (Regressivo)</span>
-                  )}
-                </td>
-                <td className="px-6 py-3.5">
-                  {String(asset2?.incentivada || '').toLowerCase() === 'sim' || String(asset2?.lei || '') === '12.431' ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md font-bold text-xs">
-                      <Check size={13} /> Isento (Lei 12.431)
-                    </span>
-                  ) : (
-                    <span className="text-slate-500 text-xs font-medium">Tributado (Regressivo)</span>
-                  )}
-                </td>
-              </tr>
-
-              {/* Vencimento */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Data de Vencimento</td>
-                <td className="px-6 py-3.5 font-mono font-medium">{asset1?.vencimento || '-'}</td>
-                <td className="px-6 py-3.5 font-mono font-medium">{asset2?.vencimento || '-'}</td>
-              </tr>
-
-              {/* Código ISIN */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Código ISIN</td>
-                <td className="px-6 py-3.5 font-mono text-xs text-slate-600">{asset1?.isin || '-'}</td>
-                <td className="px-6 py-3.5 font-mono text-xs text-slate-600">{asset2?.isin || '-'}</td>
-              </tr>
-
-              {/* Setor */}
-              <tr className="hover:bg-slate-50/60">
-                <td className="px-6 py-3.5 font-bold text-slate-600">Setor Econômico</td>
-                <td className="px-6 py-3.5 font-medium">{asset1?.setor || '-'}</td>
-                <td className="px-6 py-3.5 font-medium">{asset2?.setor || '-'}</td>
-              </tr>
-
-              {/* Link para Raio-X individual */}
-              <tr className="bg-slate-50/40">
-                <td className="px-6 py-4 font-bold text-slate-600">Página do Ativo</td>
-                <td className="px-6 py-4">
-                  {asset1?.ticker && (
-                    <Link
-                      to={`/asset/${asset1.ticker}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition"
-                    >
-                      <span>Ver {asset1.ticker}</span>
-                      <ExternalLink size={13} />
-                    </Link>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  {asset2?.ticker && (
-                    <Link
-                      to={`/asset/${asset2.ticker}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 transition"
-                    >
-                      <span>Ver {asset2.ticker}</span>
-                      <ExternalLink size={13} />
-                    </Link>
-                  )}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       {/* Modal de Busca do Ativo 1 */}
       {isSearching1 && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-200 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-extrabold text-slate-900 text-base">Selecionar Ativo 1</h3>
-              <button onClick={() => setIsSearching1(false)} className="text-slate-400 hover:text-slate-600">
+              <span className="font-bold text-slate-900 text-sm">Selecionar Ativo 1</span>
+              <button onClick={() => setIsSearching1(false)} className="p-1 text-slate-400 hover:text-slate-700">
                 <X size={18} />
               </button>
             </div>
+
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <input
                 type="text"
                 autoFocus
-                placeholder="Digite o Ticker ou Emissor (ex: VALE38, BBRK12)..."
+                placeholder="Digite o código (ex: VALE38) ou nome..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="max-h-60 overflow-y-auto divide-y divide-slate-100 text-xs">
-              {searchResults.map(a => (
-                <button
-                  key={a.ticker}
-                  onClick={() => {
-                    updateTickers(a.ticker, ticker2);
-                    setIsSearching1(false);
-                  }}
-                  className="w-full text-left p-2.5 hover:bg-blue-50 transition flex items-center justify-between"
-                >
-                  <div>
-                    <strong className="font-mono text-slate-900 block">{a.ticker}</strong>
-                    <span className="text-slate-500 truncate max-w-xs block">{a.issuer}</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
-                    {a.tipo}
-                  </span>
-                </button>
-              ))}
-              {searchQuery && searchResults.length === 0 && (
-                <p className="p-4 text-center text-slate-400">Nenhum ativo encontrado para esta busca.</p>
+
+            <div className="max-h-64 overflow-y-auto divide-y divide-slate-100">
+              {searchResults.length > 0 ? (
+                searchResults.map(a => (
+                  <button
+                    key={`search1-${a.ticker}`}
+                    onClick={() => {
+                      updateTickers(a.ticker, ticker2);
+                      setIsSearching1(false);
+                    }}
+                    className="w-full p-2.5 text-left hover:bg-slate-50 rounded-lg flex items-center justify-between transition"
+                  >
+                    <div>
+                      <span className="font-mono font-bold text-slate-900 text-xs block">{a.ticker}</span>
+                      <span className="text-[11px] text-slate-500 truncate block max-w-xs">{a.issuer}</span>
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                      {a.indexador}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <div className="py-6 text-center text-xs text-slate-400">
+                  {searchQuery ? 'Nenhum ativo encontrado.' : 'Digite o código ou nome do emissor para buscar.'}
+                </div>
               )}
             </div>
           </div>
@@ -590,46 +799,51 @@ export default function ComparatorPage() {
 
       {/* Modal de Busca do Ativo 2 */}
       {isSearching2 && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-200 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-extrabold text-slate-900 text-base">Selecionar Ativo 2</h3>
-              <button onClick={() => setIsSearching2(false)} className="text-slate-400 hover:text-slate-600">
+              <span className="font-bold text-slate-900 text-sm">Selecionar Ativo 2</span>
+              <button onClick={() => setIsSearching2(false)} className="p-1 text-slate-400 hover:text-slate-700">
                 <X size={18} />
               </button>
             </div>
+
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <input
                 type="text"
                 autoFocus
-                placeholder="Digite o Ticker ou Emissor (ex: VALEC0, PETR28)..."
+                placeholder="Digite o código (ex: VALEC0) ou nome..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
-            <div className="max-h-60 overflow-y-auto divide-y divide-slate-100 text-xs">
-              {searchResults.map(a => (
-                <button
-                  key={a.ticker}
-                  onClick={() => {
-                    updateTickers(ticker1, a.ticker);
-                    setIsSearching2(false);
-                  }}
-                  className="w-full text-left p-2.5 hover:bg-indigo-50 transition flex items-center justify-between"
-                >
-                  <div>
-                    <strong className="font-mono text-slate-900 block">{a.ticker}</strong>
-                    <span className="text-slate-500 truncate max-w-xs block">{a.issuer}</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
-                    {a.tipo}
-                  </span>
-                </button>
-              ))}
-              {searchQuery && searchResults.length === 0 && (
-                <p className="p-4 text-center text-slate-400">Nenhum ativo encontrado para esta busca.</p>
+
+            <div className="max-h-64 overflow-y-auto divide-y divide-slate-100">
+              {searchResults.length > 0 ? (
+                searchResults.map(a => (
+                  <button
+                    key={`search2-${a.ticker}`}
+                    onClick={() => {
+                      updateTickers(ticker1, a.ticker);
+                      setIsSearching2(false);
+                    }}
+                    className="w-full p-2.5 text-left hover:bg-slate-50 rounded-lg flex items-center justify-between transition"
+                  >
+                    <div>
+                      <span className="font-mono font-bold text-slate-900 text-xs block">{a.ticker}</span>
+                      <span className="text-[11px] text-slate-500 truncate block max-w-xs">{a.issuer}</span>
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                      {a.indexador}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <div className="py-6 text-center text-xs text-slate-400">
+                  {searchQuery ? 'Nenhum ativo encontrado.' : 'Digite o código ou nome do emissor para buscar.'}
+                </div>
               )}
             </div>
           </div>
