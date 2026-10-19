@@ -1,6 +1,6 @@
 # 📘 Manual Institucional: Fluxo de Pagamentos, Agenda e Calculadora de Duration (DU/252)
 
-> **Documento Mestre Unificado de Engenharia Financeira e Arquitetura de Dados**  
+> **Documento Mestre Unificado de Engenharia Financeira, Modelagem de Curvas e Arquitetura de Dados**  
 > **Sistemas Abrangidos:** FixData / Meu Crédito Privado (`meucreditoprivado.netlify.app`), Apache Airflow 3.x, SQLite `credito_privado.db` e Frontend React/Vite.  
 > **Público-Alvo:** Desenvolvedores, Engenheiros de Dados, Analistas Quantitativos e Agentes Autônomos de IA (Antigravity).
 
@@ -10,7 +10,7 @@
 
 Este manual consolida a especificação técnica, a fundamentação matemática e o runbook operacional de dois pilares centrais da plataforma FixData:
 1. **Fluxo & Agenda Multitemporal de Pagamentos:** Ingestão multi-fonte, normalização taxonômica, conciliação de Data Base vs. Liquidação Útil, deduplicação temporal hierárquica e garantia de cobertura para 100% dos ativos vivos.
-2. **Calculadora de Duration & Fluxos Futuros a Valor Presente:** Metodologia matemática de apuração de Duration de Macaulay e Modified Duration na convenção brasileira **Dias Úteis / 252 (`DU/252`)**, distinção por classe de indexador (IPCA+, Pós-fixados DI+/DI% via *Spread Duration*, e Pré-fixados), projeção e desconto de curvas no tempo e dinâmica de *Pull-to-Par*.
+2. **Calculadora de Duration & Fluxos Futuros com Projeções de Curvas:** Metodologia matemática de apuração de Duration de Macaulay e Modified Duration na convenção brasileira **Dias Úteis / 252 (`DU/252`)**, modelagem da **Estrutura a Termo das Taxas de Juros (ETTJ)** via modelo paramétrico de **Nelson-Siegel-Svensson**, projeção de taxas a termo (*Forward Rates*) para ativos pós-fixados, projeção de inflação implícita (*Breakeven Inflation*) para ativos IPCA+ e desconto a Valor Presente ($PV$) vértice a vértice.
 
 ---
 
@@ -26,7 +26,7 @@ flowchart TD
     A2["2. ANBIMA Data (web-bff Crawler)<br/>Agenda de Eventos e PUs Liquidados"] --> B
     A3["3. ANBIMA Características<br/>Próximo Evento Oficial Confirmado"] --> B
     A4["4. Securitizadoras & Trustees<br/>Informes Periódicos de Lastro"] --> B
-    A5["5. Engine Paramétrico Sintético<br/>Projeção Contratual Recursiva"] --> B
+    A5["5. Engine Paramétrico com Curvas ETTJ<br/>Projeção Contratual Recursiva"] --> B
     B --> C["Deduplicação Hierárquica em 2 Passos"]
     C --> D1["tb_fluxo_pagamentos (SQLite)"]
     C --> D2["tb_fluxos_futuros_consolidado (SQLite)"]
@@ -49,9 +49,9 @@ flowchart TD
 4. **Securitizadoras & Trustees (`cp_securitizadoras`):**
    - **Origem:** Raspagem estruturada de informes mensais e atas de securitizadoras (Opea, Virgo, Cibrasec, True, RB Capital, etc.).
    - **Papel:** Identificação de amortizações extraordinárias de CRIs/CRAs decorrentes de liquidação de lastros imobiliários ou agrícolas.
-5. **Engine Paramétrico Sintético (`gera_cronograma_contratual_ativo`):**
-   - **Origem:** Algoritmo recursivo que processa todos os ativos vivos de `tb_cadastro_ativos` que não possuam eventos mapeados nas fontes anteriores.
-   - **Papel:** Garantir que 100% dos ativos vivos possuam datas de cupons e vencimento final preenchidos na grade, eliminando qualquer ponto cego no radar.
+5. **Engine Paramétrico com Curvas ETTJ (`processa_fluxos_futuros_ativos`):**
+   - **Origem:** Algoritmo recursivo que processa todos os ativos vivos de `tb_cadastro_ativos` integrando os vértices da ETTJ da ANBIMA.
+   - **Papel:** Garantir que 100% dos ativos vivos possuam datas de cupons, vencimento final e volumes financeiros futuros projetados com a taxa a termo exata de cada período.
 
 ---
 
@@ -87,166 +87,167 @@ Strings heterogêneas provenientes dos diversos agentes do mercado são converti
 
 ---
 
-## 1.4 Estrutura de Dados e Persistência no SQLite
+# PARTE 2: Projeção de Curvas no Tempo, ETTJ e Taxas a Termo
 
-As tabelas de agenda residem no banco de produção `/home/home/airflow/src/data/credito_privado.db`:
+## 2.1 Modelagem Teórica: Nelson-Siegel-Svensson (NSS)
 
-### Tabela `tb_fluxo_pagamentos` (Eventos Pontuais):
-```sql
-CREATE TABLE IF NOT EXISTS tb_fluxo_pagamentos (
-    ticker TEXT,
-    isin TEXT,
-    data_evento TEXT,         -- YYYY-MM-DD (Data Base Contratual)
-    data_liquidacao TEXT,     -- YYYY-MM-DD (Data Efetiva Útil de Liquidação)
-    tipo_evento TEXT,         -- Pagamento de Juros, Amortização, Vencimento
-    taxa REAL,                -- Taxa aplicada no evento (se informada)
-    valor_real REAL,          -- PU pago liquidado (R$)
-    valor_projetado REAL,     -- PU previsto/estimado (R$)
-    percentual_amortizacao REAL, -- % amortizado sobre o PU base
-    status TEXT,              -- 'Liquidado' ou 'Previsto'
-    flag_status TEXT,         -- 'Total' ou 'Parcial'
-    fonte TEXT,               -- 'ANBIMA Oficial', 'Agente Cadastral - Escritura', etc.
-    anomesdia INTEGER,        -- Data de ingestão YYYYMMDD
-    atualizado_em TEXT        -- Timestamp da última atualização
-);
-```
+A ANBIMA e o Banco Central do Brasil estimam a **Estrutura a Termo das Taxas de Juros (ETTJ)** através da parametrização estendida de Nelson-Siegel proposta por **Lars E. O. Svensson (1994)**. O modelo ajusta uma curva suave e contínua sobre os contratos futuros de DI negociados na B3 e sobre os títulos da dívida pública federal (NTN-B e LTN).
 
-### Tabela `tb_fluxos_futuros_consolidado` (Grade Temporal Consolidada):
-Armazena a projeção de mais de 111.000 parcelas futuras de 100% dos ativos vivos:
-- Contém colunas de particionamento temporal: `ano`, `mes`, `ano_mes`, `bucket_ano` (`2026`, `2027`, ..., `2046+`).
-- Volumes financeiros calculados em Reais (`volume_financeiro`) e em Bilhões (`volume_financeiro_bi`).
-- Persistência atômica via Staging Table com substituição transacional segura (`DELETE FROM target; INSERT INTO target SELECT ...; DROP TABLE staging;`), prevenindo bloqueios ou corrupção de views dependentes.
+A taxa spot instantânea/anualizada $y(\tau)$ para um prazo $\tau = \frac{DU}{252}$ é expressa formalmente por:
+
+$$y(\tau) = \beta_0 + \beta_1 \left( \frac{1 - e^{-\frac{\tau}{\lambda_1}}}{\frac{\tau}{\lambda_1}} \right) + \beta_2 \left( \frac{1 - e^{-\frac{\tau}{\lambda_1}}}{\frac{\tau}{\lambda_1}} - e^{-\frac{\tau}{\lambda_1}} \right) + \beta_3 \left( \frac{1 - e^{-\frac{\tau}{\lambda_2}}}{\frac{\tau}{\lambda_2}} - e^{-\frac{\tau}{\lambda_2}} \right)$$
+
+### Interpretação Econômica dos Parâmetros:
+* $\beta_0$: **Nível de Longo Prazo (*Level*):** Assíntota para a qual convergem as taxas de juros de prazos ultra-longos ($\tau \rightarrow \infty$).
+* $\beta_1$: **Inclinação da Curva (*Slope*):** Diferencial entre as taxas de curto e longo prazo. Quando $\tau \rightarrow 0$, a taxa converge para $\beta_0 + \beta_1$ (taxa instantânea de curtíssimo prazo).
+* $\beta_2$: **Primeira Curvatura (*Curvature / Hump 1*):** Determina o ponto de corcova em vértices intermediários, com velocidade de decaimento controlada por $\lambda_1$.
+* $\beta_3$: **Segunda Curvatura (*Hump 2*):** Inovação de Svensson que adiciona flexibilidade para capturar inflexões complexas em vértices longos, com velocidade controlada por $\lambda_2$.
+* $\lambda_1, \lambda_2$: Parâmetros de escala temporal que determinam a localização exata dos picos das curvaturas ao longo da curva.
+
+Os parâmetros diários oficiais da ETTJ são persistidos na tabela `anbima_curva_di`, contendo os coeficientes e as taxas calculadas para 65 vértices diários (de 21 a 8.316 dias úteis).
 
 ---
 
-# PARTE 2: Calculadora de Duration e Fluxo Futuro a Valor Presente
+## 2.2 Projeção de Taxas a Termo (*Forward Rates*) para Ativos Pós-Fixados
 
-## 2.1 Convenção de Calendário Brasileira (Dias Úteis / 252)
+Para títulos pós-fixados indexados ao CDI (ex: Debêntures **CDI + 2,00%** ou **105% do CDI**), a remuneração de um cupom futuro entre os vértices $T_1$ e $T_2$ depende da taxa média de juros que o mercado projeta para aquele intervalo temporal.
 
-Diferente dos mercados internacionais que adotam convenções de contagem contínua (ex: *Actual/Actual* nos US Treasuries ou *30/360* no mercado europeu), o mercado financeiro de renda fixa e crédito privado brasileiro opera sob a convenção estrita de **Dias Úteis sobre base anual de 252 dias úteis (`DU/252`)**, conforme padronização da ANBIMA e B3.
+Pelo princípio da não-arbitragem, a **Taxa a Termo Anualizada (*Forward Rate*)** entre o vértice de início $T_1 = \frac{DU_1}{252}$ e o vértice de liquidação $T_2 = \frac{DU_2}{252}$ é dada por:
 
-### Regras de Contagem de Dias Úteis:
-1. Excluem-se todos os sábados e domingos.
-2. Excluem-se todos os feriados nacionais civis e religiosos decretados pela legislação brasileira.
-3. **Algoritmo Astronômico de Meeus/Jones/Butcher para Feriados Móveis:**  
-   O módulo `cp_anbima/calculadora_duration.py` calcula de forma analítica e perpétua (2015 a 2060) as datas dos feriados móveis que dependem do equinócio e ciclo lunar da Páscoa:
-   - **Segunda-feira de Carnaval:** Páscoa $- 48$ dias corridos.
-   - **Terça-feira de Carnaval:** Páscoa $- 47$ dias corridos.
-   - **Sexta-feira da Paixão:** Páscoa $- 2$ dias corridos.
-   - **Corpus Christi:** Páscoa $+ 60$ dias corridos.
-4. **Feriados Fixos Federais:**
-   - $01/01$ (Confraternização Universal), $21/04$ (Tiradentes), $01/05$ (Dia do Trabalho), $07/09$ (Independência), $12/10$ (N. Sra. Aparecida), $02/11$ (Finados), $15/11$ (Proclamação da República), $20/11$ (Dia da Consciência Negra - Lei nº 14.759/2023) e $25/12$ (Natal).
+$$F(T_1, T_2) = \left[ \frac{(1 + r_2)^{T_2}}{(1 + r_1)^{T_1}} \right]^{\frac{1}{T_2 - T_1}} - 1$$
 
-A conversão do prazo em dias úteis ($DU$) para o prazo fracionário em anos úteis ($t_{\text{anos}}$) é dada estritamente por:
+Onde:
+* $r_1$: Taxa spot anual da Curva DI para o prazo $T_1$.
+* $r_2$: Taxa spot anual da Curva DI para o prazo $T_2$.
+
+### Cálculo do Cupom Futuro Projetado:
+Com a taxa a termo $F(T_1, T_2)$ calculada, a taxa periódica do cupom é projetada de forma exata:
+1. **Para ativos DI + Spread (ex: CDI + 2,00% a.a.):**
+   $$r_{\text{anual composto}} = (1 + F_{\text{DI}}) \times (1 + \text{Spread}) - 1$$
+   $$\text{Taxa Cupom}_{\text{período}} = (1 + r_{\text{anual composto}})^{\frac{DU_2 - DU_1}{252}} - 1$$
+   $$\text{Volume Cupom} = \text{Saldo Devedor} \times \text{Taxa Cupom}_{\text{período}}$$
+2. **Para ativos % do CDI (ex: 105% do CDI):**
+   $$r_{\text{anual}} = \left(\frac{\alpha}{100}\right) \times F_{\text{DI}}$$
+   $$\text{Taxa Cupom}_{\text{período}} = (1 + r_{\text{anual}})^{\frac{DU_2 - DU_1}{252}} - 1$$
+
+> **Impacto Prático:**  
+> Anteriormente, pipelines simplistas aplicavam apenas o *spread* (ex: 2,00% a.a. $\rightarrow \approx 0{,}99\%$ ao semestre), gerando fluxos subestimados. Com a engine de curvas a termo, uma debênture CDI + 2,00% sob DI projetado de $12{,}89\%$ a.a. projeta um cupom semestral real de **$7{,}31\%$** (refletindo fielmente a expectativa de liquidez futura).
+
+---
+
+## 2.3 Projeção de Inflação Implícita (*Breakeven Inflation*) e Atualização do $VNa$
+
+Para ativos indexados ao IPCA (Debêntures Incentivadas Lei 12.431, CRIs e CRAs), o fluxo financeiro futuro em moeda corrente nominal depende da evolução do **Valor Nominal Atualizado ($VNa$)**.
+
+Pelo Teorema de Fisher, a taxa de juros prefixada nominal se decompõe no produto da taxa de juros real pela inflação esperada:
+$$(1 + y_{\text{nominal}}(\tau)) = (1 + y_{\text{real}}(\tau)) \times (1 + \pi_{\text{impl}}(\tau))$$
+
+Isolando a **Inflação Implícita Anualizada ($\pi_{\text{impl}}$)** para o vértice $\tau = \frac{DU}{252}$:
+$$\pi_{\text{impl}}(\tau) = \frac{1 + y_{\text{ETTJ\_PREF}}(\tau)}{1 + y_{\text{ETTJ\_IPCA}}(\tau)} - 1$$
+
+### Projeção do Fator de Atualização do $VNa$:
+O fator acumulado projetado de inflação entre a data base de hoje e o vértice futuro $DU$ é dado por:
+$$\text{Fator Inflação Acumulado}(DU) = (1 + \pi_{\text{impl}}(DU))^{\frac{DU}{252}}$$
+
+No cálculo da grade consolidada de fluxos nominais futuros:
+$$VNa(DU) = VNa_0 \times \text{Fator Inflação Acumulado}(DU)$$
+$$\text{Cupom Nominal}(DU) = VNa(DU) \times \left[(1 + y_{\text{real}})^{\frac{126}{252}} - 1\right]$$
+$$\text{Resgate Final no Vencimento} = \text{Saldo Devedor Principal} \times \text{Fator Inflação Acumulado}(DU_{\text{venc}})$$
+
+---
+
+# PARTE 3: Calculadora de Duration e Desconto a Valor Presente
+
+## 3.1 Convenção de Calendário Brasileira (Dias Úteis / 252)
+
+O mercado financeiro de renda fixa e crédito privado brasileiro opera sob a convenção estrita de **Dias Úteis sobre base anual de 252 dias úteis (`DU/252`)**, conforme padronização da ANBIMA e B3.
+
+### Algoritmo Astronômico de Meeus/Jones/Butcher para Feriados Móveis:
+O módulo `cp_anbima/calculadora_duration.py` calcula analiticamente (2015 a 2060) as datas dos feriados móveis dependentes da Páscoa:
+- **Segunda-feira de Carnaval:** Páscoa $- 48$ dias corridos.
+- **Terça-feira de Carnaval:** Páscoa $- 47$ dias corridos.
+- **Sexta-feira da Paixão:** Páscoa $- 2$ dias corridos.
+- **Corpus Christi:** Páscoa $+ 60$ dias corridos.
+
+A conversão do prazo em dias úteis ($DU$) para o prazo fracionário em anos úteis ($t_{\text{anos}}$) é dada por:
 $$t_{\text{anos}} = \frac{DU}{252}$$
 
 ---
 
-## 2.2 Fórmulas Matemáticas de Duration e Sensibilidade
+## 3.2 Fórmulas Matemáticas de Duration com Curva a Termo
 
-### 1. Duration de Macaulay ($D_{\text{Mac}}$)
-A Duration de Macaulay representa a média ponderada do tempo até o recebimento de todos os fluxos de caixa futuros do ativo (cupons e amortizações de principal), onde os pesos equivalem ao valor presente de cada fluxo relativo ao preço total do título:
+### 1. Desconto Vértice a Vértice na Curva ETTJ
+Em finanças quantitativas modernas, fluxos futuros em prazos distintos **não devem ser descontados por uma taxa fixa arbitrária flat**. Cada fluxo $CF_j$ no vértice $DU_j$ possui seu próprio fator de desconto $d(DU_j)$ determinado pela ETTJ:
 
-$$PV(CF_t) = \frac{CF_t}{(1 + y)^{\frac{DU_t}{252}}}$$
+$$d(DU_j) = \frac{1}{(1 + y(DU_j))^{\frac{DU_j}{252}}}$$
 
-$$D_{\text{Mac}} = \frac{\sum_{t=1}^N \left(\frac{DU_t}{252}\right) \cdot PV(CF_t)}{\sum_{t=1}^N PV(CF_t)}$$
+Onde $y(DU_j)$ é a taxa zero da curva soberana para o prazo $DU_j$ somada ao spread de crédito do emissor:
+* Para ativos IPCA+: $y(DU_j) = y_{\text{ETTJ\_IPCA}}(DU_j) + \text{Spread}$
+* Para ativos Pré-Fixados: $y(DU_j) = y_{\text{ETTJ\_PREF}}(DU_j) + \text{Spread}$
 
-Onde:
-- $CF_t$: Fluxo de caixa bruto no vértice $t$ (Cupom de Juros e/ou Parcela de Amortização de Principal).
-- $DU_t$: Número exato de dias úteis entre a data-base de apuração e a data de liquidação do fluxo $t$.
-- $y$: Taxa de juros anual de desconto do título na convenção $DU/252$ expressa em formato decimal (ex: $6{,}50\% \text{ a.a.} \rightarrow 0{,}065$).
-- $\sum_{t=1}^N PV(CF_t) = PU$: Preço Unitário Teórico do ativo a valor presente.
+O Preço Unitário Teórico a Valor Presente ($PU$) é a soma dos fluxos descontados:
+$$PU = \sum_{j=1}^K CF_j \cdot d(DU_j)$$
 
-### 2. Duration Modificada ($D_{\text{mod}}$)
-A Duration Modificada mede a elasticidade percentual direta do preço do ativo em resposta a uma variação marginal na taxa de juros anual:
+### 2. Duration de Macaulay com Estrutura a Termo (*Term-Structure Macaulay Duration*)
+A Duration de Macaulay pondera cada fluxo pelo seu valor presente exato obtido da curva:
 
-$$D_{\text{mod}} = \frac{D_{\text{Mac}}}{1 + y}$$
+$$D_{\text{Mac}} = \frac{\sum_{j=1}^K \left(\frac{DU_j}{252}\right) \cdot \left[ CF_j \cdot d(DU_j) \right]}{\sum_{j=1}^K \left[ CF_j \cdot d(DU_j) \right]} = \frac{\sum_{j=1}^K \left(\frac{DU_j}{252}\right) \cdot PV(CF_j)}{PU}$$
 
-### 3. Sensibilidade de Preço e Choques de Curva ($\Delta PU$)
-Para uma variação na taxa de juros de mercado expressa em pontos-base ($\Delta y_{\text{bps}}$), a variação percentual aproximada no Preço Unitário ($PU$) é dada pela aproximação de primeira ordem de Taylor:
+### 3. Duration Modificada ($D_{\text{mod}}$) e Sensibilidade ($\Delta PU$)
+A Duration Modificada com curva a termo reflete a elasticidade média frente a um choque paralelo em toda a ETTJ:
 
-$$\frac{\Delta PU}{PU} \approx - D_{\text{mod}} \cdot \Delta y = - D_{\text{mod}} \cdot \left(\frac{\Delta y_{\text{bps}}}{10.000}\right)$$
+$$D_{\text{mod}} = \frac{\sum_{j=1}^K \left(\frac{DU_j}{252}\right) \cdot \left( \frac{1}{1 + y(DU_j)} \right) \cdot PV(CF_j)}{PU}$$
 
-> **Exemplo Numérico:**  
-> Título com Duration de Macaulay $= 3{,}20$ anos, negociado a uma taxa de $6{,}00\%$ a.a. ($y = 0{,}06$):
-> $$D_{\text{mod}} = \frac{3{,}20}{1 + 0{,}06} = 3{,}0189 \text{ anos}$$
-> Se a curva de juros abrir $+100 \text{ bps}$ ($+1{,}00\%$):
-> $$\frac{\Delta PU}{PU} \approx -3{,}0189 \times 0{,}01 = -3{,}02\%$$
+Para um choque marginal de $\Delta y_{\text{bps}}$ pontos-base:
+$$\frac{\Delta PU}{PU} \approx - D_{\text{mod}} \cdot \left(\frac{\Delta y_{\text{bps}}}{10.000}\right)$$
 
 ---
 
-## 2.3 Metodologia por Classe de Indexador
-
-O motor implementa o tratamento institucional específico para as três famílias de indexadores do mercado brasileiro:
+## 3.3 Tratamento por Classe de Indexador
 
 ### 1. Títulos Indexados à Inflação (IPCA+ / NTN-B Like)
-- **Comportamento dos Cupons:** Cupons semestrais exponenciais calculados sobre a base de 126 dias úteis:
-  $$c_{\text{sem}} = (1 + y_{\text{cupom}})^{\frac{126}{252}} - 1 = \sqrt{1 + y_{\text{cupom}}} - 1$$
-- **Incidência sobre o Saldo Devedor:** Em caso de amortização periódica constante, o cupom do período $t$ incide estritamente sobre o saldo devedor remanescente após as amortizações dos períodos anteriores:
-  $$\text{Cupom}_t = \text{Saldo Devedor}_{t-1} \times c_{\text{sem}}$$
-- **Desconto a Valor Presente:** Todos os fluxos nominais projetados são trazidos a valor presente pela taxa real de desconto $y$.
+- Cupons semestrais calculados na base exponencial: $c_{\text{sem}} = (1 + y_{\text{cupom}})^{\frac{126}{252}} - 1$.
+- Incidência rigorosa sobre o saldo devedor remanescente a cada período de amortização.
+- Desconto a valor presente utilizando a curva real $y_{\text{ETTJ\_IPCA}}(DU_j) + \text{Spread}$.
 
 ### 2. Títulos Pós-Fixados (DI+ e DI% / CDI)
-- **Natureza do Risco de Taxa:** Em títulos pós-fixados, o cupom repactua diariamente conforme a oscilação do CDI. Consequentemente, a duration tradicional em relação à taxa básica Selic/DI é praticamente nula (equivale a $1 \text{ DU}$).
-- **Conceito de Spread Duration:** A métrica institucional relevante para o investidor é a **Spread Duration** (sensibilidade ao spread de crédito sobre o CDI).
-- **Cálculo da Spread Duration:**
-  - Para títulos com **amortização Bullet** (100% no vencimento final):
-    $$\text{Spread Duration} = \frac{DU_{\text{vencimento}}}{252}$$
-  - Para títulos com **amortizações periódicas programadas** (ex: parcelas anuais ou semestrais): A Spread Duration equivale rigorosamente ao **Prazo Médio Ponderado (PMP)** do retorno do principal em anos úteis:
-    $$\text{Spread Duration} = \frac{\sum_{i=1}^M \left(\frac{DU_i}{252}\right) \cdot \text{Amortização}_i}{\sum_{i=1}^M \text{Amortização}_i}$$
+- O risco de taxa Selic repactua diariamente ($\text{duration de juros} \approx 1 \text{ DU}$).
+- A métrica institucional calculada e exibida é a **Spread Duration** (sensibilidade ao prêmio de crédito sobre o CDI).
+- Para títulos *bullet*, equivale ao prazo total remanescente em anos úteis ($DU / 252$).
+- Para títulos com amortizações periódicas conhecidas, equivale rigorosamente ao **Prazo Médio Ponderado (PMP)** do retorno do principal:
+  $$\text{Spread Duration} = \frac{\sum_{i=1}^M \left(\frac{DU_i}{252}\right) \cdot \text{Amortização}_i}{\sum_{i=1}^M \text{Amortização}_i}$$
 
 ### 3. Títulos Pré-Fixados
-- Apuração clássica onde os cupons periódicos e o principal de resgate são prefixados em reais nominais e descontados pela taxa pré anual $y$ na convenção $DU/252$.
+- Desconto exponencial direto dos fluxos nominais prefixados pela curva $y_{\text{ETTJ\_PREF}}(DU_j)$.
 
 ---
 
-## 2.4 Projeção de Curvas no Tempo e Dinâmica de Pull-to-Par
+# PARTE 4: Guia de Operação e Manutenção para IAs e Desenvolvedores
 
-### 1. Interpolação na Curva Soberana de Referência (ETTJ)
-Para ativos IPCA+, o sistema utiliza a Estrutura a Termo das Taxas de Juros Soberana (Curva de NTN-B da ANBIMA/B3), interpolando a taxa livre de risco nos vértices específicos da duration de cada ativo.
-- O **Spread de Crédito Real (Spread Over)** é a diferença aritmética entre a taxa indicativa de negociação do ativo e a taxa da NTN-B sintética de mesma duration:
-  $$\text{Spread Over} = y_{\text{ativo}} - y_{\text{NTN-B}(\text{duration})}$$
+## 4.1 Mapa de Módulos e Responsabilidades
 
-### 2. Amortecimento do Risco e Efeito Pull-to-Par
-À medida que o tempo transcorre ($t \rightarrow T$), o prazo remanescente do ativo diminui, reduzindo linearmente a sua Duration:
-$$D_{\text{rem}}(t) \approx D_0 \times \left(\frac{T - t}{T}\right)$$
-Essa contração da duration amortece progressivamente a sensibilidade a choques de mercado, forçando o Preço Unitário de mercado a convergir matematicamente para o seu Preço Par no vencimento final (*Efeito Pull-to-Par*).
-
-### 3. Estratégias de Reinvestimento de Fluxos Intermediários:
-A calculadora do simulador (`src/utils/calculatorMath.ts`) implementa três hipóteses de reinvestimento para apuração do Saldo Futuro Final acumulado:
-- **Reinvestimento à Taxa do Ativo:** Supõe que cada cupom é imediatamente reaplicado na mesma rentabilidade contratada.
-- **Reinvestimento ao CDI:** Supõe que os proventos são depositados em um fundo soberano DI pós-fixado com liquidez diária.
-- **Sem Reinvestimento (Renda Passiva):** Os cupons são consumidos pelo investidor como fluxo de caixa livre periódico.
-
----
-
-# PARTE 3: Guia de Operação e Manutenção para IAs e Desenvolvedores
-
-## 3.1 Mapa de Módulos e Responsabilidades
-
-| Caminho do Arquivo | Módulo / Função | Responsabilidade Técnica |
+| Caminho do Arquivo | Módulo / Classe | Responsabilidade Técnica |
 | :--- | :--- | :--- |
-| `src/cp_anbima/calculadora_duration.py` | `calcular_duration_ativo` / `calcular_duration_fluxo_exato` | Motor matemático institucional de contagem de feriados móveis, dias úteis e duration `DU/252`. |
-| `src/cp_fluxo_pagamentos/main.py` | `captura_e_consolida_fluxos` | Pipeline de ingestão multi-fonte, normalização de strings e deduplicação temporal em 2 passos. |
-| `src/cp_fluxos_futuros/main.py` | `processa_fluxos_futuros_ativos` | Projeção em escala de 100% dos fluxos futuros vivos e geração de `cashflow_wall.json`. |
+| `src/cp_anbima/curva_di.py` | `ETTJCurvasEngine` | Engine institucional de interpolação spot e forward para Curvas DI, IPCA e Inflação Implícita (NSS). |
+| `src/cp_anbima/calculadora_duration.py` | `calcular_duration_ativo` / `calcular_duration_fluxo_exato` | Motor matemático institucional de contagem de feriados móveis, dias úteis, duration `DU/252` e desconto na ETTJ. |
+| `src/cp_fluxo_pagamentos/main.py` | `captura_e_consolida_fluxos` | Pipeline de ingestão multi-fonte, normalização taxonômica e deduplicação temporal em 2 passos. |
+| `src/cp_fluxos_futuros/main.py` | `processa_fluxos_futuros_ativos` | Projeção em escala de 100% dos fluxos futuros vivos com taxas a termo da ETTJ e geração de `cashflow_wall.json`. |
 | `src/cp_site/atualiza_assets_master.py`| `atualiza_assets_master` | Enriquecimento cadastral de duration calculada no dataset central de ativos. |
 | `src/cp_telegram/morning_report.py` | `montar_mensagem_matinal` | Monitor diário de eventos do dia, volume financeiro e maiores pagadores. |
-| `imob_web/` e `fixdata/` (Frontend) | `src/utils/calculatorMath.ts` | Motor matemático client-side em TypeScript para simulação de cenários, MTM e gross-up. |
+| `fixdata/` (Frontend) | `src/utils/calculatorMath.ts` | Motor matemático client-side em TypeScript para simulação de cenários, MTM e gross-up. |
 
 ---
 
-## 3.2 Comandos Rápidos de Validação e Execução
-
-Para testar e validar o funcionamento dos módulos em linha de comando:
+## 4.2 Comandos Rápidos de Validação e Execução
 
 ```bash
-# 1. Testar o motor matemático de Duration e Feriados Móveis:
+# 1. Testar o motor matemático de Duration com desconto na ETTJ:
 python3 -m cp_anbima.calculadora_duration
 
 # 2. Executar a consolidação da Agenda de Pagamentos:
 python3 -m cp_fluxo_pagamentos.main
 
-# 3. Processar a projeção dos 111.000+ fluxos futuros e gerar o cashflow_wall.json:
+# 3. Processar a projeção dos 111.000+ fluxos futuros com curvas a termo e gerar o cashflow_wall.json:
 python3 -m cp_fluxos_futuros.main
 
 # 4. Simular o relatório matinal de pagamentos do Telegram:
@@ -255,7 +256,7 @@ python3 -m cp_telegram.morning_report
 
 ---
 
-## 3.3 Matriz de Resolução de Problemas (Troubleshooting)
+## 4.3 Matriz de Resolução de Problemas (Troubleshooting)
 
 | Sintoma Observado | Causa Mais Provável | Ação Corretiva Imediata |
 | :--- | :--- | :--- |
