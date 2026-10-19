@@ -36,7 +36,8 @@ import {
   Info,
   Sparkles,
   X,
-  ArrowRight
+  ArrowRight,
+  Send
 } from 'lucide-react';
 
 /* ================= TIPOS DE FLUXO & COBERTURA ================= */
@@ -147,12 +148,17 @@ const Home: React.FC = () => {
   const [maturityWallFilter, setMaturityWallFilter] = useState<'ALL' | 'B3_ONLY'>('ALL');
   const [cashflowPeriodMode, setCashflowPeriodMode] = useState<'YEARLY' | 'MONTHLY'>('YEARLY');
   const [showPrimaryModal, setShowPrimaryModal] = useState(false);
+  const [showTelegramBanner, setShowTelegramBanner] = useState(true);
 
   useEffect(() => {
     try {
       const hasSeen = localStorage.getItem('fixdata_primary_modal_v1');
       if (!hasSeen) {
         setShowPrimaryModal(true);
+      }
+      const hasDismissedTelegram = localStorage.getItem('fixdata_telegram_banner_dismissed');
+      if (hasDismissedTelegram) {
+        setShowTelegramBanner(false);
       }
     } catch (e) {
       // Ignora erro se localStorage restrito
@@ -164,6 +170,13 @@ const Home: React.FC = () => {
       localStorage.setItem('fixdata_primary_modal_v1', 'true');
     } catch (e) {}
     setShowPrimaryModal(false);
+  };
+
+  const handleDismissTelegramBanner = () => {
+    try {
+      localStorage.setItem('fixdata_telegram_banner_dismissed', 'true');
+    } catch (e) {}
+    setShowTelegramBanner(false);
   };
 
   /* ================= LOAD ================= */
@@ -493,6 +506,45 @@ const Home: React.FC = () => {
         <div className="pt-2">
           <SearchBar assets={assets} />
         </div>
+
+        {/* Banner Canal Telegram */}
+        {showTelegramBanner && (
+          <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-3.5 sm:p-4 border border-blue-900/60 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left animate-in fade-in duration-300">
+            <div className="flex items-start sm:items-center gap-3 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center shrink-0 text-blue-400 mt-0.5 sm:mt-0">
+                <Send size={17} />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-500 text-slate-950 px-2 py-0.5 rounded-full">Canal Oficial Telegram</span>
+                  <span className="text-xs text-blue-200 font-semibold">Inteligência de Mercado</span>
+                </div>
+                <p className="text-xs text-slate-300 mt-1 leading-snug">
+                  Radar matinal com a <strong>agenda de pagamentos do dia</strong> e <strong>fechamento secundário B3</strong> direto no celular.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+              <a
+                href="https://t.me/fixdatabrasil"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 shadow-sm"
+              >
+                <span>Acessar Canal</span>
+                <ArrowRight size={14} />
+              </a>
+              <button
+                type="button"
+                onClick={handleDismissTelegramBanner}
+                className="p-1.5 text-slate-400 hover:text-white rounded-lg transition"
+                title="Dispensar aviso"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ================= KPI CARDS (METRICAS PRINCIPAIS EM 2 FILEIRAS) ================= */}
