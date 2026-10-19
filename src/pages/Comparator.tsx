@@ -43,6 +43,7 @@ export default function ComparatorPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [devedoresMap, setDevedoresMap] = useState<Record<string, DevedorKPIs>>({});
+  const [devedoresNomeMap, setDevedoresNomeMap] = useState<Record<string, DevedorKPIs>>({});
   const [loading, setLoading] = useState(true);
 
   // Seleção de ativos (por padrão VAZIO, a menos que venha na URL)
@@ -54,10 +55,17 @@ export default function ComparatorPage() {
   const [isSearching2, setIsSearching2] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Normalização estrita de CNPJ com 14 dígitos (padding à esquerda)
+  const normalizeCnpj = (raw?: string | number) => {
+    if (!raw) return '';
+    const str = String(raw).split('.')[0].replace(/\D/g, '');
+    if (!str) return '';
+    return str.padStart(14, '0');
+  };
+
   useEffect(() => {
     document.title = 'Comparador de Debêntures, CRIs e CRAs | FIXDATA';
     
-    // Carrega assets_master.csv e devedores_raiox.json em paralelo
     Promise.all([
       fetchCSV<Asset>('/data/assets_master.csv'),
       fetch('/data/devedores_raiox.json')
@@ -68,14 +76,26 @@ export default function ComparatorPage() {
         setAssets(assetsData || []);
 
         if (raioxData?.devedores && Array.isArray(raioxData.devedores)) {
-          const map: Record<string, DevedorKPIs> = {};
+          const cMap: Record<string, DevedorKPIs> = {};
+          const nMap: Record<string, DevedorKPIs> = {};
+
           raioxData.devedores.forEach((d: DevedorItem) => {
-            if (d.cnpj && d.kpis_resumo) {
-              const cleanCnpj = d.cnpj.replace(/\D/g, '');
-              map[cleanCnpj] = d.kpis_resumo;
+            if (d.kpis_resumo) {
+              if (d.cnpj) {
+                const cClean = normalizeCnpj(d.cnpj);
+                if (cClean) cMap[cClean] = d.kpis_resumo;
+              }
+              if (d.razao_social) {
+                nMap[d.razao_social.trim().toUpperCase()] = d.kpis_resumo;
+              }
+              if (d.nome_fantasia) {
+                nMap[d.nome_fantasia.trim().toUpperCase()] = d.kpis_resumo;
+              }
             }
           });
-          setDevedoresMap(map);
+
+          setDevedoresMap(cMap);
+          setDevedoresNomeMap(nMap);
         }
         setLoading(false);
       })
@@ -172,6 +192,55 @@ export default function ComparatorPage() {
     }
   };
 
+  // Duration Modificada robusta (com fallback calculado a partir do vencimento e cupons)
+  const getDuration = (asset?: Asset | null): number | null => {
+    if (!asset) return null;
+    const d = parseNum(asset.duration);
+    if (d !== null && d > 0) return d;
+    if (asset.vencimento) {
+      try {
+        let targetDate: Date;
+        if (asset.vencimento.includes('/')) {
+          const [day, m, y] = asset.vencimento.split('/');
+          targetDate = new Date(`${y}-${m}-${day}`);
+        } else {
+          targetDate = new Date(asset.vencimento);
+        }
+        const anos = (targetDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+        if (anos > 0) {
+          const isBullet = String(asset.periodicidade_cupom || '').toLowerCase().includes('vencimento');
+          const durAprox = isBullet ? anos : anos * 0.85;
+          return Math.max(0.1, Math.round(durAprox * 100) / 100);
+        }
+      } catch {}
+    }
+    return null;
+  };
+
+  // Validação estrita de Isenção de IR (Lei 12.431/11, CRIs e CRAs)
+  const isIsentoIR = (asset?: Asset | null): boolean => {
+    if (!asset) return false;
+    const tipo = (asset.tipo || '').toUpperCase();
+    if (tipo.includes('CRI') || tipo.includes('CRA')) return true;
+    const inc = String(asset.incentivada || '').toLowerCase();
+    const lei = String(asset.lei || '').toLowerCase();
+    const flagInc = String(asset.incentivada_lei_12431 || '');
+    return inc === 'sim' || inc === 'true' || inc === '1' || lei.includes('12.431') || lei.includes('12431') || flagInc === '1' || flagInc === 'true';
+  };
+
+  // Como o papel paga
+  const getComoPaga = (asset?: Asset | null): string => {
+    if (!asset) return 'N/D';
+    if (asset.periodicidade_cupom) {
+      return `${asset.periodicidade_cupom} (Amortização no Vencimento)`;
+    }
+    const tipo = (asset.tipo || '').toUpperCase();
+    if (tipo.includes('CRI') || tipo.includes('CRA')) {
+      return 'Mensal / Amortização Periódica';
+    }
+    return 'Semestral (Juros) + Bullet (Principal)';
+  };
+
   // Validação de compatibilidade de indexador
   const normalizaIndexador = (idx?: string) => {
     if (!idx) return '';
@@ -188,18 +257,87 @@ export default function ComparatorPage() {
   const idx2 = normalizaIndexador(asset2?.indexador);
   const indexadoresIncompatíveis = Boolean(asset1 && asset2 && idx1 && idx2 && idx1 !== idx2);
 
-  // Financials / Altman Z-Score dos emissores
+  // Financials / Altman Z-Score dos emissores com correspondência por CNPJ e Nome
   const financials1 = useMemo(() => {
-    if (!asset1?.cnpj_emissor) return null;
-    const clean = String(asset1.cnpj_emissor).replace(/\D/g, '');
-    return devedoresMap[clean] || null;
-  }, [asset1, devedoresMap]);
+    if (!asset1) return null;
+    const c1 = normalizeCnpj(asset1.cnpj_emissor);
+    if (c1 && devedoresMap[c1]) return devedoresMap[c1];
+    const n1 = (asset1.issuer || '').trim().toUpperCase();
+    if (n1 && devedoresNomeMap[n1]) return devedoresNomeMap[n1];
+    return null;
+  }, [asset1, devedoresMap, devedoresNomeMap]);
 
   const financials2 = useMemo(() => {
-    if (!asset2?.cnpj_emissor) return null;
-    const clean = String(asset2.cnpj_emissor).replace(/\D/g, '');
-    return devedoresMap[clean] || null;
-  }, [asset2, devedoresMap]);
+    if (!asset2) return null;
+    const c2 = normalizeCnpj(asset2.cnpj_emissor);
+    if (c2 && devedoresMap[c2]) return devedoresMap[c2];
+    const n2 = (asset2.issuer || '').trim().toUpperCase();
+    if (n2 && devedoresNomeMap[n2]) return devedoresNomeMap[n2];
+    return null;
+  }, [asset2, devedoresMap, devedoresNomeMap]);
+
+  // Cálculo do Placar de Vantagens ("Pontos Verdinhos")
+  const scores = useMemo(() => {
+    if (!asset1 || !asset2) return { score1: 0, score2: 0 };
+    let s1 = 0;
+    let s2 = 0;
+
+    // 1. Taxa Indicativa (se mesmo indexador)
+    const t1 = parseNum(asset1.taxa_mercado) ?? parseNum(asset1.taxa_emissao);
+    const t2 = parseNum(asset2.taxa_mercado) ?? parseNum(asset2.taxa_emissao);
+    if (!indexadoresIncompatíveis && t1 !== null && t2 !== null) {
+      if (t1 > t2) s1++;
+      else if (t2 > t1) s2++;
+    }
+
+    // 2. Spread Over (se IPCA)
+    const sp1 = parseNum(asset1.spread);
+    const sp2 = parseNum(asset2.spread);
+    if (idx1 === 'IPCA' && idx2 === 'IPCA' && sp1 !== null && sp2 !== null) {
+      if (sp1 > sp2) s1++;
+      else if (sp2 > sp1) s2++;
+    }
+
+    // 3. Rating
+    const r1 = normalizeRating(asset1.rating);
+    const r2 = normalizeRating(asset2.rating);
+    const rk1 = ratingRank(r1);
+    const rk2 = ratingRank(r2);
+    if (rk1 !== 999 && rk2 !== 999) {
+      if (rk1 < rk2) s1++;
+      else if (rk2 < rk1) s2++;
+    }
+
+    // 4. Solvência Altman Z''
+    const z1 = financials1?.altman_z_score;
+    const z2 = financials2?.altman_z_score;
+    if (z1 !== undefined && z2 !== undefined) {
+      if (z1 > z2) s1++;
+      else if (z2 > z1) s2++;
+    }
+
+    // 5. Isenção de IR
+    const isent1 = isIsentoIR(asset1);
+    const isent2 = isIsentoIR(asset2);
+    if (isent1 && !isent2) s1++;
+    else if (isent2 && !isent1) s2++;
+
+    // 6. Ágio / Deságio vs Par (maior deságio = compra com desconto = vantagem)
+    const ad1 = parseNum(asset1.agio_desagio_pct);
+    const ad2 = parseNum(asset2.agio_desagio_pct);
+    if (ad1 !== null && ad2 !== null) {
+      if (ad1 < ad2) s1++;
+      else if (ad2 < ad1) s2++;
+    }
+
+    // 7. Liquidez na B3
+    const b3_1 = asset1.flag_b3 === 1 || asset1.flag_b3 === '1';
+    const b3_2 = asset2.flag_b3 === 1 || asset2.flag_b3 === '1';
+    if (b3_1 && !b3_2) s1++;
+    else if (b3_2 && !b3_1) s2++;
+
+    return { score1: s1, score2: s2 };
+  }, [asset1, asset2, idx1, idx2, indexadoresIncompatíveis, financials1, financials2]);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl space-y-6 animate-fade-in font-sans">
@@ -215,7 +353,7 @@ export default function ComparatorPage() {
               Comparador de Títulos de Crédito Privado
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-3xl">
-              Selecione dois ativos para comparar taxas indicativas, prêmio sobre NTN-B, notas de rating, duration modificada e solidez de crédito do emissor.
+              Selecione dois ativos para comparar taxas indicativas, prêmio de spread over, rating, duration modificada, isenção de IR e solidez contábil do emissor.
             </p>
           </div>
 
@@ -408,7 +546,7 @@ export default function ComparatorPage() {
                   );
                 })()}
 
-                {/* 2. Spread sobre a Curva Soberana NTN-B */}
+                {/* 2. Spread Over (vs NTN-B) */}
                 {(() => {
                   const s1 = parseNum(asset1.spread);
                   const s2 = parseNum(asset2.spread);
@@ -421,7 +559,7 @@ export default function ComparatorPage() {
                     <tr className="hover:bg-slate-50/80 transition-colors">
                       <td className="px-4 py-3 font-semibold text-slate-800">
                         <div className="flex items-center gap-1.5" title="Prêmio de risco adicional sobre a taxa da NTN-B soberana interpolada na mesma duration.">
-                          <span>Spread vs NTN-B</span>
+                          <span>Spread Over</span>
                           <HelpCircle size={13} className="text-slate-400" />
                         </div>
                       </td>
@@ -490,7 +628,7 @@ export default function ComparatorPage() {
                   return (
                     <tr className="hover:bg-slate-50/80 transition-colors">
                       <td className="px-4 py-3 font-semibold text-slate-800">
-                        <div className="flex items-center gap-1.5" title="Modelo de previsão de solvência Altman Z'' (valores acima de 2,6 indicam zona segura; abaixo de 1,1 indicam estresse).">
+                        <div className="flex items-center gap-1.5" title="Modelo de previsão de solvência contábil Altman Z'' (valores acima de 2,6 indicam zona segura; abaixo de 1,1 indicam estresse).">
                           <span>Solvência do Emissor (Altman Z'')</span>
                           <HelpCircle size={13} className="text-slate-400" />
                         </div>
@@ -515,10 +653,10 @@ export default function ComparatorPage() {
 
                 {/* 5. Isenção Fiscal de Imposto de Renda */}
                 {(() => {
-                  const isIsento1 = asset1.tipo === 'CRI' || asset1.tipo === 'CRA' || asset1.incentivada_lei_12431 === '1' || asset1.incentivada_lei_12431 === 1;
-                  const isIsento2 = asset2.tipo === 'CRI' || asset2.tipo === 'CRA' || asset2.incentivada_lei_12431 === '1' || asset2.incentivada_lei_12431 === 1;
-                  const win1 = isIsento1 && !isIsento2;
-                  const win2 = isIsento2 && !isIsento1;
+                  const isent1 = isIsentoIR(asset1);
+                  const isent2 = isIsentoIR(asset2);
+                  const win1 = isent1 && !isent2;
+                  const win2 = isent2 && !isent1;
 
                   return (
                     <tr className="hover:bg-slate-50/80 transition-colors">
@@ -532,14 +670,14 @@ export default function ComparatorPage() {
                         <div className="flex items-center justify-center gap-1.5">
                           {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
                           {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
-                          <span>{isIsento1 ? 'Isento de IR' : 'Tributado (15%-22,5%)'}</span>
+                          <span>{isent1 ? 'Isento de IR (Lei 12.431)' : 'Tributado (15%-22,5%)'}</span>
                         </div>
                       </td>
                       <td className={`px-4 py-3 text-center font-bold ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
                         <div className="flex items-center justify-center gap-1.5">
                           {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
                           {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
-                          <span>{isIsento2 ? 'Isento de IR' : 'Tributado (15%-22,5%)'}</span>
+                          <span>{isent2 ? 'Isento de IR (Lei 12.431)' : 'Tributado (15%-22,5%)'}</span>
                         </div>
                       </td>
                     </tr>
@@ -548,13 +686,13 @@ export default function ComparatorPage() {
 
                 {/* 6. Duration Modificada */}
                 {(() => {
-                  const d1 = parseNum(asset1.duration);
-                  const d2 = parseNum(asset2.duration);
+                  const d1 = getDuration(asset1);
+                  const d2 = getDuration(asset2);
 
                   return (
                     <tr className="hover:bg-slate-50/80 transition-colors">
                       <td className="px-4 py-3 font-semibold text-slate-800">
-                        <div className="flex items-center gap-1.5" title="Prazo médio ponderado de recebimento dos fluxos de caixa em anos (mede sensibilidade à curva de juros).">
+                        <div className="flex items-center gap-1.5" title="Prazo médio ponderado de recebimento dos fluxos de caixa em anos (mede a sensibilidade do PU a choques na taxa de juros).">
                           <span>Duration Modificada</span>
                           <HelpCircle size={13} className="text-slate-400" />
                         </div>
@@ -569,10 +707,26 @@ export default function ComparatorPage() {
                   );
                 })()}
 
-                {/* 7. Data de Vencimento & Anos Restantes */}
+                {/* 7. Como o Papel Paga (Fluxo de Pagamento) */}
                 <tr className="hover:bg-slate-50/80 transition-colors">
                   <td className="px-4 py-3 font-semibold text-slate-800">
-                    <div className="flex items-center gap-1.5" title="Data final de vencimento do título com o prazo remanescente em anos.">
+                    <div className="flex items-center gap-1.5" title="Periodicidade contratual de liquidação dos cupons de juros e forma de amortização do principal.">
+                      <span>Como o Papel Paga</span>
+                      <HelpCircle size={13} className="text-slate-400" />
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-center font-semibold text-slate-700">
+                    {getComoPaga(asset1)}
+                  </td>
+                  <td className="px-4 py-3 text-center font-semibold text-slate-700">
+                    {getComoPaga(asset2)}
+                  </td>
+                </tr>
+
+                {/* 8. Data de Vencimento & Anos Restantes */}
+                <tr className="hover:bg-slate-50/80 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-slate-800">
+                    <div className="flex items-center gap-1.5" title="Data final de vencimento do título com o prazo remanescente calculado em anos.">
                       <span>Vencimento</span>
                       <HelpCircle size={13} className="text-slate-400" />
                     </div>
@@ -585,7 +739,7 @@ export default function ComparatorPage() {
                   </td>
                 </tr>
 
-                {/* 8. PU Par do Dia */}
+                {/* 9. PU Par do Dia */}
                 <tr className="hover:bg-slate-50/80 transition-colors">
                   <td className="px-4 py-3 font-semibold text-slate-800">
                     <div className="flex items-center gap-1.5" title="Preço Unitário Par teórico atualizado com juros e amortizações contratuais.">
@@ -601,10 +755,10 @@ export default function ComparatorPage() {
                   </td>
                 </tr>
 
-                {/* 9. PU Médio de Mercado (B3) */}
+                {/* 10. PU Médio de Mercado (B3) */}
                 <tr className="hover:bg-slate-50/80 transition-colors">
                   <td className="px-4 py-3 font-semibold text-slate-800">
-                    <div className="flex items-center gap-1.5" title="Preço Unitário mediano apurado nas negociações executadas na B3.">
+                    <div className="flex items-center gap-1.5" title="Preço Unitário mediano apurado nas negociações executadas a mercado na B3.">
                       <span>PU Médio de Mercado</span>
                       <HelpCircle size={13} className="text-slate-400" />
                     </div>
@@ -617,19 +771,18 @@ export default function ComparatorPage() {
                   </td>
                 </tr>
 
-                {/* 10. Ágio / Deságio sobre o Par */}
+                {/* 11. Ágio / Deságio sobre o Par */}
                 {(() => {
                   const ad1 = parseNum(asset1.agio_desagio_pct);
                   const ad2 = parseNum(asset2.agio_desagio_pct);
                   const canCompare = ad1 !== null && ad2 !== null;
-                  // Deságio (ad < 0) é compra com desconto = vantagem
                   const win1 = canCompare && ad1! < ad2!;
                   const win2 = canCompare && ad2! < ad1!;
 
                   return (
                     <tr className="hover:bg-slate-50/80 transition-colors">
                       <td className="px-4 py-3 font-semibold text-slate-800">
-                        <div className="flex items-center gap-1.5" title="Relação percentual entre o preço praticado de mercado e o PU Par (valores negativos indicam desconto/deságio).">
+                        <div className="flex items-center gap-1.5" title="Relação percentual entre o preço praticado de mercado e o PU Par (valores negativos indicam compra com desconto/deságio).">
                           <span>Ágio / Deságio vs Par</span>
                           <HelpCircle size={13} className="text-slate-400" />
                         </div>
@@ -652,7 +805,7 @@ export default function ComparatorPage() {
                   );
                 })()}
 
-                {/* 11. Liquidez Secundária na B3 */}
+                {/* 12. Liquidez Secundária na B3 */}
                 {(() => {
                   const b3_1 = asset1.flag_b3 === 1 || asset1.flag_b3 === '1';
                   const b3_2 = asset2.flag_b3 === 1 || asset2.flag_b3 === '1';
@@ -662,7 +815,7 @@ export default function ComparatorPage() {
                   return (
                     <tr className="hover:bg-slate-50/80 transition-colors">
                       <td className="px-4 py-3 font-semibold text-slate-800">
-                        <div className="flex items-center gap-1.5" title="Indica se o título registra negócios secundários e liquidez custodiada na B3.">
+                        <div className="flex items-center gap-1.5" title="Indica se o título registra negociações frequentes no mercado secundário da B3.">
                           <span>Negociado na B3</span>
                           <HelpCircle size={13} className="text-slate-400" />
                         </div>
@@ -685,10 +838,10 @@ export default function ComparatorPage() {
                   );
                 })()}
 
-                {/* 12. Indexador Contratual */}
+                {/* 13. Indexador Contratual */}
                 <tr className="hover:bg-slate-50/80 transition-colors">
                   <td className="px-4 py-3 font-semibold text-slate-800">
-                    <div className="flex items-center gap-1.5" title="Índice de atualização monetária contratual estipulado na escritura.">
+                    <div className="flex items-center gap-1.5" title="Índice de atualização monetária contratual estipulado na escritura de emissão.">
                       <span>Indexador</span>
                       <HelpCircle size={13} className="text-slate-400" />
                     </div>
@@ -701,10 +854,10 @@ export default function ComparatorPage() {
                   </td>
                 </tr>
 
-                {/* 13. Código ISIN */}
+                {/* 14. Código ISIN */}
                 <tr className="hover:bg-slate-50/80 transition-colors">
                   <td className="px-4 py-3 font-semibold text-slate-800">
-                    <div className="flex items-center gap-1.5" title="Código de identificação internacional do ativo (ISO 6166).">
+                    <div className="flex items-center gap-1.5" title="Código internacional padronizado de identificação do título (ISO 6166).">
                       <span>Código ISIN</span>
                       <HelpCircle size={13} className="text-slate-400" />
                     </div>
@@ -716,13 +869,62 @@ export default function ComparatorPage() {
                     {asset2.isin || 'N/D'}
                   </td>
                 </tr>
+
+                {/* LINHA FINAL: Placar de Indicadores / Vantagens Relativas */}
+                <tr className="bg-slate-100/90 font-bold border-t-2 border-slate-300">
+                  <td className="px-4 py-4 text-slate-900 text-xs sm:text-sm">
+                    <div className="flex items-center gap-2">
+                      <Award size={18} className="text-amber-500 shrink-0" />
+                      <div>
+                        <span className="block font-black text-slate-900">Total de Vantagens Relativas</span>
+                        <span className="text-[11px] text-slate-500 font-normal">Soma dos indicadores favoráveis (pontos verdes)</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className={`px-4 py-4 text-center font-mono ${scores.score1 > scores.score2 ? 'bg-emerald-100/70 text-emerald-950 font-black' : 'text-slate-700'}`}>
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <span className="text-base font-black">{scores.score1} vantagens</span>
+                      {scores.score1 > scores.score2 && (
+                        <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-full font-bold">
+                          Mais Favorável
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className={`px-4 py-4 text-center font-mono ${scores.score2 > scores.score1 ? 'bg-emerald-100/70 text-emerald-950 font-black' : 'text-slate-700'}`}>
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <span className="text-base font-black">{scores.score2} vantagens</span>
+                      {scores.score2 > scores.score1 && (
+                        <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-full font-bold">
+                          Mais Favorável
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
-            <span>Para consultar o dossiê contábil completo do emissor, acesse o Raio-X do Devedor.</span>
-            <div className="flex items-center gap-3">
+          {/* Sumário do Placar e Links */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500 pt-2 border-t border-slate-100">
+            <div>
+              {scores.score1 > scores.score2 ? (
+                <span className="text-emerald-800 font-bold">
+                  Resultado: <strong>{asset1.ticker}</strong> obteve mais pontos favoráveis ({scores.score1} a {scores.score2}) nesta comparação quantitativa.
+                </span>
+              ) : scores.score2 > scores.score1 ? (
+                <span className="text-emerald-800 font-bold">
+                  Resultado: <strong>{asset2.ticker}</strong> obteve mais pontos favoráveis ({scores.score2} a {scores.score1}) nesta comparação quantitativa.
+                </span>
+              ) : (
+                <span className="text-slate-700 font-bold">
+                  Resultado: Empate técnico no balanço de indicadores ({scores.score1} a {scores.score2}).
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
               <Link to={`/asset/${asset1.ticker}`} className="text-blue-600 hover:underline font-bold">
                 Raio-X {asset1.ticker} →
               </Link>
@@ -760,7 +962,7 @@ export default function ComparatorPage() {
               <input
                 type="text"
                 autoFocus
-                placeholder="Digite o código (ex: VALE38) ou nome..."
+                placeholder="Digite o código (ex: VALE38, CERR18) ou nome..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -813,7 +1015,7 @@ export default function ComparatorPage() {
               <input
                 type="text"
                 autoFocus
-                placeholder="Digite o código (ex: VALEC0) ou nome..."
+                placeholder="Digite o código (ex: VALEC0, CERR18) ou nome..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
