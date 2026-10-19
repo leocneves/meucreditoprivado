@@ -637,14 +637,14 @@ export default function ComparatorPage() {
                         <div className="flex items-center justify-center gap-1.5">
                           {win1 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
                           {win2 && <X size={14} className="text-rose-500 stroke-[3]" />}
-                          <span>{z1 !== undefined ? `${z1.toFixed(2)} (${financials1?.altman_zona?.split(' ')[0] || ''})` : 'N/D'}</span>
+                          <span>{z1 !== undefined ? z1.toFixed(2) : 'N/D'}</span>
                         </div>
                       </td>
                       <td className={`px-4 py-3 text-center font-mono font-bold ${win2 ? 'bg-emerald-50/60 text-emerald-900' : win1 ? 'text-slate-600' : 'text-slate-900'}`}>
                         <div className="flex items-center justify-center gap-1.5">
                           {win2 && <Check size={14} className="text-emerald-600 stroke-[3]" />}
                           {win1 && <X size={14} className="text-rose-500 stroke-[3]" />}
-                          <span>{z2 !== undefined ? `${z2.toFixed(2)} (${financials2?.altman_zona?.split(' ')[0] || ''})` : 'N/D'}</span>
+                          <span>{z2 !== undefined ? z2.toFixed(2) : 'N/D'}</span>
                         </div>
                       </td>
                     </tr>

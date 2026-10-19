@@ -48,6 +48,9 @@ interface EventoProximo {
   indexador: string;
   taxa_emissao: string;
   data_evento: string;
+  data_base_contratual?: string;
+  data_liquidacao?: string;
+  ajuste_dia_util?: boolean;
   tipo_evento: string;
   volume: number;
   pu_evento: number;
@@ -447,7 +450,9 @@ export default function AgendaPage() {
           <table className="w-full text-left text-xs text-slate-600">
             <thead className="sticky top-0 bg-slate-100/95 backdrop-blur-xs text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[11px] z-10">
               <tr>
-                <th className="px-3.5 py-3">Data</th>
+                <th className="px-3.5 py-3" title="Data efetiva de liquidação financeira do pagamento. Se a data contratual cair em final de semana ou feriado, o crédito ocorre no primeiro dia útil subsequente.">
+                  Data de Pagamento
+                </th>
                 <th className="px-3.5 py-3">Ativo</th>
                 <th className="px-3.5 py-3">Tipo</th>
                 <th className="px-3.5 py-3">Devedor / Emissor</th>
@@ -479,7 +484,17 @@ export default function AgendaPage() {
                   return (
                     <tr key={`${ev.ticker}-${ev.data_evento}-${idx}`} className="hover:bg-slate-50/80 transition-colors">
                       <td className="px-3.5 py-2.5 font-semibold text-slate-900 font-mono whitespace-nowrap">
-                        {formatDateBR(ev.data_evento)}
+                        <div className="flex flex-col">
+                          <span>{formatDateBR(ev.data_evento)}</span>
+                          {ev.ajuste_dia_util && ev.data_base_contratual && (
+                            <span
+                              className="text-[10px] text-slate-400 font-normal cursor-help"
+                              title={`Data base estipulada em contrato: ${formatDateBR(ev.data_base_contratual)}. Como caiu em final de semana/feriado, a liquidação ocorre no 1º dia útil seguinte (${formatDateBR(ev.data_evento)}).`}
+                            >
+                              (Útil • base {formatDateBR(ev.data_base_contratual).slice(0, 5)})
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-3.5 py-2.5 font-bold">
                         <Link
