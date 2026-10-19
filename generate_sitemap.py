@@ -144,7 +144,18 @@ def main():
     lastmod_week = (now - timedelta(days=7)).strftime("%Y-%m-%d")
     lastmod_old = (now - timedelta(days=30)).strftime("%Y-%m-%d")
 
-    static_pages = ["/", "/negocios/", "/charts/", "/ntnb/", "/primary/", "/contact/", "/raiox-devedor/", "/calculadora/"]
+    static_pages = [
+        "/",
+        "/negocios/",
+        "/charts/",
+        "/ntnb/",
+        "/primary/",
+        "/contact/",
+        "/raiox-devedor/",
+        "/calculadora/",
+        "/agenda/",
+        "/comparar/",
+    ]
 
     def make_urls(tickers, changefreq, priority, lm):
         return [

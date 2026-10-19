@@ -1086,6 +1086,22 @@ STATIC_PAGES_META = [
         "h1": "Contato e Apoio ao Projeto",
         "lead": "Canal oficial para dúvidas, sugestões analíticas e parcerias.",
     },
+    {
+        "slug": "agenda",
+        "title": "Agenda de Pagamentos e Proventos de Crédito Privado | FIXDATA",
+        "description": "Cronograma de liquidação de juros, amortizações e prêmios de Debêntures, CRIs e CRAs no Brasil para os próximos 90 dias e 12 meses.",
+        "keywords": "agenda de pagamentos debêntures, proventos crédito privado, cronograma amortização cri cra, juros debêntures, fluxo de caixa renda fixa",
+        "h1": "Agenda de Pagamentos Futuros de Crédito Privado",
+        "lead": "Cronograma contratual consolidado de eventos de amortização e juros de debêntures, CRIs e CRAs mapeados no mercado brasileiro.",
+    },
+    {
+        "slug": "comparar",
+        "title": "Comparador de Debêntures, CRIs e CRAs | FIXDATA",
+        "description": "Compare dois títulos de crédito privado lado a lado em taxas indicativas, spreads sobre NTN-B, ratings, duration, isenção fiscal (Lei 12.431) e liquidez B3.",
+        "keywords": "comparador de debêntures, comparar renda fixa, debênture vs cri, spread ntn-b comparador, simulador crédito privado",
+        "h1": "Comparador de Ativos de Crédito Privado",
+        "lead": "Análise quantitativa direta entre dois papéis de renda fixa corporativa para tomada de decisão técnica fundamentada.",
+    },
 ]
 
 def render_static_pages():

@@ -30,6 +30,8 @@ def get_hot_urls(limit=10000):
         "contact/",
         "raiox-devedor/",
         "calculadora/",
+        "agenda/",
+        "comparar/",
     ]
     for p in static_paths:
         urls.append(f"https://{HOST}/{p}")

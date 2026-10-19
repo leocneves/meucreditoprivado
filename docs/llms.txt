@@ -16,11 +16,14 @@
 - **Curva Soberana NTN-B:** https://fixdatabrasil.com.br/ntnb/ (Estrutura a termo das taxas de juros reais do Tesouro IPCA+ utilizada como benchmark de crédito)
 - **Mercado Primário:** https://fixdatabrasil.com.br/primary/ (Pipeline de novas emissões de debêntures e ofertas públicas em andamento)
 - **Calculadora de Equivalência Isenta:** https://fixdatabrasil.com.br/calculadora/ (Simulação de yield equivalente entre papéis isentos da Lei 12.431 e ativos tributados)
+- **Agenda de Pagamentos Futuros:** https://fixdatabrasil.com.br/agenda/ (Cronograma contratual consolidado de eventos de amortização e juros de debêntures, CRIs e CRAs nos próximos 90 dias e 12 meses)
+- **Comparador de Ativos:** https://fixdatabrasil.com.br/comparar/ (Comparação analítica e quantitativa direta entre dois papéis de renda fixa: taxa indicativa, spread NTN-B, rating, duration e isenção fiscal)
 
 ## Datasets Públicos Estruturados (CSV e JSON)
 O FIXDATA disponibiliza datasets diários atualizados para análise quantitativa:
 - **Base Mestre de Ativos:** https://fixdatabrasil.com.br/data/assets_master.csv (Cadastro completo, taxas indicativas, PUs, ratings e indexadores)
 - **Resumo de Negócios B3:** https://fixdatabrasil.com.br/data/b3_trades_summary.csv (Agregação de negociações higienizadas por ativo)
+- **Agenda de Pagamentos Futuros:** https://fixdatabrasil.com.br/data/agenda_pagamentos.json (Cronograma contratual de juros e amortizações dos próximos 90 dias e resumo mensal 12m)
 - **Mural de Fluxos de Pagamentos:** https://fixdatabrasil.com.br/data/cashflow_wall.json (Projeção de cupons e amortizações até 2045+)
 - **Base Fundamentalista de Devedores:** https://fixdatabrasil.com.br/data/devedores_raiox.json (Demonstrações contábeis e indicadores de balanço CVM)
 

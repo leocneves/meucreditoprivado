@@ -10,10 +10,12 @@ import Contact from './pages/Contact';
 import Trades from './pages/Trades';
 import DebtorRadar from './pages/DebtorRadar';
 import CalculatorPage from './pages/Calculator';
+import AgendaPage from './pages/Agenda';
+import ComparatorPage from './pages/Comparator';
 import { 
   LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, 
   ArrowLeftRight, Building2, Calculator, LogOut, User as UserIcon, 
-  ChevronDown, TrendingUp, Sparkles 
+  ChevronDown, TrendingUp, Sparkles, Calendar, Scale 
 } from 'lucide-react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LeadGate } from './components/LeadGate';
@@ -71,6 +73,12 @@ const Navbar = () => {
           desc: 'Ofertas públicas CVM 160 e emissões em andamento',
           icon: <Tag size={17} className="text-purple-600" />,
         },
+        {
+          path: '/agenda',
+          label: 'Agenda de Pagamentos',
+          desc: 'Cronograma de amortizações e cupons futuros',
+          icon: <Calendar size={17} className="text-cyan-600" />,
+        },
       ],
     },
     {
@@ -90,6 +98,12 @@ const Navbar = () => {
           desc: 'Simulador de Duration, PU, cupom e equivalência',
           icon: <Calculator size={17} className="text-teal-600" />,
         },
+        {
+          path: '/comparar',
+          label: 'Comparador de Ativos',
+          desc: 'Comparação direta de taxas, spread e rating',
+          icon: <Scale size={17} className="text-amber-500" />,
+        },
       ],
     },
   ];
@@ -97,9 +111,13 @@ const Navbar = () => {
   const isPathActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     if (path === '/negocios') return location.pathname === '/negocios' || location.pathname === '/trades';
+    if (path === '/charts') return location.pathname === '/charts';
     if (path === '/ntnb') return location.pathname === '/ntnb' || location.pathname === '/dashboard-ntnb';
+    if (path === '/primary') return location.pathname === '/primary';
+    if (path === '/agenda') return location.pathname === '/agenda' || location.pathname === '/agenda-pagamentos';
     if (path === '/raiox-devedor') return location.pathname === '/raiox-devedor' || location.pathname === '/devedor';
     if (path === '/calculadora') return location.pathname === '/calculadora' || location.pathname === '/calculator' || location.pathname === '/grossup';
+    if (path === '/comparar') return location.pathname === '/comparar' || location.pathname === '/comparator';
     if (path === '/contact') return location.pathname === '/contact' || location.pathname === '/apoiar';
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
@@ -532,6 +550,10 @@ const App: React.FC = () => {
                 }
               />
               <Route path="/primary" element={<Primary />} />
+              <Route path="/agenda" element={<AgendaPage />} />
+              <Route path="/agenda-pagamentos" element={<AgendaPage />} />
+              <Route path="/comparar" element={<ComparatorPage />} />
+              <Route path="/comparator" element={<ComparatorPage />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/apoiar" element={<Contact />} />
             </Routes>
