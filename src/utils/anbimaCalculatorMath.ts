@@ -360,84 +360,22 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
   const vna = Number(asset?.vna || asset?.pu || asset?.pu_par || 1000.0);
   const taxaEmissaoAnual = Number(asset?.taxa_emissao || 6.0) / 100.0;
   const indexador = String(asset?.indexador || 'IPCA').toUpperCase();
+  const dtVencRolled = rollToNextBusinessDay(dtVenc);
 
-  // 1. Agrupamento e identificação dos pagamentos futuros
-  const mapFuturos = new Map<string, {
-    dataLiquidacao: string;
-    hasAmortization: boolean;
-    percentualAmortizacao: number;
-    tipos: string[];
-  }>();
+  // 1. Identifica se o papel é BULLET / JUROS CAPITALIZADOS NO VENCIMENTO (ex: ECER12)
+  const proximoCupom = asset?.data_proximo_cupom || asset?.data_proximo_evento;
+  const periodicidade = String(asset?.periodicidade_cupom || '').toLowerCase();
+  const isBullet = Boolean(
+    (proximoCupom && dtVenc && proximoCupom >= dtVenc) ||
+    periodicidade.includes('vencimento') ||
+    periodicidade.includes('resgate') ||
+    periodicidade.includes('bullet') ||
+    periodicidade.includes('não há') ||
+    periodicidade.includes('sem cupom') ||
+    periodicidade.includes('zero')
+  );
 
-  for (let k = 0; k < paymentEvents.length; k++) {
-    const ev = paymentEvents[k];
-    const rawDt = ev.data_liquidacao || ev.data_evento;
-    if (!rawDt) continue;
-    const dtRolled = rollToNextBusinessDay(rawDt);
-    if (dtRolled <= dataLiquidacao) continue;
-
-    if (!mapFuturos.has(dtRolled)) {
-      mapFuturos.set(dtRolled, {
-        dataLiquidacao: dtRolled,
-        hasAmortization: false,
-        percentualAmortizacao: 0,
-        tipos: []
-      });
-    }
-    const item = mapFuturos.get(dtRolled)!;
-    const tipo = String(ev.tipo_evento || '');
-    item.tipos.push(tipo);
-    if (/amort/i.test(tipo) || /venc/i.test(tipo)) {
-      item.hasAmortization = true;
-    }
-    if (ev.percentual_amortizacao != null && !isNaN(Number(ev.percentual_amortizacao))) {
-      item.percentualAmortizacao += Number(ev.percentual_amortizacao);
-    }
-  }
-
-  let eventosFuturos = Array.from(mapFuturos.values()).sort((a, b) => a.dataLiquidacao.localeCompare(b.dataLiquidacao));
-
-  // Se não há eventos pré-cadastrados, constrói cronograma semestral hipotético até o vencimento
-  if (eventosFuturos.length === 0) {
-    const vencRolled = rollToNextBusinessDay(dtVenc);
-    let curr = new Date(vencRolled + 'T00:00:00Z');
-    const startLiq = new Date(dataLiquidacao + 'T00:00:00Z');
-    const datasGeradas: string[] = [];
-
-    while (curr > startLiq) {
-      datasGeradas.push(rollToNextBusinessDay(formatDateISO(curr)));
-      curr = addCalendarDays(curr, -182); // ~6 meses
-    }
-
-    const unicas = Array.from(new Set(datasGeradas)).sort();
-    eventosFuturos = unicas.map((d, idx) => ({
-      dataLiquidacao: d,
-      hasAmortization: idx === unicas.length - 1,
-      percentualAmortizacao: idx === unicas.length - 1 ? 100.0 : 0,
-      tipos: [idx === unicas.length - 1 ? 'Juros|Amortização' : 'Juros']
-    }));
-  }
-
-  // 2. Localiza a data base para apuração dos Juros Decorridos (Accrued Interest)
-  const passados = paymentEvents.filter(e => {
-    const d = e.data_liquidacao || e.data_evento;
-    return d && d <= dataLiquidacao;
-  });
-
-  let dtUltimoCupom: string;
-  if (passados.length > 0) {
-    dtUltimoCupom = passados.reduce((max, e) => {
-      const d = e.data_liquidacao || e.data_evento;
-      return (d && d > max) ? d : max;
-    }, passados[0].data_liquidacao || passados[0].data_evento || dataLiquidacao);
-  } else {
-    dtUltimoCupom = asset?.data_emissao || asset?.dt_emissao || addBusinessDays(dataLiquidacao, -126);
-  }
-
-  // 3. Monta grade de fluxos
-  let saldoDevedor = vna;
-  let dtAnt = dtUltimoCupom;
-  const fluxosCalculo: {
+  let fluxosCalculo: {
     nome: string;
     dataLiquidacao: string;
     prazoDu: number;
@@ -446,45 +384,160 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     amortizacao: number;
     valorFluxo: number;
   }[] = [];
+  let duDecorrido = 0;
+  let pupar = 0;
+  let fatorAccrued = 1.0;
 
-  for (let i = 0; i < eventosFuturos.length; i++) {
-    const ev = eventosFuturos[i];
-    const dtEv = ev.dataLiquidacao;
-    const duAteLiq = countBusinessDays(dataLiquidacao, dtEv);
-    let duPeriodo = countBusinessDays(dtAnt, dtEv);
-    if (duPeriodo <= 0) duPeriodo = 126;
+  if (isBullet) {
+    // -------------------------------------------------------------
+    // ATIVO BULLET: JUROS CAPITALIZADOS ATÉ O VENCIMENTO (Ex: ECER12)
+    // -------------------------------------------------------------
+    const duAteLiq = countBusinessDays(dataLiquidacao, dtVencRolled);
+    const puParOficial = Number(asset?.pu_par || 0);
 
-    const isLast = (i === eventosFuturos.length - 1);
-    let valAmort = 0.0;
-    if (ev.percentualAmortizacao > 0) {
-      valAmort = (ev.percentualAmortizacao / 100.0) * vna;
-    } else if (ev.hasAmortization || isLast) {
-      valAmort = saldoDevedor;
+    if (puParOficial > vna) {
+      pupar = puParOficial;
+      fatorAccrued = pupar / vna;
+      duDecorrido = Math.round((Math.log(fatorAccrued) / Math.log(1.0 + taxaEmissaoAnual)) * 252);
+    } else {
+      const dtEmissao = asset?.data_inicio_rentabilidade || asset?.data_emissao || asset?.dt_emissao || '2023-09-06';
+      duDecorrido = countBusinessDays(dtEmissao, dataLiquidacao);
+      fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
+      pupar = vna * fatorAccrued;
     }
 
-    // Fórmula oficial ANBIMA de cupom projetado:
-    // Juros = Saldo Devedor * [ (1 + Taxa Emissão)^(DU_periodo / 252) - 1 ]
-    const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
-    const valJuros = saldoDevedor * fatorJuros;
+    // Capitalização contínua a partir do PU Par até o vencimento
+    const valorFluxoFinal = pupar * Math.pow(1.0 + taxaEmissaoAnual, duAteLiq / 252.0);
+    const valAmortizacao = vna;
+    const valJurosProjetado = Math.max(valorFluxoFinal - valAmortizacao, 0.0);
+    const duTotalPeriodo = duDecorrido + duAteLiq;
 
     fluxosCalculo.push({
-      nome: valAmort > 0 && valJuros > 0 ? 'Juros|Amortização' : (valAmort > 0 ? 'Amortização' : 'Juros'),
-      dataLiquidacao: dtEv,
+      nome: 'Juros|Amortização',
+      dataLiquidacao: dtVencRolled,
       prazoDu: duAteLiq,
-      diasEntrePagamentos: duPeriodo,
-      jurosProjetado: valJuros,
-      amortizacao: valAmort,
-      valorFluxo: valJuros + valAmort
+      diasEntrePagamentos: duTotalPeriodo,
+      jurosProjetado: valJurosProjetado,
+      amortizacao: valAmortizacao,
+      valorFluxo: valorFluxoFinal
+    });
+  } else {
+    // -------------------------------------------------------------
+    // ATIVO COM CUPONS PERIÓDICOS (Ex: ENAT14, CRA026002BE, CERR18)
+    // -------------------------------------------------------------
+    const mapFuturos = new Map<string, {
+      dataLiquidacao: string;
+      hasAmortization: boolean;
+      percentualAmortizacao: number;
+      tipos: string[];
+    }>();
+
+    for (let k = 0; k < paymentEvents.length; k++) {
+      const ev = paymentEvents[k];
+      const rawDt = ev.data_liquidacao || ev.data_evento;
+      if (!rawDt) continue;
+      const dtRolled = rollToNextBusinessDay(rawDt);
+      if (dtRolled <= dataLiquidacao) continue;
+
+      if (!mapFuturos.has(dtRolled)) {
+        mapFuturos.set(dtRolled, {
+          dataLiquidacao: dtRolled,
+          hasAmortization: false,
+          percentualAmortizacao: 0,
+          tipos: []
+        });
+      }
+      const item = mapFuturos.get(dtRolled)!;
+      const tipo = String(ev.tipo_evento || '');
+      item.tipos.push(tipo);
+      if (/amort/i.test(tipo) || /venc/i.test(tipo)) {
+        item.hasAmortization = true;
+      }
+      if (ev.percentual_amortizacao != null && !isNaN(Number(ev.percentual_amortizacao))) {
+        item.percentualAmortizacao += Number(ev.percentual_amortizacao);
+      }
+    }
+
+    let eventosFuturos = Array.from(mapFuturos.values()).sort((a, b) => a.dataLiquidacao.localeCompare(b.dataLiquidacao));
+
+    // Se não há eventos pré-cadastrados, constrói cronograma semestral contratual até o vencimento
+    if (eventosFuturos.length === 0) {
+      let curr = new Date(dtVencRolled + 'T00:00:00Z');
+      const startLiq = new Date(dataLiquidacao + 'T00:00:00Z');
+      const datasGeradas: string[] = [];
+
+      while (curr > startLiq) {
+        datasGeradas.push(rollToNextBusinessDay(formatDateISO(curr)));
+        curr = addCalendarDays(curr, -182); // ~6 meses
+      }
+
+      const unicas = Array.from(new Set(datasGeradas)).sort();
+      eventosFuturos = unicas.map((d, idx) => ({
+        dataLiquidacao: d,
+        hasAmortization: idx === unicas.length - 1,
+        percentualAmortizacao: idx === unicas.length - 1 ? 100.0 : 0,
+        tipos: [idx === unicas.length - 1 ? 'Juros|Amortização' : 'Juros']
+      }));
+    }
+
+    // Localiza a data base para apuração dos Juros Decorridos (Accrued Interest)
+    const passados = paymentEvents.filter(e => {
+      const d = e.data_liquidacao || e.data_evento;
+      return d && d <= dataLiquidacao;
     });
 
-    saldoDevedor = Math.max(saldoDevedor - valAmort, 0.0);
-    dtAnt = dtEv;
+    let dtUltimoCupom: string;
+    if (passados.length > 0) {
+      dtUltimoCupom = passados.reduce((max, e) => {
+        const d = e.data_liquidacao || e.data_evento;
+        return (d && d > max) ? d : max;
+      }, passados[0].data_liquidacao || passados[0].data_evento || dataLiquidacao);
+    } else {
+      dtUltimoCupom = asset?.data_emissao || asset?.dt_emissao || addBusinessDays(dataLiquidacao, -126);
+    }
+
+    duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
+    fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
+    pupar = vna * fatorAccrued;
+
+    let saldoDevedor = vna;
+    let dtAnt = dtUltimoCupom;
+
+    for (let i = 0; i < eventosFuturos.length; i++) {
+      const ev = eventosFuturos[i];
+      const dtEv = ev.dataLiquidacao;
+      const duAteLiq = countBusinessDays(dataLiquidacao, dtEv);
+      let duPeriodo = countBusinessDays(dtAnt, dtEv);
+      if (duPeriodo <= 0) duPeriodo = 126;
+
+      const isLast = (i === eventosFuturos.length - 1);
+      let valAmort = 0.0;
+      if (ev.percentualAmortizacao > 0) {
+        valAmort = (ev.percentualAmortizacao / 100.0) * vna;
+      } else if (ev.hasAmortization || isLast) {
+        valAmort = saldoDevedor;
+      }
+
+      // Fórmula oficial ANBIMA de cupom projetado:
+      // Juros = Saldo Devedor * [ (1 + Taxa Emissão)^(DU_periodo / 252) - 1 ]
+      const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
+      const valJuros = saldoDevedor * fatorJuros;
+
+      fluxosCalculo.push({
+        nome: valAmort > 0 && valJuros > 0 ? 'Juros|Amortização' : (valAmort > 0 ? 'Amortização' : 'Juros'),
+        dataLiquidacao: dtEv,
+        prazoDu: duAteLiq,
+        diasEntrePagamentos: duPeriodo,
+        jurosProjetado: valJuros,
+        amortizacao: valAmort,
+        valorFluxo: valJuros + valAmort
+      });
+
+      saldoDevedor = Math.max(saldoDevedor - valAmort, 0.0);
+      dtAnt = dtEv;
+    }
   }
 
-  // 4. Apuração dos Juros Decorridos (Accrued Interest) e Preço Par
-  const duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
-  const fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
-  const pupar = vna * fatorAccrued;
   const jurosDecorridos = pupar - vna;
 
   // 5. Resolução da Taxa ou do PU

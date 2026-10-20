@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   Calculator,
@@ -13,7 +13,7 @@ import {
   HelpCircle,
   Copy,
   Check,
-  Calendar,
+  Calendar as CalendarIcon,
   Layers,
   Sliders,
   DollarSign,
@@ -22,49 +22,30 @@ import {
   Wallet,
   Receipt,
   BarChart3,
-  Award,
-  Zap,
-  ArrowRight,
-  ChevronDown,
-  ChevronUp,
-  ThumbsUp,
   AlertCircle,
-  Clock,
-  PiggyBank,
-  Flame,
-  Settings2,
   ExternalLink,
   Table,
-  LineChart
+  LineChart,
+  X,
+  ChevronRight
 } from 'lucide-react';
 import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip as RechartsTooltip,
-  Legend,
-  ReferenceDot
+  Tooltip as RechartsTooltip
 } from 'recharts';
-import { fetchCSV, Asset, NtnbRecord, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
+import { fetchCSV, Asset, NtnbRecord, getTipoBadgeClass } from '../utils/csv';
 import {
-  getIncomeTaxRate,
   calcGrossUpRate,
-  calcNominalRate,
-  calcFutureValue,
-  calcBreakevenInflation,
-  CouponFrequency,
-  AmortizationSchedule,
-  ReinvestmentStrategy
+  calcNominalRate
 } from '../utils/calculatorMath';
 import {
   calculateAnbimaPricing,
   addBusinessDays,
-  countBusinessDays,
   PaymentEventItem,
   AnbimaPricingResult
 } from '../utils/anbimaCalculatorMath';
@@ -72,10 +53,11 @@ import {
 /* ================= ATIVOS EM DESTAQUE PARA PREENCHIMENTO RÁPIDO ================= */
 const POPULAR_SHORTCUTS = [
   { label: 'Deb. Brava (ENAT14)', ticker: 'ENAT14' },
-  { label: 'CRA Pré-Fixado (CRA026002BE)', ticker: 'CRA026002BE' },
+  { label: 'Deb. Ecovias (ECER12)', ticker: 'ECER12' },
+  { label: 'Deb. Cerradinho (CERR18)', ticker: 'CERR18' },
+  { label: 'CRA Pré (CRA026002BE)', ticker: 'CRA026002BE' },
   { label: 'Deb. Vale (VALED1)', ticker: 'VALED1' },
-  { label: 'Deb. Sabesp (SBSPE2)', ticker: 'SBSPE2' },
-  { label: 'Deb. Cerradinho (CERR18)', ticker: 'CERR18' }
+  { label: 'Deb. Sabesp (SBSPE2)', ticker: 'SBSPE2' }
 ];
 
 /* ================= BENCHMARKS DE NTN-B DEFAULT (Fallback) ================= */
@@ -91,6 +73,133 @@ const DEFAULT_NTNB_LIST = [
   { nome: 'NTN-B 2040', ano: 2040, vencimento: '2040-08-15', taxa: 7.3974 },
   { nome: 'NTN-B 2050', ano: 2050, vencimento: '2050-08-15', taxa: 7.2900 }
 ];
+
+/* ================= HELPERS DE FORMATAÇÃO BRASILEIRA ================= */
+export function formatToBrDate(isoDate: string): string {
+  if (!isoDate) return '';
+  const parts = isoDate.split('-');
+  if (parts.length !== 3) return isoDate;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+export function parseBrDateToIso(brDate: string): string | null {
+  if (!brDate) return null;
+  const parts = brDate.split('/');
+  if (parts.length !== 3) return null;
+  const day = parts[0].padStart(2, '0');
+  const month = parts[1].padStart(2, '0');
+  const year = parts[2];
+  if (day.length !== 2 || month.length !== 2 || year.length !== 4) return null;
+  return `${year}-${month}-${day}`;
+}
+
+export function formatBrCurrency(value: number, decimals: number = 6): string {
+  if (isNaN(value)) return 'R$ 0,00';
+  return 'R$ ' + value.toLocaleString('pt-BR', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+}
+
+export function formatBrNumber(value: number, decimals: number = 2): string {
+  if (isNaN(value)) return '0,00';
+  return value.toLocaleString('pt-BR', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+}
+
+/* ================= COMPONENTE DE INPUT DE DATA BRASILEIRO (DD/MM/AAAA) ================= */
+interface BrDateInputProps {
+  label: string;
+  valueIso: string;
+  onChangeIso: (newIso: string) => void;
+  tooltipTitle?: string;
+  tooltipContent?: string;
+}
+
+const BrDateInput: React.FC<BrDateInputProps> = ({
+  label,
+  valueIso,
+  onChangeIso,
+  tooltipTitle,
+  tooltipContent
+}) => {
+  const [textVal, setTextVal] = useState<string>(() => formatToBrDate(valueIso));
+  const hiddenDateRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setTextVal(formatToBrDate(valueIso));
+  }, [valueIso]);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, '').slice(0, 8);
+    let formatted = raw;
+    if (raw.length > 4) {
+      formatted = `${raw.slice(0, 2)}/${raw.slice(2, 4)}/${raw.slice(4)}`;
+    } else if (raw.length > 2) {
+      formatted = `${raw.slice(0, 2)}/${raw.slice(2)}`;
+    }
+    setTextVal(formatted);
+
+    if (raw.length === 8) {
+      const iso = parseBrDateToIso(formatted);
+      if (iso && !isNaN(Date.parse(iso))) {
+        onChangeIso(iso);
+      }
+    }
+  };
+
+  const handleNativeDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newIso = e.target.value;
+    if (newIso) {
+      onChangeIso(newIso);
+      setTextVal(formatToBrDate(newIso));
+    }
+  };
+
+  return (
+    <div className="space-y-1.5">
+      <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
+        <span className="flex items-center">
+          {label}
+          {tooltipTitle && tooltipContent && (
+            <InfoTooltip title={tooltipTitle} content={tooltipContent} />
+          )}
+        </span>
+        <span className="text-[10px] text-slate-400 font-medium">DD/MM/AAAA</span>
+      </label>
+
+      <div className="relative flex items-center">
+        <input
+          type="text"
+          value={textVal}
+          onChange={handleTextChange}
+          placeholder="DD/MM/AAAA"
+          maxLength={10}
+          className="w-full pl-3.5 pr-10 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 placeholder-slate-400 shadow-xs focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition"
+        />
+        <button
+          type="button"
+          onClick={() => hiddenDateRef.current?.showPicker?.() || hiddenDateRef.current?.click()}
+          className="absolute right-2.5 text-slate-400 hover:text-blue-600 p-1 rounded-lg hover:bg-slate-100 transition"
+          title="Abrir calendário"
+        >
+          <CalendarIcon size={16} />
+        </button>
+        <input
+          ref={hiddenDateRef}
+          type="date"
+          value={valueIso}
+          onChange={handleNativeDateChange}
+          className="sr-only"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+  );
+};
 
 /* ================= TOOLTIP DIDÁTICO ================= */
 interface InfoTooltipProps {
@@ -113,7 +222,7 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title, content, formula, exam
         onMouseLeave={() => setShow(false)}
         title={title}
       >
-        <HelpCircle size={14} />
+        <HelpCircle size={13} />
       </button>
 
       {show && (
@@ -148,6 +257,7 @@ const CalculatorPage: React.FC = () => {
 
   // Abas Principais
   const [mainView, setMainView] = useState<'anbima' | 'cenarios'>('anbima');
+  const [showConvexity, setShowConvexity] = useState(false);
 
   // Estados de dados
   const [allAssets, setAllAssets] = useState<Asset[]>([]);
@@ -192,18 +302,17 @@ const CalculatorPage: React.FC = () => {
         ]);
 
         if (assetsData && assetsData.length > 0) {
-          const actives = assetsData.filter(a => a.status_ativo === 'Ativo');
-          const list = actives.length > 0 ? actives : assetsData;
-          setAllAssets(list);
+          // Disponibiliza todos os 15.984 títulos cadastrados (não filtra status_ativo para não ocultar papéis como CERR18)
+          setAllAssets(assetsData);
 
           if (initialTicker) {
-            const found = list.find(a => (a.ticker || '').toUpperCase() === initialTicker);
+            const found = assetsData.find(a => (a.ticker || '').toUpperCase() === initialTicker);
             if (found) {
               handleSelectAsset(found);
             }
           } else {
             // Seleciona ENAT14 como exemplo benchmark por default
-            const defAsset = list.find(a => a.ticker === 'ENAT14') || list[0];
+            const defAsset = assetsData.find(a => a.ticker === 'ENAT14') || assetsData[0];
             if (defAsset) {
               handleSelectAsset(defAsset);
             }
@@ -276,15 +385,15 @@ const CalculatorPage: React.FC = () => {
     setShowSearchResults(false);
 
     // Identifica taxa indicativa do ativo
-    const rAnb = parseFloat(a.taxa_indicativa_anbima || a.taxa_mercado || '');
-    const rB3 = parseFloat(a.taxa_negocio_b3 || '');
-    const rEmiss = parseFloat(a.taxa_emissao || '');
+    const rAnb = parseFloat(String(a.taxa_indicativa_anbima || a.taxa_mercado || '').replace(',', '.'));
+    const rB3 = parseFloat(String(a.taxa_negocio_b3 || '').replace(',', '.'));
+    const rEmiss = parseFloat(String(a.taxa_emissao || '').replace(',', '.'));
     const bestRate = !isNaN(rAnb) && rAnb > 0 ? rAnb : (!isNaN(rB3) && rB3 > 0 ? rB3 : (!isNaN(rEmiss) ? rEmiss : 8.2597));
     setInputRate(Number(bestRate.toFixed(4)));
 
     // Identifica PU inicial
     const rawPu = a.vna || a.pu || a.pu_par || '';
-    const puVna = typeof rawPu === 'number' ? rawPu : parseFloat(String(rawPu));
+    const puVna = typeof rawPu === 'number' ? rawPu : parseFloat(String(rawPu).replace(',', '.'));
     setInputPU(!isNaN(puVna) && puVna > 0 ? Number(puVna.toFixed(4)) : 1000.0);
 
     // Prazo em anos
@@ -358,7 +467,7 @@ const CalculatorPage: React.FC = () => {
     return points;
   }, [selectedAsset, anbimaResult, assetPaymentEvents, dataOperacao, dataLiquidacao]);
 
-  /* ================= 6. BUSCA DE ATIVOS ================= */
+  /* ================= 6. BUSCA DE ATIVOS (PRIORIDADE EXATA POR TICKER) ================= */
   const searchResults = useMemo(() => {
     if (!searchQuery || searchQuery.trim().length < 2) return [];
     const q = searchQuery.toLowerCase().trim();
@@ -368,7 +477,16 @@ const CalculatorPage: React.FC = () => {
         (a.issuer && a.issuer.toLowerCase().includes(q)) ||
         (a.isin && a.isin.toLowerCase().includes(q))
       )
-      .slice(0, 8);
+      .sort((a, b) => {
+        const aTick = (a.ticker || '').toLowerCase();
+        const bTick = (b.ticker || '').toLowerCase();
+        if (aTick === q) return -1;
+        if (bTick === q) return 1;
+        if (aTick.startsWith(q) && !bTick.startsWith(q)) return -1;
+        if (!aTick.startsWith(q) && bTick.startsWith(q)) return 1;
+        return 0;
+      })
+      .slice(0, 10);
   }, [searchQuery, allAssets]);
 
   // Benchmark NTN-B correspondente
@@ -387,81 +505,90 @@ const CalculatorPage: React.FC = () => {
 
   const copyResults = () => {
     if (!anbimaResult) return;
-    const txt = `[Calculadora FixData / ANBIMA - ${anbimaResult.ticker}]
-PU Operação: R$ ${anbimaResult.puOperacao.toFixed(6)}
-PU Par: R$ ${anbimaResult.pupar.toFixed(6)} (% PU Par: ${anbimaResult.porcentagemPupar.toFixed(4)}%)
+    const txt = `[Calculadora de Renda Fixa ANBIMA / B3 - ${anbimaResult.ticker}]
+PU Operação: ${formatBrCurrency(anbimaResult.puOperacao, 6)}
+PU Par: ${formatBrCurrency(anbimaResult.pupar, 6)} (% PU Par: ${anbimaResult.porcentagemPupar.toFixed(4)}%)
+PU Limpo: ${formatBrCurrency(anbimaResult.puLimpo, 6)}
 Taxa Operação: ${anbimaResult.taxaOperacao.toFixed(4)}% a.a.
 Duration: ${anbimaResult.durationDu.toFixed(2)} DU (${anbimaResult.durationAnos.toFixed(2)} anos)
-Liquidação: ${anbimaResult.dataLiquidacao}`;
+Data da Operação: ${formatToBrDate(anbimaResult.dataOperacao)}
+Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
     navigator.clipboard.writeText(txt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-16 font-sans text-slate-800">
-      {/* HEADER DA PÁGINA */}
-      <div className="bg-white border-b border-slate-200/80 sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+    <div className="min-h-screen bg-slate-50/70 pb-20 font-sans text-slate-800">
+      
+      {/* HEADER INSTITUCIONAL CLEAN (ESTILO ANBIMA) */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="p-2 bg-blue-50 text-blue-700 rounded-xl border border-blue-100/80 shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="p-2 bg-blue-600 text-white rounded-xl shadow-xs">
                   <Calculator size={20} className="stroke-[2.2]" />
                 </span>
                 <div>
-                  <h1 className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-                    Calculadora de Renda Fixa & Crédito Privado
-                    <span className="text-[11px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200/80 rounded-full">
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                      Calculadora de Renda Fixa
+                    </h1>
+                    <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-full">
                       Padrão ANBIMA & B3
                     </span>
-                  </h1>
+                  </div>
                   <p className="text-xs text-slate-500 font-medium">
-                    Apreçamento bidirecional (Taxa ↔ PU), PU Par, PU Limpo, Duration e Grade de Pagamentos Descontados.
+                    Preços unitários, taxas de mercado, duration e fluxos de pagamentos descontados.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* SELETOR DE MODO / VISÃO */}
-            <div className="flex items-center gap-2 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80 self-start md:self-auto">
+            <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200 self-start md:self-auto text-xs">
               <button
                 type="button"
                 onClick={() => setMainView('anbima')}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all ${
                   mainView === 'anbima'
-                    ? 'bg-white text-blue-700 shadow-xs border border-slate-200/80'
+                    ? 'bg-white text-blue-700 shadow-xs border border-slate-200'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <ShieldCheck size={14} className={mainView === 'anbima' ? 'text-blue-600' : 'text-slate-400'} />
-                Calculadora Oficial (ANBIMA / B3)
+                Calculadora Oficial
               </button>
 
               <button
                 type="button"
                 onClick={() => setMainView('cenarios')}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all ${
                   mainView === 'cenarios'
-                    ? 'bg-white text-blue-700 shadow-xs border border-slate-200/80'
+                    ? 'bg-white text-blue-700 shadow-xs border border-slate-200'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <Sliders size={14} className={mainView === 'cenarios' ? 'text-blue-600' : 'text-slate-400'} />
-                Simulador de Carteira & Cenários
+                Simulador de Carteira
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
 
-        {/* CARD DE BUSCA & ATIVO SELECIONADO */}
-        <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs space-y-4">
+        {/* CARD 1: SELEÇÃO E BUSCA DE ATIVO (LIMPO E DIRETO) */}
+        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            {/* Campo de Busca */}
+            
+            {/* Campo de Busca Principal */}
             <div className="relative flex-1 max-w-xl">
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                Selecione o Título para Apreçamento
+              </label>
               <div className="relative">
                 <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -472,14 +599,26 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                     setShowSearchResults(true);
                   }}
                   onFocus={() => setShowSearchResults(true)}
-                  placeholder="Buscar ativo por Ticker, ISIN ou Devedor (ex: ENAT14, CRA026002BE)..."
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-semibold text-slate-800 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition"
+                  placeholder="Digite o código (ex: ECER12, CERR18, ENAT14, CRA026002BE)..."
+                  className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition"
                 />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setShowSearchResults(false);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded-full"
+                  >
+                    <X size={15} />
+                  </button>
+                )}
               </div>
 
-              {/* Dropdown de Resultados da Busca */}
+              {/* Dropdown de Resultados da Busca com todos os ativos */}
               {showSearchResults && searchResults.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-200 py-1.5 z-40 max-h-72 overflow-y-auto">
+                <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-slate-200 py-1 z-40 max-h-72 overflow-y-auto">
                   {searchResults.map(a => (
                     <button
                       key={a.ticker}
@@ -489,19 +628,19 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-extrabold text-xs text-slate-900">{a.ticker}</span>
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${getTipoBadgeClass(a.tipo)}`}>
+                          <span className="font-extrabold text-xs text-blue-700">{a.ticker}</span>
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${getTipoBadgeClass(a.tipo)}`}>
                             {a.tipo}
                           </span>
                           <span className="text-[11px] font-medium text-slate-500">{a.indexador}</span>
                         </div>
-                        <p className="text-[11px] text-slate-500 truncate max-w-sm">{a.issuer}</p>
+                        <p className="text-[11px] text-slate-600 truncate max-w-sm mt-0.5">{a.issuer || a.devedor}</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs font-bold text-slate-800">
+                        <span className="text-xs font-bold text-slate-900">
                           {a.taxa_indicativa_anbima ? `${a.taxa_indicativa_anbima}%` : (a.taxa_emissao ? `${a.taxa_emissao}%` : '')}
                         </span>
-                        <span className="block text-[10px] text-slate-400">Venc. {a.vencimento || 'N/D'}</span>
+                        <span className="block text-[10px] text-slate-400">Venc. {formatToBrDate(a.vencimento || '')}</span>
                       </div>
                     </button>
                   ))}
@@ -510,7 +649,7 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
             </div>
 
             {/* Chips de Atalho Rápido */}
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 lg:pt-5">
               <span className="text-[11px] font-bold text-slate-400 mr-1 flex items-center gap-1">
                 <Sparkles size={13} className="text-amber-500" />
                 Exemplos:
@@ -523,10 +662,10 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                     const found = allAssets.find(a => a.ticker === sc.ticker);
                     if (found) handleSelectAsset(found);
                   }}
-                  className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition ${
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${
                     selectedAsset?.ticker === sc.ticker
                       ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
                   {sc.label}
@@ -535,36 +674,38 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
             </div>
           </div>
 
-          {/* FICHA TÉCNICA DO ATIVO SELECIONADO */}
+          {/* FICHA TÉCNICA DO ATIVO SELECIONADO (ESTILO TABELA ANBIMA) */}
           {selectedAsset && (
-            <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-xs">
-              <div>
-                <span className="text-slate-400 font-bold uppercase text-[10px] block">Contrato / Ticker</span>
-                <span className="font-extrabold text-slate-900 text-sm">{selectedAsset.ticker}</span>
-              </div>
-              <div>
-                <span className="text-slate-400 font-bold uppercase text-[10px] block">Código ISIN</span>
-                <span className="font-mono text-slate-700">{selectedAsset.isin || 'N/D'}</span>
-              </div>
-              <div>
-                <span className="text-slate-400 font-bold uppercase text-[10px] block">Devedor / Emissor</span>
-                <span className="font-semibold text-slate-800 truncate block" title={selectedAsset.issuer}>
-                  {selectedAsset.issuer || 'N/D'}
-                </span>
-              </div>
-              <div>
-                <span className="text-slate-400 font-bold uppercase text-[10px] block">Indexador</span>
-                <span className="font-bold text-blue-700">{selectedAsset.indexador || 'IPCA'}</span>
-              </div>
-              <div>
-                <span className="text-slate-400 font-bold uppercase text-[10px] block">Taxa de Emissão</span>
-                <span className="font-bold text-slate-800">
-                  {selectedAsset.taxa_emissao ? `${Number(selectedAsset.taxa_emissao).toFixed(4)}% a.a.` : 'N/D'}
-                </span>
-              </div>
-              <div>
-                <span className="text-slate-400 font-bold uppercase text-[10px] block">Vencimento</span>
-                <span className="font-bold text-slate-900">{selectedAsset.vencimento || 'N/D'}</span>
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3.5 text-xs">
+                <div>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Título / Código</span>
+                  <span className="font-extrabold text-blue-700 text-sm">{selectedAsset.ticker}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Código ISIN</span>
+                  <span className="font-mono text-slate-700">{selectedAsset.isin || 'N/D'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Emissor / Devedor</span>
+                  <span className="font-semibold text-slate-800 truncate block" title={selectedAsset.issuer}>
+                    {selectedAsset.issuer || 'N/D'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Indexador</span>
+                  <span className="font-bold text-slate-800">{selectedAsset.indexador || 'IPCA'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Taxa de Emissão</span>
+                  <span className="font-bold text-slate-800">
+                    {selectedAsset.taxa_emissao ? `${Number(selectedAsset.taxa_emissao).toFixed(4)}% a.a.` : 'N/D'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold uppercase text-[10px] block">Vencimento</span>
+                  <span className="font-bold text-slate-900">{formatToBrDate(selectedAsset.vencimento || '')}</span>
+                </div>
               </div>
             </div>
           )}
@@ -576,16 +717,16 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
         {mainView === 'anbima' && (
           <div className="space-y-6">
 
-            {/* SEÇÃO DE ENTRADA DE PARÂMETROS */}
-            <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            {/* CARD 2: DADOS DA OPERAÇÃO */}
+            <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                 <div>
-                  <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                     <Scale size={18} className="text-blue-600" />
-                    Parâmetros de Negociação da Operação
+                    Dados da Operação
                   </h2>
                   <p className="text-xs text-slate-500">
-                    Defina as datas da operação, liquidação e alterne entre cálculo por Taxa ou por PU.
+                    Informe os parâmetros da negociação no padrão da ANBIMA e B3.
                   </p>
                 </div>
 
@@ -593,7 +734,7 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                   <button
                     type="button"
                     onClick={copyResults}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold transition shadow-xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition shadow-xs"
                   >
                     {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
                     {copied ? 'Copiado!' : 'Copiar Resultados'}
@@ -604,70 +745,64 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
               {/* GRID DE PARÂMETROS */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
 
-                {/* 1. Data de Operação */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 flex items-center">
-                    Data da Operação
-                    <InfoTooltip
-                      title="Data da Operação"
-                      content="Data em que a negociação é acordada entre as contrapartes no mercado secundário."
-                    />
-                  </label>
-                  <input
-                    type="date"
-                    value={dataOperacao}
-                    onChange={e => setDataOperacao(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                  />
-                  <span className="text-[10px] text-slate-400 block">Padrão: Data de hoje</span>
-                </div>
+                {/* 1. Data de Operação (Padrão DD/MM/AAAA) */}
+                <BrDateInput
+                  label="Data da Operação"
+                  valueIso={dataOperacao}
+                  onChangeIso={setDataOperacao}
+                  tooltipTitle="Data da Operação"
+                  tooltipContent="Data em que o negócio é pactuado entre as contrapartes no mercado secundário."
+                />
 
                 {/* 2. Data de Liquidação com D+0, D+1, D+2 */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 flex items-center">
-                    Data de Liquidação
-                    <InfoTooltip
-                      title="Data de Liquidação Financeira"
-                      content="Data útil em que os recursos financeiros e a custódia do título são efetivamente transferidos via B3."
-                    />
+                  <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
+                    <span className="flex items-center">
+                      Data de Liquidação
+                      <InfoTooltip
+                        title="Data de Liquidação Financeira"
+                        content="Data útil em que os recursos financeiros e a custódia do título são liquidados via B3."
+                      />
+                    </span>
+                    <span className="text-[10px] text-blue-700 font-bold">{formatToBrDate(dataLiquidacao)}</span>
                   </label>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5">
                     {(['D0', 'D1', 'D2'] as const).map(mode => (
                       <button
                         key={mode}
                         type="button"
                         onClick={() => setSettlementMode(mode)}
-                        className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition ${
+                        className={`flex-1 py-2 rounded-xl text-xs font-bold border transition ${
                           settlementMode === mode
                             ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                            : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
                         }`}
                       >
                         {mode === 'D0' ? 'D+0' : (mode === 'D1' ? 'D+1' : 'D+2')}
                       </button>
                     ))}
                   </div>
-                  <div className="text-[11px] font-bold text-blue-700 bg-blue-50/80 px-2.5 py-1 rounded-lg border border-blue-100">
-                    Liquidando em: {dataLiquidacao}
-                  </div>
+                  <span className="text-[10px] text-slate-400 block">
+                    Liquidação em: <strong className="text-slate-600">{formatToBrDate(dataLiquidacao)}</strong>
+                  </span>
                 </div>
 
-                {/* 3. Alternância Modo: Por Taxa vs Por PU */}
+                {/* 3. Forma de Cálculo (Por Taxa vs Por PU) */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-700 flex items-center">
                     Forma de Cálculo
                     <InfoTooltip
                       title="Cálculo Bidirecional (ANBIMA)"
-                      content="Por Taxa: você informa a taxa (% a.a.) e o motor calcula o PU. Por PU: você informa o PU financeiro e o algoritmo numérico de Brent resolve a Taxa Interna de Retorno (YTM)."
+                      content="Por Taxa: você informa a taxa (% a.a.) e a calculadora apura o PU. Por PU: você informa o PU financeiro e o algoritmo resolve a Taxa (YTM)."
                     />
                   </label>
                   <div className="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
                     <button
                       type="button"
                       onClick={() => handleToggleFormaCalculo('Taxa')}
-                      className={`py-1.5 rounded-lg text-xs font-extrabold transition ${
+                      className={`py-2 rounded-lg text-xs font-bold transition ${
                         formaCalculo === 'Taxa'
-                          ? 'bg-white text-blue-700 shadow-xs border border-slate-200/80'
+                          ? 'bg-white text-blue-700 shadow-xs border border-slate-200'
                           : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
@@ -676,9 +811,9 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                     <button
                       type="button"
                       onClick={() => handleToggleFormaCalculo('PU')}
-                      className={`py-1.5 rounded-lg text-xs font-extrabold transition ${
+                      className={`py-2 rounded-lg text-xs font-bold transition ${
                         formaCalculo === 'PU'
-                          ? 'bg-white text-blue-700 shadow-xs border border-slate-200/80'
+                          ? 'bg-white text-blue-700 shadow-xs border border-slate-200'
                           : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
@@ -686,18 +821,21 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                     </button>
                   </div>
                   <span className="text-[10px] text-slate-400 block">
-                    {formaCalculo === 'Taxa' ? 'Entrada de taxa anual' : 'Entrada de preço unitário'}
+                    {formaCalculo === 'Taxa' ? 'Entrada por Taxa Anual' : 'Entrada por Preço Unitário'}
                   </span>
                 </div>
 
-                {/* 4. Valor de Entrada (Taxa ou PU) */}
+                {/* 4. Valor de Entrada (SEM SETAS FEIAS / [appearance:textfield]) */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
                     <span>{formaCalculo === 'Taxa' ? 'Taxa da Operação (% a.a.)' : 'PU da Operação (R$)'}</span>
                     {formaCalculo === 'Taxa' && selectedAsset?.taxa_indicativa_anbima && (
                       <button
                         type="button"
-                        onClick={() => setInputRate(parseFloat(selectedAsset.taxa_indicativa_anbima!))}
+                        onClick={() => {
+                          const r = parseFloat(String(selectedAsset.taxa_indicativa_anbima).replace(',', '.'));
+                          if (!isNaN(r)) setInputRate(r);
+                        }}
                         className="text-[10px] text-blue-600 hover:underline font-bold"
                       >
                         Usar ANBIMA ({selectedAsset.taxa_indicativa_anbima}%)
@@ -714,9 +852,9 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                         if (formaCalculo === 'Taxa') setInputRate(isNaN(val) ? 0 : val);
                         else setInputPU(isNaN(val) ? 0 : val);
                       }}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-extrabold text-slate-900 outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full pl-3.5 pr-12 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-extrabold text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">
+                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none">
                       {formaCalculo === 'Taxa' ? '% a.a.' : 'R$'}
                     </span>
                   </div>
@@ -727,7 +865,7 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                       min={1}
                       value={quantity}
                       onChange={e => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                      className="w-16 px-1.5 py-0.5 text-right font-bold border border-slate-200 rounded-md bg-white text-slate-800"
+                      className="w-20 px-2 py-0.5 text-right font-bold border border-slate-300 rounded-md bg-white text-slate-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </div>
                 </div>
@@ -737,260 +875,259 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
 
             {/* TRAVA DE ELEGIBILIDADE INSTITUCIONAL */}
             {anbimaResult && !anbimaResult.elegivel && (
-              <div className="p-5 bg-amber-50 border border-amber-200/90 rounded-3xl flex items-start gap-3.5 text-amber-900">
-                <AlertCircle size={22} className="text-amber-600 shrink-0 mt-0.5" />
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3 text-amber-900">
+                <AlertCircle size={20} className="text-amber-600 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-extrabold text-sm text-amber-900">Indisponibilidade de Cálculo Conforme Metodologia</h4>
-                  <p className="text-xs text-amber-800 mt-1 leading-relaxed">
+                  <h4 className="font-bold text-sm text-amber-900">Indisponibilidade de Cálculo Metodológico</h4>
+                  <p className="text-xs text-amber-800 mt-0.5 leading-relaxed">
                     {anbimaResult.ineligibilityReason}
-                  </p>
-                  <p className="text-[11px] text-amber-700 mt-2 font-medium">
-                    Conforme o padrão institucional da ANBIMA e B3, não geramos estimativas artificiais quando o título carece de dados contratuais mínimos de liquidação ou está vencido.
                   </p>
                 </div>
               </div>
             )}
 
-            {/* RESULTADOS OFICIAIS (KPIS GRID) */}
+            {/* CARD 3: RESULTADOS DA OPERAÇÃO (DESIGN LIMPO ESTILO ANBIMA) */}
             {anbimaResult && anbimaResult.elegivel && (
               <div className="space-y-6">
 
-                {/* GRID DE CARDS PRINCIPAIS */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-
-                  {/* 1. PU OPERAÇÃO */}
-                  <div className="p-4 sm:p-5 bg-white rounded-3xl border border-slate-200/90 shadow-xs space-y-1 relative overflow-hidden">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      <span>PU Operação (Sujo)</span>
-                      <InfoTooltip
-                        title="Preço Unitário da Operação"
-                        content="Valor presente total de todos os pagamentos futuros descontados até a data de liquidação, incorporando juros decorridos."
-                        formula="PU = Sum [ CF_k / (1 + y)^(DU_k / 252) ]"
-                      />
-                    </div>
-                    <div className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                      R$ {anbimaResult.puOperacao.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
-                    </div>
-                    <div className="flex items-center gap-1.5 pt-1">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        anbimaResult.agioDesagioPct < 0
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : (anbimaResult.agioDesagioPct > 0 ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-50 text-slate-700')
-                      }`}>
-                        {anbimaResult.agioDesagioPct < 0 ? 'Deságio' : (anbimaResult.agioDesagioPct > 0 ? 'Ágio' : 'Ao Par')}: {anbimaResult.agioDesagioPct.toFixed(2)}%
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* 2. PU PAR */}
-                  <div className="p-4 sm:p-5 bg-white rounded-3xl border border-slate-200/90 shadow-xs space-y-1">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      <span>PU Par (VNa + Accrued)</span>
-                      <InfoTooltip
-                        title="Preço Par (PU Par)"
-                        content="Valor de face do título corrigido até a liquidação pelos juros contratuais decorridos desde o último cupom."
-                        formula="PU Par = VNa * (1 + Taxa Emissao)^(DU_decorrido / 252)"
-                      />
-                    </div>
-                    <div className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">
-                      R$ {anbimaResult.pupar.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
-                    </div>
-                    <div className="text-[11px] font-bold text-blue-700 pt-1">
-                      % do PU Par: {anbimaResult.porcentagemPupar.toFixed(4)}%
-                    </div>
-                  </div>
-
-                  {/* 3. DURATION DE MACAULAY */}
-                  <div className="p-4 sm:p-5 bg-white rounded-3xl border border-slate-200/90 shadow-xs space-y-1">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      <span>Duration (Macaulay)</span>
-                      <InfoTooltip
-                        title="Duration de Macaulay"
-                        content="Prazo médio ponderado de recebimento de todos os fluxos de caixa a valor presente."
-                        formula="Duration = Sum(DU_k * PV_k) / PU_operacao"
-                      />
-                    </div>
-                    <div className="text-xl sm:text-2xl font-black text-indigo-700 tracking-tight">
-                      {anbimaResult.durationDu.toFixed(2)} <span className="text-sm font-bold text-slate-400">DU</span>
-                    </div>
-                    <div className="text-[11px] font-semibold text-slate-500 pt-1">
-                      Equivalente a <strong>{anbimaResult.durationAnos.toFixed(2)} anos</strong>
-                    </div>
-                  </div>
-
-                  {/* 4. TAXA OPERAÇÃO & SPREAD */}
-                  <div className="p-4 sm:p-5 bg-white rounded-3xl border border-slate-200/90 shadow-xs space-y-1">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      <span>Taxa Operação (YTM)</span>
-                      <InfoTooltip
-                        title="Taxa Interna de Retorno (YTM)"
-                        content="Taxa anualizada em base 252 dias úteis equivalente à compra no PU informado."
-                      />
-                    </div>
-                    <div className="text-xl sm:text-2xl font-black text-blue-700 tracking-tight">
-                      {anbimaResult.taxaOperacao.toFixed(4)}% <span className="text-xs font-semibold text-slate-400">a.a.</span>
-                    </div>
-                    <div className="text-[11px] font-bold text-slate-600 pt-1 flex items-center gap-1">
-                      <span>Spread Over NTN-B:</span>
-                      <span className={spreadVsNtnbBps >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
-                        {spreadVsNtnbBps >= 0 ? `+${spreadVsNtnbBps}` : spreadVsNtnbBps} bps
-                      </span>
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* LINHA SECUNDÁRIA DE MÉTRICAS */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-                    <span className="text-[10px] font-bold uppercase text-slate-400 block">PU Limpo (Clean Price)</span>
-                    <span className="font-extrabold text-slate-800 text-sm">
-                      R$ {anbimaResult.puLimpo.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
-                    </span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Sem juros decorridos</span>
-                  </div>
-
-                  <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-                    <span className="text-[10px] font-bold uppercase text-slate-400 block">Juros Decorridos (Accrued)</span>
-                    <span className="font-extrabold text-emerald-700 text-sm">
-                      R$ {anbimaResult.jurosDecorridos.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
-                    </span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Acumulado até a liquidação</span>
-                  </div>
-
-                  <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-                    <span className="text-[10px] font-bold uppercase text-slate-400 block">Duration Modificada (DV01)</span>
-                    <span className="font-extrabold text-slate-800 text-sm">
-                      {anbimaResult.modifiedDuration.toFixed(2)}
-                    </span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Sensibilidade / 100 bps</span>
-                  </div>
-
-                  <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80">
-                    <span className="text-[10px] font-bold uppercase text-slate-400 block">Valor Financeiro Total</span>
-                    <span className="font-extrabold text-slate-900 text-sm">
-                      R$ {anbimaResult.valorFinanceiro.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">{quantity} título(s)</span>
-                  </div>
-                </div>
-
-                {/* GRÁFICO DE CONVEXIDADE & TABELA DE FLUXOS LADO A LADO */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                  {/* GRÁFICO DE CONVEXIDADE (1 COLUNA) */}
-                  <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs space-y-4">
+                {/* PAINEL DE RESULTADOS COM DESTAQUE OFICIAL */}
+                <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                     <div>
-                      <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
-                        <TrendingUp size={16} className="text-blue-600" />
-                        Curva de Convexidade (Preço x Taxa)
+                      <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <CheckCircle2 size={18} className="text-emerald-600" />
+                        Resultados da Operação
                       </h3>
-                      <p className="text-[11px] text-slate-500">
-                        Sensibilidade do PU a choques de taxa em torno da operação atual.
+                      <p className="text-xs text-slate-500">
+                        Valores calculados conforme convenção oficial ANBIMA (base 252 dias úteis).
                       </p>
                     </div>
 
-                    <div className="h-64 w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={convexityData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                          <XAxis dataKey="taxaLabel" stroke="#94a3b8" fontSize={10} tickLine={false} />
-                          <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} domain={['auto', 'auto']} tickFormatter={val => `R$${val}`} />
-                          <RechartsTooltip
-                            formatter={(val: any) => [`R$ ${Number(val).toFixed(2)}`, 'PU Operação']}
-                            labelFormatter={label => `Taxa: ${label}`}
-                          />
-                          <Area type="monotone" dataKey="puOperacao" stroke="#2563eb" strokeWidth={2.5} fill="#3b82f6" fillOpacity={0.12} />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-
-                    <div className="p-3 bg-blue-50/80 rounded-xl border border-blue-100 text-[11px] text-blue-900 space-y-1">
-                      <span className="font-bold block">Ponto da Operação Atual:</span>
-                      <div className="flex justify-between">
-                        <span>Taxa: <strong>{anbimaResult.taxaOperacao.toFixed(4)}% a.a.</strong></span>
-                        <span>PU: <strong>R$ {anbimaResult.puOperacao.toFixed(2)}</strong></span>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowConvexity(!showConvexity)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition"
+                      >
+                        <LineChart size={14} className="text-blue-600" />
+                        {showConvexity ? 'Ocultar Curva Preço x Taxa' : 'Ver Curva Preço x Taxa'}
+                      </button>
                     </div>
                   </div>
 
-                  {/* TABELA DE CRONOGRAMA DE PAGAMENTOS DESCONTADOS (2 COLUNAS) */}
-                  <div className="lg:col-span-2 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
-                          <Table size={16} className="text-blue-600" />
-                          Cronograma de Pagamentos & Fluxo Descontado
-                        </h3>
-                        <p className="text-[11px] text-slate-500">
-                          Cada vértice futuro descontado a valor presente conforme convenção ANBIMA (DU/252).
-                        </p>
+                  {/* CARDS DE DESTAQUE PRINCIPAL: PU OPERAÇÃO & TAXA */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    {/* CARD PU OPERAÇÃO */}
+                    <div className="p-5 bg-blue-50/60 rounded-xl border border-blue-100 space-y-1 relative">
+                      <span className="text-xs font-bold text-blue-900 uppercase tracking-wider block">
+                        PU Operação
+                      </span>
+                      <div className="text-2xl sm:text-3xl font-black text-blue-900 tracking-tight">
+                        {formatBrCurrency(anbimaResult.puOperacao, 6)}
                       </div>
-                      <span className="text-[11px] font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-lg">
-                        {anbimaResult.fluxoPagamento.length} eventos futuros
+                      <div className="flex items-center gap-2 pt-1 text-xs text-slate-600">
+                        <span className={`font-bold px-2 py-0.5 rounded ${
+                          anbimaResult.agioDesagioPct < 0
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : (anbimaResult.agioDesagioPct > 0 ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-slate-800')
+                        }`}>
+                          {anbimaResult.agioDesagioPct < 0 ? 'Deságio' : (anbimaResult.agioDesagioPct > 0 ? 'Ágio' : 'Ao Par')}: {anbimaResult.agioDesagioPct.toFixed(2)}%
+                        </span>
+                        <span>({formatBrCurrency(anbimaResult.agioDesagioReais, 2)})</span>
+                      </div>
+                    </div>
+
+                    {/* CARD TAXA OPERAÇÃO */}
+                    <div className="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wider block">
+                        Taxa da Operação (YTM)
+                      </span>
+                      <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                        {anbimaResult.taxaOperacao.toFixed(4)}% <span className="text-base font-normal text-slate-500">a.a.</span>
+                      </div>
+                      <div className="text-xs text-slate-600 pt-1 flex items-center gap-1.5">
+                        <span>Spread vs {matchedNtnb.nome}:</span>
+                        <strong className={spreadVsNtnbBps >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                          {spreadVsNtnbBps >= 0 ? `+${spreadVsNtnbBps}` : spreadVsNtnbBps} bps
+                        </strong>
+                        <span className="text-slate-400">({matchedNtnb.taxa.toFixed(2)}%)</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* GRID DE INDICADORES OFICIAIS */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3.5 pt-2">
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">PU Par</span>
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm block truncate" title={String(anbimaResult.pupar)}>
+                        {formatBrCurrency(anbimaResult.pupar, 6)}
+                      </span>
+                      <span className="text-[10px] text-blue-700 font-medium block mt-0.5">
+                        {anbimaResult.porcentagemPupar.toFixed(4)}% do Par
                       </span>
                     </div>
 
-                    <div className="overflow-x-auto max-h-80 overflow-y-auto rounded-2xl border border-slate-200">
-                      <table className="w-full text-left text-xs">
-                        <thead className="bg-slate-50 text-[10px] font-extrabold text-slate-500 uppercase tracking-wider sticky top-0 border-b border-slate-200">
-                          <tr>
-                            <th className="py-2.5 px-3">Evento</th>
-                            <th className="py-2.5 px-3">Liquidação</th>
-                            <th className="py-2.5 px-3 text-right">Prazo (DU)</th>
-                            <th className="py-2.5 px-3 text-right">Período</th>
-                            <th className="py-2.5 px-3 text-right">Juros (R$)</th>
-                            <th className="py-2.5 px-3 text-right">Amortização</th>
-                            <th className="py-2.5 px-3 text-right font-black text-blue-700">Fluxo Desc. (PV)</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                          {anbimaResult.fluxoPagamento.map((fl, idx) => (
-                            <tr key={idx} className="hover:bg-blue-50/50 transition">
-                              <td className="py-2 px-3 font-bold text-slate-800">
-                                <span className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-extrabold ${
-                                  fl.nome.includes('Amort')
-                                    ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                }`}>
-                                  {fl.nome}
-                                </span>
-                              </td>
-                              <td className="py-2 px-3 font-medium text-slate-700">{fl.dataLiquidacao}</td>
-                              <td className="py-2 px-3 text-right font-mono text-slate-600">{fl.prazoDu}</td>
-                              <td className="py-2 px-3 text-right font-mono text-slate-500">{fl.diasEntrePagamentos} DU</td>
-                              <td className="py-2 px-3 text-right font-mono text-slate-700">
-                                {fl.jurosProjetado.toFixed(2)}
-                              </td>
-                              <td className="py-2 px-3 text-right font-mono text-slate-700">
-                                {fl.amortizacao > 0 ? fl.amortizacao.toFixed(2) : '-'}
-                              </td>
-                              <td className="py-2 px-3 text-right font-mono font-bold text-blue-700 bg-blue-50/30">
-                                R$ {fl.fluxoDescontado.toFixed(2)}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                        <tfoot className="bg-slate-50 font-bold text-slate-900 border-t border-slate-200 sticky bottom-0">
-                          <tr>
-                            <td colSpan={4} className="py-2.5 px-3 uppercase text-[10px] text-slate-500">
-                              Totalização da Operação
-                            </td>
-                            <td className="py-2.5 px-3 text-right font-mono text-slate-800">
-                              R$ {anbimaResult.fluxoPagamento.reduce((s, f) => s + f.jurosProjetado, 0).toFixed(2)}
-                            </td>
-                            <td className="py-2.5 px-3 text-right font-mono text-slate-800">
-                              R$ {anbimaResult.fluxoPagamento.reduce((s, f) => s + f.amortizacao, 0).toFixed(2)}
-                            </td>
-                            <td className="py-2.5 px-3 text-right font-mono font-black text-blue-700 bg-blue-50">
-                              R$ {anbimaResult.puOperacao.toFixed(2)}
-                            </td>
-                          </tr>
-                        </tfoot>
-                      </table>
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">PU Limpo</span>
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm block truncate" title={String(anbimaResult.puLimpo)}>
+                        {formatBrCurrency(anbimaResult.puLimpo, 6)}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-medium block mt-0.5">Sem juros decorridos</span>
+                    </div>
+
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">Juros Decorridos</span>
+                      <span className="font-bold text-emerald-700 text-xs sm:text-sm block truncate">
+                        {formatBrCurrency(anbimaResult.jurosDecorridos, 6)}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-medium block mt-0.5">Accrued interest</span>
+                    </div>
+
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">Duration Macaulay</span>
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm block">
+                        {anbimaResult.durationDu.toFixed(2)} <span className="text-[10px] font-normal text-slate-400">DU</span>
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
+                        {anbimaResult.durationAnos.toFixed(2)} anos
+                      </span>
+                    </div>
+
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">Duration Modificada</span>
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm block">
+                        {anbimaResult.modifiedDuration.toFixed(2)}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-medium block mt-0.5">Sensibilidade / 100 bps</span>
+                    </div>
+
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">Financeiro Total</span>
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm block truncate">
+                        {formatBrCurrency(anbimaResult.valorFinanceiro, 2)}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-medium block mt-0.5">{quantity} título(s)</span>
                     </div>
                   </div>
 
+                  {/* GRÁFICO DE CONVEXIDADE COLAPSÁVEL */}
+                  {showConvexity && (
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3 animate-in fade-in duration-200">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-800">
+                          Curva de Convexidade (Preço Unitário x Taxa Operação)
+                        </span>
+                        <span className="text-[10px] text-slate-500">Choque de ±300 bps</span>
+                      </div>
+                      <div className="h-56 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={convexityData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                            <XAxis dataKey="taxaLabel" stroke="#94a3b8" fontSize={10} tickLine={false} />
+                            <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} domain={['auto', 'auto']} tickFormatter={val => `R$${val}`} />
+                            <RechartsTooltip
+                              formatter={(val: any) => [`R$ ${Number(val).toFixed(2)}`, 'PU Operação']}
+                              labelFormatter={label => `Taxa: ${label}`}
+                            />
+                            <Area type="monotone" dataKey="puOperacao" stroke="#2563eb" strokeWidth={2} fill="#3b82f6" fillOpacity={0.15} />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* CARD 4: FLUXO DE PAGAMENTO (TABELA INSTITUCIONAL ANBIMA) */}
+                <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div>
+                      <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <Table size={18} className="text-blue-600" />
+                        Fluxo de Pagamento
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        Cronograma de liquidação com valores nominais projetados e fluxos descontados.
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
+                      {anbimaResult.fluxoPagamento.length} evento(s)
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto rounded-xl border border-slate-200">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-slate-100/80 text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200">
+                        <tr>
+                          <th className="py-3 px-3.5">Evento</th>
+                          <th className="py-3 px-3.5">Data de Liquidação</th>
+                          <th className="py-3 px-3.5 text-right">Prazo (DU)</th>
+                          <th className="py-3 px-3.5 text-right">Período (DU)</th>
+                          <th className="py-3 px-3.5 text-right">Juros Projetados</th>
+                          <th className="py-3 px-3.5 text-right">Amortização</th>
+                          <th className="py-3 px-3.5 text-right">Valor do Fluxo</th>
+                          <th className="py-3 px-3.5 text-right font-black text-blue-800 bg-blue-50/50">Fluxo Descontado</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 bg-white">
+                        {anbimaResult.fluxoPagamento.map((fl, idx) => (
+                          <tr key={idx} className="hover:bg-slate-50 transition">
+                            <td className="py-2.5 px-3.5 font-bold text-slate-800">
+                              <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-extrabold ${
+                                fl.nome.includes('Amort')
+                                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                  : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                              }`}>
+                                {fl.nome}
+                              </span>
+                            </td>
+                            <td className="py-2.5 px-3.5 font-semibold text-slate-700">
+                              {formatToBrDate(fl.dataLiquidacao)}
+                            </td>
+                            <td className="py-2.5 px-3.5 text-right font-mono text-slate-600">
+                              {fl.prazoDu}
+                            </td>
+                            <td className="py-2.5 px-3.5 text-right font-mono text-slate-500">
+                              {fl.diasEntrePagamentos}
+                            </td>
+                            <td className="py-2.5 px-3.5 text-right font-mono text-slate-700">
+                              {fl.jurosProjetado.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+                            </td>
+                            <td className="py-2.5 px-3.5 text-right font-mono text-slate-700">
+                              {fl.amortizacao > 0 ? fl.amortizacao.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : '-'}
+                            </td>
+                            <td className="py-2.5 px-3.5 text-right font-mono font-semibold text-slate-800">
+                              {fl.valorFluxo.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+                            </td>
+                            <td className="py-2.5 px-3.5 text-right font-mono font-bold text-blue-700 bg-blue-50/30">
+                              {fl.fluxoDescontado.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot className="bg-slate-50 font-bold text-slate-900 border-t border-slate-200">
+                        <tr>
+                          <td colSpan={4} className="py-3 px-3.5 uppercase text-[11px] text-slate-500">
+                            Total Geral da Operação
+                          </td>
+                          <td className="py-3 px-3.5 text-right font-mono text-slate-800">
+                            R$ {anbimaResult.fluxoPagamento.reduce((s, f) => s + f.jurosProjetado, 0).toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+                          </td>
+                          <td className="py-3 px-3.5 text-right font-mono text-slate-800">
+                            R$ {anbimaResult.fluxoPagamento.reduce((s, f) => s + f.amortizacao, 0).toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+                          </td>
+                          <td className="py-3 px-3.5 text-right font-mono text-slate-900">
+                            R$ {anbimaResult.fluxoPagamento.reduce((s, f) => s + f.valorFluxo, 0).toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+                          </td>
+                          <td className="py-3 px-3.5 text-right font-mono font-black text-blue-800 bg-blue-100/60">
+                            R$ {anbimaResult.puOperacao.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
                 </div>
 
               </div>
@@ -1003,9 +1140,9 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
         {/* VISÃO 2: SIMULADOR DE CARTEIRA & CENÁRIOS MACRO (IPCA / CDI / GROSS-UP) */}
         {/* ========================================================================= */}
         {mainView === 'cenarios' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-6">
-            <div className="pb-4 border-b border-slate-100">
-              <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-6">
+            <div className="pb-3 border-b border-slate-100">
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <Sliders size={18} className="text-blue-600" />
                 Simulador de Projeção Financeira & Gross-Up Tributário
               </h2>
@@ -1022,7 +1159,7 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                   step="1000"
                   value={principalAmount}
                   onChange={e => setPrincipalAmount(Math.max(100, parseFloat(e.target.value) || 0))}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
 
@@ -1033,7 +1170,7 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                   step="0.1"
                   value={customIpca}
                   onChange={e => setCustomIpca(parseFloat(e.target.value) || 0)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
 
@@ -1044,30 +1181,30 @@ Liquidação: ${anbimaResult.dataLiquidacao}`;
                   step="0.1"
                   value={customCdi}
                   onChange={e => setCustomCdi(parseFloat(e.target.value) || 0)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
             </div>
 
             {/* CARDS COMPARATIVOS */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-              <div className="p-4 bg-blue-50/80 rounded-2xl border border-blue-100 space-y-1">
-                <span className="text-[10px] font-bold uppercase text-blue-600 block">Retorno Nominal Esperado</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100 space-y-1">
+                <span className="text-[10px] font-bold uppercase text-blue-700 block">Retorno Nominal Esperado</span>
                 <span className="text-2xl font-black text-blue-900">
                   {calcNominalRate(inputRate, customIpca).toFixed(2)}% <span className="text-xs font-normal">a.a.</span>
                 </span>
                 <span className="text-[11px] text-blue-700 block">IPCA ({customIpca.toFixed(1)}%) + Taxa ({inputRate.toFixed(2)}%)</span>
               </div>
 
-              <div className="p-4 bg-emerald-50/80 rounded-2xl border border-emerald-100 space-y-1">
-                <span className="text-[10px] font-bold uppercase text-emerald-600 block">Gross-Up Tributário Equivalente</span>
+              <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100 space-y-1">
+                <span className="text-[10px] font-bold uppercase text-emerald-700 block">Gross-Up Tributário Equivalente</span>
                 <span className="text-2xl font-black text-emerald-900">
                   {calcGrossUpRate(inputRate, 0.15).toFixed(2)}% <span className="text-xs font-normal">a.a. Real</span>
                 </span>
                 <span className="text-[11px] text-emerald-700 block">Taxa que um CDB precisaria pagar (IR 15%)</span>
               </div>
 
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
+              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
                 <span className="text-[10px] font-bold uppercase text-slate-500 block">Saldo Final Estimado</span>
                 <span className="text-2xl font-black text-slate-900">
                   R$ {(principalAmount * Math.pow(1 + calcNominalRate(inputRate, customIpca) / 100, tenorYears)).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}
