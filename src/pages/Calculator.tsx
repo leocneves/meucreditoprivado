@@ -50,16 +50,6 @@ import {
   AnbimaPricingResult
 } from '../utils/anbimaCalculatorMath';
 
-/* ================= ATIVOS EM DESTAQUE PARA PREENCHIMENTO RÁPIDO ================= */
-const POPULAR_SHORTCUTS = [
-  { label: 'Deb. Brava (ENAT14)', ticker: 'ENAT14' },
-  { label: 'Deb. Ecovias (ECER12)', ticker: 'ECER12' },
-  { label: 'Deb. Cerradinho (CERR18)', ticker: 'CERR18' },
-  { label: 'CRA Pré (CRA026002BE)', ticker: 'CRA026002BE' },
-  { label: 'Deb. Vale (VALED1)', ticker: 'VALED1' },
-  { label: 'Deb. Sabesp (SBSPE2)', ticker: 'SBSPE2' }
-];
-
 /* ================= BENCHMARKS DE NTN-B DEFAULT (Fallback) ================= */
 const DEFAULT_NTNB_LIST = [
   { nome: 'NTN-B 2027', ano: 2027, vencimento: '2027-05-15', taxa: 5.4892 },
@@ -309,12 +299,6 @@ const CalculatorPage: React.FC = () => {
             const found = assetsData.find(a => (a.ticker || '').toUpperCase() === initialTicker);
             if (found) {
               handleSelectAsset(found);
-            }
-          } else {
-            // Seleciona ENAT14 como exemplo benchmark por default
-            const defAsset = assetsData.find(a => a.ticker === 'ENAT14') || assetsData[0];
-            if (defAsset) {
-              handleSelectAsset(defAsset);
             }
           }
         }
@@ -580,103 +564,91 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
 
-        {/* CARD 1: SELEÇÃO E BUSCA DE ATIVO (LIMPO E DIRETO) */}
-        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            
-            {/* Campo de Busca Principal */}
-            <div className="relative flex-1 max-w-xl">
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Selecione o Título para Apreçamento
+        {/* CARD 1: BUSCA DE ATIVO (AMPLA, ESPAÇOSA E SEM EXEMPLOS) */}
+        <div className="bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-xs space-y-4">
+          <div className="relative w-full">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                <Search size={16} className="text-blue-600" />
+                Buscar Título para Apreçamento (Debêntures, CRIs e CRAs)
               </label>
-              <div className="relative">
-                <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => {
-                    setSearchQuery(e.target.value);
-                    setShowSearchResults(true);
+              {selectedAsset && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedAsset(null);
+                    setSearchQuery('');
                   }}
-                  onFocus={() => setShowSearchResults(true)}
-                  placeholder="Digite o código (ex: ECER12, CERR18, ENAT14, CRA026002BE)..."
-                  className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery('');
-                      setShowSearchResults(false);
-                    }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded-full"
-                  >
-                    <X size={15} />
-                  </button>
-                )}
-              </div>
-
-              {/* Dropdown de Resultados da Busca com todos os ativos */}
-              {showSearchResults && searchResults.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-slate-200 py-1 z-40 max-h-72 overflow-y-auto">
-                  {searchResults.map(a => (
-                    <button
-                      key={a.ticker}
-                      type="button"
-                      onClick={() => handleSelectAsset(a)}
-                      className="w-full text-left px-4 py-2.5 hover:bg-blue-50/80 transition flex items-center justify-between gap-3 border-b border-slate-100 last:border-0"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-extrabold text-xs text-blue-700">{a.ticker}</span>
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${getTipoBadgeClass(a.tipo)}`}>
-                            {a.tipo}
-                          </span>
-                          <span className="text-[11px] font-medium text-slate-500">{a.indexador}</span>
-                        </div>
-                        <p className="text-[11px] text-slate-600 truncate max-w-sm mt-0.5">{a.issuer || a.devedor}</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-xs font-bold text-slate-900">
-                          {a.taxa_indicativa_anbima ? `${a.taxa_indicativa_anbima}%` : (a.taxa_emissao ? `${a.taxa_emissao}%` : '')}
-                        </span>
-                        <span className="block text-[10px] text-slate-400">Venc. {formatToBrDate(a.vencimento || '')}</span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
+                  className="text-xs text-slate-500 hover:text-blue-600 font-semibold flex items-center gap-1 transition"
+                >
+                  <X size={14} />
+                  Limpar seleção
+                </button>
               )}
             </div>
 
-            {/* Chips de Atalho Rápido */}
-            <div className="flex flex-wrap items-center gap-1.5 pt-1 lg:pt-5">
-              <span className="text-[11px] font-bold text-slate-400 mr-1 flex items-center gap-1">
-                <Sparkles size={13} className="text-amber-500" />
-                Exemplos:
-              </span>
-              {POPULAR_SHORTCUTS.map(sc => (
+            <div className="relative">
+              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => {
+                  setSearchQuery(e.target.value);
+                  setShowSearchResults(true);
+                }}
+                onFocus={() => setShowSearchResults(true)}
+                placeholder="Digite o código do título, ISIN ou emissor (ex: ECER12, CERR18, ENAT14, CRA026002BE)..."
+                className="w-full pl-12 pr-10 py-3.5 bg-slate-50 border border-slate-300 rounded-xl text-sm sm:text-base font-semibold text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition"
+              />
+              {searchQuery && (
                 <button
-                  key={sc.ticker}
                   type="button"
                   onClick={() => {
-                    const found = allAssets.find(a => a.ticker === sc.ticker);
-                    if (found) handleSelectAsset(found);
+                    setSearchQuery('');
+                    setShowSearchResults(false);
                   }}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${
-                    selectedAsset?.ticker === sc.ticker
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
-                  }`}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-200 transition"
                 >
-                  {sc.label}
+                  <X size={16} />
                 </button>
-              ))}
+              )}
             </div>
+
+            {/* Dropdown de Resultados da Busca */}
+            {showSearchResults && searchResults.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200 py-1.5 z-40 max-h-80 overflow-y-auto">
+                {searchResults.map(a => (
+                  <button
+                    key={a.ticker}
+                    type="button"
+                    onClick={() => handleSelectAsset(a)}
+                    className="w-full text-left px-4 py-3 hover:bg-blue-50/80 transition flex items-center justify-between gap-3 border-b border-slate-100 last:border-0"
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-extrabold text-sm text-blue-700">{a.ticker}</span>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${getTipoBadgeClass(a.tipo)}`}>
+                          {a.tipo}
+                        </span>
+                        <span className="text-xs font-semibold text-slate-600">{a.indexador}</span>
+                      </div>
+                      <p className="text-xs text-slate-600 truncate max-w-md mt-0.5">{a.issuer || a.devedor}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-bold text-slate-900">
+                        {a.taxa_indicativa_anbima ? `${a.taxa_indicativa_anbima}%` : (a.taxa_emissao ? `${a.taxa_emissao}%` : '')}
+                      </span>
+                      <span className="block text-[11px] text-slate-400">Venc. {formatToBrDate(a.vencimento || '')}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* FICHA TÉCNICA DO ATIVO SELECIONADO (ESTILO TABELA ANBIMA) */}
+          {/* FICHA TÉCNICA DO ATIVO SELECIONADO */}
           {selectedAsset && (
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3.5 text-xs">
                 <div>
                   <span className="text-slate-400 font-bold uppercase text-[10px] block">Título / Código</span>
@@ -711,10 +683,23 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
           )}
         </div>
 
+        {/* ESTADO VAZIO: CONVITE PARA BUSCAR ATIVO */}
+        {!selectedAsset && mainView === 'anbima' && (
+          <div className="bg-white rounded-2xl p-10 sm:p-14 border border-slate-200 shadow-xs text-center space-y-3">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 mx-auto flex items-center justify-center">
+              <Search size={26} />
+            </div>
+            <h3 className="font-bold text-slate-900 text-base sm:text-lg">Nenhum título selecionado</h3>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
+              Pesquise qualquer debênture, CRI ou CRA na barra de busca acima para carregar as características, taxas indicativas e apurar o PU da operação no padrão oficial ANBIMA & B3.
+            </p>
+          </div>
+        )}
+
         {/* ========================================================================= */}
         {/* VISÃO 1: CALCULADORA OFICIAL ANBIMA & B3 (REPLICA INSTITUCIONAL) */}
         {/* ========================================================================= */}
-        {mainView === 'anbima' && (
+        {mainView === 'anbima' && selectedAsset && (
           <div className="space-y-6">
 
             {/* CARD 2: DADOS DA OPERAÇÃO */}
