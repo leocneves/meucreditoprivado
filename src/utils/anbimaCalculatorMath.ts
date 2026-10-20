@@ -480,6 +480,102 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       }));
     }
 
+    // ---------------------------------------------------------------------------------
+    // Calibração Inteligente de Amortização Contratual Baseada na Duration Oficial ANBIMA
+    // Se o papel não possui amortizações intermediárias explícitas em paymentEvents (apenas bullet
+    // residual no vencimento), mas a Duration divulgada pela ANBIMA aponta prazo médio inferior
+    // (comum em Debêntures Lei 12.431 e CRI/CRA que amortizam nos últimos anos), calibramos
+    // o número K de parcelas anuais finais que melhor reconcilia a Duration oficial da ANBIMA.
+    // ---------------------------------------------------------------------------------
+    const hasExplicitIntermediateAmort = eventosFuturos.some(
+      (e, idx) => idx < eventosFuturos.length - 1 && (e.percentualAmortizacao > 0 || e.hasAmortization)
+    );
+
+    const rawDur = asset?.duration ?? asset?.duracao;
+    const targetDurationDu = rawDur != null ? parseFloat(String(rawDur).replace(',', '.')) * 252.0 : null;
+
+    if (!hasExplicitIntermediateAmort && targetDurationDu && targetDurationDu > 0 && eventosFuturos.length > 1) {
+      const rawTaxaOp = asset?.taxa_indicativa_anbima || asset?.taxa_mercado || (taxaEmissaoAnual * 100.0);
+      const taxaOpAnualRef = parseFloat(String(rawTaxaOp).replace(',', '.')) / 100.0;
+
+      // Função auxiliar rápida para simular a duration resultante de um mapa de amortizações
+      const simulaDuration = (amortMap: Record<string, number>): number => {
+        let s = vna;
+        let dAnt = addBusinessDays(dataLiquidacao, -126);
+        let pSum = 0;
+        let tSum = 0;
+        for (let i = 0; i < eventosFuturos.length; i++) {
+          const ev = eventosFuturos[i];
+          const isL = i === eventosFuturos.length - 1;
+          const dt = ev.dataLiquidacao;
+          const duLiq = countBusinessDays(dataLiquidacao, dt);
+          const duP = countBusinessDays(dAnt, dt) || 126;
+
+          let vAm = 0;
+          if (amortMap[dt] != null) {
+            vAm = (amortMap[dt] / 100.0) * vna;
+          } else if (isL) {
+            vAm = s;
+          }
+          const vJu = s * (Math.pow(1.0 + taxaEmissaoAnual, duP / 252.0) - 1.0);
+          const fl = vJu + vAm;
+          const pv = fl / Math.pow(1.0 + taxaOpAnualRef, duLiq / 252.0);
+          pSum += pv;
+          tSum += duLiq * pv;
+          s = Math.max(s - vAm, 0.0);
+          dAnt = dt;
+        }
+        return pSum > 0 ? tSum / pSum : 0;
+      };
+
+      const bulletDur = simulaDuration({});
+      // Se a duration bullet for significativamente superior à da ANBIMA (> 35 DU / ~0.14 anos)
+      if (bulletDur - targetDurationDu > 35.0) {
+        // Encontra eventos candidatos correspondentes a aniversários anuais até o vencimento
+        const annualCandidates: typeof eventosFuturos = [];
+        let curDuTarget = countBusinessDays(dataLiquidacao, dtVencRolled);
+        for (let i = eventosFuturos.length - 1; i >= 0; i--) {
+          const ev = eventosFuturos[i];
+          const du = countBusinessDays(dataLiquidacao, ev.dataLiquidacao);
+          if (i === eventosFuturos.length - 1 || Math.abs(curDuTarget - du - 252) < 45) {
+            annualCandidates.unshift(ev);
+            curDuTarget = du;
+          }
+        }
+
+        const candList = annualCandidates.length >= 2 ? annualCandidates : eventosFuturos;
+        let bestK = 1;
+        let minDiff = Math.abs(bulletDur - targetDurationDu);
+        let bestAmortMap: Record<string, number> | null = null;
+
+        for (let k = 2; k <= Math.min(candList.length, 10); k++) {
+          const slice = candList.slice(candList.length - k);
+          const testMap: Record<string, number> = {};
+          const pct = 100.0 / k;
+          for (let i = 0; i < slice.length; i++) {
+            testMap[slice[i].dataLiquidacao] = (i === slice.length - 1) ? (100.0 - pct * (k - 1)) : pct;
+          }
+          const durK = simulaDuration(testMap);
+          const diff = Math.abs(durK - targetDurationDu);
+          if (diff < minDiff) {
+            minDiff = diff;
+            bestK = k;
+            bestAmortMap = testMap;
+          }
+        }
+
+        // Aplica o melhor cronograma calibrado aos eventos futuros
+        if (bestAmortMap) {
+          for (const ev of eventosFuturos) {
+            if (bestAmortMap[ev.dataLiquidacao] != null) {
+              ev.percentualAmortizacao = bestAmortMap[ev.dataLiquidacao];
+              ev.hasAmortization = true;
+            }
+          }
+        }
+      }
+    }
+
     // Localiza a data base para apuração dos Juros Decorridos (Accrued Interest)
     const passados = paymentEvents.filter(e => {
       const d = e.data_liquidacao || e.data_evento;
