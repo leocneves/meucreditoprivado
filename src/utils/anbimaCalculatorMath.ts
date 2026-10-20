@@ -109,7 +109,7 @@ function addCalendarDays(d: Date, days: number): Date {
   return res;
 }
 
-function buildHolidaySet(startYear = 2015, endYear = 2060): Set<string> {
+function buildHolidaySet(startYear = 2015, endYear = 2101): Set<string> {
   const holidays = new Set<string>();
   for (let y = startYear; y <= endYear; y++) {
     // Feriados Fixos do Brasil
@@ -133,11 +133,50 @@ function buildHolidaySet(startYear = 2015, endYear = 2060): Set<string> {
   return holidays;
 }
 
-export const BR_HOLIDAYS_SET = buildHolidaySet(2015, 2060);
+export const BR_HOLIDAYS_SET = buildHolidaySet(2015, 2101);
 
 export function isHoliday(dateStr: string): boolean {
   return BR_HOLIDAYS_SET.has(dateStr);
 }
+
+// -------------------------------------------------------------
+// Calendário Ultrarrápido O(1) Precomputado (2015 a 2101)
+// -------------------------------------------------------------
+const BASE_MS = Date.UTC(2015, 0, 1);
+const MAX_CALENDAR_DAYS = 365 * 87; // 87 anos cobrindo até 2102 (~31.750 dias)
+const BUS_DAYS_MAP = new Map<string, number>();
+const ROLL_NEXT_MAP = new Map<string, string>();
+
+(function initFastCalendar() {
+  let curr = new Date(BASE_MS);
+  let cumCount = 0;
+  for (let d = 0; d < MAX_CALENDAR_DAYS; d++) {
+    const iso = formatDateISO(curr);
+    const dow = curr.getUTCDay();
+    const isBus = (dow !== 0 && dow !== 6 && !BR_HOLIDAYS_SET.has(iso));
+    if (isBus) cumCount++;
+    BUS_DAYS_MAP.set(iso, cumCount);
+    curr = addCalendarDays(curr, 1);
+  }
+
+  curr = new Date(BASE_MS);
+  for (let d = 0; d < MAX_CALENDAR_DAYS - 30; d++) {
+    const iso = formatDateISO(curr);
+    let check = new Date(curr.getTime());
+    let safety = 0;
+    while (safety < 10) {
+      const checkDow = check.getUTCDay();
+      const checkIso = formatDateISO(check);
+      if (checkDow !== 0 && checkDow !== 6 && !BR_HOLIDAYS_SET.has(checkIso)) {
+        ROLL_NEXT_MAP.set(iso, checkIso);
+        break;
+      }
+      check = addCalendarDays(check, 1);
+      safety++;
+    }
+    curr = addCalendarDays(curr, 1);
+  }
+})();
 
 export function isBusinessDay(dateStr: string): boolean {
   if (!dateStr) return false;
@@ -148,34 +187,34 @@ export function isBusinessDay(dateStr: string): boolean {
 
 export function rollToNextBusinessDay(dateStr: string): string {
   if (!dateStr) return dateStr;
+  const pre = ROLL_NEXT_MAP.get(dateStr);
+  if (pre) return pre;
   let d = new Date(dateStr + 'T00:00:00Z');
-  while (true) {
+  let safety = 0;
+  while (safety < 10) {
     const dow = d.getUTCDay();
     const iso = formatDateISO(d);
     if (dow !== 0 && dow !== 6 && !BR_HOLIDAYS_SET.has(iso)) {
       return iso;
     }
     d = addCalendarDays(d, 1);
+    safety++;
   }
+  return dateStr;
 }
 
 export function countBusinessDays(startStr: string, endStr: string): number {
   if (!startStr || !endStr || startStr >= endStr) return 0;
-  const start = new Date(startStr + 'T00:00:00Z');
-  const end = new Date(endStr + 'T00:00:00Z');
-
-  let count = 0;
-  let curr = addCalendarDays(start, 1);
-
-  while (curr <= end) {
-    const dow = curr.getUTCDay();
-    const iso = formatDateISO(curr);
-    if (dow !== 0 && dow !== 6 && !BR_HOLIDAYS_SET.has(iso)) {
-      count++;
-    }
-    curr = addCalendarDays(curr, 1);
+  const c1 = BUS_DAYS_MAP.get(startStr);
+  const c2 = BUS_DAYS_MAP.get(endStr);
+  if (c1 !== undefined && c2 !== undefined) {
+    return c2 - c1;
   }
-  return count;
+  // Fallback analítico ultra-rápido para datas além do horizonte 2101
+  const d1 = new Date(startStr + 'T00:00:00Z').getTime();
+  const d2 = new Date(endStr + 'T00:00:00Z').getTime();
+  const diffDays = Math.max(0, Math.round((d2 - d1) / 86400000));
+  return Math.round(diffDays * (252.0 / 365.25));
 }
 
 export function addBusinessDays(startStr: string, nDays: number): string {
@@ -183,15 +222,25 @@ export function addBusinessDays(startStr: string, nDays: number): string {
   if (nDays <= 0) return startStr;
   let curr = new Date(startStr + 'T00:00:00Z');
   let added = 0;
-  while (added < nDays) {
+  let safety = 0;
+  while (added < nDays && safety < nDays * 3) {
     curr = addCalendarDays(curr, 1);
     const dow = curr.getUTCDay();
     const iso = formatDateISO(curr);
     if (dow !== 0 && dow !== 6 && !BR_HOLIDAYS_SET.has(iso)) {
       added++;
     }
+    safety++;
   }
   return formatDateISO(curr);
+}
+
+export function safeParseFloat(val: any, fallback = 0.0): number {
+  if (val == null) return fallback;
+  if (typeof val === 'number') return isNaN(val) ? fallback : val;
+  const s = String(val).trim().replace(',', '.');
+  const num = parseFloat(s);
+  return isNaN(num) ? fallback : num;
 }
 
 /* ================= 2. SOLVER NUMÉRICO DE BRENT (PU -> TAXA YTM) ================= */
@@ -203,6 +252,10 @@ export function solveTaxaPorPU(
   maxIter = 100
 ): number | null {
   if (puAlvo <= 0 || !fluxos || fluxos.length === 0) return null;
+
+  // Se todos os fluxos tiverem prazoDu === 0 (liquidação no próprio vencimento), o PU é invariante à taxa (dPU/dy = 0)
+  const maxDu = Math.max(...fluxos.map(f => f.prazoDu));
+  if (maxDu <= 0) return null;
 
   const calcPU = (y: number): number => {
     if (y <= -0.99) return 1e12;
@@ -357,8 +410,17 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     };
   }
 
-  const vna = Number(asset?.vna || asset?.pu || asset?.pu_par || 1000.0);
-  const taxaEmissaoAnual = Number(asset?.taxa_emissao || 6.0) / 100.0;
+  let rawVna = safeParseFloat(asset?.vna ?? asset?.pu ?? asset?.pu_par, 0.0);
+  if (rawVna <= 0) {
+    rawVna = safeParseFloat(asset?.pu_mercado ?? asset?.pu_indicativo, 1000.0);
+  }
+  const vna = rawVna > 0 ? rawVna : 1000.0;
+
+  let rawTaxaEmissao = safeParseFloat(asset?.taxa_emissao, 0.0);
+  if (rawTaxaEmissao <= 0) {
+    rawTaxaEmissao = safeParseFloat(asset?.taxa_indicativa_anbima ?? asset?.taxa_mercado, 6.0);
+  }
+  const taxaEmissaoAnual = (rawTaxaEmissao > 0 ? rawTaxaEmissao : 6.0) / 100.0;
   const indexador = String(asset?.indexador || 'IPCA').toUpperCase();
   const dtVencRolled = rollToNextBusinessDay(dtVenc);
 
@@ -393,7 +455,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     // ATIVO BULLET: JUROS CAPITALIZADOS ATÉ O VENCIMENTO (Ex: ECER12)
     // -------------------------------------------------------------
     const duAteLiq = countBusinessDays(dataLiquidacao, dtVencRolled);
-    const puParOficial = Number(asset?.pu_par || 0);
+    const puParOficial = safeParseFloat(asset?.pu_par, 0.0);
 
     if (puParOficial > vna) {
       pupar = puParOficial;
@@ -466,7 +528,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       const startLiq = new Date(dataLiquidacao + 'T00:00:00Z');
       const datasGeradas: string[] = [];
 
-      while (curr > startLiq) {
+      while (curr > startLiq && datasGeradas.length < 120) {
         datasGeradas.push(rollToNextBusinessDay(formatDateISO(curr)));
         curr = addCalendarDays(curr, -182); // ~6 meses
       }
@@ -498,18 +560,24 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       const rawTaxaOp = asset?.taxa_indicativa_anbima || asset?.taxa_mercado || (taxaEmissaoAnual * 100.0);
       const taxaOpAnualRef = parseFloat(String(rawTaxaOp).replace(',', '.')) / 100.0;
 
-      // Função auxiliar rápida para simular a duration resultante de um mapa de amortizações
+      // Precalcula os prazos em DU de cada evento futuro uma única vez
+      let dtPrev = addBusinessDays(dataLiquidacao, -126);
+      const eventMeta = eventosFuturos.map((ev) => {
+        const dt = ev.dataLiquidacao;
+        const duLiq = countBusinessDays(dataLiquidacao, dt);
+        const duP = countBusinessDays(dtPrev, dt) || 126;
+        dtPrev = dt;
+        return { dt, duLiq, duP };
+      });
+
+      // Função auxiliar vetorizada rápida para simular a duration resultante de um mapa de amortizações
       const simulaDuration = (amortMap: Record<string, number>): number => {
         let s = vna;
-        let dAnt = addBusinessDays(dataLiquidacao, -126);
         let pSum = 0;
         let tSum = 0;
-        for (let i = 0; i < eventosFuturos.length; i++) {
-          const ev = eventosFuturos[i];
-          const isL = i === eventosFuturos.length - 1;
-          const dt = ev.dataLiquidacao;
-          const duLiq = countBusinessDays(dataLiquidacao, dt);
-          const duP = countBusinessDays(dAnt, dt) || 126;
+        for (let i = 0; i < eventMeta.length; i++) {
+          const { dt, duLiq, duP } = eventMeta[i];
+          const isL = i === eventMeta.length - 1;
 
           let vAm = 0;
           if (amortMap[dt] != null) {
@@ -523,7 +591,6 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
           pSum += pv;
           tSum += duLiq * pv;
           s = Math.max(s - vAm, 0.0);
-          dAnt = dt;
         }
         return pSum > 0 ? tSum / pSum : 0;
       };
