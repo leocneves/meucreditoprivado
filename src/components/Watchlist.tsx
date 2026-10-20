@@ -127,7 +127,7 @@ const Watchlist: React.FC<WatchlistProps> = ({ assets }) => {
               )}
               {item.taxa && (
                 <span className="text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md font-mono font-bold">
-                  {typeof item.taxa === 'number' ? `${item.taxa.toFixed(2)}%` : `${item.taxa}%`}
+                  {String(item.taxa).includes('%') ? item.taxa : `${item.taxa}%`}
                 </span>
               )}
             </div>

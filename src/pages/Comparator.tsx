@@ -224,7 +224,7 @@ export default function ComparatorPage() {
     if (tipo.includes('CRI') || tipo.includes('CRA')) return true;
     const inc = String(asset.incentivada || '').toLowerCase();
     const lei = String(asset.lei || '').toLowerCase();
-    const flagInc = String(asset.incentivada_lei_12431 || '');
+    const flagInc = String((asset as any).incentivada_lei_12431 || '');
     return inc === 'sim' || inc === 'true' || inc === '1' || lei.includes('12.431') || lei.includes('12431') || flagInc === '1' || flagInc === 'true';
   };
 
