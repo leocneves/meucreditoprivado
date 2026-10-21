@@ -46,6 +46,7 @@ import {
 import {
   calculateAnbimaPricing,
   addBusinessDays,
+  todayLocalIso,
   PaymentEventItem,
   AnbimaPricingResult
 } from '../utils/anbimaCalculatorMath';
@@ -302,7 +303,7 @@ const CalculatorPage: React.FC = () => {
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
   // Parâmetros de Apreçamento ANBIMA / B3
-  const todayIso = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const todayIso = useMemo(() => todayLocalIso(), []);
   const [dataOperacao, setDataOperacao] = useState<string>(todayIso);
   const [settlementMode, setSettlementMode] = useState<'D0' | 'D1' | 'D2' | 'custom'>('D0');
   const [customSettlementDate, setCustomSettlementDate] = useState<string>(todayIso);

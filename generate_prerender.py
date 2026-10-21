@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import math
 import shutil
 import sqlite3
 import pandas as pd
@@ -629,7 +630,8 @@ def generate_asset_html(row):
         "documents": asset_docs
     }
 
-    payload_json = json.dumps(payload, ensure_ascii=False, default=str)
+    payload = sanitize_json_nan(payload)
+    payload_json = json.dumps(payload, ensure_ascii=False, default=str, allow_nan=False)
     payload_json_safe = payload_json.replace("</script>", "<\\/script>")
 
     emitter_section_html = ""
@@ -989,6 +991,29 @@ def generate_asset_html(row):
 ASSETS_JSON_DIR = "public/data/assets"
 DOCS_ASSETS_JSON_DIR = "docs/data/assets"
 
+
+def sanitize_json_nan(obj):
+    """Substitui recursivamente NaN/Inf (float, numpy, pandas NA) por None para gerar JSON estritamente válido."""
+    if isinstance(obj, dict):
+        return {k: sanitize_json_nan(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [sanitize_json_nan(v) for v in obj]
+    if isinstance(obj, float):
+        return None if (math.isnan(obj) or math.isinf(obj)) else obj
+    if obj is None or isinstance(obj, (str, bool, int)):
+        return obj
+    try:
+        if pd.isna(obj):
+            return None
+    except (TypeError, ValueError):
+        pass
+    if hasattr(obj, 'item'):
+        try:
+            return sanitize_json_nan(obj.item())
+        except Exception:
+            pass
+    return obj
+
 def write_asset(args):
     ticker, html_content, payload = args
     if not is_valid_ticker(ticker):
@@ -1007,7 +1032,7 @@ def write_asset(args):
     if payload:
         clean_ticker = ticker.replace(' ', '').replace('-', '').upper()
         isin = str(payload.get('asset', {}).get('isin', '')).strip().upper()
-        payload_str = json.dumps(payload, ensure_ascii=False, default=str)
+        payload_str = json.dumps(sanitize_json_nan(payload), ensure_ascii=False, default=str, allow_nan=False)
 
         def safe_write_json(base_dir, name):
             if not name or name in ('-', 'NONE', 'NAN'):

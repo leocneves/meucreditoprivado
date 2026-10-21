@@ -91,6 +91,8 @@ export interface AnbimaPricingParams {
   formaCalculo: 'Taxa' | 'PU';
   valor: number;
   quantidade?: number;
+  /** Projeção mensal de IPCA (% a.m.) para atualizar o VNA da data ANBIMA até a liquidação */
+  ipcaProjMensal?: number;
 }
 
 /* ================= 1. CALENDÁRIO NACIONAL & FERIADOS BANCÁRIOS (ANBIMA / B3) ================= */
@@ -257,6 +259,70 @@ export function safeParseFloat(val: any, fallback = 0.0): number {
   return isNaN(num) ? fallback : num;
 }
 
+/**
+ * Data de hoje no fuso de Brasília (YYYY-MM-DD). Evita que após 21h a data "vire" para o dia seguinte (UTC).
+ */
+export function todayLocalIso(): string {
+  try {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date());
+  } catch {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+}
+
+/** Projeção mensal de IPCA padrão (% a.m.) usada quando não há projeção ANBIMA carregada. */
+export const DEFAULT_IPCA_PROJ_MENSAL = 0.27;
+
+function anniversaryIso(year: number, month0: number, day: number): string {
+  const y = year + Math.floor(month0 / 12);
+  const m0 = ((month0 % 12) + 12) % 12;
+  const lastDay = new Date(Date.UTC(y, m0 + 1, 0)).getUTCDate();
+  const dd = Math.min(day, lastDay);
+  return `${y}-${String(m0 + 1).padStart(2, '0')}-${String(dd).padStart(2, '0')}`;
+}
+
+/**
+ * Projeta o VNA de um título IPCA de dataBase até dataAlvo pela metodologia ANBIMA:
+ *   VNA_alvo = VNA_base × Π (1 + IPCA_proj)^(dup / dut)
+ * onde dut = dias úteis entre aniversários consecutivos e dup = dias úteis decorridos no segmento.
+ * Calibração: VALEC1 20/10→21/10/2026 com 0,27% a.m. reproduz o VNA oficial (1055,7827 → 1055,9182).
+ */
+export function projectVnaIpca(
+  vnaBase: number,
+  dataBase: string,
+  dataAlvo: string,
+  ipcaProjMensalPct: number,
+  diaAniversario: number
+): number {
+  if (!vnaBase || !dataBase || !dataAlvo || dataAlvo <= dataBase) return vnaBase;
+  const p = ipcaProjMensalPct / 100.0;
+  const dia = diaAniversario >= 1 && diaAniversario <= 31 ? diaAniversario : 15;
+  let cur = dataBase;
+  let fator = 1.0;
+  let safety = 0;
+  while (cur < dataAlvo && safety < 600) {
+    safety++;
+    const [cy, cm] = cur.split('-').map(Number);
+    let a0 = rollToNextBusinessDay(anniversaryIso(cy, cm - 1, dia));
+    let monthOffset = cm - 1;
+    if (cur < a0) {
+      monthOffset -= 1;
+      a0 = rollToNextBusinessDay(anniversaryIso(cy, monthOffset, dia));
+    }
+    const a1 = rollToNextBusinessDay(anniversaryIso(cy, monthOffset + 1, dia));
+    const dut = countBusinessDays(a0, a1) || 21;
+    const segEnd = dataAlvo < a1 ? dataAlvo : a1;
+    const dup = countBusinessDays(cur, segEnd);
+    fator *= Math.pow(1.0 + p, dup / dut);
+    if (segEnd <= cur) break;
+    cur = segEnd;
+  }
+  return vnaBase * fator;
+}
+
 /* ================= 2. SOLVER NUMÉRICO DE BRENT (PU -> TAXA YTM) ================= */
 
 export function solveTaxaPorPU(
@@ -376,11 +442,12 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
   const {
     asset,
     paymentEvents = [],
-    dataOperacao = new Date().toISOString().slice(0, 10),
+    dataOperacao = todayLocalIso(),
     dataLiquidacao = dataOperacao,
     formaCalculo = 'Taxa',
     valor,
-    quantidade = 1
+    quantidade = 1,
+    ipcaProjMensal = DEFAULT_IPCA_PROJ_MENSAL
   } = params;
 
   const ticker = (asset?.ticker || asset?.codigo_b3 || 'ATIVO').trim().toUpperCase();
@@ -415,7 +482,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
   }
 
   // Trava de integridade metodológica ANBIMA/B3: Operação futura não permitida no mercado à vista
-  const todayIso = new Date().toISOString().slice(0, 10);
+  const todayIso = todayLocalIso();
   if (dataOperacao > todayIso) {
     return {
       elegivel: false,
@@ -482,7 +549,16 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
   if (rawVna <= 0) {
     rawVna = safeParseFloat(asset?.pu_mercado ?? asset?.pu_indicativo, 1000.0);
   }
-  const vna = rawVna > 0 ? rawVna : 1000.0;
+  const vnaBase = rawVna > 0 ? rawVna : 1000.0;
+
+  // VNA IPCA: o VNA publicado refere-se à data ANBIMA (normalmente D-1). Projeta até a liquidação.
+  const indexadorUp = String(asset?.indexador || 'IPCA').toUpperCase();
+  const dataBaseVna = String(asset?.data_anbima || '').slice(0, 10);
+  let vna = vnaBase;
+  if (indexadorUp.includes('IPCA') && /^\d{4}-\d{2}-\d{2}$/.test(dataBaseVna) && dataLiquidacao > dataBaseVna) {
+    const diaAniv = parseInt(String(dtVenc).slice(8, 10), 10) || 15;
+    vna = projectVnaIpca(vnaBase, dataBaseVna, dataLiquidacao, ipcaProjMensal, diaAniv);
+  }
 
   let rawTaxaEmissao = safeParseFloat(asset?.taxa_emissao, 0.0);
   if (rawTaxaEmissao <= 0) {
@@ -635,11 +711,14 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     const hasExplicitIntermediateAmort = eventosFuturos.some(
       (e, idx) => idx < eventosFuturos.length - 1 && (e.percentualAmortizacao > 0 || e.hasAmortization)
     );
+    const hasContractualFinalAmort = eventosFuturos.some(
+      (e, idx) => idx === eventosFuturos.length - 1 && (e.percentualAmortizacao > 0 || e.hasAmortization)
+    );
 
     const rawDur = asset?.duration ?? asset?.duracao;
     const targetDurationDu = rawDur != null ? parseFloat(String(rawDur).replace(',', '.')) * 252.0 : null;
 
-    if (!hasExplicitIntermediateAmort && targetDurationDu && targetDurationDu > 0 && eventosFuturos.length > 1) {
+    if (!hasExplicitIntermediateAmort && !hasContractualFinalAmort && targetDurationDu && targetDurationDu > 0 && eventosFuturos.length > 1) {
       const rawTaxaOp = asset?.taxa_indicativa_anbima || asset?.taxa_mercado || (taxaEmissaoAnual * 100.0);
       let parsedTaxa = parseFloat(String(rawTaxaOp).replace(',', '.'));
       if (indexador.includes('DI') && (isNaN(parsedTaxa) || parsedTaxa > 40.0)) {

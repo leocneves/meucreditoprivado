@@ -380,7 +380,8 @@ const AssetPage: React.FC = () => {
             const jsonResp = await fetch(`/data/assets/${encodeURIComponent(k)}.json`);
             const cType = jsonResp.headers.get('content-type') || '';
             if (jsonResp.ok && !cType.includes('text/html')) {
-              const payload = await jsonResp.json();
+              const rawText = await jsonResp.text();
+              const payload = JSON.parse(rawText.replace(/\bNaN\b/g, 'null'));
               if (payload && payload.asset) {
                 assetMemoryCache.set(targetKey, payload);
                 if (cleanTargetKey) assetMemoryCache.set(cleanTargetKey, payload);
