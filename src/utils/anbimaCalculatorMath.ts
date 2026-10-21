@@ -27,6 +27,7 @@ export interface PaymentEventItem {
   juros_expectativa?: number | null;
   percentual_amortizacao?: number | null;
   status?: string;
+  fonte?: string;
 }
 
 export interface AnbimaCashFlowItem {
@@ -354,7 +355,9 @@ export function solveTaxaPorPU(
         const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
           ? fl.jurosExpectativa / 100.0
           : getCdiExpectationRate(fl.prazoDu) / 100.0;
-        const rEq = rCdi * (y > 1.0 ? y / 100.0 : y);
+        // y pode vir como 1.065 (decimal) ou 106.5 (percentual)
+        const pctFactor = y > 10.0 ? y / 100.0 : y;
+        const rEq = rCdi * pctFactor;
         const desc = Math.pow(1.0 + rEq, fl.prazoDu / 252.0);
         soma += fl.valorFluxo / desc;
       } else {
@@ -641,8 +644,39 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       jurosExpectativa?: number;
     }>();
 
-    for (let k = 0; k < paymentEvents.length; k++) {
-      const ev = paymentEvents[k];
+    // ---------------------------------------------------------------------------------
+    // DATA QUALITY GATE DE EVENTOS DE FLUXO:
+    // Se existirem eventos de fontes oficiais (ANBIMA Oficial, Agente Cadastral, Securitizadora),
+    // filtramos eventos puramente sintéticos ('Cronograma Contratual') que colidam ou criem
+    // datas fantasmas conflitantes com a esteira primária.
+    // ---------------------------------------------------------------------------------
+    const hasOfficialEvents = paymentEvents.some(e => {
+      const f = String(e.fonte || '').toLowerCase();
+      return f.includes('anbima') || f.includes('escritura') || f.includes('cadastral') || f.includes('securitizadora') || f.includes('trustee');
+    });
+
+    const sanitizedEvents = hasOfficialEvents
+      ? paymentEvents.filter(e => {
+          const f = String(e.fonte || '').toLowerCase();
+          if (f.includes('cronograma contratual')) {
+            // Descarta evento sintético se já existe evento oficial na mesma janela de 30 dias
+            const dStr = e.data_liquidacao || e.data_evento;
+            if (!dStr) return false;
+            return !paymentEvents.some(oe => {
+              const of = String(oe.fonte || '').toLowerCase();
+              if (of.includes('cronograma contratual')) return false;
+              const od = oe.data_liquidacao || oe.data_evento;
+              if (!od) return false;
+              const diff = Math.abs(new Date(dStr + 'T00:00:00Z').getTime() - new Date(od + 'T00:00:00Z').getTime());
+              return diff <= 30 * 86400000;
+            });
+          }
+          return true;
+        })
+      : paymentEvents;
+
+    for (let k = 0; k < sanitizedEvents.length; k++) {
+      const ev = sanitizedEvents[k];
       const rawDt = ev.data_liquidacao || ev.data_evento;
       if (!rawDt) continue;
       const dtRolled = rollToNextBusinessDay(rawDt);
@@ -914,7 +948,9 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       } else if (isDiPercentLocal) {
         jurosExp = getCdiExpectationRate(duAteLiq);
         const rCdiDec = jurosExp / 100.0;
-        const rEq = rCdiDec * (taxaEmissaoAnual > 1.0 ? taxaEmissaoAnual / 100.0 : taxaEmissaoAnual);
+        // taxaEmissaoAnual já foi dividida por 100 (ex: 106.5% -> 1.065)
+        const pctMult = taxaEmissaoAnual > 10.0 ? taxaEmissaoAnual / 100.0 : taxaEmissaoAnual;
+        const rEq = rCdiDec * pctMult;
         const fCumAtual = Math.pow(1.0 + rEq, duAteLiq / 252.0);
 
         if (i === 0) {
@@ -926,7 +962,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
           const prevDuAteLiq = countBusinessDays(dataLiquidacao, prevEv.dataLiquidacao);
           const prevJurosExp = getCdiExpectationRate(prevDuAteLiq);
           const prevRCdiDec = prevJurosExp / 100.0;
-          const prevREq = prevRCdiDec * (taxaEmissaoAnual > 1.0 ? taxaEmissaoAnual / 100.0 : taxaEmissaoAnual);
+          const prevREq = prevRCdiDec * pctMult;
           const fCumPrev = Math.pow(1.0 + prevREq, prevDuAteLiq / 252.0);
           valJuros = saldoDevedor * (fCumAtual / fCumPrev - 1.0);
         }
@@ -984,7 +1020,8 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
         const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
           ? fl.jurosExpectativa / 100.0
           : getCdiExpectationRate(fl.prazoDu) / 100.0;
-        const rEqOp = rCdi * (taxaOpAnual > 1.0 ? taxaOpAnual / 100.0 : taxaOpAnual);
+        const pctOpMult = taxaOpAnual > 10.0 ? taxaOpAnual / 100.0 : taxaOpAnual;
+        const rEqOp = rCdi * pctOpMult;
         const desc = Math.pow(1.0 + rEqOp, fl.prazoDu / 252.0);
         pvCf = fl.valorFluxo / desc;
       } else {
@@ -1012,7 +1049,8 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
         ? fl.jurosExpectativa / 100.0
         : getCdiExpectationRate(fl.prazoDu) / 100.0;
-      const rEqOp = rCdi * (taxaOpAnual > 1.0 ? taxaOpAnual / 100.0 : taxaOpAnual);
+      const pctOpMult = taxaOpAnual > 10.0 ? taxaOpAnual / 100.0 : taxaOpAnual;
+      const rEqOp = rCdi * pctOpMult;
       const desc = Math.pow(1.0 + rEqOp, fl.prazoDu / 252.0);
       pvCf = fl.valorFluxo / desc;
     } else {
