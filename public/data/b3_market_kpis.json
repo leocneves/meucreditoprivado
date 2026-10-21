@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-10-21 00:01:56",
+  "atualizado_em": "2026-10-21 01:02:32",
   "ultimo_pregao": {
     "data": "2026-10-20",
     "volume_financeiro": 6293339697.63,
@@ -100,8 +100,8 @@
     ]
   },
   "ultimos_30_dias": {
-    "volume_financeiro": 168694647596.3,
-    "total_trades": 543993,
+    "volume_financeiro": 168694144692.97998,
+    "total_trades": 543987,
     "ativos_unicos": 3474,
     "top_volume": [
       {
@@ -275,18 +275,6 @@
         "taxa_media": 7.17466
       },
       {
-        "ticker": "CRA025005V5",
-        "tipo": "CRA",
-        "devedor": "MINERVA S/A",
-        "indexador": "DI%",
-        "volume_total": 54191775.39,
-        "trades_total": 2158,
-        "titulos_total": 57470,
-        "dias_com_negocio": 30,
-        "vwap": 944.4306166666667,
-        "taxa_media": 127.64693333333334
-      },
-      {
         "ticker": "EQPA18",
         "tipo": "Debênture",
         "devedor": "EQUATORIAL PARÁ DISTRIBUIDORA DE ENERGIA S.A.",
@@ -297,6 +285,18 @@
         "dias_com_negocio": 30,
         "vwap": 1116.3247933333332,
         "taxa_media": 7.625826666666667
+      },
+      {
+        "ticker": "CRA025005V5",
+        "tipo": "CRA",
+        "devedor": "MINERVA S/A",
+        "indexador": "DI%",
+        "volume_total": 54191775.39,
+        "trades_total": 2158,
+        "titulos_total": 57470,
+        "dias_com_negocio": 30,
+        "vwap": 944.4306166666667,
+        "taxa_media": 127.64693333333334
       },
       {
         "ticker": "24A2721829",
@@ -313,7 +313,7 @@
       {
         "ticker": "CRA026005K2",
         "tipo": "CRA",
-        "devedor": "EQI",
+        "devedor": "DIVERSIFICADO",
         "indexador": "DI%",
         "volume_total": 89024900.08,
         "trades_total": 2116,
@@ -349,13 +349,13 @@
     ],
     "distribuicao_instrumento": {
       "CRA": {
-        "volume": 14543624965.28,
-        "trades": 153244,
+        "volume": 14543084706.42,
+        "trades": 153240,
         "ativos": 636
       },
       "CRI": {
-        "volume": 21977219392.66,
-        "trades": 137950,
+        "volume": 21977256748.2,
+        "trades": 137948,
         "ativos": 1128
       },
       "Debênture": {
@@ -366,20 +366,20 @@
     },
     "distribuicao_indexador": {
       "CDI / DI+": {
-        "volume": 76732446595.21,
-        "trades": 139945
+        "volume": 76776658113.93,
+        "trades": 140435
       },
       "IPCA": {
-        "volume": 81678332838.3,
-        "trades": 307704
+        "volume": 81667550810.53,
+        "trades": 307485
       },
       "Outros": {
-        "volume": 2982377737.39,
-        "trades": 15858
+        "volume": 3404703085.84,
+        "trades": 17358
       },
       "Pré-Fixado": {
-        "volume": 7301490425.4,
-        "trades": 80486
+        "volume": 6845232682.68,
+        "trades": 78709
       }
     },
     "timeline": [
@@ -415,14 +415,14 @@
       },
       {
         "data_negocio": "2026-09-15",
-        "volume": 4151554971.93,
-        "trades": 20330,
+        "volume": 4151414321.48,
+        "trades": 20327,
         "ativos": 1547
       },
       {
         "data_negocio": "2026-09-16",
-        "volume": 3701926159.2799997,
-        "trades": 21523,
+        "volume": 3701925167.15,
+        "trades": 21522,
         "ativos": 1598
       },
       {
@@ -451,8 +451,8 @@
       },
       {
         "data_negocio": "2026-09-23",
-        "volume": 5220461935.28,
-        "trades": 17275,
+        "volume": 5220402673.84,
+        "trades": 17273,
         "ativos": 1657
       },
       {
@@ -481,8 +481,8 @@
       },
       {
         "data_negocio": "2026-09-30",
-        "volume": 7851936004.96,
-        "trades": 20385,
+        "volume": 7851535405.54,
+        "trades": 20383,
         "ativos": 1708
       },
       {
@@ -547,8 +547,8 @@
       },
       {
         "data_negocio": "2026-10-16",
-        "volume": 6995073104.11,
-        "trades": 20198,
+        "volume": 6995171704.23,
+        "trades": 20200,
         "ativos": 1567
       },
       {
@@ -566,9 +566,9 @@
     ]
   },
   "acumulado_ano_ytd": {
-    "volume_financeiro": 1035190225772.75,
-    "total_trades": 3552770,
-    "ativos_unicos": 4882,
+    "volume_financeiro": 1035002821065.9299,
+    "total_trades": 3552315,
+    "ativos_unicos": 4881,
     "total_pregoes": 199
   }
 }
