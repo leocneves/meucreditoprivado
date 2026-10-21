@@ -380,6 +380,9 @@ const CalculatorPage: React.FC = () => {
         if (!text || !active) return;
         try {
           const cleanJson = JSON.parse(text.replace(/\bNaN\b/g, 'null'));
+          if (cleanJson.asset) {
+            setSelectedAsset(prev => prev ? { ...prev, ...cleanJson.asset } : cleanJson.asset);
+          }
           if (cleanJson.paymentEvents && Array.isArray(cleanJson.paymentEvents)) {
             setAssetPaymentEvents(cleanJson.paymentEvents);
           } else {
@@ -406,11 +409,61 @@ const CalculatorPage: React.FC = () => {
     setSearchQuery(a.ticker);
     setShowSearchResults(false);
 
-    // Identifica taxa indicativa do ativo
-    const rAnb = parseFloat(String(a.taxa_indicativa_anbima || a.taxa_mercado || '').replace(',', '.'));
-    const rB3 = parseFloat(String(a.taxa_negocio_b3 || '').replace(',', '.'));
+    // Identifica indexador e convenção de taxa
+    const idx = String(a.indexador || '').toUpperCase();
+    const isDi = idx.includes('DI');
     const rEmiss = parseFloat(String(a.taxa_emissao || '').replace(',', '.'));
-    const bestRate = !isNaN(rAnb) && rAnb > 0 ? rAnb : (!isNaN(rB3) && rB3 > 0 ? rB3 : (!isNaN(rEmiss) ? rEmiss : 8.2597));
+    const isDiPct = isDi && (idx.includes('%') || (!isNaN(rEmiss) && rEmiss > 40));
+    const isDiSpr = isDi && !isDiPct;
+
+    let bestRate: number;
+
+    if (isDiSpr) {
+      // Para DI + Spread: a taxa de entrada é o spread anual (ex: 1,75% a.a.)
+      const rAnb = parseFloat(String(a.taxa_indicativa_anbima || '').replace(',', '.'));
+      if (!isNaN(rAnb) && rAnb > 0 && rAnb < 30 && String(a.taxa_indicativa_anbima) !== '--') {
+        bestRate = rAnb;
+      } else if (!isNaN(rEmiss) && rEmiss > 0 && rEmiss < 30) {
+        bestRate = rEmiss;
+      } else {
+        const rMerc = parseFloat(String(a.taxa_mercado || '').replace(',', '.'));
+        if (!isNaN(rMerc) && rMerc > 0 && rMerc < 30) {
+          bestRate = rMerc;
+        } else {
+          bestRate = !isNaN(rEmiss) && rEmiss > 0 && rEmiss < 30 ? rEmiss : 1.75;
+        }
+      }
+    } else if (isDiPct) {
+      // Para % do DI: a taxa é o percentual do CDI (ex: 105% do CDI)
+      const rB3 = parseFloat(String(a.taxa_negocio_b3 || '').replace(',', '.'));
+      const rMerc = parseFloat(String(a.taxa_mercado || '').replace(',', '.'));
+      if (!isNaN(rEmiss) && rEmiss > 50) {
+        bestRate = rEmiss;
+      } else if (!isNaN(rB3) && rB3 > 50) {
+        bestRate = rB3;
+      } else if (!isNaN(rMerc) && rMerc > 50) {
+        bestRate = rMerc;
+      } else {
+        bestRate = 100.0;
+      }
+    } else {
+      // IPCA, Pré, etc.
+      const rAnb = parseFloat(String(a.taxa_indicativa_anbima || '').replace(',', '.'));
+      const rB3 = parseFloat(String(a.taxa_negocio_b3 || '').replace(',', '.'));
+      const rMerc = parseFloat(String(a.taxa_mercado || '').replace(',', '.'));
+      if (!isNaN(rAnb) && rAnb > 0 && String(a.taxa_indicativa_anbima) !== '--') {
+        bestRate = rAnb;
+      } else if (!isNaN(rB3) && rB3 > 0) {
+        bestRate = rB3;
+      } else if (!isNaN(rMerc) && rMerc > 0) {
+        bestRate = rMerc;
+      } else if (!isNaN(rEmiss) && rEmiss > 0) {
+        bestRate = rEmiss;
+      } else {
+        bestRate = 8.2597;
+      }
+    }
+
     setInputRate(Number(bestRate.toFixed(4)));
 
     // Identifica PU inicial
@@ -524,6 +577,30 @@ const CalculatorPage: React.FC = () => {
     if (!anbimaResult || !matchedNtnb) return 0;
     return Math.round((anbimaResult.taxaOperacao - matchedNtnb.taxa) * 100);
   }, [anbimaResult, matchedNtnb]);
+
+  const isDiAsset = Boolean(selectedAsset?.indexador?.toUpperCase().includes('DI'));
+  const isDiPercent = Boolean(
+    isDiAsset && (
+      selectedAsset?.indexador?.includes('%') || 
+      (selectedAsset?.taxa_emissao && parseFloat(String(selectedAsset.taxa_emissao)) > 40)
+    )
+  );
+  const isDiSpread = Boolean(isDiAsset && !isDiPercent);
+
+  const rateInputLabel = useMemo(() => {
+    if (formaCalculo === 'PU') return 'PU da Operação (R$)';
+    if (isDiSpread) return 'Taxa da Operação (Spread sobre o CDI)';
+    if (isDiPercent) return 'Taxa da Operação (% do CDI)';
+    if (selectedAsset?.indexador?.toUpperCase().includes('IPCA')) return 'Taxa da Operação (% a.a. + IPCA)';
+    return 'Taxa da Operação (% a.a.)';
+  }, [formaCalculo, isDiSpread, isDiPercent, selectedAsset?.indexador]);
+
+  const rateInputSuffix = useMemo(() => {
+    if (formaCalculo === 'PU') return 'R$';
+    if (isDiSpread) return '% a.a. + CDI';
+    if (isDiPercent) return '% do CDI';
+    return '% a.a.';
+  }, [formaCalculo, isDiSpread, isDiPercent]);
 
   const copyResults = () => {
     if (!anbimaResult) return;
@@ -853,19 +930,35 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                 {/* 4. Valor de Entrada (SEM SETAS FEIAS / [appearance:textfield]) */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
-                    <span>{formaCalculo === 'Taxa' ? 'Taxa da Operação (% a.a.)' : 'PU da Operação (R$)'}</span>
-                    {formaCalculo === 'Taxa' && selectedAsset?.taxa_indicativa_anbima && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const r = parseFloat(String(selectedAsset.taxa_indicativa_anbima).replace(',', '.'));
-                          if (!isNaN(r)) setInputRate(r);
-                        }}
-                        className="text-[10px] text-blue-600 hover:underline font-bold"
-                      >
-                        Usar ANBIMA ({selectedAsset.taxa_indicativa_anbima}%)
-                      </button>
-                    )}
+                    <span>{rateInputLabel}</span>
+                    {formaCalculo === 'Taxa' && (() => {
+                      const rawAnb = String(selectedAsset?.taxa_indicativa_anbima || '').trim();
+                      const rAnb = parseFloat(rawAnb.replace(',', '.'));
+                      const rEmiss = parseFloat(String(selectedAsset?.taxa_emissao || '').replace(',', '.'));
+                      if (!isNaN(rAnb) && rAnb > 0 && rAnb < 30 && rawAnb !== '--') {
+                        return (
+                          <button
+                            type="button"
+                            onClick={() => setInputRate(rAnb)}
+                            className="text-[10px] text-blue-600 hover:underline font-bold"
+                          >
+                            Usar ANBIMA ({isDiSpread ? `CDI + ${rawAnb}% a.a.` : `${rawAnb}%`})
+                          </button>
+                        );
+                      }
+                      if (!isNaN(rEmiss) && rEmiss > 0) {
+                        return (
+                          <button
+                            type="button"
+                            onClick={() => setInputRate(rEmiss)}
+                            className="text-[10px] text-blue-600 hover:underline font-bold"
+                          >
+                            Usar Emissão ({isDiSpread ? `CDI + ${rEmiss}% a.a.` : (isDiPercent ? `${rEmiss}% do DI` : `${rEmiss}% a.a.`)})
+                          </button>
+                        );
+                      }
+                      return null;
+                    })()}
                   </label>
                   <div className="relative">
                     <input
@@ -877,10 +970,29 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                         if (formaCalculo === 'Taxa') setInputRate(isNaN(val) ? 0 : val);
                         else setInputPU(isNaN(val) ? 0 : val);
                       }}
-                      className="w-full pl-3.5 pr-12 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-extrabold text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition"
+                      placeholder={
+                        formaCalculo === 'PU'
+                          ? 'Ex: 1081.05'
+                          : isDiSpread
+                          ? 'Ex: 1.20 (para CDI + 1.20% a.a.)'
+                          : isDiPercent
+                          ? 'Ex: 105.0 (% do CDI)'
+                          : 'Ex: 6.50 (% a.a.)'
+                      }
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-extrabold text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition"
                     />
-                    <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none">
-                      {formaCalculo === 'Taxa' ? '% a.a.' : 'R$'}
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                    <span>
+                      {formaCalculo === 'PU' ? (
+                        'Preço Unitário da Operação (PU Limpo / PU Par)'
+                      ) : isDiSpread ? (
+                        <span>Formato: <strong className="text-slate-800 font-bold">CDI + {inputRate}% a.a.</strong></span>
+                      ) : isDiPercent ? (
+                        <span>Formato: <strong className="text-slate-800 font-bold">{inputRate}% do CDI</strong></span>
+                      ) : (
+                        <span>Formato: <strong className="text-slate-800 font-bold">{inputRate}% a.a.</strong></span>
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-[10px] text-slate-400">
@@ -966,17 +1078,30 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                     {/* CARD TAXA OPERAÇÃO */}
                     <div className="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
                       <span className="text-xs font-bold text-slate-600 uppercase tracking-wider block">
-                        Taxa da Operação (YTM)
+                        {isDiSpread ? 'Spread da Operação' : (isDiPercent ? 'Taxa da Operação (% CDI)' : 'Taxa da Operação (YTM)')}
                       </span>
                       <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                        {anbimaResult.taxaOperacao.toFixed(4)}% <span className="text-base font-normal text-slate-500">a.a.</span>
+                        {anbimaResult.taxaOperacao.toFixed(4)}% <span className="text-base font-normal text-slate-500">{isDiSpread ? 'a.a. + CDI' : (isDiPercent ? 'do CDI' : 'a.a.')}</span>
                       </div>
                       <div className="text-xs text-slate-600 pt-1 flex items-center gap-1.5">
-                        <span>Spread vs {matchedNtnb.nome}:</span>
-                        <strong className={spreadVsNtnbBps >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
-                          {spreadVsNtnbBps >= 0 ? `+${spreadVsNtnbBps}` : spreadVsNtnbBps} bps
-                        </strong>
-                        <span className="text-slate-400">({matchedNtnb.taxa.toFixed(2)}%)</span>
+                        {isDiSpread ? (
+                          <>
+                            <span>Spread vs Emissão:</span>
+                            <strong className={anbimaResult.taxaOperacao - anbimaResult.taxaEmissao >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                              {anbimaResult.taxaOperacao - anbimaResult.taxaEmissao >= 0 ? '+' : ''}
+                              {Math.round((anbimaResult.taxaOperacao - anbimaResult.taxaEmissao) * 100)} bps
+                            </strong>
+                            <span className="text-slate-400">({anbimaResult.taxaEmissao.toFixed(2)}%)</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Spread vs {matchedNtnb.nome}:</span>
+                            <strong className={spreadVsNtnbBps >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                              {spreadVsNtnbBps >= 0 ? `+${spreadVsNtnbBps}` : spreadVsNtnbBps} bps
+                            </strong>
+                            <span className="text-slate-400">({matchedNtnb.taxa.toFixed(2)}%)</span>
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -1090,6 +1215,9 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                           <th className="py-3 px-3.5">Data de Liquidação</th>
                           <th className="py-3 px-3.5 text-right">Prazo (DU)</th>
                           <th className="py-3 px-3.5 text-right">Período (DU)</th>
+                          {isDiSpread && (
+                            <th className="py-3 px-3.5 text-right text-indigo-700">Expectativa CDI</th>
+                          )}
                           <th className="py-3 px-3.5 text-right">Juros Projetados</th>
                           <th className="py-3 px-3.5 text-right">Amortização</th>
                           <th className="py-3 px-3.5 text-right">Valor do Fluxo</th>
@@ -1117,6 +1245,11 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                             <td className="py-2.5 px-3.5 text-right font-mono text-slate-500">
                               {fl.diasEntrePagamentos}
                             </td>
+                            {isDiSpread && (
+                              <td className="py-2.5 px-3.5 text-right font-mono font-bold text-indigo-700">
+                                {fl.jurosExpectativa != null ? `${fl.jurosExpectativa.toFixed(2)}%` : '-'}
+                              </td>
+                            )}
                             <td className="py-2.5 px-3.5 text-right font-mono text-slate-700">
                               {fl.jurosProjetado.toLocaleString('pt-BR', { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
                             </td>
@@ -1134,7 +1267,7 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                       </tbody>
                       <tfoot className="bg-slate-50 font-bold text-slate-900 border-t border-slate-200">
                         <tr>
-                          <td colSpan={4} className="py-3 px-3.5 uppercase text-[11px] text-slate-500">
+                          <td colSpan={isDiSpread ? 5 : 4} className="py-3 px-3.5 uppercase text-[11px] text-slate-500">
                             Total Geral da Operação
                           </td>
                           <td className="py-3 px-3.5 text-right font-mono text-slate-800">

@@ -24,6 +24,7 @@ export interface PaymentEventItem {
   taxa?: number | null;
   valor_real?: number | null;
   valor_projetado?: number | null;
+  juros_expectativa?: number | null;
   percentual_amortizacao?: number | null;
   status?: string;
 }
@@ -33,10 +34,23 @@ export interface AnbimaCashFlowItem {
   dataLiquidacao: string;
   prazoDu: number;
   diasEntrePagamentos: number;
+  jurosExpectativa?: number;
   jurosProjetado: number;
   amortizacao: number;
   fluxoDescontado: number;
   valorFluxo: number;
+}
+
+/**
+ * Curva oficial de expectativa CDI da ANBIMA por vértice de prazo em Dias Úteis
+ */
+export function getCdiExpectationRate(du: number): number {
+  if (du <= 63) return 13.58;
+  if (du <= 189) return 13.24;
+  if (du <= 315) return 12.85;
+  if (du <= 441) return 12.66;
+  if (du <= 567) return 12.56;
+  return 12.59;
 }
 
 export interface AnbimaPricingResult {
@@ -246,10 +260,11 @@ export function safeParseFloat(val: any, fallback = 0.0): number {
 /* ================= 2. SOLVER NUMÉRICO DE BRENT (PU -> TAXA YTM) ================= */
 
 export function solveTaxaPorPU(
-  fluxos: { valorFluxo: number; prazoDu: number }[],
+  fluxos: { valorFluxo: number; prazoDu: number; jurosExpectativa?: number }[],
   puAlvo: number,
   tol = 1e-7,
-  maxIter = 100
+  maxIter = 100,
+  isDiSpread = false
 ): number | null {
   if (puAlvo <= 0 || !fluxos || fluxos.length === 0) return null;
 
@@ -261,7 +276,16 @@ export function solveTaxaPorPU(
     if (y <= -0.99) return 1e12;
     let soma = 0.0;
     for (let k = 0; k < fluxos.length; k++) {
-      soma += fluxos[k].valorFluxo / Math.pow(1.0 + y, fluxos[k].prazoDu / 252.0);
+      const fl = fluxos[k];
+      if (isDiSpread) {
+        const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
+          ? fl.jurosExpectativa / 100.0
+          : getCdiExpectationRate(fl.prazoDu) / 100.0;
+        const desc = Math.pow(1.0 + rCdi, fl.prazoDu / 252.0) * Math.pow(1.0 + y, fl.prazoDu / 252.0);
+        soma += fl.valorFluxo / desc;
+      } else {
+        soma += fl.valorFluxo / Math.pow(1.0 + y, fl.prazoDu / 252.0);
+      }
     }
     return soma;
   };
@@ -440,7 +464,13 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     };
   }
 
-  let rawVna = safeParseFloat(asset?.vna ?? asset?.pu ?? asset?.pu_par, 0.0);
+  let rawVna = safeParseFloat(asset?.vna, 0.0);
+  if (rawVna <= 0) {
+    rawVna = safeParseFloat(asset?.vne ?? asset?.pu_emissao ?? asset?.pu, 0.0);
+  }
+  if (rawVna <= 0) {
+    rawVna = safeParseFloat(asset?.pu_par, 0.0);
+  }
   if (rawVna <= 0) {
     rawVna = safeParseFloat(asset?.pu_mercado ?? asset?.pu_indicativo, 1000.0);
   }
@@ -472,6 +502,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     dataLiquidacao: string;
     prazoDu: number;
     diasEntrePagamentos: number;
+    jurosExpectativa?: number;
     jurosProjetado: number;
     amortizacao: number;
     valorFluxo: number;
@@ -522,6 +553,8 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       hasAmortization: boolean;
       percentualAmortizacao: number;
       tipos: string[];
+      valorProjetado?: number;
+      jurosExpectativa?: number;
     }>();
 
     for (let k = 0; k < paymentEvents.length; k++) {
@@ -542,11 +575,23 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       const item = mapFuturos.get(dtRolled)!;
       const tipo = String(ev.tipo_evento || '');
       item.tipos.push(tipo);
-      if (/amort/i.test(tipo) || /venc/i.test(tipo)) {
+      const isAmort = /amort/i.test(tipo) || /venc/i.test(tipo);
+      if (isAmort) {
         item.hasAmortization = true;
       }
-      if (ev.percentual_amortizacao != null && !isNaN(Number(ev.percentual_amortizacao))) {
-        item.percentualAmortizacao += Number(ev.percentual_amortizacao);
+      // O percentual pode vir em 'percentual_amortizacao' ou em 'taxa' quando o evento é de Amortização
+      let rawPct = ev.percentual_amortizacao != null ? Number(ev.percentual_amortizacao) : NaN;
+      if (isNaN(rawPct) && isAmort && ev.taxa != null) {
+        rawPct = Number(ev.taxa);
+      }
+      if (!isNaN(rawPct) && rawPct > 0) {
+        item.percentualAmortizacao += rawPct;
+      }
+      if (ev.valor_projetado != null && Number(ev.valor_projetado) > 0 && !isAmort) {
+        item.valorProjetado = Number(ev.valor_projetado);
+      }
+      if (ev.juros_expectativa != null && Number(ev.juros_expectativa) > 0) {
+        item.jurosExpectativa = Number(ev.juros_expectativa);
       }
     }
 
@@ -588,7 +633,11 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
 
     if (!hasExplicitIntermediateAmort && targetDurationDu && targetDurationDu > 0 && eventosFuturos.length > 1) {
       const rawTaxaOp = asset?.taxa_indicativa_anbima || asset?.taxa_mercado || (taxaEmissaoAnual * 100.0);
-      const taxaOpAnualRef = parseFloat(String(rawTaxaOp).replace(',', '.')) / 100.0;
+      let parsedTaxa = parseFloat(String(rawTaxaOp).replace(',', '.'));
+      if (indexador.includes('DI') && (isNaN(parsedTaxa) || parsedTaxa > 40.0)) {
+        parsedTaxa = taxaEmissaoAnual * 100.0;
+      }
+      const taxaOpAnualRef = (parsedTaxa > 0 ? parsedTaxa : 6.0) / 100.0;
 
       // Precalcula os prazos em DU de cada evento futuro uma única vez
       let dtPrev = addBusinessDays(dataLiquidacao, -126);
@@ -689,9 +738,22 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       dtUltimoCupom = asset?.data_emissao || asset?.dt_emissao || addBusinessDays(dataLiquidacao, -126);
     }
 
-    duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
-    fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
-    pupar = vna * fatorAccrued;
+    // PU Par oficial ou derivado de juros decorridos
+    const puParOficial = safeParseFloat(asset?.pu_par, 0.0);
+    if (puParOficial > 0) {
+      pupar = puParOficial;
+      fatorAccrued = vna > 0 ? pupar / vna : 1.0;
+      duDecorrido = Math.round((Math.log(Math.max(fatorAccrued, 1.0)) / Math.log(1.0 + taxaEmissaoAnual)) * 252);
+    } else {
+      duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
+      fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
+      pupar = vna * fatorAccrued;
+    }
+
+    // Identifica se a convenção de amortização é sobre o Saldo Remanescente
+    const amortsComPct = eventosFuturos.filter(e => e.percentualAmortizacao > 0);
+    const somaPcts = amortsComPct.reduce((acc, e) => acc + e.percentualAmortizacao, 0);
+    const isAmortizacaoSaldo = (somaPcts > 105.0) || amortsComPct.some(e => Math.abs(e.percentualAmortizacao - 33.3334) < 0.1 || Math.abs(e.percentualAmortizacao - 50.0) < 0.1);
 
     let saldoDevedor = vna;
     let dtAnt = dtUltimoCupom;
@@ -706,21 +768,70 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
       const isLast = (i === eventosFuturos.length - 1);
       let valAmort = 0.0;
       if (ev.percentualAmortizacao > 0) {
-        valAmort = (ev.percentualAmortizacao / 100.0) * vna;
-      } else if (ev.hasAmortization || isLast) {
+        if (isAmortizacaoSaldo) {
+          valAmort = saldoDevedor * (ev.percentualAmortizacao / 100.0);
+        } else {
+          valAmort = (ev.percentualAmortizacao / 100.0) * vna;
+        }
+        valAmort = Math.min(valAmort, saldoDevedor);
+      } else if (ev.hasAmortization && isLast) {
+        valAmort = saldoDevedor;
+      } else if (isLast && saldoDevedor > 0) {
         valAmort = saldoDevedor;
       }
 
+      // Identifica o indexador para projeção e desconto
+      const isDiAssetLocal = indexador.includes('DI');
+      const isDiPercentLocal = isDiAssetLocal && (indexador.includes('%') || (taxaEmissaoAnual * 100.0 > 40.0));
+      const isDiSpreadLocal = isDiAssetLocal && !isDiPercentLocal;
+
       // Fórmula oficial ANBIMA de cupom projetado:
-      // Juros = Saldo Devedor * [ (1 + Taxa Emissão)^(DU_periodo / 252) - 1 ]
-      const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
-      const valJuros = saldoDevedor * fatorJuros;
+      let valJuros = 0.0;
+      let jurosExp: number | undefined = undefined;
+
+      if (isDiSpreadLocal) {
+        jurosExp = (ev.jurosExpectativa != null && ev.jurosExpectativa > 0)
+          ? ev.jurosExpectativa
+          : getCdiExpectationRate(duAteLiq);
+
+        if (ev.valorProjetado != null && ev.valorProjetado > 0) {
+          valJuros = ev.valorProjetado;
+        } else {
+          const rCdiDec = jurosExp / 100.0;
+          if (i === 0 && pupar > 0 && vna > 0) {
+            const duRestante = Math.max(duPeriodo - duDecorrido, 0);
+            const fatorRestante = Math.pow(1.0 + rCdiDec, duRestante / 252.0) * Math.pow(1.0 + taxaEmissaoAnual, duRestante / 252.0);
+            valJuros = saldoDevedor * ((pupar / vna) * fatorRestante - 1.0);
+          } else {
+            const fatorJuros = Math.pow(1.0 + rCdiDec, duPeriodo / 252.0) * Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
+            valJuros = saldoDevedor * fatorJuros;
+          }
+        }
+      } else if (isDiPercentLocal) {
+        jurosExp = getCdiExpectationRate(duAteLiq);
+        if (ev.valorProjetado != null && ev.valorProjetado > 0) {
+          valJuros = ev.valorProjetado;
+        } else {
+          const rCdiDec = jurosExp / 100.0;
+          const rEq = rCdiDec * (taxaEmissaoAnual > 1.0 ? taxaEmissaoAnual / 100.0 : taxaEmissaoAnual);
+          const fatorJuros = Math.pow(1.0 + rEq, duPeriodo / 252.0) - 1.0;
+          valJuros = saldoDevedor * fatorJuros;
+        }
+      } else {
+        if (ev.valorProjetado != null && ev.valorProjetado > 0) {
+          valJuros = ev.valorProjetado;
+        } else {
+          const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
+          valJuros = saldoDevedor * fatorJuros;
+        }
+      }
 
       fluxosCalculo.push({
         nome: valAmort > 0 && valJuros > 0 ? 'Juros|Amortização' : (valAmort > 0 ? 'Amortização' : 'Juros'),
         dataLiquidacao: dtEv,
         prazoDu: duAteLiq,
         diasEntrePagamentos: duPeriodo,
+        jurosExpectativa: jurosExp,
         jurosProjetado: valJuros,
         amortizacao: valAmort,
         valorFluxo: valJuros + valAmort
@@ -737,10 +848,13 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
   let puOperacao = 0.0;
   let taxaOpAnual = 0.0;
   let taxaExibida = 0.0;
+  const isDiAsset = indexador.includes('DI');
+  const isDiPercent = isDiAsset && (indexador.includes('%') || (taxaEmissaoAnual * 100.0 > 40.0));
+  const isDiSpread = isDiAsset && !isDiPercent;
 
   if (formaCalculo.toUpperCase() === 'PU') {
     puOperacao = Number(valor);
-    const taxaResolvida = solveTaxaPorPU(fluxosCalculo, puOperacao);
+    const taxaResolvida = solveTaxaPorPU(fluxosCalculo, puOperacao, 1e-7, 100, isDiSpread);
     taxaExibida = taxaResolvida != null ? taxaResolvida : (taxaEmissaoAnual * 100.0);
     taxaOpAnual = taxaExibida / 100.0;
   } else {
@@ -750,7 +864,17 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     let somaPv = 0.0;
     for (let k = 0; k < fluxosCalculo.length; k++) {
       const fl = fluxosCalculo[k];
-      somaPv += fl.valorFluxo / Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+      let pvCf = 0.0;
+      if (isDiSpread) {
+        const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
+          ? fl.jurosExpectativa / 100.0
+          : getCdiExpectationRate(fl.prazoDu) / 100.0;
+        const desc = Math.pow(1.0 + rCdi, fl.prazoDu / 252.0) * Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+        pvCf = fl.valorFluxo / desc;
+      } else {
+        pvCf = fl.valorFluxo / Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+      }
+      somaPv += pvCf;
     }
     puOperacao = somaPv;
   }
@@ -761,13 +885,24 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
 
   for (let k = 0; k < fluxosCalculo.length; k++) {
     const fl = fluxosCalculo[k];
-    const pvCf = fl.valorFluxo / Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+    let pvCf = 0.0;
+    if (isDiSpread) {
+      const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
+        ? fl.jurosExpectativa / 100.0
+        : getCdiExpectationRate(fl.prazoDu) / 100.0;
+      const desc = Math.pow(1.0 + rCdi, fl.prazoDu / 252.0) * Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+      pvCf = fl.valorFluxo / desc;
+    } else {
+      pvCf = fl.valorFluxo / Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+    }
+
     timePvSum += fl.prazoDu * pvCf;
     tabelaFluxos.push({
       nome: fl.nome,
       dataLiquidacao: fl.dataLiquidacao,
       prazoDu: fl.prazoDu,
       diasEntrePagamentos: fl.diasEntrePagamentos,
+      jurosExpectativa: fl.jurosExpectativa,
       jurosProjetado: fl.jurosProjetado,
       amortizacao: fl.amortizacao,
       fluxoDescontado: pvCf,
