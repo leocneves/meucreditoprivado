@@ -264,7 +264,8 @@ export function solveTaxaPorPU(
   puAlvo: number,
   tol = 1e-7,
   maxIter = 100,
-  isDiSpread = false
+  isDiSpread = false,
+  isDiPercent = false
 ): number | null {
   if (puAlvo <= 0 || !fluxos || fluxos.length === 0) return null;
 
@@ -282,6 +283,13 @@ export function solveTaxaPorPU(
           ? fl.jurosExpectativa / 100.0
           : getCdiExpectationRate(fl.prazoDu) / 100.0;
         const desc = Math.pow(1.0 + rCdi, fl.prazoDu / 252.0) * Math.pow(1.0 + y, fl.prazoDu / 252.0);
+        soma += fl.valorFluxo / desc;
+      } else if (isDiPercent) {
+        const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
+          ? fl.jurosExpectativa / 100.0
+          : getCdiExpectationRate(fl.prazoDu) / 100.0;
+        const rEq = rCdi * (y > 1.0 ? y / 100.0 : y);
+        const desc = Math.pow(1.0 + rEq, fl.prazoDu / 252.0);
         soma += fl.valorFluxo / desc;
       } else {
         soma += fl.valorFluxo / Math.pow(1.0 + y, fl.prazoDu / 252.0);
@@ -740,10 +748,21 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
 
     // PU Par oficial ou derivado de juros decorridos
     const puParOficial = safeParseFloat(asset?.pu_par, 0.0);
-    if (puParOficial > 0) {
+    const dataAnbima = asset?.data_anbima || asset?.data_ultimo_negocio;
+
+    // Em títulos IPCA e Pré-fixados, o PU Par decorre dia a dia a partir da data do último cupom sobre o VNA:
+    if (!indexador.includes('DI')) {
+      duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
+      fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
+      pupar = vna * fatorAccrued;
+    } else if (puParOficial > 0 && (!dataAnbima || dataAnbima === dataLiquidacao)) {
       pupar = puParOficial;
       fatorAccrued = vna > 0 ? pupar / vna : 1.0;
-      duDecorrido = Math.round((Math.log(Math.max(fatorAccrued, 1.0)) / Math.log(1.0 + taxaEmissaoAnual)) * 252);
+      duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
+    } else if (puParOficial > 0) {
+      pupar = puParOficial;
+      fatorAccrued = vna > 0 ? pupar / vna : 1.0;
+      duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
     } else {
       duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
       fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
@@ -794,36 +813,47 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
           ? ev.jurosExpectativa
           : getCdiExpectationRate(duAteLiq);
 
-        if (ev.valorProjetado != null && ev.valorProjetado > 0) {
-          valJuros = ev.valorProjetado;
+        const rCdiDec = jurosExp / 100.0;
+        const fCumAtual = Math.pow(1.0 + rCdiDec, duAteLiq / 252.0);
+
+        if (i === 0) {
+          const fatorRestante = fCumAtual * Math.pow(1.0 + taxaEmissaoAnual, duAteLiq / 252.0);
+          valJuros = saldoDevedor * ((pupar / vna) * fatorRestante - 1.0);
         } else {
-          const rCdiDec = jurosExp / 100.0;
-          if (i === 0 && pupar > 0 && vna > 0) {
-            const duRestante = Math.max(duPeriodo - duDecorrido, 0);
-            const fatorRestante = Math.pow(1.0 + rCdiDec, duRestante / 252.0) * Math.pow(1.0 + taxaEmissaoAnual, duRestante / 252.0);
-            valJuros = saldoDevedor * ((pupar / vna) * fatorRestante - 1.0);
-          } else {
-            const fatorJuros = Math.pow(1.0 + rCdiDec, duPeriodo / 252.0) * Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
-            valJuros = saldoDevedor * fatorJuros;
-          }
+          const prevEv = eventosFuturos[i - 1];
+          const prevDuAteLiq = countBusinessDays(dataLiquidacao, prevEv.dataLiquidacao);
+          const prevJurosExp = (prevEv.jurosExpectativa != null && prevEv.jurosExpectativa > 0)
+            ? prevEv.jurosExpectativa
+            : getCdiExpectationRate(prevDuAteLiq);
+          const prevRCdiDec = prevJurosExp / 100.0;
+          const fCumPrev = Math.pow(1.0 + prevRCdiDec, prevDuAteLiq / 252.0);
+          const fFwd = fCumAtual / fCumPrev;
+          const dDelta = Math.max(duAteLiq - prevDuAteLiq, 1);
+          const fSpr = Math.pow(1.0 + taxaEmissaoAnual, dDelta / 252.0);
+          valJuros = saldoDevedor * (fFwd * fSpr - 1.0);
         }
       } else if (isDiPercentLocal) {
         jurosExp = getCdiExpectationRate(duAteLiq);
-        if (ev.valorProjetado != null && ev.valorProjetado > 0) {
-          valJuros = ev.valorProjetado;
+        const rCdiDec = jurosExp / 100.0;
+        const rEq = rCdiDec * (taxaEmissaoAnual > 1.0 ? taxaEmissaoAnual / 100.0 : taxaEmissaoAnual);
+        const fCumAtual = Math.pow(1.0 + rEq, duAteLiq / 252.0);
+
+        if (i === 0) {
+          valJuros = (pupar > 0 && vna > 0)
+            ? saldoDevedor * ((pupar / vna) * fCumAtual - 1.0)
+            : saldoDevedor * (fCumAtual - 1.0);
         } else {
-          const rCdiDec = jurosExp / 100.0;
-          const rEq = rCdiDec * (taxaEmissaoAnual > 1.0 ? taxaEmissaoAnual / 100.0 : taxaEmissaoAnual);
-          const fatorJuros = Math.pow(1.0 + rEq, duPeriodo / 252.0) - 1.0;
-          valJuros = saldoDevedor * fatorJuros;
+          const prevEv = eventosFuturos[i - 1];
+          const prevDuAteLiq = countBusinessDays(dataLiquidacao, prevEv.dataLiquidacao);
+          const prevJurosExp = getCdiExpectationRate(prevDuAteLiq);
+          const prevRCdiDec = prevJurosExp / 100.0;
+          const prevREq = prevRCdiDec * (taxaEmissaoAnual > 1.0 ? taxaEmissaoAnual / 100.0 : taxaEmissaoAnual);
+          const fCumPrev = Math.pow(1.0 + prevREq, prevDuAteLiq / 252.0);
+          valJuros = saldoDevedor * (fCumAtual / fCumPrev - 1.0);
         }
       } else {
-        if (ev.valorProjetado != null && ev.valorProjetado > 0) {
-          valJuros = ev.valorProjetado;
-        } else {
-          const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
-          valJuros = saldoDevedor * fatorJuros;
-        }
+        const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
+        valJuros = saldoDevedor * fatorJuros;
       }
 
       fluxosCalculo.push({
@@ -854,7 +884,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
 
   if (formaCalculo.toUpperCase() === 'PU') {
     puOperacao = Number(valor);
-    const taxaResolvida = solveTaxaPorPU(fluxosCalculo, puOperacao, 1e-7, 100, isDiSpread);
+    const taxaResolvida = solveTaxaPorPU(fluxosCalculo, puOperacao, 1e-7, 100, isDiSpread, isDiPercent);
     taxaExibida = taxaResolvida != null ? taxaResolvida : (taxaEmissaoAnual * 100.0);
     taxaOpAnual = taxaExibida / 100.0;
   } else {
@@ -870,6 +900,13 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
           ? fl.jurosExpectativa / 100.0
           : getCdiExpectationRate(fl.prazoDu) / 100.0;
         const desc = Math.pow(1.0 + rCdi, fl.prazoDu / 252.0) * Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+        pvCf = fl.valorFluxo / desc;
+      } else if (isDiPercent) {
+        const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
+          ? fl.jurosExpectativa / 100.0
+          : getCdiExpectationRate(fl.prazoDu) / 100.0;
+        const rEqOp = rCdi * (taxaOpAnual > 1.0 ? taxaOpAnual / 100.0 : taxaOpAnual);
+        const desc = Math.pow(1.0 + rEqOp, fl.prazoDu / 252.0);
         pvCf = fl.valorFluxo / desc;
       } else {
         pvCf = fl.valorFluxo / Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
@@ -891,6 +928,13 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
         ? fl.jurosExpectativa / 100.0
         : getCdiExpectationRate(fl.prazoDu) / 100.0;
       const desc = Math.pow(1.0 + rCdi, fl.prazoDu / 252.0) * Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);
+      pvCf = fl.valorFluxo / desc;
+    } else if (isDiPercent) {
+      const rCdi = (fl.jurosExpectativa != null && fl.jurosExpectativa > 0)
+        ? fl.jurosExpectativa / 100.0
+        : getCdiExpectationRate(fl.prazoDu) / 100.0;
+      const rEqOp = rCdi * (taxaOpAnual > 1.0 ? taxaOpAnual / 100.0 : taxaOpAnual);
+      const desc = Math.pow(1.0 + rEqOp, fl.prazoDu / 252.0);
       pvCf = fl.valorFluxo / desc;
     } else {
       pvCf = fl.valorFluxo / Math.pow(1.0 + taxaOpAnual, fl.prazoDu / 252.0);

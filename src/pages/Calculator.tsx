@@ -200,7 +200,13 @@ const BrDateInput: React.FC<BrDateInputProps> = ({
         />
         <button
           type="button"
-          onClick={() => hiddenDateRef.current?.showPicker?.() || hiddenDateRef.current?.click()}
+          onClick={() => {
+            if (hiddenDateRef.current?.showPicker) {
+              hiddenDateRef.current.showPicker();
+            } else {
+              hiddenDateRef.current?.click();
+            }
+          }}
           className="absolute right-2.5 text-slate-400 hover:text-blue-600 p-1 rounded-lg hover:bg-slate-100 transition"
           title="Abrir calendário"
         >
@@ -747,7 +753,7 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                         </span>
                         <span className="text-xs font-semibold text-slate-600">{a.indexador}</span>
                       </div>
-                      <p className="text-xs text-slate-600 truncate max-w-md mt-0.5">{a.issuer || a.devedor}</p>
+                      <p className="text-xs text-slate-600 truncate max-w-md mt-0.5">{a.issuer || (a as any).devedor}</p>
                     </div>
                     <div className="text-right">
                       <span className="text-xs font-bold text-slate-900">
@@ -851,7 +857,7 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                   valueIso={dataOperacao}
                   onChangeIso={setDataOperacao}
                   maxIso={todayIso}
-                  minIso={selectedAsset?.data_emissao || selectedAsset?.data_inicio_rentabilidade}
+                  minIso={selectedAsset?.data_emissao || (selectedAsset as any)?.data_inicio_rentabilidade}
                   tooltipTitle="Data da Operação"
                   tooltipContent="Data em que o negócio é pactuado entre as contrapartes no mercado à vista. Por metodologia oficial da ANBIMA e B3, não são permitidas datas de operação futuras (limite: hoje)."
                 />
