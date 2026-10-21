@@ -104,6 +104,8 @@ interface BrDateInputProps {
   label: string;
   valueIso: string;
   onChangeIso: (newIso: string) => void;
+  maxIso?: string;
+  minIso?: string;
   tooltipTitle?: string;
   tooltipContent?: string;
 }
@@ -112,15 +114,33 @@ const BrDateInput: React.FC<BrDateInputProps> = ({
   label,
   valueIso,
   onChangeIso,
+  maxIso,
+  minIso,
   tooltipTitle,
   tooltipContent
 }) => {
   const [textVal, setTextVal] = useState<string>(() => formatToBrDate(valueIso));
+  const [dateError, setDateError] = useState<string | null>(null);
   const hiddenDateRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setTextVal(formatToBrDate(valueIso));
+    setDateError(null);
   }, [valueIso]);
+
+  const validateAndEmit = (iso: string): boolean => {
+    if (maxIso && iso > maxIso) {
+      setDateError(`Data futura não permitida (limite: ${formatToBrDate(maxIso)} - Hoje)`);
+      return false;
+    }
+    if (minIso && iso < minIso) {
+      setDateError(`Data anterior à emissão (mín: ${formatToBrDate(minIso)})`);
+      return false;
+    }
+    setDateError(null);
+    onChangeIso(iso);
+    return true;
+  };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let raw = e.target.value.replace(/\D/g, '').slice(0, 8);
@@ -135,16 +155,21 @@ const BrDateInput: React.FC<BrDateInputProps> = ({
     if (raw.length === 8) {
       const iso = parseBrDateToIso(formatted);
       if (iso && !isNaN(Date.parse(iso))) {
-        onChangeIso(iso);
+        validateAndEmit(iso);
+      } else {
+        setDateError('Data inválida');
       }
+    } else {
+      setDateError(null);
     }
   };
 
   const handleNativeDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newIso = e.target.value;
     if (newIso) {
-      onChangeIso(newIso);
-      setTextVal(formatToBrDate(newIso));
+      if (validateAndEmit(newIso)) {
+        setTextVal(formatToBrDate(newIso));
+      }
     }
   };
 
@@ -167,7 +192,11 @@ const BrDateInput: React.FC<BrDateInputProps> = ({
           onChange={handleTextChange}
           placeholder="DD/MM/AAAA"
           maxLength={10}
-          className="w-full pl-3.5 pr-10 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 placeholder-slate-400 shadow-xs focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition"
+          className={`w-full pl-3.5 pr-10 py-2.5 bg-white border rounded-xl text-xs sm:text-sm font-semibold text-slate-900 placeholder-slate-400 shadow-xs outline-none transition ${
+            dateError
+              ? 'border-rose-400 focus:border-rose-600 focus:ring-2 focus:ring-rose-100 bg-rose-50/20'
+              : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+          }`}
         />
         <button
           type="button"
@@ -181,12 +210,20 @@ const BrDateInput: React.FC<BrDateInputProps> = ({
           ref={hiddenDateRef}
           type="date"
           value={valueIso}
+          max={maxIso}
+          min={minIso}
           onChange={handleNativeDateChange}
           className="sr-only"
           tabIndex={-1}
           aria-hidden="true"
         />
       </div>
+      {dateError && (
+        <p className="text-[11px] font-semibold text-rose-600 flex items-center gap-1 mt-1">
+          <AlertCircle size={12} className="shrink-0" />
+          <span>{dateError}</span>
+        </p>
+      )}
     </div>
   );
 };
@@ -259,9 +296,10 @@ const CalculatorPage: React.FC = () => {
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
   // Parâmetros de Apreçamento ANBIMA / B3
-  const [dataOperacao, setDataOperacao] = useState<string>(new Date().toISOString().slice(0, 10));
+  const todayIso = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const [dataOperacao, setDataOperacao] = useState<string>(todayIso);
   const [settlementMode, setSettlementMode] = useState<'D0' | 'D1' | 'D2' | 'custom'>('D0');
-  const [customSettlementDate, setCustomSettlementDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [customSettlementDate, setCustomSettlementDate] = useState<string>(todayIso);
   const [formaCalculo, setFormaCalculo] = useState<'Taxa' | 'PU'>('Taxa');
   const [inputRate, setInputRate] = useState<number>(8.2597);
   const [inputPU, setInputPU] = useState<number>(1000.0);
@@ -735,8 +773,10 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                   label="Data da Operação"
                   valueIso={dataOperacao}
                   onChangeIso={setDataOperacao}
+                  maxIso={todayIso}
+                  minIso={selectedAsset?.data_emissao || selectedAsset?.data_inicio_rentabilidade}
                   tooltipTitle="Data da Operação"
-                  tooltipContent="Data em que o negócio é pactuado entre as contrapartes no mercado secundário."
+                  tooltipContent="Data em que o negócio é pactuado entre as contrapartes no mercado à vista. Por metodologia oficial da ANBIMA e B3, não são permitidas datas de operação futuras (limite: hoje)."
                 />
 
                 {/* 2. Data de Liquidação com D+0, D+1, D+2 */}

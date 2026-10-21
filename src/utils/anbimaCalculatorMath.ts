@@ -354,12 +354,42 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
   const ticker = (asset?.ticker || asset?.codigo_b3 || 'ATIVO').trim().toUpperCase();
   const dtVenc = asset?.vencimento || asset?.dt_vencimento || asset?.data_vencimento;
 
-  // Trava de integridade metodológica
+  // Trava de integridade metodológica: Vencimento ausente
   if (!dtVenc) {
     return {
       elegivel: false,
       ineligibilityReason: `Ativo '${ticker}' sem data de vencimento contratual informada. O cálculo de PU e Duration exige cronograma de liquidação definido.`,
       ticker,
+      dataOperacao,
+      dataLiquidacao,
+      quantidadeTitulos: quantidade,
+      tipoCalculo: formaCalculo,
+      taxaOperacao: 0,
+      taxaEmissao: 0,
+      vna: 0,
+      pupar: 0,
+      puOperacao: 0,
+      puLimpo: 0,
+      jurosDecorridos: 0,
+      porcentagemPupar: 0,
+      agioDesagioPct: 0,
+      agioDesagioReais: 0,
+      durationDu: 0,
+      durationAnos: 0,
+      modifiedDuration: 0,
+      valorFinanceiro: 0,
+      fluxoPagamento: []
+    };
+  }
+
+  // Trava de integridade metodológica ANBIMA/B3: Operação futura não permitida no mercado à vista
+  const todayIso = new Date().toISOString().slice(0, 10);
+  if (dataOperacao > todayIso) {
+    return {
+      elegivel: false,
+      ineligibilityReason: `A Data da Operação (${dataOperacao}) não pode ser futura. Por metodologia oficial da ANBIMA e B3, o apreçamento à vista é restrito até a data de hoje (${todayIso}). Para prazos futuros de liquidação física/financeira, utilize os modos D+1 ou D+2.`,
+      ticker,
+      vencimento: dtVenc,
       dataOperacao,
       dataLiquidacao,
       quantidadeTitulos: quantidade,
