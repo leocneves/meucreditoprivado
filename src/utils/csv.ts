@@ -37,6 +37,8 @@ export interface Asset {
   divulgacao?: string;
   duration?: string;
   spread?: string;
+  spread_mercado?: string;
+  spread_anbima?: string;
   fonte_precificacao?: string;
   cnpj_emissor?: string;
   issuer_cnpj?: string;

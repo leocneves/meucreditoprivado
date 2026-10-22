@@ -26,7 +26,7 @@ import {
 } from 'recharts'
 import PieBox from '../components/PieBox'
 import SearchMultiSelect from '../components/SearchMultiSelect'
-import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter, SlidersHorizontal, Info, ChevronDown, ChevronUp, RotateCcw, ArrowUpDown } from 'lucide-react'
+import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter, SlidersHorizontal, Info, ChevronDown, ChevronUp, RotateCcw, ArrowUpDown, Copy, CheckCircle2 } from 'lucide-react'
 import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
 
 /* ================= HELPERS ================= */
@@ -82,43 +82,54 @@ export interface AssetSpreadDisplayResult {
   unit: 'bps' | '% a.a.' | '% CDI'
 }
 
-export const getAssetSpreadDisplay = (a: Asset): AssetSpreadDisplayResult => {
-  const norm = getAssetNormalizedIndexador(a)
+export const getCustomSpreadDisplay = (
+  normIdx: string,
+  rateVal?: string | number | null,
+  spreadVal?: string | number | null,
+  taxaRefVal?: string | number | null
+): AssetSpreadDisplayResult => {
+  const tm = typeof rateVal === 'number' ? rateVal : parseFloat(String(rateVal || '').replace(',', '.'))
+  const rawSp = typeof spreadVal === 'number' ? spreadVal : parseFloat(String(spreadVal || '').replace(',', '.'))
+  const tRef = typeof taxaRefVal === 'number' ? taxaRefVal : parseFloat(String(taxaRefVal || '').replace(',', '.'))
 
-  if (norm === '%DI') {
-    const tm = parseFloat(a.taxa_mercado || '')
-    const te = parseFloat(a.taxa_emissao || '')
-    const val = !isNaN(tm) && tm > 0 ? tm : (!isNaN(te) && te > 0 ? te : null)
-    if (val !== null) {
+  if (normIdx === '%DI') {
+    if (!isNaN(tm) && tm > 0) {
+      return { label: `${tm.toFixed(2)}% do CDI`, rawValue: tm, unit: '% CDI' }
+    }
+    if (!isNaN(rawSp)) {
+      const val = (1.0 + rawSp) * 100.0
       return { label: `${val.toFixed(2)}% do CDI`, rawValue: val, unit: '% CDI' }
     }
     return { label: '-', rawValue: null, unit: '% CDI' }
   }
 
-  if (norm === 'DI+') {
-    const tm = parseFloat(a.taxa_mercado || '')
-    const te = parseFloat(a.taxa_emissao || '')
-    const val = !isNaN(tm) && tm > 0 ? tm : (!isNaN(te) && te > 0 ? te : null)
-    if (val !== null) {
+  if (normIdx === 'DI+') {
+    if (!isNaN(tm) && tm > 0) {
+      return { label: `CDI +${tm.toFixed(2)}%`, rawValue: tm, unit: '% a.a.' }
+    }
+    if (!isNaN(rawSp)) {
+      const val = rawSp < 1 ? rawSp * 100 : rawSp
       return { label: `CDI +${val.toFixed(2)}%`, rawValue: val, unit: '% a.a.' }
     }
     return { label: '-', rawValue: null, unit: '% a.a.' }
   }
 
-  // IPCA ou Pré: Spread Over soberano (NTN-B ou DI Futuro) em bps
-  const tm = parseFloat(a.taxa_mercado || a.taxa_emissao || '')
-  const tRef = parseFloat(a.taxa_ntnb || '')
-  if (!isNaN(tm) && !isNaN(tRef) && tRef > 0) {
-    const diffBps = Math.round((tm - tRef) * 100)
-    return { label: `${diffBps >= 0 ? `+${diffBps}` : diffBps} bps`, rawValue: diffBps, unit: 'bps' }
-  }
-  const rawSp = parseFloat(a.spread || '')
+  // IPCA ou Pré: Spread Over soberano em bps
   if (!isNaN(rawSp)) {
     const bps = Math.abs(rawSp) < 1 ? Math.round(rawSp * 10000) : Math.round(rawSp)
     return { label: `${bps >= 0 ? `+${bps}` : bps} bps`, rawValue: bps, unit: 'bps' }
   }
+  if (!isNaN(tm) && !isNaN(tRef) && tRef > 0) {
+    const diffBps = Math.round((tm - tRef) * 100)
+    return { label: `${diffBps >= 0 ? `+${diffBps}` : diffBps} bps`, rawValue: diffBps, unit: 'bps' }
+  }
 
   return { label: '-', rawValue: null, unit: 'bps' }
+}
+
+export const getAssetSpreadDisplay = (a: Asset): AssetSpreadDisplayResult => {
+  const norm = getAssetNormalizedIndexador(a)
+  return getCustomSpreadDisplay(norm, a.taxa_mercado || a.taxa_ativo || a.taxa_indicativa_anbima || a.taxa_emissao, a.spread, a.taxa_ntnb)
 }
 
 const formatDateBr = (isoDate?: string | null): string => {
@@ -207,15 +218,19 @@ const downloadCSV = (rows: Asset[]) => {
     { key: 'incentivada', label: 'incentivada_lei_12431' },
     { key: 'em_recuperacao_judicial', label: 'em_recuperacao_judicial' },
     { key: 'taxa_emissao', label: 'taxa_emissao' },
-    { key: 'taxa_mercado', label: 'taxa_mercado_atual' },
-    { key: 'taxa_ativo', label: 'taxa_referencia' },
-    { key: 'taxa_compra', label: 'taxa_bid_compra' },
-    { key: 'taxa_venda', label: 'taxa_ask_venda' },
-    { key: 'spread', label: 'spread_over_decimal' },
+    { key: 'taxa_mercado', label: 'taxa_mercado_ponderada_10du' },
+    { key: 'spread_mercado', label: 'spread_over_mercado_decimal' },
+    { key: 'taxa_indicativa_anbima', label: 'taxa_indicativa_anbima' },
+    { key: 'spread_anbima', label: 'spread_over_anbima_decimal' },
+    { key: 'taxa_ativo', label: 'taxa_referencia_prioritaria' },
+    { key: 'spread', label: 'spread_over_prioritario_decimal' },
+    { key: 'taxa_compra', label: 'taxa_bid_compra_anbima' },
+    { key: 'taxa_venda', label: 'taxa_ask_venda_anbima' },
     { key: 'duration', label: 'duration_anos_du252' },
     { key: 'pu_emissao', label: 'pu_emissao' },
     { key: 'pu_mercado', label: 'pu_mercado_atual' },
     { key: 'data_ultimo_negocio', label: 'data_ultimo_negocio_b3' },
+    { key: 'data_anbima', label: 'data_referencia_anbima' },
     { key: 'dias_negociados_30d', label: 'dias_negociados_30d_b3' },
     { key: 'volume_emissao', label: 'volume_emissao_brl' },
     { key: 'quantidade_emitida', label: 'quantidade_emitida' },
@@ -232,7 +247,8 @@ const downloadCSV = (rows: Asset[]) => {
     { key: 'agente_fiduciario', label: 'agente_fiduciario' },
     { key: 'coordenador_lider', label: 'coordenador_lider' },
     { key: 'fonte_precificacao', label: 'fonte_precificacao' },
-    { key: 'ntnb_referencia', label: 'ntnb_referencia' }
+    { key: 'ntnb_referencia', label: 'ntnb_referencia' },
+    { key: 'taxa_ntnb', label: 'taxa_ntnb_referencia' }
   ]
 
   const headers = fieldOrder.map(f => f.label)
@@ -241,8 +257,8 @@ const downloadCSV = (rows: Asset[]) => {
     ...rows.map(r =>
       fieldOrder.map(f => {
         let val = (r as any)[f.key]
-        if (f.key === 'spread' && val != null) {
-          const num = parseFloat(val)
+        if (['spread', 'spread_mercado', 'spread_anbima'].includes(f.key) && val != null && val !== '') {
+          const num = parseFloat(String(val).replace(',', '.'))
           val = !isNaN(num) ? num.toFixed(6) : val
         }
         return `"${val ?? ''}"`
@@ -684,6 +700,19 @@ const CreditDashboard: React.FC = () => {
   /* ---------- Scatter ---------- */
 
   const [scatterViewIdx, setScatterViewIdx] = useState<string>('AUTO')
+  const [copiedTicker, setCopiedTicker] = useState<string | null>(null)
+
+  const handleScatterClick = (entry: any) => {
+    const ticker = entry?.payload?.name || entry?.name || entry?.ticker
+    if (ticker && typeof ticker === 'string') {
+      navigator.clipboard.writeText(ticker).then(() => {
+        setCopiedTicker(ticker)
+        setTimeout(() => setCopiedTicker(null), 3000)
+      }).catch(err => {
+        console.error('Falha ao copiar ticker:', err)
+      })
+    }
+  }
 
   const scatterData = useMemo(() => {
     return filteredAssets
@@ -1130,8 +1159,26 @@ const CreditDashboard: React.FC = () => {
           break
         }
         case 'taxa_mercado': {
-          const valA = parseFloat(a.taxa_mercado || '') || 0
-          const valB = parseFloat(b.taxa_mercado || '') || 0
+          const valA = a.taxa_mercado ? parseFloat(a.taxa_mercado) : -999999
+          const valB = b.taxa_mercado ? parseFloat(b.taxa_mercado) : -999999
+          comp = valA - valB
+          break
+        }
+        case 'spread_mercado': {
+          const valA = a.spread_mercado != null && a.spread_mercado !== '' ? parseFloat(a.spread_mercado) : -999999
+          const valB = b.spread_mercado != null && b.spread_mercado !== '' ? parseFloat(b.spread_mercado) : -999999
+          comp = valA - valB
+          break
+        }
+        case 'taxa_indicativa_anbima': {
+          const valA = a.taxa_indicativa_anbima ? parseFloat(String(a.taxa_indicativa_anbima).replace(',', '.')) : -999999
+          const valB = b.taxa_indicativa_anbima ? parseFloat(String(b.taxa_indicativa_anbima).replace(',', '.')) : -999999
+          comp = valA - valB
+          break
+        }
+        case 'spread_anbima': {
+          const valA = a.spread_anbima != null && a.spread_anbima !== '' ? parseFloat(a.spread_anbima) : -999999
+          const valB = b.spread_anbima != null && b.spread_anbima !== '' ? parseFloat(b.spread_anbima) : -999999
           comp = valA - valB
           break
         }
@@ -1200,7 +1247,7 @@ const CreditDashboard: React.FC = () => {
       setTableSortDir(prev => (prev === 'asc' ? 'desc' : 'asc'))
     } else {
       setTableSortCol(colKey)
-      const isNumericByDefault = ['taxa_mercado', 'taxa_compra', 'spread', 'duration', 'pu', 'dias_negociados_30d'].includes(colKey)
+      const isNumericByDefault = ['taxa_mercado', 'spread_mercado', 'taxa_indicativa_anbima', 'spread_anbima', 'taxa_compra', 'spread', 'duration', 'pu', 'dias_negociados_30d'].includes(colKey)
       setTableSortDir(isNumericByDefault ? 'desc' : 'asc')
     }
   }
@@ -2131,7 +2178,7 @@ const CreditDashboard: React.FC = () => {
               Dispersão: Spread Over x Duration (anos)
             </h2>
             <p className="text-xs text-slate-500">
-              Relação de prazo médio ponderado e retorno. {displayedScatterPoints.length} ativos plotados.
+              Relação de prazo médio ponderado e retorno. {displayedScatterPoints.length} ativos plotados. Clique na bolinha de qualquer papel para copiar o ticker.
             </p>
           </div>
 
@@ -2229,9 +2276,9 @@ const CreditDashboard: React.FC = () => {
                       'bg-slate-700 text-slate-300 border-slate-600'
 
                     return (
-                      <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-800 text-xs space-y-1.5 min-w-[220px]">
+                      <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-800 text-xs space-y-1.5 min-w-[230px]">
                         <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5 mb-1">
-                          <span className="font-bold text-blue-400 text-sm">{p.name}</span>
+                          <span className="font-bold text-blue-400 text-sm font-mono">{p.name}</span>
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${badgeColor}`}>
                             {p.indexador}
                           </span>
@@ -2241,11 +2288,14 @@ const CreditDashboard: React.FC = () => {
                         <div className="text-slate-300">Rating: <span className="font-bold text-amber-300">{p.rating}</span></div>
                         <div className="text-slate-300">Duration: <span className="font-semibold text-white">{p.x.toFixed(2)} anos</span> <span className="text-[10px] text-slate-400">(DU/252)</span></div>
                         <div className="pt-1 border-t border-slate-800/80 flex items-center justify-between">
-                          <span className="text-slate-400">Spread / Taxa:</span>
+                          <span className="text-slate-400">Spread Prioritário:</span>
                           <span className="text-emerald-400 font-extrabold text-sm">{p.spreadLabel || `${p.y}`}</span>
                         </div>
-                        <div className="text-[10px] text-slate-500 border-t border-slate-800/80 pt-1 mt-1">
-                          Base: {p.fonte}
+                        <div className="text-[10px] text-slate-400 border-t border-slate-800/80 pt-1 mt-1 flex items-center justify-between">
+                          <span>Base: {p.fonte}</span>
+                          <span className="text-blue-300 flex items-center gap-1 font-semibold">
+                            <Copy size={10} /> Clique p/ copiar
+                          </span>
                         </div>
                       </div>
                     )
@@ -2257,8 +2307,10 @@ const CreditDashboard: React.FC = () => {
                     name="IPCA (bps)"
                     data={scatterBySeries['IPCA']}
                     fill="#2563eb"
-                    fillOpacity={0.65}
+                    fillOpacity={0.7}
                     isAnimationActive={false}
+                    onClick={handleScatterClick}
+                    cursor="pointer"
                   />
                 )}
                 {scatterBySeries['DI+'].length > 0 && (
@@ -2266,8 +2318,10 @@ const CreditDashboard: React.FC = () => {
                     name="DI+ (% a.a.)"
                     data={scatterBySeries['DI+']}
                     fill="#10b981"
-                    fillOpacity={0.65}
+                    fillOpacity={0.7}
                     isAnimationActive={false}
+                    onClick={handleScatterClick}
+                    cursor="pointer"
                   />
                 )}
                 {scatterBySeries['%DI'].length > 0 && (
@@ -2275,8 +2329,10 @@ const CreditDashboard: React.FC = () => {
                     name="%DI (% do CDI)"
                     data={scatterBySeries['%DI']}
                     fill="#8b5cf6"
-                    fillOpacity={0.65}
+                    fillOpacity={0.7}
                     isAnimationActive={false}
+                    onClick={handleScatterClick}
+                    cursor="pointer"
                   />
                 )}
                 {scatterBySeries['Pré'].length > 0 && (
@@ -2284,8 +2340,10 @@ const CreditDashboard: React.FC = () => {
                     name="Pré (bps)"
                     data={scatterBySeries['Pré']}
                     fill="#f59e0b"
-                    fillOpacity={0.65}
+                    fillOpacity={0.7}
                     isAnimationActive={false}
+                    onClick={handleScatterClick}
+                    cursor="pointer"
                   />
                 )}
                 {scatterBySeries['Outros'].length > 0 && (
@@ -2293,8 +2351,10 @@ const CreditDashboard: React.FC = () => {
                     name="Outros"
                     data={scatterBySeries['Outros']}
                     fill="#64748b"
-                    fillOpacity={0.65}
+                    fillOpacity={0.7}
                     isAnimationActive={false}
+                    onClick={handleScatterClick}
+                    cursor="pointer"
                   />
                 )}
               </ScatterChart>
@@ -2366,9 +2426,12 @@ const CreditDashboard: React.FC = () => {
                 {renderSortTh('Setor (ANBIMA)', 'setor')}
                 {renderSortTh('Indexador', 'indexador')}
                 {renderSortTh('Taxa Emissão', 'taxa_emissao')}
-                {renderSortTh('Taxa Mercado', 'taxa_mercado')}
+                {renderSortTh('Taxa Mercado (10DU)', 'taxa_mercado', 'left', 'Taxa de Mercado apurada na B3 (últimos 10 dias úteis, média ponderada dos últimos até 5 negócios)')}
+                {renderSortTh('Spread Over Mercado', 'spread_mercado', 'right', 'Spread Over calculado sobre a Taxa Ponderada de Mercado')}
+                {renderSortTh('Taxa ANBIMA', 'taxa_indicativa_anbima', 'left', 'Taxa indicativa oficial apurada pela ANBIMA')}
+                {renderSortTh('Spread Over ANBIMA', 'spread_anbima', 'right', 'Spread Over calculado sobre a Taxa Indicativa da ANBIMA')}
                 {renderSortTh('Cotações ANBIMA (Bid / Ask)', 'taxa_compra', 'left', 'Taxas indicativas de Compra (Bid) e Venda (Ask) apuradas pela ANBIMA')}
-                {renderSortTh('Spread / Taxa', 'spread', 'right')}
+                {renderSortTh('Spread Prioritário', 'spread', 'right', 'Spread Over consolidado com prioridade máxima para Mercado B3 e fallback ANBIMA')}
                 {renderSortTh('Duration (anos)', 'duration', 'right')}
                 {renderSortTh('PU Mercado', 'pu', 'right')}
                 {renderSortTh('Último Negócio B3', 'data_ultimo_negocio')}
@@ -2382,6 +2445,9 @@ const CreditDashboard: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100 whitespace-nowrap">
               {displayTableAssets.slice(0, 300).map((a, idx) => {
+                const normIdx = getAssetNormalizedIndexador(a) || a.indexador || ''
+                const spMercadoDisplay = getCustomSpreadDisplay(normIdx, a.taxa_mercado, a.spread_mercado, a.taxa_ntnb)
+                const spAnbimaDisplay = getCustomSpreadDisplay(normIdx, a.taxa_indicativa_anbima, a.spread_anbima, a.taxa_ntnb)
                 const spreadDisplay = getAssetSpreadDisplay(a)
                 const durVal = parseFloat(a.duration || '')
                 const normRating = a.rating_normalizado || normalizeRating(a.rating)
@@ -2429,9 +2495,34 @@ const CreditDashboard: React.FC = () => {
                     <td className="p-2.5 text-slate-600 font-mono">{a.taxa_emissao || '-'}</td>
                     <td className="p-2.5 font-mono font-bold text-blue-700">
                       {a.taxa_mercado ? (
-                        <span>{a.taxa_mercado}%</span>
+                        <span title="Taxa ponderada dos últimos até 5 negócios nos últimos 10 dias úteis">{a.taxa_mercado}%</span>
                       ) : (
-                        <span className="text-slate-400 font-normal">-</span>
+                        <span className="text-slate-300 font-normal">-</span>
+                      )}
+                    </td>
+                    <td className="p-2.5 text-right font-mono font-bold">
+                      {spMercadoDisplay.label !== '-' ? (
+                        <span className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded text-[11px]">
+                          {spMercadoDisplay.label}
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 font-normal">-</span>
+                      )}
+                    </td>
+                    <td className="p-2.5 font-mono text-purple-700 font-semibold">
+                      {a.taxa_indicativa_anbima ? (
+                        <span title="Taxa indicativa oficial ANBIMA">{a.taxa_indicativa_anbima}%</span>
+                      ) : (
+                        <span className="text-slate-300 font-normal">-</span>
+                      )}
+                    </td>
+                    <td className="p-2.5 text-right font-mono font-semibold">
+                      {spAnbimaDisplay.label !== '-' ? (
+                        <span className="text-purple-700 bg-purple-50 border border-purple-200 px-1.5 py-0.5 rounded text-[11px]">
+                          {spAnbimaDisplay.label}
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 font-normal">-</span>
                       )}
                     </td>
                     <td className="p-2.5 font-mono text-[11px]">
@@ -2506,8 +2597,10 @@ const CreditDashboard: React.FC = () => {
                     <td className="p-2.5 text-slate-400 font-mono text-[11px]">{a.isin || '-'}</td>
                     <td className="p-2.5">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                        a.fonte_precificacao === 'ANBIMA Mercado'
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        (a.fonte_precificacao || '').includes('Mercado B3')
+                          ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                          : (a.fonte_precificacao || '').includes('ANBIMA')
+                          ? 'bg-purple-50 text-purple-700 border border-purple-200'
                           : 'bg-slate-100 text-slate-600'
                       }`}>
                         {a.fonte_precificacao || 'Calculada'}
@@ -2520,6 +2613,16 @@ const CreditDashboard: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* TOAST FLUTUANTE DE COPIA DO TICKER */}
+      {copiedTicker && (
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-blue-500/50 flex items-center gap-3 transition-all animate-bounce">
+          <CheckCircle2 size={18} className="text-emerald-400" />
+          <span className="text-xs">
+            Ticker <strong className="text-blue-300 font-mono text-sm">{copiedTicker}</strong> copiado para a área de transferência!
+          </span>
+        </div>
+      )}
     </div>
   )
 }
