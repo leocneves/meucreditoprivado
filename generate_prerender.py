@@ -1225,8 +1225,8 @@ def prune_orphaned_assets(valid_tickers: set):
             full_path = os.path.join(out_dir, name)
             if not os.path.isdir(full_path):
                 continue
-            # Remove se for inválido ou não fizer parte dos tickers válidos
-            if not is_valid_ticker(name) or name.lower() not in valid_tickers:
+            # Remove se for maiúsculo (órfão legado de 14/10), se for inválido ou não fizer parte dos tickers válidos
+            if name != name.lower() or not is_valid_ticker(name) or name.lower() not in valid_tickers:
                 try:
                     shutil.rmtree(full_path)
                     removed_count += 1

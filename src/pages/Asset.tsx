@@ -307,8 +307,10 @@ const AssetPage: React.FC = () => {
     documents?: AssetDocument[];
   }) => {
     const found = payload.asset;
-    if (found.ticker && found.ticker.trim().toUpperCase() !== targetKey) {
-      navigate(`/asset/${encodeURIComponent(found.ticker.trim())}`, { replace: true });
+    const canonicalTickerLower = (found.ticker || targetKey).trim().toLowerCase();
+    const currentParam = (ticker || '').trim();
+    if (currentParam !== canonicalTickerLower) {
+      navigate(`/asset/${canonicalTickerLower}`, { replace: true });
     }
     setAsset(found);
     setPrices(payload.prices || []);
@@ -335,6 +337,11 @@ const AssetPage: React.FC = () => {
     const descText = `Análise de ${tipoStr} ${found.ticker} emitida por ${found.issuer || 'Emissor'}. Indexador: ${found.indexador || '-'}, Vencimento: ${found.vencimento || '-'}, Rating: ${found.rating || '-'}. Dados de mercado no FIXDATA.`;
     if (metaDesc) {
       metaDesc.setAttribute('content', descText);
+    }
+
+    const metaCan = document.querySelector('link[rel="canonical"]');
+    if (metaCan) {
+      metaCan.setAttribute('href', `https://fixdatabrasil.com.br/asset/${canonicalTickerLower}/`);
     }
   };
 
