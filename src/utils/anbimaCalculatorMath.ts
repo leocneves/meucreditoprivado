@@ -831,11 +831,13 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
           }
         }
 
-        // Aplica o melhor cronograma calibrado aos eventos futuros
+        // Aplica o melhor cronograma calibrado aos eventos futuros com tolerância útil
         if (bestAmortMap) {
+          const amortKeys = Object.keys(bestAmortMap);
           for (const ev of eventosFuturos) {
-            if (bestAmortMap[ev.dataLiquidacao] != null) {
-              ev.percentualAmortizacao = bestAmortMap[ev.dataLiquidacao];
+            const matchedKey = amortKeys.find(k => k === ev.dataLiquidacao || Math.abs(countBusinessDays(k, ev.dataLiquidacao)) <= 3);
+            if (matchedKey && bestAmortMap[matchedKey] != null) {
+              ev.percentualAmortizacao = bestAmortMap[matchedKey];
               ev.hasAmortization = true;
             }
           }
@@ -855,6 +857,24 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
         const d = e.data_liquidacao || e.data_evento;
         return (d && d > max) ? d : max;
       }, passados[0].data_liquidacao || passados[0].data_evento || dataLiquidacao);
+    } else if (eventosFuturos.length > 0) {
+      // Quando a base possui apenas os eventos futuros confirmados,
+      // a data do último cupom decorre do ciclo anterior ao primeiro evento futuro:
+      const primFut = eventosFuturos[0];
+      const dtPrim = primFut.dataLiquidacao;
+      let mesesCiclo = 6;
+      if (eventosFuturos.length >= 2) {
+        const d0 = new Date(eventosFuturos[0].dataLiquidacao + 'T00:00:00Z');
+        const d1 = new Date(eventosFuturos[1].dataLiquidacao + 'T00:00:00Z');
+        const diffDias = Math.round((d1.getTime() - d0.getTime()) / 86400000);
+        mesesCiclo = diffDias >= 300 ? 12 : (diffDias >= 150 ? 6 : (diffDias >= 75 ? 3 : 1));
+      } else if (asset?.periodicidade && String(asset.periodicidade).toLowerCase().includes('anual')) {
+        mesesCiclo = 12;
+      }
+      const dtCicloPrev = addCalendarDays(new Date(dtPrim + 'T00:00:00Z'), -Math.round(mesesCiclo * 30.4375));
+      const dtCicloIso = rollToNextBusinessDay(formatDateISO(dtCicloPrev));
+      const dtEmissao = asset?.data_emissao || asset?.dt_emissao;
+      dtUltimoCupom = (dtEmissao && dtEmissao > dtCicloIso) ? dtEmissao : dtCicloIso;
     } else {
       dtUltimoCupom = asset?.data_emissao || asset?.dt_emissao || addBusinessDays(dataLiquidacao, -126);
     }
@@ -899,7 +919,9 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
 
       const isLast = (i === eventosFuturos.length - 1);
       let valAmort = 0.0;
-      if (ev.percentualAmortizacao > 0) {
+      if (isLast && saldoDevedor > 0) {
+        valAmort = saldoDevedor;
+      } else if (ev.percentualAmortizacao > 0) {
         if (isAmortizacaoSaldo) {
           valAmort = saldoDevedor * (ev.percentualAmortizacao / 100.0);
         } else {
@@ -907,8 +929,6 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
         }
         valAmort = Math.min(valAmort, saldoDevedor);
       } else if (ev.hasAmortization && isLast) {
-        valAmort = saldoDevedor;
-      } else if (isLast && saldoDevedor > 0) {
         valAmort = saldoDevedor;
       }
 
