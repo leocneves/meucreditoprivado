@@ -752,7 +752,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     const rawDur = asset?.duration ?? asset?.duracao;
     const targetDurationDu = rawDur != null ? parseFloat(String(rawDur).replace(',', '.')) * 252.0 : null;
 
-    if (!hasExplicitIntermediateAmort && !hasContractualFinalAmort && targetDurationDu && targetDurationDu > 0 && eventosFuturos.length > 1) {
+    if (!hasExplicitIntermediateAmort && targetDurationDu && targetDurationDu > 0 && eventosFuturos.length > 1) {
       const rawTaxaOp = asset?.taxa_indicativa_anbima || asset?.taxa_mercado || (taxaEmissaoAnual * 100.0);
       let parsedTaxa = parseFloat(String(rawTaxaOp).replace(',', '.'));
       if (indexador.includes('DI') && (isNaN(parsedTaxa) || parsedTaxa > 40.0)) {
