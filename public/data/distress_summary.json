@@ -1,7 +1,7 @@
 {
   "total_empresas_rj": 22,
   "total_ativos_rj": 99,
-  "volume_total_rj": 46049804153.0,
+  "volume_total_rj": 45959805463.68,
   "top_casos": [
     {
       "cnpj": "00776574000660",
@@ -200,20 +200,6 @@
       "link_documento": "https://www.rad.cvm.gov.br/ENET/frmDownloadDocumento.aspx?Tela=ext&descTipo=IPE&CodigoInstituicao=1&numProtocolo=1522430&numSequencia=1047136&numVersao=1"
     },
     {
-      "cnpj": "33035536000100",
-      "razao_social": "JOAO FORTES ENGENHARIA SA",
-      "tipo_evento": "Recuperação Judicial",
-      "data_evento": "2021-05-19",
-      "volume_emitido": 427000000.0,
-      "qtd_ativos": 3,
-      "tickers": [
-        "23L1952070",
-        "25L2736419",
-        "JFEN13"
-      ],
-      "link_documento": NaN
-    },
-    {
       "cnpj": "58580465000149",
       "razao_social": "ALUMINI ENGENHARIA S.A.",
       "tipo_evento": "Recuperação Judicial",
@@ -222,6 +208,20 @@
       "qtd_ativos": 1,
       "tickers": [
         "ALUS12"
+      ],
+      "link_documento": NaN
+    },
+    {
+      "cnpj": "33035536000100",
+      "razao_social": "JOAO FORTES ENGENHARIA SA",
+      "tipo_evento": "Recuperação Judicial",
+      "data_evento": "2021-05-19",
+      "volume_emitido": 337001310.68,
+      "qtd_ativos": 3,
+      "tickers": [
+        "23L1952070",
+        "25L2736419",
+        "JFEN13"
       ],
       "link_documento": NaN
     },
@@ -238,5 +238,5 @@
       "link_documento": NaN
     }
   ],
-  "atualizado_em": "2026-10-27 21:18:02"
+  "atualizado_em": "2026-10-28 20:32:40"
 }
