@@ -1057,11 +1057,11 @@ def write_asset(args):
 STATIC_PAGES_META = [
     {
         "slug": "negocios",
-        "title": "Negócios B3 em Tempo Real — Mercado Secundário de Crédito Privado | FIXDATA",
-        "description": "Acompanhe trades em tempo real de Debêntures, CRIs e CRAs na B3 com volume financeiro, taxa média ponderada (VWAP), PU e quantidade negociada.",
+        "title": "Negócios B3 — Mercado Secundário de Crédito Privado | FIXDATA",
+        "description": "Acompanhe os negócios secundários de Debêntures, CRIs e CRAs na B3 com volume financeiro, taxa média ponderada (VWAP), PU e quantidade negociada.",
         "keywords": "negócios B3, debêntures secundário, mercado secundário, trades crédito privado, volume b3, vwap debentures",
-        "h1": "Negócios B3 em Tempo Real",
-        "lead": "Monitoramento contínuo de negociações no mercado secundário de renda fixa corporativa brasileira.",
+        "h1": "Negócios B3 — Mercado Secundário",
+        "lead": "Monitoramento diário de negociações no mercado secundário de renda fixa corporativa brasileira.",
     },
     {
         "slug": "charts",
@@ -1131,6 +1131,7 @@ STATIC_PAGES_META = [
 
 def render_static_pages():
     print("📄 Gerando páginas estáticas institucionais para SEO...")
+    bundle_tag = get_bundle_script()
     for p in STATIC_PAGES_META:
         slug = p["slug"]
         page_url = f"{BASE_URL}/{slug}/"
@@ -1172,7 +1173,7 @@ def render_static_pages():
 
     <link rel="stylesheet" href="/index.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    {BUNDLE_SCRIPT_TAG}
+    {bundle_tag}
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">

@@ -7,6 +7,7 @@
     "dev": "vite",
     "prebuild": "(python3 scripts/sanity_check_schedules.py || true) && (python3 generate_sitemap.py || node scripts/generate-sitemap.js || true)",
     "build": "vite build",
+    "postbuild": "node scripts/sync-static-bundle.mjs",
     "preview": "vite preview --port 5173"
   },
   "dependencies": {
