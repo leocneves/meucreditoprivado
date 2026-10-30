@@ -1100,13 +1100,22 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                             </strong>
                             <span className="text-slate-400">({anbimaResult.taxaEmissao.toFixed(2)}%)</span>
                           </>
+                        ) : isDiPercent ? (
+                          <>
+                            <span>Variação vs Emissão:</span>
+                            <strong className={anbimaResult.taxaOperacao - anbimaResult.taxaEmissao >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+                              {anbimaResult.taxaOperacao - anbimaResult.taxaEmissao >= 0 ? '+' : ''}
+                              {(anbimaResult.taxaOperacao - anbimaResult.taxaEmissao).toFixed(2)}% do CDI
+                            </strong>
+                            <span className="text-slate-400">({anbimaResult.taxaEmissao.toFixed(2)}% do CDI)</span>
+                          </>
                         ) : (
                           <>
-                            <span>Spread vs {matchedNtnb.nome}:</span>
+                            <span>Spread vs {matchedNtnb?.nome || 'Benchmark'}:</span>
                             <strong className={spreadVsNtnbBps >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
                               {spreadVsNtnbBps >= 0 ? `+${spreadVsNtnbBps}` : spreadVsNtnbBps} bps
                             </strong>
-                            <span className="text-slate-400">({matchedNtnb.taxa.toFixed(2)}%)</span>
+                            <span className="text-slate-400">({matchedNtnb?.taxa ? `${matchedNtnb.taxa.toFixed(2)}%` : '-'})</span>
                           </>
                         )}
                       </div>

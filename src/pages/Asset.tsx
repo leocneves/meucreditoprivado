@@ -701,17 +701,56 @@ const AssetPage: React.FC = () => {
                       </div>
                     )}
 
-                    {asset.spread && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-500 font-medium inline-flex items-center">
-                          Spread vs NTN-B:
-                          <InfoTooltip text="Prêmio de crédito em relação à taxa soberana da NTN-B de vencimento equivalente." />
-                        </span>
-                        <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
-                          +{Number(asset.spread) > 0 ? (Number(asset.spread) * 100).toFixed(2) : Number(asset.spread).toFixed(2)}%
-                        </span>
-                      </div>
-                    )}
+                    {(() => {
+                      if (!asset.spread) return null;
+
+                      const rawIdx = (asset.indexador || '').trim();
+                      const idxUp = rawIdx.toUpperCase();
+
+                      // Títulos em % do CDI (ex: 102% do CDI, 114.92% do CDI) não possuem Spread Over sobre curva de juros.
+                      // O percentual apurado é uma proporção flutuante do CDI, não uma taxa aditiva linear.
+                      const isDiPercent = idxUp === '%DI' || idxUp === 'DI%' || idxUp.includes('%CDI') || idxUp.includes('% CDI') || idxUp.includes('% DO CDI') || idxUp.includes('%DO CDI') || ((idxUp === 'DI' || idxUp === 'CDI') && !idxUp.includes('+') && !idxUp.includes('%') && Number(tMercadoVal || asset.taxa_emissao || 0) >= 70);
+
+                      if (isDiPercent) return null;
+
+                      const spreadNum = Number(asset.spread);
+                      if (isNaN(spreadNum)) return null;
+
+                      const isDiSpread = idxUp.includes('DI+') || idxUp.includes('CDI+') || idxUp === 'DI +' || idxUp === 'CDI +' || ((idxUp === 'DI' || idxUp === 'CDI') && !idxUp.includes('+') && !idxUp.includes('%'));
+                      const isPre = idxUp.includes('PRE') || idxUp.includes('PRÉ') || idxUp === 'PRÉ' || idxUp === 'PRE';
+                      const isIpca = idxUp.includes('IPCA') || idxUp.includes('IGP') || idxUp.includes('INPC');
+
+                      let tooltipText = "Prêmio de crédito apurado em relação ao benchmark de duration equivalente.";
+                      if (isIpca) {
+                        const refStr = asset.ntnb_referencia ? ` (${formatDatePretty(asset.ntnb_referencia)}${asset.taxa_ntnb ? ` @ ${Number(asset.taxa_ntnb).toFixed(2)}%` : ''})` : '';
+                        tooltipText = `Prêmio de crédito em relação à taxa soberana da NTN-B de vencimento equivalente${refStr}.`;
+                      } else if (isPre) {
+                        const refStr = asset.taxa_ntnb ? ` (@ ${Number(asset.taxa_ntnb).toFixed(2)}%)` : '';
+                        tooltipText = `Prêmio de crédito em relação à curva soberana do DI Futuro de duration equivalente${refStr}.`;
+                      } else if (isDiSpread) {
+                        tooltipText = "Spread anual de crédito acima de 100% do CDI.";
+                      }
+
+                      const spreadPct = spreadNum * 100;
+                      const isPositive = spreadPct >= 0;
+                      const formattedSpread = `${isPositive ? '+' : ''}${spreadPct.toFixed(2)}%`;
+
+                      return (
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-500 font-medium inline-flex items-center">
+                            Spread Over:
+                            <InfoTooltip text={tooltipText} />
+                          </span>
+                          <span className={`font-mono text-[11px] font-bold px-1.5 py-0.5 rounded ${
+                            isPositive 
+                              ? 'text-emerald-800 bg-emerald-50 border border-emerald-200' 
+                              : 'text-blue-700 bg-blue-50 border border-blue-200'
+                          }`}>
+                            {formattedSpread}
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -935,17 +974,40 @@ const AssetPage: React.FC = () => {
             <p className="font-semibold text-slate-100">{formatDatePretty(asset.data_emissao)}</p>
           </div>
 
-          {/* 8. REF. NTN-B (BENCHMARK) */}
-          <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
-            <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
-              Ref. NTN-B (Benchmark)
-              <InfoTooltipDark text="Título público Tesouro IPCA+ (NTN-B) soberano de vencimento correspondente utilizado como taxa livre de risco de referência para o cálculo do spread de crédito na mesma data." />
-            </span>
-            <p className="font-semibold text-slate-100">
-              {asset.ntnb_referencia ? formatDatePretty(asset.ntnb_referencia) : '-'}
-              {asset.taxa_ntnb && <span className="text-blue-300 ml-1 font-mono">({Number(asset.taxa_ntnb).toFixed(2)}%)</span>}
-            </p>
-          </div>
+          {/* 8. REF. BENCHMARK */}
+          {(() => {
+            const rawIdx = (asset.indexador || '').trim().toUpperCase();
+            const isPre = rawIdx.includes('PRE') || rawIdx.includes('PRÉ');
+            const isIpca = rawIdx.includes('IPCA') || rawIdx.includes('IGP');
+
+            let cardTitle = "Ref. NTN-B (Benchmark)";
+            let cardTip = "Título público Tesouro IPCA+ (NTN-B) soberano de vencimento correspondente utilizado como taxa livre de risco de referência para o cálculo do spread de crédito na mesma data.";
+
+            if (isPre) {
+              cardTitle = "Ref. DI Futuro (Benchmark)";
+              cardTip = "Taxa soberana da curva de juros DI Futuro / ETTJ Pré correspondente à duration do ativo utilizada para o cálculo do spread de crédito.";
+            } else if (!isIpca) {
+              cardTitle = "Benchmark de Referência";
+              cardTip = "Taxa soberana ou curva livre de risco utilizada para precificação e apuração de spread.";
+            }
+
+            const refDisplay = asset.ntnb_referencia 
+              ? (isPre ? asset.ntnb_referencia : formatDatePretty(asset.ntnb_referencia)) 
+              : '-';
+
+            return (
+              <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
+                <span className="text-slate-400 text-xs font-bold uppercase block mb-1">
+                  {cardTitle}
+                  <InfoTooltipDark text={cardTip} />
+                </span>
+                <p className="font-semibold text-slate-100">
+                  {refDisplay}
+                  {asset.taxa_ntnb && <span className="text-blue-300 ml-1 font-mono">({Number(asset.taxa_ntnb).toFixed(2)}%)</span>}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* 9. PERIODICIDADE DE CUPONS */}
           <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70">
