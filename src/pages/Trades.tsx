@@ -702,7 +702,7 @@ const Trades: React.FC = () => {
     if (kpis) {
       if (kpiPeriod === 'pregao' && kpis.ultimo_pregao) {
         return {
-          titulo: `Último Pregão (${formatDateBR(kpis.ultimo_pregao.data)})`,
+          titulo: `Última atualização (${formatDateBR(kpis.ultimo_pregao.data)})`,
           volume: kpis.ultimo_pregao.volume_financeiro,
           trades: kpis.ultimo_pregao.total_trades,
           ativos: kpis.ultimo_pregao.ativos_negociados,
@@ -771,7 +771,7 @@ const Trades: React.FC = () => {
       }));
 
       return {
-        titulo: `Último Pregão (${formatDateBR(latestDate)})`,
+        titulo: `Última atualização (${formatDateBR(latestDate)})`,
         volume: vol,
         trades: nTrades,
         ativos: uniqueTickers,
@@ -1439,7 +1439,7 @@ const Trades: React.FC = () => {
           <div className="bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-xl flex items-center gap-2 shadow-2xs">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-bold text-emerald-800">
-              Último Pregão: {formatDateBR(latestDate)}
+              Última atualização: {formatDateBR(latestDate)}
             </span>
           </div>
 

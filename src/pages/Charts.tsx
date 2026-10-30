@@ -1880,7 +1880,7 @@ const CreditDashboard: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-slate-200/60 text-xs font-semibold">
                   {[
                     { id: 'ALL', label: 'Todas as Datas' },
-                    { id: 'LATEST', label: `Último Pregão (${formatDateBr(maxAvailableTradeDate).slice(0, 5)})` },
+                    { id: 'LATEST', label: `Última atualização (${formatDateBr(maxAvailableTradeDate).slice(0, 5)})` },
                     { id: '3D', label: '3 Dias' },
                     { id: '7D', label: '7 Dias' },
                     { id: '15D', label: '15 Dias' },

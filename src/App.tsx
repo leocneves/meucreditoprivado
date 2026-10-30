@@ -52,7 +52,7 @@ const Navbar = () => {
         {
           path: '/negocios',
           label: 'Negócios B3',
-          desc: 'Trades em tempo real, volume diário e VWAP',
+          desc: 'Negócios secundários, volume diário e VWAP',
           icon: <ArrowLeftRight size={17} className="text-blue-600" />,
         },
         {

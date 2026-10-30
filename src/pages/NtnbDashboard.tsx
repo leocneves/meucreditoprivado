@@ -122,7 +122,7 @@ const NtnbDashboard: React.FC = () => {
     return Object.values(dateMap);
   }, [data, filteredDates, selectedVertices, metricMode]);
 
-  // Dados para a Curva de Juros Real (Estrutura a Termo: Hoje vs 30D vs 90D)
+  // Dados para a Curva de Juros Real (Estrutura a Termo: Última atualização vs 30D vs 90D)
   const curveData = useMemo(() => {
     const mapVertices: { [vertice: number]: any } = {};
 
@@ -243,7 +243,7 @@ const NtnbDashboard: React.FC = () => {
               Curva Soberana ANBIMA
             </span>
             <span className="text-xs text-slate-500 font-medium">
-              Fechamento de Mercado: <strong>{formatDatePretty(latestDate)}</strong>
+              Última atualização: <strong>{formatDatePretty(latestDate)}</strong>
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -369,7 +369,7 @@ const NtnbDashboard: React.FC = () => {
           <div className="flex items-center gap-4 text-xs font-semibold text-slate-600">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-full bg-blue-600 inline-block"></span>
-              <span>Hoje ({formatDatePretty(latestDate)})</span>
+              <span>Última atualização ({formatDatePretty(latestDate)})</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
@@ -402,7 +402,7 @@ const NtnbDashboard: React.FC = () => {
                       <div className="bg-slate-900 text-white p-3.5 rounded-xl shadow-xl text-xs space-y-1.5">
                         <p className="font-extrabold text-slate-200 border-b border-slate-700 pb-1">{item.vertice}</p>
                         {item.taxaAtual !== null && (
-                          <p className="text-blue-300 font-bold">Hoje: {item.taxaAtual.toFixed(4)}% a.a.</p>
+                          <p className="text-blue-300 font-bold">Última atualização ({formatDatePretty(latestDate)}): {item.taxaAtual.toFixed(4)}% a.a.</p>
                         )}
                         {item.taxa30d !== null && (
                           <p className="text-emerald-300 font-medium">30D atrás: {item.taxa30d.toFixed(4)}% a.a.</p>
@@ -419,7 +419,7 @@ const NtnbDashboard: React.FC = () => {
               <Line
                 type="monotone"
                 dataKey="taxaAtual"
-                name="Taxa Atual"
+                name="Última atualização"
                 stroke="#2563eb"
                 strokeWidth={3}
                 dot={{ r: 4, fill: '#2563eb' }}
