@@ -40,7 +40,7 @@
         "volume_bi": 290.33
       }
     },
-    "data_atualizacao": "2026-11-02 03:07:28"
+    "data_atualizacao": "2026-11-03 03:07:36"
   },
   "evolucao_anual": [
     {
@@ -526,8 +526,8 @@
         "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
         "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
         "dot_color": "bg-orange-500",
-        "total_ofertas": 65,
-        "volume_total_reais": 43595416207.0,
+        "total_ofertas": 67,
+        "volume_total_reais": 50656694207.0,
         "ofertas_ativas": 4,
         "volume_ativo_reais": 3182925000.0
       },
@@ -537,10 +537,21 @@
         "portal_url": "https://www.bradescobbi.com.br/",
         "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
         "dot_color": "bg-rose-600",
-        "total_ofertas": 37,
-        "volume_total_reais": 30197740830.0,
+        "total_ofertas": 42,
+        "volume_total_reais": 41386665830.0,
         "ofertas_ativas": 3,
         "volume_ativo_reais": 3202925000.0
+      },
+      {
+        "id": "BB_UBS",
+        "nome": "BB / UBS BB",
+        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+        "dot_color": "bg-yellow-500",
+        "total_ofertas": 24,
+        "volume_total_reais": 25505030830.0,
+        "ofertas_ativas": 1,
+        "volume_ativo_reais": 800000000.0
       },
       {
         "id": "BTG",
@@ -565,24 +576,13 @@
         "volume_ativo_reais": 868000000.0
       },
       {
-        "id": "BB_UBS",
-        "nome": "BB / UBS BB",
-        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
-        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
-        "dot_color": "bg-yellow-500",
-        "total_ofertas": 19,
-        "volume_total_reais": 14243752830.0,
-        "ofertas_ativas": 1,
-        "volume_ativo_reais": 800000000.0
-      },
-      {
         "id": "SANTANDER",
         "nome": "Santander",
         "portal_url": "https://www.santander.com.br/assessoria-financeira-e-mercado-de-capitais/ofertas-publicas/ofertas-em-andamento",
         "badge_bg": "bg-red-50 text-red-700 border-red-200",
         "dot_color": "bg-red-600",
-        "total_ofertas": 19,
-        "volume_total_reais": 10491146257.0,
+        "total_ofertas": 22,
+        "volume_total_reais": 13891146257.0,
         "ofertas_ativas": 2,
         "volume_ativo_reais": 1200000000.0
       },
@@ -5177,7 +5177,7 @@
         "valor_total_reais": 1000000000.0,
         "data_processo": "2026-08-07",
         "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_liquidacao": "2026-08-10",
         "taxas_indicativas": "CDI + 2,00%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -5209,7 +5209,7 @@
         "valor_total_reais": 1140000000.0,
         "data_processo": "2026-08-07",
         "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_liquidacao": "2026-08-10",
         "taxas_indicativas": "CDI + 2,10% | CDI + 2,50%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -5241,7 +5241,7 @@
         "valor_total_reais": 125000000.0,
         "data_processo": "2026-08-06",
         "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_liquidacao": "2026-08-07",
         "taxas_indicativas": "CDI + 2,35%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -5395,13 +5395,13 @@
         "portal_url": "https://ofertaspublicas.xpi.com.br/",
         "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
         "dot_color": "bg-amber-500",
-        "devedor": "MANTIQUEIRA ALIMENTOS S",
+        "devedor": "MANTIQUEIRA BRASIL",
         "emissor_tecnico": "ECO. SEC. DTOS. CREDIT. AGRONEGÓCIOS S/A",
         "tipo_ativo": "CRA",
         "valor_total_reais": 150000000.0,
         "data_processo": "2026-07-31",
         "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_liquidacao": "2026-08-03",
         "taxas_indicativas": "Sobre o Valor Nominal ou saldo do Valor Nominal, conforme o caso, incidirão juros remuneratórios correspondentes a variação acumulada da Taxa DI, acrescida de sobretaxa (spread) equivalente a 0,55% (cinquenta e cinco centésimos por cento) (“Taxa Teto”)(duzentos e cinquenta e dois) Dias Úteis",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -5427,13 +5427,13 @@
         "portal_url": "https://ofertaspublicas.xpi.com.br/",
         "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
         "dot_color": "bg-amber-500",
-        "devedor": "VALE DO TIJUCO AÇÚCAR E ÁLCOOL S",
-        "emissor_tecnico": "ECO. SEC. DTOS. CREDIT. AGRONEGÓCIOS S/A",
+        "devedor": "ECO. SEC. DTOS. CREDIT. AGRONEGÓCIOS S/A",
+        "emissor_tecnico": null,
         "tipo_ativo": "CRA",
         "valor_total_reais": 400000000.0,
         "data_processo": "2026-07-30",
-        "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_vencimento": "2031-07-15",
+        "data_liquidacao": "2026-07-31",
         "taxas_indicativas": "Correspondente a determinado percentual a ser definido no Procedimento de Bookbuilding da variação acumulada da Taxa DI, observado o percentual máximo de 107,50% (cento e sete inteiros e cinquenta centésimos por cento) da Taxa DI,(duzentos e cinquenta e dois) Dias Úteis (\"Taxa Teto 1ª Série\"). | O Valor Nominal Unitário Atualizado dos CRA da 2ª Série incidirão juros remuneratórios, a ser definido de acordo com o Procedimento de Bookbuilding e, em qualquer caso, limitado à maior taxa entre: (a) a taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de agosto de 2032, baseada na cotação indicativa divulgada pela ANBIMA conforme apurada no fechamento do Dia Útil da data de realização do Procedimento de Bookbuilding, acrescida exponencialmente de sobretaxa (spread) de 1,20%, ou (b) 9,52%. | O Valor Nominal Unitário Atualizado dos CRA da 3ª Série incidirão juros remuneratórios, a ser definido de acordo com o Procedimento de Bookbuilding e, em qualquer caso, limitado à maior taxa entre: (a) a taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de maio de 2035, baseada na cotação indicativa divulgada pela ANBIMA conforme apurada no fechamento do Dia Útil da data de realização do Procedimento de Bookbuilding, acrescida exponencialmente de sobretaxa (spread) de 1,55%, ou (b) 9,65%.",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -5459,13 +5459,13 @@
         "portal_url": "https://www.bradescobbi.com.br/",
         "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
         "dot_color": "bg-rose-600",
-        "devedor": "VALE DO TIJUCO AÇÚCAR E ÁLCOOL S",
-        "emissor_tecnico": "ECO. SEC. DTOS. CREDIT. AGRONEGÓCIOS S/A",
+        "devedor": "ECO. SEC. DTOS. CREDIT. AGRONEGÓCIOS S/A",
+        "emissor_tecnico": null,
         "tipo_ativo": "CRA",
         "valor_total_reais": 400000000.0,
         "data_processo": "2026-07-30",
-        "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_vencimento": "2031-07-15",
+        "data_liquidacao": "2026-07-31",
         "taxas_indicativas": "Correspondente a determinado percentual a ser definido no Procedimento de Bookbuilding da variação acumulada da Taxa DI, observado o percentual máximo de 107,50% (cento e sete inteiros e cinquenta centésimos por cento) da Taxa DI,(duzentos e cinquenta e dois) Dias Úteis (\"Taxa Teto 1ª Série\"). | O Valor Nominal Unitário Atualizado dos CRA da 2ª Série incidirão juros remuneratórios, a ser definido de acordo com o Procedimento de Bookbuilding e, em qualquer caso, limitado à maior taxa entre: (a) a taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de agosto de 2032, baseada na cotação indicativa divulgada pela ANBIMA conforme apurada no fechamento do Dia Útil da data de realização do Procedimento de Bookbuilding, acrescida exponencialmente de sobretaxa (spread) de 1,20%, ou (b) 9,52%. | O Valor Nominal Unitário Atualizado dos CRA da 3ª Série incidirão juros remuneratórios, a ser definido de acordo com o Procedimento de Bookbuilding e, em qualquer caso, limitado à maior taxa entre: (a) a taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de maio de 2035, baseada na cotação indicativa divulgada pela ANBIMA conforme apurada no fechamento do Dia Útil da data de realização do Procedimento de Bookbuilding, acrescida exponencialmente de sobretaxa (spread) de 1,55%, ou (b) 9,65%.",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -6010,13 +6010,22 @@
         "data_processo": "2026-07-21",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 3,55%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/ec83e9ba-4cdb-4e71-97bb-20f9802421b7"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/c0678aca-f381-46a5-8faa-e99f73ddf102"
+          }
+        ]
       },
       {
         "id_requerimento": "27183",
@@ -6039,7 +6048,48 @@
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/ac492c33-c435-46ce-8163-d8edc44270f5"
+          },
+          {
+            "nome_documento": "Anúncio de Encerramento da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/54f38fd6-52f2-4baa-9124-8e777fa38576"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "27183",
+        "banco_id": "BRADESCO",
+        "banco_nome": "Bradesco BBI",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bradescobbi.com.br/",
+        "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+        "dot_color": "bg-rose-600",
+        "devedor": "VERT COMPANHIA SECURITIZADORA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "CRI",
+        "valor_total_reais": 627647000.0,
+        "data_processo": "2026-07-20",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": null,
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/ac492c33-c435-46ce-8163-d8edc44270f5"
+          },
+          {
+            "nome_documento": "Anúncio de Encerramento da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/54f38fd6-52f2-4baa-9124-8e777fa38576"
+          }
+        ]
       },
       {
         "id_requerimento": "27212",
@@ -6062,7 +6112,16 @@
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/b1bd49ae-a6e2-42a4-a150-977d5c7879ea"
+          },
+          {
+            "nome_documento": "Anúncio de Encerramento da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4675af28-749a-4cf3-bc0b-e426a8a80186"
+          }
+        ]
       },
       {
         "id_requerimento": "26971",
@@ -6079,13 +6138,86 @@
         "data_processo": "2026-07-20",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 2,90%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/397b1be1-4187-4a54-b1ce-3e0e78d6f983"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/be04148e-4991-45f3-aeea-82c52afab4b5"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26971",
+        "banco_id": "SANTANDER",
+        "banco_nome": "Santander",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.santander.com.br/assessoria-financeira-e-mercado-de-capitais/ofertas-publicas/ofertas-em-andamento",
+        "badge_bg": "bg-red-50 text-red-700 border-red-200",
+        "dot_color": "bg-red-600",
+        "devedor": "DIAGNOSTICOS DA AMERICA SA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 700000000.0,
+        "data_processo": "2026-07-20",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 2,90%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/397b1be1-4187-4a54-b1ce-3e0e78d6f983"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/be04148e-4991-45f3-aeea-82c52afab4b5"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26971",
+        "banco_id": "BB_UBS",
+        "banco_nome": "BB / UBS BB",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+        "dot_color": "bg-yellow-500",
+        "devedor": "DIAGNOSTICOS DA AMERICA SA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 700000000.0,
+        "data_processo": "2026-07-20",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 2,90%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/397b1be1-4187-4a54-b1ce-3e0e78d6f983"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/be04148e-4991-45f3-aeea-82c52afab4b5"
+          }
+        ]
       },
       {
         "id_requerimento": "27081",
@@ -6102,13 +6234,22 @@
         "data_processo": "2026-07-16",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "NTN-B35 - 0,10%ou IPCA + 7,79",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/91917771-7013-4840-9d49-6c9318310e41"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/fd71211b-02a8-41c2-bad1-b0ff45a3fdfb"
+          }
+        ]
       },
       {
         "id_requerimento": "27080",
@@ -6125,13 +6266,22 @@
         "data_processo": "2026-07-16",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "NTN-B35 - 0,10%ou IPCA + 7,79",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/f5758755-8f6c-4377-bdb2-f3c689208eff"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/02918de3-36a1-4d7e-92ef-49ef29442cf2"
+          }
+        ]
       },
       {
         "id_requerimento": "26887",
@@ -6148,13 +6298,118 @@
         "data_processo": "2026-07-15",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/8dc3b4ce-2029-4e6c-8bca-60c1873c0f19"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/16a4ced8-acec-4b7f-b5d2-0fdb886288a3"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26887",
+        "banco_id": "ITAU",
+        "banco_nome": "Itaú BBA / Corretora",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
+        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
+        "dot_color": "bg-orange-500",
+        "devedor": "LOCALIZA RENT A CAR SA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 5643014000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/8dc3b4ce-2029-4e6c-8bca-60c1873c0f19"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/16a4ced8-acec-4b7f-b5d2-0fdb886288a3"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26887",
+        "banco_id": "BB_UBS",
+        "banco_nome": "BB / UBS BB",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+        "dot_color": "bg-yellow-500",
+        "devedor": "LOCALIZA RENT A CAR SA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 5643014000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/8dc3b4ce-2029-4e6c-8bca-60c1873c0f19"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/16a4ced8-acec-4b7f-b5d2-0fdb886288a3"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26887",
+        "banco_id": "BRADESCO",
+        "banco_nome": "Bradesco BBI",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bradescobbi.com.br/",
+        "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+        "dot_color": "bg-rose-600",
+        "devedor": "LOCALIZA RENT A CAR SA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 5643014000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/8dc3b4ce-2029-4e6c-8bca-60c1873c0f19"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/16a4ced8-acec-4b7f-b5d2-0fdb886288a3"
+          }
+        ]
       },
       {
         "id_requerimento": "26886",
@@ -6171,13 +6426,118 @@
         "data_processo": "2026-07-15",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/27917fc9-8a0c-4b33-b936-6871a8adcfdd"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/38d2a11a-b4b3-47ab-9e34-8026920948f9"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26886",
+        "banco_id": "ITAU",
+        "banco_nome": "Itaú BBA / Corretora",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
+        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
+        "dot_color": "bg-orange-500",
+        "devedor": "LOCALIZA  FLEET S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 1418264000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/27917fc9-8a0c-4b33-b936-6871a8adcfdd"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/38d2a11a-b4b3-47ab-9e34-8026920948f9"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26886",
+        "banco_id": "BB_UBS",
+        "banco_nome": "BB / UBS BB",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+        "dot_color": "bg-yellow-500",
+        "devedor": "LOCALIZA  FLEET S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 1418264000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/27917fc9-8a0c-4b33-b936-6871a8adcfdd"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/38d2a11a-b4b3-47ab-9e34-8026920948f9"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26886",
+        "banco_id": "BRADESCO",
+        "banco_nome": "Bradesco BBI",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bradescobbi.com.br/",
+        "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+        "dot_color": "bg-rose-600",
+        "devedor": "LOCALIZA  FLEET S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 1418264000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "As Debêntures farão jus ao pagamento de juros remuneratórios equivalentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos Depósitos Interfinanceiros - DI de um dia, “over extra grupo”, expressa na forma percentual,(duzentos e cinquenta e dois) Dias Úteis (conforme definido abaixo), calculadas e divulgadas diariamente pela B3 S.A. - Brasil, Bolsa, Balcão, no informativo diário disponível em sua página na internet (http://www.b3.com.br) (“Taxa DI”), acrescida exponencialmente de um spread ou sobretaxa de 1,25%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/27917fc9-8a0c-4b33-b936-6871a8adcfdd"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/38d2a11a-b4b3-47ab-9e34-8026920948f9"
+          }
+        ]
       },
       {
         "id_requerimento": "26932",
@@ -6194,13 +6554,118 @@
         "data_processo": "2026-07-15",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 0,80% | CDI + 0,90%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/79fe55ac-bd87-4572-ba16-9f5d61b7ef2f"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4ddd1cad-15fe-45ea-b4a3-894b7fd1b9f8"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26932",
+        "banco_id": "SANTANDER",
+        "banco_nome": "Santander",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.santander.com.br/assessoria-financeira-e-mercado-de-capitais/ofertas-publicas/ofertas-em-andamento",
+        "badge_bg": "bg-red-50 text-red-700 border-red-200",
+        "dot_color": "bg-red-600",
+        "devedor": "AXIA ENERGIA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 2000000000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 0,80% | CDI + 0,90%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/79fe55ac-bd87-4572-ba16-9f5d61b7ef2f"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4ddd1cad-15fe-45ea-b4a3-894b7fd1b9f8"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26932",
+        "banco_id": "BB_UBS",
+        "banco_nome": "BB / UBS BB",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+        "dot_color": "bg-yellow-500",
+        "devedor": "AXIA ENERGIA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 2000000000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 0,80% | CDI + 0,90%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/79fe55ac-bd87-4572-ba16-9f5d61b7ef2f"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4ddd1cad-15fe-45ea-b4a3-894b7fd1b9f8"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26932",
+        "banco_id": "BRADESCO",
+        "banco_nome": "Bradesco BBI",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bradescobbi.com.br/",
+        "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+        "dot_color": "bg-rose-600",
+        "devedor": "AXIA ENERGIA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 2000000000.0,
+        "data_processo": "2026-07-15",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 0,80% | CDI + 0,90%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/79fe55ac-bd87-4572-ba16-9f5d61b7ef2f"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4ddd1cad-15fe-45ea-b4a3-894b7fd1b9f8"
+          }
+        ]
       },
       {
         "id_requerimento": "27024",
@@ -6217,13 +6682,54 @@
         "data_processo": "2026-07-14",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "incidirão juros remuneratórios correspondentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos DI – Depósitos Interfinanceiros de um dia, “over extra-grupo”, expressas na forma de percentual,(duzentos e cinquenta e dois) Dias Úteis, calculadas e divulgadas diariamente pela B3 no informativo diário disponível em sua página na Internet (www.b3.com.br) (“Taxa DI”), acrescida de spread (sobretaxa) de 0,10% (dez centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis | incidirão juros remuneratórios correspondentes à variação acumulada de 100% (cem por cento) da Taxa DI, acrescida de spread (sobretaxa) de 0,35% (trinta e cinco centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis (“Remuneração das Debêntures da Segunda Série” e, quando em conjunto com a Remuneração das Debêntures da Primeira Série, a “Remuneração”).",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/fb88000d-5d58-464c-82bf-37ef4c829bf0"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/b5b39e80-6d91-4339-99e7-6a1edec021d9"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "27024",
+        "banco_id": "SANTANDER",
+        "banco_nome": "Santander",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.santander.com.br/assessoria-financeira-e-mercado-de-capitais/ofertas-publicas/ofertas-em-andamento",
+        "badge_bg": "bg-red-50 text-red-700 border-red-200",
+        "dot_color": "bg-red-600",
+        "devedor": "ENGIE BRASIL ENERGIA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 700000000.0,
+        "data_processo": "2026-07-14",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "incidirão juros remuneratórios correspondentes à variação acumulada de 100% (cem por cento) das taxas médias diárias dos DI – Depósitos Interfinanceiros de um dia, “over extra-grupo”, expressas na forma de percentual,(duzentos e cinquenta e dois) Dias Úteis, calculadas e divulgadas diariamente pela B3 no informativo diário disponível em sua página na Internet (www.b3.com.br) (“Taxa DI”), acrescida de spread (sobretaxa) de 0,10% (dez centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis | incidirão juros remuneratórios correspondentes à variação acumulada de 100% (cem por cento) da Taxa DI, acrescida de spread (sobretaxa) de 0,35% (trinta e cinco centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis (“Remuneração das Debêntures da Segunda Série” e, quando em conjunto com a Remuneração das Debêntures da Primeira Série, a “Remuneração”).",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/fb88000d-5d58-464c-82bf-37ef4c829bf0"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/b5b39e80-6d91-4339-99e7-6a1edec021d9"
+          }
+        ]
       },
       {
         "id_requerimento": "27009",
@@ -6240,13 +6746,86 @@
         "data_processo": "2026-07-14",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 0,42%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e041ef11-7b98-462a-b0e8-2083f895e191"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7bbe8a51-34d5-4acb-a899-9366353ec317"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "27009",
+        "banco_id": "BB_UBS",
+        "banco_nome": "BB / UBS BB",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+        "dot_color": "bg-yellow-500",
+        "devedor": "ISA ENERGIA BRASIL S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 1500000000.0,
+        "data_processo": "2026-07-14",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 0,42%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e041ef11-7b98-462a-b0e8-2083f895e191"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7bbe8a51-34d5-4acb-a899-9366353ec317"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "27009",
+        "banco_id": "BRADESCO",
+        "banco_nome": "Bradesco BBI",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bradescobbi.com.br/",
+        "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+        "dot_color": "bg-rose-600",
+        "devedor": "ISA ENERGIA BRASIL S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 1500000000.0,
+        "data_processo": "2026-07-14",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 0,42%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e041ef11-7b98-462a-b0e8-2083f895e191"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7bbe8a51-34d5-4acb-a899-9366353ec317"
+          }
+        ]
       },
       {
         "id_requerimento": "27034",
@@ -6263,13 +6842,22 @@
         "data_processo": "2026-07-13",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 2,40%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4f03d398-696a-42a0-ba89-76427cfb2e7d"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2393447c-0db0-4c18-9b06-e3d998049704"
+          }
+        ]
       },
       {
         "id_requerimento": "27114",
@@ -6292,7 +6880,16 @@
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2fc97a5c-1729-4a51-ace0-ffc611fd2914"
+          },
+          {
+            "nome_documento": "Anúncio de Encerramento da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/8bb32d46-9154-4ff3-bf95-f999374a5062"
+          }
+        ]
       },
       {
         "id_requerimento": "27032",
@@ -6309,13 +6906,22 @@
         "data_processo": "2026-07-13",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "100% das taxas médias diárias do DI – Depósitos Interfinanceiros de um dia, “over extra-grupo”, expressas na forma percentual-(duzentos e cinquenta e dois) Dias Úteis, calculadas e divulgadas diariamente pela B3, no informativo diário disponível em sua página na rede mundial de computadores , acrescida de spread (sobretaxa) de 1,26%,(duzentos e cinquenta e dois) Dias Úteis",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/3a716ab1-19a3-49cb-9012-553fbc9044a7"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/a8f44faf-de71-47f5-95bc-da01d39a8198"
+          }
+        ]
       },
       {
         "id_requerimento": "27027",
@@ -6507,10 +7113,10 @@
         {
           "banco_id": "ITAU",
           "banco_nome": "Itaú BBA / Corretora",
-          "volume_bi": 43.6,
-          "total_ofertas": 65,
+          "volume_bi": 50.66,
+          "total_ofertas": 67,
           "ofertas_ativas": 4,
-          "share_pct": 31.3,
+          "share_pct": 29.4,
           "cor": "#EC7000",
           "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
           "dot_color": "bg-orange-500"
@@ -6518,13 +7124,24 @@
         {
           "banco_id": "BRADESCO",
           "banco_nome": "Bradesco BBI",
-          "volume_bi": 30.2,
-          "total_ofertas": 37,
+          "volume_bi": 41.39,
+          "total_ofertas": 42,
           "ofertas_ativas": 3,
-          "share_pct": 21.7,
+          "share_pct": 24.0,
           "cor": "#CC092F",
           "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
           "dot_color": "bg-rose-600"
+        },
+        {
+          "banco_id": "BB_UBS",
+          "banco_nome": "BB / UBS BB",
+          "volume_bi": 25.51,
+          "total_ofertas": 24,
+          "ofertas_ativas": 1,
+          "share_pct": 14.8,
+          "cor": "#0284C7",
+          "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+          "dot_color": "bg-yellow-500"
         },
         {
           "banco_id": "BTG",
@@ -6532,7 +7149,7 @@
           "volume_bi": 19.5,
           "total_ofertas": 18,
           "ofertas_ativas": 1,
-          "share_pct": 14.0,
+          "share_pct": 11.3,
           "cor": "#001E62",
           "badge_bg": "bg-blue-50 text-blue-700 border-blue-200",
           "dot_color": "bg-blue-600"
@@ -6543,29 +7160,18 @@
           "volume_bi": 16.48,
           "total_ofertas": 26,
           "ofertas_ativas": 2,
-          "share_pct": 11.8,
+          "share_pct": 9.6,
           "cor": "#D97706",
           "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
           "dot_color": "bg-amber-500"
         },
         {
-          "banco_id": "BB_UBS",
-          "banco_nome": "BB / UBS BB",
-          "volume_bi": 14.24,
-          "total_ofertas": 19,
-          "ofertas_ativas": 1,
-          "share_pct": 10.2,
-          "cor": "#0284C7",
-          "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
-          "dot_color": "bg-yellow-500"
-        },
-        {
           "banco_id": "SANTANDER",
           "banco_nome": "Santander",
-          "volume_bi": 10.49,
-          "total_ofertas": 19,
+          "volume_bi": 13.89,
+          "total_ofertas": 22,
           "ofertas_ativas": 2,
-          "share_pct": 7.5,
+          "share_pct": 8.1,
           "cor": "#EC0000",
           "badge_bg": "bg-red-50 text-red-700 border-red-200",
           "dot_color": "bg-red-600"
@@ -6576,13 +7182,13 @@
           "volume_bi": 4.84,
           "total_ofertas": 8,
           "ofertas_ativas": 2,
-          "share_pct": 3.5,
+          "share_pct": 2.8,
           "cor": "#4F46E5",
           "badge_bg": "bg-indigo-50 text-indigo-700 border-indigo-200",
           "dot_color": "bg-indigo-600"
         }
       ],
-      "volume_total_esteira_bi": 139.36,
+      "volume_total_esteira_bi": 172.27,
       "series_anuais": [
         {
           "periodo": "2023",
