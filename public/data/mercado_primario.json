@@ -1,13 +1,13 @@
 {
   "resumo": {
-    "total_ofertas_ano": 899,
-    "volume_total_ano_bi": 290.33,
+    "total_ofertas_ano": 900,
+    "volume_total_ano_bi": 290.37,
     "total_em_andamento": 7,
-    "volume_em_andamento_bi": 4.08,
-    "total_encerradas": 886,
-    "volume_encerradas_bi": 281.28,
-    "total_historico_base": 4525,
-    "volume_historico_base_bi": 1759.75,
+    "volume_em_andamento_bi": 3.82,
+    "total_encerradas": 887,
+    "volume_encerradas_bi": 281.58,
+    "total_historico_base": 4526,
+    "volume_historico_base_bi": 1759.79,
     "por_tipo": {
       "CRA": {
         "total": 85,
@@ -18,8 +18,8 @@
         "volume_bi": 39.82
       },
       "DEB": {
-        "total": 391,
-        "volume_bi": 238.73
+        "total": 392,
+        "volume_bi": 238.77
       }
     },
     "por_ano": {
@@ -36,11 +36,11 @@
         "volume_bi": 552.56
       },
       "2026": {
-        "total": 899,
-        "volume_bi": 290.33
+        "total": 900,
+        "volume_bi": 290.37
       }
     },
-    "data_atualizacao": "2026-11-03 03:07:36"
+    "data_atualizacao": "2026-11-04 03:07:13"
   },
   "evolucao_anual": [
     {
@@ -84,11 +84,11 @@
     },
     {
       "ano": "2026",
-      "volume_bi": 290.33,
-      "total_ofertas": 899,
-      "ticket_medio_mi": 322.9,
+      "volume_bi": 290.37,
+      "total_ofertas": 900,
+      "ticket_medio_mi": 322.6,
       "yoy_volume_pct": -47.5,
-      "yoy_qtd_pct": -30.4,
+      "yoy_qtd_pct": -30.3,
       "mix_instrumentos": {
         "deb_pct": 82.2,
         "cri_pct": 13.7,
@@ -464,13 +464,21 @@
       "vol_cri_bi": 4.69,
       "vol_cra_bi": 0.78,
       "total_ofertas": 86
+    },
+    {
+      "mes": "2026-11",
+      "volume_bi": 0.04,
+      "vol_deb_bi": 0.04,
+      "vol_cri_bi": 0.0,
+      "vol_cra_bi": 0.0,
+      "total_ofertas": 1
     }
   ],
   "league_table": [
     {
       "coordenador": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-      "total_ofertas": 117,
-      "volume_bi": 72.9
+      "total_ofertas": 118,
+      "volume_bi": 72.94
     },
     {
       "coordenador": "BANCO BRADESCO BBI S.A.",
@@ -526,10 +534,10 @@
         "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
         "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
         "dot_color": "bg-orange-500",
-        "total_ofertas": 67,
-        "volume_total_reais": 50656694207.0,
-        "ofertas_ativas": 4,
-        "volume_ativo_reais": 3182925000.0
+        "total_ofertas": 69,
+        "volume_total_reais": 52396694207.0,
+        "ofertas_ativas": 5,
+        "volume_ativo_reais": 3222925000.0
       },
       {
         "id": "BRADESCO",
@@ -537,8 +545,8 @@
         "portal_url": "https://www.bradescobbi.com.br/",
         "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
         "dot_color": "bg-rose-600",
-        "total_ofertas": 42,
-        "volume_total_reais": 41386665830.0,
+        "total_ofertas": 43,
+        "volume_total_reais": 41586665830.0,
         "ofertas_ativas": 3,
         "volume_ativo_reais": 3202925000.0
       },
@@ -570,8 +578,8 @@
         "portal_url": "https://ofertaspublicas.xpi.com.br/",
         "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
         "dot_color": "bg-amber-500",
-        "total_ofertas": 26,
-        "volume_total_reais": 16480027228.880001,
+        "total_ofertas": 27,
+        "volume_total_reais": 17480027228.88,
         "ofertas_ativas": 2,
         "volume_ativo_reais": 868000000.0
       },
@@ -594,11 +602,39 @@
         "dot_color": "bg-indigo-600",
         "total_ofertas": 8,
         "volume_total_reais": 4845000000.0,
-        "ofertas_ativas": 2,
-        "volume_ativo_reais": 870000000.0
+        "ofertas_ativas": 1,
+        "volume_ativo_reais": 800000000.0
       }
     ],
     "todas_ofertas_distribuicao": [
+      {
+        "id_requerimento": "28577",
+        "banco_id": "ITAU",
+        "banco_nome": "Itaú BBA / Corretora",
+        "papel_banco": "Coordenador Líder",
+        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
+        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
+        "dot_color": "bg-orange-500",
+        "devedor": "ALBIOMA ESPLANADA ENERGIA S.A",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 40000000.0,
+        "data_processo": "2026-11-03",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "IPCA + 7,55%",
+        "status_oferta": "Aguardando Bookbuilding",
+        "fase_oferta": "EM_BOOKBUILDING",
+        "fase_label": "Em Bookbuilding",
+        "badge_fase": "bg-purple-50 text-purple-700 border-purple-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/349175e0-504a-41cb-bfc7-243854b3c715"
+          }
+        ]
+      },
       {
         "id_requerimento": "28454",
         "banco_id": "ITAU",
@@ -647,10 +683,10 @@
         "data_vencimento": null,
         "data_liquidacao": null,
         "taxas_indicativas": "Sobre o Valor Nominal Unitário Atualizado das Debêntures incidirão juros remuneratórios equivalentes à taxa interna de retorno do Tesouro IPCA + (nova denominação da Nota do Tesouro Nacional, Série B –NTN-B), com vencimento em 15 de maio de 2031, a ser apurada conforme as taxas divulgadas pela ANBIMA no fechamento do Dia Útil da realização do Procedimento de Coleta de Intenções de Investimento, acrescida exponencialmente de spread negativo de 0,30% (trinta centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis",
-        "status_oferta": "Aguardando Bookbuilding",
-        "fase_oferta": "EM_BOOKBUILDING",
-        "fase_label": "Em Bookbuilding",
-        "badge_fase": "bg-purple-50 text-purple-700 border-purple-200",
+        "status_oferta": "Registro Concedido",
+        "fase_oferta": "DISTRIBUICAO_ATIVA",
+        "fase_label": "Registro Concedido (Em Distribuição)",
+        "badge_fase": "bg-emerald-50 text-emerald-700 border-emerald-200",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -947,10 +983,10 @@
         "data_vencimento": null,
         "data_liquidacao": "2026-10-21",
         "taxas_indicativas": null,
-        "status_oferta": "Registro Concedido",
-        "fase_oferta": "DISTRIBUICAO_ATIVA",
-        "fase_label": "Registro Concedido (Em Distribuição)",
-        "badge_fase": "bg-emerald-50 text-emerald-700 border-emerald-200",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -5491,12 +5527,12 @@
         "portal_url": "https://investimentos.btgpactual.com/ofertas-publicas",
         "badge_bg": "bg-blue-50 text-blue-700 border-blue-200",
         "dot_color": "bg-blue-600",
-        "devedor": "BARI SECURITIZADORA S.A.",
-        "emissor_tecnico": null,
+        "devedor": "MERCADO LIVRE | TRX",
+        "emissor_tecnico": "BARI SECURITIZADORA S.A.",
         "tipo_ativo": "CRI",
         "valor_total_reais": 111107629.0,
         "data_processo": "2026-07-29",
-        "data_vencimento": null,
+        "data_vencimento": "2030-08-15",
         "data_liquidacao": null,
         "taxas_indicativas": "A partir da Data de Emissão dos CRI, sobre o saldo do Valor Nominal Unitário Atualizado dos CRI, incidirão juros remuneratórios equivalentes a um determinado percentual, base 360 dias, a ser definido de acordo com o Procedimento de Bookbuilding e, em qualquer caso, limitado à (NTN-B), com vencimento em 15 de agosto de 2030, acrescida exponencialmente de spread de no máximo 1,00%",
         "status_oferta": "Oferta Encerrada",
@@ -5529,7 +5565,7 @@
         "valor_total_reais": 500000000.0,
         "data_processo": "2026-07-27",
         "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_liquidacao": "2026-07-28",
         "taxas_indicativas": "Sobre o Valor Nominal Unitário Atualizado das Debêntures incidirão juros remuneratórios correspondentes a determinado percentual, a serem definidos de acordo com o Procedimento de Bookbuilding, e que serão limitados à maior taxa entre (i) A taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de maio de 2035 baseada na cotação indicativa divulgada pela ANBIMA, conforme apurada no fechamento do Dia Útil da realização do Procedimento de Bookbuilding, acrescida exponencialmente de um spread negativo de 0,20%; ou (ii) 7,80%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -5561,7 +5597,7 @@
         "valor_total_reais": 500000000.0,
         "data_processo": "2026-07-27",
         "data_vencimento": null,
-        "data_liquidacao": null,
+        "data_liquidacao": "2026-07-28",
         "taxas_indicativas": "Sobre o Valor Nominal Unitário Atualizado das Debêntures incidirão juros remuneratórios correspondentes a determinado percentual, a serem definidos de acordo com o Procedimento de Bookbuilding, e que serão limitados à maior taxa entre (i) A taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de maio de 2035 baseada na cotação indicativa divulgada pela ANBIMA, conforme apurada no fechamento do Dia Útil da realização do Procedimento de Bookbuilding, acrescida exponencialmente de um spread negativo de 0,20%; ou (ii) 7,80%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
@@ -5592,7 +5628,7 @@
         "tipo_ativo": "DEB",
         "valor_total_reais": 1400000000.0,
         "data_processo": "2026-07-27",
-        "data_vencimento": null,
+        "data_vencimento": "2031-01-02",
         "data_liquidacao": null,
         "taxas_indicativas": "Sobre o saldo do Valor Nominal Unitário das Debêntures da Primeira Série, incidirão juros remuneratórios prefixados, a serem fixados na data do Procedimento de Bookbuilding, equivalentes à Taxa DI baseada no preço de ajuste (interpolação) da curva ‘DI x Pré’ equivalente ao contrato futuro com vencimento em 2 de janeiro de 2031, relativa à ‘DI x Pré’, DI verificado na data de realização do Procedimento de Bookbuilding, , acrescidas, exponencialmente, de um determinado spread negativo equivalente a, no máximo, 0,50%. | Sobre o saldo do Valor Nominal Unitário Atualizado das Debêntures da Segunda Série incidirão juros remuneratórios, a serem definidos no Procedimento de Bookbuilding e, em qualquer caso, correspondentes à taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais (“Tesouro IPCA+”), com vencimento em 15 de maio de 2033, conforme apurada no fechamento do Dia Útil da realização do Procedimento de Bookbuilding, acrescida, exponencialmente, de um determinado spread negativo equivalente a, no máximo, 0,50%. | Sobre o saldo do Valor Nominal Unitário das Debêntures da Terceira Série, incidirão juros remuneratórios prefixados, a serem fixados na data do Procedimento de Bookbuilding, equivalentes à Taxa DI baseada no preço de ajuste (interpolação) da curva ‘DI x Pré’ equivalente ao contrato futuro com vencimento em 2 de janeiro de 2032, relativa à ‘DI x Pré’, DI verificado na data de realização do Procedimento de Bookbuilding, , acrescidas, exponencialmente, de um determinado spread negativo equivalente a, no máximo, 0,40%. | Sobre o saldo do Valor Nominal Unitário Atualizado das Debêntures da Quarta Série incidirão juros remuneratórios, a serem definidos no Procedimento de Bookbuilding e, em qualquer caso, correspondentes à taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais (“Tesouro IPCA+”), com vencimento em 15 de maio de 2035, conforme apurada no fechamento do Dia Útil da realização do Procedimento de Bookbuilding, acrescida, exponencialmente, de um determinado spread negativo equivalente a, no máximo, 0,40%. | Sobre o saldo do Valor Nominal Unitário das Debêntures da Quinta Série, incidirão juros remuneratórios prefixados, a serem fixados na data do Procedimento de Bookbuilding, equivalentes à Taxa DI baseada no preço de ajuste (interpolação) da curva ‘DI x Pré’ equivalente ao contrato futuro com vencimento em 3 de janeiro de 2033, relativa à ‘DI x Pré’, DI verificado na data de realização do Procedimento de Bookbuilding, , acrescidas, exponencialmente, de um determinado spread negativo equivalente a, no máximo, 0,30%. | Sobre o saldo do Valor Nominal Unitário Atualizado das Debêntures da Sexta Série incidirão juros remuneratórios, a serem definidos no Procedimento de Bookbuilding e, em qualquer caso, correspondentes à taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais (“Tesouro IPCA+”), com vencimento em 15 de agosto de 2040, conforme apurada no fechamento do Dia Útil da realização do Procedimento de Bookbuilding, acrescida, exponencialmente, de um determinado spread negativo equivalente a, no máximo, 0,30%.",
         "status_oferta": "Oferta Encerrada",
@@ -6938,13 +6974,22 @@
         "data_processo": "2026-07-10",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 1,30%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/53ce6f0e-e277-47f2-beb2-479b8afac787"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/be92b3ee-979b-4e1c-b82b-45db2d5c37cb"
+          }
+        ]
       },
       {
         "id_requerimento": "27008",
@@ -6961,13 +7006,22 @@
         "data_processo": "2026-07-09",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "Maior entre: (i) NTNB-2029 + 2,15% e IPCA + 10,25% | Maior entre IPCA + 11,75% e NTNB-32 + 3,80%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/029cd6b0-7869-4fc3-bd76-d679b56ab86d"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/30205851-0173-4923-a3d3-17b8c56e6bf4"
+          }
+        ]
       },
       {
         "id_requerimento": "26678",
@@ -6984,13 +7038,54 @@
         "data_processo": "2026-07-07",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "O Valor Nominal Unitário Atualizado das Debêntures da Primeira Série incidirão juros remuneratórios correspondentes a (i) o percentual correspondente à taxa interna de retorno do Tesouro IPCA+, com vencimento em 15 de agosto de 2032, acrescida exponencialmente de spread de 1,00% (um inteiro por cento); e (ii) 9,30% (nove inteiros e trinta centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis.",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/b2408123-9c5d-47b2-9954-309d153faab7"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/519ce1b1-0386-4d34-a19c-92c3a15a00a7"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26678",
+        "banco_id": "BRADESCO",
+        "banco_nome": "Bradesco BBI",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bradescobbi.com.br/",
+        "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+        "dot_color": "bg-rose-600",
+        "devedor": "VALE DO TIJUCO ACUCAR E ALCOOL S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 200000000.0,
+        "data_processo": "2026-07-07",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "O Valor Nominal Unitário Atualizado das Debêntures da Primeira Série incidirão juros remuneratórios correspondentes a (i) o percentual correspondente à taxa interna de retorno do Tesouro IPCA+, com vencimento em 15 de agosto de 2032, acrescida exponencialmente de spread de 1,00% (um inteiro por cento); e (ii) 9,30% (nove inteiros e trinta centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis.",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/b2408123-9c5d-47b2-9954-309d153faab7"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/519ce1b1-0386-4d34-a19c-92c3a15a00a7"
+          }
+        ]
       },
       {
         "id_requerimento": "26743",
@@ -7007,13 +7102,54 @@
         "data_processo": "2026-07-03",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 0,40%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4e08c216-bcc3-43a7-bd2b-27bead9e1e43"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/5c8bb56e-144f-4d84-a906-59673506f9c6"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26743",
+        "banco_id": "ITAU",
+        "banco_nome": "Itaú BBA / Corretora",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
+        "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
+        "dot_color": "bg-orange-500",
+        "devedor": "TRANSMISSORA ALIANÇA DE ENERGIA ELÉTRICA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 1700000000.0,
+        "data_processo": "2026-07-03",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI + 0,40%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4e08c216-bcc3-43a7-bd2b-27bead9e1e43"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/5c8bb56e-144f-4d84-a906-59673506f9c6"
+          }
+        ]
       },
       {
         "id_requerimento": "26834",
@@ -7030,13 +7166,54 @@
         "data_processo": "2026-07-02",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "obre o Valor Nominal Unitário Atualizado das Debêntures incidirão juros remuneratórios correspondentes a determinado percentual, a serem definidos de acordo com o Procedimento de Bookbuilding, e que serão limitados à maior taxa (“Taxa Teto”) entre (i) a taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de maio de 2035, conforme apurada no fechamento do Dia Útil da realização do Procedimento de Bookbuilding; ou (ii) 7,66%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/999ec35e-00d9-4247-a5d8-d2ea62599707"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/1c17be8a-6513-45d0-b4f7-d3090160125a"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "26834",
+        "banco_id": "XP",
+        "banco_nome": "XP Investimentos",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://ofertaspublicas.xpi.com.br/",
+        "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
+        "dot_color": "bg-amber-500",
+        "devedor": "AXIA ENERGIA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 1000000000.0,
+        "data_processo": "2026-07-02",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "obre o Valor Nominal Unitário Atualizado das Debêntures incidirão juros remuneratórios correspondentes a determinado percentual, a serem definidos de acordo com o Procedimento de Bookbuilding, e que serão limitados à maior taxa (“Taxa Teto”) entre (i) a taxa interna de retorno do Tesouro IPCA+ com Juros Semestrais, com vencimento em 15 de maio de 2035, conforme apurada no fechamento do Dia Útil da realização do Procedimento de Bookbuilding; ou (ii) 7,66%",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/999ec35e-00d9-4247-a5d8-d2ea62599707"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/1c17be8a-6513-45d0-b4f7-d3090160125a"
+          }
+        ]
       },
       {
         "id_requerimento": "26814",
@@ -7046,20 +7223,29 @@
         "portal_url": "https://investimentos.btgpactual.com/ofertas-publicas",
         "badge_bg": "bg-blue-50 text-blue-700 border-blue-200",
         "dot_color": "bg-blue-600",
-        "devedor": "CERES SECURITIZADORA S.A.",
-        "emissor_tecnico": null,
+        "devedor": "CERES SECURITIZADORA S",
+        "emissor_tecnico": "CERES SECURITIZADORA S.A.",
         "tipo_ativo": "CRA",
         "valor_total_reais": 800000000.0,
         "data_processo": "2026-07-01",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "105% CDI",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Prospecto Preliminar",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/f3d96e51-8210-4a91-8a72-7fe690938846"
+          },
+          {
+            "nome_documento": "Prospecto Definitivo",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/b6c2bd70-e650-4e76-a4f5-8e140dcd59b4"
+          }
+        ]
       },
       {
         "id_requerimento": "26708",
@@ -7076,13 +7262,22 @@
         "data_processo": "2026-07-01",
         "data_vencimento": null,
         "data_liquidacao": null,
-        "taxas_indicativas": null,
+        "taxas_indicativas": "CDI + 1,60%",
         "status_oferta": "Oferta Encerrada",
         "fase_oferta": "CONCLUIDA_RECENTE",
         "fase_label": "Distribuída Recentemente",
         "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
-        "documentos": []
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/0dd9f5e6-91ed-4f7a-86ee-ce3ead1141bd"
+          },
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2cdf2539-b7e5-444d-872e-c88d01a05bab"
+          }
+        ]
       },
       {
         "id_requerimento": "25705",
@@ -7113,10 +7308,10 @@
         {
           "banco_id": "ITAU",
           "banco_nome": "Itaú BBA / Corretora",
-          "volume_bi": 50.66,
-          "total_ofertas": 67,
-          "ofertas_ativas": 4,
-          "share_pct": 29.4,
+          "volume_bi": 52.4,
+          "total_ofertas": 69,
+          "ofertas_ativas": 5,
+          "share_pct": 29.9,
           "cor": "#EC7000",
           "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
           "dot_color": "bg-orange-500"
@@ -7124,10 +7319,10 @@
         {
           "banco_id": "BRADESCO",
           "banco_nome": "Bradesco BBI",
-          "volume_bi": 41.39,
-          "total_ofertas": 42,
+          "volume_bi": 41.59,
+          "total_ofertas": 43,
           "ofertas_ativas": 3,
-          "share_pct": 24.0,
+          "share_pct": 23.7,
           "cor": "#CC092F",
           "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
           "dot_color": "bg-rose-600"
@@ -7138,7 +7333,7 @@
           "volume_bi": 25.51,
           "total_ofertas": 24,
           "ofertas_ativas": 1,
-          "share_pct": 14.8,
+          "share_pct": 14.6,
           "cor": "#0284C7",
           "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
           "dot_color": "bg-yellow-500"
@@ -7149,7 +7344,7 @@
           "volume_bi": 19.5,
           "total_ofertas": 18,
           "ofertas_ativas": 1,
-          "share_pct": 11.3,
+          "share_pct": 11.1,
           "cor": "#001E62",
           "badge_bg": "bg-blue-50 text-blue-700 border-blue-200",
           "dot_color": "bg-blue-600"
@@ -7157,10 +7352,10 @@
         {
           "banco_id": "XP",
           "banco_nome": "XP Investimentos",
-          "volume_bi": 16.48,
-          "total_ofertas": 26,
+          "volume_bi": 17.48,
+          "total_ofertas": 27,
           "ofertas_ativas": 2,
-          "share_pct": 9.6,
+          "share_pct": 10.0,
           "cor": "#D97706",
           "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
           "dot_color": "bg-amber-500"
@@ -7171,7 +7366,7 @@
           "volume_bi": 13.89,
           "total_ofertas": 22,
           "ofertas_ativas": 2,
-          "share_pct": 8.1,
+          "share_pct": 7.9,
           "cor": "#EC0000",
           "badge_bg": "bg-red-50 text-red-700 border-red-200",
           "dot_color": "bg-red-600"
@@ -7181,14 +7376,14 @@
           "banco_nome": "Banco Safra",
           "volume_bi": 4.84,
           "total_ofertas": 8,
-          "ofertas_ativas": 2,
+          "ofertas_ativas": 1,
           "share_pct": 2.8,
           "cor": "#4F46E5",
           "badge_bg": "bg-indigo-50 text-indigo-700 border-indigo-200",
           "dot_color": "bg-indigo-600"
         }
       ],
-      "volume_total_esteira_bi": 172.27,
+      "volume_total_esteira_bi": 175.21,
       "series_anuais": [
         {
           "periodo": "2023",
@@ -7256,8 +7451,8 @@
         {
           "periodo": "2026",
           "label": "2026",
-          "total_bi": 290.33,
-          "Itaú BBA": 72.9,
+          "total_bi": 290.37,
+          "Itaú BBA": 72.94,
           "Itaú BBA_share": 25.1,
           "Bradesco BBI": 46.16,
           "Bradesco BBI_share": 15.9,
@@ -7594,11 +7789,11 @@
         {
           "periodo": "2026-T4",
           "label": "2026 T4",
-          "total_bi": 19.56,
-          "Itaú BBA": 4.92,
-          "Itaú BBA_share": 25.2,
+          "total_bi": 19.6,
+          "Itaú BBA": 4.96,
+          "Itaú BBA_share": 25.3,
           "Bradesco BBI": 2.3,
-          "Bradesco BBI_share": 11.8,
+          "Bradesco BBI_share": 11.7,
           "BTG Pactual": 1.87,
           "BTG Pactual_share": 9.5,
           "XP Investimentos": 1.0,
@@ -7658,6 +7853,88 @@
     }
   },
   "ofertas_em_andamento": [
+    {
+      "id_requerimento": "28577",
+      "numero_processo": "SRE/3580/2026",
+      "numero_registro": "",
+      "tipo_ativo": "DEB",
+      "nome_valor_mobiliario": "Debêntures",
+      "status_oferta": "Aguardando Bookbuilding",
+      "nome_emissor": "ALBIOMA ESPLANADA ENERGIA S.A",
+      "cnpj_emissor": "29915125000123",
+      "nome_devedor_real": "ALBIOMA ESPLANADA ENERGIA S.A",
+      "cnpj_devedor_real": "29915125000123",
+      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
+      "cnpj_coordenador_lider": "04845753000159",
+      "valor_total_reais": 40000000.0,
+      "data_processo": "2026-11-03",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28577_45689",
+          "descricao_serie": "Debêntures",
+          "volume_serie_reais": 40000000.0,
+          "quantidade_ativos": 40000.0,
+          "pu_nominal": 1000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_maxima": "IPCA + 7,55%",
+          "taxa_remuneracao_final": "",
+          "data_emissao": "2026-10-30",
+          "data_vencimento": "2034-12-15",
+          "forma_amortizacao": "Amortização customizada, conforme definido na Escritura de Emissão.",
+          "avaliacao_risco": null,
+          "isin": "BRALBODBS003",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-11-03",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/349175e0-504a-41cb-bfc7-243854b3c715"
+        }
+      ],
+      "participantes": [
+        {
+          "tipo_participante": "COORDENADOR",
+          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
+          "cnpj": "04845753000159"
+        },
+        {
+          "tipo_participante": "OFERTANTE",
+          "razao_social": "ALBIOMA ESPLANADA ENERGIA S.A",
+          "cnpj": "29915125000123"
+        },
+        {
+          "tipo_participante": "REQUERENTE",
+          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
+          "cnpj": "04845753000159"
+        },
+        {
+          "tipo_participante": "EMISSOR",
+          "razao_social": "ALBIOMA ESPLANADA ENERGIA S.A",
+          "cnpj": "29915125000123"
+        }
+      ],
+      "ativo_secundario": null,
+      "sindicato_distribuicao": [
+        {
+          "banco_id": "ITAU",
+          "banco_nome": "Itaú BBA / Corretora",
+          "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
+          "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
+          "dot_color": "bg-orange-500",
+          "papel": "Coordenador Líder",
+          "is_lead": true,
+          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A"
+        }
+      ]
+    },
     {
       "id_requerimento": "28428",
       "numero_processo": "SRE/3554/2026",
@@ -7744,93 +8021,6 @@
       ],
       "ativo_secundario": null,
       "sindicato_distribuicao": []
-    },
-    {
-      "id_requerimento": "28480",
-      "numero_processo": "SRE/3483/2026",
-      "numero_registro": "",
-      "tipo_ativo": "DEB",
-      "nome_valor_mobiliario": "Debêntures",
-      "status_oferta": "Aguardando Bookbuilding",
-      "nome_emissor": "INPASA AGROINDUSTRIAL S.A.",
-      "cnpj_emissor": "29316596000115",
-      "nome_devedor_real": "INPASA AGROINDUSTRIAL S.A.",
-      "cnpj_devedor_real": "29316596000115",
-      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-      "cnpj_coordenador_lider": "04845753000159",
-      "valor_total_reais": 300000000.0,
-      "data_processo": "2026-10-26",
-      "data_liquidacao_doc": null,
-      "data_vencimento_doc": null,
-      "possui_book": 0,
-      "resumo_oferta": "OFERTA PÚBLICA DE DISTRIBUIÇÃO DE DEBÊNTURES SIMPLES, NÃO CONVERSÍVEIS EM AÇÕES, DA ESPÉCIE QUIROGRAFÁRIA, COM GARANTIA ADICIONAL FIDEJUSSÓRIA, DA 8ª (OITAVA) EMISSÃO, EM SÉRIE ÚNICA, PARA DISTRIBUIÇÃO PÚBLICA, SOB O RITO DE REGISTRO AUTOMÁTICO DE DISTRIBUIÇÃO, DA INPASA BRASIL S.A.",
-      "matched_ticker": null,
-      "matched_isin": null,
-      "series": [
-        {
-          "id_serie": "28480_45569",
-          "descricao_serie": "Série Única",
-          "volume_serie_reais": 300000000.0,
-          "quantidade_ativos": 300000.0,
-          "pu_nominal": 1000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_maxima": "Sobre o Valor Nominal Unitário Atualizado das Debêntures incidirão juros remuneratórios equivalentes à taxa interna de retorno do Tesouro IPCA + (nova denominação da Nota do Tesouro Nacional, Série B –NTN-B), com vencimento em 15 de maio de 2031, a ser apurada conforme as taxas divulgadas pela ANBIMA no fechamento do Dia Útil da realização do Procedimento de Coleta de Intenções de Investimento, acrescida exponencialmente de spread negativo de 0,30% (trinta centésimos por cento),(duzentos e cinquenta e dois) Dias Úteis",
-          "taxa_remuneracao_final": "Não",
-          "data_emissao": "2026-10-23",
-          "data_vencimento": "2032-10-15",
-          "forma_amortizacao": "O Valor Nominal Unitário Atualizado das Debêntures será amortizado anualmente, sendo o primeiro pagamento devido em 15 de outubro de 2030 e o último pagamento, na Data de Vencimento",
-          "avaliacao_risco": null,
-          "isin": "BRINPSDBS078",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Aviso ao Mercado",
-          "data_publicacao": "2026-10-26",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/fd0a1018-a369-496a-b7b0-31727ab12c39"
-        },
-        {
-          "nome_documento": "Comunicado ao Mercado",
-          "data_publicacao": "2026-10-28",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7337a3e2-2d3a-4aaa-95b8-aa218bcfa3cc"
-        }
-      ],
-      "participantes": [
-        {
-          "tipo_participante": "COORDENADOR",
-          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-          "cnpj": "04845753000159"
-        },
-        {
-          "tipo_participante": "OFERTANTE",
-          "razao_social": "INPASA AGROINDUSTRIAL S.A.",
-          "cnpj": "29316596000115"
-        },
-        {
-          "tipo_participante": "REQUERENTE",
-          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-          "cnpj": "04845753000159"
-        },
-        {
-          "tipo_participante": "EMISSOR",
-          "razao_social": "INPASA AGROINDUSTRIAL S.A.",
-          "cnpj": "29316596000115"
-        }
-      ],
-      "ativo_secundario": null,
-      "sindicato_distribuicao": [
-        {
-          "banco_id": "ITAU",
-          "banco_nome": "Itaú BBA / Corretora",
-          "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-          "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-          "dot_color": "bg-orange-500",
-          "papel": "Coordenador Líder",
-          "is_lead": true,
-          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A"
-        }
-      ]
     },
     {
       "id_requerimento": "28435",
@@ -9179,6 +9369,54 @@
       "ativo_secundario": null
     },
     {
+      "id_requerimento": "28480",
+      "numero_processo": "SRE/3483/2026",
+      "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/505",
+      "tipo_ativo": "DEB",
+      "nome_valor_mobiliario": "Debêntures",
+      "status_oferta": "Registro Concedido",
+      "nome_emissor": "INPASA AGROINDUSTRIAL S.A.",
+      "cnpj_emissor": "29316596000115",
+      "nome_devedor_real": "INPASA AGROINDUSTRIAL S.A.",
+      "cnpj_devedor_real": "29316596000115",
+      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
+      "cnpj_coordenador_lider": "04845753000159",
+      "valor_total_reais": 300000000.0,
+      "data_processo": "2026-10-26",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 1,
+      "resumo_oferta": "OFERTA PÚBLICA DE DISTRIBUIÇÃO DE DEBÊNTURES SIMPLES, NÃO CONVERSÍVEIS EM AÇÕES, DA ESPÉCIE QUIROGRAFÁRIA, COM GARANTIA ADICIONAL FIDEJUSSÓRIA, DA 8ª (OITAVA) EMISSÃO, EM SÉRIE ÚNICA, PARA DISTRIBUIÇÃO PÚBLICA, SOB O RITO DE REGISTRO AUTOMÁTICO DE DISTRIBUIÇÃO, DA INPASA BRASIL S.A.",
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28480_45569",
+          "descricao_serie": "Série Única",
+          "volume_serie_reais": 300000000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "Não",
+          "data_vencimento": "2032-10-15",
+          "avaliacao_risco": null,
+          "isin": "BRINPSDBS078",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-10-26",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/fd0a1018-a369-496a-b7b0-31727ab12c39"
+        },
+        {
+          "nome_documento": "Comunicado ao Mercado",
+          "data_publicacao": "2026-10-28",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7337a3e2-2d3a-4aaa-95b8-aa218bcfa3cc"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
       "id_requerimento": "28451",
       "numero_processo": "SRE/3461/2026",
       "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/678;CVM/SRE/AUT/CRI/PRI/2026/679",
@@ -9788,6 +10026,49 @@
       "ativo_secundario": null
     },
     {
+      "id_requerimento": "28391",
+      "numero_processo": "SRE/3411/2026",
+      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/673",
+      "tipo_ativo": "CRI",
+      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
+      "status_oferta": "Oferta Encerrada",
+      "nome_emissor": "OPEA SECURITIZADORA S.A.",
+      "cnpj_emissor": "02773542000122",
+      "nome_devedor_real": null,
+      "cnpj_devedor_real": null,
+      "nome_coordenador_lider": "BANCO SAFRA S/A",
+      "cnpj_coordenador_lider": "58160789000128",
+      "valor_total_reais": 70000000.0,
+      "data_processo": "2026-10-20",
+      "data_liquidacao_doc": "2026-10-21",
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28391_45437",
+          "descricao_serie": "Certificado de Recebíveis Imobiliários",
+          "volume_serie_reais": 70000000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2038-09-29",
+          "avaliacao_risco": null,
+          "isin": "BRRBRACIR572",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Anúncio de Início da Distribuição",
+          "data_publicacao": "2026-10-20",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/636c7941-6b69-436f-b755-4851331d5f50"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
       "id_requerimento": "28405",
       "numero_processo": "SRE/3417/2026",
       "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/498",
@@ -9826,49 +10107,6 @@
           "nome_documento": "Aviso ao Mercado",
           "data_publicacao": "2026-10-20",
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/89bbb8b9-c8b6-49f5-b05a-d50427c83633"
-        }
-      ],
-      "ativo_secundario": null
-    },
-    {
-      "id_requerimento": "28391",
-      "numero_processo": "SRE/3411/2026",
-      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/673",
-      "tipo_ativo": "CRI",
-      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
-      "status_oferta": "Registro Concedido",
-      "nome_emissor": "OPEA SECURITIZADORA S.A.",
-      "cnpj_emissor": "02773542000122",
-      "nome_devedor_real": null,
-      "cnpj_devedor_real": null,
-      "nome_coordenador_lider": "BANCO SAFRA S/A",
-      "cnpj_coordenador_lider": "58160789000128",
-      "valor_total_reais": 70000000.0,
-      "data_processo": "2026-10-20",
-      "data_liquidacao_doc": "2026-10-21",
-      "data_vencimento_doc": null,
-      "possui_book": 0,
-      "resumo_oferta": null,
-      "matched_ticker": null,
-      "matched_isin": null,
-      "series": [
-        {
-          "id_serie": "28391_45437",
-          "descricao_serie": "Certificado de Recebíveis Imobiliários",
-          "volume_serie_reais": 70000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2038-09-29",
-          "avaliacao_risco": null,
-          "isin": "BRRBRACIR572",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-10-20",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/636c7941-6b69-436f-b755-4851331d5f50"
         }
       ],
       "ativo_secundario": null
@@ -22878,84 +23116,6 @@
       "ativo_secundario": {
         "ticker": "EGTI12",
         "isin": "BREGTIDBS017"
-      }
-    },
-    {
-      "id_requerimento": "27270",
-      "numero_processo": "SRE/2374/2026",
-      "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/390;CVM/SRE/AUT/DEB/PRI/2026/391;CVM/SRE/AUT/DEB/PRI/2026/392",
-      "tipo_ativo": "DEB",
-      "nome_valor_mobiliario": "Debêntures",
-      "status_oferta": "Oferta Encerrada",
-      "nome_emissor": "SMARTFIT ESCOLA DE GINÁSTICA E DANÇA S.A.",
-      "cnpj_emissor": "07594978000178",
-      "nome_devedor_real": "SMARTFIT ESCOLA DE GINÁSTICA E DANÇA S.A.",
-      "cnpj_devedor_real": "07594978000178",
-      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-      "cnpj_coordenador_lider": "04845753000159",
-      "valor_total_reais": 1198000000.0,
-      "data_processo": "2026-08-14",
-      "data_liquidacao_doc": "2026-08-20",
-      "data_vencimento_doc": null,
-      "possui_book": 1,
-      "resumo_oferta": null,
-      "matched_ticker": "SMFTB5",
-      "matched_isin": "BRSMFTDBS0L4",
-      "series": [
-        {
-          "id_serie": "27270_43766",
-          "descricao_serie": "1ª Série",
-          "volume_serie_reais": 1250000000.0,
-          "book_taxa": "DI + 0,65% a.a.",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2031-08-19",
-          "avaliacao_risco": null,
-          "isin": "BRSMFTDBS0K6",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27270_43767",
-          "descricao_serie": "Série 2",
-          "volume_serie_reais": 1250000000.0,
-          "book_taxa": "DI + 0,75% a.a.",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2033-08-20",
-          "avaliacao_risco": null,
-          "isin": "BRSMFTDBS0L4",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27270_43768",
-          "descricao_serie": "3ª Série",
-          "volume_serie_reais": 1250000000.0,
-          "book_taxa": "DI + 1,05% a.a.",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2036-08-20",
-          "avaliacao_risco": null,
-          "isin": "BRSMFTDBS0M2",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Aviso ao Mercado",
-          "data_publicacao": "2026-07-27",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/bc94b7f9-8157-41c7-9cac-146f368a1a69"
-        },
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-08-14",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2ba42310-9188-4713-a53c-aa958bb59f82"
-        },
-        {
-          "nome_documento": "Comunicado ao Mercado",
-          "data_publicacao": "2026-08-13",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/a9e47296-464d-495b-9581-155145e1ddca"
-        }
-      ],
-      "ativo_secundario": {
-        "ticker": "SMFTB5",
-        "isin": "BRSMFTDBS0L4"
       }
     }
   ]
