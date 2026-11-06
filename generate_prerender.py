@@ -1659,11 +1659,13 @@ def render_home_page():
         base_template
     )
 
-    for out_p in ("docs/index.html", "public/index.html"):
-        os.makedirs(os.path.dirname(out_p), exist_ok=True)
+    for out_p in ("docs/index.html", "public/index.html", "index.html"):
+        p_dir = os.path.dirname(out_p)
+        if p_dir:
+            os.makedirs(p_dir, exist_ok=True)
         with open(out_p, "w", encoding="utf-8") as f:
             f.write(new_html)
-    print("   ✅ Home Page estática gerada com sucesso em docs/index.html e public/index.html!", flush=True)
+    print("   ✅ Home Page estática gerada com sucesso em index.html, docs/index.html e public/index.html!", flush=True)
 
 def prune_orphaned_assets(valid_tickers: set):
     print("🧹 Verificando e podando diretórios órfãos e inválidos...")
