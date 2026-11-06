@@ -155,6 +155,8 @@ def main():
         "/calculadora/",
         "/agenda/",
         "/comparar/",
+        "/metodologia/",
+        "/sobre/",
     ]
 
     def make_urls(tickers, changefreq, priority, lm):

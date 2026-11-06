@@ -32,6 +32,18 @@ def is_valid_ticker(ticker: str) -> bool:
         return False
     return True
 
+def format_currency(val) -> str:
+    try:
+        num = float(val)
+        if num >= 1e9:
+            return f"R$ {num / 1e9:.2f} Bi"
+        if num >= 1e6:
+            return f"R$ {num / 1e6:.2f} Mi"
+        if num >= 1e3:
+            return f"R$ {num / 1e3:.2f} Mil"
+        return f"R$ {num:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+    except:
+        return "R$ 0,00"
 
 def normalize_rating(val):
     if not val or not isinstance(val, str):
@@ -221,16 +233,54 @@ EMITTERS_MAP = None
 PRICES_MAP = None
 PAYMENTS_MAP = None
 DOCS_MAP = None
+EMITTER_ASSETS_MAP = None
+SECTOR_ASSETS_MAP = None
 
-def init_maps():
-    global EMITTERS_MAP, PRICES_MAP, PAYMENTS_MAP, DOCS_MAP
+def init_maps(df=None):
+    global EMITTERS_MAP, PRICES_MAP, PAYMENTS_MAP, DOCS_MAP, EMITTER_ASSETS_MAP, SECTOR_ASSETS_MAP
     if EMITTERS_MAP is None:
         print("📊 Carregando bases analíticas em memória...")
         EMITTERS_MAP = get_emitters_map()
         PRICES_MAP = get_prices_map()
         PAYMENTS_MAP = get_payments_map()
         DOCS_MAP = get_docs_map()
-        print("✅ Bases analíticas carregadas!")
+        
+        if df is None:
+            df = get_assets()
+        
+        print("🔗 Construindo índices de interlinking (emissor e setor)...")
+        EMITTER_ASSETS_MAP = {}
+        SECTOR_ASSETS_MAP = {}
+        for _, r in df.iterrows():
+            t = str(r.get('ticker', '')).strip()
+            if not is_valid_ticker(t):
+                continue
+            iss = str(r.get('issuer', '')).strip()
+            iss_key = iss.lower()
+            cnpj = str(r.get('cnpj_emissor', '')).strip()
+            setor = str(r.get('setor', '')).strip()
+            tipo = str(r.get('tipo', 'Título')).strip()
+            venc = str(r.get('vencimento', '')).strip()
+            item = {
+                'ticker': t,
+                'tipo': tipo,
+                'issuer': iss,
+                'vencimento': venc if venc and venc.lower() not in ('nan', 'none') else '-'
+            }
+            if iss_key and iss_key not in ('nan', 'none', ''):
+                if iss_key not in EMITTER_ASSETS_MAP:
+                    EMITTER_ASSETS_MAP[iss_key] = []
+                EMITTER_ASSETS_MAP[iss_key].append(item)
+            if cnpj and cnpj not in ('nan', 'none', '', '-'):
+                if cnpj not in EMITTER_ASSETS_MAP:
+                    EMITTER_ASSETS_MAP[cnpj] = []
+                EMITTER_ASSETS_MAP[cnpj].append(item)
+            if setor and setor not in ('nan', 'none', '', '-'):
+                if setor not in SECTOR_ASSETS_MAP:
+                    SECTOR_ASSETS_MAP[setor] = []
+                SECTOR_ASSETS_MAP[setor].append(item)
+                
+        print("✅ Bases analíticas e índices de interlinking carregados!")
 
 def generate_asset_html(row):
     if EMITTERS_MAP is None:
@@ -754,6 +804,127 @@ def generate_asset_html(row):
         </div>
         """
 
+    # Bloco de Títulos Relacionados (Internal Linking & Crawl Graph)
+    related_same_issuer = []
+    iss_key = issuer.lower().strip()
+    cnpj = str(row.get('cnpj_emissor', '')).strip()
+    seen_rel = {ticker.upper()}
+
+    candidates_issuer = []
+    if EMITTER_ASSETS_MAP:
+        if iss_key in EMITTER_ASSETS_MAP:
+            candidates_issuer.extend(EMITTER_ASSETS_MAP[iss_key])
+        if cnpj and cnpj in EMITTER_ASSETS_MAP:
+            candidates_issuer.extend(EMITTER_ASSETS_MAP[cnpj])
+
+    for item in candidates_issuer:
+        tk = item['ticker'].upper()
+        if tk not in seen_rel:
+            seen_rel.add(tk)
+            related_same_issuer.append(item)
+            if len(related_same_issuer) >= 4:
+                break
+
+    related_same_sector = []
+    if SECTOR_ASSETS_MAP and setor and setor in SECTOR_ASSETS_MAP:
+        for item in SECTOR_ASSETS_MAP[setor]:
+            tk = item['ticker'].upper()
+            if tk not in seen_rel:
+                seen_rel.add(tk)
+                related_same_sector.append(item)
+                if len(related_same_sector) >= 4:
+                    break
+
+    related_issuer_cards = ""
+    if related_same_issuer:
+        cards_html = "".join([
+            f"""<a href="/asset/{it['ticker'].lower()}/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">{it['ticker']}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{it['tipo']}</span>
+                </div>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">{it['issuer']}</p>
+              </div>
+              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
+                <span>Venc: <strong class="text-slate-800">{it['vencimento']}</strong></span>
+                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
+              </div>
+            </a>""" for it in related_same_issuer
+        ])
+        related_issuer_cards = f"""
+        <div class="space-y-2.5">
+          <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            <span>Outros Títulos Emitidos por {issuer}</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">{len(related_same_issuer)} papéis</span>
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {cards_html}
+          </div>
+        </div>
+        """
+
+    related_sector_cards = ""
+    if related_same_sector:
+        cards_html = "".join([
+            f"""<a href="/asset/{it['ticker'].lower()}/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">{it['ticker']}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">{it['tipo']}</span>
+                </div>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">{it['issuer']}</p>
+              </div>
+              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
+                <span>Venc: <strong class="text-slate-800">{it['vencimento']}</strong></span>
+                <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
+              </div>
+            </a>""" for it in related_same_sector
+        ])
+        related_sector_cards = f"""
+        <div class="space-y-2.5">
+          <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            <span>Títulos Semelhantes no Setor ({setor})</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">{len(related_same_sector)} papéis</span>
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {cards_html}
+          </div>
+        </div>
+        """
+
+    related_assets_section_html = f"""
+    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
+      <div class="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div>
+          <h3 class="text-lg font-black text-slate-900">Títulos Relacionados & Mercado Secundário</h3>
+          <p class="text-xs text-slate-500">Explore emissões da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-semibold">
+          <a href="/negocios/" class="text-blue-600 hover:underline">Negócios B3</a>
+          <span class="text-slate-300">•</span>
+          <a href="/comparar/" class="text-blue-600 hover:underline">Comparador</a>
+          <span class="text-slate-300">•</span>
+          <a href="/metodologia/" class="text-blue-600 hover:underline">Metodologia</a>
+        </div>
+      </div>
+      {related_issuer_cards}
+      {related_sector_cards}
+      <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+        <a href="/" class="text-blue-600 font-bold hover:underline flex items-center gap-1">
+          <span>← Voltar à Página Inicial / Buscar Mais Ativos</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
+          <span>•</span>
+          <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X de Emissores</a>
+          <span>•</span>
+          <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
+        </div>
+      </div>
+    </div>
+    """
+
     html_content = f"""<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -974,6 +1145,8 @@ def generate_asset_html(row):
 
         {payments_section_html}
 
+        {related_assets_section_html}
+
         <p class="text-xs text-slate-400 text-center">
           Dados fornecidos por ANBIMA, CVM e B3 através do FIXDATA. Cotações e preços históricos sujeitos à liquidez do mercado secundário.
         </p>
@@ -1127,6 +1300,22 @@ STATIC_PAGES_META = [
         "h1": "Comparador de Ativos de Crédito Privado",
         "lead": "Análise quantitativa direta entre dois papéis de renda fixa corporativa para tomada de decisão técnica fundamentada.",
     },
+    {
+        "slug": "metodologia",
+        "title": "Metodologia, Fontes de Dados e Rigor Quantitativo | FIXDATA",
+        "description": "Metodologia matemática, convenção DU/252, modelo Svensson da curva NTN-B, índices de solvência Altman Z'' e ICR, e governança de dados oficiais ANBIMA, B3 e CVM.",
+        "keywords": "metodologia renda fixa, du 252 anbima, modelo svensson ntn-b, altman z score credito privado, icr cobertura de juros, fontes dados cvm b3",
+        "h1": "Metodologia & Transparência de Dados",
+        "lead": "Fundamentos quantitativos, convenções financeiras e fontes oficiais de dados do FIXDATA para análise de crédito privado brasileiro.",
+    },
+    {
+        "slug": "sobre",
+        "title": "Sobre o FIXDATA | Quem Somos, Missão e Governança",
+        "description": "Conheça o FIXDATA, infraestrutura analítica independente criada por Leonardo Contador Neves para democratizar dados de Debêntures, CRIs e CRAs no Brasil.",
+        "keywords": "sobre fixdata, quem somos, leonardo contador neves, crédito privado brasil, governança de dados",
+        "h1": "Sobre o FIXDATA",
+        "lead": "Infraestrutura analítica independente que traz transparência, rigor matemático e dados abertos para o mercado de Renda Fixa no Brasil.",
+    },
 ]
 
 def render_static_pages():
@@ -1210,6 +1399,272 @@ def render_static_pages():
                 f.write(html)
         print(f"   ✅ /{slug}/ gerada em public/ e docs/", flush=True)
 
+def render_home_page():
+    print("🏠 Gerando Home Page pré-renderizada com links estáticos dos 50 ativos mais líquidos...", flush=True)
+    # 1. Carrega dados de mercado
+    market_kpis_file = "public/data/b3_market_kpis.json"
+    kpis = {}
+    if os.path.exists(market_kpis_file):
+        try:
+            with open(market_kpis_file, "r", encoding="utf-8") as f:
+                kpis = json.load(f)
+        except Exception as e:
+            print(f"Aviso ao carregar market KPIs: {e}")
+
+    ult = kpis.get("ultimo_pregao", {})
+    vol_dia = format_currency(ult.get("volume_financeiro", 0))
+    trades_dia = f"{ult.get('total_trades', 0):,}".replace(",", ".")
+    ativos_dia = f"{ult.get('ativos_negociados', 0):,}".replace(",", ".")
+    dt_dia = ult.get("data", "")
+    
+    # 2. Carrega Top 50 ativos mais negociados na B3
+    top_50 = []
+    trades_recent_file = "public/data/b3_trades_recent.csv"
+    if os.path.exists(trades_recent_file):
+        try:
+            df_rec = pd.read_csv(trades_recent_file)
+            top_df = df_rec.groupby(['ticker', 'tipo', 'devedor']).agg({
+                'volume_financeiro': 'sum',
+                'qtd_negocios': 'sum',
+                'data_negocio': 'max'
+            }).reset_index().sort_values(by='volume_financeiro', ascending=False).head(50)
+            top_50 = top_df.to_dict(orient='records')
+        except Exception as e:
+            print(f"Aviso ao carregar top trades: {e}")
+
+    if not top_50:
+        top_50 = ult.get("top_ativos", [])
+
+    rows_html = []
+    for it in top_50:
+        tk = str(it.get('ticker', '')).strip()
+        if not is_valid_ticker(tk):
+            continue
+        tipo = str(it.get('tipo', 'Título')).strip()
+        devedor = str(it.get('devedor', '')).strip()
+        vol = format_currency(it.get('volume_financeiro', 0))
+        qtd = it.get('qtd_negocios', 1)
+        
+        tipo_badge_class = "bg-blue-100 text-blue-800" if "deb" in tipo.lower() else "bg-emerald-100 text-emerald-800"
+        
+        rows_html.append(f"""
+        <tr class="border-b border-slate-100 hover:bg-slate-50/80 transition-colors">
+          <td class="py-3 px-4 font-mono font-black text-sm">
+            <a href="/asset/{tk.lower()}/" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1.5">
+              <span>{tk}</span>
+            </a>
+          </td>
+          <td class="py-3 px-4">
+            <span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold {tipo_badge_class}">
+              {tipo}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-xs font-medium text-slate-700 max-w-xs truncate" title="{devedor}">
+            {devedor}
+          </td>
+          <td class="py-3 px-4 text-right font-mono font-bold text-slate-900 text-xs sm:text-sm">
+            {vol}
+          </td>
+          <td class="py-3 px-4 text-right font-mono text-xs text-slate-500">
+            {qtd}
+          </td>
+          <td class="py-3 px-4 text-center">
+            <a href="/asset/{tk.lower()}/" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 transition">
+              Raio-X →
+            </a>
+          </td>
+        </tr>""")
+
+    table_rows = "".join(rows_html)
+
+    home_body_html = f"""
+      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+        <div class="container mx-auto px-4">
+          <div class="flex justify-between items-center h-16">
+            <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
+              <div class="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-sm sm:text-base shadow-xs hover:bg-blue-700 transition">
+                FIX<span class="text-blue-200 font-extrabold">DATA</span>
+              </div>
+            </a>
+            <div class="hidden md:flex items-center gap-4 text-xs font-bold text-slate-600">
+              <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
+              <a href="/charts/" class="hover:text-blue-600 transition">Dashboard Secundário</a>
+              <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
+              <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X do Devedor</a>
+              <a href="/agenda/" class="hover:text-blue-600 transition">Agenda de Pagamentos</a>
+              <a href="/calculadora/" class="hover:text-blue-600 transition">Calculadora</a>
+              <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
+              <a href="/sobre/" class="hover:text-blue-600 transition">Sobre</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container mx-auto px-4 py-8 space-y-10">
+        <!-- Hero Section Institucional -->
+        <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-8 md:p-12 text-white shadow-xl border border-slate-800">
+          <div class="relative z-10 max-w-3xl space-y-4">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-semibold uppercase tracking-wider">
+              Plataforma Aberta de Renda Fixa e Mercado Secundário
+            </div>
+            <h1 class="text-3xl md:text-5xl font-black tracking-tight text-white leading-tight">
+              Inteligência de Mercado para Debêntures, CRIs e CRAs
+            </h1>
+            <p class="text-slate-300 text-base md:text-lg leading-relaxed font-normal">
+              Acompanhe cotações em tempo real, taxas indicativas ANBIMA, spreads sobre a curva NTN-B, volume diário da B3, ratings e solvência de mais de 16.000 títulos corporativos brasileiros.
+            </p>
+          </div>
+        </div>
+
+        <!-- KPIs de Mercado -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <span class="text-xs font-bold text-slate-400 uppercase">Volume B3 (Último Pregão)</span>
+            <p class="text-2xl font-black text-slate-900">{vol_dia}</p>
+            <span class="text-[11px] text-slate-500">Data de referência: {dt_dia}</span>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <span class="text-xs font-bold text-slate-400 uppercase">Total de Negócios</span>
+            <p class="text-2xl font-black text-blue-600">{trades_dia}</p>
+            <span class="text-[11px] text-slate-500">Operações secundárias registradas</span>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <span class="text-xs font-bold text-slate-400 uppercase">Ativos Negociados</span>
+            <p class="text-2xl font-black text-emerald-600">{ativos_dia}</p>
+            <span class="text-[11px] text-slate-500">Títulos com liquidez no pregão</span>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <span class="text-xs font-bold text-slate-400 uppercase">Universo Monitorado</span>
+            <p class="text-2xl font-black text-purple-600">15.747</p>
+            <span class="text-[11px] text-slate-500">Debêntures, CRIs e CRAs CVM</span>
+          </div>
+        </div>
+
+        <!-- Tabela Estática com Top 50 Ativos Mais Negociados -->
+        <section class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-xl md:text-2xl font-black text-slate-900">Títulos Mais Negociados no Mercado Secundário B3</h2>
+              <p class="text-xs sm:text-sm text-slate-500">Papéis com maior volume financeiro e liquidez transacionados no mercado secundário brasileiro.</p>
+            </div>
+            <a href="/negocios/" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition">
+              Ver Todos os Negócios B3 →
+            </a>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase">
+                  <th class="py-2.5 px-4">Ticker</th>
+                  <th class="py-2.5 px-4">Tipo</th>
+                  <th class="py-2.5 px-4">Devedor / Emissor</th>
+                  <th class="py-2.5 px-4 text-right">Volume B3</th>
+                  <th class="py-2.5 px-4 text-right">Negócios</th>
+                  <th class="py-2.5 px-4 text-center">Ação</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                {table_rows}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Seções Analíticas e Ferramentas -->
+        <section class="space-y-4">
+          <h2 class="text-xl md:text-2xl font-black text-slate-900">Módulos Analíticos do FIXDATA</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <a href="/negocios/" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 hover:shadow-md transition group space-y-2">
+              <span class="text-xs font-bold text-blue-600 uppercase">Módulo 1</span>
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">Mercado Secundário B3</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Acompanhe negócios diários, taxa média ponderada (VWAP), dispersão de PU e volume transacionado.</p>
+            </a>
+            <a href="/ntnb/" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 hover:shadow-md transition group space-y-2">
+              <span class="text-xs font-bold text-blue-600 uppercase">Módulo 2</span>
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">Estrutura a Termo da NTN-B</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Curva de juros real do Tesouro IPCA+, modelo Nelson-Siegel-Svensson e spreads de crédito privado.</p>
+            </a>
+            <a href="/raiox-devedor/" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 hover:shadow-md transition group space-y-2">
+              <span class="text-xs font-bold text-blue-600 uppercase">Módulo 3</span>
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">Raio-X de Solvência CVM</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Demonstrações contábeis DFP/ITR, modelo Altman Z'', índice de cobertura de juros (ICR) e alavancagem.</p>
+            </a>
+            <a href="/agenda/" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 hover:shadow-md transition group space-y-2">
+              <span class="text-xs font-bold text-blue-600 uppercase">Módulo 4</span>
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">Agenda de Proventos & Cupons</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Cronograma consolidado de pagamentos de juros, prêmios e amortizações para os próximos 12 meses.</p>
+            </a>
+            <a href="/calculadora/" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 hover:shadow-md transition group space-y-2">
+              <span class="text-xs font-bold text-blue-600 uppercase">Módulo 5</span>
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">Calculadora de Equivalência</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Simulação de gross-up e equivalência fiscal de títulos isentos (Lei 12.431) contra CDI e tributados.</p>
+            </a>
+            <a href="/metodologia/" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 hover:shadow-md transition group space-y-2">
+              <span class="text-xs font-bold text-blue-600 uppercase">Módulo 6</span>
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">Metodologia & Governança</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Convenções de contagem DU/252, modelos econométricos e fontes de dados oficiais ANBIMA, B3 e CVM.</p>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="bg-white border-t border-slate-200 py-10 mt-20">
+        <div class="container mx-auto px-4 text-center space-y-3">
+          <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
+            <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia e Rigor Quantitativo</a>
+            <span>•</span>
+            <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
+            <span>•</span>
+            <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
+            <span>•</span>
+            <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
+            <span>•</span>
+            <a href="/contact/" class="hover:text-blue-600 transition">Contato & Apoio</a>
+          </div>
+          <p class="text-slate-500 text-sm font-semibold">
+            &copy; {datetime.now().year} FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
+          </p>
+          <p class="text-slate-400 text-xs font-medium">
+            Desenvolvido por <a href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-600 transition-colors font-bold">Leonardo Contador Neves</a>
+          </p>
+          <p class="text-slate-300 text-[10px] uppercase tracking-widest">
+            Base de dados CVM, ANBIMA e B3
+          </p>
+        </div>
+      </footer>
+    """
+
+    # 3. Injeta no template docs/index.html e public/index.html
+    base_template = None
+    for tmpl_path in ("docs/index.html", "index.html", "public/index.html"):
+        if os.path.exists(tmpl_path):
+            with open(tmpl_path, "r", encoding="utf-8") as f:
+                base_template = f.read()
+            break
+
+    if not base_template:
+        print("⚠️ Template index.html não encontrado.")
+        return
+
+    if 'rel="alternate" type="application/rss+xml"' not in base_template:
+        base_template = base_template.replace(
+            '<link rel="canonical" href="https://fixdatabrasil.com.br/" />',
+            '<link rel="canonical" href="https://fixdatabrasil.com.br/" />\n    <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="https://fixdatabrasil.com.br/feed.xml" />'
+        )
+
+    new_html = re.sub(
+        r'<div id="root">[\s\S]*?</div>',
+        f'<div id="root">{home_body_html}</div>',
+        base_template
+    )
+
+    for out_p in ("docs/index.html", "public/index.html"):
+        os.makedirs(os.path.dirname(out_p), exist_ok=True)
+        with open(out_p, "w", encoding="utf-8") as f:
+            f.write(new_html)
+    print("   ✅ Home Page estática gerada com sucesso em docs/index.html e public/index.html!", flush=True)
+
 def prune_orphaned_assets(valid_tickers: set):
     print("🧹 Verificando e podando diretórios órfãos e inválidos...")
     for out_dir in (OUTPUT_DIR, DOCS_OUTPUT_DIR):
@@ -1256,7 +1711,12 @@ def main():
     # Gera imediatamente páginas institucionais com canonical e SEO próprio
     render_static_pages()
 
+    # Gera Home Page estática com os 50 ativos mais líquidos da B3
+    render_home_page()
+
     df = get_assets()
+    init_maps(df)
+
     rows = [row for _, row in df.iterrows()]
     print(f"Processando {len(rows)} ativos...")
 

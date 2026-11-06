@@ -12,10 +12,12 @@ import DebtorRadar from './pages/DebtorRadar';
 import CalculatorPage from './pages/Calculator';
 import AgendaPage from './pages/Agenda';
 import ComparatorPage from './pages/Comparator';
+import MethodologyPage from './pages/Methodology';
+import AboutPage from './pages/About';
 import { 
   LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, 
   ArrowLeftRight, Building2, Calculator, LogOut, User as UserIcon, 
-  ChevronDown, TrendingUp, Sparkles, Calendar, Scale 
+  ChevronDown, TrendingUp, Sparkles, Calendar, Scale, ShieldCheck, BookOpen 
 } from 'lucide-react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LeadGate } from './components/LeadGate';
@@ -106,6 +108,25 @@ const Navbar = () => {
         },
       ],
     },
+    {
+      id: 'institucional',
+      label: 'Institucional',
+      icon: <ShieldCheck size={16} />,
+      items: [
+        {
+          path: '/metodologia',
+          label: 'Metodologia & Dados',
+          desc: 'Fontes oficiais ANBIMA/B3, convenção DU/252 e modelos quantitativos',
+          icon: <BookOpen size={17} className="text-blue-600" />,
+        },
+        {
+          path: '/sobre',
+          label: 'Sobre o FIXDATA',
+          desc: 'Missão, autoria técnica e governança da plataforma',
+          icon: <Building2 size={17} className="text-indigo-600" />,
+        },
+      ],
+    },
   ];
 
   const isPathActive = (path: string) => {
@@ -118,6 +139,8 @@ const Navbar = () => {
     if (path === '/raiox-devedor') return location.pathname === '/raiox-devedor' || location.pathname === '/devedor';
     if (path === '/calculadora') return location.pathname === '/calculadora' || location.pathname === '/calculator' || location.pathname === '/grossup';
     if (path === '/comparar') return location.pathname === '/comparar' || location.pathname === '/comparator';
+    if (path === '/metodologia') return location.pathname === '/metodologia' || location.pathname === '/methodology';
+    if (path === '/sobre') return location.pathname === '/sobre' || location.pathname === '/about';
     if (path === '/contact') return location.pathname === '/contact' || location.pathname === '/apoiar';
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
@@ -554,12 +577,27 @@ const App: React.FC = () => {
               <Route path="/agenda-pagamentos" element={<AgendaPage />} />
               <Route path="/comparar" element={<ComparatorPage />} />
               <Route path="/comparator" element={<ComparatorPage />} />
+              <Route path="/metodologia" element={<MethodologyPage />} />
+              <Route path="/methodology" element={<MethodologyPage />} />
+              <Route path="/sobre" element={<AboutPage />} />
+              <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/apoiar" element={<Contact />} />
             </Routes>
           </main>
           <footer className="bg-white border-t border-slate-200 py-10 mt-20">
             <div className="container mx-auto px-4 text-center space-y-3">
+              <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
+                <Link to="/metodologia" className="hover:text-blue-600 transition">Metodologia e Rigor Quantitativo</Link>
+                <span>•</span>
+                <Link to="/sobre" className="hover:text-blue-600 transition">Sobre o FIXDATA</Link>
+                <span>•</span>
+                <Link to="/negocios" className="hover:text-blue-600 transition">Negócios B3</Link>
+                <span>•</span>
+                <Link to="/ntnb" className="hover:text-blue-600 transition">Curva NTN-B</Link>
+                <span>•</span>
+                <Link to="/contact" className="hover:text-blue-600 transition">Contato & Apoio</Link>
+              </div>
               <p className="text-slate-500 text-sm font-semibold">
                 &copy; {new Date().getFullYear()} FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
               </p>

@@ -32,6 +32,8 @@ const staticSlugs = [
   'contact',
   'agenda',
   'comparar',
+  'metodologia',
+  'sobre',
 ];
 
 let updatedStatic = 0;
