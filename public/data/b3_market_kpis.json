@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-05 21:21:47",
+  "atualizado_em": "2026-11-06 13:33:22",
   "ultimo_pregao": {
     "data": "2026-11-05",
     "volume_financeiro": 5987029986.51,
@@ -335,16 +335,16 @@
         "taxa_media": 13.632896666666666
       },
       {
-        "ticker": "CRA021000RX",
-        "tipo": "CRA",
-        "devedor": "MINERVA S/A",
+        "ticker": "EGIEA6",
+        "tipo": "Debênture",
+        "devedor": "ENGIE BRASIL ENERGIA S.A.",
         "indexador": "IPCA",
-        "volume_total": 86275935.06,
+        "volume_total": 1173497197.24,
         "trades_total": 1952,
-        "titulos_total": 68970,
+        "titulos_total": 1215338,
         "dias_com_negocio": 30,
-        "vwap": 1248.9946866666667,
-        "taxa_media": 12.69288
+        "vwap": 978.7418566666668,
+        "taxa_media": 7.44931
       }
     ],
     "distribuicao_instrumento": {
@@ -366,20 +366,20 @@
     },
     "distribuicao_indexador": {
       "CDI / DI+": {
-        "volume": 83942144745.31,
-        "trades": 144166
+        "volume": 83859313951.79,
+        "trades": 144237
       },
       "IPCA": {
-        "volume": 101517300049.08,
-        "trades": 325036
+        "volume": 101511162481.79,
+        "trades": 324944
       },
       "Outros": {
-        "volume": 2826280149.52,
-        "trades": 13153
+        "volume": 3392707907.93,
+        "trades": 14521
       },
       "Pré-Fixado": {
-        "volume": 9710791852.27,
-        "trades": 76841
+        "volume": 9233332454.67,
+        "trades": 75494
       }
     },
     "timeline": [
@@ -566,9 +566,9 @@
     ]
   },
   "acumulado_ano_ytd": {
-    "volume_financeiro": 1114557979287.7998,
-    "total_trades": 3763220,
-    "ativos_unicos": 4948,
+    "volume_financeiro": 1114515302134.47,
+    "total_trades": 3763219,
+    "ativos_unicos": 4947,
     "total_pregoes": 210
   }
 }
