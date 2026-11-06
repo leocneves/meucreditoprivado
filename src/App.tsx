@@ -19,7 +19,7 @@ import PrivacyPage from './pages/Privacy';
 import { 
   LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, 
   ArrowLeftRight, Building2, Calculator, LogOut, User as UserIcon, 
-  ChevronDown, TrendingUp, Sparkles, Calendar, Scale, ShieldCheck, BookOpen 
+  ChevronDown, TrendingUp, Sparkles, Calendar, Scale 
 } from 'lucide-react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LeadGate } from './components/LeadGate';
@@ -107,25 +107,6 @@ const Navbar = () => {
           label: 'Comparador de Ativos',
           desc: 'Comparação direta de taxas, spread e rating',
           icon: <Scale size={17} className="text-amber-500" />,
-        },
-      ],
-    },
-    {
-      id: 'institucional',
-      label: 'Institucional',
-      icon: <ShieldCheck size={16} />,
-      items: [
-        {
-          path: '/metodologia',
-          label: 'Metodologia & Dados',
-          desc: 'Fontes oficiais ANBIMA/B3, convenção DU/252 e modelos quantitativos',
-          icon: <BookOpen size={17} className="text-blue-600" />,
-        },
-        {
-          path: '/sobre',
-          label: 'Sobre o FIXDATA',
-          desc: 'Missão, autoria técnica e governança da plataforma',
-          icon: <Building2 size={17} className="text-indigo-600" />,
         },
       ],
     },
