@@ -34,6 +34,8 @@ const staticSlugs = [
   'comparar',
   'metodologia',
   'sobre',
+  'termos',
+  'privacidade',
 ];
 
 let updatedStatic = 0;

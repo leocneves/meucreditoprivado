@@ -1316,6 +1316,22 @@ STATIC_PAGES_META = [
         "h1": "Sobre o FIXDATA",
         "lead": "Infraestrutura analítica independente que traz transparência, rigor matemático e dados abertos para o mercado de Renda Fixa no Brasil.",
     },
+    {
+        "slug": "termos",
+        "title": "Termos de Serviço e Uso da Plataforma | FIXDATA",
+        "description": "Termos de serviço, condições de acesso, política de uso e disclaimer de investimento da plataforma analítica FIXDATA.",
+        "keywords": "termos de serviço, termos de uso, disclaimer investimento, aviso legal renda fixa, fixdata termos",
+        "h1": "Termos de Serviço & Uso",
+        "lead": "Condições gerais de navegação, isenção de responsabilidade e regras de uso da plataforma FIXDATA.",
+    },
+    {
+        "slug": "privacidade",
+        "title": "Política de Privacidade e Proteção de Dados (LGPD) | FIXDATA",
+        "description": "Política de privacidade, conformidade com a LGPD (Lei 13.709/2018), tratamento de dados de navegação e autenticação Google no FIXDATA.",
+        "keywords": "politica de privacidade, lgpd fixdata, proteção de dados, privacidade renda fixa, direitos do titular",
+        "h1": "Política de Privacidade & LGPD",
+        "lead": "Compromisso com a proteção de dados pessoais, transparência no tratamento e conformidade com a legislação brasileira.",
+    },
 ]
 
 def render_static_pages():
@@ -1612,9 +1628,13 @@ def render_home_page():
       <footer class="bg-white border-t border-slate-200 py-10 mt-20">
         <div class="container mx-auto px-4 text-center space-y-3">
           <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
-            <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia e Rigor Quantitativo</a>
+            <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
             <span>•</span>
             <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
+            <span>•</span>
+            <a href="/termos/" class="hover:text-blue-600 transition">Termos de Uso</a>
+            <span>•</span>
+            <a href="/privacidade/" class="hover:text-blue-600 transition">Privacidade (LGPD)</a>
             <span>•</span>
             <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
             <span>•</span>
@@ -1647,24 +1667,46 @@ def render_home_page():
         print("⚠️ Template index.html não encontrado.")
         return
 
+    bundle_tag = get_bundle_script()
+    source_script_tag = '<script type="module" src="/src/main.tsx"></script>'
+
+    # Base com feed RSS
     if 'rel="alternate" type="application/rss+xml"' not in base_template:
         base_template = base_template.replace(
             '<link rel="canonical" href="https://fixdatabrasil.com.br/" />',
             '<link rel="canonical" href="https://fixdatabrasil.com.br/" />\n    <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="https://fixdatabrasil.com.br/feed.xml" />'
         )
 
-    new_html = re.sub(
+    # 1. HTML para docs/ e public/ (com bundle JS compilado)
+    docs_html = base_template
+    if source_script_tag in docs_html:
+        docs_html = docs_html.replace(source_script_tag, bundle_tag)
+    docs_html = re.sub(
         r'<div id="root">[\s\S]*?</div>',
         f'<div id="root">{home_body_html}</div>',
-        base_template
+        docs_html
     )
 
-    for out_p in ("docs/index.html", "public/index.html", "index.html"):
-        p_dir = os.path.dirname(out_p)
-        if p_dir:
-            os.makedirs(p_dir, exist_ok=True)
+    for out_p in ("docs/index.html", "public/index.html"):
+        os.makedirs(os.path.dirname(out_p), exist_ok=True)
         with open(out_p, "w", encoding="utf-8") as f:
-            f.write(new_html)
+            f.write(docs_html)
+
+    # 2. HTML para index.html raiz (mantendo /src/main.tsx para o build do Vite)
+    root_html = base_template
+    if bundle_tag in root_html:
+        root_html = root_html.replace(bundle_tag, source_script_tag)
+    elif source_script_tag not in root_html:
+        root_html = root_html.replace('</body>', f'    {source_script_tag}\n  </body>')
+    root_html = re.sub(
+        r'<div id="root">[\s\S]*?</div>',
+        f'<div id="root">{home_body_html}</div>',
+        root_html
+    )
+
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(root_html)
+
     print("   ✅ Home Page estática gerada com sucesso em index.html, docs/index.html e public/index.html!", flush=True)
 
 def prune_orphaned_assets(valid_tickers: set):

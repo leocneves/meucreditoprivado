@@ -157,6 +157,8 @@ def main():
         "/comparar/",
         "/metodologia/",
         "/sobre/",
+        "/termos/",
+        "/privacidade/",
     ]
 
     def make_urls(tickers, changefreq, priority, lm):

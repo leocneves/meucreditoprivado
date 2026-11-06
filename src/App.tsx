@@ -14,6 +14,8 @@ import AgendaPage from './pages/Agenda';
 import ComparatorPage from './pages/Comparator';
 import MethodologyPage from './pages/Methodology';
 import AboutPage from './pages/About';
+import TermsPage from './pages/Terms';
+import PrivacyPage from './pages/Privacy';
 import { 
   LayoutDashboard, LineChart, Files, Tag, Menu, X, Landmark, Coffee, 
   ArrowLeftRight, Building2, Calculator, LogOut, User as UserIcon, 
@@ -141,6 +143,8 @@ const Navbar = () => {
     if (path === '/comparar') return location.pathname === '/comparar' || location.pathname === '/comparator';
     if (path === '/metodologia') return location.pathname === '/metodologia' || location.pathname === '/methodology';
     if (path === '/sobre') return location.pathname === '/sobre' || location.pathname === '/about';
+    if (path === '/termos') return location.pathname === '/termos' || location.pathname === '/terms';
+    if (path === '/privacidade') return location.pathname === '/privacidade' || location.pathname === '/privacy';
     if (path === '/contact') return location.pathname === '/contact' || location.pathname === '/apoiar';
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
@@ -581,6 +585,10 @@ const App: React.FC = () => {
               <Route path="/methodology" element={<MethodologyPage />} />
               <Route path="/sobre" element={<AboutPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/termos" element={<TermsPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/privacidade" element={<PrivacyPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/apoiar" element={<Contact />} />
             </Routes>
@@ -588,9 +596,13 @@ const App: React.FC = () => {
           <footer className="bg-white border-t border-slate-200 py-10 mt-20">
             <div className="container mx-auto px-4 text-center space-y-3">
               <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
-                <Link to="/metodologia" className="hover:text-blue-600 transition">Metodologia e Rigor Quantitativo</Link>
+                <Link to="/metodologia" className="hover:text-blue-600 transition">Metodologia</Link>
                 <span>•</span>
                 <Link to="/sobre" className="hover:text-blue-600 transition">Sobre o FIXDATA</Link>
+                <span>•</span>
+                <Link to="/termos" className="hover:text-blue-600 transition">Termos de Uso</Link>
+                <span>•</span>
+                <Link to="/privacidade" className="hover:text-blue-600 transition">Privacidade (LGPD)</Link>
                 <span>•</span>
                 <Link to="/negocios" className="hover:text-blue-600 transition">Negócios B3</Link>
                 <span>•</span>
