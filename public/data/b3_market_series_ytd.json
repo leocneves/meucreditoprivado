@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-10 21:22:02",
+  "atualizado_em": "2026-11-11 20:36:23",
   "datas": [
     "2026-01-02",
     "2026-01-05",
@@ -213,7 +213,8 @@
     "2026-11-05",
     "2026-11-06",
     "2026-11-09",
-    "2026-11-10"
+    "2026-11-10",
+    "2026-11-11"
   ],
   "series": {
     "TODOS": [
@@ -2346,6 +2347,16 @@
         "price": 340.92,
         "yield": 16.18,
         "spread_bps": null
+      },
+      {
+        "date": "2026-11-11",
+        "datePretty": "11/11",
+        "volume": 5282.62,
+        "volumeRaw": 5282622143.209999,
+        "trades": 16191,
+        "price": 85.95,
+        "yield": 13.03,
+        "spread_bps": null
       }
     ],
     "IPCA": [
@@ -2357,7 +2368,7 @@
         "trades": 5081,
         "price": 359.53,
         "yield": 7.81,
-        "spread_bps": -20.0
+        "spread_bps": -14.8
       },
       {
         "date": "2026-01-05",
@@ -2367,7 +2378,7 @@
         "trades": 8549,
         "price": 48.9,
         "yield": 8.29,
-        "spread_bps": 18.5
+        "spread_bps": 23.5
       },
       {
         "date": "2026-01-06",
@@ -2377,7 +2388,7 @@
         "trades": 8755,
         "price": 86.32,
         "yield": 7.87,
-        "spread_bps": -0.8
+        "spread_bps": 3.8
       },
       {
         "date": "2026-01-07",
@@ -2387,7 +2398,7 @@
         "trades": 8271,
         "price": 59.9,
         "yield": 7.83,
-        "spread_bps": -5.3
+        "spread_bps": -0.9
       },
       {
         "date": "2026-01-08",
@@ -2397,7 +2408,7 @@
         "trades": 7823,
         "price": 45.7,
         "yield": 7.97,
-        "spread_bps": 46.3
+        "spread_bps": 51.3
       },
       {
         "date": "2026-01-09",
@@ -2407,7 +2418,7 @@
         "trades": 8021,
         "price": 35.18,
         "yield": 7.92,
-        "spread_bps": -11.7
+        "spread_bps": -7.1
       },
       {
         "date": "2026-01-12",
@@ -2417,7 +2428,7 @@
         "trades": 8467,
         "price": 54.53,
         "yield": 8.02,
-        "spread_bps": 39.3
+        "spread_bps": 44.2
       },
       {
         "date": "2026-01-13",
@@ -2427,7 +2438,7 @@
         "trades": 9006,
         "price": 76.94,
         "yield": 7.91,
-        "spread_bps": 9.9
+        "spread_bps": 14.5
       },
       {
         "date": "2026-01-14",
@@ -2437,7 +2448,7 @@
         "trades": 8153,
         "price": 41.58,
         "yield": 7.82,
-        "spread_bps": -13.1
+        "spread_bps": -8.5
       },
       {
         "date": "2026-01-15",
@@ -2447,7 +2458,7 @@
         "trades": 13450,
         "price": 69.1,
         "yield": 7.97,
-        "spread_bps": 49.6
+        "spread_bps": 54.5
       },
       {
         "date": "2026-01-16",
@@ -2457,7 +2468,7 @@
         "trades": 11929,
         "price": 65.82,
         "yield": 7.85,
-        "spread_bps": 17.5
+        "spread_bps": 22.4
       },
       {
         "date": "2026-01-19",
@@ -2467,7 +2478,7 @@
         "trades": 8740,
         "price": 191.63,
         "yield": 7.86,
-        "spread_bps": 0.1
+        "spread_bps": 5.1
       },
       {
         "date": "2026-01-20",
@@ -2477,7 +2488,7 @@
         "trades": 12810,
         "price": 138.0,
         "yield": 7.89,
-        "spread_bps": 28.7
+        "spread_bps": 33.3
       },
       {
         "date": "2026-01-21",
@@ -2487,7 +2498,7 @@
         "trades": 10839,
         "price": 31.21,
         "yield": 8.0,
-        "spread_bps": 30.6
+        "spread_bps": 35.4
       },
       {
         "date": "2026-01-22",
@@ -2497,7 +2508,7 @@
         "trades": 15740,
         "price": 70.61,
         "yield": 7.85,
-        "spread_bps": -8.9
+        "spread_bps": -4.1
       },
       {
         "date": "2026-01-23",
@@ -2507,7 +2518,7 @@
         "trades": 12074,
         "price": 62.26,
         "yield": 7.65,
-        "spread_bps": -1.8
+        "spread_bps": 3.2
       },
       {
         "date": "2026-01-26",
@@ -2517,7 +2528,7 @@
         "trades": 11600,
         "price": 29.35,
         "yield": 7.79,
-        "spread_bps": 17.6
+        "spread_bps": 23.1
       },
       {
         "date": "2026-01-27",
@@ -2527,7 +2538,7 @@
         "trades": 11110,
         "price": 330.34,
         "yield": 7.49,
-        "spread_bps": -34.7
+        "spread_bps": -29.7
       },
       {
         "date": "2026-01-28",
@@ -2537,7 +2548,7 @@
         "trades": 10745,
         "price": 250.19,
         "yield": 7.58,
-        "spread_bps": -3.2
+        "spread_bps": 1.8
       },
       {
         "date": "2026-01-29",
@@ -2547,7 +2558,7 @@
         "trades": 12294,
         "price": 158.61,
         "yield": 7.72,
-        "spread_bps": -6.3
+        "spread_bps": -1.1
       },
       {
         "date": "2026-01-30",
@@ -4478,6 +4489,16 @@
         "price": 310.24,
         "yield": 11.26,
         "spread_bps": 103.4
+      },
+      {
+        "date": "2026-11-11",
+        "datePretty": "11/11",
+        "volume": 2329.42,
+        "volumeRaw": 2329417962.68,
+        "trades": 9134,
+        "price": 40.38,
+        "yield": 12.76,
+        "spread_bps": 120.8
       }
     ],
     "CDI+": [
@@ -4964,10 +4985,10 @@
       {
         "date": "2026-03-13",
         "datePretty": "13/03",
-        "volume": 5402.98,
-        "volumeRaw": 5402979275.920001,
-        "trades": 3543,
-        "price": 894.21,
+        "volume": 5403.92,
+        "volumeRaw": 5403915087.000001,
+        "trades": 3545,
+        "price": 894.25,
         "yield": 1.29,
         "spread_bps": 116.5
       },
@@ -6610,6 +6631,16 @@
         "price": 411.15,
         "yield": 30.8,
         "spread_bps": 439.1
+      },
+      {
+        "date": "2026-11-11",
+        "datePretty": "11/11",
+        "volume": 2674.67,
+        "volumeRaw": 2674666911.81,
+        "trades": 2691,
+        "price": 835.09,
+        "yield": 11.22,
+        "spread_bps": 316.7
       }
     ],
     "CDI%": [
@@ -8742,6 +8773,16 @@
         "price": 1040.98,
         "yield": 100.83,
         "spread_bps": 589.9
+      },
+      {
+        "date": "2026-11-11",
+        "datePretty": "11/11",
+        "volume": 88.92,
+        "volumeRaw": 88919249.89000002,
+        "trades": 1805,
+        "price": 1014.57,
+        "yield": 110.53,
+        "spread_bps": 614.6
       }
     ],
     "PRE": [
@@ -9243,7 +9284,7 @@
         "trades": 3030,
         "price": 1004.19,
         "yield": 14.8,
-        "spread_bps": 80.4
+        "spread_bps": 80.3
       },
       {
         "date": "2026-03-17",
@@ -9313,7 +9354,7 @@
         "trades": 2769,
         "price": 923.34,
         "yield": 15.83,
-        "spread_bps": 147.2
+        "spread_bps": 146.8
       },
       {
         "date": "2026-03-26",
@@ -9323,7 +9364,7 @@
         "trades": 2958,
         "price": 600.83,
         "yield": 15.08,
-        "spread_bps": 52.7
+        "spread_bps": 52.8
       },
       {
         "date": "2026-03-27",
@@ -9333,7 +9374,7 @@
         "trades": 2519,
         "price": 764.14,
         "yield": 15.82,
-        "spread_bps": 110.5
+        "spread_bps": 110.6
       },
       {
         "date": "2026-03-30",
@@ -9343,7 +9384,7 @@
         "trades": 2481,
         "price": 878.81,
         "yield": 13.85,
-        "spread_bps": -41.9
+        "spread_bps": -41.5
       },
       {
         "date": "2026-03-31",
@@ -9363,7 +9404,7 @@
         "trades": 2224,
         "price": 423.15,
         "yield": 15.89,
-        "spread_bps": 129.2
+        "spread_bps": 129.3
       },
       {
         "date": "2026-04-02",
@@ -9373,7 +9414,7 @@
         "trades": 2410,
         "price": 355.42,
         "yield": 14.5,
-        "spread_bps": 44.5
+        "spread_bps": 44.6
       },
       {
         "date": "2026-04-06",
@@ -9383,7 +9424,7 @@
         "trades": 2488,
         "price": 431.58,
         "yield": 14.04,
-        "spread_bps": -6.1
+        "spread_bps": -5.9
       },
       {
         "date": "2026-04-07",
@@ -9403,7 +9444,7 @@
         "trades": 1978,
         "price": 88.46,
         "yield": 15.44,
-        "spread_bps": 87.7
+        "spread_bps": 88.0
       },
       {
         "date": "2026-04-09",
@@ -9413,7 +9454,7 @@
         "trades": 2426,
         "price": 383.23,
         "yield": 14.3,
-        "spread_bps": 60.0
+        "spread_bps": 59.9
       },
       {
         "date": "2026-04-10",
@@ -9423,7 +9464,7 @@
         "trades": 2351,
         "price": 90.33,
         "yield": 15.16,
-        "spread_bps": 133.5
+        "spread_bps": 133.4
       },
       {
         "date": "2026-04-13",
@@ -9433,7 +9474,7 @@
         "trades": 2272,
         "price": 68.91,
         "yield": 15.29,
-        "spread_bps": 148.9
+        "spread_bps": 148.7
       },
       {
         "date": "2026-04-14",
@@ -9443,7 +9484,7 @@
         "trades": 2181,
         "price": 127.91,
         "yield": 15.07,
-        "spread_bps": 136.2
+        "spread_bps": 136.1
       },
       {
         "date": "2026-04-15",
@@ -9453,7 +9494,7 @@
         "trades": 2793,
         "price": 117.86,
         "yield": 16.28,
-        "spread_bps": 234.4
+        "spread_bps": 234.2
       },
       {
         "date": "2026-04-16",
@@ -9463,7 +9504,7 @@
         "trades": 2866,
         "price": 6.45,
         "yield": 15.8,
-        "spread_bps": 191.0
+        "spread_bps": 191.2
       },
       {
         "date": "2026-04-17",
@@ -9473,7 +9514,7 @@
         "trades": 2503,
         "price": 26.42,
         "yield": 15.06,
-        "spread_bps": 142.5
+        "spread_bps": 142.6
       },
       {
         "date": "2026-04-20",
@@ -9483,7 +9524,7 @@
         "trades": 2419,
         "price": 160.37,
         "yield": 15.7,
-        "spread_bps": 200.1
+        "spread_bps": 200.0
       },
       {
         "date": "2026-04-22",
@@ -9493,7 +9534,7 @@
         "trades": 2306,
         "price": 186.24,
         "yield": 14.87,
-        "spread_bps": 112.7
+        "spread_bps": 113.0
       },
       {
         "date": "2026-04-23",
@@ -9503,7 +9544,7 @@
         "trades": 2178,
         "price": 65.62,
         "yield": 15.6,
-        "spread_bps": 157.9
+        "spread_bps": 157.8
       },
       {
         "date": "2026-04-24",
@@ -9523,7 +9564,7 @@
         "trades": 2208,
         "price": 25.93,
         "yield": 14.64,
-        "spread_bps": 62.1
+        "spread_bps": 62.4
       },
       {
         "date": "2026-04-28",
@@ -9533,7 +9574,7 @@
         "trades": 2400,
         "price": 46.27,
         "yield": 14.62,
-        "spread_bps": 64.4
+        "spread_bps": 64.5
       },
       {
         "date": "2026-04-29",
@@ -9543,7 +9584,7 @@
         "trades": 2585,
         "price": 12.08,
         "yield": 14.88,
-        "spread_bps": 70.3
+        "spread_bps": 70.2
       },
       {
         "date": "2026-04-30",
@@ -9553,7 +9594,7 @@
         "trades": 2936,
         "price": 10.33,
         "yield": 16.42,
-        "spread_bps": 211.2
+        "spread_bps": 211.3
       },
       {
         "date": "2026-05-04",
@@ -9563,7 +9604,7 @@
         "trades": 2353,
         "price": 532.63,
         "yield": 16.56,
-        "spread_bps": 215.1
+        "spread_bps": 215.7
       },
       {
         "date": "2026-05-05",
@@ -9573,7 +9614,7 @@
         "trades": 2305,
         "price": 530.36,
         "yield": 15.11,
-        "spread_bps": 93.6
+        "spread_bps": 93.7
       },
       {
         "date": "2026-05-06",
@@ -9623,7 +9664,7 @@
         "trades": 2219,
         "price": 693.47,
         "yield": 14.19,
-        "spread_bps": 16.2
+        "spread_bps": 16.3
       },
       {
         "date": "2026-05-13",
@@ -9633,7 +9674,7 @@
         "trades": 2295,
         "price": 168.93,
         "yield": 16.04,
-        "spread_bps": 155.5
+        "spread_bps": 155.6
       },
       {
         "date": "2026-05-14",
@@ -9673,7 +9714,7 @@
         "trades": 2166,
         "price": 175.58,
         "yield": 15.35,
-        "spread_bps": 85.6
+        "spread_bps": 85.7
       },
       {
         "date": "2026-05-20",
@@ -9683,7 +9724,7 @@
         "trades": 2095,
         "price": 13.88,
         "yield": 15.04,
-        "spread_bps": 76.8
+        "spread_bps": 76.9
       },
       {
         "date": "2026-05-21",
@@ -9693,7 +9734,7 @@
         "trades": 2339,
         "price": 548.48,
         "yield": 14.79,
-        "spread_bps": 61.2
+        "spread_bps": 61.3
       },
       {
         "date": "2026-05-22",
@@ -9703,7 +9744,7 @@
         "trades": 2343,
         "price": 380.48,
         "yield": 14.38,
-        "spread_bps": 23.8
+        "spread_bps": 23.9
       },
       {
         "date": "2026-05-25",
@@ -9773,7 +9814,7 @@
         "trades": 2063,
         "price": 417.73,
         "yield": 16.09,
-        "spread_bps": 166.7
+        "spread_bps": 166.8
       },
       {
         "date": "2026-06-03",
@@ -9783,7 +9824,7 @@
         "trades": 2182,
         "price": 991.45,
         "yield": 15.81,
-        "spread_bps": 109.6
+        "spread_bps": 109.8
       },
       {
         "date": "2026-06-05",
@@ -9803,7 +9844,7 @@
         "trades": 2104,
         "price": 242.52,
         "yield": 14.75,
-        "spread_bps": 78.2
+        "spread_bps": 78.4
       },
       {
         "date": "2026-06-09",
@@ -9813,7 +9854,7 @@
         "trades": 1883,
         "price": 130.95,
         "yield": 15.68,
-        "spread_bps": 53.8
+        "spread_bps": 54.1
       },
       {
         "date": "2026-06-10",
@@ -9833,7 +9874,7 @@
         "trades": 1758,
         "price": 358.6,
         "yield": 15.38,
-        "spread_bps": 77.1
+        "spread_bps": 77.2
       },
       {
         "date": "2026-06-12",
@@ -9843,7 +9884,7 @@
         "trades": 1687,
         "price": 278.91,
         "yield": 15.24,
-        "spread_bps": 64.9
+        "spread_bps": 65.0
       },
       {
         "date": "2026-06-15",
@@ -9853,7 +9894,7 @@
         "trades": 2166,
         "price": 246.14,
         "yield": 15.71,
-        "spread_bps": 114.7
+        "spread_bps": 114.8
       },
       {
         "date": "2026-06-16",
@@ -9873,7 +9914,7 @@
         "trades": 2162,
         "price": 154.65,
         "yield": 16.17,
-        "spread_bps": 132.7
+        "spread_bps": 132.8
       },
       {
         "date": "2026-06-18",
@@ -9883,7 +9924,7 @@
         "trades": 1939,
         "price": 180.2,
         "yield": 15.9,
-        "spread_bps": 86.1
+        "spread_bps": 86.3
       },
       {
         "date": "2026-06-19",
@@ -9903,7 +9944,7 @@
         "trades": 2163,
         "price": 437.33,
         "yield": 16.23,
-        "spread_bps": 124.6
+        "spread_bps": 126.0
       },
       {
         "date": "2026-06-23",
@@ -9913,7 +9954,7 @@
         "trades": 2125,
         "price": 293.3,
         "yield": 14.02,
-        "spread_bps": 137.2
+        "spread_bps": 138.1
       },
       {
         "date": "2026-06-24",
@@ -9983,7 +10024,7 @@
         "trades": 1918,
         "price": 231.9,
         "yield": 14.14,
-        "spread_bps": -45.6
+        "spread_bps": -45.3
       },
       {
         "date": "2026-07-03",
@@ -9993,7 +10034,7 @@
         "trades": 1807,
         "price": 214.5,
         "yield": 14.3,
-        "spread_bps": -21.6
+        "spread_bps": -21.5
       },
       {
         "date": "2026-07-06",
@@ -10013,7 +10054,7 @@
         "trades": 2056,
         "price": 204.85,
         "yield": 16.55,
-        "spread_bps": 184.1
+        "spread_bps": 184.2
       },
       {
         "date": "2026-07-08",
@@ -10043,7 +10084,7 @@
         "trades": 2001,
         "price": 605.94,
         "yield": 14.3,
-        "spread_bps": 10.5
+        "spread_bps": 10.6
       },
       {
         "date": "2026-07-13",
@@ -10063,7 +10104,7 @@
         "trades": 2013,
         "price": 194.05,
         "yield": 15.38,
-        "spread_bps": 94.3
+        "spread_bps": 94.4
       },
       {
         "date": "2026-07-15",
@@ -10073,7 +10114,7 @@
         "trades": 2225,
         "price": 611.04,
         "yield": 14.09,
-        "spread_bps": -25.7
+        "spread_bps": -25.6
       },
       {
         "date": "2026-07-16",
@@ -10083,7 +10124,7 @@
         "trades": 2720,
         "price": 262.09,
         "yield": 15.72,
-        "spread_bps": 121.1
+        "spread_bps": 121.3
       },
       {
         "date": "2026-07-17",
@@ -10093,7 +10134,7 @@
         "trades": 2486,
         "price": 698.86,
         "yield": 14.79,
-        "spread_bps": 13.8
+        "spread_bps": 14.1
       },
       {
         "date": "2026-07-20",
@@ -10103,7 +10144,7 @@
         "trades": 2410,
         "price": 273.91,
         "yield": 15.11,
-        "spread_bps": 44.7
+        "spread_bps": 44.9
       },
       {
         "date": "2026-07-21",
@@ -10113,7 +10154,7 @@
         "trades": 2302,
         "price": 380.71,
         "yield": 16.36,
-        "spread_bps": 153.2
+        "spread_bps": 153.8
       },
       {
         "date": "2026-07-22",
@@ -10123,7 +10164,7 @@
         "trades": 2003,
         "price": 348.75,
         "yield": 16.3,
-        "spread_bps": 143.0
+        "spread_bps": 143.3
       },
       {
         "date": "2026-07-23",
@@ -10133,7 +10174,7 @@
         "trades": 1853,
         "price": 386.97,
         "yield": 16.29,
-        "spread_bps": 124.0
+        "spread_bps": 124.3
       },
       {
         "date": "2026-07-24",
@@ -10143,7 +10184,7 @@
         "trades": 2204,
         "price": 19.15,
         "yield": 14.7,
-        "spread_bps": -4.5
+        "spread_bps": -4.2
       },
       {
         "date": "2026-07-27",
@@ -10153,7 +10194,7 @@
         "trades": 2138,
         "price": 263.13,
         "yield": 15.28,
-        "spread_bps": 52.7
+        "spread_bps": 52.8
       },
       {
         "date": "2026-07-28",
@@ -10163,7 +10204,7 @@
         "trades": 2048,
         "price": 213.07,
         "yield": 16.22,
-        "spread_bps": 161.1
+        "spread_bps": 161.8
       },
       {
         "date": "2026-07-29",
@@ -10173,7 +10214,7 @@
         "trades": 2220,
         "price": 226.44,
         "yield": 16.11,
-        "spread_bps": 143.8
+        "spread_bps": 144.8
       },
       {
         "date": "2026-07-30",
@@ -10183,7 +10224,7 @@
         "trades": 2243,
         "price": 34.63,
         "yield": 15.69,
-        "spread_bps": 110.4
+        "spread_bps": 110.8
       },
       {
         "date": "2026-07-31",
@@ -10193,7 +10234,7 @@
         "trades": 1534,
         "price": 212.24,
         "yield": 16.45,
-        "spread_bps": 174.5
+        "spread_bps": 175.2
       },
       {
         "date": "2026-08-03",
@@ -10203,7 +10244,7 @@
         "trades": 2128,
         "price": 615.01,
         "yield": 16.24,
-        "spread_bps": 171.9
+        "spread_bps": 172.0
       },
       {
         "date": "2026-08-04",
@@ -10213,7 +10254,7 @@
         "trades": 2201,
         "price": 649.76,
         "yield": 15.92,
-        "spread_bps": 143.0
+        "spread_bps": 143.3
       },
       {
         "date": "2026-08-05",
@@ -10233,7 +10274,7 @@
         "trades": 2379,
         "price": 243.97,
         "yield": 15.59,
-        "spread_bps": 108.1
+        "spread_bps": 108.4
       },
       {
         "date": "2026-08-10",
@@ -10243,7 +10284,7 @@
         "trades": 2456,
         "price": 299.99,
         "yield": 16.03,
-        "spread_bps": 143.8
+        "spread_bps": 144.0
       },
       {
         "date": "2026-08-11",
@@ -10253,7 +10294,7 @@
         "trades": 2118,
         "price": 429.16,
         "yield": 15.77,
-        "spread_bps": 114.4
+        "spread_bps": 114.8
       },
       {
         "date": "2026-08-12",
@@ -10263,7 +10304,7 @@
         "trades": 2273,
         "price": 568.25,
         "yield": 16.56,
-        "spread_bps": 180.3
+        "spread_bps": 180.1
       },
       {
         "date": "2026-08-13",
@@ -10273,7 +10314,7 @@
         "trades": 2338,
         "price": 314.37,
         "yield": 16.47,
-        "spread_bps": 170.0
+        "spread_bps": 170.2
       },
       {
         "date": "2026-08-14",
@@ -10283,7 +10324,7 @@
         "trades": 2177,
         "price": 446.72,
         "yield": 15.6,
-        "spread_bps": 79.6
+        "spread_bps": 79.7
       },
       {
         "date": "2026-08-17",
@@ -10293,7 +10334,7 @@
         "trades": 2552,
         "price": 131.36,
         "yield": 15.69,
-        "spread_bps": 95.9
+        "spread_bps": 96.1
       },
       {
         "date": "2026-08-18",
@@ -10303,7 +10344,7 @@
         "trades": 2820,
         "price": 955.28,
         "yield": 15.74,
-        "spread_bps": 99.8
+        "spread_bps": 100.1
       },
       {
         "date": "2026-08-19",
@@ -10313,7 +10354,7 @@
         "trades": 2538,
         "price": 76.55,
         "yield": 15.0,
-        "spread_bps": 38.7
+        "spread_bps": 38.8
       },
       {
         "date": "2026-08-20",
@@ -10323,7 +10364,7 @@
         "trades": 2482,
         "price": 151.1,
         "yield": 16.19,
-        "spread_bps": 134.7
+        "spread_bps": 134.9
       },
       {
         "date": "2026-08-21",
@@ -10333,7 +10374,7 @@
         "trades": 2396,
         "price": 10.03,
         "yield": 15.84,
-        "spread_bps": 125.1
+        "spread_bps": 125.3
       },
       {
         "date": "2026-08-24",
@@ -10343,7 +10384,7 @@
         "trades": 2718,
         "price": 31.61,
         "yield": 14.71,
-        "spread_bps": 18.2
+        "spread_bps": 18.7
       },
       {
         "date": "2026-08-25",
@@ -10353,7 +10394,7 @@
         "trades": 2447,
         "price": 683.89,
         "yield": 15.8,
-        "spread_bps": 120.8
+        "spread_bps": 121.0
       },
       {
         "date": "2026-08-26",
@@ -10363,7 +10404,7 @@
         "trades": 2584,
         "price": 600.53,
         "yield": 15.5,
-        "spread_bps": 99.7
+        "spread_bps": 99.9
       },
       {
         "date": "2026-08-27",
@@ -10373,7 +10414,7 @@
         "trades": 2461,
         "price": 381.19,
         "yield": 15.96,
-        "spread_bps": 139.0
+        "spread_bps": 139.2
       },
       {
         "date": "2026-08-28",
@@ -10383,7 +10424,7 @@
         "trades": 2262,
         "price": 220.58,
         "yield": 16.25,
-        "spread_bps": 155.6
+        "spread_bps": 155.9
       },
       {
         "date": "2026-08-31",
@@ -10393,7 +10434,7 @@
         "trades": 2689,
         "price": 13.34,
         "yield": 16.31,
-        "spread_bps": 161.2
+        "spread_bps": 161.4
       },
       {
         "date": "2026-09-01",
@@ -10403,7 +10444,7 @@
         "trades": 2604,
         "price": 41.4,
         "yield": 16.41,
-        "spread_bps": 177.2
+        "spread_bps": 177.4
       },
       {
         "date": "2026-09-02",
@@ -10413,7 +10454,7 @@
         "trades": 2563,
         "price": 723.77,
         "yield": 15.73,
-        "spread_bps": 126.2
+        "spread_bps": 126.1
       },
       {
         "date": "2026-09-03",
@@ -10423,7 +10464,7 @@
         "trades": 2377,
         "price": 197.48,
         "yield": 15.46,
-        "spread_bps": 112.0
+        "spread_bps": 111.9
       },
       {
         "date": "2026-09-04",
@@ -10433,7 +10474,7 @@
         "trades": 2403,
         "price": 104.52,
         "yield": 15.11,
-        "spread_bps": 125.7
+        "spread_bps": 125.8
       },
       {
         "date": "2026-09-08",
@@ -10443,7 +10484,7 @@
         "trades": 2507,
         "price": 423.8,
         "yield": 15.86,
-        "spread_bps": 168.8
+        "spread_bps": 170.6
       },
       {
         "date": "2026-09-09",
@@ -10453,7 +10494,7 @@
         "trades": 1997,
         "price": 683.22,
         "yield": 15.04,
-        "spread_bps": 132.5
+        "spread_bps": 133.7
       },
       {
         "date": "2026-09-10",
@@ -10463,7 +10504,7 @@
         "trades": 2724,
         "price": 366.89,
         "yield": 16.16,
-        "spread_bps": 185.2
+        "spread_bps": 185.5
       },
       {
         "date": "2026-09-11",
@@ -10473,7 +10514,7 @@
         "trades": 2549,
         "price": 602.86,
         "yield": 15.56,
-        "spread_bps": 121.2
+        "spread_bps": 121.7
       },
       {
         "date": "2026-09-14",
@@ -10483,7 +10524,7 @@
         "trades": 2664,
         "price": 311.27,
         "yield": 15.63,
-        "spread_bps": 173.6
+        "spread_bps": 173.7
       },
       {
         "date": "2026-09-15",
@@ -10493,7 +10534,7 @@
         "trades": 2844,
         "price": 956.34,
         "yield": 14.82,
-        "spread_bps": 43.6
+        "spread_bps": 43.7
       },
       {
         "date": "2026-09-16",
@@ -10503,7 +10544,7 @@
         "trades": 3304,
         "price": 474.95,
         "yield": 15.76,
-        "spread_bps": 134.6
+        "spread_bps": 134.8
       },
       {
         "date": "2026-09-17",
@@ -10513,7 +10554,7 @@
         "trades": 2877,
         "price": 562.86,
         "yield": 15.61,
-        "spread_bps": 127.5
+        "spread_bps": 127.6
       },
       {
         "date": "2026-09-18",
@@ -10523,7 +10564,7 @@
         "trades": 2812,
         "price": 647.47,
         "yield": 16.01,
-        "spread_bps": 135.9
+        "spread_bps": 136.2
       },
       {
         "date": "2026-09-21",
@@ -10533,7 +10574,7 @@
         "trades": 2844,
         "price": 572.21,
         "yield": 14.83,
-        "spread_bps": 71.9
+        "spread_bps": 72.0
       },
       {
         "date": "2026-09-22",
@@ -10543,7 +10584,7 @@
         "trades": 2797,
         "price": 386.94,
         "yield": 15.87,
-        "spread_bps": 160.9
+        "spread_bps": 161.0
       },
       {
         "date": "2026-09-23",
@@ -10553,7 +10594,7 @@
         "trades": 2761,
         "price": 6.57,
         "yield": 15.76,
-        "spread_bps": 148.2
+        "spread_bps": 148.7
       },
       {
         "date": "2026-09-24",
@@ -10563,7 +10604,7 @@
         "trades": 2431,
         "price": 7.02,
         "yield": 15.13,
-        "spread_bps": 86.8
+        "spread_bps": 87.0
       },
       {
         "date": "2026-09-25",
@@ -10573,7 +10614,7 @@
         "trades": 2357,
         "price": 341.75,
         "yield": 15.14,
-        "spread_bps": 90.2
+        "spread_bps": 90.4
       },
       {
         "date": "2026-09-28",
@@ -10583,7 +10624,7 @@
         "trades": 2370,
         "price": 608.67,
         "yield": 15.47,
-        "spread_bps": 109.5
+        "spread_bps": 109.6
       },
       {
         "date": "2026-09-29",
@@ -10593,7 +10634,7 @@
         "trades": 2634,
         "price": 501.62,
         "yield": 15.24,
-        "spread_bps": 101.3
+        "spread_bps": 101.5
       },
       {
         "date": "2026-09-30",
@@ -10603,7 +10644,7 @@
         "trades": 2580,
         "price": 40.35,
         "yield": 16.84,
-        "spread_bps": 244.0
+        "spread_bps": 244.1
       },
       {
         "date": "2026-10-01",
@@ -10613,7 +10654,7 @@
         "trades": 2312,
         "price": 774.74,
         "yield": 16.18,
-        "spread_bps": 176.8
+        "spread_bps": 176.7
       },
       {
         "date": "2026-10-02",
@@ -10623,7 +10664,7 @@
         "trades": 2085,
         "price": 259.18,
         "yield": 15.75,
-        "spread_bps": 142.8
+        "spread_bps": 143.1
       },
       {
         "date": "2026-10-05",
@@ -10663,7 +10704,7 @@
         "trades": 2859,
         "price": 159.03,
         "yield": 14.48,
-        "spread_bps": 161.9
+        "spread_bps": 161.8
       },
       {
         "date": "2026-10-09",
@@ -10743,7 +10784,7 @@
         "trades": 2892,
         "price": 430.82,
         "yield": 13.84,
-        "spread_bps": 87.1
+        "spread_bps": 87.2
       },
       {
         "date": "2026-10-22",
@@ -10763,7 +10804,7 @@
         "trades": 2993,
         "price": 641.14,
         "yield": 16.15,
-        "spread_bps": 293.5
+        "spread_bps": 293.4
       },
       {
         "date": "2026-10-26",
@@ -10783,7 +10824,7 @@
         "trades": 2312,
         "price": 908.94,
         "yield": 15.72,
-        "spread_bps": 49.6
+        "spread_bps": 49.8
       },
       {
         "date": "2026-10-28",
@@ -10793,7 +10834,7 @@
         "trades": 2272,
         "price": 882.64,
         "yield": 15.61,
-        "spread_bps": 26.6
+        "spread_bps": 26.8
       },
       {
         "date": "2026-10-29",
@@ -10813,7 +10854,7 @@
         "trades": 2272,
         "price": 638.84,
         "yield": 16.03,
-        "spread_bps": 46.1
+        "spread_bps": 46.3
       },
       {
         "date": "2026-11-03",
@@ -10823,7 +10864,7 @@
         "trades": 2344,
         "price": 722.44,
         "yield": 16.93,
-        "spread_bps": 121.3
+        "spread_bps": 121.6
       },
       {
         "date": "2026-11-04",
@@ -10833,7 +10874,7 @@
         "trades": 2318,
         "price": 584.68,
         "yield": 16.49,
-        "spread_bps": 109.5
+        "spread_bps": 109.7
       },
       {
         "date": "2026-11-05",
@@ -10843,7 +10884,7 @@
         "trades": 2250,
         "price": 344.06,
         "yield": 16.84,
-        "spread_bps": 145.9
+        "spread_bps": 146.1
       },
       {
         "date": "2026-11-06",
@@ -10853,7 +10894,7 @@
         "trades": 2512,
         "price": 621.64,
         "yield": 16.5,
-        "spread_bps": 122.6
+        "spread_bps": 122.8
       },
       {
         "date": "2026-11-09",
@@ -10863,7 +10904,7 @@
         "trades": 2359,
         "price": 5.71,
         "yield": 17.28,
-        "spread_bps": 190.0
+        "spread_bps": 190.1
       },
       {
         "date": "2026-11-10",
@@ -10873,7 +10914,17 @@
         "trades": 2068,
         "price": 461.01,
         "yield": 16.74,
-        "spread_bps": 140.0
+        "spread_bps": 140.2
+      },
+      {
+        "date": "2026-11-11",
+        "datePretty": "11/11",
+        "volume": 104.97,
+        "volumeRaw": 104974130.47,
+        "trades": 2192,
+        "price": 756.26,
+        "yield": 16.92,
+        "spread_bps": 166.5
       }
     ]
   }
