@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-11 21:18:42",
+  "atualizado_em": "2026-11-12 20:41:55",
   "ultimo_pregao": {
     "data": "2026-11-11",
     "volume_financeiro": 5282622143.209999,
@@ -37,7 +37,7 @@
       {
         "ticker": "24D2858481",
         "tipo": "CRI",
-        "devedor": "MSB BARCELONA EMPREENDIMENTOS IMOBILIÁRIOS LTDA",
+        "devedor": "MSB AXIS",
         "volume_financeiro": 152527941.47,
         "qtd_negocios": 4,
         "preco_medio_ponderado": 1133.7839,
@@ -100,8 +100,8 @@
     ]
   },
   "ultimos_30_dias": {
-    "volume_financeiro": 199311600227.41998,
-    "total_trades": 565824,
+    "volume_financeiro": 199308411879.59003,
+    "total_trades": 565820,
     "ativos_unicos": 3414,
     "top_volume": [
       {
@@ -354,8 +354,8 @@
         "ativos": 620
       },
       "CRI": {
-        "volume": 23520289361.12,
-        "trades": 130451,
+        "volume": 23517101013.29,
+        "trades": 130447,
         "ativos": 1108
       },
       "Debênture": {
@@ -366,20 +366,20 @@
     },
     "distribuicao_indexador": {
       "CDI / DI+": {
-        "volume": 82274212858.06,
-        "trades": 145251
+        "volume": 82401008104.75,
+        "trades": 144679
       },
       "IPCA": {
-        "volume": 104873453025.75,
-        "trades": 331192
+        "volume": 104853027432.01,
+        "trades": 331322
       },
       "Outros": {
-        "volume": 3631561061.11,
-        "trades": 14765
+        "volume": 3200858099.94,
+        "trades": 14063
       },
       "Pré-Fixado": {
-        "volume": 8532373282.5,
-        "trades": 74616
+        "volume": 8853518242.89,
+        "trades": 75756
       }
     },
     "timeline": [
@@ -463,8 +463,8 @@
       },
       {
         "data_negocio": "2026-10-19",
-        "volume": 5337946030.44,
-        "trades": 18572,
+        "volume": 5336342433.11,
+        "trades": 18570,
         "ativos": 1511
       },
       {
@@ -481,8 +481,8 @@
       },
       {
         "data_negocio": "2026-10-22",
-        "volume": 7583495748.7699995,
-        "trades": 18594,
+        "volume": 7581910998.2699995,
+        "trades": 18592,
         "ativos": 1608
       },
       {
@@ -566,9 +566,9 @@
     ]
   },
   "acumulado_ano_ytd": {
-    "volume_financeiro": 1138030317311.29,
-    "total_trades": 3834010,
-    "ativos_unicos": 4969,
+    "volume_financeiro": 1138064993049.22,
+    "total_trades": 3833996,
+    "ativos_unicos": 4971,
     "total_pregoes": 214
   }
 }
