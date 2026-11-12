@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchCSV, fetchMetadata, Asset, Metadata, DocsOverview, DistressSummary, normalizeRating, getRatingBadgeClass } from '../utils/csv';
+import { getCachedRaioXIndex, loadRaioXIndex, resolveRaioXCnpj, RaioXIndex } from '../utils/raioxLookup';
 import SearchBar from '../components/SearchBar';
 import Watchlist from '../components/Watchlist';
 import {
@@ -144,7 +145,12 @@ const Home: React.FC = () => {
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [distressSummary, setDistressSummary] = useState<DistressSummary | null>(null);
   const [cashflowWallData, setCashflowWallData] = useState<CashflowWallPayload | null>(null);
+  const [raioxIndex, setRaioxIndex] = useState<RaioXIndex | null>(getCachedRaioXIndex());
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadRaioXIndex().then(setRaioxIndex);
+  }, []);
   const [maturityWallFilter, setMaturityWallFilter] = useState<'ALL' | 'B3_ONLY'>('ALL');
   const [cashflowPeriodMode, setCashflowPeriodMode] = useState<'YEARLY' | 'MONTHLY'>('YEARLY');
   const [showPrimaryModal, setShowPrimaryModal] = useState(false);
@@ -1176,31 +1182,39 @@ const Home: React.FC = () => {
               </div>
 
               <div className="space-y-2.5">
-                {topEmissores.map((item, idx) => (
-                  <Link
-                    key={idx}
-                    to={`/raiox-devedor?search=${encodeURIComponent(item.name)}`}
-                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 transition group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-bold text-xs flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        {idx + 1}
-                      </span>
-                      <div>
-                        <p className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors flex items-center gap-1.5">
-                          {item.name}
-                          <ArrowUpRight size={13} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </p>
-                        <p className="text-xs text-slate-500">{item.count} títulos emitidos</p>
+                {topEmissores.map((item, idx) => {
+                  const matchedRaioXCnpj = resolveRaioXCnpj(raioxIndex, { issuer: item.name });
+                  const destLink = matchedRaioXCnpj
+                    ? `/raiox-devedor?cnpj=${matchedRaioXCnpj}`
+                    : `/negocios?search=${encodeURIComponent(item.name)}`;
+                  return (
+                    <Link
+                      key={idx}
+                      to={destLink}
+                      className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 transition group cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-bold text-xs flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                          {idx + 1}
+                        </span>
+                        <div>
+                          <p className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors flex items-center gap-1.5">
+                            {item.name}
+                            <ArrowUpRight size={13} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </p>
+                          <p className="text-xs text-slate-500">{item.count} títulos emitidos</p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="text-right">
-                      <p className="text-sm font-extrabold text-slate-900">R$ {item.volumeBi} bi</p>
-                      <p className="text-xs text-slate-400 group-hover:text-blue-600 font-medium">Ver Raio-X &rarr;</p>
-                    </div>
-                  </Link>
-                ))}
+                      <div className="text-right">
+                        <p className="text-sm font-extrabold text-slate-900">R$ {item.volumeBi} bi</p>
+                        <p className="text-xs text-slate-400 group-hover:text-blue-600 font-medium">
+                          {matchedRaioXCnpj ? 'Ver Raio-X →' : 'Ver Negócios →'}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 

@@ -1,25 +1,25 @@
 {
   "resumo": {
-    "total_ofertas_ano": 916,
-    "volume_total_ano_bi": 292.84,
-    "total_em_andamento": 10,
-    "volume_em_andamento_bi": 5.12,
-    "total_encerradas": 900,
-    "volume_encerradas_bi": 282.76,
-    "total_historico_base": 4542,
-    "volume_historico_base_bi": 1762.26,
+    "total_ofertas_ano": 919,
+    "volume_total_ano_bi": 293.65,
+    "total_em_andamento": 11,
+    "volume_em_andamento_bi": 5.67,
+    "total_encerradas": 902,
+    "volume_encerradas_bi": 283.02,
+    "total_historico_base": 4545,
+    "volume_historico_base_bi": 1763.07,
     "por_tipo": {
       "CRA": {
         "total": 89,
         "volume_bi": 11.94
       },
       "CRI": {
-        "total": 430,
-        "volume_bi": 40.56
+        "total": 431,
+        "volume_bi": 40.58
       },
       "DEB": {
-        "total": 397,
-        "volume_bi": 240.34
+        "total": 399,
+        "volume_bi": 241.13
       }
     },
     "por_ano": {
@@ -36,11 +36,11 @@
         "volume_bi": 552.56
       },
       "2026": {
-        "total": 916,
-        "volume_bi": 292.84
+        "total": 919,
+        "volume_bi": 293.65
       }
     },
-    "data_atualizacao": "2026-11-11 03:06:56"
+    "data_atualizacao": "2026-11-12 03:06:52"
   },
   "evolucao_anual": [
     {
@@ -84,14 +84,14 @@
     },
     {
       "ano": "2026",
-      "volume_bi": 292.84,
-      "total_ofertas": 916,
-      "ticket_medio_mi": 319.7,
-      "yoy_volume_pct": -47.0,
-      "yoy_qtd_pct": -29.0,
+      "volume_bi": 293.65,
+      "total_ofertas": 919,
+      "ticket_medio_mi": 319.5,
+      "yoy_volume_pct": -46.9,
+      "yoy_qtd_pct": -28.8,
       "mix_instrumentos": {
         "deb_pct": 82.1,
-        "cri_pct": 13.9,
+        "cri_pct": 13.8,
         "cra_pct": 4.1
       }
     }
@@ -467,11 +467,11 @@
     },
     {
       "mes": "2026-11",
-      "volume_bi": 2.52,
-      "vol_deb_bi": 1.61,
-      "vol_cri_bi": 0.74,
+      "volume_bi": 3.32,
+      "vol_deb_bi": 2.4,
+      "vol_cri_bi": 0.76,
       "vol_cra_bi": 0.16,
-      "total_ofertas": 17
+      "total_ofertas": 20
     }
   ],
   "league_table": [
@@ -487,8 +487,8 @@
     },
     {
       "coordenador": "XP INVESTIMENTOS CCTVM S.A.",
-      "total_ofertas": 49,
-      "volume_bi": 32.38
+      "total_ofertas": 50,
+      "volume_bi": 32.62
     },
     {
       "coordenador": "BTG PACTUAL INVESTMENT BANKING LTDA.",
@@ -497,8 +497,8 @@
     },
     {
       "coordenador": "BANCO SANTANDER (BRASIL) S.A.",
-      "total_ofertas": 39,
-      "volume_bi": 21.02
+      "total_ofertas": 40,
+      "volume_bi": 21.57
     },
     {
       "coordenador": "UBS BB Corretora de Câmbio, Títulos e Valores Mobiliários S.A.",
@@ -556,10 +556,10 @@
         "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
         "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
         "dot_color": "bg-yellow-500",
-        "total_ofertas": 24,
-        "volume_total_reais": 25505030830.0,
-        "ofertas_ativas": 1,
-        "volume_ativo_reais": 800000000.0
+        "total_ofertas": 25,
+        "volume_total_reais": 26055030830.0,
+        "ofertas_ativas": 2,
+        "volume_ativo_reais": 1350000000.0
       },
       {
         "id": "BTG",
@@ -578,10 +578,10 @@
         "portal_url": "https://ofertaspublicas.xpi.com.br/",
         "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
         "dot_color": "bg-amber-500",
-        "total_ofertas": 28,
-        "volume_total_reais": 17998777228.88,
-        "ofertas_ativas": 3,
-        "volume_ativo_reais": 1386750000.0
+        "total_ofertas": 29,
+        "volume_total_reais": 18241062113.55,
+        "ofertas_ativas": 4,
+        "volume_ativo_reais": 1629034884.67
       },
       {
         "id": "SANTANDER",
@@ -589,10 +589,10 @@
         "portal_url": "https://www.santander.com.br/assessoria-financeira-e-mercado-de-capitais/ofertas-publicas/ofertas-em-andamento",
         "badge_bg": "bg-red-50 text-red-700 border-red-200",
         "dot_color": "bg-red-600",
-        "total_ofertas": 22,
-        "volume_total_reais": 13891146257.0,
-        "ofertas_ativas": 2,
-        "volume_ativo_reais": 1200000000.0
+        "total_ofertas": 23,
+        "volume_total_reais": 14441146257.0,
+        "ofertas_ativas": 3,
+        "volume_ativo_reais": 1750000000.0
       },
       {
         "id": "SAFRA",
@@ -607,6 +607,90 @@
       }
     ],
     "todas_ofertas_distribuicao": [
+      {
+        "id_requerimento": "28668",
+        "banco_id": "XP",
+        "banco_nome": "XP Investimentos",
+        "papel_banco": "Coordenador Líder",
+        "portal_url": "https://ofertaspublicas.xpi.com.br/",
+        "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
+        "dot_color": "bg-amber-500",
+        "devedor": "VERT COMPANHIA SECURITIZADORA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 242284884.67,
+        "data_processo": "2026-11-11",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": null,
+        "status_oferta": "Registro Concedido",
+        "fase_oferta": "DISTRIBUICAO_ATIVA",
+        "fase_label": "Registro Concedido (Em Distribuição)",
+        "badge_fase": "bg-emerald-50 text-emerald-700 border-emerald-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Anúncio de Início da Distribuição",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7441e6ad-0bbb-40f8-a647-0938f918278e"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "28675",
+        "banco_id": "SANTANDER",
+        "banco_nome": "Santander",
+        "papel_banco": "Coordenador Líder",
+        "portal_url": "https://www.santander.com.br/assessoria-financeira-e-mercado-de-capitais/ofertas-publicas/ofertas-em-andamento",
+        "badge_bg": "bg-red-50 text-red-700 border-red-200",
+        "dot_color": "bg-red-600",
+        "devedor": "UNIDAS LOCADORA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 550000000.0,
+        "data_processo": "2026-11-11",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI+2,35%",
+        "status_oferta": "Aguardando Bookbuilding",
+        "fase_oferta": "EM_BOOKBUILDING",
+        "fase_label": "Em Bookbuilding",
+        "badge_fase": "bg-purple-50 text-purple-700 border-purple-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2a1c9bc5-a4c9-482b-8a49-117b638d88e1"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "28675",
+        "banco_id": "BB_UBS",
+        "banco_nome": "BB / UBS BB",
+        "papel_banco": "Consórcio Distribuidor",
+        "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+        "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+        "dot_color": "bg-yellow-500",
+        "devedor": "UNIDAS LOCADORA S.A.",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 550000000.0,
+        "data_processo": "2026-11-11",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "CDI+2,35%",
+        "status_oferta": "Aguardando Bookbuilding",
+        "fase_oferta": "EM_BOOKBUILDING",
+        "fase_label": "Em Bookbuilding",
+        "badge_fase": "bg-purple-50 text-purple-700 border-purple-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2a1c9bc5-a4c9-482b-8a49-117b638d88e1"
+          }
+        ]
+      },
       {
         "id_requerimento": "28662",
         "banco_id": "SAFRA",
@@ -7460,7 +7544,7 @@
           "volume_bi": 52.59,
           "total_ofertas": 71,
           "ofertas_ativas": 3,
-          "share_pct": 29.8,
+          "share_pct": 29.5,
           "cor": "#EC7000",
           "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
           "dot_color": "bg-orange-500"
@@ -7471,7 +7555,7 @@
           "volume_bi": 41.89,
           "total_ofertas": 44,
           "ofertas_ativas": 3,
-          "share_pct": 23.7,
+          "share_pct": 23.5,
           "cor": "#CC092F",
           "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
           "dot_color": "bg-rose-600"
@@ -7479,10 +7563,10 @@
         {
           "banco_id": "BB_UBS",
           "banco_nome": "BB / UBS BB",
-          "volume_bi": 25.51,
-          "total_ofertas": 24,
-          "ofertas_ativas": 1,
-          "share_pct": 14.4,
+          "volume_bi": 26.06,
+          "total_ofertas": 25,
+          "ofertas_ativas": 2,
+          "share_pct": 14.6,
           "cor": "#0284C7",
           "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
           "dot_color": "bg-yellow-500"
@@ -7501,9 +7585,9 @@
         {
           "banco_id": "XP",
           "banco_nome": "XP Investimentos",
-          "volume_bi": 18.0,
-          "total_ofertas": 28,
-          "ofertas_ativas": 3,
+          "volume_bi": 18.24,
+          "total_ofertas": 29,
+          "ofertas_ativas": 4,
           "share_pct": 10.2,
           "cor": "#D97706",
           "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
@@ -7512,10 +7596,10 @@
         {
           "banco_id": "SANTANDER",
           "banco_nome": "Santander",
-          "volume_bi": 13.89,
-          "total_ofertas": 22,
-          "ofertas_ativas": 2,
-          "share_pct": 7.9,
+          "volume_bi": 14.44,
+          "total_ofertas": 23,
+          "ofertas_ativas": 3,
+          "share_pct": 8.1,
           "cor": "#EC0000",
           "badge_bg": "bg-red-50 text-red-700 border-red-200",
           "dot_color": "bg-red-600"
@@ -7532,7 +7616,7 @@
           "dot_color": "bg-indigo-600"
         }
       ],
-      "volume_total_esteira_bi": 176.72,
+      "volume_total_esteira_bi": 178.06,
       "series_anuais": [
         {
           "periodo": "2023",
@@ -7600,23 +7684,23 @@
         {
           "periodo": "2026",
           "label": "2026",
-          "total_bi": 292.85,
+          "total_bi": 293.65,
           "Itaú BBA": 73.06,
           "Itaú BBA_share": 24.9,
           "Bradesco BBI": 46.46,
-          "Bradesco BBI_share": 15.9,
+          "Bradesco BBI_share": 15.8,
           "BTG Pactual": 33.51,
           "BTG Pactual_share": 11.4,
-          "XP Investimentos": 32.38,
+          "XP Investimentos": 32.62,
           "XP Investimentos_share": 11.1,
-          "Santander": 21.02,
-          "Santander_share": 7.2,
+          "Santander": 21.57,
+          "Santander_share": 7.3,
           "BB / UBS BB": 15.58,
           "BB / UBS BB_share": 5.3,
           "Banco Safra": 3.54,
           "Banco Safra_share": 1.2,
-          "Outros": 67.3,
-          "Outros_share": 23.0
+          "Outros": 67.32,
+          "Outros_share": 22.9
         }
       ],
       "series_trimestrais": [
@@ -7938,23 +8022,23 @@
         {
           "periodo": "2026-T4",
           "label": "2026 T4",
-          "total_bi": 22.07,
+          "total_bi": 22.88,
           "Itaú BBA": 5.07,
-          "Itaú BBA_share": 23.0,
+          "Itaú BBA_share": 22.2,
           "Bradesco BBI": 2.6,
-          "Bradesco BBI_share": 11.8,
+          "Bradesco BBI_share": 11.4,
           "BTG Pactual": 1.87,
-          "BTG Pactual_share": 8.5,
-          "XP Investimentos": 1.52,
-          "XP Investimentos_share": 6.9,
-          "Santander": 1.4,
-          "Santander_share": 6.4,
+          "BTG Pactual_share": 8.2,
+          "XP Investimentos": 1.76,
+          "XP Investimentos_share": 7.7,
+          "Santander": 1.95,
+          "Santander_share": 8.5,
           "BB / UBS BB": 0.85,
-          "BB / UBS BB_share": 3.9,
+          "BB / UBS BB_share": 3.7,
           "Banco Safra": 0.57,
-          "Banco Safra_share": 2.6,
-          "Outros": 8.19,
-          "Outros_share": 37.1
+          "Banco Safra_share": 2.5,
+          "Outros": 8.2,
+          "Outros_share": 35.8
         }
       ],
       "bancos_meta": [
@@ -8002,6 +8086,108 @@
     }
   },
   "ofertas_em_andamento": [
+    {
+      "id_requerimento": "28675",
+      "numero_processo": "SRE/3664/2026",
+      "numero_registro": "",
+      "tipo_ativo": "DEB",
+      "nome_valor_mobiliario": "Debêntures",
+      "status_oferta": "Aguardando Bookbuilding",
+      "nome_emissor": "UNIDAS LOCADORA S.A.",
+      "cnpj_emissor": "45736131000170",
+      "nome_devedor_real": "UNIDAS LOCADORA S.A.",
+      "cnpj_devedor_real": "45736131000170",
+      "nome_coordenador_lider": "BANCO SANTANDER (BRASIL) S.A.",
+      "cnpj_coordenador_lider": "90400888000142",
+      "valor_total_reais": 550000000.0,
+      "data_processo": "2026-11-11",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28675_45832",
+          "descricao_serie": "Debêntures",
+          "volume_serie_reais": 550000000.0,
+          "quantidade_ativos": 550000.0,
+          "pu_nominal": 1000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_maxima": "CDI+2,35%",
+          "taxa_remuneracao_final": "",
+          "data_emissao": "2026-11-25",
+          "data_vencimento": "2032-05-25",
+          "forma_amortizacao": "Em parcelas iguais, ao final do 48º mês e na Data de Vencimento.",
+          "avaliacao_risco": "AA+br - pela Moody's América Latina",
+          "isin": "BRUNLCDBS035",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-11-11",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2a1c9bc5-a4c9-482b-8a49-117b638d88e1"
+        }
+      ],
+      "participantes": [
+        {
+          "tipo_participante": "COORDENADOR",
+          "razao_social": "BANCO SANTANDER (BRASIL) S.A.",
+          "cnpj": "90400888000142"
+        },
+        {
+          "tipo_participante": "COORDENADOR",
+          "razao_social": "UBS BB Corretora de Câmbio, Títulos e Valores Mobiliários S.A.",
+          "cnpj": "02819125000173"
+        },
+        {
+          "tipo_participante": "COORDENADOR",
+          "razao_social": "BANCO DAYCOVAL S.A.",
+          "cnpj": "62232889000190"
+        },
+        {
+          "tipo_participante": "OFERTANTE",
+          "razao_social": "UNIDAS LOCADORA S.A.",
+          "cnpj": "45736131000170"
+        },
+        {
+          "tipo_participante": "REQUERENTE",
+          "razao_social": "BANCO SANTANDER (BRASIL) S.A.",
+          "cnpj": "90400888000142"
+        },
+        {
+          "tipo_participante": "EMISSOR",
+          "razao_social": "UNIDAS LOCADORA S.A.",
+          "cnpj": "45736131000170"
+        }
+      ],
+      "ativo_secundario": null,
+      "sindicato_distribuicao": [
+        {
+          "banco_id": "SANTANDER",
+          "banco_nome": "Santander",
+          "portal_url": "https://www.santander.com.br/assessoria-financeira-e-mercado-de-capitais/ofertas-publicas/ofertas-em-andamento",
+          "badge_bg": "bg-red-50 text-red-700 border-red-200",
+          "dot_color": "bg-red-600",
+          "papel": "Coordenador Líder",
+          "is_lead": true,
+          "razao_social": "BANCO SANTANDER (BRASIL) S.A."
+        },
+        {
+          "banco_id": "BB_UBS",
+          "banco_nome": "BB / UBS BB",
+          "portal_url": "https://www.bb.com.br/site/investimentos/oferta-publica/",
+          "badge_bg": "bg-yellow-50 text-yellow-800 border-yellow-300",
+          "dot_color": "bg-yellow-500",
+          "papel": "Consórcio Distribuidor",
+          "is_lead": false,
+          "razao_social": "UBS BB Corretora de Câmbio, Títulos e Valores Mobiliários S.A."
+        }
+      ]
+    },
     {
       "id_requerimento": "28662",
       "numero_processo": "SRE/3654/2026",
@@ -8763,6 +8949,11 @@
           "nome_documento": "Aviso ao Mercado",
           "data_publicacao": "2026-10-20",
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/3e7a3a83-e430-4693-aa60-0bccf0e6a7c7"
+        },
+        {
+          "nome_documento": "Comunicado ao Mercado",
+          "data_publicacao": "2026-11-11",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/baffd4c9-3f76-449f-8e2c-4de2b768ccce"
         }
       ],
       "participantes": [
@@ -9091,6 +9282,103 @@
     }
   ],
   "ofertas_recentes": [
+    {
+      "id_requerimento": "28633",
+      "numero_processo": "SRE/3657/2026",
+      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/712;CVM/SRE/AUT/CRI/PRI/2026/713",
+      "tipo_ativo": "CRI",
+      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
+      "status_oferta": "Registro Concedido",
+      "nome_emissor": "CIA PROVINCIA DE SECURITIZAÇÃO",
+      "cnpj_emissor": "04200649000107",
+      "nome_devedor_real": null,
+      "cnpj_devedor_real": null,
+      "nome_coordenador_lider": "CIA PROVINCIA DE SECURITIZAÇÃO",
+      "cnpj_coordenador_lider": "04200649000107",
+      "valor_total_reais": 14700000.0,
+      "data_processo": "2026-11-11",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28633_45773",
+          "descricao_serie": "2ª",
+          "volume_serie_reais": 14700000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2029-11-21",
+          "avaliacao_risco": "N/A",
+          "isin": "BRPVSCCRICV8",
+          "matched_ticker": null
+        },
+        {
+          "id_serie": "28633_45775",
+          "descricao_serie": "3ª",
+          "volume_serie_reais": 14700000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2028-12-19",
+          "avaliacao_risco": "N/A",
+          "isin": "BRPVSCCRICW6",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Anúncio de Início da Distribuição",
+          "data_publicacao": "2026-11-11",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/a17fea05-e04e-4e18-8f14-a504cfd5ad71"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
+      "id_requerimento": "28668",
+      "numero_processo": "SRE/3665/2026",
+      "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/510",
+      "tipo_ativo": "DEB",
+      "nome_valor_mobiliario": "Debêntures",
+      "status_oferta": "Registro Concedido",
+      "nome_emissor": "VERT COMPANHIA SECURITIZADORA",
+      "cnpj_emissor": "25005683000109",
+      "nome_devedor_real": "VERT COMPANHIA SECURITIZADORA",
+      "cnpj_devedor_real": "25005683000109",
+      "nome_coordenador_lider": "XP INVESTIMENTOS CCTVM S.A.",
+      "cnpj_coordenador_lider": "02332886000104",
+      "valor_total_reais": 242284884.67,
+      "data_processo": "2026-11-11",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28668_45825",
+          "descricao_serie": "Debênture - Série Única",
+          "volume_serie_reais": 242284884.67,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2033-08-03",
+          "avaliacao_risco": null,
+          "isin": "BRVERTDBS2T4",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Anúncio de Início da Distribuição",
+          "data_publicacao": "2026-11-11",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7441e6ad-0bbb-40f8-a647-0938f918278e"
+        }
+      ],
+      "ativo_secundario": null
+    },
     {
       "id_requerimento": "28646",
       "numero_processo": "SRE/3645/2026",
@@ -9683,7 +9971,7 @@
       "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/508;CVM/SRE/AUT/DEB/PRI/2026/509",
       "tipo_ativo": "DEB",
       "nome_valor_mobiliario": "Debêntures",
-      "status_oferta": "Registro Concedido",
+      "status_oferta": "Oferta Encerrada",
       "nome_emissor": "FRIGOL S.A.",
       "cnpj_emissor": "68067446001220",
       "nome_devedor_real": "FRIGOL S.A.",
@@ -23190,199 +23478,6 @@
       "ativo_secundario": {
         "ticker": "26G4095254",
         "isin": "BRIMWLCRIQM4"
-      }
-    },
-    {
-      "id_requerimento": "27007",
-      "numero_processo": "SRE/2134/2026",
-      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/500",
-      "tipo_ativo": "CRI",
-      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
-      "status_oferta": "Oferta Encerrada",
-      "nome_emissor": "CANAL COMPANHIA DE SECURITIZAÇÃO",
-      "cnpj_emissor": "41811375000119",
-      "nome_devedor_real": "PROLAGOS S/A - CONC.DE SERVICOS PÚBLICOS DE ÁGUA E ESGOTO",
-      "cnpj_devedor_real": "02.382.073/0001-10",
-      "nome_coordenador_lider": "CANAL COMPANHIA DE SECURITIZAÇÃO",
-      "cnpj_coordenador_lider": "41811375000119",
-      "valor_total_reais": 115000000.0,
-      "data_processo": "2026-08-20",
-      "data_liquidacao_doc": "2026-07-31",
-      "data_vencimento_doc": "2026-08-26",
-      "possui_book": 1,
-      "resumo_oferta": null,
-      "matched_ticker": "26G5186437",
-      "matched_isin": "BRCASCCRI8V7",
-      "series": [
-        {
-          "id_serie": "27007_43378",
-          "descricao_serie": "CRI",
-          "volume_serie_reais": 115000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2042-07-28",
-          "avaliacao_risco": null,
-          "isin": "BRCASCCRI8V7",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Prospecto Preliminar",
-          "data_publicacao": "2026-07-03",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/c8cb8555-fbe3-4fe9-a497-16a0e1958e40"
-        },
-        {
-          "nome_documento": "Prospecto Preliminar",
-          "data_publicacao": "2026-07-07",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/f799a03b-cc04-431e-b564-892b815ee024"
-        },
-        {
-          "nome_documento": "Prospecto Preliminar",
-          "data_publicacao": "2026-07-16",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/28a81704-87ac-4dcc-ae6e-e3d406acc0a6"
-        },
-        {
-          "nome_documento": "Prospecto Preliminar",
-          "data_publicacao": "2026-07-28",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/f27612dc-f022-4748-b95f-2841a15bf4f1"
-        },
-        {
-          "nome_documento": "Prospecto Preliminar",
-          "data_publicacao": "2026-08-11",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/1c1a5fb0-9b12-4506-9f37-27d217b74d7b"
-        },
-        {
-          "nome_documento": "Prospecto Definitivo",
-          "data_publicacao": "2026-08-20",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/a03d8e4e-0a39-4c70-abfb-8ac1fd9cf261"
-        },
-        {
-          "nome_documento": "Prospecto Definitivo",
-          "data_publicacao": "2026-08-20",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/6df4d0cb-d0ce-4693-b494-7ce66f576a8c"
-        },
-        {
-          "nome_documento": "Lâmina",
-          "data_publicacao": "2026-07-03",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4515983d-c2ee-4f98-a098-0a18cdcfb82f"
-        },
-        {
-          "nome_documento": "Lâmina",
-          "data_publicacao": "2026-07-28",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/a155bf71-1932-4a81-a5b4-153133e0051a"
-        },
-        {
-          "nome_documento": "Lâmina",
-          "data_publicacao": "2026-08-19",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/f74a8588-259c-4a93-a827-a873f735e34d"
-        },
-        {
-          "nome_documento": "Aviso ao Mercado",
-          "data_publicacao": "2026-07-03",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/485db7b9-66cf-458f-b974-e0dcfa49c5de"
-        },
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-08-20",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/c841bdae-8dbf-45af-bf44-fbafb0e3dee2"
-        },
-        {
-          "nome_documento": "Comunicado ao Mercado",
-          "data_publicacao": "2026-07-07",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/95115173-70f2-4a7e-a1f2-6e0aa4589e2e"
-        },
-        {
-          "nome_documento": "Comunicado ao Mercado",
-          "data_publicacao": "2026-07-16",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2677a22f-474e-4d74-ac9a-39c525a4271b"
-        },
-        {
-          "nome_documento": "Comunicado ao Mercado",
-          "data_publicacao": "2026-07-28",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/0a36f1ff-4322-49e8-83a3-c194bdd54337"
-        },
-        {
-          "nome_documento": "Comunicado ao Mercado",
-          "data_publicacao": "2026-08-11",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/0c3d9211-02ba-44e5-9003-eac9e2c0d8e1"
-        },
-        {
-          "nome_documento": "Anúncio de Encerramento da Distribuição",
-          "data_publicacao": "2026-09-02",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/ccb139ca-048d-4445-973f-31d15f0d9eee"
-        }
-      ],
-      "ativo_secundario": {
-        "ticker": "26G5186437",
-        "isin": "BRCASCCRI8V7"
-      }
-    },
-    {
-      "id_requerimento": "27514",
-      "numero_processo": "SRE/2601/2026",
-      "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/398;CVM/SRE/AUT/DEB/PRI/2026/399",
-      "tipo_ativo": "DEB",
-      "nome_valor_mobiliario": "Debêntures",
-      "status_oferta": "Oferta Encerrada",
-      "nome_emissor": "EDP ESPIRITO SANTO DISTRIBUIÇÃO DE ENERGIA S.A.",
-      "cnpj_emissor": "28152650000171",
-      "nome_devedor_real": "EDP ESPIRITO SANTO DISTRIBUIÇÃO DE ENERGIA S.A.",
-      "cnpj_devedor_real": "28152650000171",
-      "nome_coordenador_lider": "BANCO BRADESCO BBI S.A.",
-      "cnpj_coordenador_lider": "06271464000119",
-      "valor_total_reais": 800000000.0,
-      "data_processo": "2026-08-20",
-      "data_liquidacao_doc": null,
-      "data_vencimento_doc": null,
-      "possui_book": 1,
-      "resumo_oferta": null,
-      "matched_ticker": "ESCEB7",
-      "matched_isin": "BRESCEDBS0J8",
-      "series": [
-        {
-          "id_serie": "27514_44121",
-          "descricao_serie": "Debêntures da 1ª Série",
-          "volume_serie_reais": 400000000.0,
-          "book_taxa": "15,1730%",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2036-08-15",
-          "avaliacao_risco": null,
-          "isin": "BRESCEDBS0I0",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27514_44123",
-          "descricao_serie": "Debêntures da 2ª Série",
-          "volume_serie_reais": 400000000.0,
-          "book_taxa": "15,2304%",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2036-08-15",
-          "avaliacao_risco": null,
-          "isin": "BRESCEDBS0J8",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Aviso ao Mercado",
-          "data_publicacao": "2026-08-14",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/3bc82d54-dd9f-483a-a276-17c7ece3153f"
-        },
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-08-20",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/0738aab9-bd03-473f-929f-2e77cc374364"
-        },
-        {
-          "nome_documento": "Anúncio de Encerramento da Distribuição",
-          "data_publicacao": "2026-08-21",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4feea292-421a-4388-a001-47bf00d9c607"
-        }
-      ],
-      "ativo_secundario": {
-        "ticker": "ESCEB7",
-        "isin": "BRESCEDBS0J8"
       }
     }
   ]

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, AssetDocument, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
+import { cleanCnpj14, normCompanyKey, isSecuritizadoraName, getCachedRaioXIndex, loadRaioXIndex, resolveRaioXCnpj, RaioXIndex } from '../utils/raioxLookup';
 import ChartComponent from '../components/ChartComponent';
 import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen, ArrowRight, Activity, ArrowLeftRight, Calculator, HelpCircle, Info, Users } from 'lucide-react';
 
@@ -101,28 +102,52 @@ const getPrazoAnosInfo = (vctoStr?: string) => {
 
 const matchEmitter = (issuers: Emitter[], asset: Asset): Emitter | null => {
   const issuerName = (asset.issuer || '').trim();
-  const cnpjClean = (asset.cnpj_emissor || '').replace(/\D/g, '');
+  const cnpjClean = cleanCnpj14(asset.cnpj_emissor);
+  const isCriCra = ['CRI', 'CRA'].includes((asset.tipo || '').trim().toUpperCase());
+  const issIsSec = isSecuritizadoraName(issuerName);
 
-  if (cnpjClean && cnpjClean.length >= 8) {
-    const byCnpj = issuers.find(e => (e.cnpj || '').replace(/\D/g, '') === cnpjClean);
-    if (byCnpj) return byCnpj;
+  // 1. Para CRI/CRA cujo issuer é o devedor (não securitizadora), prioriza nome do devedor
+  if (isCriCra && !issIsSec && issuerName && !['nan', 'none', '-', ''].includes(issuerName.toLowerCase()) && !issuerName.toLowerCase().includes('pulverizad')) {
+    const target = issuerName.toLowerCase();
+    const targetNorm = normCompanyKey(issuerName);
+    const byName = issuers.find(e => {
+      const rs = (e.razao_social || '').trim().toLowerCase();
+      const nf = (e.nome_fantasia || '').trim().toLowerCase();
+      return rs === target || nf === target || (targetNorm && (normCompanyKey(e.razao_social) === targetNorm || normCompanyKey(e.nome_fantasia) === targetNorm));
+    });
+    if (byName && !isSecuritizadoraName(byName.razao_social, byName.setor)) {
+      return byName;
+    }
   }
 
+  // 2. Busca por CNPJ de 14 dígitos
+  if (cnpjClean) {
+    const byCnpj = issuers.find(e => cleanCnpj14(e.cnpj) === cnpjClean);
+    if (byCnpj && !(isCriCra && !issIsSec && isSecuritizadoraName(byCnpj.razao_social, byCnpj.setor))) {
+      return byCnpj;
+    }
+  }
+
+  // 3. Busca por nome exato ou normalizado (sem match frouxo de substring)
   if (issuerName && !['nan', 'none', '-', ''].includes(issuerName.toLowerCase())) {
     const target = issuerName.toLowerCase();
-    const exact = issuers.find(e => 
-      (e.razao_social && e.razao_social.trim().toLowerCase() === target) ||
-      (e.nome_fantasia && e.nome_fantasia.trim().toLowerCase() === target)
-    );
-    if (exact) return exact;
-
-    const partial = issuers.find(e => {
-      const r = (e.razao_social || '').trim().toLowerCase();
-      const f = (e.nome_fantasia || '').trim().toLowerCase();
-      return (r.length > 3 && target.includes(r)) || (target.length > 3 && r.includes(target)) ||
-             (f.length > 3 && target.includes(f)) || (target.length > 3 && f.includes(target));
+    const targetNorm = normCompanyKey(issuerName);
+    const exactOrNorm = issuers.find(e => {
+      const rs = (e.razao_social || '').trim().toLowerCase();
+      const nf = (e.nome_fantasia || '').trim().toLowerCase();
+      return rs === target || nf === target || (targetNorm && (normCompanyKey(e.razao_social) === targetNorm || normCompanyKey(e.nome_fantasia) === targetNorm));
     });
-    if (partial) return partial;
+    if (exactOrNorm) return exactOrNorm;
+
+    // 4. Busca por raiz de CNPJ (8 dígitos, exceto securitizadoras)
+    if (cnpjClean) {
+      const root8 = cnpjClean.slice(0, 8);
+      const byRoot = issuers.find(e => {
+        const ec = cleanCnpj14(e.cnpj);
+        return ec.slice(0, 8) === root8 && !isSecuritizadoraName(e.razao_social, e.setor);
+      });
+      if (byRoot) return byRoot;
+    }
 
     return {
       cnpj: asset.cnpj_emissor || '-',
@@ -176,6 +201,8 @@ const AssetPage: React.FC = () => {
 
   const [asset, setAsset] = useState<Asset | null>(initialPayload ? initialPayload.asset : null);
   const [emitter, setEmitter] = useState<Emitter | null>(initialPayload ? initialPayload.emitter : null);
+  const [raioxCnpj, setRaioxCnpj] = useState<string | null>(initialPayload && 'raiox_cnpj' in initialPayload ? initialPayload.raiox_cnpj : null);
+  const [raioxIndex, setRaioxIndex] = useState<RaioXIndex | null>(getCachedRaioXIndex());
   const [prices, setPrices] = useState<PriceRecord[]>(initialPayload ? (initialPayload.prices || []) : []);
   const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>(initialPayload ? (initialPayload.paymentEvents || []) : []);
   const [documents, setDocuments] = useState<AssetDocument[]>(initialPayload ? (initialPayload.documents || []) : []);
@@ -183,6 +210,16 @@ const AssetPage: React.FC = () => {
   const [docFilter, setDocFilter] = useState<'ALL' | 'PROSPECTO' | 'RELATORIO' | 'ASSEMBLEIA'>('ALL');
   const [loading, setLoading] = useState(!initialPayload);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    loadRaioXIndex().then((idx) => {
+      if (active) setRaioxIndex(idx);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const formatDatePretty = (dateStr?: string | null) => {
     if (!dateStr) return "-";
@@ -303,6 +340,7 @@ const AssetPage: React.FC = () => {
     asset: Asset;
     prices?: PriceRecord[];
     emitter?: Emitter | null;
+    raiox_cnpj?: string | null;
     paymentEvents?: PaymentEvent[];
     documents?: AssetDocument[];
   }) => {
@@ -315,6 +353,7 @@ const AssetPage: React.FC = () => {
     setAsset(found);
     setPrices(payload.prices || []);
     setEmitter(payload.emitter || null);
+    setRaioxCnpj('raiox_cnpj' in payload ? (payload.raiox_cnpj || null) : null);
 
     const assetEvents = [...(payload.paymentEvents || [])];
     assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
@@ -537,9 +576,15 @@ const AssetPage: React.FC = () => {
   const tEmissaoVal = asset.taxa_emissao || (asset.taxa_mercado ? null : asset.taxa_ativo);
   const taxaEmissaoFormatted = formatTaxaValue(tEmissaoVal, asset.indexador);
 
-  const debtorCnpjClean = (emitter?.cnpj || asset.cnpj_emissor || '').replace(/\D/g, '');
-  const debtorSearchQuery = (emitter?.nome_fantasia || emitter?.razao_social || asset.issuer || '').trim();
-  const debtorRaioXLink = `/raiox-devedor?cnpj=${debtorCnpjClean}&search=${encodeURIComponent(debtorSearchQuery)}`;
+  const effectiveRaioXCnpj =
+    raioxCnpj ||
+    resolveRaioXCnpj(raioxIndex, {
+      issuer: asset.issuer || emitter?.razao_social,
+      cnpj: asset.cnpj_emissor,
+      emitterCnpj: emitter?.cnpj,
+      tipo: asset.tipo
+    });
+  const debtorRaioXLink = effectiveRaioXCnpj ? `/raiox-devedor?cnpj=${effectiveRaioXCnpj}` : null;
   const prazoInfo = getPrazoAnosInfo(asset.vencimento);
 
   return (
@@ -562,15 +607,17 @@ const AssetPage: React.FC = () => {
             Ficha do Ativo
           </span>
 
-          <Link
-            to={debtorRaioXLink}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-xs font-bold transition border border-slate-200 hover:border-indigo-300 group"
-            title="Ir para o Raio-X e Balanço do Devedor"
-          >
-            <Building2 size={13} className="text-indigo-600 group-hover:scale-110 transition-transform" />
-            <span>Raio-X do Devedor</span>
-            <span className="px-1.5 py-0.2 bg-indigo-600 text-white text-[9px] font-black rounded-full uppercase">Novo</span>
-          </Link>
+          {debtorRaioXLink && (
+            <Link
+              to={debtorRaioXLink}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-xs font-bold transition border border-slate-200 hover:border-indigo-300 group"
+              title="Ir para o Raio-X e Balanço do Devedor"
+            >
+              <Building2 size={13} className="text-indigo-600 group-hover:scale-110 transition-transform" />
+              <span>Raio-X do Devedor</span>
+              <span className="px-1.5 py-0.2 bg-indigo-600 text-white text-[9px] font-black rounded-full uppercase">Novo</span>
+            </Link>
+          )}
 
           <Link
             to={`/negocios?search=${encodeURIComponent(asset.ticker)}`}
@@ -1099,23 +1146,33 @@ const AssetPage: React.FC = () => {
                   {emitter.tipo_emissor || 'Emissor / Devedor'}
                 </span>
                 <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
-                  {emitter.nome_fantasia || emitter.razao_social}
+                  {emitter.razao_social || asset.issuer || emitter.nome_fantasia}
                 </h3>
-                {emitter.razao_social && emitter.nome_fantasia && emitter.razao_social !== emitter.nome_fantasia && (
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">{emitter.razao_social}</p>
+                {emitter.nome_fantasia && emitter.razao_social && emitter.nome_fantasia !== emitter.razao_social && (
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">{emitter.nome_fantasia}</p>
                 )}
               </div>
 
               <div className="flex flex-wrap items-center gap-2.5">
-                <Link
-                  to={debtorRaioXLink}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-extrabold rounded-xl transition shadow-xs hover:shadow-md active:scale-95 group"
-                  title="Abrir Demonstrações Financeiras, Balanço, Ratings e Risco no Raio-X do Devedor"
-                >
-                  <Activity size={16} className="text-blue-200 group-hover:scale-110 transition-transform" />
-                  <span>Ir para análise do devedor</span>
-                  <ArrowRight size={14} className="text-blue-200 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                {debtorRaioXLink ? (
+                  <Link
+                    to={debtorRaioXLink}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-extrabold rounded-xl transition shadow-xs hover:shadow-md active:scale-95 group"
+                    title="Abrir Demonstrações Financeiras, Balanço, Ratings e Risco no Raio-X do Devedor"
+                  >
+                    <Activity size={16} className="text-blue-200 group-hover:scale-110 transition-transform" />
+                    <span>Ir para análise do devedor</span>
+                    <ArrowRight size={14} className="text-blue-200 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                ) : (
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 text-slate-400 border border-slate-200 text-xs font-semibold rounded-xl cursor-not-allowed select-none"
+                    title="Este emissor/devedor não possui demonstrações financeiras abertas (DFP/ITR) registradas na CVM para o Raio-X do Devedor"
+                  >
+                    <Activity size={14} className="text-slate-400" />
+                    <span>Sem análise de balanço CVM</span>
+                  </span>
+                )}
 
                 {emitter.site_ri && (
                   <a

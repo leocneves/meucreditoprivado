@@ -28,6 +28,7 @@ import PieBox from '../components/PieBox'
 import SearchMultiSelect from '../components/SearchMultiSelect'
 import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter, SlidersHorizontal, Info, ChevronDown, ChevronUp, RotateCcw, ArrowUpDown, Copy, CheckCircle2 } from 'lucide-react'
 import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
+import { getCachedRaioXIndex, loadRaioXIndex, resolveRaioXCnpj, RaioXIndex } from '../utils/raioxLookup'
 
 /* ================= HELPERS ================= */
 
@@ -318,7 +319,12 @@ const CreditDashboard: React.FC = () => {
   const [prices, setPrices] = useState<PriceRecord[]>([])
   const [spreadHistory, setSpreadHistory] = useState<SpreadHistoryRecord[]>([])
   const [b3Liquidity, setB3Liquidity] = useState<Record<string, { dias: number; last_date: string }>>({})
+  const [raioxIndex, setRaioxIndex] = useState<RaioXIndex | null>(getCachedRaioXIndex())
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadRaioXIndex().then(setRaioxIndex)
+  }, [])
 
   const [tiposSel, setTiposSel] = useState<string[]>([])
   const [setoresSel, setSetoresSel] = useState<string[]>([])
@@ -2473,13 +2479,29 @@ const CreditDashboard: React.FC = () => {
                       )}
                     </td>
                     <td className="p-2.5 font-medium text-slate-800 truncate max-w-[200px]" title={a.issuer}>
-                      <Link
-                        to={`/raiox-devedor?cnpj=${(a.cnpj_emissor || '').replace(/\D/g, '')}&search=${encodeURIComponent(a.issuer || '')}`}
-                        className="hover:text-blue-600 hover:underline transition font-bold"
-                        title="Ver análise completa no Raio-X do Devedor"
-                      >
-                        {(a.issuer || '-').toUpperCase()}
-                      </Link>
+                      {(() => {
+                        const rCnpj = resolveRaioXCnpj(raioxIndex, {
+                          issuer: a.issuer,
+                          cnpj: a.cnpj_emissor,
+                          tipo: a.tipo
+                        })
+                        if (rCnpj) {
+                          return (
+                            <Link
+                              to={`/raiox-devedor?cnpj=${rCnpj}`}
+                              className="hover:text-blue-600 hover:underline transition font-bold"
+                              title="Ver análise completa no Raio-X do Devedor"
+                            >
+                              {(a.issuer || '-').toUpperCase()}
+                            </Link>
+                          )
+                        }
+                        return (
+                          <span className="font-semibold text-slate-700">
+                            {(a.issuer || '-').toUpperCase()}
+                          </span>
+                        )
+                      })()}
                       {a.em_recuperacao_judicial === 'Sim' && (
                         <span className="ml-1.5 px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-[9px] font-extrabold" title="Emissor em Recuperação Judicial / Falência">
                           ⚠️ Em RJ

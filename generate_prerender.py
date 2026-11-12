@@ -89,6 +89,36 @@ def normalize_rating(val):
 
     return r_up if r_up else None
 
+SECURITIZADORA_TERMS = (
+    'securitizadora', 'securitizacao', 'securitização', 'securitzadora',
+    'virgo', 'opea', 'true sec', 'habitasec', 'fortesec', 'cibrasec',
+    'bari sec', 'octante', 'brazilian securities', 'b.sec', 'ecoagro',
+    'eco. sec', 'eco sec', 'riza sec', 'canalsec', 'planeta sec', 'ceres sec'
+)
+
+def is_securitizadora_name(name: str, setor: str = '') -> bool:
+    s = f"{name or ''} {setor or ''}".lower()
+    return any(t in s for t in SECURITIZADORA_TERMS)
+
+def norm_company_key(val: str) -> str:
+    if not val or pd.isna(val):
+        return ""
+    s = str(val).upper().strip()
+    s = re.sub(r'\s*-\s*EM\s+(RECUPERA[CÇ][AÃ]O\s+JUDICIAL|LIQUIDA[CÇ][AÃ]O.*)$', '', s)
+    s = re.sub(r'\bEM\s+RECUPERA[CÇ][AÃ]O\s+JUDICIAL\b', '', s)
+    s = re.sub(r'[\.\,\-\/\(\)]', ' ', s)
+    s = re.sub(r'\b(S\s+A|S\/A|SA|LTDA|CIA|COMPANHIA)\b', ' ', s)
+    return " ".join(s.split()).lower()
+
+def clean_cnpj14(val) -> str:
+    if not val or pd.isna(val):
+        return ""
+    digits = re.sub(r'\D', '', str(val))
+    if not digits:
+        return ""
+    digits = digits.zfill(14) if len(digits) >= 11 else digits
+    return digits if len(digits) == 14 else ""
+
 def get_emitters_map():
     emitters_file = "public/data/emitters_master.csv"
     if not os.path.exists(emitters_file):
@@ -101,14 +131,20 @@ def get_emitters_map():
         df_e = pd.read_csv(emitters_file)
         e_dict = {}
         for _, row in df_e.iterrows():
-            rs = str(row.get('razao_social', '')).strip().lower()
-            nf = str(row.get('nome_fantasia', '')).strip().lower()
+            cnpj_14 = clean_cnpj14(row.get('cnpj', ''))
+            rs_raw = str(row.get('razao_social', '')).strip()
+            nf_raw = str(row.get('nome_fantasia', '')).strip()
+            rs = rs_raw.lower()
+            nf = nf_raw.lower()
+            setor_str = str(row.get('setor', '')).strip()
+            tipo_emissor_str = str(row.get('tipo_emissor', '')).strip()
             item = {
-                'cnpj': str(row.get('cnpj', '')).strip(),
+                'cnpj': cnpj_14 or str(row.get('cnpj', '')).strip(),
                 'cnpj_formatado': str(row.get('cnpj_formatado', '')).strip(),
-                'razao_social': str(row.get('razao_social', '')).strip(),
-                'nome_fantasia': str(row.get('nome_fantasia', '')).strip(),
-                'setor': str(row.get('setor', '')).strip(),
+                'razao_social': rs_raw,
+                'nome_fantasia': nf_raw if nf_raw and nf_raw.lower() not in ('nan', 'none', '') else rs_raw,
+                'setor': setor_str,
+                'tipo_emissor': tipo_emissor_str if tipo_emissor_str and tipo_emissor_str.lower() not in ('nan', 'none', '') else 'Emissor / Devedor',
                 'categoria_cvm': str(row.get('categoria_cvm', '')).strip(),
                 'situacao_cvm': str(row.get('situacao_cvm', '')).strip(),
                 'site_ri': str(row.get('site_ri', '')).strip() if pd.notna(row.get('site_ri')) else None,
@@ -116,14 +152,96 @@ def get_emitters_map():
                 'uf': str(row.get('uf', '')).strip() if pd.notna(row.get('uf')) else None,
                 'descricao': str(row.get('descricao', '')).strip() if pd.notna(row.get('descricao')) else None
             }
+            is_sec = is_securitizadora_name(rs_raw, setor_str) or tipo_emissor_str == 'Securitizadora'
+            if cnpj_14:
+                e_dict[f"cnpj:{cnpj_14}"] = item
+                if not is_sec and f"cnpj8:{cnpj_14[:8]}" not in e_dict:
+                    e_dict[f"cnpj8:{cnpj_14[:8]}"] = item
             if rs and rs not in ('nan', 'none', ''):
                 e_dict[rs] = item
+                nk = norm_company_key(rs_raw)
+                if nk:
+                    e_dict[f"norm:{nk}"] = item
             if nf and nf not in ('nan', 'none', ''):
                 e_dict[nf] = item
+                nk_nf = norm_company_key(nf_raw)
+                if nk_nf and f"norm:{nk_nf}" not in e_dict:
+                    e_dict[f"norm:{nk_nf}"] = item
         return e_dict
     except Exception as err:
         print(f"Erro ao carregar mapa de emissores: {err}")
         return {}
+
+def get_raiox_devedores_map():
+    raiox_file = "public/data/devedores_resumo.json"
+    if not os.path.exists(raiox_file):
+        raiox_file = "/home/home/airflow/src/cp_site/data/devedores_resumo.json"
+    if not os.path.exists(raiox_file):
+        return {}
+    try:
+        with open(raiox_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        devs = data.get("devedores", [])
+        r_map = {}
+        for d in devs:
+            c14 = clean_cnpj14(d.get("cnpj", ""))
+            if not c14:
+                continue
+            rs_raw = str(d.get("razao_social", "")).strip()
+            nf_raw = str(d.get("nome_fantasia", "")).strip()
+            setor_str = str(d.get("setor", "")).strip()
+            is_sec = is_securitizadora_name(rs_raw, setor_str)
+            r_map[f"cnpj:{c14}"] = {"cnpj": c14, "is_sec": is_sec, "razao_social": rs_raw}
+            if not is_sec and f"cnpj8:{c14[:8]}" not in r_map:
+                r_map[f"cnpj8:{c14[:8]}"] = {"cnpj": c14, "is_sec": False, "razao_social": rs_raw}
+            if rs_raw:
+                r_map[rs_raw.lower()] = {"cnpj": c14, "is_sec": is_sec, "razao_social": rs_raw}
+                nk = norm_company_key(rs_raw)
+                if nk:
+                    r_map[f"norm:{nk}"] = {"cnpj": c14, "is_sec": is_sec, "razao_social": rs_raw}
+            if nf_raw and nf_raw.lower() not in ('nan', 'none', ''):
+                r_map[nf_raw.lower()] = {"cnpj": c14, "is_sec": is_sec, "razao_social": rs_raw}
+                nk_nf = norm_company_key(nf_raw)
+                if nk_nf and f"norm:{nk_nf}" not in r_map:
+                    r_map[f"norm:{nk_nf}"] = {"cnpj": c14, "is_sec": is_sec, "razao_social": rs_raw}
+        return r_map
+    except Exception as err:
+        print(f"Erro ao carregar mapa do Raio-X: {err}")
+        return {}
+
+def resolve_raiox_cnpj(issuer: str, cnpj_raw: str, tipo: str, emitter_info: dict = None) -> str:
+    if not RAIOX_MAP:
+        return None
+    iss_clean = (issuer or '').strip()
+    iss_low = iss_clean.lower()
+    if not iss_clean or 'pulverizad' in iss_low or iss_low in ('nan', 'none', '-', 'emissor privado', 'não informado'):
+        return None
+
+    is_cricra = str(tipo or '').strip().upper() in ('CRI', 'CRA')
+    iss_is_sec = is_securitizadora_name(iss_clean)
+
+    # 1. Tenta pelo nome do devedor (especialmente prioritário para CRI/CRA onde cnpj_emissor pode ser da securitizadora)
+    for k in (iss_low, f"norm:{norm_company_key(iss_clean)}"):
+        cand = RAIOX_MAP.get(k)
+        if cand and (not cand["is_sec"] or iss_is_sec):
+            return cand["cnpj"]
+
+    # 2. Tenta pelo CNPJ do ativo ou do emitter_info
+    for c_cand in (clean_cnpj14(cnpj_raw), clean_cnpj14(emitter_info.get("cnpj") if emitter_info else "")):
+        if not c_cand:
+            continue
+        m14 = RAIOX_MAP.get(f"cnpj:{c_cand}")
+        if m14:
+            if is_cricra and m14["is_sec"] and not iss_is_sec:
+                continue
+            return m14["cnpj"]
+        m8 = RAIOX_MAP.get(f"cnpj8:{c_cand[:8]}")
+        if m8:
+            if is_cricra and m8["is_sec"] and not iss_is_sec:
+                continue
+            return m8["cnpj"]
+
+    return None
 
 def get_bundle_script():
     # 1. Busca dinamicamente a tag exata gerada no index.html do Vite
@@ -230,6 +348,7 @@ def get_docs_map():
         return {}
 
 EMITTERS_MAP = None
+RAIOX_MAP = None
 PRICES_MAP = None
 PAYMENTS_MAP = None
 DOCS_MAP = None
@@ -237,10 +356,11 @@ EMITTER_ASSETS_MAP = None
 SECTOR_ASSETS_MAP = None
 
 def init_maps(df=None):
-    global EMITTERS_MAP, PRICES_MAP, PAYMENTS_MAP, DOCS_MAP, EMITTER_ASSETS_MAP, SECTOR_ASSETS_MAP
+    global EMITTERS_MAP, RAIOX_MAP, PRICES_MAP, PAYMENTS_MAP, DOCS_MAP, EMITTER_ASSETS_MAP, SECTOR_ASSETS_MAP
     if EMITTERS_MAP is None:
         print("📊 Carregando bases analíticas em memória...")
         EMITTERS_MAP = get_emitters_map()
+        RAIOX_MAP = get_raiox_devedores_map()
         PRICES_MAP = get_prices_map()
         PAYMENTS_MAP = get_payments_map()
         DOCS_MAP = get_docs_map()
@@ -506,22 +626,47 @@ def generate_asset_html(row):
     vna_display = safe_fmt_pu(row.get('vna'))
     pu_par_display = safe_fmt_pu(row.get('pu_par'))
 
-    # Procurar emissor cadastrado
+    # Procurar emissor cadastrado (CNPJ 14 dígitos -> nome exato -> nome normalizado, sem substring frouxa)
     issuer_key = issuer.strip().lower()
-    emitter_info = EMITTERS_MAP.get(issuer_key)
-    if not emitter_info:
-        for k, v in EMITTERS_MAP.items():
-            if len(k) > 3 and (k in issuer_key or issuer_key in k):
-                emitter_info = v
-                break
+    cnpj_raw_asset = str(row.get('cnpj_emissor') or '').strip()
+    cnpj_14_asset = clean_cnpj14(cnpj_raw_asset)
+    is_cricra_asset = tipo.upper() in ('CRI', 'CRA')
+    issuer_is_sec = is_securitizadora_name(issuer)
+
+    emitter_info = None
+    # 1. Para CRI/CRA cujo issuer é o devedor (não securitizadora), prioriza nome do devedor para não puxar a securitizadora pelo CNPJ de emissão
+    if is_cricra_asset and not issuer_is_sec:
+        emitter_info = EMITTERS_MAP.get(issuer_key) or EMITTERS_MAP.get(f"norm:{norm_company_key(issuer)}")
+        if emitter_info and is_securitizadora_name(emitter_info.get('razao_social', ''), emitter_info.get('setor', '')):
+            emitter_info = None
+
+    # 2. Busca por CNPJ de 14 dígitos
+    if not emitter_info and cnpj_14_asset:
+        cand_cnpj = EMITTERS_MAP.get(f"cnpj:{cnpj_14_asset}")
+        if cand_cnpj:
+            cand_is_sec = is_securitizadora_name(cand_cnpj.get('razao_social', ''), cand_cnpj.get('setor', ''))
+            if not (is_cricra_asset and cand_is_sec and not issuer_is_sec):
+                emitter_info = cand_cnpj
+
+    # 3. Busca por nome exato ou normalizado
+    if not emitter_info and issuer_key and issuer_key not in ('nan', 'none', '-', 'emissor privado') and 'pulverizad' not in issuer_key:
+        emitter_info = EMITTERS_MAP.get(issuer_key) or EMITTERS_MAP.get(f"norm:{norm_company_key(issuer)}")
+
+    # 4. Busca por raiz de CNPJ (8 dígitos) para filiais do mesmo grupo econômico (exceto securitizadoras)
+    if not emitter_info and cnpj_14_asset:
+        cand_c8 = EMITTERS_MAP.get(f"cnpj8:{cnpj_14_asset[:8]}")
+        if cand_c8 and not (is_cricra_asset and not issuer_is_sec and is_securitizadora_name(cand_c8.get('razao_social', ''))):
+            emitter_info = cand_c8
+
+    raiox_cnpj = resolve_raiox_cnpj(issuer, cnpj_raw_asset, tipo, emitter_info)
 
     page_url = f"{BASE_URL}/asset/{ticker.lower()}/"
     
     # Prefix para evitar repetição como "CRA CRA02300JG5"
     tipo_prefix = "" if ticker.upper().startswith(tipo.upper()) else f"{tipo} "
     
-    # Nome limpo do emissor
-    issuer_display = emitter_info.get('nome_fantasia') if emitter_info and emitter_info.get('nome_fantasia') else issuer
+    # Nome oficial do emissor/devedor consistente com o topo da página
+    issuer_display = emitter_info.get('razao_social') if emitter_info and emitter_info.get('razao_social') else issuer
     if len(issuer_display) > 28:
         issuer_display = issuer_display[:26].strip() + "…"
 
@@ -676,6 +821,7 @@ def generate_asset_html(row):
         "asset": asset_dict,
         "prices": asset_prices,
         "emitter": emitter_info,
+        "raiox_cnpj": raiox_cnpj,
         "paymentEvents": asset_payments,
         "documents": asset_docs
     }
@@ -687,7 +833,9 @@ def generate_asset_html(row):
     emitter_section_html = ""
     if emitter_info:
         ri_button = f'<a href="{emitter_info["site_ri"]}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200">Portal de RI &rarr;</a>' if emitter_info.get("site_ri") else ""
-        razao_sub = f'<p class="text-xs text-slate-500 font-medium">{emitter_info["razao_social"]}</p>' if emitter_info.get("razao_social") and emitter_info.get("razao_social") != emitter_info.get("nome_fantasia") else ""
+        raiox_button = f'<a href="/raiox-devedor?cnpj={raiox_cnpj}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold rounded-lg transition shadow-xs">Ir para análise do devedor &rarr;</a>' if raiox_cnpj else ""
+        primary_emitter_title = emitter_info.get("razao_social") or issuer
+        fantasia_sub = f'<p class="text-xs text-slate-500 font-medium">{emitter_info["nome_fantasia"]}</p>' if emitter_info.get("nome_fantasia") and emitter_info.get("nome_fantasia") != primary_emitter_title else ""
         desc_box = f'<p class="text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100 mt-3">{emitter_info["descricao"]}</p>' if emitter_info.get("descricao") else ""
         sede = f'{emitter_info.get("municipio") or ""} / {emitter_info.get("uf") or ""}'.strip(' /') or 'Brasil'
         emitter_section_html = f"""
@@ -695,10 +843,13 @@ def generate_asset_html(row):
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
               <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Perfil do Emissor / Devedor CVM</span>
-              <h2 class="text-xl font-extrabold text-slate-900 mt-0.5">{emitter_info.get('nome_fantasia') or emitter_info.get('razao_social')}</h2>
-              {razao_sub}
+              <h2 class="text-xl font-extrabold text-slate-900 mt-0.5">{primary_emitter_title}</h2>
+              {fantasia_sub}
             </div>
-            {ri_button}
+            <div class="flex flex-wrap items-center gap-2">
+              {raiox_button}
+              {ri_button}
+            </div>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div class="p-2.5 bg-slate-50 rounded-lg"><span class="text-slate-400 font-bold block mb-0.5">CNPJ</span><strong class="text-slate-800 font-mono text-sm">{emitter_info.get('cnpj_formatado') or '-'}</strong></div>
@@ -1509,8 +1660,7 @@ def render_home_page():
               <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X do Devedor</a>
               <a href="/agenda/" class="hover:text-blue-600 transition">Agenda de Pagamentos</a>
               <a href="/calculadora/" class="hover:text-blue-600 transition">Calculadora</a>
-              <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
-              <a href="/sobre/" class="hover:text-blue-600 transition">Sobre</a>
+              <a href="/contact/" class="hover:text-blue-600 transition">Contato & Apoio</a>
             </div>
           </div>
         </div>
@@ -1655,61 +1805,127 @@ def render_home_page():
       </footer>
     """
 
-    # 3. Injeta no template docs/index.html e public/index.html
-    base_template = None
-    for tmpl_path in ("docs/index.html", "index.html", "public/index.html"):
-        if os.path.exists(tmpl_path):
-            with open(tmpl_path, "r", encoding="utf-8") as f:
-                base_template = f.read()
-            break
-
-    if not base_template:
-        print("⚠️ Template index.html não encontrado.")
-        return
-
+    # 3. Gera template HTML determinístico e limpo para index.html, docs/index.html e public/index.html
     bundle_tag = get_bundle_script()
     source_script_tag = '<script type="module" src="/src/main.tsx"></script>'
 
-    # Base com feed RSS
-    if 'rel="alternate" type="application/rss+xml"' not in base_template:
-        base_template = base_template.replace(
-            '<link rel="canonical" href="https://fixdatabrasil.com.br/" />',
-            '<link rel="canonical" href="https://fixdatabrasil.com.br/" />\n    <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="https://fixdatabrasil.com.br/feed.xml" />'
-        )
+    def build_clean_home_doc(script_tag_to_inject: str) -> str:
+        return f"""<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Primary Tags -->
+    <title>FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário</title>
+    <meta name="title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
+    <meta name="description" content="Plataforma de inteligência de mercado para mais de 16.000 Debêntures, CRIs e CRAs. Acompanhe taxas, spreads contra NTN-B, ratings, duration e preços diários de fechamento de forma gratuita." />
+    <meta name="keywords" content="FIXDATA, renda fixa, debêntures, CRI, CRA, mercado secundário, taxas indicativas, ANBIMA, NTN-B, spread de crédito, ratings, inteligência de renda fixa" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://fixdatabrasil.com.br/" />
+    <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="https://fixdatabrasil.com.br/feed.xml" />
+    <meta name="google-site-verification" content="google5ed1f75e95ab450f.html" />
+    <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
+    
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fixdatabrasil.com.br/" />
+    <meta property="og:title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
+    <meta property="og:description" content="Acompanhe mais de 16.000 Debêntures, CRIs e CRAs com taxas, spreads, ratings e gráficos históricos de forma 100% gratuita." />
+    <meta property="og:site_name" content="FIXDATA" />
+    <meta property="og:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="FIXDATA — Inteligência e Dados de Renda Fixa" />
+    <meta property="twitter:description" content="Raio-x do mercado secundário de Debêntures, CRIs e CRAs com spreads e ratings." />
+    <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
-    # 1. HTML para docs/ e public/ (com bundle JS compilado)
-    docs_html = base_template
-    if source_script_tag in docs_html:
-        docs_html = docs_html.replace(source_script_tag, bundle_tag)
-    docs_html = re.sub(
-        r'<div id="root">[\s\S]*?</div>',
-        f'<div id="root">{home_body_html}</div>',
-        docs_html
-    )
+    <!-- Google Search Structured Data (Site Name & Organization) -->
+    <script type="application/ld+json">
+    {{
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "FIXDATA",
+      "alternateName": ["FixData", "Meu Crédito Privado"],
+      "url": "https://fixdatabrasil.com.br/"
+    }}
+    </script>
+    <script type="application/ld+json">
+    {{
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "FIXDATA",
+      "url": "https://fixdatabrasil.com.br/",
+      "logo": "https://fixdatabrasil.com.br/icon-512x512.png"
+    }}
+    </script>
 
+    <!-- GitHub Pages Single Page Apps Routing Handler -->
+    <script type="text/javascript">
+      (function(l) {{
+        if (l.search[1] === '/' ) {{
+          var decoded = l.search.slice(1).split('&').map(function(s) {{ 
+            return s.replace(/~and~/g, '&')
+          }}).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }}
+      }}(window.location))
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="/index.css">
+
+    <script type="importmap">
+    {{
+      "imports": {{
+        "vite": "https://esm.sh/vite@^7.3.1",
+        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+        "papaparse": "https://esm.sh/papaparse@^5.5.3",
+        "react": "https://esm.sh/react@^19.2.4",
+        "react-dom": "https://esm.sh/react-dom@^19.2.4",
+        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
+        "fuse.js": "https://esm.sh/fuse.js@^7.1.0",
+        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
+        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "recharts": "https://esm.sh/recharts@^2.15.1",
+        "chart.js": "https://esm.sh/chart.js@^4.5.1",
+        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1"
+      }}
+    }}
+    </script>
+    {script_tag_to_inject}
+  </head>
+  <body class="bg-slate-50 text-slate-900">
+    <div id="root">{home_body_html}</div>
+  </body>
+</html>
+"""
+
+    docs_html = build_clean_home_doc(bundle_tag)
     for out_p in ("docs/index.html", "public/index.html"):
         os.makedirs(os.path.dirname(out_p), exist_ok=True)
         with open(out_p, "w", encoding="utf-8") as f:
             f.write(docs_html)
 
-    # 2. HTML para index.html raiz (mantendo /src/main.tsx para o build do Vite)
-    root_html = base_template
-    if bundle_tag in root_html:
-        root_html = root_html.replace(bundle_tag, source_script_tag)
-    elif source_script_tag not in root_html:
-        root_html = root_html.replace('</body>', f'    {source_script_tag}\n  </body>')
-    root_html = re.sub(
-        r'<div id="root">[\s\S]*?</div>',
-        f'<div id="root">{home_body_html}</div>',
-        root_html
-    )
-
+    root_html = build_clean_home_doc(source_script_tag)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(root_html)
 
     print("   ✅ Home Page estática gerada com sucesso em index.html, docs/index.html e public/index.html!", flush=True)
 
-def prune_orphaned_assets(valid_tickers: set):
+def prune_orphaned_assets(valid_tickers: set, valid_json_names: set = None):
     print("🧹 Verificando e podando diretórios órfãos e inválidos...")
     for out_dir in (OUTPUT_DIR, DOCS_OUTPUT_DIR):
         if not os.path.exists(out_dir):
@@ -1735,17 +1951,30 @@ def prune_orphaned_assets(valid_tickers: set):
         if removed_count > 0:
             print(f"🗑️ Removidos {removed_count} diretórios órfãos/inválidos de {out_dir}")
 
-    # Limpeza de JSONs órfãos sintéticos em public/data/assets e docs/data/assets
+    # Limpeza de JSONs órfãos em public/data/assets e docs/data/assets
     for j_dir in (ASSETS_JSON_DIR, DOCS_ASSETS_JSON_DIR):
         if not os.path.exists(j_dir):
             continue
         try:
+            removed_j = 0
             for f in os.listdir(j_dir):
-                if f.startswith(('CRI_', 'CRA_', 'DEB_')) and f.endswith('.json'):
+                if not f.endswith('.json'):
+                    continue
+                if valid_json_names is not None:
+                    if f not in valid_json_names:
+                        try:
+                            os.remove(os.path.join(j_dir, f))
+                            removed_j += 1
+                        except Exception:
+                            pass
+                elif f.startswith(('CRI_', 'CRA_', 'DEB_', 'SÉRIE', 'SERIE')) or ' ' in f:
                     try:
                         os.remove(os.path.join(j_dir, f))
+                        removed_j += 1
                     except Exception:
                         pass
+            if removed_j > 0:
+                print(f"🗑️ Removidos {removed_j} JSONs órfãos de {j_dir}")
         except Exception:
             pass
 
@@ -1766,11 +1995,20 @@ def main():
 
     tasks = []
     valid_tickers = set()
+    valid_json_names = set()
     for r in rows:
         res = generate_asset_html(r)
         if res:
             tasks.append(res)
-            valid_tickers.add(res[0].lower())
+            tk = res[0]
+            valid_tickers.add(tk.lower())
+            valid_json_names.add(f"{tk}.json")
+            clean_tk = tk.replace(' ', '').replace('-', '').upper()
+            if clean_tk:
+                valid_json_names.add(f"{clean_tk}.json")
+            isin_val = str(res[2].get('asset', {}).get('isin', '')).strip().upper()
+            if isin_val and isin_val != '-' and len(isin_val) == 12:
+                valid_json_names.add(f"{isin_val}.json")
 
     print(f"Gravando {len(tasks)} páginas HTML estáticas...")
     with ThreadPoolExecutor(max_workers=16) as executor:
@@ -1779,7 +2017,7 @@ def main():
     print(f"Pré-renderização concluída com sucesso para {len(tasks)} ativos!")
 
     # Pruna páginas órfãs antigas
-    prune_orphaned_assets(valid_tickers)
+    prune_orphaned_assets(valid_tickers, valid_json_names)
 
 
 if __name__ == "__main__":

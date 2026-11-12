@@ -378,16 +378,32 @@ const DebtorRadar: React.FC = () => {
           let defaultDev: DevedorItem | undefined = undefined;
           if (urlCnpj) {
             const cleanUrl = urlCnpj.replace(/\D/g, "");
-            defaultDev = devs.find(
-              (d: DevedorItem) => d.cnpj === cleanUrl || d.cnpj === urlCnpj || d.cnpj_formatado === urlCnpj
-            );
-          } else if (urlSearch) {
-            const sLower = urlSearch.toLowerCase();
+            const paddedUrl = cleanUrl.length >= 11 && cleanUrl.length < 14 ? cleanUrl.padStart(14, "0") : cleanUrl;
             defaultDev = devs.find(
               (d: DevedorItem) =>
-                d.razao_social.toLowerCase().includes(sLower) ||
-                (d.nome_fantasia && d.nome_fantasia.toLowerCase().includes(sLower))
+                d.cnpj === paddedUrl ||
+                d.cnpj === cleanUrl ||
+                d.cnpj === urlCnpj ||
+                d.cnpj_formatado === urlCnpj
             );
+            if (!defaultDev && paddedUrl.length >= 8) {
+              const root8 = paddedUrl.slice(0, 8);
+              defaultDev = devs.find((d: DevedorItem) => (d.cnpj || "").slice(0, 8) === root8);
+            }
+          }
+          if (!defaultDev && urlSearch) {
+            const sLower = urlSearch.toLowerCase().trim();
+            defaultDev =
+              devs.find(
+                (d: DevedorItem) =>
+                  d.razao_social.toLowerCase() === sLower ||
+                  (d.nome_fantasia && d.nome_fantasia.toLowerCase() === sLower)
+              ) ||
+              devs.find(
+                (d: DevedorItem) =>
+                  d.razao_social.toLowerCase().includes(sLower) ||
+                  (d.nome_fantasia && d.nome_fantasia.toLowerCase().includes(sLower))
+              );
           }
 
           if (!defaultDev) {
