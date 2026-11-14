@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-11-12 21:22:00",
+  "atualizado_em": "2026-11-13 20:57:27",
   "datas": [
     "2026-01-02",
     "2026-01-05",
@@ -214,7 +214,9 @@
     "2026-11-06",
     "2026-11-09",
     "2026-11-10",
-    "2026-11-11"
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-13"
   ],
   "series": {
     "TODOS": [
@@ -821,10 +823,10 @@
       {
         "date": "2026-03-31",
         "datePretty": "31/03",
-        "volume": 6914.59,
-        "volumeRaw": 6914587529.5,
-        "trades": 20031,
-        "price": 205.33,
+        "volume": 6915.59,
+        "volumeRaw": 6915585375.58,
+        "trades": 20034,
+        "price": 205.35,
         "yield": 7.25,
         "spread_bps": null
       },
@@ -871,10 +873,10 @@
       {
         "date": "2026-04-08",
         "datePretty": "08/04",
-        "volume": 6054.9,
-        "volumeRaw": 6054901749.87,
-        "trades": 17327,
-        "price": 84.3,
+        "volume": 6056.9,
+        "volumeRaw": 6056899285.3,
+        "trades": 17329,
+        "price": 84.32,
         "yield": 7.06,
         "spread_bps": null
       },
@@ -1011,9 +1013,9 @@
       {
         "date": "2026-04-29",
         "datePretty": "29/04",
-        "volume": 6393.14,
-        "volumeRaw": 6393138111.829999,
-        "trades": 21297,
+        "volume": 6393.45,
+        "volumeRaw": 6393446391.079999,
+        "trades": 21299,
         "price": 76.74,
         "yield": 10.17,
         "spread_bps": null
@@ -1021,10 +1023,10 @@
       {
         "date": "2026-04-30",
         "datePretty": "30/04",
-        "volume": 4389.72,
-        "volumeRaw": 4389722233.17,
-        "trades": 22334,
-        "price": 98.6,
+        "volume": 4390.03,
+        "volumeRaw": 4390030389.72,
+        "trades": 22336,
+        "price": 98.61,
         "yield": 10.84,
         "spread_bps": null
       },
@@ -1161,10 +1163,10 @@
       {
         "date": "2026-05-21",
         "datePretty": "21/05",
-        "volume": 6291.35,
-        "volumeRaw": 6291350901.79,
-        "trades": 17371,
-        "price": 60.7,
+        "volume": 6292.55,
+        "volumeRaw": 6292552152.05,
+        "trades": 17373,
+        "price": 60.71,
         "yield": 12.66,
         "spread_bps": null
       },
@@ -2191,10 +2193,10 @@
       {
         "date": "2026-10-19",
         "datePretty": "19/10",
-        "volume": 5336.34,
-        "volumeRaw": 5336342433.110001,
-        "trades": 18570,
-        "price": 427.19,
+        "volume": 5337.95,
+        "volumeRaw": 5337946030.440001,
+        "trades": 18572,
+        "price": 427.27,
         "yield": 11.56,
         "spread_bps": null
       },
@@ -2221,10 +2223,10 @@
       {
         "date": "2026-10-22",
         "datePretty": "22/10",
-        "volume": 7581.91,
-        "volumeRaw": 7581910998.27,
-        "trades": 18592,
-        "price": 517.16,
+        "volume": 7583.5,
+        "volumeRaw": 7583495748.77,
+        "trades": 18594,
+        "price": 517.21,
         "yield": 11.49,
         "spread_bps": null
       },
@@ -2357,6 +2359,26 @@
         "price": 85.95,
         "yield": 13.03,
         "spread_bps": null
+      },
+      {
+        "date": "2026-11-12",
+        "datePretty": "12/11",
+        "volume": 5098.55,
+        "volumeRaw": 5098545571.940001,
+        "trades": 15671,
+        "price": 126.49,
+        "yield": 11.94,
+        "spread_bps": null
+      },
+      {
+        "date": "2026-11-13",
+        "datePretty": "13/11",
+        "volume": 4600.7,
+        "volumeRaw": 4600701366.12,
+        "trades": 15516,
+        "price": 151.15,
+        "yield": 13.66,
+        "spread_bps": null
       }
     ],
     "IPCA": [
@@ -2368,7 +2390,7 @@
         "trades": 5084,
         "price": 359.55,
         "yield": 7.81,
-        "spread_bps": -22.0
+        "spread_bps": -21.1
       },
       {
         "date": "2026-01-05",
@@ -2378,7 +2400,7 @@
         "trades": 8555,
         "price": 48.91,
         "yield": 8.29,
-        "spread_bps": 16.8
+        "spread_bps": 17.9
       },
       {
         "date": "2026-01-06",
@@ -2388,7 +2410,7 @@
         "trades": 8765,
         "price": 86.33,
         "yield": 7.87,
-        "spread_bps": -3.5
+        "spread_bps": -2.5
       },
       {
         "date": "2026-01-07",
@@ -2398,17 +2420,17 @@
         "trades": 8277,
         "price": 59.91,
         "yield": 7.83,
-        "spread_bps": -8.1
+        "spread_bps": -7.1
       },
       {
         "date": "2026-01-08",
         "datePretty": "08/01",
-        "volume": 2856.53,
-        "volumeRaw": 2856528780.59,
-        "trades": 7805,
-        "price": 45.02,
+        "volume": 2902.16,
+        "volumeRaw": 2902157986.57,
+        "trades": 7829,
+        "price": 45.71,
         "yield": 7.97,
-        "spread_bps": 44.1
+        "spread_bps": 45.0
       },
       {
         "date": "2026-01-09",
@@ -2418,7 +2440,7 @@
         "trades": 8024,
         "price": 35.18,
         "yield": 7.92,
-        "spread_bps": -14.5
+        "spread_bps": -13.6
       },
       {
         "date": "2026-01-12",
@@ -2428,7 +2450,7 @@
         "trades": 8478,
         "price": 54.58,
         "yield": 8.02,
-        "spread_bps": 37.2
+        "spread_bps": 38.1
       },
       {
         "date": "2026-01-13",
@@ -2438,27 +2460,27 @@
         "trades": 9015,
         "price": 76.95,
         "yield": 7.91,
-        "spread_bps": 7.5
+        "spread_bps": 8.7
       },
       {
         "date": "2026-01-14",
         "datePretty": "14/01",
-        "volume": 2545.83,
-        "volumeRaw": 2545833214.6,
-        "trades": 8156,
-        "price": 41.48,
+        "volume": 2552.87,
+        "volumeRaw": 2552871204.8,
+        "trades": 8159,
+        "price": 41.59,
         "yield": 7.82,
-        "spread_bps": -15.8
+        "spread_bps": -14.7
       },
       {
         "date": "2026-01-15",
         "datePretty": "15/01",
-        "volume": 3207.47,
-        "volumeRaw": 3207472966.8199997,
-        "trades": 13436,
-        "price": 68.76,
+        "volume": 3221.09,
+        "volumeRaw": 3221091241.93,
+        "trades": 13437,
+        "price": 69.03,
         "yield": 7.97,
-        "spread_bps": 48.2
+        "spread_bps": 49.3
       },
       {
         "date": "2026-01-16",
@@ -2468,7 +2490,7 @@
         "trades": 11942,
         "price": 65.83,
         "yield": 7.85,
-        "spread_bps": 15.0
+        "spread_bps": 15.9
       },
       {
         "date": "2026-01-19",
@@ -2478,7 +2500,7 @@
         "trades": 8751,
         "price": 191.71,
         "yield": 7.86,
-        "spread_bps": -2.2
+        "spread_bps": -1.4
       },
       {
         "date": "2026-01-20",
@@ -2488,17 +2510,17 @@
         "trades": 12824,
         "price": 138.02,
         "yield": 7.89,
-        "spread_bps": 25.9
+        "spread_bps": 26.9
       },
       {
         "date": "2026-01-21",
         "datePretty": "21/01",
-        "volume": 2003.27,
-        "volumeRaw": 2003272823.9099998,
-        "trades": 10847,
-        "price": 31.15,
+        "volume": 2007.58,
+        "volumeRaw": 2007577521.9299998,
+        "trades": 10849,
+        "price": 31.21,
         "yield": 8.0,
-        "spread_bps": 28.3
+        "spread_bps": 29.3
       },
       {
         "date": "2026-01-22",
@@ -2508,17 +2530,17 @@
         "trades": 15754,
         "price": 70.62,
         "yield": 7.85,
-        "spread_bps": -11.6
+        "spread_bps": -10.9
       },
       {
         "date": "2026-01-23",
         "datePretty": "23/01",
-        "volume": 1786.19,
-        "volumeRaw": 1786185555.9100003,
-        "trades": 12086,
-        "price": 61.85,
+        "volume": 1799.59,
+        "volumeRaw": 1799586621.8,
+        "trades": 12092,
+        "price": 62.28,
         "yield": 7.65,
-        "spread_bps": -3.9
+        "spread_bps": -3.0
       },
       {
         "date": "2026-01-26",
@@ -2528,7 +2550,7 @@
         "trades": 11611,
         "price": 29.35,
         "yield": 7.79,
-        "spread_bps": 16.2
+        "spread_bps": 17.0
       },
       {
         "date": "2026-01-27",
@@ -2538,7 +2560,7 @@
         "trades": 11130,
         "price": 330.4,
         "yield": 7.49,
-        "spread_bps": -37.1
+        "spread_bps": -36.5
       },
       {
         "date": "2026-01-28",
@@ -2548,7 +2570,7 @@
         "trades": 10763,
         "price": 250.22,
         "yield": 7.58,
-        "spread_bps": -4.3
+        "spread_bps": -3.4
       },
       {
         "date": "2026-01-29",
@@ -2558,7 +2580,7 @@
         "trades": 12316,
         "price": 158.66,
         "yield": 7.72,
-        "spread_bps": -7.6
+        "spread_bps": -6.8
       },
       {
         "date": "2026-01-30",
@@ -2603,10 +2625,10 @@
       {
         "date": "2026-02-05",
         "datePretty": "05/02",
-        "volume": 1816.31,
-        "volumeRaw": 1816306982.56,
-        "trades": 9475,
-        "price": 175.52,
+        "volume": 1816.39,
+        "volumeRaw": 1816386124.8799999,
+        "trades": 9479,
+        "price": 175.53,
         "yield": 7.87,
         "spread_bps": 60.2
       },
@@ -2633,9 +2655,9 @@
       {
         "date": "2026-02-10",
         "datePretty": "10/02",
-        "volume": 2155.8,
-        "volumeRaw": 2155804566.44,
-        "trades": 10391,
+        "volume": 2156.08,
+        "volumeRaw": 2156079228.44,
+        "trades": 10393,
         "price": 28.12,
         "yield": 8.29,
         "spread_bps": -13.0
@@ -2653,30 +2675,30 @@
       {
         "date": "2026-02-12",
         "datePretty": "12/02",
-        "volume": 1879.54,
-        "volumeRaw": 1879543787.27,
-        "trades": 9090,
-        "price": 92.93,
+        "volume": 1869.99,
+        "volumeRaw": 1869988006.7500002,
+        "trades": 8926,
+        "price": 92.54,
         "yield": 7.84,
         "spread_bps": 15.7
       },
       {
         "date": "2026-02-13",
         "datePretty": "13/02",
-        "volume": 1597.85,
-        "volumeRaw": 1597847790.65,
-        "trades": 9746,
-        "price": 256.05,
+        "volume": 1596.99,
+        "volumeRaw": 1596988755.64,
+        "trades": 9732,
+        "price": 255.98,
         "yield": 8.06,
         "spread_bps": -4.5
       },
       {
         "date": "2026-02-18",
         "datePretty": "18/02",
-        "volume": 824.47,
-        "volumeRaw": 824473753.2500001,
-        "trades": 6432,
-        "price": 101.91,
+        "volume": 823.89,
+        "volumeRaw": 823887486.8100001,
+        "trades": 6430,
+        "price": 101.85,
         "yield": 7.95,
         "spread_bps": 22.0
       },
@@ -2703,20 +2725,20 @@
       {
         "date": "2026-02-23",
         "datePretty": "23/02",
-        "volume": 1651.62,
-        "volumeRaw": 1651619268.0300002,
-        "trades": 10344,
-        "price": 153.91,
+        "volume": 1655.91,
+        "volumeRaw": 1655909689.38,
+        "trades": 10346,
+        "price": 154.24,
         "yield": 7.94,
         "spread_bps": 67.5
       },
       {
         "date": "2026-02-24",
         "datePretty": "24/02",
-        "volume": 2172.51,
-        "volumeRaw": 2172511292.62,
-        "trades": 10290,
-        "price": 182.74,
+        "volume": 2183.5,
+        "volumeRaw": 2183501881.0800004,
+        "trades": 10304,
+        "price": 183.49,
         "yield": 7.71,
         "spread_bps": -14.6
       },
@@ -2743,9 +2765,9 @@
       {
         "date": "2026-02-27",
         "datePretty": "27/02",
-        "volume": 2228.55,
-        "volumeRaw": 2228546561.3,
-        "trades": 9856,
+        "volume": 2228.5,
+        "volumeRaw": 2228500864.1600003,
+        "trades": 9854,
         "price": 80.81,
         "yield": 7.79,
         "spread_bps": 15.8
@@ -2793,10 +2815,10 @@
       {
         "date": "2026-03-06",
         "datePretty": "06/03",
-        "volume": 1247.06,
-        "volumeRaw": 1247060789.24,
-        "trades": 10213,
-        "price": 59.95,
+        "volume": 1247.18,
+        "volumeRaw": 1247182268.3999999,
+        "trades": 10215,
+        "price": 59.96,
         "yield": 8.24,
         "spread_bps": 3.9
       },
@@ -2813,10 +2835,10 @@
       {
         "date": "2026-03-10",
         "datePretty": "10/03",
-        "volume": 1622.54,
-        "volumeRaw": 1622539939.5799997,
-        "trades": 9043,
-        "price": 127.94,
+        "volume": 1630.61,
+        "volumeRaw": 1630605196.9799998,
+        "trades": 9045,
+        "price": 128.49,
         "yield": 7.99,
         "spread_bps": -9.4
       },
@@ -2943,10 +2965,10 @@
       {
         "date": "2026-03-27",
         "datePretty": "27/03",
-        "volume": 2880.35,
-        "volumeRaw": 2880353576.98,
-        "trades": 11905,
-        "price": 90.24,
+        "volume": 2880.66,
+        "volumeRaw": 2880657875.0,
+        "trades": 11913,
+        "price": 90.25,
         "yield": 8.62,
         "spread_bps": 53.7
       },
@@ -2963,19 +2985,19 @@
       {
         "date": "2026-03-31",
         "datePretty": "31/03",
-        "volume": 3825.12,
-        "volumeRaw": 3825124079.64,
-        "trades": 10502,
-        "price": 130.76,
+        "volume": 3826.58,
+        "volumeRaw": 3826580022.25,
+        "trades": 10507,
+        "price": 130.81,
         "yield": 8.22,
         "spread_bps": 11.4
       },
       {
         "date": "2026-04-01",
         "datePretty": "01/04",
-        "volume": 1580.7,
-        "volumeRaw": 1580699479.33,
-        "trades": 8866,
+        "volume": 1580.8,
+        "volumeRaw": 1580796752.5099998,
+        "trades": 8868,
         "price": 86.7,
         "yield": 8.4,
         "spread_bps": 50.7
@@ -3013,10 +3035,10 @@
       {
         "date": "2026-04-08",
         "datePretty": "08/04",
-        "volume": 1971.18,
-        "volumeRaw": 1971179057.32,
-        "trades": 9406,
-        "price": 29.89,
+        "volume": 1973.18,
+        "volumeRaw": 1973176592.75,
+        "trades": 9408,
+        "price": 29.92,
         "yield": 10.68,
         "spread_bps": 62.7
       },
@@ -3043,10 +3065,10 @@
       {
         "date": "2026-04-13",
         "datePretty": "13/04",
-        "volume": 2282.89,
-        "volumeRaw": 2282894550.92,
-        "trades": 10026,
-        "price": 239.28,
+        "volume": 2285.33,
+        "volumeRaw": 2285333799.5,
+        "trades": 10028,
+        "price": 239.48,
         "yield": 10.28,
         "spread_bps": 25.3
       },
@@ -3153,9 +3175,9 @@
       {
         "date": "2026-04-29",
         "datePretty": "29/04",
-        "volume": 2384.17,
-        "volumeRaw": 2384165075.8900003,
-        "trades": 13998,
+        "volume": 2384.47,
+        "volumeRaw": 2384473355.1400003,
+        "trades": 14000,
         "price": 55.52,
         "yield": 11.6,
         "spread_bps": 32.6
@@ -3163,20 +3185,20 @@
       {
         "date": "2026-04-30",
         "datePretty": "30/04",
-        "volume": 1822.62,
-        "volumeRaw": 1822622655.35,
-        "trades": 10824,
-        "price": 188.32,
+        "volume": 1822.93,
+        "volumeRaw": 1822930811.8999999,
+        "trades": 10826,
+        "price": 188.34,
         "yield": 12.5,
         "spread_bps": 41.1
       },
       {
         "date": "2026-05-04",
         "datePretty": "04/05",
-        "volume": 1868.93,
-        "volumeRaw": 1868926930.53,
-        "trades": 10859,
-        "price": 148.48,
+        "volume": 1873.03,
+        "volumeRaw": 1873031979.66,
+        "trades": 10861,
+        "price": 148.76,
         "yield": 13.05,
         "spread_bps": 39.2
       },
@@ -3203,9 +3225,9 @@
       {
         "date": "2026-05-07",
         "datePretty": "07/05",
-        "volume": 2468.26,
-        "volumeRaw": 2468264972.56,
-        "trades": 13777,
+        "volume": 2468.27,
+        "volumeRaw": 2468268723.2299995,
+        "trades": 13779,
         "price": 34.12,
         "yield": 12.47,
         "spread_bps": 86.7
@@ -3213,10 +3235,10 @@
       {
         "date": "2026-05-08",
         "datePretty": "08/05",
-        "volume": 2049.1,
-        "volumeRaw": 2049096632.6500003,
-        "trades": 9093,
-        "price": 155.9,
+        "volume": 2053.1,
+        "volumeRaw": 2053095816.76,
+        "trades": 9095,
+        "price": 156.16,
         "yield": 11.5,
         "spread_bps": 89.3
       },
@@ -3303,19 +3325,19 @@
       {
         "date": "2026-05-21",
         "datePretty": "21/05",
-        "volume": 3297.46,
-        "volumeRaw": 3297456377.4799995,
-        "trades": 10218,
-        "price": 33.02,
+        "volume": 3298.66,
+        "volumeRaw": 3298657627.74,
+        "trades": 10220,
+        "price": 33.03,
         "yield": 13.01,
         "spread_bps": 63.5
       },
       {
         "date": "2026-05-22",
         "datePretty": "22/05",
-        "volume": 2989.78,
-        "volumeRaw": 2989780202.88,
-        "trades": 10468,
+        "volume": 2989.82,
+        "volumeRaw": 2989820315.23,
+        "trades": 10470,
         "price": 48.9,
         "yield": 13.36,
         "spread_bps": 66.0
@@ -3373,10 +3395,10 @@
       {
         "date": "2026-06-01",
         "datePretty": "01/06",
-        "volume": 4484.72,
-        "volumeRaw": 4484715500.870001,
-        "trades": 9498,
-        "price": 329.36,
+        "volume": 4486.32,
+        "volumeRaw": 4486315738.8,
+        "trades": 9500,
+        "price": 329.43,
         "yield": 9.3,
         "spread_bps": 28.0
       },
@@ -3413,9 +3435,9 @@
       {
         "date": "2026-06-08",
         "datePretty": "08/06",
-        "volume": 1965.26,
-        "volumeRaw": 1965258549.42,
-        "trades": 9312,
+        "volume": 1965.31,
+        "volumeRaw": 1965309585.99,
+        "trades": 9314,
         "price": 50.12,
         "yield": 10.15,
         "spread_bps": 57.7
@@ -3503,10 +3525,10 @@
       {
         "date": "2026-06-19",
         "datePretty": "19/06",
-        "volume": 2562.12,
-        "volumeRaw": 2562119868.93,
-        "trades": 9355,
-        "price": 455.73,
+        "volume": 2564.04,
+        "volumeRaw": 2564038401.05,
+        "trades": 9357,
+        "price": 455.93,
         "yield": 10.27,
         "spread_bps": 19.4
       },
@@ -3663,10 +3685,10 @@
       {
         "date": "2026-07-13",
         "datePretty": "13/07",
-        "volume": 1089.15,
-        "volumeRaw": 1089149162.07,
-        "trades": 10397,
-        "price": 159.43,
+        "volume": 1089.2,
+        "volumeRaw": 1089200005.33,
+        "trades": 10399,
+        "price": 159.44,
         "yield": 9.01,
         "spread_bps": 14.9
       },
@@ -3723,9 +3745,9 @@
       {
         "date": "2026-07-21",
         "datePretty": "21/07",
-        "volume": 1450.79,
-        "volumeRaw": 1450788145.82,
-        "trades": 11012,
+        "volume": 1450.84,
+        "volumeRaw": 1450839185.2,
+        "trades": 11014,
         "price": 33.91,
         "yield": 10.19,
         "spread_bps": 56.6
@@ -3753,9 +3775,9 @@
       {
         "date": "2026-07-24",
         "datePretty": "24/07",
-        "volume": 1353.48,
-        "volumeRaw": 1353481563.52,
-        "trades": 7232,
+        "volume": 1353.53,
+        "volumeRaw": 1353532277.05,
+        "trades": 7234,
         "price": 76.9,
         "yield": 10.88,
         "spread_bps": 70.6
@@ -3843,10 +3865,10 @@
       {
         "date": "2026-08-07",
         "datePretty": "07/08",
-        "volume": 1038.31,
-        "volumeRaw": 1038308604.8800001,
-        "trades": 8423,
-        "price": 17.98,
+        "volume": 1051.62,
+        "volumeRaw": 1051618550.1099999,
+        "trades": 8425,
+        "price": 18.2,
         "yield": 11.52,
         "spread_bps": 89.9
       },
@@ -3893,9 +3915,9 @@
       {
         "date": "2026-08-14",
         "datePretty": "14/08",
-        "volume": 2347.47,
-        "volumeRaw": 2347467755.2400002,
-        "trades": 7860,
+        "volume": 2347.55,
+        "volumeRaw": 2347546747.9900002,
+        "trades": 7862,
         "price": 25.34,
         "yield": 10.27,
         "spread_bps": 41.3
@@ -3913,10 +3935,10 @@
       {
         "date": "2026-08-18",
         "datePretty": "18/08",
-        "volume": 1509.66,
-        "volumeRaw": 1509656286.5100002,
-        "trades": 9966,
-        "price": 179.28,
+        "volume": 1538.77,
+        "volumeRaw": 1538768190.1699998,
+        "trades": 9970,
+        "price": 182.07,
         "yield": 10.75,
         "spread_bps": 42.3
       },
@@ -3963,10 +3985,10 @@
       {
         "date": "2026-08-25",
         "datePretty": "25/08",
-        "volume": 2382.74,
-        "volumeRaw": 2382736304.74,
-        "trades": 10204,
-        "price": 149.94,
+        "volume": 2384.1,
+        "volumeRaw": 2384099463.2299995,
+        "trades": 10206,
+        "price": 150.01,
         "yield": 11.14,
         "spread_bps": 58.5
       },
@@ -3983,10 +4005,10 @@
       {
         "date": "2026-08-27",
         "datePretty": "27/08",
-        "volume": 1775.66,
-        "volumeRaw": 1775659393.2600002,
-        "trades": 8484,
-        "price": 45.27,
+        "volume": 1811.67,
+        "volumeRaw": 1811668271.5,
+        "trades": 8486,
+        "price": 46.15,
         "yield": 11.16,
         "spread_bps": 80.9
       },
@@ -4053,21 +4075,21 @@
       {
         "date": "2026-09-08",
         "datePretty": "08/09",
-        "volume": 1959.83,
-        "volumeRaw": 1959832007.94,
-        "trades": 10848,
-        "price": 81.26,
-        "yield": 10.66,
+        "volume": 1962.43,
+        "volumeRaw": 1962432081.7,
+        "trades": 10853,
+        "price": 81.36,
+        "yield": 10.68,
         "spread_bps": 94.3
       },
       {
         "date": "2026-09-09",
         "datePretty": "09/09",
-        "volume": 1135.18,
-        "volumeRaw": 1135177460.2199998,
-        "trades": 7563,
-        "price": 128.45,
-        "yield": 10.83,
+        "volume": 1139.08,
+        "volumeRaw": 1139082541.1000001,
+        "trades": 7567,
+        "price": 128.79,
+        "yield": 10.84,
         "spread_bps": 95.9
       },
       {
@@ -4083,9 +4105,9 @@
       {
         "date": "2026-09-11",
         "datePretty": "11/09",
-        "volume": 4551.03,
-        "volumeRaw": 4551028141.89,
-        "trades": 8007,
+        "volume": 4551.25,
+        "volumeRaw": 4551247374.08,
+        "trades": 8008,
         "price": 39.94,
         "yield": 8.75,
         "spread_bps": 123.5
@@ -4093,50 +4115,50 @@
       {
         "date": "2026-09-14",
         "datePretty": "14/09",
-        "volume": 1904.61,
-        "volumeRaw": 1904612061.0900002,
-        "trades": 11243,
-        "price": 43.07,
+        "volume": 1905.28,
+        "volumeRaw": 1905283844.29,
+        "trades": 11248,
+        "price": 43.09,
         "yield": 10.07,
         "spread_bps": 106.6
       },
       {
         "date": "2026-09-15",
         "datePretty": "15/09",
-        "volume": 2332.34,
-        "volumeRaw": 2332344384.0499997,
-        "trades": 12663,
-        "price": 58.64,
-        "yield": 11.33,
+        "volume": 2333.45,
+        "volumeRaw": 2333450393.93,
+        "trades": 12666,
+        "price": 58.67,
+        "yield": 11.34,
         "spread_bps": 78.4
       },
       {
         "date": "2026-09-16",
         "datePretty": "16/09",
-        "volume": 1415.96,
-        "volumeRaw": 1415964251.2700002,
-        "trades": 11811,
-        "price": 240.15,
-        "yield": 12.21,
+        "volume": 1416.27,
+        "volumeRaw": 1416265048.71,
+        "trades": 11814,
+        "price": 240.19,
+        "yield": 12.22,
         "spread_bps": 142.6
       },
       {
         "date": "2026-09-17",
         "datePretty": "17/09",
-        "volume": 1950.9,
-        "volumeRaw": 1950902749.5800002,
-        "trades": 11142,
-        "price": 279.99,
-        "yield": 11.04,
+        "volume": 1951.24,
+        "volumeRaw": 1951239947.1100001,
+        "trades": 11144,
+        "price": 280.03,
+        "yield": 11.05,
         "spread_bps": 100.2
       },
       {
         "date": "2026-09-18",
         "datePretty": "18/09",
-        "volume": 1853.55,
-        "volumeRaw": 1853546823.48,
-        "trades": 9293,
-        "price": 581.74,
+        "volume": 1853.71,
+        "volumeRaw": 1853712996.36,
+        "trades": 9294,
+        "price": 581.76,
         "yield": 9.99,
         "spread_bps": 100.4
       },
@@ -4144,8 +4166,8 @@
         "date": "2026-09-21",
         "datePretty": "21/09",
         "volume": 1515.31,
-        "volumeRaw": 1515305846.99,
-        "trades": 9179,
+        "volumeRaw": 1515307862.29,
+        "trades": 9180,
         "price": 27.61,
         "yield": 11.2,
         "spread_bps": 117.4
@@ -4163,11 +4185,11 @@
       {
         "date": "2026-09-23",
         "datePretty": "23/09",
-        "volume": 2698.42,
-        "volumeRaw": 2698422096.6,
-        "trades": 9275,
-        "price": 100.5,
-        "yield": 12.52,
+        "volume": 2705.8,
+        "volumeRaw": 2705796636.41,
+        "trades": 9278,
+        "price": 100.75,
+        "yield": 12.56,
         "spread_bps": 76.9
       },
       {
@@ -4183,10 +4205,10 @@
       {
         "date": "2026-09-25",
         "datePretty": "25/09",
-        "volume": 1876.49,
-        "volumeRaw": 1876490375.3500004,
-        "trades": 9489,
-        "price": 243.23,
+        "volume": 1876.65,
+        "volumeRaw": 1876651305.8800004,
+        "trades": 9495,
+        "price": 243.24,
         "yield": 10.87,
         "spread_bps": 88.4
       },
@@ -4213,39 +4235,39 @@
       {
         "date": "2026-09-30",
         "datePretty": "30/09",
-        "volume": 3738.72,
-        "volumeRaw": 3738716304.799999,
-        "trades": 12402,
-        "price": 50.18,
+        "volume": 3754.28,
+        "volumeRaw": 3754279908.68,
+        "trades": 12409,
+        "price": 50.38,
         "yield": 9.6,
         "spread_bps": 72.1
       },
       {
         "date": "2026-10-01",
         "datePretty": "01/10",
-        "volume": 2705.23,
-        "volumeRaw": 2705230971.9400005,
-        "trades": 8946,
-        "price": 678.43,
+        "volume": 2858.67,
+        "volumeRaw": 2858667562.77,
+        "trades": 8948,
+        "price": 690.92,
         "yield": 10.43,
         "spread_bps": 93.6
       },
       {
         "date": "2026-10-02",
         "datePretty": "02/10",
-        "volume": 1915.16,
-        "volumeRaw": 1915162141.79,
-        "trades": 7717,
-        "price": 55.24,
-        "yield": 10.76,
+        "volume": 1915.57,
+        "volumeRaw": 1915565123.8,
+        "trades": 7721,
+        "price": 55.25,
+        "yield": 10.78,
         "spread_bps": 105.7
       },
       {
         "date": "2026-10-05",
         "datePretty": "05/10",
-        "volume": 1338.45,
-        "volumeRaw": 1338449461.99,
-        "trades": 7327,
+        "volume": 1338.46,
+        "volumeRaw": 1338458579.53,
+        "trades": 7328,
         "price": 72.02,
         "yield": 13.34,
         "spread_bps": 214.3
@@ -4263,39 +4285,39 @@
       {
         "date": "2026-10-07",
         "datePretty": "07/10",
-        "volume": 3607.05,
-        "volumeRaw": 3607045681.0,
-        "trades": 11099,
-        "price": 595.45,
+        "volume": 3607.68,
+        "volumeRaw": 3607684139.98,
+        "trades": 11114,
+        "price": 595.5,
         "yield": 9.4,
-        "spread_bps": 79.4
+        "spread_bps": 79.5
       },
       {
         "date": "2026-10-08",
         "datePretty": "08/10",
-        "volume": 3752.5,
-        "volumeRaw": 3752498531.979999,
-        "trades": 10224,
-        "price": 81.81,
+        "volume": 3752.57,
+        "volumeRaw": 3752569190.709999,
+        "trades": 10228,
+        "price": 81.82,
         "yield": 9.77,
         "spread_bps": 84.0
       },
       {
         "date": "2026-10-09",
         "datePretty": "09/10",
-        "volume": 2983.39,
-        "volumeRaw": 2983392890.79,
-        "trades": 12070,
-        "price": 151.32,
-        "yield": 10.1,
+        "volume": 2986.39,
+        "volumeRaw": 2986391889.52,
+        "trades": 12071,
+        "price": 151.45,
+        "yield": 10.11,
         "spread_bps": 152.5
       },
       {
         "date": "2026-10-13",
         "datePretty": "13/10",
-        "volume": 3649.95,
-        "volumeRaw": 3649949430.2900004,
-        "trades": 10925,
+        "volume": 3649.98,
+        "volumeRaw": 3649984305.6000004,
+        "trades": 10929,
         "price": 162.44,
         "yield": 11.04,
         "spread_bps": 66.8
@@ -4303,79 +4325,79 @@
       {
         "date": "2026-10-14",
         "datePretty": "14/10",
-        "volume": 3277.04,
-        "volumeRaw": 3277037654.9200006,
-        "trades": 11091,
-        "price": 103.81,
+        "volume": 3277.76,
+        "volumeRaw": 3277756084.1600003,
+        "trades": 11100,
+        "price": 103.83,
         "yield": 11.95,
-        "spread_bps": 109.0
+        "spread_bps": 109.2
       },
       {
         "date": "2026-10-15",
         "datePretty": "15/10",
-        "volume": 4972.65,
-        "volumeRaw": 4972652729.27,
-        "trades": 15790,
-        "price": 337.91,
+        "volume": 4973.41,
+        "volumeRaw": 4973413902.840001,
+        "trades": 15812,
+        "price": 337.95,
         "yield": 9.15,
         "spread_bps": 105.3
       },
       {
         "date": "2026-10-16",
         "datePretty": "16/10",
-        "volume": 2908.31,
-        "volumeRaw": 2908314815.17,
-        "trades": 11101,
-        "price": 109.34,
-        "yield": 13.75,
-        "spread_bps": 121.4
+        "volume": 2910.67,
+        "volumeRaw": 2910674952.38,
+        "trades": 11122,
+        "price": 109.42,
+        "yield": 13.76,
+        "spread_bps": 121.6
       },
       {
         "date": "2026-10-19",
         "datePretty": "19/10",
-        "volume": 3009.71,
-        "volumeRaw": 3009709337.16,
-        "trades": 11419,
-        "price": 353.4,
+        "volume": 3011.34,
+        "volumeRaw": 3011344825.21,
+        "trades": 11424,
+        "price": 353.52,
         "yield": 12.12,
         "spread_bps": 142.3
       },
       {
         "date": "2026-10-20",
         "datePretty": "20/10",
-        "volume": 3533.78,
-        "volumeRaw": 3533780588.8400006,
-        "trades": 12340,
-        "price": 604.24,
+        "volume": 3535.04,
+        "volumeRaw": 3535038832.53,
+        "trades": 12360,
+        "price": 604.34,
         "yield": 9.22,
-        "spread_bps": 106.1
+        "spread_bps": 106.3
       },
       {
         "date": "2026-10-21",
         "datePretty": "21/10",
-        "volume": 3495.29,
-        "volumeRaw": 3495291647.2799997,
-        "trades": 11789,
-        "price": 549.56,
+        "volume": 3495.42,
+        "volumeRaw": 3495419449.7,
+        "trades": 11793,
+        "price": 549.57,
         "yield": 10.47,
         "spread_bps": 95.9
       },
       {
         "date": "2026-10-22",
         "datePretty": "22/10",
-        "volume": 5008.74,
-        "volumeRaw": 5008742499.510001,
-        "trades": 11894,
-        "price": 421.7,
-        "yield": 10.96,
-        "spread_bps": 101.0
+        "volume": 5012.26,
+        "volumeRaw": 5012255474.710001,
+        "trades": 11905,
+        "price": 421.88,
+        "yield": 10.98,
+        "spread_bps": 101.1
       },
       {
         "date": "2026-10-23",
         "datePretty": "23/10",
-        "volume": 3872.42,
-        "volumeRaw": 3872417914.3,
-        "trades": 14418,
+        "volume": 3872.44,
+        "volumeRaw": 3872438377.21,
+        "trades": 14420,
         "price": 259.83,
         "yield": 11.04,
         "spread_bps": 116.2
@@ -4393,19 +4415,19 @@
       {
         "date": "2026-10-27",
         "datePretty": "27/10",
-        "volume": 4657.79,
-        "volumeRaw": 4657789599.18,
-        "trades": 10931,
-        "price": 549.5,
-        "yield": 11.05,
+        "volume": 4659.83,
+        "volumeRaw": 4659830635.25,
+        "trades": 10932,
+        "price": 549.61,
+        "yield": 11.07,
         "spread_bps": 54.5
       },
       {
         "date": "2026-10-28",
         "datePretty": "28/10",
         "volume": 7997.99,
-        "volumeRaw": 7997990800.940001,
-        "trades": 10506,
+        "volumeRaw": 7997992876.12,
+        "trades": 10508,
         "price": 265.32,
         "yield": 12.24,
         "spread_bps": 81.3
@@ -4413,92 +4435,112 @@
       {
         "date": "2026-10-29",
         "datePretty": "29/10",
-        "volume": 4317.53,
-        "volumeRaw": 4317526619.309999,
-        "trades": 15429,
-        "price": 67.42,
+        "volume": 4320.96,
+        "volumeRaw": 4320956254.81,
+        "trades": 15438,
+        "price": 67.46,
         "yield": 11.64,
         "spread_bps": 73.0
       },
       {
         "date": "2026-10-30",
         "datePretty": "30/10",
-        "volume": 3595.94,
-        "volumeRaw": 3595942962.6699996,
-        "trades": 13485,
-        "price": 110.19,
+        "volume": 3599.63,
+        "volumeRaw": 3599633607.939999,
+        "trades": 13491,
+        "price": 110.28,
         "yield": 13.04,
         "spread_bps": 70.6
       },
       {
         "date": "2026-11-03",
         "datePretty": "03/11",
-        "volume": 2383.19,
-        "volumeRaw": 2383186631.03,
-        "trades": 12450,
+        "volume": 2383.62,
+        "volumeRaw": 2383621008.98,
+        "trades": 12464,
         "price": 19.6,
         "yield": 14.13,
-        "spread_bps": 135.7
+        "spread_bps": 135.8
       },
       {
         "date": "2026-11-04",
         "datePretty": "04/11",
-        "volume": 1811.73,
-        "volumeRaw": 1811727990.2300003,
-        "trades": 7404,
-        "price": 37.67,
+        "volume": 1816.48,
+        "volumeRaw": 1816480033.1100004,
+        "trades": 7464,
+        "price": 37.77,
         "yield": 13.74,
-        "spread_bps": 117.1
+        "spread_bps": 119.7
       },
       {
         "date": "2026-11-05",
         "datePretty": "05/11",
-        "volume": 3282.96,
-        "volumeRaw": 3282958147.97,
-        "trades": 14705,
-        "price": 61.79,
+        "volume": 3284.05,
+        "volumeRaw": 3284053092.6,
+        "trades": 14720,
+        "price": 61.81,
         "yield": 12.09,
-        "spread_bps": 85.0
+        "spread_bps": 85.3
       },
       {
         "date": "2026-11-06",
         "datePretty": "06/11",
-        "volume": 3392.86,
-        "volumeRaw": 3392856211.74,
-        "trades": 9140,
-        "price": 74.23,
+        "volume": 3398.28,
+        "volumeRaw": 3398276144.91,
+        "trades": 9167,
+        "price": 74.34,
         "yield": 10.33,
-        "spread_bps": 72.0
+        "spread_bps": 72.6
       },
       {
         "date": "2026-11-09",
         "datePretty": "09/11",
-        "volume": 3190.17,
-        "volumeRaw": 3190167359.4,
-        "trades": 14110,
-        "price": 95.65,
-        "yield": 9.43,
-        "spread_bps": 89.2
+        "volume": 3201.79,
+        "volumeRaw": 3201787815.1099997,
+        "trades": 14135,
+        "price": 95.96,
+        "yield": 9.68,
+        "spread_bps": 89.5
       },
       {
         "date": "2026-11-10",
         "datePretty": "10/11",
-        "volume": 3121.43,
-        "volumeRaw": 3121428655.68,
-        "trades": 9891,
-        "price": 310.25,
+        "volume": 3122.5,
+        "volumeRaw": 3122502057.3799996,
+        "trades": 9913,
+        "price": 310.32,
         "yield": 11.26,
-        "spread_bps": 103.4
+        "spread_bps": 103.8
       },
       {
         "date": "2026-11-11",
         "datePretty": "11/11",
-        "volume": 2329.44,
-        "volumeRaw": 2329437847.96,
-        "trades": 9136,
-        "price": 40.38,
+        "volume": 2331.48,
+        "volumeRaw": 2331478751.1,
+        "trades": 9169,
+        "price": 40.42,
         "yield": 12.76,
-        "spread_bps": 120.8
+        "spread_bps": 121.8
+      },
+      {
+        "date": "2026-11-12",
+        "datePretty": "12/11",
+        "volume": 2366.2,
+        "volumeRaw": 2366197519.85,
+        "trades": 9306,
+        "price": 87.47,
+        "yield": 13.8,
+        "spread_bps": 111.6
+      },
+      {
+        "date": "2026-11-13",
+        "datePretty": "13/11",
+        "volume": 2220.02,
+        "volumeRaw": 2220015539.3199997,
+        "trades": 9209,
+        "price": 309.51,
+        "yield": 12.74,
+        "spread_bps": 135.9
       }
     ],
     "CDI+": [
@@ -4565,20 +4607,20 @@
       {
         "date": "2026-01-12",
         "datePretty": "12/01",
-        "volume": 2464.22,
-        "volumeRaw": 2464215906.34,
-        "trades": 2101,
-        "price": 420.57,
+        "volume": 2467.22,
+        "volumeRaw": 2467215718.1700006,
+        "trades": 2102,
+        "price": 420.87,
         "yield": 2.44,
         "spread_bps": 203.8
       },
       {
         "date": "2026-01-13",
         "datePretty": "13/01",
-        "volume": 2061.83,
-        "volumeRaw": 2061825951.13,
-        "trades": 2640,
-        "price": 956.79,
+        "volume": 2064.83,
+        "volumeRaw": 2064828078.3000002,
+        "trades": 2641,
+        "price": 956.87,
         "yield": 1.31,
         "spread_bps": 131.2
       },
@@ -4595,9 +4637,9 @@
       {
         "date": "2026-01-15",
         "datePretty": "15/01",
-        "volume": 2509.21,
-        "volumeRaw": 2509212569.12,
-        "trades": 2779,
+        "volume": 2509.27,
+        "volumeRaw": 2509268466.18,
+        "trades": 2781,
         "price": 211.88,
         "yield": 1.69,
         "spread_bps": 156.7
@@ -4675,10 +4717,10 @@
       {
         "date": "2026-01-27",
         "datePretty": "27/01",
-        "volume": 1956.37,
-        "volumeRaw": 1956368374.8900003,
-        "trades": 2940,
-        "price": 131.68,
+        "volume": 1957.7,
+        "volumeRaw": 1957695032.0100002,
+        "trades": 2942,
+        "price": 131.76,
         "yield": 1.93,
         "spread_bps": 188.2
       },
@@ -4715,70 +4757,70 @@
       {
         "date": "2026-02-02",
         "datePretty": "02/02",
-        "volume": 3652.14,
-        "volumeRaw": 3652140375.07,
-        "trades": 3120,
-        "price": 368.14,
+        "volume": 3663.6,
+        "volumeRaw": 3663595970.8599997,
+        "trades": 3123,
+        "price": 368.87,
         "yield": 1.46,
         "spread_bps": 141.8
       },
       {
         "date": "2026-02-03",
         "datePretty": "03/02",
-        "volume": 3077.61,
-        "volumeRaw": 3077614947.7699995,
-        "trades": 2810,
-        "price": 1034.23,
+        "volume": 3083.85,
+        "volumeRaw": 3083849863.83,
+        "trades": 2813,
+        "price": 1034.17,
         "yield": 1.1,
         "spread_bps": 109.2
       },
       {
         "date": "2026-02-04",
         "datePretty": "04/02",
-        "volume": 2332.78,
-        "volumeRaw": 2332777497.8200006,
-        "trades": 3871,
-        "price": 1017.93,
+        "volume": 2351.37,
+        "volumeRaw": 2351369244.5899997,
+        "trades": 3939,
+        "price": 1017.82,
         "yield": 1.23,
         "spread_bps": 119.1
       },
       {
         "date": "2026-02-05",
         "datePretty": "05/02",
-        "volume": 4328.97,
-        "volumeRaw": 4328970091.34,
-        "trades": 2773,
-        "price": 7.07,
+        "volume": 4348.12,
+        "volumeRaw": 4348118840.139999,
+        "trades": 2905,
+        "price": 7.1,
         "yield": 3.23,
         "spread_bps": 148.3
       },
       {
         "date": "2026-02-06",
         "datePretty": "06/02",
-        "volume": 1726.63,
-        "volumeRaw": 1726627614.1400003,
-        "trades": 2438,
-        "price": 76.06,
+        "volume": 1735.55,
+        "volumeRaw": 1735550809.8400002,
+        "trades": 2601,
+        "price": 76.42,
         "yield": 2.04,
         "spread_bps": 156.0
       },
       {
         "date": "2026-02-09",
         "datePretty": "09/02",
-        "volume": 1796.24,
-        "volumeRaw": 1796243049.61,
-        "trades": 2571,
-        "price": 781.17,
+        "volume": 1802.71,
+        "volumeRaw": 1802706549.75,
+        "trades": 2572,
+        "price": 781.79,
         "yield": 2.16,
         "spread_bps": 174.4
       },
       {
         "date": "2026-02-10",
         "datePretty": "10/02",
-        "volume": 2285.41,
-        "volumeRaw": 2285411054.08,
-        "trades": 2518,
-        "price": 811.76,
+        "volume": 2285.91,
+        "volumeRaw": 2285907090.59,
+        "trades": 2519,
+        "price": 811.79,
         "yield": 1.56,
         "spread_bps": 130.9
       },
@@ -4795,49 +4837,49 @@
       {
         "date": "2026-02-12",
         "datePretty": "12/02",
-        "volume": 3247.04,
-        "volumeRaw": 3247036619.69,
-        "trades": 4285,
-        "price": 964.43,
+        "volume": 3259.82,
+        "volumeRaw": 3259821689.2200003,
+        "trades": 4481,
+        "price": 962.46,
         "yield": 4.92,
         "spread_bps": 205.2
       },
       {
         "date": "2026-02-13",
         "datePretty": "13/02",
-        "volume": 1184.71,
-        "volumeRaw": 1184711586.78,
-        "trades": 2443,
-        "price": 49.08,
+        "volume": 1192.39,
+        "volumeRaw": 1192386937.59,
+        "trades": 2471,
+        "price": 49.38,
         "yield": 2.83,
         "spread_bps": 173.1
       },
       {
         "date": "2026-02-18",
         "datePretty": "18/02",
-        "volume": 624.26,
-        "volumeRaw": 624259202.71,
-        "trades": 1343,
-        "price": 32.02,
+        "volume": 629.87,
+        "volumeRaw": 629873011.24,
+        "trades": 1347,
+        "price": 32.29,
         "yield": 1.56,
         "spread_bps": 140.3
       },
       {
         "date": "2026-02-19",
         "datePretty": "19/02",
-        "volume": 985.0,
-        "volumeRaw": 984998818.0500001,
-        "trades": 2346,
-        "price": 936.56,
+        "volume": 993.58,
+        "volumeRaw": 993579195.25,
+        "trades": 2492,
+        "price": 937.1,
         "yield": 4.13,
         "spread_bps": 172.8
       },
       {
         "date": "2026-02-20",
         "datePretty": "20/02",
-        "volume": 2232.32,
-        "volumeRaw": 2232321098.52,
-        "trades": 2895,
+        "volume": 2232.4,
+        "volumeRaw": 2232404943.38,
+        "trades": 2898,
         "price": 988.46,
         "yield": 1.2,
         "spread_bps": 119.2
@@ -4845,50 +4887,50 @@
       {
         "date": "2026-02-23",
         "datePretty": "23/02",
-        "volume": 1611.02,
-        "volumeRaw": 1611015320.82,
-        "trades": 3417,
-        "price": 816.44,
+        "volume": 1611.52,
+        "volumeRaw": 1611524992.6699998,
+        "trades": 3423,
+        "price": 816.49,
         "yield": 1.64,
         "spread_bps": 146.6
       },
       {
         "date": "2026-02-24",
         "datePretty": "24/02",
-        "volume": 1559.0,
-        "volumeRaw": 1558999685.71,
-        "trades": 2904,
-        "price": 48.51,
+        "volume": 1559.8,
+        "volumeRaw": 1559799404.49,
+        "trades": 2910,
+        "price": 48.53,
         "yield": 8.09,
         "spread_bps": 166.5
       },
       {
         "date": "2026-02-25",
         "datePretty": "25/02",
-        "volume": 2323.08,
-        "volumeRaw": 2323078626.26,
-        "trades": 2719,
-        "price": 1014.01,
+        "volume": 2330.61,
+        "volumeRaw": 2330610275.9599996,
+        "trades": 2750,
+        "price": 1013.99,
         "yield": 2.08,
         "spread_bps": 147.1
       },
       {
         "date": "2026-02-26",
         "datePretty": "26/02",
-        "volume": 2520.21,
-        "volumeRaw": 2520208375.22,
-        "trades": 3518,
-        "price": 1011.59,
+        "volume": 2527.87,
+        "volumeRaw": 2527871409.5699997,
+        "trades": 3532,
+        "price": 1011.57,
         "yield": 3.11,
         "spread_bps": 172.9
       },
       {
         "date": "2026-02-27",
         "datePretty": "27/02",
-        "volume": 2131.33,
-        "volumeRaw": 2131332338.0799997,
-        "trades": 3649,
-        "price": 1001.04,
+        "volume": 2133.51,
+        "volumeRaw": 2133512480.1899996,
+        "trades": 3654,
+        "price": 1001.03,
         "yield": 2.29,
         "spread_bps": 159.4
       },
@@ -4896,8 +4938,8 @@
         "date": "2026-03-02",
         "datePretty": "02/03",
         "volume": 1980.05,
-        "volumeRaw": 1980046341.12,
-        "trades": 2994,
+        "volumeRaw": 1980054658.4599998,
+        "trades": 2997,
         "price": 167.19,
         "yield": 1.4,
         "spread_bps": 127.6
@@ -4905,9 +4947,9 @@
       {
         "date": "2026-03-03",
         "datePretty": "03/03",
-        "volume": 2211.44,
-        "volumeRaw": 2211442000.16,
-        "trades": 3282,
+        "volume": 2211.47,
+        "volumeRaw": 2211472792.0199995,
+        "trades": 3284,
         "price": 924.15,
         "yield": 1.86,
         "spread_bps": 152.6
@@ -4915,39 +4957,39 @@
       {
         "date": "2026-03-04",
         "datePretty": "04/03",
-        "volume": 3018.27,
-        "volumeRaw": 3018272600.7300005,
-        "trades": 3134,
-        "price": 782.12,
+        "volume": 3022.57,
+        "volumeRaw": 3022572445.1500006,
+        "trades": 3136,
+        "price": 782.37,
         "yield": 1.6,
         "spread_bps": 130.0
       },
       {
         "date": "2026-03-05",
         "datePretty": "05/03",
-        "volume": 2397.29,
-        "volumeRaw": 2397290838.9100003,
-        "trades": 2656,
-        "price": 1006.5,
+        "volume": 2402.33,
+        "volumeRaw": 2402333606.61,
+        "trades": 2662,
+        "price": 1006.52,
         "yield": 1.15,
         "spread_bps": 108.3
       },
       {
         "date": "2026-03-06",
         "datePretty": "06/03",
-        "volume": 2841.01,
-        "volumeRaw": 2841014795.4100003,
-        "trades": 2544,
-        "price": 361.69,
+        "volume": 2841.41,
+        "volumeRaw": 2841410856.26,
+        "trades": 2546,
+        "price": 361.73,
         "yield": 1.53,
         "spread_bps": 147.6
       },
       {
         "date": "2026-03-09",
         "datePretty": "09/03",
-        "volume": 1836.65,
-        "volumeRaw": 1836649781.07,
-        "trades": 2799,
+        "volume": 1836.81,
+        "volumeRaw": 1836814812.03,
+        "trades": 2803,
         "price": 79.36,
         "yield": 2.01,
         "spread_bps": 166.4
@@ -4965,9 +5007,9 @@
       {
         "date": "2026-03-11",
         "datePretty": "11/03",
-        "volume": 1641.18,
-        "volumeRaw": 1641176798.2399998,
-        "trades": 3000,
+        "volume": 1641.19,
+        "volumeRaw": 1641186421.1399999,
+        "trades": 3004,
         "price": 182.57,
         "yield": 1.92,
         "spread_bps": 123.4
@@ -4975,29 +5017,29 @@
       {
         "date": "2026-03-12",
         "datePretty": "12/03",
-        "volume": 2335.33,
-        "volumeRaw": 2335334750.32,
-        "trades": 3465,
-        "price": 727.78,
+        "volume": 2335.36,
+        "volumeRaw": 2335364994.7400002,
+        "trades": 3467,
+        "price": 727.79,
         "yield": 3.16,
         "spread_bps": 236.5
       },
       {
         "date": "2026-03-13",
         "datePretty": "13/03",
-        "volume": 5401.26,
-        "volumeRaw": 5401256675.18,
-        "trades": 3548,
-        "price": 894.17,
+        "volume": 5402.24,
+        "volumeRaw": 5402242828.0,
+        "trades": 3551,
+        "price": 894.21,
         "yield": 1.29,
         "spread_bps": 116.5
       },
       {
         "date": "2026-03-16",
         "datePretty": "16/03",
-        "volume": 2338.12,
-        "volumeRaw": 2338124619.8799996,
-        "trades": 2953,
+        "volume": 2338.15,
+        "volumeRaw": 2338147619.8799996,
+        "trades": 2955,
         "price": 976.59,
         "yield": 2.23,
         "spread_bps": 138.8
@@ -5005,9 +5047,9 @@
       {
         "date": "2026-03-17",
         "datePretty": "17/03",
-        "volume": 1995.15,
-        "volumeRaw": 1995147141.16,
-        "trades": 4020,
+        "volume": 1995.26,
+        "volumeRaw": 1995259211.71,
+        "trades": 4021,
         "price": 12.08,
         "yield": 2.79,
         "spread_bps": 200.9
@@ -5015,9 +5057,9 @@
       {
         "date": "2026-03-18",
         "datePretty": "18/03",
-        "volume": 2981.69,
-        "volumeRaw": 2981689114.01,
-        "trades": 3236,
+        "volume": 2981.9,
+        "volumeRaw": 2981897028.28,
+        "trades": 3239,
         "price": 7.2,
         "yield": 2.33,
         "spread_bps": 193.1
@@ -5035,9 +5077,9 @@
       {
         "date": "2026-03-20",
         "datePretty": "20/03",
-        "volume": 3513.61,
-        "volumeRaw": 3513607949.4300003,
-        "trades": 4000,
+        "volume": 3513.66,
+        "volumeRaw": 3513657192.1000004,
+        "trades": 4003,
         "price": 259.62,
         "yield": 6.08,
         "spread_bps": 199.2
@@ -5045,20 +5087,20 @@
       {
         "date": "2026-03-23",
         "datePretty": "23/03",
-        "volume": 1615.09,
-        "volumeRaw": 1615085706.26,
-        "trades": 3275,
-        "price": 117.07,
+        "volume": 1615.11,
+        "volumeRaw": 1615112613.3899999,
+        "trades": 3277,
+        "price": 117.08,
         "yield": 3.33,
         "spread_bps": 240.4
       },
       {
         "date": "2026-03-24",
         "datePretty": "24/03",
-        "volume": 1734.2,
-        "volumeRaw": 1734202847.41,
-        "trades": 4689,
-        "price": 927.85,
+        "volume": 1734.41,
+        "volumeRaw": 1734408879.33,
+        "trades": 4694,
+        "price": 927.86,
         "yield": 2.72,
         "spread_bps": 185.7
       },
@@ -5095,10 +5137,10 @@
       {
         "date": "2026-03-30",
         "datePretty": "30/03",
-        "volume": 2070.46,
-        "volumeRaw": 2070460837.9899998,
-        "trades": 3886,
-        "price": 913.15,
+        "volume": 2070.51,
+        "volumeRaw": 2070511233.2099998,
+        "trades": 3888,
+        "price": 913.16,
         "yield": 1.91,
         "spread_bps": 177.2
       },
@@ -5115,9 +5157,9 @@
       {
         "date": "2026-04-01",
         "datePretty": "01/04",
-        "volume": 2579.8,
-        "volumeRaw": 2579801497.2900004,
-        "trades": 3415,
+        "volume": 2579.81,
+        "volumeRaw": 2579807673.05,
+        "trades": 3417,
         "price": 734.68,
         "yield": 2.53,
         "spread_bps": 178.1
@@ -5125,10 +5167,10 @@
       {
         "date": "2026-04-02",
         "datePretty": "02/04",
-        "volume": 6576.1,
-        "volumeRaw": 6576099981.92,
-        "trades": 4232,
-        "price": 726.65,
+        "volume": 6576.16,
+        "volumeRaw": 6576160335.7699995,
+        "trades": 4234,
+        "price": 726.66,
         "yield": 7.54,
         "spread_bps": 131.3
       },
@@ -5145,9 +5187,9 @@
       {
         "date": "2026-04-07",
         "datePretty": "07/04",
-        "volume": 3430.29,
-        "volumeRaw": 3430291946.9,
-        "trades": 4183,
+        "volume": 3430.35,
+        "volumeRaw": 3430345532.48,
+        "trades": 4189,
         "price": 773.22,
         "yield": 2.38,
         "spread_bps": 144.6
@@ -5175,69 +5217,69 @@
       {
         "date": "2026-04-10",
         "datePretty": "10/04",
-        "volume": 1887.86,
-        "volumeRaw": 1887859694.4099998,
-        "trades": 3118,
-        "price": 721.23,
+        "volume": 1887.91,
+        "volumeRaw": 1887914292.1299999,
+        "trades": 3123,
+        "price": 721.24,
         "yield": 2.16,
         "spread_bps": 200.9
       },
       {
         "date": "2026-04-13",
         "datePretty": "13/04",
-        "volume": 2596.33,
-        "volumeRaw": 2596327204.41,
-        "trades": 3585,
-        "price": 47.76,
+        "volume": 2618.96,
+        "volumeRaw": 2618958611.77,
+        "trades": 3589,
+        "price": 48.15,
         "yield": 8.48,
         "spread_bps": 142.3
       },
       {
         "date": "2026-04-14",
         "datePretty": "14/04",
-        "volume": 1758.33,
-        "volumeRaw": 1758330052.6200001,
-        "trades": 3842,
-        "price": 741.46,
+        "volume": 1757.39,
+        "volumeRaw": 1757385124.82,
+        "trades": 3837,
+        "price": 741.21,
         "yield": 8.46,
         "spread_bps": 161.3
       },
       {
         "date": "2026-04-15",
         "datePretty": "15/04",
-        "volume": 2033.22,
-        "volumeRaw": 2033220731.4299998,
-        "trades": 2794,
-        "price": 657.62,
+        "volume": 2042.2,
+        "volumeRaw": 2042199656.67,
+        "trades": 2803,
+        "price": 658.57,
         "yield": 2.24,
         "spread_bps": 213.6
       },
       {
         "date": "2026-04-16",
         "datePretty": "16/04",
-        "volume": 2933.96,
-        "volumeRaw": 2933964072.59,
-        "trades": 3781,
-        "price": 164.75,
+        "volume": 2946.33,
+        "volumeRaw": 2946330159.1700006,
+        "trades": 3788,
+        "price": 165.32,
         "yield": 2.18,
         "spread_bps": 183.1
       },
       {
         "date": "2026-04-17",
         "datePretty": "17/04",
-        "volume": 2979.84,
-        "volumeRaw": 2979842185.3500004,
-        "trades": 3555,
-        "price": 227.11,
+        "volume": 2987.95,
+        "volumeRaw": 2987954654.61,
+        "trades": 3557,
+        "price": 227.58,
         "yield": 8.15,
         "spread_bps": 161.9
       },
       {
         "date": "2026-04-20",
         "datePretty": "20/04",
-        "volume": 806.13,
-        "volumeRaw": 806133880.5999999,
-        "trades": 2679,
+        "volume": 806.18,
+        "volumeRaw": 806180957.39,
+        "trades": 2684,
         "price": 983.06,
         "yield": 2.02,
         "spread_bps": 195.0
@@ -5245,9 +5287,9 @@
       {
         "date": "2026-04-22",
         "datePretty": "22/04",
-        "volume": 1758.0,
-        "volumeRaw": 1757996385.6200001,
-        "trades": 3741,
+        "volume": 1758.27,
+        "volumeRaw": 1758266379.64,
+        "trades": 3750,
         "price": 978.6,
         "yield": 1.86,
         "spread_bps": 182.7
@@ -5255,9 +5297,9 @@
       {
         "date": "2026-04-23",
         "datePretty": "23/04",
-        "volume": 2499.85,
-        "volumeRaw": 2499848510.13,
-        "trades": 3726,
+        "volume": 2499.95,
+        "volumeRaw": 2499946561.48,
+        "trades": 3730,
         "price": 44.49,
         "yield": 2.23,
         "spread_bps": 159.4
@@ -5276,8 +5318,8 @@
         "date": "2026-04-27",
         "datePretty": "27/04",
         "volume": 1549.08,
-        "volumeRaw": 1549078533.38,
-        "trades": 2529,
+        "volumeRaw": 1549080610.02,
+        "trades": 2531,
         "price": 412.56,
         "yield": 1.76,
         "spread_bps": 155.4
@@ -5295,20 +5337,20 @@
       {
         "date": "2026-04-29",
         "datePretty": "29/04",
-        "volume": 3185.43,
-        "volumeRaw": 3185434855.81,
-        "trades": 2940,
-        "price": 148.42,
+        "volume": 3215.43,
+        "volumeRaw": 3215434441.27,
+        "trades": 2941,
+        "price": 149.61,
         "yield": 4.62,
         "spread_bps": 176.8
       },
       {
         "date": "2026-04-30",
         "datePretty": "30/04",
-        "volume": 1987.6,
-        "volumeRaw": 1987604858.52,
-        "trades": 5214,
-        "price": 329.37,
+        "volume": 1987.63,
+        "volumeRaw": 1987629821.7,
+        "trades": 5216,
+        "price": 329.38,
         "yield": 1.76,
         "spread_bps": 160.4
       },
@@ -5316,8 +5358,8 @@
         "date": "2026-05-04",
         "datePretty": "04/05",
         "volume": 1413.48,
-        "volumeRaw": 1413476478.9699998,
-        "trades": 2572,
+        "volumeRaw": 1413480641.9299998,
+        "trades": 2575,
         "price": 281.46,
         "yield": 2.54,
         "spread_bps": 238.4
@@ -5325,30 +5367,30 @@
       {
         "date": "2026-05-05",
         "datePretty": "05/05",
-        "volume": 2000.58,
-        "volumeRaw": 2000580804.48,
-        "trades": 3485,
-        "price": 360.65,
+        "volume": 2001.31,
+        "volumeRaw": 2001305138.21,
+        "trades": 3489,
+        "price": 360.73,
         "yield": 2.25,
         "spread_bps": 157.9
       },
       {
         "date": "2026-05-06",
         "datePretty": "06/05",
-        "volume": 7053.52,
-        "volumeRaw": 7053519517.71,
-        "trades": 4267,
-        "price": 950.03,
+        "volume": 7083.6,
+        "volumeRaw": 7083597314.63,
+        "trades": 4271,
+        "price": 950.19,
         "yield": 1.86,
         "spread_bps": 139.5
       },
       {
         "date": "2026-05-07",
         "datePretty": "07/05",
-        "volume": 3686.2,
-        "volumeRaw": 3686204980.72,
-        "trades": 2870,
-        "price": 404.75,
+        "volume": 3686.27,
+        "volumeRaw": 3686269259.45,
+        "trades": 2873,
+        "price": 404.76,
         "yield": 1.34,
         "spread_bps": 127.9
       },
@@ -5365,9 +5407,9 @@
       {
         "date": "2026-05-11",
         "datePretty": "11/05",
-        "volume": 2188.3,
-        "volumeRaw": 2188299364.8399997,
-        "trades": 3527,
+        "volume": 2188.31,
+        "volumeRaw": 2188305627.2599998,
+        "trades": 3531,
         "price": 935.61,
         "yield": 1.45,
         "spread_bps": 125.1
@@ -5376,8 +5418,8 @@
         "date": "2026-05-12",
         "datePretty": "12/05",
         "volume": 3917.79,
-        "volumeRaw": 3917788562.59,
-        "trades": 5496,
+        "volumeRaw": 3917794891.9900002,
+        "trades": 5498,
         "price": 239.89,
         "yield": 4.57,
         "spread_bps": 204.1
@@ -5385,9 +5427,9 @@
       {
         "date": "2026-05-13",
         "datePretty": "13/05",
-        "volume": 2401.29,
-        "volumeRaw": 2401289194.89,
-        "trades": 2759,
+        "volume": 2401.3,
+        "volumeRaw": 2401299707.64,
+        "trades": 2764,
         "price": 947.26,
         "yield": 1.97,
         "spread_bps": 188.7
@@ -5405,19 +5447,19 @@
       {
         "date": "2026-05-15",
         "datePretty": "15/05",
-        "volume": 1703.14,
-        "volumeRaw": 1703136971.1699998,
-        "trades": 2864,
-        "price": 429.79,
+        "volume": 1702.62,
+        "volumeRaw": 1702616211.23,
+        "trades": 2867,
+        "price": 429.69,
         "yield": 2.04,
         "spread_bps": 156.0
       },
       {
         "date": "2026-05-18",
         "datePretty": "18/05",
-        "volume": 2393.75,
-        "volumeRaw": 2393754734.8900003,
-        "trades": 3200,
+        "volume": 2393.92,
+        "volumeRaw": 2393924369.9200006,
+        "trades": 3211,
         "price": 990.55,
         "yield": 1.58,
         "spread_bps": 146.6
@@ -5425,60 +5467,60 @@
       {
         "date": "2026-05-19",
         "datePretty": "19/05",
-        "volume": 2789.64,
-        "volumeRaw": 2789642624.9099994,
-        "trades": 3796,
-        "price": 936.82,
+        "volume": 2789.84,
+        "volumeRaw": 2789837056.549999,
+        "trades": 3799,
+        "price": 936.83,
         "yield": 1.48,
         "spread_bps": 130.6
       },
       {
         "date": "2026-05-20",
         "datePretty": "20/05",
-        "volume": 2635.37,
-        "volumeRaw": 2635368995.6699996,
-        "trades": 3459,
-        "price": 970.3,
+        "volume": 2636.27,
+        "volumeRaw": 2636268829.06,
+        "trades": 3460,
+        "price": 970.31,
         "yield": 1.03,
         "spread_bps": 102.8
       },
       {
         "date": "2026-05-21",
         "datePretty": "21/05",
-        "volume": 2568.58,
-        "volumeRaw": 2568583213.09,
-        "trades": 2598,
-        "price": 981.78,
+        "volume": 2570.15,
+        "volumeRaw": 2570152230.6300006,
+        "trades": 2606,
+        "price": 981.82,
         "yield": 1.09,
         "spread_bps": 105.7
       },
       {
         "date": "2026-05-22",
         "datePretty": "22/05",
-        "volume": 2871.5,
-        "volumeRaw": 2871504002.28,
-        "trades": 2095,
-        "price": 993.21,
+        "volume": 2873.63,
+        "volumeRaw": 2873628831.03,
+        "trades": 2096,
+        "price": 992.62,
         "yield": 1.1,
         "spread_bps": 107.6
       },
       {
         "date": "2026-05-25",
         "datePretty": "25/05",
-        "volume": 3375.95,
-        "volumeRaw": 3375946773.07,
-        "trades": 4070,
-        "price": 580.06,
+        "volume": 3376.02,
+        "volumeRaw": 3376023408.12,
+        "trades": 4091,
+        "price": 580.07,
         "yield": 1.21,
         "spread_bps": 118.6
       },
       {
         "date": "2026-05-26",
         "datePretty": "26/05",
-        "volume": 3125.62,
-        "volumeRaw": 3125620646.2500005,
-        "trades": 3304,
-        "price": 151.58,
+        "volume": 3125.65,
+        "volumeRaw": 3125648818.36,
+        "trades": 3316,
+        "price": 151.59,
         "yield": 1.76,
         "spread_bps": 148.4
       },
@@ -5495,9 +5537,9 @@
       {
         "date": "2026-05-28",
         "datePretty": "28/05",
-        "volume": 4399.2,
-        "volumeRaw": 4399198817.790001,
-        "trades": 4386,
+        "volume": 4399.28,
+        "volumeRaw": 4399279643.000001,
+        "trades": 4402,
         "price": 204.91,
         "yield": 1.04,
         "spread_bps": 101.3
@@ -5505,9 +5547,9 @@
       {
         "date": "2026-05-29",
         "datePretty": "29/05",
-        "volume": 1628.84,
-        "volumeRaw": 1628842633.0999997,
-        "trades": 2493,
+        "volume": 1628.9,
+        "volumeRaw": 1628904414.2899997,
+        "trades": 2503,
         "price": 843.59,
         "yield": 1.42,
         "spread_bps": 138.6
@@ -5516,8 +5558,8 @@
         "date": "2026-06-01",
         "datePretty": "01/06",
         "volume": 2121.11,
-        "volumeRaw": 2121107225.8600001,
-        "trades": 2014,
+        "volumeRaw": 2121109332.41,
+        "trades": 2016,
         "price": 1038.41,
         "yield": 1.94,
         "spread_bps": 190.1
@@ -5525,10 +5567,10 @@
       {
         "date": "2026-06-02",
         "datePretty": "02/06",
-        "volume": 1844.24,
-        "volumeRaw": 1844242715.48,
-        "trades": 3128,
-        "price": 737.9,
+        "volume": 1884.35,
+        "volumeRaw": 1884351101.4400003,
+        "trades": 3130,
+        "price": 742.08,
         "yield": 1.36,
         "spread_bps": 135.0
       },
@@ -5545,29 +5587,29 @@
       {
         "date": "2026-06-05",
         "datePretty": "05/06",
-        "volume": 1350.6,
-        "volumeRaw": 1350598328.26,
-        "trades": 2551,
-        "price": 547.99,
+        "volume": 1350.67,
+        "volumeRaw": 1350674267.9899998,
+        "trades": 2558,
+        "price": 548.0,
         "yield": 1.12,
         "spread_bps": 110.4
       },
       {
         "date": "2026-06-08",
         "datePretty": "08/06",
-        "volume": 1322.27,
-        "volumeRaw": 1322274240.53,
-        "trades": 2487,
-        "price": 139.06,
+        "volume": 1322.28,
+        "volumeRaw": 1322280574.61,
+        "trades": 2492,
+        "price": 139.07,
         "yield": 4.31,
         "spread_bps": 184.8
       },
       {
         "date": "2026-06-09",
         "datePretty": "09/06",
-        "volume": 1931.59,
-        "volumeRaw": 1931590222.4100003,
-        "trades": 2786,
+        "volume": 1931.64,
+        "volumeRaw": 1931635630.8100002,
+        "trades": 2801,
         "price": 317.42,
         "yield": 5.18,
         "spread_bps": 206.4
@@ -5575,10 +5617,10 @@
       {
         "date": "2026-06-10",
         "datePretty": "10/06",
-        "volume": 2708.22,
-        "volumeRaw": 2708224028.2400002,
-        "trades": 2530,
-        "price": 907.35,
+        "volume": 2708.67,
+        "volumeRaw": 2708665714.37,
+        "trades": 2555,
+        "price": 907.37,
         "yield": 1.95,
         "spread_bps": 167.4
       },
@@ -5595,19 +5637,19 @@
       {
         "date": "2026-06-12",
         "datePretty": "12/06",
-        "volume": 2919.69,
-        "volumeRaw": 2919687010.81,
-        "trades": 2497,
-        "price": 1027.2,
+        "volume": 2920.11,
+        "volumeRaw": 2920109981.2799997,
+        "trades": 2501,
+        "price": 1027.21,
         "yield": 1.19,
         "spread_bps": 116.9
       },
       {
         "date": "2026-06-15",
         "datePretty": "15/06",
-        "volume": 1718.21,
-        "volumeRaw": 1718208608.48,
-        "trades": 2098,
+        "volume": 1718.28,
+        "volumeRaw": 1718279097.16,
+        "trades": 2099,
         "price": 1034.54,
         "yield": 1.62,
         "spread_bps": 158.8
@@ -5616,8 +5658,8 @@
         "date": "2026-06-16",
         "datePretty": "16/06",
         "volume": 1276.72,
-        "volumeRaw": 1276717276.41,
-        "trades": 2278,
+        "volumeRaw": 1276719395.06,
+        "trades": 2280,
         "price": 711.1,
         "yield": 2.2,
         "spread_bps": 207.4
@@ -5625,9 +5667,9 @@
       {
         "date": "2026-06-17",
         "datePretty": "17/06",
-        "volume": 1555.75,
-        "volumeRaw": 1555749984.07,
-        "trades": 2114,
+        "volume": 1555.82,
+        "volumeRaw": 1555822944.22,
+        "trades": 2117,
         "price": 1056.41,
         "yield": 2.85,
         "spread_bps": 190.4
@@ -5635,9 +5677,9 @@
       {
         "date": "2026-06-18",
         "datePretty": "18/06",
-        "volume": 1705.39,
-        "volumeRaw": 1705393141.5399997,
-        "trades": 1976,
+        "volume": 1705.4,
+        "volumeRaw": 1705400988.2399998,
+        "trades": 1977,
         "price": 173.05,
         "yield": 1.71,
         "spread_bps": 166.6
@@ -5645,9 +5687,9 @@
       {
         "date": "2026-06-19",
         "datePretty": "19/06",
-        "volume": 1351.11,
-        "volumeRaw": 1351107309.63,
-        "trades": 2034,
+        "volume": 1350.89,
+        "volumeRaw": 1350886492.63,
+        "trades": 2030,
         "price": 25.28,
         "yield": 1.81,
         "spread_bps": 163.0
@@ -5655,9 +5697,9 @@
       {
         "date": "2026-06-22",
         "datePretty": "22/06",
-        "volume": 2033.51,
-        "volumeRaw": 2033509125.92,
-        "trades": 3326,
+        "volume": 2033.53,
+        "volumeRaw": 2033527165.94,
+        "trades": 3333,
         "price": 32.55,
         "yield": 4.15,
         "spread_bps": 126.9
@@ -5675,9 +5717,9 @@
       {
         "date": "2026-06-24",
         "datePretty": "24/06",
-        "volume": 2615.91,
-        "volumeRaw": 2615907997.16,
-        "trades": 2951,
+        "volume": 2615.92,
+        "volumeRaw": 2615923914.0899997,
+        "trades": 2955,
         "price": 391.16,
         "yield": 3.32,
         "spread_bps": 153.7
@@ -5685,9 +5727,9 @@
       {
         "date": "2026-06-25",
         "datePretty": "25/06",
-        "volume": 1830.95,
-        "volumeRaw": 1830954191.81,
-        "trades": 3276,
+        "volume": 1830.97,
+        "volumeRaw": 1830973322.6899998,
+        "trades": 3282,
         "price": 295.73,
         "yield": 1.57,
         "spread_bps": 158.2
@@ -5695,19 +5737,19 @@
       {
         "date": "2026-06-26",
         "datePretty": "26/06",
-        "volume": 1853.95,
-        "volumeRaw": 1853950836.49,
-        "trades": 2159,
-        "price": 265.15,
+        "volume": 1854.39,
+        "volumeRaw": 1854388748.32,
+        "trades": 2197,
+        "price": 265.2,
         "yield": 1.12,
         "spread_bps": 110.0
       },
       {
         "date": "2026-06-29",
         "datePretty": "29/06",
-        "volume": 1238.5,
-        "volumeRaw": 1238498362.25,
-        "trades": 1636,
+        "volume": 1238.51,
+        "volumeRaw": 1238512207.3,
+        "trades": 1641,
         "price": 127.02,
         "yield": 4.01,
         "spread_bps": 125.3
@@ -5715,9 +5757,9 @@
       {
         "date": "2026-06-30",
         "datePretty": "30/06",
-        "volume": 1391.3,
-        "volumeRaw": 1391297745.4799998,
-        "trades": 2444,
+        "volume": 1391.33,
+        "volumeRaw": 1391325197.02,
+        "trades": 2450,
         "price": 101.64,
         "yield": 3.19,
         "spread_bps": 142.4
@@ -5725,20 +5767,20 @@
       {
         "date": "2026-07-01",
         "datePretty": "01/07",
-        "volume": 1689.35,
-        "volumeRaw": 1689354721.2200003,
-        "trades": 2782,
-        "price": 655.43,
+        "volume": 1689.66,
+        "volumeRaw": 1689655482.3700004,
+        "trades": 2783,
+        "price": 655.47,
         "yield": 1.24,
         "spread_bps": 119.8
       },
       {
         "date": "2026-07-02",
         "datePretty": "02/07",
-        "volume": 1329.49,
-        "volumeRaw": 1329489579.2099998,
-        "trades": 2298,
-        "price": 152.48,
+        "volume": 1335.49,
+        "volumeRaw": 1335489737.2,
+        "trades": 2300,
+        "price": 153.03,
         "yield": 26.16,
         "spread_bps": 131.1
       },
@@ -5755,9 +5797,9 @@
       {
         "date": "2026-07-06",
         "datePretty": "06/07",
-        "volume": 1693.4,
-        "volumeRaw": 1693401216.97,
-        "trades": 2110,
+        "volume": 1694.19,
+        "volumeRaw": 1694193693.9599998,
+        "trades": 2113,
         "price": 3.14,
         "yield": 1.06,
         "spread_bps": 158.3
@@ -5765,29 +5807,29 @@
       {
         "date": "2026-07-07",
         "datePretty": "07/07",
-        "volume": 1431.39,
-        "volumeRaw": 1431390925.24,
-        "trades": 3014,
-        "price": 333.25,
+        "volume": 1431.4,
+        "volumeRaw": 1431401606.72,
+        "trades": 3018,
+        "price": 333.26,
         "yield": 3.56,
         "spread_bps": 177.8
       },
       {
         "date": "2026-07-08",
         "datePretty": "08/07",
-        "volume": 1560.32,
-        "volumeRaw": 1560316827.81,
-        "trades": 2345,
-        "price": 751.9,
+        "volume": 1570.02,
+        "volumeRaw": 1570016101.75,
+        "trades": 2346,
+        "price": 753.02,
         "yield": 2.54,
         "spread_bps": 184.8
       },
       {
         "date": "2026-07-09",
         "datePretty": "09/07",
-        "volume": 1047.75,
-        "volumeRaw": 1047751844.06,
-        "trades": 1920,
+        "volume": 1047.78,
+        "volumeRaw": 1047779648.51,
+        "trades": 1929,
         "price": 998.47,
         "yield": 1.4,
         "spread_bps": 135.7
@@ -5795,49 +5837,49 @@
       {
         "date": "2026-07-10",
         "datePretty": "10/07",
-        "volume": 532.94,
-        "volumeRaw": 532940984.08,
-        "trades": 2008,
-        "price": 150.33,
+        "volume": 537.13,
+        "volumeRaw": 537131624.78,
+        "trades": 2016,
+        "price": 151.33,
         "yield": 1.15,
         "spread_bps": 189.4
       },
       {
         "date": "2026-07-13",
         "datePretty": "13/07",
-        "volume": 1052.16,
-        "volumeRaw": 1052164422.9200002,
-        "trades": 2256,
-        "price": 963.45,
+        "volume": 1052.25,
+        "volumeRaw": 1052246874.1000001,
+        "trades": 2267,
+        "price": 963.46,
         "yield": 1.21,
         "spread_bps": 111.4
       },
       {
         "date": "2026-07-14",
         "datePretty": "14/07",
-        "volume": 1151.42,
-        "volumeRaw": 1151423202.3799999,
-        "trades": 2796,
-        "price": 1012.99,
+        "volume": 1161.95,
+        "volumeRaw": 1161951883.27,
+        "trades": 2802,
+        "price": 1012.79,
         "yield": 1.71,
         "spread_bps": 146.3
       },
       {
         "date": "2026-07-15",
         "datePretty": "15/07",
-        "volume": 1206.45,
-        "volumeRaw": 1206447335.18,
-        "trades": 2806,
-        "price": 859.67,
+        "volume": 1216.96,
+        "volumeRaw": 1216963315.41,
+        "trades": 2807,
+        "price": 860.58,
         "yield": 1.61,
         "spread_bps": 152.2
       },
       {
         "date": "2026-07-16",
         "datePretty": "16/07",
-        "volume": 1760.91,
-        "volumeRaw": 1760911763.7800002,
-        "trades": 4898,
+        "volume": 1760.97,
+        "volumeRaw": 1760966791.2200003,
+        "trades": 4909,
         "price": 17.64,
         "yield": 6.76,
         "spread_bps": 208.5
@@ -5856,8 +5898,8 @@
         "date": "2026-07-20",
         "datePretty": "20/07",
         "volume": 6483.13,
-        "volumeRaw": 6483129456.849999,
-        "trades": 2279,
+        "volumeRaw": 6483131460.139999,
+        "trades": 2281,
         "price": 1034.19,
         "yield": 1.9,
         "spread_bps": 181.1
@@ -5865,9 +5907,9 @@
       {
         "date": "2026-07-21",
         "datePretty": "21/07",
-        "volume": 1497.41,
-        "volumeRaw": 1497414454.5500002,
-        "trades": 2607,
+        "volume": 1497.42,
+        "volumeRaw": 1497424474.49,
+        "trades": 2611,
         "price": 992.83,
         "yield": 1.87,
         "spread_bps": 175.0
@@ -5875,10 +5917,10 @@
       {
         "date": "2026-07-22",
         "datePretty": "22/07",
-        "volume": 3037.09,
-        "volumeRaw": 3037089184.5400004,
-        "trades": 2027,
-        "price": 594.1,
+        "volume": 3037.2,
+        "volumeRaw": 3037196069.1600003,
+        "trades": 2031,
+        "price": 594.11,
         "yield": 1.58,
         "spread_bps": 195.9
       },
@@ -5895,9 +5937,9 @@
       {
         "date": "2026-07-24",
         "datePretty": "24/07",
-        "volume": 1908.81,
-        "volumeRaw": 1908813784.6599996,
-        "trades": 2104,
+        "volume": 1908.8,
+        "volumeRaw": 1908799784.6599996,
+        "trades": 2102,
         "price": 66.37,
         "yield": 3.94,
         "spread_bps": 154.1
@@ -5905,9 +5947,9 @@
       {
         "date": "2026-07-27",
         "datePretty": "27/07",
-        "volume": 855.57,
-        "volumeRaw": 855565670.9499999,
-        "trades": 2565,
+        "volume": 855.58,
+        "volumeRaw": 855579670.43,
+        "trades": 2567,
         "price": 992.81,
         "yield": 2.33,
         "spread_bps": 193.6
@@ -5915,19 +5957,19 @@
       {
         "date": "2026-07-28",
         "datePretty": "28/07",
-        "volume": 3563.3,
-        "volumeRaw": 3563298237.5499997,
-        "trades": 3045,
-        "price": 916.08,
+        "volume": 3567.39,
+        "volumeRaw": 3567389492.6099997,
+        "trades": 3057,
+        "price": 916.18,
         "yield": 3.12,
         "spread_bps": 143.1
       },
       {
         "date": "2026-07-29",
         "datePretty": "29/07",
-        "volume": 2091.3,
-        "volumeRaw": 2091299163.92,
-        "trades": 2473,
+        "volume": 2091.32,
+        "volumeRaw": 2091324188.3200002,
+        "trades": 2479,
         "price": 196.29,
         "yield": 3.84,
         "spread_bps": 186.2
@@ -5935,10 +5977,10 @@
       {
         "date": "2026-07-30",
         "datePretty": "30/07",
-        "volume": 1543.55,
-        "volumeRaw": 1543545487.3300002,
-        "trades": 2881,
-        "price": 84.93,
+        "volume": 1544.98,
+        "volumeRaw": 1544983805.31,
+        "trades": 2888,
+        "price": 85.0,
         "yield": 3.97,
         "spread_bps": 138.4
       },
@@ -5955,10 +5997,10 @@
       {
         "date": "2026-08-03",
         "datePretty": "03/08",
-        "volume": 1614.37,
-        "volumeRaw": 1614372733.88,
-        "trades": 2111,
-        "price": 533.39,
+        "volume": 1614.39,
+        "volumeRaw": 1614393465.66,
+        "trades": 2112,
+        "price": 533.4,
         "yield": 1.99,
         "spread_bps": 177.6
       },
@@ -5995,10 +6037,10 @@
       {
         "date": "2026-08-10",
         "datePretty": "10/08",
-        "volume": 941.88,
-        "volumeRaw": 941881620.8000001,
-        "trades": 2213,
-        "price": 893.1,
+        "volume": 942.0,
+        "volumeRaw": 942004512.5600001,
+        "trades": 2217,
+        "price": 893.11,
         "yield": 1.81,
         "spread_bps": 159.0
       },
@@ -6015,19 +6057,19 @@
       {
         "date": "2026-08-12",
         "datePretty": "12/08",
-        "volume": 1811.22,
-        "volumeRaw": 1811217113.2199998,
-        "trades": 2618,
-        "price": 93.69,
+        "volume": 1811.29,
+        "volumeRaw": 1811286886.3199997,
+        "trades": 2631,
+        "price": 93.7,
         "yield": 9.03,
         "spread_bps": 144.4
       },
       {
         "date": "2026-08-13",
         "datePretty": "13/08",
-        "volume": 2508.32,
-        "volumeRaw": 2508316125.49,
-        "trades": 2349,
+        "volume": 2508.38,
+        "volumeRaw": 2508380678.22,
+        "trades": 2351,
         "price": 998.1,
         "yield": 1.19,
         "spread_bps": 107.2
@@ -6045,9 +6087,9 @@
       {
         "date": "2026-08-17",
         "datePretty": "17/08",
-        "volume": 1207.46,
-        "volumeRaw": 1207455231.2699997,
-        "trades": 2480,
+        "volume": 1207.48,
+        "volumeRaw": 1207480716.3999999,
+        "trades": 2481,
         "price": 207.72,
         "yield": 1.7,
         "spread_bps": 293.9
@@ -6055,10 +6097,10 @@
       {
         "date": "2026-08-18",
         "datePretty": "18/08",
-        "volume": 2083.11,
-        "volumeRaw": 2083105075.79,
-        "trades": 3541,
-        "price": 189.81,
+        "volume": 2084.03,
+        "volumeRaw": 2084030697.1299996,
+        "trades": 3549,
+        "price": 189.88,
         "yield": 3.95,
         "spread_bps": 282.1
       },
@@ -6066,8 +6108,8 @@
         "date": "2026-08-19",
         "datePretty": "19/08",
         "volume": 1874.23,
-        "volumeRaw": 1874228383.17,
-        "trades": 2910,
+        "volumeRaw": 1874231433.86,
+        "trades": 2911,
         "price": 39.0,
         "yield": 6.89,
         "spread_bps": 350.0
@@ -6075,9 +6117,9 @@
       {
         "date": "2026-08-20",
         "datePretty": "20/08",
-        "volume": 1966.45,
-        "volumeRaw": 1966451037.88,
-        "trades": 2421,
+        "volume": 1966.5,
+        "volumeRaw": 1966504811.5100002,
+        "trades": 2431,
         "price": 89.37,
         "yield": 3.44,
         "spread_bps": 294.5
@@ -6095,20 +6137,20 @@
       {
         "date": "2026-08-24",
         "datePretty": "24/08",
-        "volume": 1250.35,
-        "volumeRaw": 1250347950.36,
-        "trades": 2396,
-        "price": 890.86,
+        "volume": 1251.8,
+        "volumeRaw": 1251797306.8099997,
+        "trades": 2400,
+        "price": 890.66,
         "yield": 2.7,
         "spread_bps": 242.1
       },
       {
         "date": "2026-08-25",
         "datePretty": "25/08",
-        "volume": 1798.37,
-        "volumeRaw": 1798374869.67,
-        "trades": 2770,
-        "price": 939.48,
+        "volume": 1798.84,
+        "volumeRaw": 1798841855.17,
+        "trades": 2774,
+        "price": 939.5,
         "yield": 2.89,
         "spread_bps": 236.3
       },
@@ -6116,8 +6158,8 @@
         "date": "2026-08-26",
         "datePretty": "26/08",
         "volume": 2547.72,
-        "volumeRaw": 2547720131.48,
-        "trades": 3444,
+        "volumeRaw": 2547723247.38,
+        "trades": 3447,
         "price": 92.57,
         "yield": 8.25,
         "spread_bps": 114.0
@@ -6125,20 +6167,20 @@
       {
         "date": "2026-08-27",
         "datePretty": "27/08",
-        "volume": 1965.49,
-        "volumeRaw": 1965485669.08,
-        "trades": 2387,
-        "price": 931.33,
+        "volume": 1971.04,
+        "volumeRaw": 1971042165.0,
+        "trades": 2391,
+        "price": 931.55,
         "yield": 4.45,
-        "spread_bps": 263.2
+        "spread_bps": 263.0
       },
       {
         "date": "2026-08-28",
         "datePretty": "28/08",
-        "volume": 1367.37,
-        "volumeRaw": 1367366416.34,
-        "trades": 3109,
-        "price": 941.89,
+        "volume": 1375.27,
+        "volumeRaw": 1375271276.4199998,
+        "trades": 3112,
+        "price": 941.56,
         "yield": 2.83,
         "spread_bps": 205.5
       },
@@ -6155,9 +6197,9 @@
       {
         "date": "2026-09-01",
         "datePretty": "01/09",
-        "volume": 1376.42,
-        "volumeRaw": 1376419704.78,
-        "trades": 2401,
+        "volume": 1376.43,
+        "volumeRaw": 1376431850.3999999,
+        "trades": 2403,
         "price": 673.61,
         "yield": 5.3,
         "spread_bps": 135.3
@@ -6195,18 +6237,18 @@
       {
         "date": "2026-09-08",
         "datePretty": "08/09",
-        "volume": 1850.74,
-        "volumeRaw": 1850735849.6299999,
-        "trades": 2394,
-        "price": 581.26,
+        "volume": 1851.35,
+        "volumeRaw": 1851351443.85,
+        "trades": 2403,
+        "price": 581.34,
         "yield": 1.49,
         "spread_bps": 160.9
       },
       {
         "date": "2026-09-09",
         "datePretty": "09/09",
-        "volume": 2040.18,
-        "volumeRaw": 2040177848.9299998,
+        "volume": 2040.15,
+        "volumeRaw": 2040154532.2799997,
         "trades": 2350,
         "price": 773.42,
         "yield": 2.52,
@@ -6215,30 +6257,30 @@
       {
         "date": "2026-09-10",
         "datePretty": "10/09",
-        "volume": 1677.47,
-        "volumeRaw": 1677471994.5300002,
-        "trades": 3867,
-        "price": 694.79,
+        "volume": 1677.76,
+        "volumeRaw": 1677760626.38,
+        "trades": 3894,
+        "price": 694.82,
         "yield": 1.43,
         "spread_bps": 121.7
       },
       {
         "date": "2026-09-11",
         "datePretty": "11/09",
-        "volume": 2604.02,
-        "volumeRaw": 2604017532.87,
-        "trades": 2830,
-        "price": 78.39,
+        "volume": 2605.34,
+        "volumeRaw": 2605339231.9499993,
+        "trades": 2832,
+        "price": 78.43,
         "yield": 12.23,
         "spread_bps": 245.1
       },
       {
         "date": "2026-09-14",
         "datePretty": "14/09",
-        "volume": 1229.96,
-        "volumeRaw": 1229958499.94,
-        "trades": 3251,
-        "price": 260.33,
+        "volume": 1232.26,
+        "volumeRaw": 1232258589.04,
+        "trades": 3254,
+        "price": 260.69,
         "yield": 19.27,
         "spread_bps": 136.4
       },
@@ -6256,18 +6298,18 @@
         "date": "2026-09-16",
         "datePretty": "16/09",
         "volume": 1958.85,
-        "volumeRaw": 1958848770.8899996,
-        "trades": 3753,
-        "price": 270.08,
+        "volumeRaw": 1958854575.1699996,
+        "trades": 3755,
+        "price": 270.09,
         "yield": 2.63,
         "spread_bps": 205.7
       },
       {
         "date": "2026-09-17",
         "datePretty": "17/09",
-        "volume": 3326.1,
-        "volumeRaw": 3326104424.8999996,
-        "trades": 2865,
+        "volume": 3326.15,
+        "volumeRaw": 3326154712.75,
+        "trades": 2871,
         "price": 504.93,
         "yield": 1.05,
         "spread_bps": 93.0
@@ -6285,9 +6327,9 @@
       {
         "date": "2026-09-21",
         "datePretty": "21/09",
-        "volume": 1183.42,
-        "volumeRaw": 1183420069.4600003,
-        "trades": 2773,
+        "volume": 1183.45,
+        "volumeRaw": 1183450274.93,
+        "trades": 2775,
         "price": 593.84,
         "yield": 7.95,
         "spread_bps": 122.2
@@ -6295,30 +6337,30 @@
       {
         "date": "2026-09-22",
         "datePretty": "22/09",
-        "volume": 2132.7,
-        "volumeRaw": 2132699648.97,
-        "trades": 2395,
-        "price": 300.34,
+        "volume": 2132.87,
+        "volumeRaw": 2132873357.6499999,
+        "trades": 2422,
+        "price": 300.35,
         "yield": 1.3,
         "spread_bps": 131.0
       },
       {
         "date": "2026-09-23",
         "datePretty": "23/09",
-        "volume": 2141.28,
-        "volumeRaw": 2141275075.16,
-        "trades": 3070,
-        "price": 1001.66,
+        "volume": 2147.37,
+        "volumeRaw": 2147366340.41,
+        "trades": 3074,
+        "price": 1001.69,
         "yield": 1.51,
         "spread_bps": 146.4
       },
       {
         "date": "2026-09-24",
         "datePretty": "24/09",
-        "volume": 4272.02,
-        "volumeRaw": 4272015916.53,
+        "volume": 4276.06,
+        "volumeRaw": 4276057573.52,
         "trades": 2057,
-        "price": 756.55,
+        "price": 756.73,
         "yield": 1.97,
         "spread_bps": 142.0
       },
@@ -6326,8 +6368,8 @@
         "date": "2026-09-25",
         "datePretty": "25/09",
         "volume": 2844.24,
-        "volumeRaw": 2844239909.21,
-        "trades": 2398,
+        "volumeRaw": 2844237109.21,
+        "trades": 2396,
         "price": 49.91,
         "yield": 0.84,
         "spread_bps": 127.8
@@ -6335,10 +6377,10 @@
       {
         "date": "2026-09-28",
         "datePretty": "28/09",
-        "volume": 1991.71,
-        "volumeRaw": 1991709145.98,
-        "trades": 2427,
-        "price": 655.54,
+        "volume": 2013.72,
+        "volumeRaw": 2013716197.38,
+        "trades": 2429,
+        "price": 658.07,
         "yield": 2.06,
         "spread_bps": 228.4
       },
@@ -6346,8 +6388,8 @@
         "date": "2026-09-29",
         "datePretty": "29/09",
         "volume": 3877.79,
-        "volumeRaw": 3877789278.0599995,
-        "trades": 7248,
+        "volumeRaw": 3877787878.06,
+        "trades": 7246,
         "price": 693.41,
         "yield": 1.43,
         "spread_bps": 152.0
@@ -6355,69 +6397,69 @@
       {
         "date": "2026-09-30",
         "datePretty": "30/09",
-        "volume": 2842.57,
-        "volumeRaw": 2842570697.21,
-        "trades": 2775,
-        "price": 964.22,
+        "volume": 2863.02,
+        "volumeRaw": 2863016949.100001,
+        "trades": 2781,
+        "price": 964.54,
         "yield": 2.44,
         "spread_bps": 142.2
       },
       {
         "date": "2026-10-01",
         "datePretty": "01/10",
-        "volume": 2844.25,
-        "volumeRaw": 2844250057.94,
-        "trades": 1921,
-        "price": 310.2,
+        "volume": 2690.83,
+        "volumeRaw": 2690834712.0700006,
+        "trades": 1922,
+        "price": 298.34,
         "yield": 1.17,
         "spread_bps": 154.0
       },
       {
         "date": "2026-10-02",
         "datePretty": "02/10",
-        "volume": 1407.8,
-        "volumeRaw": 1407803251.53,
-        "trades": 2301,
-        "price": 959.71,
-        "yield": 1.87,
-        "spread_bps": 171.3
+        "volume": 1412.16,
+        "volumeRaw": 1412162538.6599998,
+        "trades": 2304,
+        "price": 959.61,
+        "yield": 1.88,
+        "spread_bps": 171.8
       },
       {
         "date": "2026-10-05",
         "datePretty": "05/10",
-        "volume": 1576.72,
-        "volumeRaw": 1576719284.38,
-        "trades": 1684,
-        "price": 704.58,
+        "volume": 1582.93,
+        "volumeRaw": 1582932895.24,
+        "trades": 1692,
+        "price": 705.29,
         "yield": 3.29,
-        "spread_bps": 296.2
+        "spread_bps": 296.3
       },
       {
         "date": "2026-10-06",
         "datePretty": "06/10",
-        "volume": 1994.37,
-        "volumeRaw": 1994366733.7799997,
-        "trades": 2539,
-        "price": 308.43,
+        "volume": 1994.49,
+        "volumeRaw": 1994494195.9399998,
+        "trades": 2561,
+        "price": 308.45,
         "yield": 2.3,
         "spread_bps": 208.9
       },
       {
         "date": "2026-10-07",
         "datePretty": "07/10",
-        "volume": 1894.23,
-        "volumeRaw": 1894233977.4199998,
-        "trades": 2580,
-        "price": 661.12,
+        "volume": 1893.87,
+        "volumeRaw": 1893871094.8,
+        "trades": 2569,
+        "price": 661.05,
         "yield": 2.17,
-        "spread_bps": 200.1
+        "spread_bps": 199.8
       },
       {
         "date": "2026-10-08",
         "datePretty": "08/10",
-        "volume": 2000.36,
-        "volumeRaw": 2000355531.0800002,
-        "trades": 2424,
+        "volume": 2000.33,
+        "volumeRaw": 2000334592.13,
+        "trades": 2421,
         "price": 369.52,
         "yield": 2.17,
         "spread_bps": 183.7
@@ -6425,129 +6467,129 @@
       {
         "date": "2026-10-09",
         "datePretty": "09/10",
-        "volume": 1727.27,
-        "volumeRaw": 1727271185.66,
-        "trades": 2613,
-        "price": 165.15,
+        "volume": 1741.62,
+        "volumeRaw": 1741623485.9299998,
+        "trades": 2620,
+        "price": 166.3,
         "yield": 4.19,
         "spread_bps": 363.6
       },
       {
         "date": "2026-10-13",
         "datePretty": "13/10",
-        "volume": 1300.43,
-        "volumeRaw": 1300431418.85,
-        "trades": 2626,
-        "price": 707.19,
-        "yield": 2.25,
-        "spread_bps": 186.6
+        "volume": 1316.49,
+        "volumeRaw": 1316490066.71,
+        "trades": 2633,
+        "price": 709.84,
+        "yield": 2.24,
+        "spread_bps": 186.2
       },
       {
         "date": "2026-10-14",
         "datePretty": "14/10",
-        "volume": 3999.81,
-        "volumeRaw": 3999813255.9299994,
-        "trades": 2452,
-        "price": 958.42,
-        "yield": 1.53,
-        "spread_bps": 135.7
+        "volume": 3999.15,
+        "volumeRaw": 3999152622.4299994,
+        "trades": 2448,
+        "price": 958.39,
+        "yield": 1.52,
+        "spread_bps": 135.4
       },
       {
         "date": "2026-10-15",
         "datePretty": "15/10",
-        "volume": 4622.01,
-        "volumeRaw": 4622008841.429998,
-        "trades": 3186,
-        "price": 458.64,
+        "volume": 4621.36,
+        "volumeRaw": 4621364948.179999,
+        "trades": 3167,
+        "price": 458.6,
         "yield": 1.65,
-        "spread_bps": 151.3
+        "spread_bps": 151.1
       },
       {
         "date": "2026-10-16",
         "datePretty": "16/10",
-        "volume": 3465.63,
-        "volumeRaw": 3465631077.24,
-        "trades": 3030,
-        "price": 216.7,
-        "yield": 1.47,
-        "spread_bps": 127.4
+        "volume": 3464.44,
+        "volumeRaw": 3464440962.44,
+        "trades": 3010,
+        "price": 216.64,
+        "yield": 1.46,
+        "spread_bps": 127.0
       },
       {
         "date": "2026-10-19",
         "datePretty": "19/10",
-        "volume": 1929.33,
-        "volumeRaw": 1929332815.95,
-        "trades": 2279,
-        "price": 602.25,
+        "volume": 1929.3,
+        "volumeRaw": 1929300925.23,
+        "trades": 2276,
+        "price": 602.24,
         "yield": 1.67,
         "spread_bps": 133.6
       },
       {
         "date": "2026-10-20",
         "datePretty": "20/10",
-        "volume": 2243.78,
-        "volumeRaw": 2243775516.4,
-        "trades": 2701,
-        "price": 503.63,
+        "volume": 2242.69,
+        "volumeRaw": 2242693516.21,
+        "trades": 2706,
+        "price": 503.49,
         "yield": 1.54,
-        "spread_bps": 177.0
+        "spread_bps": 176.3
       },
       {
         "date": "2026-10-21",
         "datePretty": "21/10",
-        "volume": 1637.14,
-        "volumeRaw": 1637138372.5700002,
-        "trades": 2438,
+        "volume": 1637.13,
+        "volumeRaw": 1637127078.5400002,
+        "trades": 2455,
         "price": 276.79,
         "yield": 1.46,
-        "spread_bps": 126.5
+        "spread_bps": 126.4
       },
       {
         "date": "2026-10-22",
         "datePretty": "22/10",
-        "volume": 1930.72,
-        "volumeRaw": 1930715715.14,
-        "trades": 2211,
-        "price": 988.77,
+        "volume": 1930.35,
+        "volumeRaw": 1930350541.15,
+        "trades": 2208,
+        "price": 988.75,
         "yield": 2.08,
-        "spread_bps": 149.0
+        "spread_bps": 148.7
       },
       {
         "date": "2026-10-23",
         "datePretty": "23/10",
-        "volume": 3460.71,
-        "volumeRaw": 3460714496.25,
-        "trades": 6738,
-        "price": 254.83,
+        "volume": 3468.74,
+        "volumeRaw": 3468744518.3800006,
+        "trades": 6744,
+        "price": 255.27,
         "yield": 3.92,
         "spread_bps": 113.5
       },
       {
         "date": "2026-10-26",
         "datePretty": "26/10",
-        "volume": 2913.17,
-        "volumeRaw": 2913174508.54,
-        "trades": 3256,
-        "price": 963.05,
+        "volume": 2914.34,
+        "volumeRaw": 2914343681.3799996,
+        "trades": 3258,
+        "price": 963.07,
         "yield": 1.86,
         "spread_bps": 116.5
       },
       {
         "date": "2026-10-27",
         "datePretty": "27/10",
-        "volume": 2689.8,
-        "volumeRaw": 2689797871.7000003,
-        "trades": 2397,
-        "price": 628.88,
+        "volume": 2696.22,
+        "volumeRaw": 2696224345.2500005,
+        "trades": 2403,
+        "price": 629.47,
         "yield": 2.9,
-        "spread_bps": 342.8
+        "spread_bps": 342.0
       },
       {
         "date": "2026-10-28",
         "datePretty": "28/10",
         "volume": 4270.27,
-        "volumeRaw": 4270274517.339999,
-        "trades": 3201,
+        "volumeRaw": 4270273117.339999,
+        "trades": 3199,
         "price": 994.91,
         "yield": 4.54,
         "spread_bps": 279.1
@@ -6556,8 +6598,8 @@
         "date": "2026-10-29",
         "datePretty": "29/10",
         "volume": 2580.48,
-        "volumeRaw": 2580480129.8000007,
-        "trades": 3619,
+        "volumeRaw": 2580484312.1900005,
+        "trades": 3621,
         "price": 988.1,
         "yield": 8.04,
         "spread_bps": 501.3
@@ -6565,82 +6607,102 @@
       {
         "date": "2026-10-30",
         "datePretty": "30/10",
-        "volume": 2980.49,
-        "volumeRaw": 2980487510.3,
-        "trades": 2544,
-        "price": 802.63,
+        "volume": 2986.0,
+        "volumeRaw": 2986002183.4599996,
+        "trades": 2548,
+        "price": 803.02,
         "yield": 20.17,
         "spread_bps": 246.2
       },
       {
         "date": "2026-11-03",
         "datePretty": "03/11",
-        "volume": 1717.47,
-        "volumeRaw": 1717473125.17,
-        "trades": 2260,
-        "price": 885.78,
-        "yield": 7.88,
-        "spread_bps": 295.3
+        "volume": 1724.15,
+        "volumeRaw": 1724152909.56,
+        "trades": 2250,
+        "price": 886.01,
+        "yield": 7.87,
+        "spread_bps": 295.0
       },
       {
         "date": "2026-11-04",
         "datePretty": "04/11",
-        "volume": 2460.45,
-        "volumeRaw": 2460449446.98,
-        "trades": 2143,
-        "price": 757.56,
-        "yield": 22.25,
-        "spread_bps": 839.1
+        "volume": 2455.7,
+        "volumeRaw": 2455699456.5600004,
+        "trades": 2085,
+        "price": 757.21,
+        "yield": 22.26,
+        "spread_bps": 836.9
       },
       {
         "date": "2026-11-05",
         "datePretty": "05/11",
-        "volume": 2220.09,
-        "volumeRaw": 2220090478.78,
-        "trades": 3106,
-        "price": 630.24,
+        "volume": 2219.24,
+        "volumeRaw": 2219238901.5600004,
+        "trades": 3093,
+        "price": 630.14,
         "yield": 7.22,
-        "spread_bps": 475.5
+        "spread_bps": 474.9
       },
       {
         "date": "2026-11-06",
         "datePretty": "06/11",
-        "volume": 2762.02,
-        "volumeRaw": 2762022469.8599997,
-        "trades": 2456,
-        "price": 628.48,
-        "yield": 29.69,
-        "spread_bps": 522.8
+        "volume": 2781.63,
+        "volumeRaw": 2781633900.4,
+        "trades": 2437,
+        "price": 630.13,
+        "yield": 29.56,
+        "spread_bps": 519.5
       },
       {
         "date": "2026-11-09",
         "datePretty": "09/11",
-        "volume": 2804.23,
-        "volumeRaw": 2804229411.1699996,
-        "trades": 2923,
-        "price": 490.96,
+        "volume": 2803.31,
+        "volumeRaw": 2803314687.33,
+        "trades": 2908,
+        "price": 490.88,
         "yield": 18.12,
-        "spread_bps": 432.8
+        "spread_bps": 432.4
       },
       {
         "date": "2026-11-10",
         "datePretty": "10/11",
-        "volume": 1759.11,
-        "volumeRaw": 1759105334.6000001,
-        "trades": 2650,
-        "price": 411.17,
-        "yield": 30.81,
-        "spread_bps": 439.1
+        "volume": 1758.05,
+        "volumeRaw": 1758052266.2000003,
+        "trades": 2630,
+        "price": 411.02,
+        "yield": 30.82,
+        "spread_bps": 438.4
       },
       {
         "date": "2026-11-11",
         "datePretty": "11/11",
-        "volume": 2675.35,
-        "volumeRaw": 2675347107.54,
-        "trades": 2705,
-        "price": 835.13,
+        "volume": 2673.31,
+        "volumeRaw": 2673312145.28,
+        "trades": 2676,
+        "price": 835.01,
         "yield": 11.24,
-        "spread_bps": 316.7
+        "spread_bps": 315.7
+      },
+      {
+        "date": "2026-11-12",
+        "datePretty": "12/11",
+        "volume": 2480.35,
+        "volumeRaw": 2480352038.6499996,
+        "trades": 2371,
+        "price": 195.61,
+        "yield": 5.37,
+        "spread_bps": 232.9
+      },
+      {
+        "date": "2026-11-13",
+        "datePretty": "13/11",
+        "volume": 1902.53,
+        "volumeRaw": 1902527482.48,
+        "trades": 2197,
+        "price": 753.26,
+        "yield": 12.23,
+        "spread_bps": 428.1
       }
     ],
     "CDI%": [
@@ -6937,10 +6999,10 @@
       {
         "date": "2026-02-12",
         "datePretty": "12/02",
-        "volume": 139.51,
-        "volumeRaw": 139510883.42000002,
-        "trades": 1513,
-        "price": 1036.79,
+        "volume": 151.64,
+        "volumeRaw": 151636030.98000002,
+        "trades": 1654,
+        "price": 1031.14,
         "yield": 91.18,
         "spread_bps": -245.6
       },
@@ -6987,10 +7049,10 @@
       {
         "date": "2026-02-23",
         "datePretty": "23/02",
-        "volume": 145.66,
-        "volumeRaw": 145655174.76,
-        "trades": 1704,
-        "price": 1040.76,
+        "volume": 145.93,
+        "volumeRaw": 145928244.09,
+        "trades": 1708,
+        "price": 1040.72,
         "yield": 99.61,
         "spread_bps": -41.3
       },
@@ -7027,39 +7089,39 @@
       {
         "date": "2026-02-27",
         "datePretty": "27/02",
-        "volume": 378.62,
-        "volumeRaw": 378619086.51000005,
-        "trades": 1790,
-        "price": 1031.66,
+        "volume": 379.32,
+        "volumeRaw": 379317222.97,
+        "trades": 1805,
+        "price": 1031.64,
         "yield": 100.77,
         "spread_bps": 92.4
       },
       {
         "date": "2026-03-02",
         "datePretty": "02/03",
-        "volume": 218.52,
-        "volumeRaw": 218523970.75000003,
-        "trades": 1533,
-        "price": 1049.07,
+        "volume": 219.96,
+        "volumeRaw": 219963508.17,
+        "trades": 1555,
+        "price": 1048.93,
         "yield": 100.92,
         "spread_bps": 266.6
       },
       {
         "date": "2026-03-03",
         "datePretty": "03/03",
-        "volume": 285.38,
-        "volumeRaw": 285378844.25,
-        "trades": 1780,
-        "price": 1042.57,
+        "volume": 286.52,
+        "volumeRaw": 286517215.5399999,
+        "trades": 1805,
+        "price": 1042.55,
         "yield": 95.05,
         "spread_bps": -200.0
       },
       {
         "date": "2026-03-04",
         "datePretty": "04/03",
-        "volume": 163.96,
-        "volumeRaw": 163962264.41,
-        "trades": 1705,
+        "volume": 163.98,
+        "volumeRaw": 163982799.37,
+        "trades": 1706,
         "price": 1045.54,
         "yield": 14.2,
         "spread_bps": 363.6
@@ -7067,10 +7129,10 @@
       {
         "date": "2026-03-05",
         "datePretty": "05/03",
-        "volume": 252.08,
-        "volumeRaw": 252083209.55,
-        "trades": 1340,
-        "price": 1043.68,
+        "volume": 252.24,
+        "volumeRaw": 252235585.88000003,
+        "trades": 1352,
+        "price": 1043.67,
         "yield": 71.48,
         "spread_bps": -92.5
       },
@@ -7107,9 +7169,9 @@
       {
         "date": "2026-03-11",
         "datePretty": "11/03",
-        "volume": 118.38,
-        "volumeRaw": 118380620.78999999,
-        "trades": 1494,
+        "volume": 118.4,
+        "volumeRaw": 118401418.97999999,
+        "trades": 1496,
         "price": 1042.19,
         "yield": 86.57,
         "spread_bps": 16.0
@@ -7127,9 +7189,9 @@
       {
         "date": "2026-03-13",
         "datePretty": "13/03",
-        "volume": 255.66,
-        "volumeRaw": 255658503.97000003,
-        "trades": 1591,
+        "volume": 255.79,
+        "volumeRaw": 255789321.16000003,
+        "trades": 1593,
         "price": 1036.83,
         "yield": 110.93,
         "spread_bps": 261.5
@@ -7147,29 +7209,29 @@
       {
         "date": "2026-03-17",
         "datePretty": "17/03",
-        "volume": 235.46,
-        "volumeRaw": 235458683.76999998,
-        "trades": 3065,
-        "price": 1120.83,
+        "volume": 236.49,
+        "volumeRaw": 236488413.23999998,
+        "trades": 3067,
+        "price": 1120.39,
         "yield": 30.49,
         "spread_bps": 262.8
       },
       {
         "date": "2026-03-18",
         "datePretty": "18/03",
-        "volume": 175.02,
-        "volumeRaw": 175020553.62000003,
-        "trades": 1868,
-        "price": 1038.79,
+        "volume": 175.47,
+        "volumeRaw": 175471298.14000002,
+        "trades": 1913,
+        "price": 1038.7,
         "yield": 66.64,
         "spread_bps": -24.8
       },
       {
         "date": "2026-03-19",
         "datePretty": "19/03",
-        "volume": 122.13,
-        "volumeRaw": 122131852.28000002,
-        "trades": 1404,
+        "volume": 122.16,
+        "volumeRaw": 122163060.73000002,
+        "trades": 1407,
         "price": 1041.93,
         "yield": 81.94,
         "spread_bps": 95.4
@@ -7197,19 +7259,19 @@
       {
         "date": "2026-03-24",
         "datePretty": "24/03",
-        "volume": 132.09,
-        "volumeRaw": 132088015.6,
-        "trades": 1662,
-        "price": 1043.3,
+        "volume": 134.37,
+        "volumeRaw": 134370474.32,
+        "trades": 1666,
+        "price": 1042.96,
         "yield": 85.94,
         "spread_bps": -48.1
       },
       {
         "date": "2026-03-25",
         "datePretty": "25/03",
-        "volume": 124.83,
-        "volumeRaw": 124834467.16999999,
-        "trades": 1470,
+        "volume": 125.08,
+        "volumeRaw": 125077745.24999999,
+        "trades": 1479,
         "price": 1035.1,
         "yield": 99.44,
         "spread_bps": -61.1
@@ -7217,10 +7279,10 @@
       {
         "date": "2026-03-26",
         "datePretty": "26/03",
-        "volume": 392.6,
-        "volumeRaw": 392601047.59000003,
-        "trades": 1439,
-        "price": 984.66,
+        "volume": 393.91,
+        "volumeRaw": 393914323.14,
+        "trades": 1510,
+        "price": 984.7,
         "yield": 140.2,
         "spread_bps": 247.8
       },
@@ -7237,20 +7299,20 @@
       {
         "date": "2026-03-30",
         "datePretty": "30/03",
-        "volume": 124.38,
-        "volumeRaw": 124376051.49,
-        "trades": 1520,
-        "price": 1022.15,
+        "volume": 124.41,
+        "volumeRaw": 124412700.82,
+        "trades": 1528,
+        "price": 1022.14,
         "yield": 86.29,
         "spread_bps": 125.0
       },
       {
         "date": "2026-03-31",
         "datePretty": "31/03",
-        "volume": 387.34,
-        "volumeRaw": 387342308.43,
-        "trades": 3132,
-        "price": 1032.21,
+        "volume": 387.65,
+        "volumeRaw": 387650202.09000003,
+        "trades": 3141,
+        "price": 1032.22,
         "yield": 97.11,
         "spread_bps": -272.3
       },
@@ -7287,10 +7349,10 @@
       {
         "date": "2026-04-07",
         "datePretty": "07/04",
-        "volume": 235.29,
-        "volumeRaw": 235286842.91,
-        "trades": 1462,
-        "price": 1016.53,
+        "volume": 235.39,
+        "volumeRaw": 235391939.57,
+        "trades": 1464,
+        "price": 1016.54,
         "yield": 82.79,
         "spread_bps": -98.9
       },
@@ -7317,9 +7379,9 @@
       {
         "date": "2026-04-10",
         "datePretty": "10/04",
-        "volume": 426.0,
-        "volumeRaw": 426003581.31999993,
-        "trades": 1812,
+        "volume": 426.03,
+        "volumeRaw": 426030440.91999996,
+        "trades": 1822,
         "price": 1013.51,
         "yield": 26.92,
         "spread_bps": -44.3
@@ -7367,9 +7429,9 @@
       {
         "date": "2026-04-17",
         "datePretty": "17/04",
-        "volume": 348.28,
-        "volumeRaw": 348284832.28,
-        "trades": 1978,
+        "volume": 348.31,
+        "volumeRaw": 348310170.14,
+        "trades": 1984,
         "price": 1033.8,
         "yield": 99.93,
         "spread_bps": -6.3
@@ -7397,10 +7459,10 @@
       {
         "date": "2026-04-23",
         "datePretty": "23/04",
-        "volume": 198.75,
-        "volumeRaw": 198748201.14,
-        "trades": 1525,
-        "price": 1021.65,
+        "volume": 200.16,
+        "volumeRaw": 200159937.57999998,
+        "trades": 1532,
+        "price": 1021.74,
         "yield": 101.58,
         "spread_bps": 181.1
       },
@@ -7427,9 +7489,9 @@
       {
         "date": "2026-04-28",
         "datePretty": "28/04",
-        "volume": 249.14,
-        "volumeRaw": 249139994.2,
-        "trades": 1808,
+        "volume": 249.22,
+        "volumeRaw": 249218739.6,
+        "trades": 1810,
         "price": 1024.57,
         "yield": 95.93,
         "spread_bps": -407.3
@@ -7447,50 +7509,50 @@
       {
         "date": "2026-04-30",
         "datePretty": "30/04",
-        "volume": 334.74,
-        "volumeRaw": 334735621.54,
-        "trades": 2622,
-        "price": 1021.45,
+        "volume": 335.1,
+        "volumeRaw": 335097232.40000004,
+        "trades": 2628,
+        "price": 1021.49,
         "yield": 71.21,
         "spread_bps": 2.0
       },
       {
         "date": "2026-05-04",
         "datePretty": "04/05",
-        "volume": 241.66,
-        "volumeRaw": 241655780.40000004,
-        "trades": 1828,
-        "price": 1023.74,
+        "volume": 241.73,
+        "volumeRaw": 241730072.86,
+        "trades": 1830,
+        "price": 1023.75,
         "yield": 100.01,
         "spread_bps": 113.1
       },
       {
         "date": "2026-05-05",
         "datePretty": "05/05",
-        "volume": 233.26,
-        "volumeRaw": 233262695.72000003,
-        "trades": 1901,
-        "price": 1021.87,
+        "volume": 233.89,
+        "volumeRaw": 233892736.90000004,
+        "trades": 1907,
+        "price": 1021.93,
         "yield": 97.49,
         "spread_bps": -45.4
       },
       {
         "date": "2026-05-06",
         "datePretty": "06/05",
-        "volume": 162.03,
-        "volumeRaw": 162028955.23000002,
-        "trades": 1878,
-        "price": 1035.1,
+        "volume": 162.09,
+        "volumeRaw": 162090848.4,
+        "trades": 1883,
+        "price": 1035.11,
         "yield": 98.94,
         "spread_bps": -177.8
       },
       {
         "date": "2026-05-07",
         "datePretty": "07/05",
-        "volume": 178.28,
-        "volumeRaw": 178275684.12,
-        "trades": 1915,
-        "price": 1026.73,
+        "volume": 178.49,
+        "volumeRaw": 178485790.31,
+        "trades": 1936,
+        "price": 1026.74,
         "yield": 98.25,
         "spread_bps": 375.8
       },
@@ -7517,10 +7579,10 @@
       {
         "date": "2026-05-12",
         "datePretty": "12/05",
-        "volume": 147.54,
-        "volumeRaw": 147537564.51999998,
-        "trades": 1691,
-        "price": 1025.57,
+        "volume": 147.75,
+        "volumeRaw": 147749030.38,
+        "trades": 1697,
+        "price": 1025.61,
         "yield": 111.0,
         "spread_bps": 666.1
       },
@@ -7547,20 +7609,20 @@
       {
         "date": "2026-05-15",
         "datePretty": "15/05",
-        "volume": 203.63,
-        "volumeRaw": 203629999.55999997,
-        "trades": 2008,
-        "price": 1029.05,
+        "volume": 203.72,
+        "volumeRaw": 203715354.70999998,
+        "trades": 2010,
+        "price": 1029.06,
         "yield": 102.89,
         "spread_bps": 338.4
       },
       {
         "date": "2026-05-18",
         "datePretty": "18/05",
-        "volume": 198.64,
-        "volumeRaw": 198638555.78,
-        "trades": 1919,
-        "price": 1017.49,
+        "volume": 198.87,
+        "volumeRaw": 198867785.78,
+        "trades": 1929,
+        "price": 1017.53,
         "yield": 67.59,
         "spread_bps": 322.1
       },
@@ -7597,9 +7659,9 @@
       {
         "date": "2026-05-22",
         "datePretty": "22/05",
-        "volume": 141.23,
-        "volumeRaw": 141225670.88,
-        "trades": 1348,
+        "volume": 141.24,
+        "volumeRaw": 141235987.98,
+        "trades": 1350,
         "price": 1019.6,
         "yield": 98.18,
         "spread_bps": -182.2
@@ -7607,20 +7669,20 @@
       {
         "date": "2026-05-25",
         "datePretty": "25/05",
-        "volume": 149.16,
-        "volumeRaw": 149164573.2,
-        "trades": 1778,
-        "price": 1025.24,
+        "volume": 149.34,
+        "volumeRaw": 149343256.2,
+        "trades": 1782,
+        "price": 1025.2,
         "yield": 12.44,
         "spread_bps": null
       },
       {
         "date": "2026-05-26",
         "datePretty": "26/05",
-        "volume": 189.84,
-        "volumeRaw": 189840325.88,
-        "trades": 1646,
-        "price": 1021.84,
+        "volume": 189.95,
+        "volumeRaw": 189945191.8,
+        "trades": 1648,
+        "price": 1021.86,
         "yield": 98.28,
         "spread_bps": -170.5
       },
@@ -7637,9 +7699,9 @@
       {
         "date": "2026-05-28",
         "datePretty": "28/05",
-        "volume": 403.14,
-        "volumeRaw": 403142939.60999995,
-        "trades": 1889,
+        "volume": 403.16,
+        "volumeRaw": 403163031.75999993,
+        "trades": 1890,
         "price": 1053.34,
         "yield": 62.18,
         "spread_bps": 118.8
@@ -7707,20 +7769,20 @@
       {
         "date": "2026-06-09",
         "datePretty": "09/06",
-        "volume": 305.37,
-        "volumeRaw": 305372920.13,
-        "trades": 1760,
-        "price": 1010.85,
-        "yield": 63.75,
-        "spread_bps": 149.5
+        "volume": 305.58,
+        "volumeRaw": 305582152.29,
+        "trades": 1770,
+        "price": 1010.88,
+        "yield": 63.78,
+        "spread_bps": 150.5
       },
       {
         "date": "2026-06-10",
         "datePretty": "10/06",
-        "volume": 154.34,
-        "volumeRaw": 154340710.48000002,
-        "trades": 1711,
-        "price": 1028.4,
+        "volume": 154.69,
+        "volumeRaw": 154687344.34000003,
+        "trades": 1764,
+        "price": 1028.38,
         "yield": 101.07,
         "spread_bps": 157.9
       },
@@ -7747,29 +7809,29 @@
       {
         "date": "2026-06-15",
         "datePretty": "15/06",
-        "volume": 225.59,
-        "volumeRaw": 225592285.69,
-        "trades": 1514,
-        "price": 1006.53,
+        "volume": 225.69,
+        "volumeRaw": 225690795.7,
+        "trades": 1516,
+        "price": 1006.55,
         "yield": 75.18,
         "spread_bps": -293.4
       },
       {
         "date": "2026-06-16",
         "datePretty": "16/06",
-        "volume": 244.99,
-        "volumeRaw": 244991458.77999997,
-        "trades": 2307,
-        "price": 1013.0,
+        "volume": 245.06,
+        "volumeRaw": 245060377.98999998,
+        "trades": 2311,
+        "price": 1013.01,
         "yield": 89.22,
         "spread_bps": -138.3
       },
       {
         "date": "2026-06-17",
         "datePretty": "17/06",
-        "volume": 114.9,
-        "volumeRaw": 114895586.36999999,
-        "trades": 1513,
+        "volume": 114.91,
+        "volumeRaw": 114911201.03,
+        "trades": 1516,
         "price": 1015.22,
         "yield": 86.0,
         "spread_bps": -229.8
@@ -7797,10 +7859,10 @@
       {
         "date": "2026-06-22",
         "datePretty": "22/06",
-        "volume": 114.27,
-        "volumeRaw": 114271141.07999998,
-        "trades": 1339,
-        "price": 1026.0,
+        "volume": 114.49,
+        "volumeRaw": 114491702.99999999,
+        "trades": 1347,
+        "price": 1026.1,
         "yield": 86.47,
         "spread_bps": -154.4
       },
@@ -7818,8 +7880,8 @@
         "date": "2026-06-24",
         "datePretty": "24/06",
         "volume": 306.92,
-        "volumeRaw": 306919485.02,
-        "trades": 1860,
+        "volumeRaw": 306921344.61,
+        "trades": 1862,
         "price": 1046.07,
         "yield": 97.34,
         "spread_bps": 423.8
@@ -7837,9 +7899,9 @@
       {
         "date": "2026-06-26",
         "datePretty": "26/06",
-        "volume": 281.69,
-        "volumeRaw": 281685501.67999995,
-        "trades": 1484,
+        "volume": 281.71,
+        "volumeRaw": 281705713.73999995,
+        "trades": 1486,
         "price": 1052.57,
         "yield": 98.81,
         "spread_bps": -101.2
@@ -7847,9 +7909,9 @@
       {
         "date": "2026-06-29",
         "datePretty": "29/06",
-        "volume": 241.46,
-        "volumeRaw": 241456057.35999998,
-        "trades": 1329,
+        "volume": 241.48,
+        "volumeRaw": 241475557.62999997,
+        "trades": 1331,
         "price": 1038.63,
         "yield": 94.28,
         "spread_bps": -170.5
@@ -7857,10 +7919,10 @@
       {
         "date": "2026-06-30",
         "datePretty": "30/06",
-        "volume": 168.65,
-        "volumeRaw": 168647519.61,
-        "trades": 1634,
-        "price": 1036.3,
+        "volume": 168.77,
+        "volumeRaw": 168766470.92,
+        "trades": 1639,
+        "price": 1036.23,
         "yield": 90.84,
         "spread_bps": -314.3
       },
@@ -7917,10 +7979,10 @@
       {
         "date": "2026-07-08",
         "datePretty": "08/07",
-        "volume": 153.38,
-        "volumeRaw": 153377438.35,
-        "trades": 1502,
-        "price": 1002.21,
+        "volume": 153.46,
+        "volumeRaw": 153460891.7,
+        "trades": 1505,
+        "price": 1002.15,
         "yield": 94.7,
         "spread_bps": 9.8
       },
@@ -7937,10 +7999,10 @@
       {
         "date": "2026-07-10",
         "datePretty": "10/07",
-        "volume": 86.86,
-        "volumeRaw": 86860416.21,
-        "trades": 1530,
-        "price": 1004.75,
+        "volume": 86.96,
+        "volumeRaw": 86962414.35,
+        "trades": 1532,
+        "price": 1004.77,
         "yield": 87.43,
         "spread_bps": -157.1
       },
@@ -7957,19 +8019,19 @@
       {
         "date": "2026-07-14",
         "datePretty": "14/07",
-        "volume": 89.11,
-        "volumeRaw": 89107122.05000001,
-        "trades": 1827,
-        "price": 977.66,
+        "volume": 90.51,
+        "volumeRaw": 90507267.15,
+        "trades": 1829,
+        "price": 977.73,
         "yield": 96.8,
         "spread_bps": -112.7
       },
       {
         "date": "2026-07-15",
         "datePretty": "15/07",
-        "volume": 1308.93,
-        "volumeRaw": 1308928385.76,
-        "trades": 1818,
+        "volume": 1309.21,
+        "volumeRaw": 1309210309.5900002,
+        "trades": 1865,
         "price": 987.96,
         "yield": 94.89,
         "spread_bps": -171.4
@@ -7987,12 +8049,12 @@
       {
         "date": "2026-07-17",
         "datePretty": "17/07",
-        "volume": 637.14,
-        "volumeRaw": 637143613.02,
-        "trades": 1547,
+        "volume": 637.18,
+        "volumeRaw": 637175994.48,
+        "trades": 1549,
         "price": 995.9,
         "yield": 102.24,
-        "spread_bps": 279.8
+        "spread_bps": 279.9
       },
       {
         "date": "2026-07-20",
@@ -8037,12 +8099,12 @@
       {
         "date": "2026-07-24",
         "datePretty": "24/07",
-        "volume": 105.68,
-        "volumeRaw": 105678731.78,
-        "trades": 1726,
-        "price": 1002.92,
+        "volume": 105.71,
+        "volumeRaw": 105711441.74,
+        "trades": 1728,
+        "price": 1002.93,
         "yield": 109.91,
-        "spread_bps": 262.4
+        "spread_bps": 262.6
       },
       {
         "date": "2026-07-27",
@@ -8057,10 +8119,10 @@
       {
         "date": "2026-07-28",
         "datePretty": "28/07",
-        "volume": 556.25,
-        "volumeRaw": 556249073.3700001,
-        "trades": 2840,
-        "price": 1026.59,
+        "volume": 556.36,
+        "volumeRaw": 556358037.6400001,
+        "trades": 2865,
+        "price": 1026.58,
         "yield": 101.56,
         "spread_bps": 156.2
       },
@@ -8147,12 +8209,12 @@
       {
         "date": "2026-08-11",
         "datePretty": "11/08",
-        "volume": 95.21,
-        "volumeRaw": 95211539.59,
-        "trades": 1974,
-        "price": 1019.18,
+        "volume": 95.31,
+        "volumeRaw": 95312214.65,
+        "trades": 1976,
+        "price": 1019.16,
         "yield": 107.71,
-        "spread_bps": 777.8
+        "spread_bps": 778.1
       },
       {
         "date": "2026-08-12",
@@ -8167,10 +8229,10 @@
       {
         "date": "2026-08-13",
         "datePretty": "13/08",
-        "volume": 123.5,
-        "volumeRaw": 123500757.77000001,
-        "trades": 1360,
-        "price": 1061.71,
+        "volume": 123.54,
+        "volumeRaw": 123536816.17000002,
+        "trades": 1370,
+        "price": 1061.69,
         "yield": 100.66,
         "spread_bps": 272.1
       },
@@ -8187,12 +8249,12 @@
       {
         "date": "2026-08-17",
         "datePretty": "17/08",
-        "volume": 92.29,
-        "volumeRaw": 92288461.35000001,
-        "trades": 1621,
-        "price": 1029.91,
+        "volume": 92.33,
+        "volumeRaw": 92329858.2,
+        "trades": 1623,
+        "price": 1029.92,
         "yield": 100.25,
-        "spread_bps": 299.1
+        "spread_bps": 299.3
       },
       {
         "date": "2026-08-18",
@@ -8217,10 +8279,10 @@
       {
         "date": "2026-08-20",
         "datePretty": "20/08",
-        "volume": 144.29,
-        "volumeRaw": 144292053.52,
-        "trades": 2022,
-        "price": 1051.27,
+        "volume": 144.93,
+        "volumeRaw": 144932280.69,
+        "trades": 2063,
+        "price": 1050.92,
         "yield": 101.12,
         "spread_bps": 281.2
       },
@@ -8247,20 +8309,20 @@
       {
         "date": "2026-08-25",
         "datePretty": "25/08",
-        "volume": 105.34,
-        "volumeRaw": 105344421.04,
-        "trades": 1523,
-        "price": 394.9,
+        "volume": 105.37,
+        "volumeRaw": 105373122.34,
+        "trades": 1524,
+        "price": 394.96,
         "yield": 103.11,
         "spread_bps": 445.1
       },
       {
         "date": "2026-08-26",
         "datePretty": "26/08",
-        "volume": 98.79,
-        "volumeRaw": 98788704.10000001,
-        "trades": 1905,
-        "price": 1036.16,
+        "volume": 98.91,
+        "volumeRaw": 98911187.35000001,
+        "trades": 1908,
+        "price": 1036.02,
         "yield": 102.27,
         "spread_bps": 346.7
       },
@@ -8297,20 +8359,20 @@
       {
         "date": "2026-09-01",
         "datePretty": "01/09",
-        "volume": 131.53,
-        "volumeRaw": 131529728.82000001,
-        "trades": 1701,
-        "price": 413.94,
-        "yield": 104.48,
-        "spread_bps": 674.5
+        "volume": 131.57,
+        "volumeRaw": 131569928.88,
+        "trades": 1703,
+        "price": 414.02,
+        "yield": 104.49,
+        "spread_bps": 674.8
       },
       {
         "date": "2026-09-02",
         "datePretty": "02/09",
-        "volume": 158.47,
-        "volumeRaw": 158473210.28,
-        "trades": 2039,
-        "price": 1024.85,
+        "volume": 158.52,
+        "volumeRaw": 158518412.05,
+        "trades": 2047,
+        "price": 1024.84,
         "yield": 102.18,
         "spread_bps": 559.3
       },
@@ -8337,99 +8399,99 @@
       {
         "date": "2026-09-08",
         "datePretty": "08/09",
-        "volume": 82.25,
-        "volumeRaw": 82247846.41,
-        "trades": 1675,
-        "price": 1026.52,
-        "yield": 92.95,
-        "spread_bps": 551.1
+        "volume": 80.6,
+        "volumeRaw": 80601851.61999999,
+        "trades": 1678,
+        "price": 1027.19,
+        "yield": 92.51,
+        "spread_bps": 551.7
       },
       {
         "date": "2026-09-09",
         "datePretty": "09/09",
-        "volume": 83.93,
-        "volumeRaw": 83928107.15,
-        "trades": 1380,
-        "price": 1008.96,
-        "yield": 99.14,
-        "spread_bps": 471.8
+        "volume": 82.93,
+        "volumeRaw": 82926848.13,
+        "trades": 1378,
+        "price": 1008.95,
+        "yield": 99.06,
+        "spread_bps": 472.3
       },
       {
         "date": "2026-09-10",
         "datePretty": "10/09",
-        "volume": 137.92,
-        "volumeRaw": 137921074.88,
-        "trades": 2129,
+        "volume": 137.93,
+        "volumeRaw": 137926884.29999998,
+        "trades": 2131,
         "price": 1044.64,
         "yield": 103.06,
-        "spread_bps": 511.2
+        "spread_bps": 511.3
       },
       {
         "date": "2026-09-11",
         "datePretty": "11/09",
-        "volume": 89.24,
-        "volumeRaw": 89238607.98,
-        "trades": 1721,
+        "volume": 89.02,
+        "volumeRaw": 89019375.78999999,
+        "trades": 1720,
         "price": 1020.03,
         "yield": 103.08,
-        "spread_bps": 450.2
+        "spread_bps": 450.7
       },
       {
         "date": "2026-09-14",
         "datePretty": "14/09",
-        "volume": 95.1,
-        "volumeRaw": 95095819.34,
-        "trades": 1636,
-        "price": 1037.29,
-        "yield": 102.78,
-        "spread_bps": 392.8
+        "volume": 94.55,
+        "volumeRaw": 94546354.67999999,
+        "trades": 1633,
+        "price": 1037.48,
+        "yield": 102.76,
+        "spread_bps": 391.9
       },
       {
         "date": "2026-09-15",
         "datePretty": "15/09",
-        "volume": 128.93,
-        "volumeRaw": 128925891.91999999,
-        "trades": 2064,
-        "price": 1016.15,
-        "yield": 101.84,
-        "spread_bps": 237.0
+        "volume": 127.82,
+        "volumeRaw": 127819882.04,
+        "trades": 2061,
+        "price": 1016.24,
+        "yield": 101.81,
+        "spread_bps": 233.7
       },
       {
         "date": "2026-09-16",
         "datePretty": "16/09",
-        "volume": 109.12,
-        "volumeRaw": 109124257.55,
-        "trades": 2061,
-        "price": 1038.46,
-        "yield": 96.37,
-        "spread_bps": 312.4
+        "volume": 108.83,
+        "volumeRaw": 108831223.02000001,
+        "trades": 2060,
+        "price": 1038.55,
+        "yield": 96.34,
+        "spread_bps": 311.7
       },
       {
         "date": "2026-09-17",
         "datePretty": "17/09",
-        "volume": 134.15,
-        "volumeRaw": 134147266.58,
-        "trades": 2007,
-        "price": 1044.48,
+        "volume": 133.81,
+        "volumeRaw": 133810069.05,
+        "trades": 2005,
+        "price": 1044.58,
         "yield": 104.45,
-        "spread_bps": 306.2
+        "spread_bps": 305.5
       },
       {
         "date": "2026-09-18",
         "datePretty": "18/09",
-        "volume": 109.61,
-        "volumeRaw": 109605057.31,
-        "trades": 1564,
-        "price": 1048.21,
+        "volume": 109.79,
+        "volumeRaw": 109788991.67999999,
+        "trades": 1613,
+        "price": 1047.86,
         "yield": 100.89,
-        "spread_bps": 399.2
+        "spread_bps": 399.7
       },
       {
         "date": "2026-09-21",
         "datePretty": "21/09",
         "volume": 104.17,
-        "volumeRaw": 104168264.27000001,
-        "trades": 1755,
+        "volumeRaw": 104166248.97,
+        "trades": 1754,
         "price": 1024.45,
         "yield": 104.76,
         "spread_bps": 717.4
@@ -8437,22 +8499,22 @@
       {
         "date": "2026-09-22",
         "datePretty": "22/09",
-        "volume": 109.01,
-        "volumeRaw": 109013654.11999999,
-        "trades": 1477,
-        "price": 1002.95,
-        "yield": 105.9,
-        "spread_bps": 752.7
+        "volume": 109.19,
+        "volumeRaw": 109188847.27999999,
+        "trades": 1483,
+        "price": 1002.9,
+        "yield": 105.92,
+        "spread_bps": 754.6
       },
       {
         "date": "2026-09-23",
         "datePretty": "23/09",
-        "volume": 180.24,
-        "volumeRaw": 180243147.63,
-        "trades": 1715,
-        "price": 1011.65,
-        "yield": 86.46,
-        "spread_bps": 421.0
+        "volume": 175.24,
+        "volumeRaw": 175243891.04,
+        "trades": 1714,
+        "price": 1011.73,
+        "yield": 85.5,
+        "spread_bps": 412.7
       },
       {
         "date": "2026-09-24",
@@ -8467,22 +8529,22 @@
       {
         "date": "2026-09-25",
         "datePretty": "25/09",
-        "volume": 98.24,
-        "volumeRaw": 98238889.16000001,
-        "trades": 1810,
-        "price": 1047.23,
-        "yield": 85.86,
-        "spread_bps": 560.1
+        "volume": 98.08,
+        "volumeRaw": 98077958.63000001,
+        "trades": 1804,
+        "price": 1047.28,
+        "yield": 85.82,
+        "spread_bps": 560.4
       },
       {
         "date": "2026-09-28",
         "datePretty": "28/09",
-        "volume": 74.25,
-        "volumeRaw": 74252814.57000001,
-        "trades": 1515,
-        "price": 1040.36,
-        "yield": 102.35,
-        "spread_bps": 492.5
+        "volume": 74.28,
+        "volumeRaw": 74278424.61,
+        "trades": 1519,
+        "price": 1040.34,
+        "yield": 102.36,
+        "spread_bps": 493.0
       },
       {
         "date": "2026-09-29",
@@ -8497,19 +8559,19 @@
       {
         "date": "2026-09-30",
         "datePretty": "30/09",
-        "volume": 539.26,
-        "volumeRaw": 539258055.16,
-        "trades": 2010,
+        "volume": 538.19,
+        "volumeRaw": 538194797.38,
+        "trades": 2011,
         "price": 1008.21,
-        "yield": 103.27,
+        "yield": 103.26,
         "spread_bps": 561.3
       },
       {
         "date": "2026-10-01",
         "datePretty": "01/10",
-        "volume": 629.31,
-        "volumeRaw": 629305375.46,
-        "trades": 2363,
+        "volume": 629.29,
+        "volumeRaw": 629294243.73,
+        "trades": 2362,
         "price": 931.78,
         "yield": 109.09,
         "spread_bps": 1010.6
@@ -8517,19 +8579,19 @@
       {
         "date": "2026-10-02",
         "datePretty": "02/10",
-        "volume": 84.38,
-        "volumeRaw": 84381925.19999999,
-        "trades": 1701,
-        "price": 1033.99,
-        "yield": 103.33,
-        "spread_bps": 398.4
+        "volume": 83.98,
+        "volumeRaw": 83978943.19,
+        "trades": 1697,
+        "price": 1034.1,
+        "yield": 103.32,
+        "spread_bps": 397.4
       },
       {
         "date": "2026-10-05",
         "datePretty": "05/10",
-        "volume": 78.8,
-        "volumeRaw": 78801945.53,
-        "trades": 1822,
+        "volume": 78.79,
+        "volumeRaw": 78792827.99000001,
+        "trades": 1821,
         "price": 1020.47,
         "yield": 102.27,
         "spread_bps": 573.5
@@ -8537,82 +8599,82 @@
       {
         "date": "2026-10-06",
         "datePretty": "06/10",
-        "volume": 132.78,
-        "volumeRaw": 132778636.34000002,
-        "trades": 1558,
-        "price": 1006.88,
+        "volume": 132.82,
+        "volumeRaw": 132815004.78000002,
+        "trades": 1566,
+        "price": 1006.86,
         "yield": 101.97,
         "spread_bps": 531.7
       },
       {
         "date": "2026-10-07",
         "datePretty": "07/10",
-        "volume": 130.99,
-        "volumeRaw": 130987855.00999998,
-        "trades": 1765,
-        "price": 441.93,
+        "volume": 130.88,
+        "volumeRaw": 130878327.22999997,
+        "trades": 1763,
+        "price": 441.72,
         "yield": 100.43,
-        "spread_bps": 393.3
+        "spread_bps": 393.1
       },
       {
         "date": "2026-10-08",
         "datePretty": "08/10",
-        "volume": 118.25,
-        "volumeRaw": 118252930.75000003,
-        "trades": 1460,
+        "volume": 118.2,
+        "volumeRaw": 118203210.97000003,
+        "trades": 1459,
         "price": 1030.36,
         "yield": 105.9,
-        "spread_bps": 836.6
+        "spread_bps": 836.8
       },
       {
         "date": "2026-10-09",
         "datePretty": "09/10",
-        "volume": 279.89,
-        "volumeRaw": 279892439.72,
-        "trades": 1670,
-        "price": 1002.53,
-        "yield": 98.87,
-        "spread_bps": 479.1
+        "volume": 277.21,
+        "volumeRaw": 277208908.61999995,
+        "trades": 1673,
+        "price": 1002.43,
+        "yield": 98.59,
+        "spread_bps": 475.4
       },
       {
         "date": "2026-10-13",
         "datePretty": "13/10",
-        "volume": 319.32,
-        "volumeRaw": 319324644.81,
-        "trades": 1949,
+        "volume": 319.35,
+        "volumeRaw": 319346188.76,
+        "trades": 1950,
         "price": 1012.39,
         "yield": 101.92,
-        "spread_bps": 249.0
+        "spread_bps": 249.1
       },
       {
         "date": "2026-10-14",
         "datePretty": "14/10",
-        "volume": 372.21,
-        "volumeRaw": 372212879.75,
-        "trades": 1966,
+        "volume": 372.19,
+        "volumeRaw": 372186518.46000004,
+        "trades": 1967,
         "price": 1080.34,
-        "yield": 91.38,
-        "spread_bps": 242.5
+        "yield": 91.37,
+        "spread_bps": 242.4
       },
       {
         "date": "2026-10-15",
         "datePretty": "15/10",
-        "volume": 188.86,
-        "volumeRaw": 188859273.55999997,
-        "trades": 2261,
+        "volume": 188.74,
+        "volumeRaw": 188741993.23999998,
+        "trades": 2258,
         "price": 1012.85,
-        "yield": 99.86,
-        "spread_bps": 243.9
+        "yield": 99.85,
+        "spread_bps": 243.6
       },
       {
         "date": "2026-10-16",
         "datePretty": "16/10",
-        "volume": 196.73,
-        "volumeRaw": 196733091.89000002,
-        "trades": 2239,
-        "price": 1101.94,
-        "yield": 101.7,
-        "spread_bps": 205.2
+        "volume": 195.56,
+        "volumeRaw": 195563069.48000002,
+        "trades": 2238,
+        "price": 1102.49,
+        "yield": 101.67,
+        "spread_bps": 202.7
       },
       {
         "date": "2026-10-19",
@@ -8627,69 +8689,69 @@
       {
         "date": "2026-10-20",
         "datePretty": "20/10",
-        "volume": 75.36,
-        "volumeRaw": 75358060.62,
-        "trades": 1569,
-        "price": 1014.45,
+        "volume": 75.29,
+        "volumeRaw": 75286553.33,
+        "trades": 1565,
+        "price": 1014.44,
         "yield": 104.0,
-        "spread_bps": 640.3
+        "spread_bps": 640.5
       },
       {
         "date": "2026-10-21",
         "datePretty": "21/10",
-        "volume": 90.2,
-        "volumeRaw": 90196380.46000001,
-        "trades": 1890,
-        "price": 1025.87,
+        "volume": 90.19,
+        "volumeRaw": 90186607.06,
+        "trades": 1894,
+        "price": 1025.85,
         "yield": 104.78,
-        "spread_bps": 635.7
+        "spread_bps": 635.8
       },
       {
         "date": "2026-10-22",
         "datePretty": "22/10",
-        "volume": 225.42,
-        "volumeRaw": 225422708.80999994,
-        "trades": 1484,
-        "price": 1003.21,
-        "yield": 111.75,
-        "spread_bps": 1287.5
+        "volume": 223.86,
+        "volumeRaw": 223863474.74999994,
+        "trades": 1480,
+        "price": 1003.09,
+        "yield": 111.79,
+        "spread_bps": 1293.6
       },
       {
         "date": "2026-10-23",
         "datePretty": "23/10",
-        "volume": 306.1,
-        "volumeRaw": 306098542.55,
-        "trades": 1957,
-        "price": 1002.16,
+        "volume": 309.0,
+        "volumeRaw": 309000790.11,
+        "trades": 1961,
+        "price": 1002.36,
         "yield": 118.34,
-        "spread_bps": 1966.6
+        "spread_bps": 1966.7
       },
       {
         "date": "2026-10-26",
         "datePretty": "26/10",
-        "volume": 32.1,
-        "volumeRaw": 32098855.11,
-        "trades": 723,
-        "price": 1033.51,
+        "volume": 32.53,
+        "volumeRaw": 32534838.450000003,
+        "trades": 725,
+        "price": 1033.31,
         "yield": 104.36,
         "spread_bps": 433.5
       },
       {
         "date": "2026-10-27",
         "datePretty": "27/10",
-        "volume": 100.13,
-        "volumeRaw": 100133332.31999998,
-        "trades": 1669,
-        "price": 1034.84,
-        "yield": 104.7,
-        "spread_bps": 615.1
+        "volume": 98.09,
+        "volumeRaw": 98092296.25,
+        "trades": 1668,
+        "price": 1035.14,
+        "yield": 104.68,
+        "spread_bps": 616.5
       },
       {
         "date": "2026-10-28",
         "datePretty": "28/10",
         "volume": 154.59,
-        "volumeRaw": 154593871.47,
-        "trades": 1867,
+        "volumeRaw": 154591796.29,
+        "trades": 1865,
         "price": 1039.38,
         "yield": 101.86,
         "spread_bps": 323.4
@@ -8697,10 +8759,10 @@
       {
         "date": "2026-10-29",
         "datePretty": "29/10",
-        "volume": 137.91,
-        "volumeRaw": 137909451.21,
-        "trades": 3223,
-        "price": 1044.15,
+        "volume": 138.47,
+        "volumeRaw": 138467218.62,
+        "trades": 3290,
+        "price": 1043.56,
         "yield": 102.46,
         "spread_bps": 301.6
       },
@@ -8757,12 +8819,12 @@
       {
         "date": "2026-11-09",
         "datePretty": "09/11",
-        "volume": 86.37,
-        "volumeRaw": 86370293.36999999,
-        "trades": 1837,
-        "price": 1021.43,
-        "yield": 102.96,
-        "spread_bps": 569.8
+        "volume": 75.82,
+        "volumeRaw": 75819317.45,
+        "trades": 1832,
+        "price": 1020.38,
+        "yield": 102.67,
+        "spread_bps": 574.6
       },
       {
         "date": "2026-11-10",
@@ -8783,16 +8845,36 @@
         "price": 1014.59,
         "yield": 110.58,
         "spread_bps": 569.0
+      },
+      {
+        "date": "2026-11-12",
+        "datePretty": "12/11",
+        "volume": 107.44,
+        "volumeRaw": 107441403.92,
+        "trades": 1523,
+        "price": 1018.1,
+        "yield": 104.48,
+        "spread_bps": 553.1
+      },
+      {
+        "date": "2026-11-13",
+        "datePretty": "13/11",
+        "volume": 110.67,
+        "volumeRaw": 110673274.88,
+        "trades": 1505,
+        "price": 1006.81,
+        "yield": 102.39,
+        "spread_bps": 276.0
       }
     ],
     "PRE": [
       {
         "date": "2026-01-02",
         "datePretty": "02/01",
-        "volume": 64.0,
-        "volumeRaw": 63999669.25,
-        "trades": 1250,
-        "price": 1017.97,
+        "volume": 64.01,
+        "volumeRaw": 64009469.95,
+        "trades": 1252,
+        "price": 1017.93,
         "yield": 13.87,
         "spread_bps": -14.2
       },
@@ -8809,20 +8891,20 @@
       {
         "date": "2026-01-06",
         "datePretty": "06/01",
-        "volume": 226.54,
-        "volumeRaw": 226538124.79999998,
-        "trades": 2182,
-        "price": 994.62,
+        "volume": 226.56,
+        "volumeRaw": 226560377.35,
+        "trades": 2186,
+        "price": 994.61,
         "yield": 14.21,
         "spread_bps": 8.0
       },
       {
         "date": "2026-01-07",
         "datePretty": "07/01",
-        "volume": 441.97,
-        "volumeRaw": 441970463.23,
-        "trades": 2046,
-        "price": 981.86,
+        "volume": 442.08,
+        "volumeRaw": 442080828.65000004,
+        "trades": 2052,
+        "price": 981.85,
         "yield": 14.17,
         "spread_bps": 3.6
       },
@@ -8830,8 +8912,8 @@
         "date": "2026-01-08",
         "datePretty": "08/01",
         "volume": 609.03,
-        "volumeRaw": 609029655.3399999,
-        "trades": 2018,
+        "volumeRaw": 609033036.8199999,
+        "trades": 2022,
         "price": 978.39,
         "yield": 14.32,
         "spread_bps": 14.7
@@ -8839,9 +8921,9 @@
       {
         "date": "2026-01-09",
         "datePretty": "09/01",
-        "volume": 196.37,
-        "volumeRaw": 196369421.48999998,
-        "trades": 1958,
+        "volume": 196.39,
+        "volumeRaw": 196386539.81999996,
+        "trades": 1962,
         "price": 996.27,
         "yield": 14.09,
         "spread_bps": 3.1
@@ -8879,10 +8961,10 @@
       {
         "date": "2026-01-15",
         "datePretty": "15/01",
-        "volume": 177.29,
-        "volumeRaw": 177294692.64000002,
-        "trades": 2496,
-        "price": 1026.79,
+        "volume": 177.31,
+        "volumeRaw": 177310053.81,
+        "trades": 2498,
+        "price": 1026.78,
         "yield": 13.89,
         "spread_bps": -13.8
       },
@@ -8900,9 +8982,9 @@
         "date": "2026-01-19",
         "datePretty": "19/01",
         "volume": 700.11,
-        "volumeRaw": 700109047.32,
-        "trades": 2401,
-        "price": 977.83,
+        "volumeRaw": 700112340.13,
+        "trades": 2404,
+        "price": 977.82,
         "yield": 12.52,
         "spread_bps": -132.9
       },
@@ -8919,9 +9001,9 @@
       {
         "date": "2026-01-21",
         "datePretty": "21/01",
-        "volume": 330.97,
-        "volumeRaw": 330973640.0,
-        "trades": 2656,
+        "volume": 330.98,
+        "volumeRaw": 330977168.59,
+        "trades": 2659,
         "price": 1058.22,
         "yield": 14.76,
         "spread_bps": 50.6
@@ -8939,10 +9021,10 @@
       {
         "date": "2026-01-23",
         "datePretty": "23/01",
-        "volume": 440.0,
-        "volumeRaw": 439995410.4200002,
-        "trades": 3504,
-        "price": 1008.69,
+        "volume": 440.05,
+        "volumeRaw": 440052492.4400002,
+        "trades": 3506,
+        "price": 1008.67,
         "yield": 14.07,
         "spread_bps": -6.7
       },
@@ -8950,8 +9032,8 @@
         "date": "2026-01-26",
         "datePretty": "26/01",
         "volume": 244.38,
-        "volumeRaw": 244379226.14,
-        "trades": 3216,
+        "volumeRaw": 244380878.2,
+        "trades": 3218,
         "price": 1025.35,
         "yield": 13.77,
         "spread_bps": -24.1
@@ -8960,9 +9042,9 @@
         "date": "2026-01-27",
         "datePretty": "27/01",
         "volume": 203.69,
-        "volumeRaw": 203686283.9,
-        "trades": 3079,
-        "price": 986.15,
+        "volumeRaw": 203688059.53,
+        "trades": 3081,
+        "price": 986.14,
         "yield": 13.85,
         "spread_bps": -16.5
       },
@@ -8979,19 +9061,19 @@
       {
         "date": "2026-01-29",
         "datePretty": "29/01",
-        "volume": 335.28,
-        "volumeRaw": 335279931.52,
-        "trades": 3373,
-        "price": 1060.08,
+        "volume": 335.4,
+        "volumeRaw": 335395844.02,
+        "trades": 3377,
+        "price": 1059.98,
         "yield": 13.09,
-        "spread_bps": -84.6
+        "spread_bps": -84.5
       },
       {
         "date": "2026-01-30",
         "datePretty": "30/01",
-        "volume": 179.38,
-        "volumeRaw": 179377690.77,
-        "trades": 3250,
+        "volume": 179.4,
+        "volumeRaw": 179398979.79000002,
+        "trades": 3253,
         "price": 879.75,
         "yield": 13.81,
         "spread_bps": -23.0
@@ -8999,22 +9081,22 @@
       {
         "date": "2026-02-02",
         "datePretty": "02/02",
-        "volume": 233.27,
-        "volumeRaw": 233265706.65999997,
-        "trades": 2489,
-        "price": 1022.2,
+        "volume": 233.31,
+        "volumeRaw": 233307858.51999998,
+        "trades": 2498,
+        "price": 1022.17,
         "yield": 14.18,
         "spread_bps": 10.2
       },
       {
         "date": "2026-02-03",
         "datePretty": "03/02",
-        "volume": 247.49,
-        "volumeRaw": 247488308.81,
-        "trades": 2513,
-        "price": 1019.59,
+        "volume": 247.6,
+        "volumeRaw": 247600932.43,
+        "trades": 2520,
+        "price": 1019.53,
         "yield": 14.44,
-        "spread_bps": 32.2
+        "spread_bps": 32.3
       },
       {
         "date": "2026-02-04",
@@ -9039,12 +9121,12 @@
       {
         "date": "2026-02-06",
         "datePretty": "06/02",
-        "volume": 618.84,
-        "volumeRaw": 618836680.5699999,
-        "trades": 2267,
-        "price": 574.18,
+        "volume": 618.98,
+        "volumeRaw": 618976269.51,
+        "trades": 2271,
+        "price": 574.23,
         "yield": 12.54,
-        "spread_bps": -128.1
+        "spread_bps": -128.0
       },
       {
         "date": "2026-02-09",
@@ -9069,20 +9151,20 @@
       {
         "date": "2026-02-11",
         "datePretty": "11/02",
-        "volume": 186.47,
-        "volumeRaw": 186472628.37,
-        "trades": 2937,
-        "price": 1035.6,
+        "volume": 186.52,
+        "volumeRaw": 186522233.46,
+        "trades": 2939,
+        "price": 1035.55,
         "yield": 13.86,
         "spread_bps": -25.3
       },
       {
         "date": "2026-02-12",
         "datePretty": "12/02",
-        "volume": 218.87,
-        "volumeRaw": 218873987.52000004,
-        "trades": 2631,
-        "price": 1020.33,
+        "volume": 218.97,
+        "volumeRaw": 218972003.79000002,
+        "trades": 2633,
+        "price": 1020.34,
         "yield": 14.28,
         "spread_bps": 5.5
       },
@@ -9109,140 +9191,140 @@
       {
         "date": "2026-02-19",
         "datePretty": "19/02",
-        "volume": 141.7,
-        "volumeRaw": 141703770.57,
-        "trades": 2554,
-        "price": 131.48,
+        "volume": 142.2,
+        "volumeRaw": 142201557.97,
+        "trades": 2558,
+        "price": 131.88,
         "yield": 13.84,
         "spread_bps": -23.2
       },
       {
         "date": "2026-02-20",
         "datePretty": "20/02",
-        "volume": 133.66,
-        "volumeRaw": 133656106.2,
-        "trades": 2669,
-        "price": 233.58,
+        "volume": 134.11,
+        "volumeRaw": 134105142.69,
+        "trades": 2673,
+        "price": 234.19,
         "yield": 13.88,
         "spread_bps": -21.0
       },
       {
         "date": "2026-02-23",
         "datePretty": "23/02",
-        "volume": 119.08,
-        "volumeRaw": 119075554.18,
-        "trades": 2542,
-        "price": 309.02,
+        "volume": 119.12,
+        "volumeRaw": 119120601.47,
+        "trades": 2544,
+        "price": 309.1,
         "yield": 14.31,
         "spread_bps": 10.7
       },
       {
         "date": "2026-02-24",
         "datePretty": "24/02",
-        "volume": 219.09,
-        "volumeRaw": 219092047.53000003,
-        "trades": 2584,
-        "price": 234.68,
+        "volume": 219.19,
+        "volumeRaw": 219190861.22000003,
+        "trades": 2586,
+        "price": 234.76,
         "yield": 13.82,
         "spread_bps": -19.8
       },
       {
         "date": "2026-02-25",
         "datePretty": "25/02",
-        "volume": 177.43,
-        "volumeRaw": 177425758.97,
-        "trades": 2443,
-        "price": 6.51,
+        "volume": 178.07,
+        "volumeRaw": 178071340.23000002,
+        "trades": 2449,
+        "price": 6.53,
         "yield": 13.94,
         "spread_bps": -10.9
       },
       {
         "date": "2026-02-26",
         "datePretty": "26/02",
-        "volume": 221.56,
-        "volumeRaw": 221557050.84,
-        "trades": 2523,
-        "price": 10.57,
+        "volume": 221.98,
+        "volumeRaw": 221982819.15,
+        "trades": 2530,
+        "price": 10.59,
         "yield": 13.74,
         "spread_bps": -27.2
       },
       {
         "date": "2026-02-27",
         "datePretty": "27/02",
-        "volume": 316.76,
-        "volumeRaw": 316764605.39,
-        "trades": 3087,
-        "price": 37.5,
+        "volume": 317.42,
+        "volumeRaw": 317416141.0,
+        "trades": 3106,
+        "price": 37.58,
         "yield": 13.41,
         "spread_bps": -57.9
       },
       {
         "date": "2026-03-02",
         "datePretty": "02/03",
-        "volume": 698.61,
-        "volumeRaw": 698605830.67,
-        "trades": 3196,
-        "price": 853.49,
+        "volume": 699.62,
+        "volumeRaw": 699624929.56,
+        "trades": 3210,
+        "price": 853.73,
         "yield": 12.68,
         "spread_bps": -119.6
       },
       {
         "date": "2026-03-03",
         "datePretty": "03/03",
-        "volume": 163.53,
-        "volumeRaw": 163527966.94000003,
-        "trades": 2593,
-        "price": 288.93,
+        "volume": 163.91,
+        "volumeRaw": 163910210.94000003,
+        "trades": 2600,
+        "price": 289.42,
         "yield": 14.51,
         "spread_bps": 32.9
       },
       {
         "date": "2026-03-04",
         "datePretty": "04/03",
-        "volume": 179.47,
-        "volumeRaw": 179474246.4,
-        "trades": 2633,
-        "price": 243.04,
+        "volume": 179.73,
+        "volumeRaw": 179728443.77,
+        "trades": 2637,
+        "price": 243.31,
         "yield": 14.17,
         "spread_bps": 5.1
       },
       {
         "date": "2026-03-05",
         "datePretty": "05/03",
-        "volume": 158.91,
-        "volumeRaw": 158911063.26,
-        "trades": 2478,
-        "price": 160.2,
+        "volume": 159.24,
+        "volumeRaw": 159239819.45,
+        "trades": 2489,
+        "price": 160.48,
         "yield": 14.37,
         "spread_bps": 20.6
       },
       {
         "date": "2026-03-06",
         "datePretty": "06/03",
-        "volume": 342.11,
-        "volumeRaw": 342105688.54,
-        "trades": 2493,
-        "price": 454.63,
+        "volume": 342.64,
+        "volumeRaw": 342639750.6,
+        "trades": 2509,
+        "price": 454.99,
         "yield": 14.28,
         "spread_bps": 17.6
       },
       {
         "date": "2026-03-09",
         "datePretty": "09/03",
-        "volume": 120.73,
-        "volumeRaw": 120733199.55000001,
-        "trades": 2512,
-        "price": 346.3,
+        "volume": 120.95,
+        "volumeRaw": 120952438.53000002,
+        "trades": 2519,
+        "price": 346.71,
         "yield": 14.96,
         "spread_bps": 70.5
       },
       {
         "date": "2026-03-10",
         "datePretty": "10/03",
-        "volume": 104.23,
-        "volumeRaw": 104233291.20000002,
-        "trades": 2466,
-        "price": 267.28,
+        "volume": 104.25,
+        "volumeRaw": 104245489.18,
+        "trades": 2468,
+        "price": 267.3,
         "yield": 14.63,
         "spread_bps": 47.5
       },
@@ -9284,14 +9366,14 @@
         "trades": 3055,
         "price": 1003.96,
         "yield": 14.79,
-        "spread_bps": 79.8
+        "spread_bps": 79.6
       },
       {
         "date": "2026-03-17",
         "datePretty": "17/03",
-        "volume": 218.42,
-        "volumeRaw": 218423084.46,
-        "trades": 3330,
+        "volume": 218.43,
+        "volumeRaw": 218426299.42000002,
+        "trades": 3332,
         "price": 796.06,
         "yield": 15.02,
         "spread_bps": 91.8
@@ -9299,40 +9381,40 @@
       {
         "date": "2026-03-18",
         "datePretty": "18/03",
-        "volume": 217.75,
-        "volumeRaw": 217752708.76000002,
-        "trades": 2712,
-        "price": 860.34,
+        "volume": 218.07,
+        "volumeRaw": 218065175.41000003,
+        "trades": 2720,
+        "price": 860.5,
         "yield": 14.14,
-        "spread_bps": 14.6
+        "spread_bps": 14.5
       },
       {
         "date": "2026-03-19",
         "datePretty": "19/03",
-        "volume": 141.87,
-        "volumeRaw": 141873550.95,
-        "trades": 3006,
-        "price": 857.66,
+        "volume": 142.7,
+        "volumeRaw": 142703818.92,
+        "trades": 3033,
+        "price": 858.28,
         "yield": 15.82,
-        "spread_bps": 156.9
+        "spread_bps": 156.8
       },
       {
         "date": "2026-03-20",
         "datePretty": "20/03",
-        "volume": 748.01,
-        "volumeRaw": 748012938.7400001,
-        "trades": 2791,
-        "price": 839.05,
+        "volume": 748.25,
+        "volumeRaw": 748254247.8500001,
+        "trades": 2801,
+        "price": 839.08,
         "yield": 13.56,
         "spread_bps": -66.3
       },
       {
         "date": "2026-03-23",
         "datePretty": "23/03",
-        "volume": 133.62,
-        "volumeRaw": 133619175.06000002,
-        "trades": 2716,
-        "price": 586.4,
+        "volume": 133.68,
+        "volumeRaw": 133681096.64000002,
+        "trades": 2719,
+        "price": 586.51,
         "yield": 16.73,
         "spread_bps": 213.8
       },
@@ -9340,8 +9422,8 @@
         "date": "2026-03-24",
         "datePretty": "24/03",
         "volume": 165.22,
-        "volumeRaw": 165219375.95,
-        "trades": 3153,
+        "volumeRaw": 165222602.01,
+        "trades": 3155,
         "price": 793.55,
         "yield": 17.06,
         "spread_bps": 237.7
@@ -9350,11 +9432,11 @@
         "date": "2026-03-25",
         "datePretty": "25/03",
         "volume": 384.31,
-        "volumeRaw": 384307866.3899999,
-        "trades": 2824,
+        "volumeRaw": 384313206.12999994,
+        "trades": 2826,
         "price": 924.2,
         "yield": 15.8,
-        "spread_bps": 144.4
+        "spread_bps": 141.6
       },
       {
         "date": "2026-03-26",
@@ -9370,8 +9452,8 @@
         "date": "2026-03-27",
         "datePretty": "27/03",
         "volume": 120.01,
-        "volumeRaw": 120012598.11,
-        "trades": 2549,
+        "volumeRaw": 120014150.92999999,
+        "trades": 2551,
         "price": 765.75,
         "yield": 15.81,
         "spread_bps": 110.0
@@ -9379,29 +9461,29 @@
       {
         "date": "2026-03-30",
         "datePretty": "30/03",
-        "volume": 488.19,
-        "volumeRaw": 488194070.22999996,
-        "trades": 2525,
-        "price": 879.28,
+        "volume": 488.22,
+        "volumeRaw": 488216284.15,
+        "trades": 2526,
+        "price": 879.29,
         "yield": 13.86,
-        "spread_bps": -41.1
+        "spread_bps": -41.5
       },
       {
         "date": "2026-03-31",
         "datePretty": "31/03",
-        "volume": 256.2,
-        "volumeRaw": 256199304.83999997,
-        "trades": 2494,
-        "price": 464.48,
+        "volume": 256.22,
+        "volumeRaw": 256221539.51999998,
+        "trades": 2495,
+        "price": 464.5,
         "yield": 14.63,
         "spread_bps": 42.2
       },
       {
         "date": "2026-04-01",
         "datePretty": "01/04",
-        "volume": 116.56,
-        "volumeRaw": 116562519.46000001,
-        "trades": 2254,
+        "volume": 116.57,
+        "volumeRaw": 116565631.91,
+        "trades": 2256,
         "price": 428.07,
         "yield": 15.87,
         "spread_bps": 127.4
@@ -9409,10 +9491,10 @@
       {
         "date": "2026-04-02",
         "datePretty": "02/04",
-        "volume": 205.02,
-        "volumeRaw": 205019138.13999996,
-        "trades": 2429,
-        "price": 357.07,
+        "volume": 205.03,
+        "volumeRaw": 205025882.50999996,
+        "trades": 2433,
+        "price": 357.08,
         "yield": 14.5,
         "spread_bps": 44.5
       },
@@ -9424,7 +9506,7 @@
         "trades": 2538,
         "price": 432.89,
         "yield": 14.05,
-        "spread_bps": -5.7
+        "spread_bps": -5.9
       },
       {
         "date": "2026-04-07",
@@ -9440,11 +9522,11 @@
         "date": "2026-04-08",
         "datePretty": "08/04",
         "volume": 138.04,
-        "volumeRaw": 138040762.81,
-        "trades": 1998,
+        "volumeRaw": 138042323.59,
+        "trades": 2000,
         "price": 88.77,
         "yield": 15.43,
-        "spread_bps": 88.1
+        "spread_bps": 87.6
       },
       {
         "date": "2026-04-09",
@@ -9459,22 +9541,22 @@
       {
         "date": "2026-04-10",
         "datePretty": "10/04",
-        "volume": 130.0,
-        "volumeRaw": 129999158.08,
-        "trades": 2367,
-        "price": 91.08,
+        "volume": 130.01,
+        "volumeRaw": 130010214.97,
+        "trades": 2369,
+        "price": 91.09,
         "yield": 15.15,
         "spread_bps": 132.3
       },
       {
         "date": "2026-04-13",
         "datePretty": "13/04",
-        "volume": 106.29,
-        "volumeRaw": 106293304.38,
-        "trades": 2285,
-        "price": 69.48,
+        "volume": 106.35,
+        "volumeRaw": 106354308.13999999,
+        "trades": 2287,
+        "price": 69.52,
         "yield": 15.27,
-        "spread_bps": 147.8
+        "spread_bps": 147.7
       },
       {
         "date": "2026-04-14",
@@ -9484,7 +9566,7 @@
         "trades": 2207,
         "price": 129.35,
         "yield": 15.06,
-        "spread_bps": 135.4
+        "spread_bps": 135.3
       },
       {
         "date": "2026-04-15",
@@ -9494,37 +9576,37 @@
         "trades": 2798,
         "price": 117.86,
         "yield": 16.28,
-        "spread_bps": 234.4
+        "spread_bps": 234.3
       },
       {
         "date": "2026-04-16",
         "datePretty": "16/04",
         "volume": 173.63,
-        "volumeRaw": 173629827.95000002,
-        "trades": 2891,
+        "volumeRaw": 173631608.3,
+        "trades": 2893,
         "price": 6.5,
         "yield": 15.78,
-        "spread_bps": 189.7
+        "spread_bps": 189.4
       },
       {
         "date": "2026-04-17",
         "datePretty": "17/04",
         "volume": 265.75,
-        "volumeRaw": 265748084.77999997,
-        "trades": 2517,
+        "volumeRaw": 265754388.22999996,
+        "trades": 2519,
         "price": 26.49,
         "yield": 15.06,
-        "spread_bps": 142.3
+        "spread_bps": 141.9
       },
       {
         "date": "2026-04-20",
         "datePretty": "20/04",
-        "volume": 94.72,
-        "volumeRaw": 94724371.89,
-        "trades": 2432,
-        "price": 161.07,
+        "volume": 94.83,
+        "volumeRaw": 94830058.60000001,
+        "trades": 2436,
+        "price": 161.21,
         "yield": 15.7,
-        "spread_bps": 199.6
+        "spread_bps": 199.0
       },
       {
         "date": "2026-04-22",
@@ -9534,7 +9616,7 @@
         "trades": 2332,
         "price": 187.1,
         "yield": 14.86,
-        "spread_bps": 112.7
+        "spread_bps": 112.3
       },
       {
         "date": "2026-04-23",
@@ -9544,34 +9626,34 @@
         "trades": 2191,
         "price": 65.83,
         "yield": 15.6,
-        "spread_bps": 157.5
+        "spread_bps": 157.4
       },
       {
         "date": "2026-04-24",
         "datePretty": "24/04",
-        "volume": 118.11,
-        "volumeRaw": 118105182.56,
-        "trades": 2260,
-        "price": 212.49,
+        "volume": 118.13,
+        "volumeRaw": 118125863.55,
+        "trades": 2263,
+        "price": 212.52,
         "yield": 16.89,
         "spread_bps": 245.2
       },
       {
         "date": "2026-04-27",
         "datePretty": "27/04",
-        "volume": 214.15,
-        "volumeRaw": 214152147.78000006,
-        "trades": 2221,
-        "price": 26.07,
+        "volume": 214.17,
+        "volumeRaw": 214171135.75000006,
+        "trades": 2224,
+        "price": 26.08,
         "yield": 14.64,
-        "spread_bps": 62.3
+        "spread_bps": 61.9
       },
       {
         "date": "2026-04-28",
         "datePretty": "28/04",
         "volume": 345.09,
-        "volumeRaw": 345093054.94,
-        "trades": 2431,
+        "volumeRaw": 345094739.02000004,
+        "trades": 2433,
         "price": 54.04,
         "yield": 14.61,
         "spread_bps": 64.0
@@ -9584,7 +9666,7 @@
         "trades": 2608,
         "price": 12.2,
         "yield": 14.88,
-        "spread_bps": 70.4
+        "spread_bps": 70.3
       },
       {
         "date": "2026-04-30",
@@ -9594,45 +9676,45 @@
         "trades": 2956,
         "price": 10.52,
         "yield": 16.39,
-        "spread_bps": 208.7
+        "spread_bps": 208.6
       },
       {
         "date": "2026-05-04",
         "datePretty": "04/05",
-        "volume": 155.67,
-        "volumeRaw": 155674739.72,
-        "trades": 2366,
-        "price": 533.49,
+        "volume": 155.69,
+        "volumeRaw": 155689250.81,
+        "trades": 2373,
+        "price": 533.51,
         "yield": 16.55,
-        "spread_bps": 214.9
+        "spread_bps": 214.5
       },
       {
         "date": "2026-05-05",
         "datePretty": "05/05",
         "volume": 234.02,
-        "volumeRaw": 234016332.98999998,
-        "trades": 2322,
+        "volumeRaw": 234018040.67999998,
+        "trades": 2324,
         "price": 530.82,
         "yield": 15.11,
-        "spread_bps": 93.7
+        "spread_bps": 93.6
       },
       {
         "date": "2026-05-06",
         "datePretty": "06/05",
-        "volume": 108.28,
-        "volumeRaw": 108283496.45,
-        "trades": 1978,
-        "price": 184.91,
+        "volume": 108.34,
+        "volumeRaw": 108340207.32000001,
+        "trades": 1983,
+        "price": 184.99,
         "yield": 15.78,
-        "spread_bps": 176.0
+        "spread_bps": 175.8
       },
       {
         "date": "2026-05-07",
         "datePretty": "07/05",
-        "volume": 163.51,
-        "volumeRaw": 163506994.49,
-        "trades": 2016,
-        "price": 568.8,
+        "volume": 163.57,
+        "volumeRaw": 163570146.62,
+        "trades": 2018,
+        "price": 568.9,
         "yield": 15.28,
         "spread_bps": 130.8
       },
@@ -9640,38 +9722,38 @@
         "date": "2026-05-08",
         "datePretty": "08/05",
         "volume": 111.79,
-        "volumeRaw": 111787809.74,
-        "trades": 2092,
-        "price": 549.45,
+        "volumeRaw": 111793014.79999998,
+        "trades": 2094,
+        "price": 549.46,
         "yield": 15.47,
-        "spread_bps": 154.1
+        "spread_bps": 154.0
       },
       {
         "date": "2026-05-11",
         "datePretty": "11/05",
         "volume": 149.74,
-        "volumeRaw": 149741017.01999998,
-        "trades": 2146,
-        "price": 281.13,
+        "volumeRaw": 149743148.29,
+        "trades": 2148,
+        "price": 281.14,
         "yield": 14.98,
         "spread_bps": 89.4
       },
       {
         "date": "2026-05-12",
         "datePretty": "12/05",
-        "volume": 387.81,
-        "volumeRaw": 387808082.09000003,
-        "trades": 2230,
-        "price": 693.24,
+        "volume": 388.48,
+        "volumeRaw": 388475823.25000006,
+        "trades": 2234,
+        "price": 693.58,
         "yield": 14.19,
-        "spread_bps": 16.5
+        "spread_bps": 16.2
       },
       {
         "date": "2026-05-13",
         "datePretty": "13/05",
-        "volume": 91.36,
-        "volumeRaw": 91363560.43,
-        "trades": 2299,
+        "volume": 91.37,
+        "volumeRaw": 91368889.11,
+        "trades": 2303,
         "price": 170.83,
         "yield": 16.03,
         "spread_bps": 154.0
@@ -9679,49 +9761,49 @@
       {
         "date": "2026-05-14",
         "datePretty": "14/05",
-        "volume": 373.27,
-        "volumeRaw": 373272617.80999994,
-        "trades": 2093,
-        "price": 476.76,
+        "volume": 373.38,
+        "volumeRaw": 373375392.81999993,
+        "trades": 2095,
+        "price": 476.81,
         "yield": 14.24,
-        "spread_bps": 5.7
+        "spread_bps": 6.0
       },
       {
         "date": "2026-05-15",
         "datePretty": "15/05",
-        "volume": 179.45,
-        "volumeRaw": 179447804.70000002,
-        "trades": 2723,
-        "price": 15.78,
+        "volume": 179.55,
+        "volumeRaw": 179551472.28000003,
+        "trades": 2725,
+        "price": 15.79,
         "yield": 15.19,
-        "spread_bps": 73.5
+        "spread_bps": 73.4
       },
       {
         "date": "2026-05-18",
         "datePretty": "18/05",
-        "volume": 205.51,
-        "volumeRaw": 205510799.30999997,
-        "trades": 2560,
-        "price": 359.59,
+        "volume": 205.52,
+        "volumeRaw": 205519547.80999997,
+        "trades": 2563,
+        "price": 359.6,
         "yield": 14.61,
         "spread_bps": 27.8
       },
       {
         "date": "2026-05-19",
         "datePretty": "19/05",
-        "volume": 129.2,
-        "volumeRaw": 129202742.89000002,
-        "trades": 2189,
-        "price": 178.98,
+        "volume": 129.62,
+        "volumeRaw": 129622099.95,
+        "trades": 2193,
+        "price": 179.46,
         "yield": 15.35,
-        "spread_bps": 85.6
+        "spread_bps": 85.7
       },
       {
         "date": "2026-05-20",
         "datePretty": "20/05",
         "volume": 161.21,
-        "volumeRaw": 161208063.81,
-        "trades": 2106,
+        "volumeRaw": 161209805.2,
+        "trades": 2108,
         "price": 13.96,
         "yield": 15.04,
         "spread_bps": 76.8
@@ -9729,10 +9811,10 @@
       {
         "date": "2026-05-21",
         "datePretty": "21/05",
-        "volume": 190.84,
-        "volumeRaw": 190835050.50000003,
-        "trades": 2366,
-        "price": 549.81,
+        "volume": 190.9,
+        "volumeRaw": 190896965.53000003,
+        "trades": 2368,
+        "price": 549.89,
         "yield": 14.79,
         "spread_bps": 61.1
       },
@@ -9740,8 +9822,8 @@
         "date": "2026-05-22",
         "datePretty": "22/05",
         "volume": 292.21,
-        "volumeRaw": 292209439.03,
-        "trades": 2364,
+        "volumeRaw": 292210854.46,
+        "trades": 2366,
         "price": 381.06,
         "yield": 14.38,
         "spread_bps": 24.1
@@ -9780,11 +9862,11 @@
         "date": "2026-05-28",
         "datePretty": "28/05",
         "volume": 240.44,
-        "volumeRaw": 240437398.76,
-        "trades": 2521,
+        "volumeRaw": 240444934.48,
+        "trades": 2527,
         "price": 5.89,
         "yield": 15.17,
-        "spread_bps": 102.9
+        "spread_bps": 102.8
       },
       {
         "date": "2026-05-29",
@@ -9794,15 +9876,15 @@
         "trades": 3260,
         "price": 6.08,
         "yield": 14.94,
-        "spread_bps": 80.5
+        "spread_bps": 80.4
       },
       {
         "date": "2026-06-01",
         "datePretty": "01/06",
-        "volume": 598.64,
-        "volumeRaw": 598641139.44,
-        "trades": 2087,
-        "price": 730.83,
+        "volume": 598.73,
+        "volumeRaw": 598726823.37,
+        "trades": 2089,
+        "price": 730.84,
         "yield": 14.18,
         "spread_bps": 6.3
       },
@@ -9810,8 +9892,8 @@
         "date": "2026-06-02",
         "datePretty": "02/06",
         "volume": 214.7,
-        "volumeRaw": 214699123.42000002,
-        "trades": 2069,
+        "volumeRaw": 214700530.08,
+        "trades": 2071,
         "price": 418.07,
         "yield": 16.08,
         "spread_bps": 166.2
@@ -9820,8 +9902,8 @@
         "date": "2026-06-03",
         "datePretty": "03/06",
         "volume": 149.98,
-        "volumeRaw": 149982579.67000002,
-        "trades": 2211,
+        "volumeRaw": 149984430.35,
+        "trades": 2212,
         "price": 991.17,
         "yield": 15.8,
         "spread_bps": 108.8
@@ -9829,10 +9911,10 @@
       {
         "date": "2026-06-05",
         "datePretty": "05/06",
-        "volume": 151.51,
-        "volumeRaw": 151514311.84,
-        "trades": 2209,
-        "price": 212.05,
+        "volume": 151.53,
+        "volumeRaw": 151528740.04,
+        "trades": 2214,
+        "price": 212.06,
         "yield": 15.6,
         "spread_bps": 70.7
       },
@@ -9849,20 +9931,20 @@
       {
         "date": "2026-06-09",
         "datePretty": "09/06",
-        "volume": 102.8,
-        "volumeRaw": 102796663.54,
-        "trades": 1904,
-        "price": 132.49,
+        "volume": 102.81,
+        "volumeRaw": 102805004.10000001,
+        "trades": 1911,
+        "price": 132.5,
         "yield": 15.68,
-        "spread_bps": 54.6
+        "spread_bps": 54.7
       },
       {
         "date": "2026-06-10",
         "datePretty": "10/06",
-        "volume": 262.71,
-        "volumeRaw": 262708660.33999997,
-        "trades": 1862,
-        "price": 467.87,
+        "volume": 262.73,
+        "volumeRaw": 262729457.23,
+        "trades": 1866,
+        "price": 467.88,
         "yield": 15.07,
         "spread_bps": 9.8
       },
@@ -9899,12 +9981,12 @@
       {
         "date": "2026-06-16",
         "datePretty": "16/06",
-        "volume": 117.3,
-        "volumeRaw": 117304926.80000001,
-        "trades": 2359,
-        "price": 350.63,
+        "volume": 117.31,
+        "volumeRaw": 117312097.12,
+        "trades": 2363,
+        "price": 350.64,
         "yield": 15.1,
-        "spread_bps": 119.9
+        "spread_bps": 120.0
       },
       {
         "date": "2026-06-17",
@@ -9914,27 +9996,27 @@
         "trades": 2182,
         "price": 155.79,
         "yield": 16.16,
-        "spread_bps": 131.6
+        "spread_bps": 131.7
       },
       {
         "date": "2026-06-18",
         "datePretty": "18/06",
-        "volume": 99.27,
-        "volumeRaw": 99268356.43,
-        "trades": 1974,
-        "price": 184.08,
+        "volume": 99.52,
+        "volumeRaw": 99524758.8,
+        "trades": 1976,
+        "price": 184.45,
         "yield": 15.87,
-        "spread_bps": 84.6
+        "spread_bps": 84.8
       },
       {
         "date": "2026-06-19",
         "datePretty": "19/06",
-        "volume": 244.34,
-        "volumeRaw": 244340051.53,
-        "trades": 1948,
-        "price": 546.75,
+        "volume": 244.36,
+        "volumeRaw": 244357055.19,
+        "trades": 1950,
+        "price": 546.77,
         "yield": 14.84,
-        "spread_bps": -19.2
+        "spread_bps": -19.1
       },
       {
         "date": "2026-06-22",
@@ -9944,87 +10026,87 @@
         "trades": 2189,
         "price": 440.12,
         "yield": 16.24,
-        "spread_bps": 124.5
+        "spread_bps": 124.6
       },
       {
         "date": "2026-06-23",
         "datePretty": "23/06",
-        "volume": 141.7,
-        "volumeRaw": 141697352.23,
-        "trades": 2171,
-        "price": 295.24,
-        "yield": 14.02,
-        "spread_bps": 136.2
+        "volume": 141.78,
+        "volumeRaw": 141777315.32999998,
+        "trades": 2178,
+        "price": 295.35,
+        "yield": 14.03,
+        "spread_bps": 136.3
       },
       {
         "date": "2026-06-24",
         "datePretty": "24/06",
-        "volume": 121.91,
-        "volumeRaw": 121910846.42,
-        "trades": 1934,
-        "price": 340.57,
+        "volume": 121.97,
+        "volumeRaw": 121974048.44,
+        "trades": 1938,
+        "price": 340.69,
         "yield": 15.61,
         "spread_bps": 98.5
       },
       {
         "date": "2026-06-25",
         "datePretty": "25/06",
-        "volume": 171.14,
-        "volumeRaw": 171143498.9,
-        "trades": 1988,
-        "price": 145.27,
+        "volume": 172.09,
+        "volumeRaw": 172086519.35999998,
+        "trades": 1995,
+        "price": 145.93,
         "yield": 14.7,
         "spread_bps": 15.1
       },
       {
         "date": "2026-06-26",
         "datePretty": "26/06",
-        "volume": 78.04,
-        "volumeRaw": 78035674.41,
-        "trades": 2040,
-        "price": 55.64,
+        "volume": 78.32,
+        "volumeRaw": 78318581.97,
+        "trades": 2044,
+        "price": 55.83,
         "yield": 15.48,
         "spread_bps": 80.2
       },
       {
         "date": "2026-06-29",
         "datePretty": "29/06",
-        "volume": 61.58,
-        "volumeRaw": 61576906.47,
-        "trades": 1555,
-        "price": 117.3,
+        "volume": 61.82,
+        "volumeRaw": 61815167.19,
+        "trades": 1557,
+        "price": 117.7,
         "yield": 14.72,
-        "spread_bps": 26.9
+        "spread_bps": 27.0
       },
       {
         "date": "2026-06-30",
         "datePretty": "30/06",
-        "volume": 142.55,
-        "volumeRaw": 142548892.73,
-        "trades": 2166,
-        "price": 73.03,
+        "volume": 149.47,
+        "volumeRaw": 149473348.29999998,
+        "trades": 2191,
+        "price": 76.26,
         "yield": 14.53,
         "spread_bps": 22.9
       },
       {
         "date": "2026-07-01",
         "datePretty": "01/07",
-        "volume": 100.9,
-        "volumeRaw": 100904326.53999999,
-        "trades": 1886,
-        "price": 154.56,
+        "volume": 101.12,
+        "volumeRaw": 101120758.99000001,
+        "trades": 1892,
+        "price": 154.83,
         "yield": 14.52,
-        "spread_bps": 7.1
+        "spread_bps": 7.2
       },
       {
         "date": "2026-07-02",
         "datePretty": "02/07",
-        "volume": 120.89,
-        "volumeRaw": 120891739.52,
-        "trades": 1932,
-        "price": 233.76,
+        "volume": 120.94,
+        "volumeRaw": 120944951.7,
+        "trades": 1934,
+        "price": 233.84,
         "yield": 14.14,
-        "spread_bps": -45.3
+        "spread_bps": -45.6
       },
       {
         "date": "2026-07-03",
@@ -10050,8 +10132,8 @@
         "date": "2026-07-07",
         "datePretty": "07/07",
         "volume": 96.78,
-        "volumeRaw": 96776802.67,
-        "trades": 2069,
+        "volumeRaw": 96778124.79,
+        "trades": 2071,
         "price": 205.32,
         "yield": 16.55,
         "spread_bps": 184.2
@@ -10060,8 +10142,8 @@
         "date": "2026-07-08",
         "datePretty": "08/07",
         "volume": 93.01,
-        "volumeRaw": 93012413.91999999,
-        "trades": 1996,
+        "volumeRaw": 93014075.58,
+        "trades": 1998,
         "price": 176.06,
         "yield": 16.47,
         "spread_bps": 172.0
@@ -10074,7 +10156,7 @@
         "trades": 1646,
         "price": 85.68,
         "yield": 15.25,
-        "spread_bps": 69.8
+        "spread_bps": 69.6
       },
       {
         "date": "2026-07-10",
@@ -10084,57 +10166,57 @@
         "trades": 2018,
         "price": 606.76,
         "yield": 14.3,
-        "spread_bps": 10.7
+        "spread_bps": 10.8
       },
       {
         "date": "2026-07-13",
         "datePretty": "13/07",
-        "volume": 103.51,
-        "volumeRaw": 103505418.19,
-        "trades": 2258,
-        "price": 660.05,
+        "volume": 103.57,
+        "volumeRaw": 103574612.79,
+        "trades": 2260,
+        "price": 660.15,
         "yield": 15.94,
-        "spread_bps": 131.3
+        "spread_bps": 131.2
       },
       {
         "date": "2026-07-14",
         "datePretty": "14/07",
         "volume": 84.79,
-        "volumeRaw": 84788271.04,
-        "trades": 2032,
+        "volumeRaw": 84789599.79,
+        "trades": 2034,
         "price": 195.84,
         "yield": 15.38,
-        "spread_bps": 94.5
+        "spread_bps": 94.6
       },
       {
         "date": "2026-07-15",
         "datePretty": "15/07",
-        "volume": 367.82,
-        "volumeRaw": 367817286.96000004,
-        "trades": 2261,
+        "volume": 367.83,
+        "volumeRaw": 367828218.56000006,
+        "trades": 2265,
         "price": 612.49,
         "yield": 14.09,
-        "spread_bps": -25.6
+        "spread_bps": -25.5
       },
       {
         "date": "2026-07-16",
         "datePretty": "16/07",
-        "volume": 125.28,
-        "volumeRaw": 125283371.36999999,
-        "trades": 2752,
-        "price": 262.86,
+        "volume": 125.38,
+        "volumeRaw": 125380798.75999999,
+        "trades": 2758,
+        "price": 263.0,
         "yield": 15.72,
-        "spread_bps": 120.9
+        "spread_bps": 121.1
       },
       {
         "date": "2026-07-17",
         "datePretty": "17/07",
-        "volume": 318.04,
-        "volumeRaw": 318036031.2200001,
-        "trades": 2508,
-        "price": 699.41,
-        "yield": 14.78,
-        "spread_bps": 14.0
+        "volume": 318.18,
+        "volumeRaw": 318177125.89000005,
+        "trades": 2514,
+        "price": 699.48,
+        "yield": 14.79,
+        "spread_bps": 13.9
       },
       {
         "date": "2026-07-20",
@@ -10144,7 +10226,7 @@
         "trades": 2430,
         "price": 274.16,
         "yield": 15.11,
-        "spread_bps": 44.8
+        "spread_bps": 44.9
       },
       {
         "date": "2026-07-21",
@@ -10164,17 +10246,17 @@
         "trades": 2025,
         "price": 351.56,
         "yield": 16.3,
-        "spread_bps": 142.7
+        "spread_bps": 142.8
       },
       {
         "date": "2026-07-23",
         "datePretty": "23/07",
         "volume": 84.96,
-        "volumeRaw": 84957895.44000001,
-        "trades": 1874,
+        "volumeRaw": 84961890.30000001,
+        "trades": 1877,
         "price": 389.04,
         "yield": 16.29,
-        "spread_bps": 123.8
+        "spread_bps": 124.0
       },
       {
         "date": "2026-07-24",
@@ -10184,47 +10266,47 @@
         "trades": 2226,
         "price": 19.19,
         "yield": 14.7,
-        "spread_bps": -4.0
+        "spread_bps": -4.1
       },
       {
         "date": "2026-07-27",
         "datePretty": "27/07",
-        "volume": 169.62,
-        "volumeRaw": 169615463.79,
-        "trades": 2147,
-        "price": 264.23,
+        "volume": 169.63,
+        "volumeRaw": 169632043.64999998,
+        "trades": 2151,
+        "price": 264.25,
         "yield": 15.28,
-        "spread_bps": 53.3
+        "spread_bps": 53.4
       },
       {
         "date": "2026-07-28",
         "datePretty": "28/07",
-        "volume": 133.64,
-        "volumeRaw": 133635971.10999998,
-        "trades": 2085,
-        "price": 220.32,
+        "volume": 133.86,
+        "volumeRaw": 133864375.38,
+        "trades": 2087,
+        "price": 220.61,
         "yield": 16.28,
-        "spread_bps": 167.0
+        "spread_bps": 166.3
       },
       {
         "date": "2026-07-29",
         "datePretty": "29/07",
         "volume": 142.08,
-        "volumeRaw": 142075326.24,
-        "trades": 2251,
+        "volumeRaw": 142076643.85,
+        "trades": 2253,
         "price": 229.16,
         "yield": 16.13,
-        "spread_bps": 146.3
+        "spread_bps": 145.6
       },
       {
         "date": "2026-07-30",
         "datePretty": "30/07",
         "volume": 149.1,
-        "volumeRaw": 149098928.58,
-        "trades": 2260,
+        "volumeRaw": 149100569.08,
+        "trades": 2262,
         "price": 35.07,
         "yield": 15.68,
-        "spread_bps": 109.7
+        "spread_bps": 109.5
       },
       {
         "date": "2026-07-31",
@@ -10234,7 +10316,7 @@
         "trades": 1555,
         "price": 213.45,
         "yield": 16.45,
-        "spread_bps": 175.6
+        "spread_bps": 175.2
       },
       {
         "date": "2026-08-03",
@@ -10244,114 +10326,114 @@
         "trades": 2137,
         "price": 615.9,
         "yield": 16.23,
-        "spread_bps": 171.4
+        "spread_bps": 171.6
       },
       {
         "date": "2026-08-04",
         "datePretty": "04/08",
-        "volume": 149.54,
-        "volumeRaw": 149535777.26,
-        "trades": 2210,
-        "price": 649.83,
+        "volume": 149.62,
+        "volumeRaw": 149619302.03,
+        "trades": 2212,
+        "price": 649.92,
         "yield": 15.92,
-        "spread_bps": 143.2
+        "spread_bps": 143.1
       },
       {
         "date": "2026-08-05",
         "datePretty": "05/08",
-        "volume": 159.1,
-        "volumeRaw": 159104920.71,
-        "trades": 2324,
-        "price": 328.37,
-        "yield": 15.58,
-        "spread_bps": 117.6
+        "volume": 162.28,
+        "volumeRaw": 162283084.84,
+        "trades": 2330,
+        "price": 332.32,
+        "yield": 15.62,
+        "spread_bps": 121.4
       },
       {
         "date": "2026-08-07",
         "datePretty": "07/08",
-        "volume": 110.37,
-        "volumeRaw": 110368889.31000002,
-        "trades": 2401,
-        "price": 245.25,
+        "volume": 110.59,
+        "volumeRaw": 110585764.14000002,
+        "trades": 2403,
+        "price": 245.62,
         "yield": 15.58,
-        "spread_bps": 107.7
+        "spread_bps": 107.6
       },
       {
         "date": "2026-08-10",
         "datePretty": "10/08",
-        "volume": 158.66,
-        "volumeRaw": 158662777.35,
-        "trades": 2497,
-        "price": 300.84,
+        "volume": 158.67,
+        "volumeRaw": 158668429.17,
+        "trades": 2500,
+        "price": 300.85,
         "yield": 16.03,
-        "spread_bps": 142.7
+        "spread_bps": 142.6
       },
       {
         "date": "2026-08-11",
         "datePretty": "11/08",
-        "volume": 157.68,
-        "volumeRaw": 157683011.04,
-        "trades": 2154,
-        "price": 429.79,
+        "volume": 157.94,
+        "volumeRaw": 157942688.37,
+        "trades": 2158,
+        "price": 430.16,
         "yield": 15.76,
-        "spread_bps": 114.3
+        "spread_bps": 114.2
       },
       {
         "date": "2026-08-12",
         "datePretty": "12/08",
-        "volume": 223.2,
-        "volumeRaw": 223203676.36,
-        "trades": 2300,
-        "price": 569.48,
+        "volume": 223.28,
+        "volumeRaw": 223282768.4,
+        "trades": 2302,
+        "price": 569.54,
         "yield": 16.55,
-        "spread_bps": 179.6
+        "spread_bps": 179.7
       },
       {
         "date": "2026-08-13",
         "datePretty": "13/08",
         "volume": 145.4,
-        "volumeRaw": 145397234.99,
-        "trades": 2370,
+        "volumeRaw": 145398567.19,
+        "trades": 2372,
         "price": 316.78,
         "yield": 16.45,
-        "spread_bps": 168.5
+        "spread_bps": 168.7
       },
       {
         "date": "2026-08-14",
         "datePretty": "14/08",
-        "volume": 214.32,
-        "volumeRaw": 214324570.1,
-        "trades": 2195,
+        "volume": 214.33,
+        "volumeRaw": 214326219.89999998,
+        "trades": 2197,
         "price": 447.11,
         "yield": 15.6,
-        "spread_bps": 79.6
+        "spread_bps": 79.7
       },
       {
         "date": "2026-08-17",
         "datePretty": "17/08",
-        "volume": 111.66,
-        "volumeRaw": 111663737.80999997,
-        "trades": 2576,
-        "price": 132.85,
+        "volume": 111.72,
+        "volumeRaw": 111715616.76999998,
+        "trades": 2582,
+        "price": 132.9,
         "yield": 15.68,
         "spread_bps": 94.4
       },
       {
         "date": "2026-08-18",
         "datePretty": "18/08",
-        "volume": 127.12,
-        "volumeRaw": 127122682.08999999,
-        "trades": 2866,
-        "price": 955.85,
+        "volume": 127.13,
+        "volumeRaw": 127125982.53999999,
+        "trades": 2869,
+        "price": 955.84,
         "yield": 15.74,
-        "spread_bps": 99.4
+        "spread_bps": 99.5
       },
       {
         "date": "2026-08-19",
         "datePretty": "19/08",
         "volume": 255.96,
-        "volumeRaw": 255958410.80999997,
-        "trades": 2573,
+        "volumeRaw": 255960275.89999992,
+        "trades": 2575,
         "price": 76.66,
         "yield": 15.0,
         "spread_bps": 39.0
@@ -10359,70 +10441,70 @@
       {
         "date": "2026-08-20",
         "datePretty": "20/08",
-        "volume": 113.5,
-        "volumeRaw": 113497889.28999999,
-        "trades": 2495,
-        "price": 152.2,
+        "volume": 113.7,
+        "volumeRaw": 113701475.1,
+        "trades": 2502,
+        "price": 152.43,
         "yield": 16.18,
-        "spread_bps": 134.1
+        "spread_bps": 134.3
       },
       {
         "date": "2026-08-21",
         "datePretty": "21/08",
-        "volume": 137.59,
-        "volumeRaw": 137586183.23000002,
-        "trades": 2425,
-        "price": 10.08,
+        "volume": 137.75,
+        "volumeRaw": 137751980.43,
+        "trades": 2430,
+        "price": 10.09,
         "yield": 15.84,
-        "spread_bps": 125.0
+        "spread_bps": 124.9
       },
       {
         "date": "2026-08-24",
         "datePretty": "24/08",
-        "volume": 450.22,
-        "volumeRaw": 450218593.59999996,
-        "trades": 2758,
-        "price": 31.69,
+        "volume": 450.39,
+        "volumeRaw": 450393948.11999995,
+        "trades": 2763,
+        "price": 31.7,
         "yield": 14.71,
-        "spread_bps": 19.1
+        "spread_bps": 18.7
       },
       {
         "date": "2026-08-25",
         "datePretty": "25/08",
-        "volume": 199.18,
-        "volumeRaw": 199175140.72000003,
-        "trades": 2491,
-        "price": 685.39,
+        "volume": 199.25,
+        "volumeRaw": 199252915.46,
+        "trades": 2495,
+        "price": 685.43,
         "yield": 15.8,
-        "spread_bps": 120.7
+        "spread_bps": 120.8
       },
       {
         "date": "2026-08-26",
         "datePretty": "26/08",
-        "volume": 202.39,
-        "volumeRaw": 202392881.12000003,
-        "trades": 2626,
-        "price": 600.86,
+        "volume": 203.36,
+        "volumeRaw": 203362777.74000004,
+        "trades": 2635,
+        "price": 601.63,
         "yield": 15.5,
-        "spread_bps": 99.8
+        "spread_bps": 99.9
       },
       {
         "date": "2026-08-27",
         "datePretty": "27/08",
-        "volume": 173.63,
-        "volumeRaw": 173626731.82000002,
-        "trades": 2491,
-        "price": 383.37,
+        "volume": 173.84,
+        "volumeRaw": 173835483.09000003,
+        "trades": 2497,
+        "price": 383.63,
         "yield": 15.95,
         "spread_bps": 138.5
       },
       {
         "date": "2026-08-28",
         "datePretty": "28/08",
-        "volume": 111.19,
-        "volumeRaw": 111185556.52,
-        "trades": 2285,
-        "price": 223.04,
+        "volume": 111.25,
+        "volumeRaw": 111245989.81,
+        "trades": 2286,
+        "price": 223.14,
         "yield": 16.26,
         "spread_bps": 156.7
       },
@@ -10434,7 +10516,7 @@
         "trades": 2729,
         "price": 13.36,
         "yield": 16.31,
-        "spread_bps": 161.4
+        "spread_bps": 161.0
       },
       {
         "date": "2026-09-01",
@@ -10444,7 +10526,7 @@
         "trades": 2623,
         "price": 41.75,
         "yield": 16.4,
-        "spread_bps": 176.3
+        "spread_bps": 176.4
       },
       {
         "date": "2026-09-02",
@@ -10459,12 +10541,12 @@
       {
         "date": "2026-09-03",
         "datePretty": "03/09",
-        "volume": 458.89,
-        "volumeRaw": 458888334.54,
-        "trades": 2398,
-        "price": 197.74,
+        "volume": 459.01,
+        "volumeRaw": 459011599.39000005,
+        "trades": 2407,
+        "price": 197.78,
         "yield": 15.46,
-        "spread_bps": 111.9
+        "spread_bps": 112.0
       },
       {
         "date": "2026-09-04",
@@ -10479,52 +10561,52 @@
       {
         "date": "2026-09-08",
         "datePretty": "08/09",
-        "volume": 112.26,
-        "volumeRaw": 112260047.88999999,
-        "trades": 2534,
-        "price": 426.65,
+        "volume": 112.37,
+        "volumeRaw": 112368710.39999999,
+        "trades": 2538,
+        "price": 426.87,
         "yield": 15.85,
-        "spread_bps": 167.7
+        "spread_bps": 167.8
       },
       {
         "date": "2026-09-09",
         "datePretty": "09/09",
-        "volume": 101.53,
-        "volumeRaw": 101526841.07000001,
-        "trades": 2037,
-        "price": 687.11,
+        "volume": 101.54,
+        "volumeRaw": 101544911.35000001,
+        "trades": 2041,
+        "price": 687.14,
         "yield": 15.04,
         "spread_bps": 131.6
       },
       {
         "date": "2026-09-10",
         "datePretty": "10/09",
-        "volume": 149.64,
-        "volumeRaw": 149639690.89,
-        "trades": 2773,
-        "price": 372.0,
+        "volume": 149.68,
+        "volumeRaw": 149681934.81,
+        "trades": 2777,
+        "price": 372.06,
         "yield": 16.14,
-        "spread_bps": 183.5
+        "spread_bps": 183.6
       },
       {
         "date": "2026-09-11",
         "datePretty": "11/09",
-        "volume": 363.8,
-        "volumeRaw": 363804965.01,
-        "trades": 2627,
+        "volume": 363.81,
+        "volumeRaw": 363806852.51,
+        "trades": 2629,
         "price": 603.61,
         "yield": 15.55,
-        "spread_bps": 121.3
+        "spread_bps": 121.4
       },
       {
         "date": "2026-09-14",
         "datePretty": "14/09",
-        "volume": 151.23,
-        "volumeRaw": 151227109.16,
-        "trades": 2737,
-        "price": 316.72,
+        "volume": 151.39,
+        "volumeRaw": 151389074.39,
+        "trades": 2743,
+        "price": 316.94,
         "yield": 15.62,
-        "spread_bps": 171.9
+        "spread_bps": 171.6
       },
       {
         "date": "2026-09-15",
@@ -10539,52 +10621,52 @@
       {
         "date": "2026-09-16",
         "datePretty": "16/09",
-        "volume": 168.15,
-        "volumeRaw": 168152898.52,
-        "trades": 3408,
-        "price": 481.82,
+        "volume": 168.39,
+        "volumeRaw": 168390963.94,
+        "trades": 3412,
+        "price": 482.16,
         "yield": 15.74,
         "spread_bps": 133.7
       },
       {
         "date": "2026-09-17",
         "datePretty": "17/09",
-        "volume": 168.2,
-        "volumeRaw": 168196751.02,
-        "trades": 2964,
-        "price": 571.64,
+        "volume": 168.22,
+        "volumeRaw": 168221466.46,
+        "trades": 2969,
+        "price": 571.68,
         "yield": 15.58,
-        "spread_bps": 126.8
+        "spread_bps": 126.9
       },
       {
         "date": "2026-09-18",
         "datePretty": "18/09",
-        "volume": 348.12,
-        "volumeRaw": 348120429.7999999,
-        "trades": 2889,
-        "price": 650.28,
+        "volume": 348.4,
+        "volumeRaw": 348398548.88999987,
+        "trades": 2895,
+        "price": 650.43,
         "yield": 15.99,
         "spread_bps": 135.0
       },
       {
         "date": "2026-09-21",
         "datePretty": "21/09",
-        "volume": 559.54,
-        "volumeRaw": 559536031.3199999,
-        "trades": 2898,
-        "price": 573.89,
+        "volume": 559.64,
+        "volumeRaw": 559640566.5600001,
+        "trades": 2902,
+        "price": 573.93,
         "yield": 14.84,
-        "spread_bps": 72.5
+        "spread_bps": 72.6
       },
       {
         "date": "2026-09-22",
         "datePretty": "22/09",
-        "volume": 178.9,
-        "volumeRaw": 178900549.81,
-        "trades": 2862,
-        "price": 390.94,
+        "volume": 179.07,
+        "volumeRaw": 179069213.75,
+        "trades": 2864,
+        "price": 391.15,
         "yield": 15.85,
-        "spread_bps": 159.8
+        "spread_bps": 160.0
       },
       {
         "date": "2026-09-23",
@@ -10594,47 +10676,47 @@
         "trades": 2812,
         "price": 6.64,
         "yield": 15.75,
-        "spread_bps": 147.9
+        "spread_bps": 147.6
       },
       {
         "date": "2026-09-24",
         "datePretty": "24/09",
-        "volume": 183.96,
-        "volumeRaw": 183956061.4,
-        "trades": 2473,
-        "price": 7.07,
+        "volume": 184.08,
+        "volumeRaw": 184076052.83,
+        "trades": 2475,
+        "price": 7.08,
         "yield": 15.13,
         "spread_bps": 87.3
       },
       {
         "date": "2026-09-25",
         "datePretty": "25/09",
-        "volume": 165.21,
-        "volumeRaw": 165211638.26999998,
-        "trades": 2415,
-        "price": 345.47,
+        "volume": 165.3,
+        "volumeRaw": 165297766.29999998,
+        "trades": 2417,
+        "price": 345.58,
         "yield": 15.14,
-        "spread_bps": 90.7
+        "spread_bps": 90.8
       },
       {
         "date": "2026-09-28",
         "datePretty": "28/09",
-        "volume": 163.4,
-        "volumeRaw": 163403724.76000002,
-        "trades": 2403,
-        "price": 611.94,
+        "volume": 163.44,
+        "volumeRaw": 163436946.5,
+        "trades": 2409,
+        "price": 611.97,
         "yield": 15.46,
-        "spread_bps": 108.9
+        "spread_bps": 109.0
       },
       {
         "date": "2026-09-29",
         "datePretty": "29/09",
-        "volume": 333.36,
-        "volumeRaw": 333358783.73,
-        "trades": 2674,
-        "price": 526.0,
+        "volume": 333.38,
+        "volumeRaw": 333377507.92,
+        "trades": 2676,
+        "price": 526.01,
         "yield": 15.45,
-        "spread_bps": 118.4
+        "spread_bps": 118.5
       },
       {
         "date": "2026-09-30",
@@ -10644,85 +10726,85 @@
         "trades": 2612,
         "price": 49.25,
         "yield": 16.89,
-        "spread_bps": 249.0
+        "spread_bps": 248.9
       },
       {
         "date": "2026-10-01",
         "datePretty": "01/10",
-        "volume": 159.6,
-        "volumeRaw": 159602950.26000002,
-        "trades": 2339,
-        "price": 629.04,
+        "volume": 159.62,
+        "volumeRaw": 159618017.14000002,
+        "trades": 2341,
+        "price": 629.06,
         "yield": 16.17,
-        "spread_bps": 175.9
+        "spread_bps": 176.0
       },
       {
         "date": "2026-10-02",
         "datePretty": "02/10",
-        "volume": 97.85,
-        "volumeRaw": 97845037.97,
-        "trades": 2130,
-        "price": 263.33,
+        "volume": 97.88,
+        "volumeRaw": 97880653.19,
+        "trades": 2133,
+        "price": 263.39,
         "yield": 15.74,
         "spread_bps": 142.1
       },
       {
         "date": "2026-10-05",
         "datePretty": "05/10",
-        "volume": 122.65,
-        "volumeRaw": 122652558.37,
-        "trades": 2194,
-        "price": 330.42,
+        "volume": 122.67,
+        "volumeRaw": 122668100.64000002,
+        "trades": 2196,
+        "price": 330.45,
         "yield": 14.38,
         "spread_bps": 133.9
       },
       {
         "date": "2026-10-06",
         "datePretty": "06/10",
-        "volume": 348.07,
-        "volumeRaw": 348072749.20000005,
-        "trades": 2690,
-        "price": 566.4,
+        "volume": 348.17,
+        "volumeRaw": 348167660.45,
+        "trades": 2696,
+        "price": 566.47,
         "yield": 14.0,
         "spread_bps": 109.0
       },
       {
         "date": "2026-10-07",
         "datePretty": "07/10",
-        "volume": 275.0,
-        "volumeRaw": 275003352.45000005,
-        "trades": 3017,
-        "price": 381.68,
+        "volume": 275.02,
+        "volumeRaw": 275016635.72,
+        "trades": 3022,
+        "price": 381.69,
         "yield": 14.29,
         "spread_bps": 133.2
       },
       {
         "date": "2026-10-08",
         "datePretty": "08/10",
-        "volume": 125.64,
-        "volumeRaw": 125643373.03000002,
-        "trades": 2880,
-        "price": 161.38,
+        "volume": 125.74,
+        "volumeRaw": 125738280.84000002,
+        "trades": 2894,
+        "price": 161.49,
         "yield": 14.47,
         "spread_bps": 161.1
       },
       {
         "date": "2026-10-09",
         "datePretty": "09/10",
-        "volume": 585.59,
-        "volumeRaw": 585592789.69,
-        "trades": 2903,
-        "price": 643.35,
+        "volume": 585.62,
+        "volumeRaw": 585623609.5000001,
+        "trades": 2908,
+        "price": 643.37,
         "yield": 14.32,
         "spread_bps": 156.2
       },
       {
         "date": "2026-10-13",
         "datePretty": "13/10",
-        "volume": 133.77,
-        "volumeRaw": 133768303.99,
-        "trades": 2608,
-        "price": 296.54,
+        "volume": 133.88,
+        "volumeRaw": 133879786.86000001,
+        "trades": 2616,
+        "price": 296.7,
         "yield": 14.39,
         "spread_bps": 142.4
       },
@@ -10730,28 +10812,28 @@
         "date": "2026-10-14",
         "datePretty": "14/10",
         "volume": 153.84,
-        "volumeRaw": 153838829.95,
-        "trades": 2606,
-        "price": 316.51,
+        "volumeRaw": 153843573.78,
+        "trades": 2609,
+        "price": 316.52,
         "yield": 14.36,
-        "spread_bps": 140.1
+        "spread_bps": 140.2
       },
       {
         "date": "2026-10-15",
         "datePretty": "15/10",
         "volume": 302.34,
-        "volumeRaw": 302337097.35,
-        "trades": 2726,
+        "volumeRaw": 302343173.82,
+        "trades": 2729,
         "price": 344.21,
         "yield": 15.52,
-        "spread_bps": 236.4
+        "spread_bps": 236.3
       },
       {
         "date": "2026-10-16",
         "datePretty": "16/10",
-        "volume": 316.54,
-        "volumeRaw": 316535722.97,
-        "trades": 3476,
+        "volume": 316.55,
+        "volumeRaw": 316545754.69000006,
+        "trades": 3480,
         "price": 880.41,
         "yield": 15.6,
         "spread_bps": 234.3
@@ -10759,49 +10841,49 @@
       {
         "date": "2026-10-19",
         "datePretty": "19/10",
-        "volume": 191.02,
-        "volumeRaw": 191023160.32000002,
-        "trades": 2657,
-        "price": 523.46,
+        "volume": 191.08,
+        "volumeRaw": 191078666.52,
+        "trades": 2666,
+        "price": 523.53,
         "yield": 14.21,
         "spread_bps": 107.7
       },
       {
         "date": "2026-10-20",
         "datePretty": "20/10",
-        "volume": 331.08,
-        "volumeRaw": 331084423.71000004,
-        "trades": 3043,
-        "price": 657.97,
+        "volume": 331.09,
+        "volumeRaw": 331094467.85,
+        "trades": 3045,
+        "price": 657.98,
         "yield": 13.98,
         "spread_bps": 98.0
       },
       {
         "date": "2026-10-21",
         "datePretty": "21/10",
-        "volume": 434.64,
-        "volumeRaw": 434642564.62,
-        "trades": 2943,
-        "price": 432.95,
+        "volume": 434.95,
+        "volumeRaw": 434952587.8,
+        "trades": 2953,
+        "price": 433.11,
         "yield": 13.85,
-        "spread_bps": 87.8
+        "spread_bps": 87.7
       },
       {
         "date": "2026-10-22",
         "datePretty": "22/10",
-        "volume": 374.14,
-        "volumeRaw": 374135049.44000006,
-        "trades": 2644,
-        "price": 937.37,
+        "volume": 374.2,
+        "volumeRaw": 374201683.6000001,
+        "trades": 2649,
+        "price": 937.38,
         "yield": 13.94,
         "spread_bps": 92.2
       },
       {
         "date": "2026-10-23",
         "datePretty": "23/10",
-        "volume": 682.61,
-        "volumeRaw": 682607910.7500001,
-        "trades": 3057,
+        "volume": 682.63,
+        "volumeRaw": 682631819.3500001,
+        "trades": 3063,
         "price": 661.38,
         "yield": 16.13,
         "spread_bps": 292.3
@@ -10820,8 +10902,8 @@
         "date": "2026-10-27",
         "datePretty": "27/10",
         "volume": 629.13,
-        "volumeRaw": 629127208.54,
-        "trades": 2362,
+        "volumeRaw": 629130645.13,
+        "trades": 2364,
         "price": 909.19,
         "yield": 15.72,
         "spread_bps": 50.0
@@ -10834,15 +10916,15 @@
         "trades": 2299,
         "price": 882.84,
         "yield": 15.61,
-        "spread_bps": 26.8
+        "spread_bps": 26.7
       },
       {
         "date": "2026-10-29",
         "datePretty": "29/10",
-        "volume": 493.17,
-        "volumeRaw": 493170891.86000013,
-        "trades": 2252,
-        "price": 674.41,
+        "volume": 493.26,
+        "volumeRaw": 493257348.7100001,
+        "trades": 2254,
+        "price": 674.43,
         "yield": 16.09,
         "spread_bps": 62.1
       },
@@ -10860,71 +10942,91 @@
         "date": "2026-11-03",
         "datePretty": "03/11",
         "volume": 99.49,
-        "volumeRaw": 99486077.53999999,
-        "trades": 2369,
+        "volumeRaw": 99489107.95,
+        "trades": 2371,
         "price": 724.99,
         "yield": 16.92,
-        "spread_bps": 120.7
+        "spread_bps": 120.6
       },
       {
         "date": "2026-11-04",
         "datePretty": "04/11",
-        "volume": 161.31,
-        "volumeRaw": 161307913.36,
-        "trades": 2349,
-        "price": 586.16,
+        "volume": 161.32,
+        "volumeRaw": 161315495.5,
+        "trades": 2352,
+        "price": 586.17,
         "yield": 16.49,
-        "spread_bps": 109.3
+        "spread_bps": 109.4
       },
       {
         "date": "2026-11-05",
         "datePretty": "05/11",
-        "volume": 142.71,
-        "volumeRaw": 142711654.98,
-        "trades": 2283,
-        "price": 345.78,
+        "volume": 142.89,
+        "volumeRaw": 142892630.44,
+        "trades": 2288,
+        "price": 346.04,
         "yield": 16.83,
-        "spread_bps": 145.3
+        "spread_bps": 145.4
       },
       {
         "date": "2026-11-06",
         "datePretty": "06/11",
-        "volume": 202.65,
-        "volumeRaw": 202654742.15,
-        "trades": 2536,
-        "price": 623.12,
-        "yield": 16.49,
-        "spread_bps": 121.9
+        "volume": 202.72,
+        "volumeRaw": 202724963.69,
+        "trades": 2539,
+        "price": 623.14,
+        "yield": 16.5,
+        "spread_bps": 122.3
       },
       {
         "date": "2026-11-09",
         "datePretty": "09/11",
-        "volume": 233.78,
-        "volumeRaw": 233784374.26000002,
-        "trades": 2393,
-        "price": 5.79,
+        "volume": 233.91,
+        "volumeRaw": 233909973.21000004,
+        "trades": 2396,
+        "price": 5.8,
         "yield": 17.28,
         "spread_bps": 191.1
       },
       {
         "date": "2026-11-10",
         "datePretty": "10/11",
-        "volume": 104.42,
-        "volumeRaw": 104421426.74000001,
-        "trades": 2094,
+        "volume": 104.43,
+        "volumeRaw": 104425767.92000002,
+        "trades": 2096,
         "price": 466.93,
         "yield": 16.69,
-        "spread_bps": 136.1
+        "spread_bps": 136.2
       },
       {
         "date": "2026-11-11",
         "datePretty": "11/11",
-        "volume": 105.15,
-        "volumeRaw": 105149846.88999999,
-        "trades": 2199,
-        "price": 756.56,
+        "volume": 105.17,
+        "volumeRaw": 105172875.00999999,
+        "trades": 2203,
+        "price": 756.58,
         "yield": 16.92,
         "spread_bps": 166.0
+      },
+      {
+        "date": "2026-11-12",
+        "datePretty": "12/11",
+        "volume": 111.21,
+        "volumeRaw": 111208300.76,
+        "trades": 2167,
+        "price": 861.32,
+        "yield": 16.89,
+        "spread_bps": 147.4
+      },
+      {
+        "date": "2026-11-13",
+        "datePretty": "13/11",
+        "volume": 278.58,
+        "volumeRaw": 278583420.96999997,
+        "trades": 2207,
+        "price": 13.67,
+        "yield": 17.1,
+        "spread_bps": 160.6
       }
     ]
   }
