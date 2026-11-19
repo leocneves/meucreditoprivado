@@ -31,3 +31,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# IndexNow state
+.indexnow_last_run.json
+
+

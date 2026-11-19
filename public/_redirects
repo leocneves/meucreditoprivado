@@ -12,19 +12,18 @@ http://fixdata.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
 https://meucreditoprivado.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
 http://meucreditoprivado.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
 
-# 3. Assets estáticos, APIs e sitemaps
+# 3. Assets estáticos, APIs, sitemaps e feed RSS
 /data/*            /data/:splat        200
 /assets/*          /assets/:splat      200
 /index.css         /index.css          200
 /favicon.ico       /favicon.ico        200
 /sitemap.xml       /sitemap.xml        200
+/sitemap-hubs.xml  /sitemap-hubs.xml   200
 /sitemap-hot.xml   /sitemap-hot.xml    200
-/sitemap-year.xml  /sitemap-year.xml   200
-/sitemap-all.xml   /sitemap-all.xml    200
+/feed.xml          /feed.xml           200
 /robots.txt        /robots.txt         200
 /llms.txt          /llms.txt           200
 /api/news          /.netlify/functions/news 200
 
 # 4. Fallback SPA
 /*                 /index.html         200
-

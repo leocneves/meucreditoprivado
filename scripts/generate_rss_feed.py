@@ -15,9 +15,25 @@ from datetime import datetime, timezone, timedelta
 import xml.etree.ElementTree as ET
 
 BASE_URL = "https://fixdatabrasil.com.br"
+ASSETS_CSV = "public/data/assets_master.csv"
 TRADES_CSV = "public/data/b3_trades_recent.csv"
 SCHEDULES_CSV = "public/data/payment_schedules.csv"
 OUTPUT_FILES = ["public/feed.xml", "docs/feed.xml"]
+
+def load_active_tickers():
+    active = set()
+    if not os.path.exists(ASSETS_CSV):
+        return active
+    try:
+        with open(ASSETS_CSV, "r", encoding="utf-8", errors="ignore") as f:
+            for r in csv.DictReader(f):
+                if str(r.get("status_ativo") or "").strip() == "Ativo":
+                    tk = str(r.get("ticker") or "").strip().upper()
+                    if is_valid_ticker(tk):
+                        active.add(tk)
+    except Exception as e:
+        print(f"Aviso ao carregar ativos vigentes: {e}")
+    return active
 
 def is_valid_ticker(ticker: str) -> bool:
     if not ticker:
@@ -55,7 +71,7 @@ def rfc822_date(dt: datetime) -> str:
         tz_str = "-0300"
     return f"{weekday}, {dt.day:02d} {month} {dt.year} {dt.hour:02d}:{dt.minute:02d}:{dt.second:02d} {tz_str}"
 
-def load_top_trades(limit=40):
+def load_top_trades(active_tickers, limit=40):
     if not os.path.exists(TRADES_CSV):
         print(f"⚠️ {TRADES_CSV} não encontrado.")
         return []
@@ -67,7 +83,7 @@ def load_top_trades(limit=40):
             rows = []
             for r in reader:
                 ticker = r.get("ticker", "").strip()
-                if is_valid_ticker(ticker):
+                if is_valid_ticker(ticker) and (not active_tickers or ticker.upper() in active_tickers):
                     try:
                         vol = float(r.get("volume_financeiro") or 0)
                         r["_vol"] = vol
@@ -82,7 +98,7 @@ def load_top_trades(limit=40):
         print(f"Erro ao carregar trades: {e}")
     return trades
 
-def load_upcoming_payments(days_ahead=14, limit=20):
+def load_upcoming_payments(active_tickers, days_ahead=14, limit=20):
     if not os.path.exists(SCHEDULES_CSV):
         return []
     
@@ -97,7 +113,7 @@ def load_upcoming_payments(days_ahead=14, limit=20):
             for r in reader:
                 dt_ev = r.get("data_evento", "")
                 ticker = r.get("ticker", "").strip()
-                if is_valid_ticker(ticker) and today_str <= dt_ev <= max_date_str:
+                if is_valid_ticker(ticker) and (not active_tickers or ticker.upper() in active_tickers) and today_str <= dt_ev <= max_date_str:
                     events.append(r)
                     if len(events) >= limit * 3:
                         break
@@ -112,9 +128,10 @@ def generate_feed():
     print("📡 Gerando Feed RSS 2.0 / Atom de Mercado Secundário...")
     now_utc = datetime.now(timezone.utc)
     now_br = datetime.now()
+    active_tickers = load_active_tickers()
     
-    trades = load_top_trades(limit=45)
-    payments = load_upcoming_payments(days_ahead=21, limit=25)
+    trades = load_top_trades(active_tickers, limit=45)
+    payments = load_upcoming_payments(active_tickers, days_ahead=21, limit=25)
     
     feed_items = []
     

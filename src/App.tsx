@@ -54,31 +54,31 @@ const Navbar = () => {
       icon: <TrendingUp size={16} />,
       items: [
         {
-          path: '/negocios',
+          path: '/negocios/',
           label: 'Negócios B3',
           desc: 'Negócios secundários, volume diário e VWAP',
           icon: <ArrowLeftRight size={17} className="text-blue-600" />,
         },
         {
-          path: '/charts',
+          path: '/charts/',
           label: 'Dashboard Secundário',
           desc: 'Spreads ANBIMA, dispersão de PU e taxas indicativas',
           icon: <LineChart size={17} className="text-emerald-600" />,
         },
         {
-          path: '/ntnb',
+          path: '/ntnb/',
           label: 'Curva NTN-B',
           desc: 'Estrutura a termo do juro real e prêmios de risco',
           icon: <Landmark size={17} className="text-amber-600" />,
         },
         {
-          path: '/primary',
+          path: '/primary/',
           label: 'Mercado Primário',
           desc: 'Ofertas públicas CVM 160 e emissões em andamento',
           icon: <Tag size={17} className="text-purple-600" />,
         },
         {
-          path: '/agenda',
+          path: '/agenda/',
           label: 'Agenda de Pagamentos',
           desc: 'Cronograma de amortizações e cupons futuros',
           icon: <Calendar size={17} className="text-cyan-600" />,
@@ -91,19 +91,19 @@ const Navbar = () => {
       icon: <Calculator size={16} />,
       items: [
         {
-          path: '/raiox-devedor',
+          path: '/raiox-devedor/',
           label: 'Raio-X do Devedor',
           desc: 'Demonstrações CVM, solvência, ratings e dívida',
           icon: <Building2 size={17} className="text-indigo-600" />,
         },
         {
-          path: '/calculadora',
+          path: '/calculadora/',
           label: 'Calculadora de Renda Fixa',
           desc: 'Simulador de Duration, PU, cupom e equivalência',
           icon: <Calculator size={17} className="text-teal-600" />,
         },
         {
-          path: '/comparar',
+          path: '/comparar/',
           label: 'Comparador de Ativos',
           desc: 'Comparação direta de taxas, spread e rating',
           icon: <Scale size={17} className="text-amber-500" />,
@@ -113,21 +113,23 @@ const Navbar = () => {
   ];
 
   const isPathActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
-    if (path === '/negocios') return location.pathname === '/negocios' || location.pathname === '/trades';
-    if (path === '/charts') return location.pathname === '/charts';
-    if (path === '/ntnb') return location.pathname === '/ntnb' || location.pathname === '/dashboard-ntnb';
-    if (path === '/primary') return location.pathname === '/primary';
-    if (path === '/agenda') return location.pathname === '/agenda' || location.pathname === '/agenda-pagamentos';
-    if (path === '/raiox-devedor') return location.pathname === '/raiox-devedor' || location.pathname === '/devedor';
-    if (path === '/calculadora') return location.pathname === '/calculadora' || location.pathname === '/calculator' || location.pathname === '/grossup';
-    if (path === '/comparar') return location.pathname === '/comparar' || location.pathname === '/comparator';
-    if (path === '/metodologia') return location.pathname === '/metodologia' || location.pathname === '/methodology';
-    if (path === '/sobre') return location.pathname === '/sobre' || location.pathname === '/about';
-    if (path === '/termos') return location.pathname === '/termos' || location.pathname === '/terms';
-    if (path === '/privacidade') return location.pathname === '/privacidade' || location.pathname === '/privacy';
-    if (path === '/contact') return location.pathname === '/contact' || location.pathname === '/apoiar';
-    return location.pathname === path || location.pathname.startsWith(path + '/');
+    const cleanCurrent = location.pathname.replace(/\/+$/, '') || '/';
+    const cleanTarget = path.replace(/\/+$/, '') || '/';
+    if (cleanTarget === '/') return cleanCurrent === '/';
+    if (cleanTarget === '/negocios') return cleanCurrent === '/negocios' || cleanCurrent === '/trades';
+    if (cleanTarget === '/charts') return cleanCurrent === '/charts';
+    if (cleanTarget === '/ntnb') return cleanCurrent === '/ntnb' || cleanCurrent === '/dashboard-ntnb';
+    if (cleanTarget === '/primary') return cleanCurrent === '/primary';
+    if (cleanTarget === '/agenda') return cleanCurrent === '/agenda' || cleanCurrent === '/agenda-pagamentos';
+    if (cleanTarget === '/raiox-devedor') return cleanCurrent === '/raiox-devedor' || cleanCurrent === '/devedor';
+    if (cleanTarget === '/calculadora') return cleanCurrent === '/calculadora' || cleanCurrent === '/calculator' || cleanCurrent === '/grossup';
+    if (cleanTarget === '/comparar') return cleanCurrent === '/comparar' || cleanCurrent === '/comparator';
+    if (cleanTarget === '/metodologia') return cleanCurrent === '/metodologia' || cleanCurrent === '/methodology';
+    if (cleanTarget === '/sobre') return cleanCurrent === '/sobre' || cleanCurrent === '/about';
+    if (cleanTarget === '/termos') return cleanCurrent === '/termos' || cleanCurrent === '/terms';
+    if (cleanTarget === '/privacidade') return cleanCurrent === '/privacidade' || cleanCurrent === '/privacy';
+    if (cleanTarget === '/contact') return cleanCurrent === '/contact' || cleanCurrent === '/apoiar';
+    return cleanCurrent === cleanTarget || cleanCurrent.startsWith(cleanTarget + '/');
   };
 
   const isGroupActive = (group: NavGroup) => {
@@ -284,9 +286,9 @@ const Navbar = () => {
 
             {/* Link Direto: Contato & Apoio (mantido como exceção) */}
             <Link
-              to="/contact"
+              to="/contact/"
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all ${
-                isPathActive('/contact')
+                isPathActive('/contact/')
                   ? 'bg-blue-50 text-blue-600'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
@@ -465,10 +467,10 @@ const Navbar = () => {
 
           {/* Link Direto: Contato & Apoio Mobile */}
           <Link
-            to="/contact"
+            to="/contact/"
             onClick={() => setIsOpen(false)}
             className={`flex items-center gap-3 p-3 rounded-xl font-bold transition-all ${
-              isPathActive('/contact')
+              isPathActive('/contact/')
                 ? 'bg-blue-50 text-blue-600'
                 : 'text-slate-700 hover:bg-slate-50'
             }`}
@@ -576,20 +578,33 @@ const App: React.FC = () => {
           </main>
           <footer className="bg-white border-t border-slate-200 py-10 mt-20">
             <div className="container mx-auto px-4 text-center space-y-3">
+              <div className="flex items-center justify-center gap-3 sm:gap-5 text-xs font-semibold text-slate-600 mb-2 flex-wrap">
+                <a href="/debentures/" className="hover:text-blue-600 transition">Debêntures</a>
+                <span>•</span>
+                <a href="/debentures-incentivadas/" className="hover:text-blue-600 transition">Debêntures Incentivadas</a>
+                <span>•</span>
+                <a href="/cri/" className="hover:text-blue-600 transition">CRIs</a>
+                <span>•</span>
+                <a href="/cra/" className="hover:text-blue-600 transition">CRAs</a>
+                <span>•</span>
+                <a href="/emissores/" className="hover:text-blue-600 transition">Emissores</a>
+                <span>•</span>
+                <a href="/setores/" className="hover:text-blue-600 transition">Setores ANBIMA</a>
+              </div>
               <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
-                <Link to="/metodologia" className="hover:text-blue-600 transition">Metodologia</Link>
+                <Link to="/metodologia/" className="hover:text-blue-600 transition">Metodologia</Link>
                 <span>•</span>
-                <Link to="/sobre" className="hover:text-blue-600 transition">Sobre o FIXDATA</Link>
+                <Link to="/sobre/" className="hover:text-blue-600 transition">Sobre o FIXDATA</Link>
                 <span>•</span>
-                <Link to="/termos" className="hover:text-blue-600 transition">Termos de Uso</Link>
+                <Link to="/termos/" className="hover:text-blue-600 transition">Termos de Uso</Link>
                 <span>•</span>
-                <Link to="/privacidade" className="hover:text-blue-600 transition">Privacidade (LGPD)</Link>
+                <Link to="/privacidade/" className="hover:text-blue-600 transition">Privacidade (LGPD)</Link>
                 <span>•</span>
-                <Link to="/negocios" className="hover:text-blue-600 transition">Negócios B3</Link>
+                <Link to="/negocios/" className="hover:text-blue-600 transition">Negócios B3</Link>
                 <span>•</span>
-                <Link to="/ntnb" className="hover:text-blue-600 transition">Curva NTN-B</Link>
+                <Link to="/ntnb/" className="hover:text-blue-600 transition">Curva NTN-B</Link>
                 <span>•</span>
-                <Link to="/contact" className="hover:text-blue-600 transition">Contato & Apoio</Link>
+                <Link to="/contact/" className="hover:text-blue-600 transition">Contato & Apoio</Link>
               </div>
               <p className="text-slate-500 text-sm font-semibold">
                 &copy; {new Date().getFullYear()} FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
@@ -605,7 +620,7 @@ const App: React.FC = () => {
                   Leonardo Contador Neves
                 </a></span>
                 <span>•</span>
-                <Link to="/contact" className="text-amber-600 hover:text-amber-700 font-bold flex items-center gap-1">
+                <Link to="/contact/" className="text-amber-600 hover:text-amber-700 font-bold flex items-center gap-1">
                   <Coffee size={14} />
                   <span>Buy Me a Coffee / Contato</span>
                 </Link>

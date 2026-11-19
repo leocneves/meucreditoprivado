@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { assetPath } from '../utils/urls';
 import {
   Calendar,
   Search,
@@ -498,7 +499,7 @@ export default function AgendaPage() {
                       </td>
                       <td className="px-3.5 py-2.5 font-bold">
                         <Link
-                          to={`/asset/${ev.ticker}`}
+                          to={assetPath(ev.ticker)}
                           className="text-blue-600 hover:text-blue-800 hover:underline font-mono text-xs"
                         >
                           {ev.ticker}

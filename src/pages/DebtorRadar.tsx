@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { assetPath } from '../utils/urls';
 import {
   ResponsiveContainer,
   LineChart,
@@ -1891,7 +1892,7 @@ const DebtorRadar: React.FC = () => {
                         {currentDevedor.titulos_ativos.map((t, idx) => (
                           <tr key={idx} className="hover:bg-slate-50 transition-colors">
                             <td className="py-2 px-2.5 font-bold font-mono text-blue-600">
-                              <Link to={`/asset/${t.ticker}`} className="hover:underline flex items-center gap-1">
+                              <Link to={assetPath(t.ticker)} className="hover:underline flex items-center gap-1">
                                 {t.ticker}
                                 <ArrowUpRight size={12} />
                               </Link>

@@ -1,16 +1,16 @@
 """
 generate_sitemap.py
-Gera 3 sitemaps segmentados por volume de negócios B3 + 1 sitemap index.
-Implementação pura em Python com biblioteca padrão (sem dependência de pandas ou numpy),
-garantindo execução rápida e 100% confiável no Netlify, Docker e ambientes CI/CD.
+Gera 2 sitemaps enxutos e de alta qualidade + 1 sitemap index (100% Python stdlib, sem pandas/numpy):
+- sitemap-hubs.xml : Home, páginas institucionais, hubs de categoria, setores ANBIMA e Top 500 emissores ativos.
+- sitemap-hot.xml  : Apenas ativos VIGENTES (status_ativo == 'Ativo') com negociação B3 ou taxa indicativa ANBIMA,
+                     com <lastmod> real (data do último negócio B3, ANBIMA ou emissão).
+- sitemap.xml      : Sitemap index apontando exclusivamente para sitemap-hubs.xml e sitemap-hot.xml.
 
-- sitemap-hot.xml  : ativos negociados nos últimos 30 dias  (priority 1.0, daily)
-- sitemap-year.xml : negociados no ano, exceto os do hot    (priority 0.8, weekly)
-- sitemap-all.xml  : todos os demais ativos                 (priority 0.5, monthly)
-- sitemap.xml      : sitemap index apontando para os 3 acima
+Remove os sitemaps legados (sitemap-all.xml, sitemap-year.xml) que causavam index bloat com papéis vencidos/resgatados.
 """
 
 import csv
+import json
 import os
 import re
 from datetime import datetime, timedelta, timezone
@@ -18,6 +18,8 @@ from datetime import datetime, timedelta, timezone
 BASE_URL = "https://fixdatabrasil.com.br"
 ASSETS_CSV = "public/data/assets_master.csv"
 TRADES_CSV = "public/data/b3_trades_summary.csv"
+HUBS_MANIFEST = "public/data/seo_hubs_manifest.json"
+METADATA_JSON = "public/data/_metadata.json"
 OUTPUT_DIRS = ["public", "docs"]
 
 
@@ -30,7 +32,7 @@ def write_xml(path, content):
 def build_urlset(urls):
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     for u in urls:
         lines += [
@@ -48,7 +50,7 @@ def build_urlset(urls):
 def build_sitemap_index(sitemaps):
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     for s in sitemaps:
         lines += [
@@ -67,142 +69,163 @@ def is_valid_ticker(ticker: str) -> bool:
     t = ticker.strip()
     if t.lower() in ("nan", "none", "n/a", "null", "", "-", "0"):
         return False
-    # Rejeita ISINs estruturados (ISO 6166 de 12 caracteres: ex: BRBRAMDBS001, BRCEDBCRI002)
-    # Preserva debêntures e ativos legítimos cujo código comece com 'BR' (ex: BRFS31, BRKP28, BRAM11)
-    if len(t) == 12 and re.match(r'^BR[A-Z0-9]{4}(DBS|DBC|DBN|CRI|CRA|NC0|CTF|LFI)[A-Z0-9]{2}\d$', t):
+    if len(t) == 12 and re.match(r"^BR[A-Z0-9]{4}(DBS|DBC|DBN|CRI|CRA|NC0|CTF|LFI)[A-Z0-9]{2}\d$", t):
         return False
-    # Rejeita prefixos sintéticos gerados por crawlers
     if t.startswith(("CRI_", "CRA_", "DEB_")):
         return False
-    # Rejeita puramente numérico ou contendo espaços/barras
     if t.isdigit() or " " in t or "/" in t or "\\" in t:
         return False
     return True
 
 
-def main():
-    print("📄 Lendo assets_master.csv...", flush=True)
-    all_tickers = []
-    seen = set()
-    if os.path.exists(ASSETS_CSV):
-        with open(ASSETS_CSV, "r", encoding="utf-8", errors="ignore") as f:
-            r = csv.reader(f)
-            header = next(r, None)
-            if header and "ticker" in header:
-                idx_tk = header.index("ticker")
-                for row in r:
-                    if len(row) > idx_tk:
-                        ticker = row[idx_tk].strip()
-                        if is_valid_ticker(ticker):
-                            if ticker not in seen:
-                                seen.add(ticker)
-                                all_tickers.append(ticker)
-    print(f"✅ {len(all_tickers)} ativos únicos carregados", flush=True)
+def parse_iso_date(val: str, max_date: str) -> str:
+    s = str(val or "").strip()[:10]
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", s):
+        return min(s, max_date)
+    return ""
 
-    print("📈 Lendo b3_trades_summary.csv...")
-    hot_tickers = set()
-    year_tickers = set()
 
+def parse_float(val: str) -> float:
+    s = str(val or "").strip().replace(",", ".")
+    if not s or s.lower() in ("nan", "none", "-", "null"):
+        return 0.0
     try:
-        if os.path.exists(TRADES_CSV):
-            now = datetime.now(timezone.utc)
-            cutoff_30 = (now - timedelta(days=30)).strftime("%Y-%m-%d")
-            cutoff_year = f"{now.year}-01-01"
+        return float(s)
+    except ValueError:
+        return 0.0
 
+
+def main():
+    now = datetime.now(timezone.utc)
+    today_iso = now.strftime("%Y-%m-%d")
+    cutoff_180 = (now - timedelta(days=180)).strftime("%Y-%m-%d")
+
+    market_date = today_iso
+    if os.path.exists(METADATA_JSON):
+        try:
+            with open(METADATA_JSON, "r", encoding="utf-8") as f:
+                md = json.load(f)
+                cand = parse_iso_date(md.get("last_update", ""), today_iso)
+                if cand:
+                    market_date = cand
+        except Exception:
+            pass
+
+    print("📈 Lendo histórico B3 (b3_trades_summary.csv)...", flush=True)
+    b3_last_date = {}
+    recent_180_tickers = set()
+    if os.path.exists(TRADES_CSV):
+        try:
             with open(TRADES_CSV, "r", encoding="utf-8", errors="ignore") as f:
                 r = csv.reader(f)
                 header = next(r, None)
-                if header:
-                    idx_dt = header.index("data_negocio") if "data_negocio" in header else -1
-                    idx_tk = header.index("ticker") if "ticker" in header else -1
-                    if idx_dt >= 0 and idx_tk >= 0:
-                        max_idx = max(idx_dt, idx_tk)
-                        for row in r:
-                            if len(row) > max_idx:
-                                dt = row[idx_dt][:10]
-                                tk = row[idx_tk].strip()
-                                if tk and dt:
-                                    if dt >= cutoff_30:
-                                        hot_tickers.add(tk)
-                                    elif dt >= cutoff_year:
-                                        year_tickers.add(tk)
+                if header and "data_negocio" in header and "ticker" in header:
+                    idx_dt = header.index("data_negocio")
+                    idx_tk = header.index("ticker")
+                    max_idx = max(idx_dt, idx_tk)
+                    for row in r:
+                        if len(row) <= max_idx:
+                            continue
+                        dt = parse_iso_date(row[idx_dt], today_iso)
+                        tk = row[idx_tk].strip().upper()
+                        if tk and dt:
+                            prev = b3_last_date.get(tk, "")
+                            if dt > prev:
+                                b3_last_date[tk] = dt
+                            if dt >= cutoff_180:
+                                recent_180_tickers.add(tk)
+        except Exception as e:
+            print(f"⚠️ Aviso ao ler {TRADES_CSV}: {e}")
 
-            # Garante exclusividade de hot vs year
-            year_tickers = year_tickers - hot_tickers
-            print(f"   Hot (30d): {len(hot_tickers)} tickers | Ano (excl. hot): {len(year_tickers)} tickers")
-        else:
-            print(f"⚠️  Arquivo {TRADES_CSV} não encontrado.")
-    except Exception as e:
-        print(f"⚠️  Erro ao ler trades ({e}). Continuando com sitemap padrão.")
+    print("📄 Filtrando ativos VIGENTES e líquidos em assets_master.csv...", flush=True)
+    hot_urls = []
+    seen_hot = set()
 
-    hot_list = [t for t in all_tickers if t in hot_tickers]
-    year_list = [t for t in all_tickers if t in year_tickers]
-    rest_list = [t for t in all_tickers if t not in hot_tickers and t not in year_tickers]
+    if os.path.exists(ASSETS_CSV):
+        with open(ASSETS_CSV, "r", encoding="utf-8", errors="ignore") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if str(row.get("status_ativo") or "").strip() != "Ativo":
+                    continue
+                ticker = str(row.get("ticker") or "").strip()
+                if not is_valid_ticker(ticker):
+                    continue
+                tk_up = ticker.upper()
+                tk_low = ticker.lower()
+                if tk_low in seen_hot:
+                    continue
 
-    now = datetime.now(timezone.utc)
-    lastmod_today = now.strftime("%Y-%m-%d")
-    lastmod_week = (now - timedelta(days=7)).strftime("%Y-%m-%d")
-    lastmod_old = (now - timedelta(days=30)).strftime("%Y-%m-%d")
+                vol_b3 = parse_float(row.get("volume_negociado_b3"))
+                taxa_anb = str(row.get("taxa_indicativa_anbima") or "").strip()
+                has_anb = bool(taxa_anb and taxa_anb.lower() not in ("nan", "none", "-", "null"))
+                dt_ult = parse_iso_date(row.get("data_ultimo_negocio"), today_iso)
+                dt_anb = parse_iso_date(row.get("data_anbima"), today_iso)
+                dt_em = parse_iso_date(row.get("data_emissao"), today_iso)
+                dt_b3_sum = b3_last_date.get(tk_up, "")
 
+                is_liquid = (tk_up in recent_180_tickers) or (vol_b3 > 0) or bool(dt_ult) or has_anb
+                if not is_liquid:
+                    continue
+
+                seen_hot.add(tk_low)
+                candidates = [d for d in (dt_b3_sum, dt_ult, dt_anb, dt_em) if d]
+                real_lastmod = max(candidates) if candidates else market_date
+                recent_trade = (dt_b3_sum >= (now - timedelta(days=30)).strftime("%Y-%m-%d")) or (dt_ult >= (now - timedelta(days=30)).strftime("%Y-%m-%d"))
+
+                hot_urls.append({
+                    "loc": f"{BASE_URL}/asset/{tk_low}/",
+                    "lastmod": real_lastmod,
+                    "changefreq": "daily" if recent_trade else "weekly",
+                    "priority": "0.9" if recent_trade else "0.75",
+                })
+
+    print("🏛️ Montando sitemap-hubs.xml (páginas principais + categorias + setores + Top 500 emissores)...", flush=True)
     static_pages = [
-        "/",
-        "/negocios/",
-        "/charts/",
-        "/ntnb/",
-        "/primary/",
-        "/contact/",
-        "/raiox-devedor/",
-        "/calculadora/",
-        "/agenda/",
-        "/comparar/",
-        "/metodologia/",
-        "/sobre/",
-        "/termos/",
-        "/privacidade/",
+        ("/", market_date, "daily", "1.0"),
+        ("/negocios/", market_date, "daily", "0.95"),
+        ("/charts/", market_date, "daily", "0.85"),
+        ("/ntnb/", market_date, "daily", "0.85"),
+        ("/primary/", market_date, "daily", "0.9"),
+        ("/agenda/", market_date, "daily", "0.9"),
+        ("/raiox-devedor/", market_date, "daily", "0.9"),
+        ("/calculadora/", "2026-11-19", "weekly", "0.9"),
+        ("/comparar/", "2026-11-19", "weekly", "0.8"),
+        ("/metodologia/", "2026-11-19", "monthly", "0.75"),
+        ("/sobre/", "2026-11-19", "monthly", "0.75"),
+        ("/contact/", "2026-11-19", "monthly", "0.6"),
+        ("/termos/", "2026-11-06", "yearly", "0.4"),
+        ("/privacidade/", "2026-11-06", "yearly", "0.4"),
     ]
 
-    def make_urls(tickers, changefreq, priority, lm):
-        return [
-            {
-                "loc": f"{BASE_URL}/asset/{t.strip().lower()}/",
-                "lastmod": lm,
-                "changefreq": changefreq,
-                "priority": priority,
-            }
-            for t in tickers
-        ]
+    hub_urls = []
+    seen_hubs = set()
+    for path, lm, cf, pr in static_pages:
+        loc = f"{BASE_URL}{path}"
+        seen_hubs.add(loc)
+        hub_urls.append({"loc": loc, "lastmod": lm, "changefreq": cf, "priority": pr})
 
-
-    static_urls = [
-        {
-            "loc": f"{BASE_URL}{p}",
-            "lastmod": lastmod_today,
-            "changefreq": "daily",
-            "priority": "0.9",
-        }
-        for p in static_pages
-    ]
-
-    hot_urls = static_urls + make_urls(hot_list, "daily", "1.0", lastmod_today)
-    year_urls = make_urls(year_list, "weekly", "0.8", lastmod_week)
-    rest_urls = make_urls(rest_list, "monthly", "0.5", lastmod_old)
+    if os.path.exists(HUBS_MANIFEST):
+        try:
+            with open(HUBS_MANIFEST, "r", encoding="utf-8") as f:
+                manifest = json.load(f)
+            for item in manifest.get("hub_urls", []):
+                loc = str(item.get("loc") or "").strip()
+                if not loc or loc in seen_hubs:
+                    continue
+                seen_hubs.add(loc)
+                lm = parse_iso_date(item.get("lastmod"), today_iso) or market_date
+                hub_urls.append({
+                    "loc": loc,
+                    "lastmod": lm,
+                    "changefreq": item.get("changefreq") or "daily",
+                    "priority": item.get("priority") or "0.85",
+                })
+        except Exception as e:
+            print(f"⚠️ Aviso ao ler {HUBS_MANIFEST}: {e}")
 
     sitemaps_meta = [
-        {
-            "filename": "sitemap-hot.xml",
-            "urls": hot_urls,
-            "label": f"hot ({len(hot_list)} ativos)",
-        },
-        {
-            "filename": "sitemap-year.xml",
-            "urls": year_urls,
-            "label": f"ano ({len(year_list)} ativos)",
-        },
-        {
-            "filename": "sitemap-all.xml",
-            "urls": rest_urls,
-            "label": f"demais ({len(rest_list)} ativos)",
-        },
+        {"filename": "sitemap-hubs.xml", "urls": hub_urls, "lastmod": market_date},
+        {"filename": "sitemap-hot.xml", "urls": hot_urls, "lastmod": market_date},
     ]
 
     index_entries = []
@@ -210,15 +233,20 @@ def main():
         content = build_urlset(sm["urls"])
         for d in OUTPUT_DIRS:
             write_xml(f"{d}/{sm['filename']}", content)
-        index_entries.append({"loc": f"{BASE_URL}/{sm['filename']}", "lastmod": lastmod_today})
-        print(f"   ✅ {sm['filename']} — {sm['label']}", flush=True)
+        index_entries.append({"loc": f"{BASE_URL}/{sm['filename']}", "lastmod": sm["lastmod"]})
+        print(f"   ✅ {sm['filename']} — {len(sm['urls'])} URLs", flush=True)
 
     index_content = build_sitemap_index(index_entries)
     for d in OUTPUT_DIRS:
         write_xml(f"{d}/sitemap.xml", index_content)
+        for stale in ("sitemap-all.xml", "sitemap-year.xml"):
+            stale_path = os.path.join(d, stale)
+            if os.path.exists(stale_path):
+                os.remove(stale_path)
+                print(f"   🗑️ Removido sitemap legado: {stale_path}", flush=True)
 
-    total = len(hot_urls) + len(year_urls) + len(rest_urls)
-    print(f"\n🗺️  Sitemap index gerado com 3 sitemaps ({total} URLs totais)", flush=True)
+    total = len(hub_urls) + len(hot_urls)
+    print(f"\n🗺️  Sitemap index enxuto gerado ({total} URLs totais em 2 sitemaps)", flush=True)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { assetPath } from '../utils/urls';
 import { 
   ArrowLeftRight, 
   Search, 
@@ -1594,7 +1595,7 @@ const Trades: React.FC = () => {
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
                           <Link
-                            to={`/asset/${item.ticker}`}
+                            to={assetPath(item.ticker)}
                             className="font-black text-white hover:text-blue-300 text-xs sm:text-sm transition-colors"
                           >
                             {item.ticker}
@@ -1684,7 +1685,7 @@ const Trades: React.FC = () => {
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
                           <Link
-                            to={`/asset/${item.ticker}`}
+                            to={assetPath(item.ticker)}
                             className="font-black text-white hover:text-emerald-300 text-xs sm:text-sm transition-colors"
                           >
                             {item.ticker}
@@ -2424,7 +2425,7 @@ const Trades: React.FC = () => {
               </p>
               {chartSummary.assetMeta ? (
                 <Link
-                  to={`/asset/${chartSummary.assetMeta.ticker}`}
+                  to={assetPath(chartSummary.assetMeta.ticker)}
                   className="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1 mt-0.5"
                 >
                   <Eye size={12} /> Abrir página do ativo
@@ -2695,7 +2696,7 @@ const Trades: React.FC = () => {
                       <div className="flex items-center gap-2">
                         {renderTipoBadge(t.tipo)}
                         <Link 
-                          to={`/asset/${t.ticker}`}
+                          to={assetPath(t.ticker)}
                           className="font-extrabold text-blue-600 hover:text-blue-800 hover:underline font-mono"
                         >
                           {t.ticker}
@@ -3153,7 +3154,7 @@ const Trades: React.FC = () => {
                     <div className="flex items-center gap-2">
                       {renderTipoBadge(item.tipo)}
                       <Link 
-                        to={`/asset/${item.ticker}`}
+                        to={assetPath(item.ticker)}
                         className="font-extrabold text-blue-600 hover:text-blue-800 hover:underline font-mono"
                       >
                         {item.ticker}
@@ -3261,7 +3262,7 @@ const Trades: React.FC = () => {
                   {/* Link do Ativo */}
                   <td className="p-3.5 text-center">
                     <Link
-                      to={`/asset/${item.ticker}`}
+                      to={assetPath(item.ticker)}
                       title={`Ver cadastro e detalhes de ${item.ticker}`}
                       className="p-1.5 bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 rounded-lg transition-all inline-flex items-center justify-center"
                     >

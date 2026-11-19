@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import { useNavigate } from 'react-router-dom';
 import { Asset } from '../utils/csv';
+import { assetPath } from '../utils/urls';
 import { Search } from 'lucide-react';
 
 interface SearchBarProps {
@@ -25,7 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
 
   const handleSelect = (ticker: string) => {
     setQuery('');
-    navigate(`/asset/${ticker}`);
+    navigate(assetPath(ticker));
   };
 
   return (

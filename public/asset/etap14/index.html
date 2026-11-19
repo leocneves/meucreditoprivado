@@ -36,7 +36,7 @@
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
     <script type="application/ld+json">
-{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 3, "name": "ETAP14", "item": "https://fixdatabrasil.com.br/asset/etap14/"}]}, {"@type": "FinancialProduct", "name": "Debênture ETAP14 ((1)ETAP - EMPRESA TRANSMIS…)", "identifier": "ETAP14", "isin": "BRETAPDBS049", "description": "Consulte dados de mercado da debênture ETAP14 emitida por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. (CNPJ: 25.224.629/0001-46). Indexador DI+, vencimento em 15/07/2030, spread de 0.49%, duration de 3.62 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo ETAP14 é um título de crédito privado do tipo Debênture (comum) emitido por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. (CNPJ: 25.224.629/0001-46), com taxa de emissão de CDI + 0.49% a.a. e data de vencimento em 15/07/2030. O título encontra-se ativo (duration modificada de 3.62 anos anos) e spread indicativo de 0.49% sobre a NTN-B soberana, com volume emitido de R$ 100.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/etap14/", "category": "Debênture", "provider": {"@type": "Organization", "name": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "taxID": "25.224.629/0001-46"}}]}
+{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "ETAP14", "item": "https://fixdatabrasil.com.br/asset/etap14/"}]}, {"@type": "FinancialProduct", "name": "Debênture ETAP14 ((1)ETAP - EMPRESA TRANSMIS…)", "identifier": "ETAP14", "isin": "BRETAPDBS049", "description": "Consulte dados de mercado da debênture ETAP14 emitida por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. (CNPJ: 25.224.629/0001-46). Indexador DI+, vencimento em 15/07/2030, spread de 0.49%, duration de 3.62 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo ETAP14 é um título de crédito privado do tipo Debênture (comum) emitido por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. (CNPJ: 25.224.629/0001-46), com taxa de emissão de CDI + 0.49% a.a. e data de vencimento em 15/07/2030. O título encontra-se ativo (duration modificada de 3.62 anos) e spread indicativo de 0.49% sobre a NTN-B soberana, com volume emitido de R$ 100.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/etap14/", "category": "Debênture", "provider": {"@type": "Organization", "name": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "taxID": "25.224.629/0001-46"}}]}
     </script>
 
     <!-- GitHub Pages Single Page Apps Routing Handler -->
@@ -53,27 +53,6 @@
       }(window.location))
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="importmap">
-    {
-      "imports": {
-        "vite": "https://esm.sh/vite@^7.3.1",
-        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-        "papaparse": "https://esm.sh/papaparse@^5.5.3",
-        "react": "https://esm.sh/react@^19.2.4",
-        "react-dom": "https://esm.sh/react-dom@^19.2.4",
-        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
-        "fuse.js": "https://esm.sh/fuse.js@^7.1.0",
-        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
-        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "recharts": "https://esm.sh/recharts@^2.15.1",
-        "chart.js": "https://esm.sh/chart.js@^4.5.1",
-        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1"
-      }
-    }
-    </script>
     <link rel="stylesheet" href="/index.css">
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
@@ -86,21 +65,16 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-0.5 lg:gap-1">
-              <a href="/" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Home</a>
-              <a href="/raiox-devedor" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Raio-X Devedor</a>
-              <a href="/calculadora" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Calculadora</a>
-              <a href="/negocios" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Negócios B3</a>
-              <a href="/charts" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Crédito Privado</a>
-              <a href="/ntnb" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Curva NTN-B</a>
-              <a href="/primary" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Mercado Primário</a>
-              <a href="/contact" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Contato & Apoio</a>
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a href="/raiox-devedor" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                  <span>Entrar</span>
-                </a>
-              </div>
+            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
+              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
+              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
+              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
+              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
+              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
+              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
+              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
+              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
+              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
             </div>
           </div>
         </div>
@@ -109,7 +83,7 @@
       <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
-          <a href="/" class="hover:underline">Debêntures</a> &gt;
+          <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">ETAP14</span>
         </div>
 
@@ -120,7 +94,7 @@
             <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
           </div>
           <p class="font-normal text-slate-700">
-            O ativo ETAP14 é um título de crédito privado do tipo Debênture (comum) emitido por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. (CNPJ: 25.224.629/0001-46), com taxa de emissão de CDI + 0.49% a.a. e data de vencimento em 15/07/2030. O título encontra-se ativo (duration modificada de 3.62 anos anos) e spread indicativo de 0.49% sobre a NTN-B soberana, com volume emitido de R$ 100.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
+            O ativo ETAP14 é um título de crédito privado do tipo Debênture (comum) emitido por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. (CNPJ: 25.224.629/0001-46), com taxa de emissão de CDI + 0.49% a.a. e data de vencimento em 15/07/2030. O título encontra-se ativo (duration modificada de 3.62 anos) e spread indicativo de 0.49% sobre a NTN-B soberana, com volume emitido de R$ 100.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
           </p>
         </section>
 
@@ -180,7 +154,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/07/2030</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 3,7 anos (1334 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 3,6 anos (1333 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -205,10 +179,10 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Periodicidade de Cupons</span><p class="font-semibold text-slate-100">Semestral</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Próximo Cupom</span><p class="font-semibold text-emerald-400">15/01/2027</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">VNA / PU Par</span><p class="font-mono text-xs font-bold text-slate-100">VNA: R$ 1.000,00<br /><span class="text-indigo-300">Par: R$ 1.070,72</span></p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Energia Elétrica</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/energia-eletrica/" class="font-semibold text-blue-300 hover:underline">Energia Elétrica</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">VORTX DTVM LTDA.</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">ITAU UNIBANCO HOLDING S.A</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">3,7 anos (1334 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">3,6 anos (1333 dias corridos)</p></div>
           </div>
         </div>
 
@@ -221,6 +195,7 @@
               
             </div>
             <div class="flex flex-wrap items-center gap-2">
+              
               
               
             </div>
@@ -344,9 +319,11 @@
       <div class="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h3 class="text-lg font-black text-slate-900">Títulos Relacionados & Mercado Secundário</h3>
-          <p class="text-xs text-slate-500">Explore emissões da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
+          <p class="text-xs text-slate-500">Explore emissões ativas da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
         </div>
-        <div class="flex items-center gap-2 text-xs font-semibold">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+          <a href="/debentures/" class="text-blue-600 hover:underline">Debêntures</a>
+          <span class="text-slate-300">•</span>
           <a href="/negocios/" class="text-blue-600 hover:underline">Negócios B3</a>
           <span class="text-slate-300">•</span>
           <a href="/comparar/" class="text-blue-600 hover:underline">Comparador</a>
@@ -355,105 +332,60 @@
         </div>
       </div>
       
-        <div class="space-y-2.5">
-          <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-            <span>Outros Títulos Emitidos por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.</span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">3 papéis</span>
-          </h4>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <a href="/asset/etap12/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">ETAP12</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Debênture</span>
-                </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.</p>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2023-09-15</strong></span>
-                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
-              </div>
-            </a><a href="/asset/etap13/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">ETAP13</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Debênture</span>
-                </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.</p>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2030-06-15</strong></span>
-                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
-              </div>
-            </a><a href="/asset/etap22/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">ETAP22</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Debênture</span>
-                </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.</p>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2025-09-15</strong></span>
-                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
-              </div>
-            </a>
-          </div>
-        </div>
-        
       
         <div class="space-y-2.5">
           <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-            <span>Títulos Semelhantes no Setor (Energia Elétrica)</span>
+            <span>Títulos Ativos no Setor (Energia Elétrica)</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">4 papéis</span>
           </h4>
+          <a href="/setores/energia-eletrica/" class="text-xs font-bold text-emerald-700 hover:underline">Ver setor completo →</a>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <a href="/asset/21f0097802/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            <a href="/asset/egiea6/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">21F0097802</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">EGIEA6</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">RZK ENERGIA</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">ENGIE BRASIL ENERGIA S.A.</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2036-07-29</strong></span>
+                <span>Venc: <strong class="text-slate-800">2038-02-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
-            </a><a href="/asset/23l0034761/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            </a><a href="/asset/trgp13/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">23L0034761</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">TRGP13</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">FARO ENERGY PROJETOS SOLARES HOLDING S.A.</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">TECP - TRANSMISSORA DE ENERGIA CENTRAL PAULISTANA S.A.</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2038-12-15</strong></span>
+                <span>Venc: <strong class="text-slate-800">2038-01-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
-            </a><a href="/asset/24b2011344/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            </a><a href="/asset/chsf13/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">24B2011344</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">CHSF13</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">ASSOCIAÇÃO AUTOPRODUTORES DE ENERGIA ALEGRIA</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">AXIA ENERGIA NORDESTE S.A.</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2034-02-27</strong></span>
+                <span>Venc: <strong class="text-slate-800">2031-06-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
-            </a><a href="/asset/24h0000801/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            </a><a href="/asset/cplda1/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">24H0000801</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">CPLDA1</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">ASSOCIAÇÃO AUTOPRODUTORES DE ENERGIA ALEGRIA</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">COPEL DISTRIBUIÇÃO S.A.</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2034-02-27</strong></span>
+                <span>Venc: <strong class="text-slate-800">2038-01-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
             </a>
@@ -465,6 +397,8 @@
           <span>← Voltar à Página Inicial / Buscar Mais Ativos</span>
         </a>
         <div class="flex items-center gap-3">
+          <a href="/emissores/" class="hover:text-blue-600 transition">Emissores</a>
+          <span>•</span>
           <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
           <span>•</span>
           <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X de Emissores</a>
@@ -479,11 +413,52 @@
           Dados fornecidos por ANBIMA, CVM e B3 através do FIXDATA. Cotações e preços históricos sujeitos à liquidez do mercado secundário.
         </p>
       </main>
+      <footer class="bg-white border-t border-slate-200 py-10 mt-16">
+        <div class="container mx-auto px-4 text-center space-y-3">
+          <div class="flex items-center justify-center gap-3 sm:gap-5 text-xs font-semibold text-slate-600 flex-wrap">
+            <a href="/debentures/" class="hover:text-blue-600 transition">Debêntures</a>
+            <span>•</span>
+            <a href="/debentures-incentivadas/" class="hover:text-blue-600 transition">Debêntures Incentivadas</a>
+            <span>•</span>
+            <a href="/cri/" class="hover:text-blue-600 transition">CRIs</a>
+            <span>•</span>
+            <a href="/cra/" class="hover:text-blue-600 transition">CRAs</a>
+            <span>•</span>
+            <a href="/emissores/" class="hover:text-blue-600 transition">Emissores</a>
+            <span>•</span>
+            <a href="/setores/" class="hover:text-blue-600 transition">Setores ANBIMA</a>
+          </div>
+          <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 flex-wrap">
+            <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
+            <span>•</span>
+            <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
+            <span>•</span>
+            <a href="/termos/" class="hover:text-blue-600 transition">Termos de Uso</a>
+            <span>•</span>
+            <a href="/privacidade/" class="hover:text-blue-600 transition">Privacidade (LGPD)</a>
+            <span>•</span>
+            <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
+            <span>•</span>
+            <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
+            <span>•</span>
+            <a href="/contact/" class="hover:text-blue-600 transition">Contato &amp; Apoio</a>
+          </div>
+          <p class="text-slate-500 text-sm font-semibold">
+            &copy; 2026 FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
+          </p>
+          <p class="text-slate-400 text-xs font-medium">
+            Desenvolvido por <a href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-600 transition-colors font-bold">Leonardo Contador Neves</a>
+          </p>
+          <p class="text-slate-300 text-[10px] uppercase tracking-widest">
+            Base de dados CVM, ANBIMA e B3
+          </p>
+        </div>
+      </footer>
     </div>
     
     <script id="__PRELOADED_ASSET__" type="application/json">
-{"asset": {"ticker": "ETAP14", "tipo": "Debênture", "issuer": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "indexador": "DI+", "taxa_emissao": 0.49, "taxa_negocio_b3": null, "taxa_indicativa_anbima": null, "taxa_mercado": null, "taxa_ativo": 0.49, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": null, "data_ultimo_negocio": null, "data_anbima": null, "volume_negociado_b3": null, "volume_emissao": 100000000.0, "volume": 100000000.0, "quantidade_emitida": 100000.0, "quantidade": 100000.0, "data_emissao": "2025-07-22", "vencimento": "2030-07-15", "emissao": 4.0, "serie": 1.0, "isin": "BRETAPDBS049", "lei": null, "cnpj_emissor": 25224629000146.0, "setor": "Energia Elétrica", "agente_fiduciario": "VORTX DTVM LTDA.", "coordenador_lider": "ITAU UNIBANCO HOLDING S.A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 0, "status_ativo": "Ativo", "duration": 3.62, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-01-15", "vna": 1000.0, "pu_par": 1070.7154, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Duration Calculada (DU/252)", "spread_mercado": null, "spread_anbima": null, "spread": 0.0049, "pu_mercado_mediano": 1000.0, "agio_desagio_pct": -6.6}, "prices": [], "emitter": {"cnpj": "25224629000146", "cnpj_formatado": "25.224.629/0001-46", "razao_social": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "nome_fantasia": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "setor": "Energia Elétrica", "tipo_emissor": "Emissor de Dívida", "categoria_cvm": "Emissor de Dívida", "situacao_cvm": "Ativo", "site_ri": null, "municipio": null, "uf": null, "descricao": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. é emissora de títulos de crédito privado registrados na CVM."}, "raiox_cnpj": null, "paymentEvents": [{"ticker": "ETAP14", "data_evento": "2027-01-15", "data_liquidacao": "2027-01-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "ETAP14", "data_evento": "2027-07-15", "data_liquidacao": "2027-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2028-01-15", "data_liquidacao": "2028-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2028-07-15", "data_liquidacao": "2028-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2029-01-15", "data_liquidacao": "2029-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2029-07-15", "data_liquidacao": "2029-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2030-01-15", "data_liquidacao": "2030-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2030-07-15", "data_liquidacao": "2030-07-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2030-07-15", "data_liquidacao": "2030-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
+{"asset": {"ticker": "ETAP14", "tipo": "Debênture", "issuer": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "indexador": "DI+", "taxa_emissao": 0.49, "taxa_negocio_b3": null, "taxa_indicativa_anbima": null, "taxa_mercado": null, "taxa_ativo": 0.49, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": null, "data_ultimo_negocio": null, "data_anbima": null, "volume_negociado_b3": null, "volume_emissao": 100000000.0, "volume": 100000000.0, "quantidade_emitida": 100000.0, "quantidade": 100000.0, "data_emissao": "2025-07-22", "vencimento": "2030-07-15", "emissao": 4.0, "serie": 1.0, "isin": "BRETAPDBS049", "lei": null, "cnpj_emissor": 25224629000146.0, "setor": "Energia Elétrica", "agente_fiduciario": "VORTX DTVM LTDA.", "coordenador_lider": "ITAU UNIBANCO HOLDING S.A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 0, "status_ativo": "Ativo", "duration": 3.62, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-01-15", "vna": 1000.0, "pu_par": 1070.7154, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Duration Calculada (DU/252)", "spread_mercado": null, "spread_anbima": null, "spread": 0.0049, "pu_mercado_mediano": 1000.0, "agio_desagio_pct": -6.6}, "prices": [], "emitter": {"cnpj": "25224629000146", "cnpj_formatado": "25.224.629/0001-46", "razao_social": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "nome_fantasia": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A.", "setor": "Energia Elétrica", "tipo_emissor": "Emissor de Dívida", "categoria_cvm": "Emissor de Dívida", "situacao_cvm": "Ativo", "site_ri": null, "municipio": null, "uf": null, "descricao": "(1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. é emissora de títulos de crédito privado registrados na CVM."}, "raiox_cnpj": null, "paymentEvents": [{"ticker": "ETAP14", "data_evento": "2027-01-15", "data_liquidacao": "2027-01-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "ETAP14", "data_evento": "2027-07-15", "data_liquidacao": "2027-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2028-01-15", "data_liquidacao": "2028-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2028-07-15", "data_liquidacao": "2028-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2029-01-15", "data_liquidacao": "2029-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2029-07-15", "data_liquidacao": "2029-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2030-01-15", "data_liquidacao": "2030-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2030-07-15", "data_liquidacao": "2030-07-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ETAP14", "data_evento": "2030-07-15", "data_liquidacao": "2030-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 0.49, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo ETAP14 é um título de crédito privado do tipo Debênture (comum) emitido por (1)ETAP - EMPRESA TRANSMISSORA AGRESTE POTIGUAR S.A. (CNPJ: 25.224.629/0001-46), com taxa de emissão de CDI + 0.49% a.a. e data de vencimento em 15/07/2030. O título encontra-se ativo (duration modificada de 3.62 anos) e spread indicativo de 0.49% sobre a NTN-B soberana, com volume emitido de R$ 100.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [], "relatedSector": [{"ticker": "EGIEA6", "tipo": "Debênture", "issuer": "ENGIE BRASIL ENERGIA S.A.", "vencimento": "2038-02-15"}, {"ticker": "TRGP13", "tipo": "Debênture", "issuer": "TECP - TRANSMISSORA DE ENERGIA CENTRAL PAULISTANA S.A.", "vencimento": "2038-01-15"}, {"ticker": "CHSF13", "tipo": "Debênture", "issuer": "AXIA ENERGIA NORDESTE S.A.", "vencimento": "2031-06-15"}, {"ticker": "CPLDA1", "tipo": "Debênture", "issuer": "COPEL DISTRIBUIÇÃO S.A.", "vencimento": "2038-01-15"}], "issuerSlug": null, "sectorSlug": "energia-eletrica"}
     </script>
-    <script type="module" crossorigin src="/assets/index-BDvznFiB.js"></script>
+    <script type="module" crossorigin src="/assets/index-bDGAHIId.js"></script>
   </body>
 </html>

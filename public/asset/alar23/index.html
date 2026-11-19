@@ -36,7 +36,7 @@
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
     <script type="application/ld+json">
-{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 3, "name": "ALAR23", "item": "https://fixdatabrasil.com.br/asset/alar23/"}]}, {"@type": "FinancialProduct", "name": "Debênture ALAR23 (ALARES INTERNET PARTICIPAÇ…)", "identifier": "ALAR23", "isin": "BRALARDBS016", "description": "Consulte dados de mercado da debênture ALAR23 emitida por ALARES INTERNET PARTICIPAÇÕES S/A (CNPJ: 23.438.929/0001-00). Indexador IPCA, vencimento em 15/05/2030, rating A, spread de 4.44%, duration de 3.06 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo ALAR23 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por ALARES INTERNET PARTICIPAÇÕES S/A (CNPJ: 23.438.929/0001-00), com taxa de emissão de IPCA + 8.67% a.a. e data de vencimento em 15/05/2030. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.06 anos anos) e spread indicativo de 4.44% sobre a NTN-B soberana, com volume emitido de R$ 28.426.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/alar23/", "category": "Debênture", "provider": {"@type": "Organization", "name": "ALARES INTERNET PARTICIPAÇÕES S/A", "taxID": "23.438.929/0001-00", "url": "https://ri.alaresinternet.com.br/"}}]}
+{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "ALAR23", "item": "https://fixdatabrasil.com.br/asset/alar23/"}]}, {"@type": "FinancialProduct", "name": "Debênture ALAR23 (ALARES INTERNET PARTICIPAÇ…)", "identifier": "ALAR23", "isin": "BRALARDBS016", "description": "Consulte dados de mercado da debênture ALAR23 emitida por ALARES INTERNET PARTICIPAÇÕES S/A (CNPJ: 23.438.929/0001-00). Indexador IPCA, vencimento em 15/05/2030, rating A, spread de 4.44%, duration de 3.06 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo ALAR23 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por ALARES INTERNET PARTICIPAÇÕES S/A (CNPJ: 23.438.929/0001-00), com taxa de emissão de IPCA + 8.67% a.a. e data de vencimento em 15/05/2030. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.06 anos) e spread indicativo de 4.44% sobre a NTN-B soberana, com volume emitido de R$ 28.426.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/alar23/", "category": "Debênture", "provider": {"@type": "Organization", "name": "ALARES INTERNET PARTICIPAÇÕES S/A", "taxID": "23.438.929/0001-00", "url": "https://ri.alaresinternet.com.br/"}}]}
     </script>
 
     <!-- GitHub Pages Single Page Apps Routing Handler -->
@@ -53,27 +53,6 @@
       }(window.location))
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="importmap">
-    {
-      "imports": {
-        "vite": "https://esm.sh/vite@^7.3.1",
-        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-        "papaparse": "https://esm.sh/papaparse@^5.5.3",
-        "react": "https://esm.sh/react@^19.2.4",
-        "react-dom": "https://esm.sh/react-dom@^19.2.4",
-        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
-        "fuse.js": "https://esm.sh/fuse.js@^7.1.0",
-        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
-        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "recharts": "https://esm.sh/recharts@^2.15.1",
-        "chart.js": "https://esm.sh/chart.js@^4.5.1",
-        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1"
-      }
-    }
-    </script>
     <link rel="stylesheet" href="/index.css">
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
@@ -86,21 +65,16 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-0.5 lg:gap-1">
-              <a href="/" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Home</a>
-              <a href="/raiox-devedor" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Raio-X Devedor</a>
-              <a href="/calculadora" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Calculadora</a>
-              <a href="/negocios" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Negócios B3</a>
-              <a href="/charts" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Crédito Privado</a>
-              <a href="/ntnb" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Curva NTN-B</a>
-              <a href="/primary" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Mercado Primário</a>
-              <a href="/contact" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Contato & Apoio</a>
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a href="/raiox-devedor" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                  <span>Entrar</span>
-                </a>
-              </div>
+            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
+              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
+              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
+              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
+              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
+              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
+              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
+              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
+              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
+              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
             </div>
           </div>
         </div>
@@ -109,7 +83,7 @@
       <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
-          <a href="/" class="hover:underline">Debêntures</a> &gt;
+          <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">ALAR23</span>
         </div>
 
@@ -120,7 +94,7 @@
             <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
           </div>
           <p class="font-normal text-slate-700">
-            O ativo ALAR23 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por ALARES INTERNET PARTICIPAÇÕES S/A (CNPJ: 23.438.929/0001-00), com taxa de emissão de IPCA + 8.67% a.a. e data de vencimento em 15/05/2030. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.06 anos anos) e spread indicativo de 4.44% sobre a NTN-B soberana, com volume emitido de R$ 28.426.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
+            O ativo ALAR23 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por ALARES INTERNET PARTICIPAÇÕES S/A (CNPJ: 23.438.929/0001-00), com taxa de emissão de IPCA + 8.67% a.a. e data de vencimento em 15/05/2030. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.06 anos) e spread indicativo de 4.44% sobre a NTN-B soberana, com volume emitido de R$ 28.426.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
           </p>
         </section>
 
@@ -180,7 +154,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/05/2030</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 3,5 anos (1273 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 3,5 anos (1272 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -205,10 +179,10 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Periodicidade de Cupons</span><p class="font-semibold text-slate-100">Semestral</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Próximo Cupom</span><p class="font-semibold text-emerald-400">17/05/2027</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">VNA / PU Par</span><p class="font-mono text-xs font-bold text-slate-100">VNA: R$ 1.113,23<br /><span class="text-indigo-300">Par: R$ 1.159,96</span></p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">TI e Telecomunicações</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/ti-e-telecomunicacoes/" class="font-semibold text-blue-300 hover:underline">TI e Telecomunicações</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">VORTX DTVM LTDA.</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BTG PACTUAL INVESTMENT BANKING LTDA.</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">3,5 anos (1273 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">3,5 anos (1272 dias corridos)</p></div>
           </div>
         </div>
 
@@ -221,7 +195,8 @@
               
             </div>
             <div class="flex flex-wrap items-center gap-2">
-              <a href="/raiox-devedor?cnpj=23438929000100" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold rounded-lg transition shadow-xs">Ir para análise do devedor &rarr;</a>
+              <a href="/raiox-devedor/?cnpj=23438929000100" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold rounded-lg transition shadow-xs">Ir para análise do devedor &rarr;</a>
+              <a href="/emissor/alares-internet-participacoes-s-a/" class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold rounded-lg border border-slate-200">Todos os títulos do emissor &rarr;</a>
               <a href="https://ri.alaresinternet.com.br/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200">Portal de RI &rarr;</a>
             </div>
           </div>
@@ -369,9 +344,11 @@
       <div class="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h3 class="text-lg font-black text-slate-900">Títulos Relacionados & Mercado Secundário</h3>
-          <p class="text-xs text-slate-500">Explore emissões da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
+          <p class="text-xs text-slate-500">Explore emissões ativas da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
         </div>
-        <div class="flex items-center gap-2 text-xs font-semibold">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+          <a href="/debentures/" class="text-blue-600 hover:underline">Debêntures</a>
+          <span class="text-slate-300">•</span>
           <a href="/negocios/" class="text-blue-600 hover:underline">Negócios B3</a>
           <span class="text-slate-300">•</span>
           <a href="/comparar/" class="text-blue-600 hover:underline">Comparador</a>
@@ -382,23 +359,12 @@
       
         <div class="space-y-2.5">
           <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-            <span>Outros Títulos Emitidos por ALARES INTERNET PARTICIPAÇÕES S/A</span>
+            <span>Outros Títulos Ativos de ALARES INTERNET PARTICIPAÇÕES S/A</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">4 papéis</span>
           </h4>
+          <a href="/emissor/alares-internet-participacoes-s-a/" class="text-xs font-bold text-blue-600 hover:underline">Ver página do emissor →</a>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <a href="/asset/alar13/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">ALAR13</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Debênture</span>
-                </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">ALARES INTERNET PARTICIPAÇÕES S/A</p>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2030-05-15</strong></span>
-                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
-              </div>
-            </a><a href="/asset/conx12/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
+            <a href="/asset/conx12/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
                   <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">CONX12</span>
@@ -408,18 +374,6 @@
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
                 <span>Venc: <strong class="text-slate-800">2029-08-15</strong></span>
-                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
-              </div>
-            </a><a href="/asset/nc002600jlb/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">NC002600JLB</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">CRI</span>
-                </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">ALARES INTERNET PARTICIPAÇÕES S/A</p>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2027-08-15</strong></span>
                 <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
             </a><a href="/asset/alar14/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
@@ -434,6 +388,30 @@
                 <span>Venc: <strong class="text-slate-800">2032-10-15</strong></span>
                 <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
+            </a><a href="/asset/alar13/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">ALAR13</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Debênture</span>
+                </div>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">ALARES INTERNET PARTICIPAÇÕES S/A</p>
+              </div>
+              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
+                <span>Venc: <strong class="text-slate-800">2030-05-15</strong></span>
+                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
+              </div>
+            </a><a href="/asset/nc002600jlb/" class="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-black text-slate-900 group-hover:text-blue-600 text-sm">NC002600JLB</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">CRI</span>
+                </div>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">ALARES INTERNET PARTICIPAÇÕES S/A</p>
+              </div>
+              <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
+                <span>Venc: <strong class="text-slate-800">2027-08-15</strong></span>
+                <span class="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
+              </div>
             </a>
           </div>
         </div>
@@ -441,56 +419,57 @@
       
         <div class="space-y-2.5">
           <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-            <span>Títulos Semelhantes no Setor (TI e Telecomunicações)</span>
+            <span>Títulos Ativos no Setor (TI e Telecomunicações)</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">4 papéis</span>
           </h4>
+          <a href="/setores/ti-e-telecomunicacoes/" class="text-xs font-bold text-emerald-700 hover:underline">Ver setor completo →</a>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <a href="/asset/21i0278118/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            <a href="/asset/bcpsa7/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">21I0278118</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">BCPSA7</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">LOG COMMERCIAL PROPERTIES E PARTICIPAÇÕES S.A.</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">BCP S/A</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2028-09-15</strong></span>
+                <span>Venc: <strong class="text-slate-800">2036-01-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
-            </a><a href="/asset/23j1141681/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            </a><a href="/asset/bcpsa5/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">23J1141681</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">BCPSA5</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">YDUQS PARTICIPACOES S.A.</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">BCP S/A</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2028-10-16</strong></span>
+                <span>Venc: <strong class="text-slate-800">2029-03-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
-            </a><a href="/asset/24f1075307/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            </a><a href="/asset/btel13/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">24F1075307</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">BTEL13</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">BV EXCLUSIVE</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">V. TAL - REDE NEUTRA DE TELECOMUNICAÇÕES S.A.</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2027-07-21</strong></span>
+                <span>Venc: <strong class="text-slate-800">2032-04-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
-            </a><a href="/asset/25f8639014/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
+            </a><a href="/asset/tims12/" class="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-1">
-                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">25F8639014</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">CRI</span>
+                  <span class="font-black text-slate-900 group-hover:text-emerald-700 text-sm">TIMS12</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Debênture</span>
                 </div>
-                <p class="text-xs text-slate-500 font-medium line-clamp-1">TELLUS IV PARTICIPAÇÕES S.A</p>
+                <p class="text-xs text-slate-500 font-medium line-clamp-1">TIM S.A.</p>
               </div>
               <div class="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                <span>Venc: <strong class="text-slate-800">2030-06-19</strong></span>
+                <span>Venc: <strong class="text-slate-800">2028-06-15</strong></span>
                 <span class="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
               </div>
             </a>
@@ -502,6 +481,8 @@
           <span>← Voltar à Página Inicial / Buscar Mais Ativos</span>
         </a>
         <div class="flex items-center gap-3">
+          <a href="/emissores/" class="hover:text-blue-600 transition">Emissores</a>
+          <span>•</span>
           <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
           <span>•</span>
           <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X de Emissores</a>
@@ -516,11 +497,52 @@
           Dados fornecidos por ANBIMA, CVM e B3 através do FIXDATA. Cotações e preços históricos sujeitos à liquidez do mercado secundário.
         </p>
       </main>
+      <footer class="bg-white border-t border-slate-200 py-10 mt-16">
+        <div class="container mx-auto px-4 text-center space-y-3">
+          <div class="flex items-center justify-center gap-3 sm:gap-5 text-xs font-semibold text-slate-600 flex-wrap">
+            <a href="/debentures/" class="hover:text-blue-600 transition">Debêntures</a>
+            <span>•</span>
+            <a href="/debentures-incentivadas/" class="hover:text-blue-600 transition">Debêntures Incentivadas</a>
+            <span>•</span>
+            <a href="/cri/" class="hover:text-blue-600 transition">CRIs</a>
+            <span>•</span>
+            <a href="/cra/" class="hover:text-blue-600 transition">CRAs</a>
+            <span>•</span>
+            <a href="/emissores/" class="hover:text-blue-600 transition">Emissores</a>
+            <span>•</span>
+            <a href="/setores/" class="hover:text-blue-600 transition">Setores ANBIMA</a>
+          </div>
+          <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 flex-wrap">
+            <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
+            <span>•</span>
+            <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
+            <span>•</span>
+            <a href="/termos/" class="hover:text-blue-600 transition">Termos de Uso</a>
+            <span>•</span>
+            <a href="/privacidade/" class="hover:text-blue-600 transition">Privacidade (LGPD)</a>
+            <span>•</span>
+            <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
+            <span>•</span>
+            <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
+            <span>•</span>
+            <a href="/contact/" class="hover:text-blue-600 transition">Contato &amp; Apoio</a>
+          </div>
+          <p class="text-slate-500 text-sm font-semibold">
+            &copy; 2026 FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
+          </p>
+          <p class="text-slate-400 text-xs font-medium">
+            Desenvolvido por <a href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-600 transition-colors font-bold">Leonardo Contador Neves</a>
+          </p>
+          <p class="text-slate-300 text-[10px] uppercase tracking-widest">
+            Base de dados CVM, ANBIMA e B3
+          </p>
+        </div>
+      </footer>
     </div>
     
     <script id="__PRELOADED_ASSET__" type="application/json">
-{"asset": {"ticker": "ALAR23", "tipo": "Debênture", "issuer": "ALARES INTERNET PARTICIPAÇÕES S/A", "indexador": "IPCA", "taxa_emissao": 8.674, "taxa_negocio_b3": 12.295, "taxa_indicativa_anbima": null, "taxa_mercado": 12.421, "taxa_ativo": 12.421, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1020.2792", "data_ultimo_negocio": "2026-11-17", "data_anbima": null, "volume_negociado_b3": 10202.8, "volume_emissao": 28426000.0, "volume": 28426000.0, "quantidade_emitida": 28426.0, "quantidade": 28426.0, "data_emissao": "2024-05-15", "vencimento": "2030-05-15", "emissao": 3.0, "serie": 2.0, "isin": "BRALARDBS016", "lei": 12.431, "cnpj_emissor": 23438929000100.0, "setor": "TI e Telecomunicações", "agente_fiduciario": "VORTX DTVM LTDA.", "coordenador_lider": "BTG PACTUAL INVESTMENT BANKING LTDA.", "rating": "A(bra) ", "rating_original": "A(bra) ", "rating_agencia": "Fitch Ratings ", "agencia": "Fitch Ratings ", "rating_data": "13/07/2026", "divulgacao": "13/07/2026", "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 3.06, "ntnb_referencia": "15/08/2030", "taxa_ntnb": 7.6398, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-05-17", "vna": 1113.2269, "pu_par": 1159.9627, "incentivada": "Sim", "rating_normalizado": "A", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-17)", "spread_mercado": 0.0444185143413495, "spread_anbima": null, "spread": 0.0444185143413495, "pu_mercado_mediano": 1049.0272, "agio_desagio_pct": -9.56}, "prices": [{"date": "2026-05-26", "ticker": "ALAR23", "price": 977.9542, "clean_price": 977.9542, "yield": 13.0226, "fonte_yield": "B3", "spread_over_ref": 476.2}, {"date": "2026-05-27", "ticker": "ALAR23", "price": 1014.1114, "clean_price": 1014.1114, "yield": 11.695, "fonte_yield": "B3", "spread_over_ref": 347.9}, {"date": "2026-05-28", "ticker": "ALAR23", "price": 977.0908, "clean_price": 977.0908, "yield": 13.1101, "fonte_yield": "B3", "spread_over_ref": 477.0}, {"date": "2026-05-29", "ticker": "ALAR23", "price": 1013.6258, "clean_price": 1013.6258, "yield": 11.7641, "fonte_yield": "B3", "spread_over_ref": 348.1}, {"date": "2026-06-01", "ticker": "ALAR23", "price": 1005.3291, "clean_price": 1005.3291, "yield": 12.0958, "fonte_yield": "B3", "spread_over_ref": 371.0}, {"date": "2026-06-02", "ticker": "ALAR23", "price": 1000.588, "clean_price": 1000.588, "yield": 12.2992, "fonte_yield": "B3", "spread_over_ref": 383.0}, {"date": "2026-06-03", "ticker": "ALAR23", "price": 1010.1271, "clean_price": 1010.1271, "yield": 11.9701, "fonte_yield": "B3", "spread_over_ref": 331.3}, {"date": "2026-06-05", "ticker": "ALAR23", "price": 1006.5247, "clean_price": 1006.5247, "yield": 12.1301, "fonte_yield": "B3", "spread_over_ref": 327.6}, {"date": "2026-06-08", "ticker": "ALAR23", "price": 1001.3564, "clean_price": 1001.3564, "yield": 12.35, "fonte_yield": "B3", "spread_over_ref": 338.0}, {"date": "2026-06-09", "ticker": "ALAR23", "price": 931.3488, "clean_price": 931.3488, "yield": 15.1561, "fonte_yield": "B3", "spread_over_ref": 594.4}, {"date": "2026-06-10", "ticker": "ALAR23", "price": 998.2803, "clean_price": 998.2803, "yield": 12.52, "fonte_yield": "B3", "spread_over_ref": 357.6}, {"date": "2026-06-11", "ticker": "ALAR23", "price": 1001.3751, "clean_price": 1001.3751, "yield": 12.43, "fonte_yield": "B3", "spread_over_ref": 374.0}, {"date": "2026-06-12", "ticker": "ALAR23", "price": 1007.5851, "clean_price": 1007.5851, "yield": 12.2534, "fonte_yield": "B3", "spread_over_ref": 359.9}, {"date": "2026-06-16", "ticker": "ALAR23", "price": 991.7996, "clean_price": 991.7996, "yield": 12.9576, "fonte_yield": "B3", "spread_over_ref": 416.5}, {"date": "2026-06-18", "ticker": "ALAR23", "price": 975.5036, "clean_price": 975.5036, "yield": 13.59, "fonte_yield": "B3", "spread_over_ref": 449.9}, {"date": "2026-06-19", "ticker": "ALAR23", "price": 972.3693, "clean_price": 972.3693, "yield": 13.74, "fonte_yield": "B3", "spread_over_ref": 446.7}, {"date": "2026-06-24", "ticker": "ALAR23", "price": 974.8131, "clean_price": 974.8131, "yield": 13.72, "fonte_yield": "B3", "spread_over_ref": 465.7}, {"date": "2026-07-01", "ticker": "ALAR23", "price": 980.1974, "clean_price": 980.1974, "yield": 13.635, "fonte_yield": "B3", "spread_over_ref": 464.6}, {"date": "2026-07-13", "ticker": "ALAR23", "price": 1028.9394, "clean_price": 1028.9394, "yield": 11.88, "fonte_yield": "B3", "spread_over_ref": 324.1}, {"date": "2026-07-15", "ticker": "ALAR23", "price": 1005.1452, "clean_price": 1005.1452, "yield": 12.8433, "fonte_yield": "B3", "spread_over_ref": 426.8}, {"date": "2026-07-16", "ticker": "ALAR23", "price": 1026.1015, "clean_price": 1026.1015, "yield": 12.0486, "fonte_yield": "B3", "spread_over_ref": 353.8}, {"date": "2026-07-17", "ticker": "ALAR23", "price": 1026.8842, "clean_price": 1026.8842, "yield": 12.04, "fonte_yield": "B3", "spread_over_ref": 342.9}, {"date": "2026-07-20", "ticker": "ALAR23", "price": 1032.897, "clean_price": 1032.897, "yield": 11.835, "fonte_yield": "B3", "spread_over_ref": 319.0}, {"date": "2026-07-23", "ticker": "ALAR23", "price": 990.8688, "clean_price": 990.8688, "yield": 13.54, "fonte_yield": "B3", "spread_over_ref": 468.3}, {"date": "2026-07-24", "ticker": "ALAR23", "price": 1024.4942, "clean_price": 1024.4942, "yield": 12.24, "fonte_yield": "B3", "spread_over_ref": 357.1}, {"date": "2026-07-30", "ticker": "ALAR23", "price": 996.4781, "clean_price": 996.4781, "yield": 13.4, "fonte_yield": "B3", "spread_over_ref": 463.3}, {"date": "2026-07-31", "ticker": "ALAR23", "price": 1028.4679, "clean_price": 1028.4679, "yield": 12.16, "fonte_yield": "B3", "spread_over_ref": 356.8}, {"date": "2026-08-03", "ticker": "ALAR23", "price": 1025.1916, "clean_price": 1025.1916, "yield": 12.3065, "fonte_yield": "B3", "spread_over_ref": 376.9}, {"date": "2026-08-04", "ticker": "ALAR23", "price": 1010.876, "clean_price": 1010.876, "yield": 12.893, "fonte_yield": "B3", "spread_over_ref": 428.7}, {"date": "2026-08-05", "ticker": "ALAR23", "price": 1026.9303, "clean_price": 1026.9303, "yield": 12.2785, "fonte_yield": "B3", "spread_over_ref": 375.0}, {"date": "2026-08-12", "ticker": "ALAR23", "price": 1039.8345, "clean_price": 1039.8345, "yield": 11.88, "fonte_yield": "B3", "spread_over_ref": 345.0}, {"date": "2026-08-13", "ticker": "ALAR23", "price": 1040.3295, "clean_price": 1040.3295, "yield": 11.88, "fonte_yield": "B3", "spread_over_ref": 343.1}, {"date": "2026-08-14", "ticker": "ALAR23", "price": 1008.0743, "clean_price": 1008.0743, "yield": 13.17, "fonte_yield": "B3", "spread_over_ref": 457.6}, {"date": "2026-08-17", "ticker": "ALAR23", "price": 1034.2392, "clean_price": 1034.2392, "yield": 12.155, "fonte_yield": "B3", "spread_over_ref": 368.4}, {"date": "2026-08-18", "ticker": "ALAR23", "price": 1040.9022, "clean_price": 1040.9022, "yield": 11.91, "fonte_yield": "B3", "spread_over_ref": 345.4}, {"date": "2026-08-19", "ticker": "ALAR23", "price": 1038.8282, "clean_price": 1038.8282, "yield": 12.005, "fonte_yield": "B3", "spread_over_ref": 360.8}, {"date": "2026-08-20", "ticker": "ALAR23", "price": 1042.0503, "clean_price": 1042.0503, "yield": 11.8937, "fonte_yield": "B3", "spread_over_ref": 355.4}, {"date": "2026-08-21", "ticker": "ALAR23", "price": 1046.1287, "clean_price": 1046.1287, "yield": 11.75, "fonte_yield": "B3", "spread_over_ref": 343.1}, {"date": "2026-08-24", "ticker": "ALAR23", "price": 1014.5278, "clean_price": 1014.5278, "yield": 13.01, "fonte_yield": "B3", "spread_over_ref": 455.9}, {"date": "2026-09-02", "ticker": "ALAR23", "price": 1038.409, "clean_price": 1038.409, "yield": 12.145, "fonte_yield": "B3", "spread_over_ref": 381.9}, {"date": "2026-09-11", "ticker": "ALAR23", "price": 863.8595, "clean_price": 863.8595, "yield": 20.1669, "fonte_yield": "B3", "spread_over_ref": 1169.3}, {"date": "2026-09-18", "ticker": "ALAR23", "price": 1033.9934, "clean_price": 1033.9934, "yield": 12.5, "fonte_yield": "B3", "spread_over_ref": 459.3}, {"date": "2026-09-22", "ticker": "ALAR23", "price": 1067.1144, "clean_price": 1067.1144, "yield": 11.25, "fonte_yield": "B3", "spread_over_ref": 333.9}, {"date": "2026-09-23", "ticker": "ALAR23", "price": 1064.8196, "clean_price": 1064.8196, "yield": 11.3679, "fonte_yield": "B3", "spread_over_ref": 339.6}, {"date": "2026-10-13", "ticker": "ALAR23", "price": 929.7414, "clean_price": 929.7414, "yield": 18.062, "fonte_yield": "B3", "spread_over_ref": 1059.7}, {"date": "2026-10-15", "ticker": "ALAR23", "price": 1058.3204, "clean_price": 1058.3204, "yield": 12.18, "fonte_yield": "B3", "spread_over_ref": 500.0}, {"date": "2026-10-16", "ticker": "ALAR23", "price": 1059.6291, "clean_price": 1059.6291, "yield": 12.1542, "fonte_yield": "B3", "spread_over_ref": 493.3}, {"date": "2026-10-19", "ticker": "ALAR23", "price": 1072.0261, "clean_price": 1072.0261, "yield": 11.68, "fonte_yield": "B3", "spread_over_ref": 448.5}, {"date": "2026-10-20", "ticker": "ALAR23", "price": 1083.7178, "clean_price": 1083.7178, "yield": 11.2425, "fonte_yield": "B3", "spread_over_ref": 416.3}, {"date": "2026-10-21", "ticker": "ALAR23", "price": 1081.4681, "clean_price": 1081.4681, "yield": 11.355, "fonte_yield": "B3", "spread_over_ref": 428.1}, {"date": "2026-10-22", "ticker": "ALAR23", "price": 1081.6994, "clean_price": 1081.6994, "yield": 11.37, "fonte_yield": "B3", "spread_over_ref": 431.3}, {"date": "2026-10-27", "ticker": "ALAR23", "price": 1077.8326, "clean_price": 1077.8326, "yield": 11.585, "fonte_yield": "B3", "spread_over_ref": 348.8}, {"date": "2026-10-30", "ticker": "ALAR23", "price": 1069.7528, "clean_price": 1069.7528, "yield": 11.98, "fonte_yield": "B3", "spread_over_ref": 375.3}, {"date": "2026-11-03", "ticker": "ALAR23", "price": 916.8044, "clean_price": 916.8044, "yield": 19.0, "fonte_yield": "B3", "spread_over_ref": 1023.6}, {"date": "2026-11-06", "ticker": "ALAR23", "price": 1055.6276, "clean_price": 1055.6276, "yield": 12.6588, "fonte_yield": "B3", "spread_over_ref": 460.4}, {"date": "2026-11-09", "ticker": "ALAR23", "price": 1062.7162, "clean_price": 1062.7162, "yield": 12.3894, "fonte_yield": "B3", "spread_over_ref": 440.3}, {"date": "2026-11-10", "ticker": "ALAR23", "price": 936.3181, "clean_price": 936.3181, "yield": 18.175, "fonte_yield": "B3", "spread_over_ref": 982.8}, {"date": "2026-11-13", "ticker": "ALAR23", "price": 1068.8625, "clean_price": 1068.8625, "yield": 12.205, "fonte_yield": "B3", "spread_over_ref": 427.1}, {"date": "2026-11-17", "ticker": "ALAR23", "price": 1020.2792, "clean_price": 1020.2792, "yield": 12.295, "fonte_yield": "B3", "spread_over_ref": 432.5}], "emitter": {"cnpj": "23438929000100", "cnpj_formatado": "23.438.929/0001-00", "razao_social": "ALARES INTERNET PARTICIPAÇÕES S/A", "nome_fantasia": "ALARES INTERNET PARTICIPAÇÕES S/A", "setor": "Emp. Adm. Part. - Telecomunicações", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://ri.alaresinternet.com.br/", "municipio": "SÃO PAULO", "uf": "SP", "descricao": "ALARES INTERNET PARTICIPAÇÕES S/A é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Emp. Adm. Part. - Telecomunicações."}, "raiox_cnpj": "23438929000100", "paymentEvents": [{"ticker": "ALAR23", "data_evento": "2027-05-17", "data_liquidacao": "2027-05-17", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "ALAR23", "data_evento": "2027-11-17", "data_liquidacao": "2027-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2028-05-17", "data_liquidacao": "2028-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2028-11-17", "data_liquidacao": "2028-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2029-05-17", "data_liquidacao": "2029-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2029-11-17", "data_liquidacao": "2029-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2030-05-15", "data_liquidacao": "2030-05-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": []}
+{"asset": {"ticker": "ALAR23", "tipo": "Debênture", "issuer": "ALARES INTERNET PARTICIPAÇÕES S/A", "indexador": "IPCA", "taxa_emissao": 8.674, "taxa_negocio_b3": 12.295, "taxa_indicativa_anbima": null, "taxa_mercado": 12.421, "taxa_ativo": 12.421, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1020.2792", "data_ultimo_negocio": "2026-11-17", "data_anbima": null, "volume_negociado_b3": 10202.8, "volume_emissao": 28426000.0, "volume": 28426000.0, "quantidade_emitida": 28426.0, "quantidade": 28426.0, "data_emissao": "2024-05-15", "vencimento": "2030-05-15", "emissao": 3.0, "serie": 2.0, "isin": "BRALARDBS016", "lei": 12.431, "cnpj_emissor": 23438929000100.0, "setor": "TI e Telecomunicações", "agente_fiduciario": "VORTX DTVM LTDA.", "coordenador_lider": "BTG PACTUAL INVESTMENT BANKING LTDA.", "rating": "A(bra) ", "rating_original": "A(bra) ", "rating_agencia": "Fitch Ratings ", "agencia": "Fitch Ratings ", "rating_data": "13/07/2026", "divulgacao": "13/07/2026", "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 3.06, "ntnb_referencia": "15/08/2030", "taxa_ntnb": 7.6398, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-05-17", "vna": 1113.2269, "pu_par": 1159.9627, "incentivada": "Sim", "rating_normalizado": "A", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-17)", "spread_mercado": 0.0444185143413495, "spread_anbima": null, "spread": 0.0444185143413495, "pu_mercado_mediano": 1049.0272, "agio_desagio_pct": -9.56}, "prices": [{"date": "2026-05-26", "ticker": "ALAR23", "price": 977.9542, "clean_price": 977.9542, "yield": 13.0226, "fonte_yield": "B3", "spread_over_ref": 476.2}, {"date": "2026-05-27", "ticker": "ALAR23", "price": 1014.1114, "clean_price": 1014.1114, "yield": 11.695, "fonte_yield": "B3", "spread_over_ref": 347.9}, {"date": "2026-05-28", "ticker": "ALAR23", "price": 977.0908, "clean_price": 977.0908, "yield": 13.1101, "fonte_yield": "B3", "spread_over_ref": 477.0}, {"date": "2026-05-29", "ticker": "ALAR23", "price": 1013.6258, "clean_price": 1013.6258, "yield": 11.7641, "fonte_yield": "B3", "spread_over_ref": 348.1}, {"date": "2026-06-01", "ticker": "ALAR23", "price": 1005.3291, "clean_price": 1005.3291, "yield": 12.0958, "fonte_yield": "B3", "spread_over_ref": 371.0}, {"date": "2026-06-02", "ticker": "ALAR23", "price": 1000.588, "clean_price": 1000.588, "yield": 12.2992, "fonte_yield": "B3", "spread_over_ref": 383.0}, {"date": "2026-06-03", "ticker": "ALAR23", "price": 1010.1271, "clean_price": 1010.1271, "yield": 11.9701, "fonte_yield": "B3", "spread_over_ref": 331.3}, {"date": "2026-06-05", "ticker": "ALAR23", "price": 1006.5247, "clean_price": 1006.5247, "yield": 12.1301, "fonte_yield": "B3", "spread_over_ref": 327.6}, {"date": "2026-06-08", "ticker": "ALAR23", "price": 1001.3564, "clean_price": 1001.3564, "yield": 12.35, "fonte_yield": "B3", "spread_over_ref": 338.0}, {"date": "2026-06-09", "ticker": "ALAR23", "price": 931.3488, "clean_price": 931.3488, "yield": 15.1561, "fonte_yield": "B3", "spread_over_ref": 594.4}, {"date": "2026-06-10", "ticker": "ALAR23", "price": 998.2803, "clean_price": 998.2803, "yield": 12.52, "fonte_yield": "B3", "spread_over_ref": 357.6}, {"date": "2026-06-11", "ticker": "ALAR23", "price": 1001.3751, "clean_price": 1001.3751, "yield": 12.43, "fonte_yield": "B3", "spread_over_ref": 374.0}, {"date": "2026-06-12", "ticker": "ALAR23", "price": 1007.5851, "clean_price": 1007.5851, "yield": 12.2534, "fonte_yield": "B3", "spread_over_ref": 359.9}, {"date": "2026-06-16", "ticker": "ALAR23", "price": 991.7996, "clean_price": 991.7996, "yield": 12.9576, "fonte_yield": "B3", "spread_over_ref": 416.5}, {"date": "2026-06-18", "ticker": "ALAR23", "price": 975.5036, "clean_price": 975.5036, "yield": 13.59, "fonte_yield": "B3", "spread_over_ref": 449.9}, {"date": "2026-06-19", "ticker": "ALAR23", "price": 972.3693, "clean_price": 972.3693, "yield": 13.74, "fonte_yield": "B3", "spread_over_ref": 446.7}, {"date": "2026-06-24", "ticker": "ALAR23", "price": 974.8131, "clean_price": 974.8131, "yield": 13.72, "fonte_yield": "B3", "spread_over_ref": 465.7}, {"date": "2026-07-01", "ticker": "ALAR23", "price": 980.1974, "clean_price": 980.1974, "yield": 13.635, "fonte_yield": "B3", "spread_over_ref": 464.6}, {"date": "2026-07-13", "ticker": "ALAR23", "price": 1028.9394, "clean_price": 1028.9394, "yield": 11.88, "fonte_yield": "B3", "spread_over_ref": 324.1}, {"date": "2026-07-15", "ticker": "ALAR23", "price": 1005.1452, "clean_price": 1005.1452, "yield": 12.8433, "fonte_yield": "B3", "spread_over_ref": 426.8}, {"date": "2026-07-16", "ticker": "ALAR23", "price": 1026.1015, "clean_price": 1026.1015, "yield": 12.0486, "fonte_yield": "B3", "spread_over_ref": 353.8}, {"date": "2026-07-17", "ticker": "ALAR23", "price": 1026.8842, "clean_price": 1026.8842, "yield": 12.04, "fonte_yield": "B3", "spread_over_ref": 342.9}, {"date": "2026-07-20", "ticker": "ALAR23", "price": 1032.897, "clean_price": 1032.897, "yield": 11.835, "fonte_yield": "B3", "spread_over_ref": 319.0}, {"date": "2026-07-23", "ticker": "ALAR23", "price": 990.8688, "clean_price": 990.8688, "yield": 13.54, "fonte_yield": "B3", "spread_over_ref": 468.3}, {"date": "2026-07-24", "ticker": "ALAR23", "price": 1024.4942, "clean_price": 1024.4942, "yield": 12.24, "fonte_yield": "B3", "spread_over_ref": 357.1}, {"date": "2026-07-30", "ticker": "ALAR23", "price": 996.4781, "clean_price": 996.4781, "yield": 13.4, "fonte_yield": "B3", "spread_over_ref": 463.3}, {"date": "2026-07-31", "ticker": "ALAR23", "price": 1028.4679, "clean_price": 1028.4679, "yield": 12.16, "fonte_yield": "B3", "spread_over_ref": 356.8}, {"date": "2026-08-03", "ticker": "ALAR23", "price": 1025.1916, "clean_price": 1025.1916, "yield": 12.3065, "fonte_yield": "B3", "spread_over_ref": 376.9}, {"date": "2026-08-04", "ticker": "ALAR23", "price": 1010.876, "clean_price": 1010.876, "yield": 12.893, "fonte_yield": "B3", "spread_over_ref": 428.7}, {"date": "2026-08-05", "ticker": "ALAR23", "price": 1026.9303, "clean_price": 1026.9303, "yield": 12.2785, "fonte_yield": "B3", "spread_over_ref": 375.0}, {"date": "2026-08-12", "ticker": "ALAR23", "price": 1039.8345, "clean_price": 1039.8345, "yield": 11.88, "fonte_yield": "B3", "spread_over_ref": 345.0}, {"date": "2026-08-13", "ticker": "ALAR23", "price": 1040.3295, "clean_price": 1040.3295, "yield": 11.88, "fonte_yield": "B3", "spread_over_ref": 343.1}, {"date": "2026-08-14", "ticker": "ALAR23", "price": 1008.0743, "clean_price": 1008.0743, "yield": 13.17, "fonte_yield": "B3", "spread_over_ref": 457.6}, {"date": "2026-08-17", "ticker": "ALAR23", "price": 1034.2392, "clean_price": 1034.2392, "yield": 12.155, "fonte_yield": "B3", "spread_over_ref": 368.4}, {"date": "2026-08-18", "ticker": "ALAR23", "price": 1040.9022, "clean_price": 1040.9022, "yield": 11.91, "fonte_yield": "B3", "spread_over_ref": 345.4}, {"date": "2026-08-19", "ticker": "ALAR23", "price": 1038.8282, "clean_price": 1038.8282, "yield": 12.005, "fonte_yield": "B3", "spread_over_ref": 360.8}, {"date": "2026-08-20", "ticker": "ALAR23", "price": 1042.0503, "clean_price": 1042.0503, "yield": 11.8937, "fonte_yield": "B3", "spread_over_ref": 355.4}, {"date": "2026-08-21", "ticker": "ALAR23", "price": 1046.1287, "clean_price": 1046.1287, "yield": 11.75, "fonte_yield": "B3", "spread_over_ref": 343.1}, {"date": "2026-08-24", "ticker": "ALAR23", "price": 1014.5278, "clean_price": 1014.5278, "yield": 13.01, "fonte_yield": "B3", "spread_over_ref": 455.9}, {"date": "2026-09-02", "ticker": "ALAR23", "price": 1038.409, "clean_price": 1038.409, "yield": 12.145, "fonte_yield": "B3", "spread_over_ref": 381.9}, {"date": "2026-09-11", "ticker": "ALAR23", "price": 863.8595, "clean_price": 863.8595, "yield": 20.1669, "fonte_yield": "B3", "spread_over_ref": 1169.3}, {"date": "2026-09-18", "ticker": "ALAR23", "price": 1033.9934, "clean_price": 1033.9934, "yield": 12.5, "fonte_yield": "B3", "spread_over_ref": 459.3}, {"date": "2026-09-22", "ticker": "ALAR23", "price": 1067.1144, "clean_price": 1067.1144, "yield": 11.25, "fonte_yield": "B3", "spread_over_ref": 333.9}, {"date": "2026-09-23", "ticker": "ALAR23", "price": 1064.8196, "clean_price": 1064.8196, "yield": 11.3679, "fonte_yield": "B3", "spread_over_ref": 339.6}, {"date": "2026-10-13", "ticker": "ALAR23", "price": 929.7414, "clean_price": 929.7414, "yield": 18.062, "fonte_yield": "B3", "spread_over_ref": 1059.7}, {"date": "2026-10-15", "ticker": "ALAR23", "price": 1058.3204, "clean_price": 1058.3204, "yield": 12.18, "fonte_yield": "B3", "spread_over_ref": 500.0}, {"date": "2026-10-16", "ticker": "ALAR23", "price": 1059.6291, "clean_price": 1059.6291, "yield": 12.1542, "fonte_yield": "B3", "spread_over_ref": 493.3}, {"date": "2026-10-19", "ticker": "ALAR23", "price": 1072.0261, "clean_price": 1072.0261, "yield": 11.68, "fonte_yield": "B3", "spread_over_ref": 448.5}, {"date": "2026-10-20", "ticker": "ALAR23", "price": 1083.7178, "clean_price": 1083.7178, "yield": 11.2425, "fonte_yield": "B3", "spread_over_ref": 416.3}, {"date": "2026-10-21", "ticker": "ALAR23", "price": 1081.4681, "clean_price": 1081.4681, "yield": 11.355, "fonte_yield": "B3", "spread_over_ref": 428.1}, {"date": "2026-10-22", "ticker": "ALAR23", "price": 1081.6994, "clean_price": 1081.6994, "yield": 11.37, "fonte_yield": "B3", "spread_over_ref": 431.3}, {"date": "2026-10-27", "ticker": "ALAR23", "price": 1077.8326, "clean_price": 1077.8326, "yield": 11.585, "fonte_yield": "B3", "spread_over_ref": 348.8}, {"date": "2026-10-30", "ticker": "ALAR23", "price": 1069.7528, "clean_price": 1069.7528, "yield": 11.98, "fonte_yield": "B3", "spread_over_ref": 375.3}, {"date": "2026-11-03", "ticker": "ALAR23", "price": 916.8044, "clean_price": 916.8044, "yield": 19.0, "fonte_yield": "B3", "spread_over_ref": 1023.6}, {"date": "2026-11-06", "ticker": "ALAR23", "price": 1055.6276, "clean_price": 1055.6276, "yield": 12.6588, "fonte_yield": "B3", "spread_over_ref": 460.4}, {"date": "2026-11-09", "ticker": "ALAR23", "price": 1062.7162, "clean_price": 1062.7162, "yield": 12.3894, "fonte_yield": "B3", "spread_over_ref": 440.3}, {"date": "2026-11-10", "ticker": "ALAR23", "price": 936.3181, "clean_price": 936.3181, "yield": 18.175, "fonte_yield": "B3", "spread_over_ref": 982.8}, {"date": "2026-11-13", "ticker": "ALAR23", "price": 1068.8625, "clean_price": 1068.8625, "yield": 12.205, "fonte_yield": "B3", "spread_over_ref": 427.1}, {"date": "2026-11-17", "ticker": "ALAR23", "price": 1020.2792, "clean_price": 1020.2792, "yield": 12.295, "fonte_yield": "B3", "spread_over_ref": 432.5}], "emitter": {"cnpj": "23438929000100", "cnpj_formatado": "23.438.929/0001-00", "razao_social": "ALARES INTERNET PARTICIPAÇÕES S/A", "nome_fantasia": "ALARES INTERNET PARTICIPAÇÕES S/A", "setor": "Emp. Adm. Part. - Telecomunicações", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://ri.alaresinternet.com.br/", "municipio": "SÃO PAULO", "uf": "SP", "descricao": "ALARES INTERNET PARTICIPAÇÕES S/A é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Emp. Adm. Part. - Telecomunicações."}, "raiox_cnpj": "23438929000100", "paymentEvents": [{"ticker": "ALAR23", "data_evento": "2027-05-17", "data_liquidacao": "2027-05-17", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "ALAR23", "data_evento": "2027-11-17", "data_liquidacao": "2027-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2028-05-17", "data_liquidacao": "2028-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2028-11-17", "data_liquidacao": "2028-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2029-05-17", "data_liquidacao": "2029-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2029-11-17", "data_liquidacao": "2029-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.2468, "valor_real": null, "valor_projetado": 42.468, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ALAR23", "data_evento": "2030-05-15", "data_liquidacao": "2030-05-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo ALAR23 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por ALARES INTERNET PARTICIPAÇÕES S/A (CNPJ: 23.438.929/0001-00), com taxa de emissão de IPCA + 8.67% a.a. e data de vencimento em 15/05/2030. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.06 anos) e spread indicativo de 4.44% sobre a NTN-B soberana, com volume emitido de R$ 28.426.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "CONX12", "tipo": "Debênture", "issuer": "ALARES INTERNET PARTICIPAÇÕES S/A", "vencimento": "2029-08-15"}, {"ticker": "alar14", "tipo": "Debênture", "issuer": "ALARES INTERNET PARTICIPAÇÕES S/A", "vencimento": "2032-10-15"}, {"ticker": "ALAR13", "tipo": "Debênture", "issuer": "ALARES INTERNET PARTICIPAÇÕES S/A", "vencimento": "2030-05-15"}, {"ticker": "NC002600JLB", "tipo": "CRI", "issuer": "ALARES INTERNET PARTICIPAÇÕES S/A", "vencimento": "2027-08-15"}], "relatedSector": [{"ticker": "BCPSA7", "tipo": "Debênture", "issuer": "BCP S/A", "vencimento": "2036-01-15"}, {"ticker": "BCPSA5", "tipo": "Debênture", "issuer": "BCP S/A", "vencimento": "2029-03-15"}, {"ticker": "BTEL13", "tipo": "Debênture", "issuer": "V. TAL - REDE NEUTRA DE TELECOMUNICAÇÕES S.A.", "vencimento": "2032-04-15"}, {"ticker": "TIMS12", "tipo": "Debênture", "issuer": "TIM S.A.", "vencimento": "2028-06-15"}], "issuerSlug": "alares-internet-participacoes-s-a", "sectorSlug": "ti-e-telecomunicacoes"}
     </script>
-    <script type="module" crossorigin src="/assets/index-BDvznFiB.js"></script>
+    <script type="module" crossorigin src="/assets/index-bDGAHIId.js"></script>
   </body>
 </html>

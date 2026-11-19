@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Trash2, ArrowUpRight } from 'lucide-react';
 import { Asset } from '../utils/csv';
+import { assetPath } from '../utils/urls';
 
 interface WatchlistProps {
   assets: Asset[];
@@ -104,7 +105,7 @@ const Watchlist: React.FC<WatchlistProps> = ({ assets }) => {
           key={item.key} 
           className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition-all group relative flex flex-col justify-between"
         >
-          <Link to={`/asset/${item.ticker}`} className="block pr-8">
+          <Link to={assetPath(item.ticker)} className="block pr-8">
             <div className="flex items-center gap-2">
               <h3 className="font-black text-lg text-blue-900 group-hover:text-blue-600 transition-colors">
                 {item.ticker}

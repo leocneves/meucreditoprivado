@@ -22,6 +22,33 @@ const currentBundleFilename = match[2];
 const newScriptTag = `<script type="module" crossorigin src="${currentBundleSrc}"></script>`;
 const scriptRegex = /<script\s+type="module"\s+crossorigin\s+src="\/assets\/index-[^"]+\.js"><\/script>/g;
 
+// Sincroniza CSS compilado pelo Vite para /index.css (public/ e docs/) eliminando 404 em todas as páginas pré-renderizadas
+const assetsDir = path.join(rootDir, 'docs', 'assets');
+const cssMatch = indexContent.match(/<link\s+rel="stylesheet"[^>]*href="(\/assets\/(index-[^"]+\.css))"[^>]*>/);
+let compiledCssPath = null;
+if (cssMatch) {
+  const candidate = path.join(rootDir, 'docs', cssMatch[1].replace(/^\//, ''));
+  if (fs.existsSync(candidate)) compiledCssPath = candidate;
+}
+if (!compiledCssPath && fs.existsSync(assetsDir)) {
+  const cssFiles = fs
+    .readdirSync(assetsDir)
+    .filter((f) => f.startsWith('index-') && f.endsWith('.css'))
+    .sort((a, b) => fs.statSync(path.join(assetsDir, b)).mtimeMs - fs.statSync(path.join(assetsDir, a)).mtimeMs);
+  if (cssFiles.length > 0) {
+    compiledCssPath = path.join(assetsDir, cssFiles[0]);
+  }
+}
+
+let syncedCssCount = 0;
+if (compiledCssPath && fs.existsSync(compiledCssPath)) {
+  for (const dest of [path.join(rootDir, 'docs', 'index.css'), path.join(rootDir, 'public', 'index.css')]) {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(compiledCssPath, dest);
+    syncedCssCount++;
+  }
+}
+
 const staticSlugs = [
   'negocios',
   'charts',
@@ -53,8 +80,7 @@ for (const base of ['docs', 'public']) {
   }
 }
 
-// Também sincroniza bundles legados em docs/assets/ para garantir que qualquer HTML pré-renderizado sirva o bundle mais recente
-const assetsDir = path.join(rootDir, 'docs', 'assets');
+// Também sincroniza bundles legados em docs/assets/ caso alguma página pré-renderizada ainda referencie um hash anterior
 const currentBundlePath = path.join(assetsDir, currentBundleFilename);
 let syncedBundles = 0;
 
@@ -68,4 +94,6 @@ if (fs.existsSync(assetsDir) && fs.existsSync(currentBundlePath)) {
   }
 }
 
-console.log(`✅ Bundle sincronizado (${currentBundleSrc}): ${updatedStatic} páginas estáticas e ${syncedBundles} bundles legados atualizados.`);
+console.log(
+  `✅ Bundle sincronizado (${currentBundleSrc}): ${updatedStatic} páginas estáticas, ${syncedBundles} bundles legados e ${syncedCssCount} arquivos index.css atualizados.`
+);

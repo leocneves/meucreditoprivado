@@ -33,10 +33,12 @@
     <meta property="twitter:title" content="Calculadora de Equivalência e Gross-up de Renda Fixa | FIXDATA" />
     <meta property="twitter:description" content="Calcule a equivalência de taxas isentas de IR (CRIs, CRAs, Debêntures Incentivadas Lei 12.431) contra títulos tributados e CDI." />
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Como calcular a taxa equivalente (gross-up) de uma debênture incentivada, CRI ou CRA isento de IR?", "acceptedAnswer": {"@type": "Answer", "text": "Divide-se a taxa líquida do título isento (Lei 12.431/11) por (1 - alíquota de IR do título tributado comparável: 22,5% até 180 dias, 20% de 181 a 360 dias, 17,5% de 361 a 720 dias e 15% acima de 720 dias)."}}, {"@type": "Question", "name": "Qual a diferença entre taxa de emissão e taxa indicativa ANBIMA no mercado secundário?", "acceptedAnswer": {"@type": "Answer", "text": "A taxa de emissão é a remuneração contratada na escritura original; já a taxa indicativa ANBIMA reflete o juro anual implícito ao Preço Unitário (PU) negociado atualmente no mercado secundário."}}]}
+    </script>
 
     <link rel="stylesheet" href="/index.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="module" crossorigin src="/assets/index-BDvznFiB.js"></script>
+    <script type="module" crossorigin src="/assets/index-bDGAHIId.js"></script>
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
@@ -48,21 +50,84 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="text-xs text-slate-500 font-medium">Plataforma de Renda Fixa e Crédito Privado</div>
+            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
+              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
+              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
+              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
+              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
+              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
+              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
+              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
+              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
+              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+            </div>
           </div>
         </div>
       </nav>
 
-      <main class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 max-w-4xl mx-auto space-y-4">
-          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Calculadora de Gross-up e Equivalência</h1>
-          <p class="text-base sm:text-lg text-slate-600 leading-relaxed">Ferramenta analítica para comparar a rentabilidade real de papéis incentivados isentos contra ativos tributados.</p>
-          <div class="pt-4 border-t border-slate-100 flex items-center gap-2 text-sm text-slate-500">
-            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Carregando dados interativos em tempo real...</span>
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-5">
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Calculadora de Gross-up e Equivalência de Renda Fixa</h1>
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Compare taxas de títulos isentos de Imposto de Renda para Pessoa Física (<a href="/debentures-incentivadas/" class="text-blue-600 hover:underline font-semibold">Debêntures Incentivadas Lei 12.431</a>, <a href="/cri/" class="text-blue-600 hover:underline font-semibold">CRIs</a> e <a href="/cra/" class="text-blue-600 hover:underline font-semibold">CRAs</a>) contra CDBs, LCAs/tributados e debêntures comuns utilizando a fórmula <code>Taxa Tributada Equivalente = Taxa Isenta / (1 - Alíquota IR)</code> e marcação a mercado DU/252.
+          </p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase">
+                  <th class="py-2 px-3">Taxa Isenta (CRI / CRA / Lei 12.431)</th>
+                  <th class="py-2 px-3 text-right">Equiv. IR 22,5%</th>
+                  <th class="py-2 px-3 text-right">Equiv. IR 20,0%</th>
+                  <th class="py-2 px-3 text-right">Equiv. IR 17,5%</th>
+                  <th class="py-2 px-3 text-right">Equiv. IR 15,0%</th>
+                </tr>
+              </thead>
+              <tbody><tr class="border-b border-slate-100 text-xs"><td class="py-2 px-3 font-mono font-black text-emerald-700">IPCA + 5.50% (Isento)</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">7.10%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">6.87%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">6.67%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">6.47%</td></tr><tr class="border-b border-slate-100 text-xs"><td class="py-2 px-3 font-mono font-black text-emerald-700">IPCA + 6.00% (Isento)</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">7.74%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">7.50%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">7.27%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">7.06%</td></tr><tr class="border-b border-slate-100 text-xs"><td class="py-2 px-3 font-mono font-black text-emerald-700">IPCA + 6.50% (Isento)</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">8.39%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">8.12%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">7.88%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">7.65%</td></tr><tr class="border-b border-slate-100 text-xs"><td class="py-2 px-3 font-mono font-black text-emerald-700">IPCA + 7.00% (Isento)</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">9.03%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">8.75%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">8.48%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">8.24%</td></tr><tr class="border-b border-slate-100 text-xs"><td class="py-2 px-3 font-mono font-black text-emerald-700">IPCA + 7.50% (Isento)</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">9.68%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">9.37%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">9.09%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">8.82%</td></tr><tr class="border-b border-slate-100 text-xs"><td class="py-2 px-3 font-mono font-black text-emerald-700">IPCA + 8.00% (Isento)</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">10.32%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">10.00%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">9.70%</td><td class="py-2 px-3 text-right font-mono font-bold text-blue-700">9.41%</td></tr></tbody>
+            </table>
           </div>
         </div>
       </main>
+      <footer class="bg-white border-t border-slate-200 py-10 mt-16">
+        <div class="container mx-auto px-4 text-center space-y-3">
+          <div class="flex items-center justify-center gap-3 sm:gap-5 text-xs font-semibold text-slate-600 flex-wrap">
+            <a href="/debentures/" class="hover:text-blue-600 transition">Debêntures</a>
+            <span>•</span>
+            <a href="/debentures-incentivadas/" class="hover:text-blue-600 transition">Debêntures Incentivadas</a>
+            <span>•</span>
+            <a href="/cri/" class="hover:text-blue-600 transition">CRIs</a>
+            <span>•</span>
+            <a href="/cra/" class="hover:text-blue-600 transition">CRAs</a>
+            <span>•</span>
+            <a href="/emissores/" class="hover:text-blue-600 transition">Emissores</a>
+            <span>•</span>
+            <a href="/setores/" class="hover:text-blue-600 transition">Setores ANBIMA</a>
+          </div>
+          <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 flex-wrap">
+            <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
+            <span>•</span>
+            <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
+            <span>•</span>
+            <a href="/termos/" class="hover:text-blue-600 transition">Termos de Uso</a>
+            <span>•</span>
+            <a href="/privacidade/" class="hover:text-blue-600 transition">Privacidade (LGPD)</a>
+            <span>•</span>
+            <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
+            <span>•</span>
+            <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
+            <span>•</span>
+            <a href="/contact/" class="hover:text-blue-600 transition">Contato &amp; Apoio</a>
+          </div>
+          <p class="text-slate-500 text-sm font-semibold">
+            &copy; 2026 FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
+          </p>
+          <p class="text-slate-400 text-xs font-medium">
+            Desenvolvido por <a href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-600 transition-colors font-bold">Leonardo Contador Neves</a>
+          </p>
+          <p class="text-slate-300 text-[10px] uppercase tracking-widest">
+            Base de dados CVM, ANBIMA e B3
+          </p>
+        </div>
+      </footer>
     </div>
   </body>
 </html>

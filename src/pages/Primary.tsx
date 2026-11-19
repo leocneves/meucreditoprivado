@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { assetPath } from '../utils/urls';
 import {
   ResponsiveContainer,
   BarChart,
@@ -1880,7 +1881,7 @@ const Primary: React.FC = () => {
                                   {/* Vínculo com Ativo Secundário (apenas em ofertas já encerradas e com ticker oficial de mercado) */}
                                   {activeTab === 'ENCERRADAS' && oferta.ativo_secundario && (
                                     <Link
-                                      to={`/asset/${oferta.ativo_secundario.ticker}`}
+                                      to={assetPath(oferta.ativo_secundario.ticker)}
                                       className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold transition shadow-xs"
                                       title={`Ver ativo ${oferta.ativo_secundario.ticker} no mercado secundário`}
                                     >

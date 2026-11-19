@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { fetchCSV, Asset, PriceRecord, Emitter, PaymentEvent, AssetDocument, normalizeRating, getRatingBadgeClass, getTipoBadgeClass } from '../utils/csv';
 import { cleanCnpj14, normCompanyKey, isSecuritizadoraName, getCachedRaioXIndex, loadRaioXIndex, resolveRaioXCnpj, RaioXIndex } from '../utils/raioxLookup';
+import { assetPath, slugify } from '../utils/urls';
 import ChartComponent from '../components/ChartComponent';
 import { ArrowLeft, Star, FileText, Calendar, Percent, Building2, Globe, ExternalLink, ShieldCheck, Receipt, CalendarDays, CheckCircle2, Clock, Sparkles, AlertTriangle, TrendingUp, Tag, Landmark, Layers, FileDown, FolderOpen, ArrowRight, Activity, ArrowLeftRight, Calculator, HelpCircle, Info, Users } from 'lucide-react';
 
@@ -189,9 +190,17 @@ const getPreloadedPayload = (targetKey: string, cleanTargetKey: string) => {
   return null;
 };
 
+interface RelatedAssetItem {
+  ticker: string;
+  tipo: string;
+  issuer: string;
+  vencimento?: string;
+}
+
 const AssetPage: React.FC = () => {
   const { ticker } = useParams<{ ticker: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const targetKey = decodeURIComponent(ticker || '').trim().toUpperCase();
   const cleanTargetKey = targetKey.replace(/[\s\-]/g, '');
 
@@ -206,6 +215,11 @@ const AssetPage: React.FC = () => {
   const [prices, setPrices] = useState<PriceRecord[]>(initialPayload ? (initialPayload.prices || []) : []);
   const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>(initialPayload ? (initialPayload.paymentEvents || []) : []);
   const [documents, setDocuments] = useState<AssetDocument[]>(initialPayload ? (initialPayload.documents || []) : []);
+  const [aiSummary, setAiSummary] = useState<string | null>(initialPayload?.aiSummary || null);
+  const [relatedIssuer, setRelatedIssuer] = useState<RelatedAssetItem[]>(initialPayload?.relatedIssuer || []);
+  const [relatedSector, setRelatedSector] = useState<RelatedAssetItem[]>(initialPayload?.relatedSector || []);
+  const [issuerSlug, setIssuerSlug] = useState<string | null>(initialPayload?.issuerSlug || null);
+  const [sectorSlug, setSectorSlug] = useState<string | null>(initialPayload?.sectorSlug || null);
   const [filterType, setFilterType] = useState<'ALL' | 'JUROS' | 'AMORTIZACAO' | 'FUTUROS'>('ALL');
   const [docFilter, setDocFilter] = useState<'ALL' | 'PROSPECTO' | 'RELATORIO' | 'ASSEMBLEIA'>('ALL');
   const [loading, setLoading] = useState(!initialPayload);
@@ -343,17 +357,27 @@ const AssetPage: React.FC = () => {
     raiox_cnpj?: string | null;
     paymentEvents?: PaymentEvent[];
     documents?: AssetDocument[];
+    aiSummary?: string | null;
+    relatedIssuer?: RelatedAssetItem[];
+    relatedSector?: RelatedAssetItem[];
+    issuerSlug?: string | null;
+    sectorSlug?: string | null;
   }) => {
     const found = payload.asset;
     const canonicalTickerLower = (found.ticker || targetKey).trim().toLowerCase();
-    const currentParam = (ticker || '').trim();
-    if (currentParam !== canonicalTickerLower) {
-      navigate(`/asset/${canonicalTickerLower}`, { replace: true });
+    const canonicalPath = assetPath(canonicalTickerLower);
+    if (location.pathname !== canonicalPath) {
+      navigate(`${canonicalPath}${location.search}${location.hash}`, { replace: true });
     }
     setAsset(found);
     setPrices(payload.prices || []);
     setEmitter(payload.emitter || null);
     setRaioxCnpj('raiox_cnpj' in payload ? (payload.raiox_cnpj || null) : null);
+    setAiSummary(payload.aiSummary || null);
+    setRelatedIssuer(Array.isArray(payload.relatedIssuer) ? payload.relatedIssuer : []);
+    setRelatedSector(Array.isArray(payload.relatedSector) ? payload.relatedSector : []);
+    setIssuerSlug(payload.issuerSlug || null);
+    setSectorSlug(payload.sectorSlug || null);
 
     const assetEvents = [...(payload.paymentEvents || [])];
     assetEvents.sort((a, b) => (a.data_evento || '').localeCompare(b.data_evento || ''));
@@ -367,13 +391,27 @@ const AssetPage: React.FC = () => {
     });
     setDocuments(assetDocs);
 
-    // SEO dinâmico por ativo
+    // SEO dinâmico por ativo (preservando metadados estruturais de alta qualidade)
     const tipoStr = found.tipo || 'Título';
-    const emissorStr = found.issuer ? `(${found.issuer})` : '';
-    document.title = `${tipoStr} ${found.ticker} ${emissorStr} — Taxas, Spread e Rating | FIXDATA`;
+    const tickerStr = (found.ticker || canonicalTickerLower.toUpperCase()).trim();
+    const tipoPrefix = tickerStr.toUpperCase().startsWith(tipoStr.toUpperCase()) ? '' : `${tipoStr} `;
+    const rawIssuerName = payload.emitter?.razao_social || found.issuer || '';
+    const issuerDisp = rawIssuerName.length > 28 ? `${rawIssuerName.slice(0, 26).trim()}…` : rawIssuerName;
+    const vctoStr = String(found.vencimento || '').trim();
+    const vctoYear = /^\d{4}/.test(vctoStr) ? `Vcto ${vctoStr.slice(0, 4)}` : '';
+    const normR = found.rating_normalizado || normalizeRating(found.rating);
+    const featParts = [
+      found.indexador && found.indexador !== '-' ? found.indexador : '',
+      vctoYear,
+      normR && normR !== 'Sem Rating' ? `Rating ${normR}` : (found.spread ? 'Spread NTN-B' : 'Histórico B3')
+    ].filter(Boolean);
+    document.title = `${tipoPrefix}${tickerStr}${issuerDisp ? ` (${issuerDisp})` : ''}${featParts.length ? ` — ${featParts.join(', ')}` : ''} | FIXDATA`;
 
     const metaDesc = document.querySelector('meta[name="description"]');
-    const descText = `Análise de ${tipoStr} ${found.ticker} emitida por ${found.issuer || 'Emissor'}. Indexador: ${found.indexador || '-'}, Vencimento: ${found.vencimento || '-'}, Rating: ${found.rating || '-'}. Dados de mercado no FIXDATA.`;
+    const spreadNum = found.spread !== undefined && found.spread !== null && !isNaN(Number(found.spread)) ? (Number(found.spread) * 100).toFixed(2) : null;
+    const descText = payload.aiSummary
+      ? payload.aiSummary.slice(0, 240)
+      : `Consulte dados de mercado de ${tipoStr} ${tickerStr}${rawIssuerName ? ` emitido por ${rawIssuerName}` : ''}. Indexador ${found.indexador || '-'}, vencimento ${vctoStr || '-'}${normR && normR !== 'Sem Rating' ? `, rating ${normR}` : ''}${spreadNum ? `, spread de ${spreadNum}%` : ''}. Acompanhe taxas ANBIMA, negócios B3 e fluxo de pagamentos no FIXDATA.`;
     if (metaDesc) {
       metaDesc.setAttribute('content', descText);
     }
@@ -584,8 +622,23 @@ const AssetPage: React.FC = () => {
       emitterCnpj: emitter?.cnpj,
       tipo: asset.tipo
     });
-  const debtorRaioXLink = effectiveRaioXCnpj ? `/raiox-devedor?cnpj=${effectiveRaioXCnpj}` : null;
+  const debtorRaioXLink = effectiveRaioXCnpj ? `/raiox-devedor/?cnpj=${effectiveRaioXCnpj}` : null;
   const prazoInfo = getPrazoAnosInfo(asset.vencimento);
+  const categoryHubHref = (asset.tipo || '').toLowerCase().includes('deb')
+    ? '/debentures/'
+    : (asset.tipo || '').toUpperCase() === 'CRI'
+    ? '/cri/'
+    : (asset.tipo || '').toUpperCase() === 'CRA'
+    ? '/cra/'
+    : '/';
+  const fallbackSummary =
+    `O ativo ${asset.ticker} é um título de crédito privado do tipo ${asset.tipo || 'Renda Fixa'} emitido por ${asset.issuer || 'Emissor Privado'}` +
+    `${taxaEmissaoFormatted ? `, com taxa de emissão de ${taxaEmissaoFormatted}` : ''}` +
+    `${asset.vencimento ? ` e vencimento em ${formatDatePretty(asset.vencimento)}` : ''}. ` +
+    `${normRating && normRating !== 'Sem Rating' ? `Rating normalizado: ${normRating}. ` : ''}` +
+    `Dados analíticos consolidados via FIXDATA (fixdatabrasil.com.br).`;
+  const effectiveAiSummary = aiSummary || fallbackSummary;
+  const resolvedSectorSlug = sectorSlug || (asset.setor && !['Outros Serviços', 'Crédito Privado', '-'].includes(asset.setor) ? slugify(asset.setor) : null);
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
@@ -620,7 +673,7 @@ const AssetPage: React.FC = () => {
           )}
 
           <Link
-            to={`/negocios?search=${encodeURIComponent(asset.ticker)}`}
+            to={`/negocios/?search=${encodeURIComponent(asset.ticker)}`}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold transition border border-slate-200 hover:border-blue-300"
             title="Ver histórico de negócios B3 deste ativo"
           >
@@ -656,7 +709,7 @@ const AssetPage: React.FC = () => {
         <div className="flex items-center gap-2">
           {asset && (
             <Link
-              to={`/calculadora?ticker=${encodeURIComponent(asset.ticker)}`}
+              to={`/calculadora/?ticker=${encodeURIComponent(asset.ticker)}`}
               className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 transition shadow-xs"
               title="Simular este ativo na Calculadora de Equivalência e Gross-up"
             >
@@ -678,6 +731,32 @@ const AssetPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* ================= SÍNTESE ANALÍTICA FIXDATA (GEO / SEO PRESERVADO NA HIDRATAÇÃO) ================= */}
+      <section className="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">
+              Síntese Analítica FIXDATA
+            </span>
+            <span className="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial de Mercado</span>
+          </div>
+          <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500">
+            <a href={categoryHubHref} className="text-blue-600 hover:underline">
+              {asset.tipo === 'Debênture' ? 'Todas as Debêntures' : asset.tipo === 'CRI' ? 'Todos os CRIs' : asset.tipo === 'CRA' ? 'Todos os CRAs' : 'Mercado'}
+            </a>
+            {issuerSlug && (
+              <>
+                <span className="text-slate-300">•</span>
+                <a href={`/emissor/${issuerSlug}/`} className="text-blue-600 hover:underline">
+                  Títulos do Emissor
+                </a>
+              </>
+            )}
+          </div>
+        </div>
+        <p className="font-normal text-slate-700">{effectiveAiSummary}</p>
+      </section>
 
       {/* ================= HERO CARD PRINCIPAL DO ATIVO ================= */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
@@ -1103,7 +1182,13 @@ const AssetPage: React.FC = () => {
               Setor Econômico (ANBIMA)
               <InfoTooltipDark text="Classificação setorial oficial de risco da ANBIMA para alocação e análise de concentração setorial em carteiras de crédito." />
             </span>
-            <p className="font-semibold text-slate-100">{asset.setor || 'Crédito Privado'}</p>
+            {resolvedSectorSlug ? (
+              <a href={`/setores/${resolvedSectorSlug}/`} className="font-semibold text-blue-300 hover:underline">
+                {asset.setor || 'Crédito Privado'}
+              </a>
+            ) : (
+              <p className="font-semibold text-slate-100">{asset.setor || 'Crédito Privado'}</p>
+            )}
           </div>
 
           {/* 13. AGENTE FIDUCIÁRIO */}
@@ -1172,6 +1257,17 @@ const AssetPage: React.FC = () => {
                     <Activity size={14} className="text-slate-400" />
                     <span>Sem análise de balanço CVM</span>
                   </span>
+                )}
+
+                {issuerSlug && (
+                  <a
+                    href={`/emissor/${issuerSlug}/`}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold rounded-xl transition border border-slate-200 shadow-xs"
+                  >
+                    <Building2 size={15} className="text-blue-600" />
+                    Ver todos os títulos do emissor
+                    <ArrowRight size={13} />
+                  </a>
                 )}
 
                 {emitter.site_ri && (
@@ -1490,6 +1586,103 @@ const AssetPage: React.FC = () => {
               </div>
             )}
           </div>
+
+      {/* ================= TÍTULOS RELACIONADOS & MALHA DE LINKS INTERNOS (PRESERVADO NA HIDRATAÇÃO) ================= */}
+      {(relatedIssuer.length > 0 || relatedSector.length > 0) && (
+        <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
+          <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h3 className="text-lg font-black text-slate-900">Títulos Relacionados & Mercado Secundário</h3>
+              <p className="text-xs text-slate-500">Explore emissões ativas da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
+              <Link to="/negocios/" className="text-blue-600 hover:underline">Negócios B3</Link>
+              <span className="text-slate-300">•</span>
+              <Link to="/comparar/" className="text-blue-600 hover:underline">Comparador</Link>
+              <span className="text-slate-300">•</span>
+              <a href={categoryHubHref} className="text-blue-600 hover:underline">
+                {asset.tipo === 'Debênture' ? 'Debêntures' : asset.tipo === 'CRI' ? 'CRIs' : asset.tipo === 'CRA' ? 'CRAs' : 'Catálogo'}
+              </a>
+              <span className="text-slate-300">•</span>
+              <Link to="/metodologia/" className="text-blue-600 hover:underline">Metodologia</Link>
+            </div>
+          </div>
+
+          {relatedIssuer.length > 0 && (
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                  <span>Outros Títulos Ativos de {asset.issuer || 'Mesmo Emissor'}</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">{relatedIssuer.length} papéis</span>
+                </h4>
+                {issuerSlug && (
+                  <a href={`/emissor/${issuerSlug}/`} className="text-xs font-bold text-blue-600 hover:underline">
+                    Ver página do emissor →
+                  </a>
+                )}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {relatedIssuer.map((it) => (
+                  <Link
+                    key={it.ticker}
+                    to={assetPath(it.ticker)}
+                    className="p-3.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between group"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-black text-slate-900 group-hover:text-blue-600 text-sm">{it.ticker}</span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{it.tipo}</span>
+                      </div>
+                      <p className="text-xs text-slate-500 font-medium line-clamp-1">{it.issuer}</p>
+                    </div>
+                    <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
+                      <span>Venc: <strong className="text-slate-800">{it.vencimento || '-'}</strong></span>
+                      <span className="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {relatedSector.length > 0 && (
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                  <span>Títulos Ativos no Setor ({asset.setor || 'Crédito Privado'})</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-semibold">{relatedSector.length} papéis</span>
+                </h4>
+                {resolvedSectorSlug && (
+                  <a href={`/setores/${resolvedSectorSlug}/`} className="text-xs font-bold text-emerald-700 hover:underline">
+                    Ver setor completo →
+                  </a>
+                )}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {relatedSector.map((it) => (
+                  <Link
+                    key={it.ticker}
+                    to={assetPath(it.ticker)}
+                    className="p-3.5 bg-slate-50 hover:bg-emerald-50/70 rounded-2xl border border-slate-200/80 hover:border-emerald-300 transition-all flex flex-col justify-between group"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-black text-slate-900 group-hover:text-emerald-700 text-sm">{it.ticker}</span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">{it.tipo}</span>
+                      </div>
+                      <p className="text-xs text-slate-500 font-medium line-clamp-1">{it.issuer}</p>
+                    </div>
+                    <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
+                      <span>Venc: <strong className="text-slate-800">{it.vencimento || '-'}</strong></span>
+                      <span className="text-emerald-700 font-bold group-hover:translate-x-0.5 transition-transform">Ver ativo →</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
     </div>
   );

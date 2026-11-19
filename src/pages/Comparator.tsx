@@ -24,6 +24,7 @@ import {
   Plus
 } from 'lucide-react';
 import { fetchCSV, Asset, normalizeRating } from '../utils/csv';
+import { assetPath } from '../utils/urls';
 
 interface DevedorKPIs {
   altman_z_score?: number;
@@ -925,10 +926,10 @@ export default function ComparatorPage() {
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
-              <Link to={`/asset/${asset1.ticker}`} className="text-blue-600 hover:underline font-bold">
+              <Link to={assetPath(asset1.ticker)} className="text-blue-600 hover:underline font-bold">
                 Raio-X {asset1.ticker} →
               </Link>
-              <Link to={`/asset/${asset2.ticker}`} className="text-indigo-600 hover:underline font-bold">
+              <Link to={assetPath(asset2.ticker)} className="text-indigo-600 hover:underline font-bold">
                 Raio-X {asset2.ticker} →
               </Link>
             </div>

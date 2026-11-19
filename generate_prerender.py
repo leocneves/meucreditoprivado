@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import json
 import math
 import shutil
@@ -7,6 +8,20 @@ import sqlite3
 import pandas as pd
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+from prerender_hubs import (
+    slugify,
+    esc,
+    shared_navbar_html,
+    shared_footer_html,
+    load_b3_summary_stats,
+    build_seo_hubs_registry,
+    write_hub_manifest,
+    render_all_hub_pages,
+    build_rich_static_page_body,
+    safe_float,
+)
 
 BASE_URL = "https://fixdatabrasil.com.br"
 DB_PATH = "/home/home/airflow/src/data/credito_privado.db"
@@ -354,9 +369,11 @@ PAYMENTS_MAP = None
 DOCS_MAP = None
 EMITTER_ASSETS_MAP = None
 SECTOR_ASSETS_MAP = None
+HUBS_REGISTRY = None
+B3_SUMMARY_STATS = None
 
 def init_maps(df=None):
-    global EMITTERS_MAP, RAIOX_MAP, PRICES_MAP, PAYMENTS_MAP, DOCS_MAP, EMITTER_ASSETS_MAP, SECTOR_ASSETS_MAP
+    global EMITTERS_MAP, RAIOX_MAP, PRICES_MAP, PAYMENTS_MAP, DOCS_MAP, EMITTER_ASSETS_MAP, SECTOR_ASSETS_MAP, HUBS_REGISTRY, B3_SUMMARY_STATS
     if EMITTERS_MAP is None:
         print("📊 Carregando bases analíticas em memória...")
         EMITTERS_MAP = get_emitters_map()
@@ -364,14 +381,33 @@ def init_maps(df=None):
         PRICES_MAP = get_prices_map()
         PAYMENTS_MAP = get_payments_map()
         DOCS_MAP = get_docs_map()
+        B3_SUMMARY_STATS = load_b3_summary_stats()
         
         if df is None:
             df = get_assets()
+
+        print("🏛️ Construindo registro de hubs (setores & Top 500 emissores)...")
+        HUBS_REGISTRY, hubs_manifest = build_seo_hubs_registry(
+            df=df,
+            emitters_map=EMITTERS_MAP,
+            raiox_map=RAIOX_MAP,
+            resolve_raiox_fn=resolve_raiox_cnpj,
+            norm_company_key_fn=norm_company_key,
+            clean_cnpj14_fn=clean_cnpj14,
+            is_securitizadora_fn=is_securitizadora_name,
+            normalize_rating_fn=normalize_rating,
+            is_valid_ticker_fn=is_valid_ticker,
+            b3_stats=B3_SUMMARY_STATS,
+            max_issuers=500,
+        )
+        write_hub_manifest(hubs_manifest)
         
-        print("🔗 Construindo índices de interlinking (emissor e setor)...")
+        print("🔗 Construindo índices de interlinking apenas com ativos VIGENTES ordenados por liquidez...")
         EMITTER_ASSETS_MAP = {}
         SECTOR_ASSETS_MAP = {}
         for _, r in df.iterrows():
+            if str(r.get('status_ativo', '')).strip() != 'Ativo':
+                continue
             t = str(r.get('ticker', '')).strip()
             if not is_valid_ticker(t):
                 continue
@@ -381,24 +417,31 @@ def init_maps(df=None):
             setor = str(r.get('setor', '')).strip()
             tipo = str(r.get('tipo', 'Título')).strip()
             venc = str(r.get('vencimento', '')).strip()
+
+            b3_info = B3_SUMMARY_STATS.get(t.upper(), {})
+            vol_b3 = max(safe_float(r.get('volume_negociado_b3'), 0.0), b3_info.get('vol', 0.0))
+            has_anb = 1 if (pd.notna(r.get('taxa_indicativa_anbima')) and str(r.get('taxa_indicativa_anbima')).strip() not in ('', 'nan', 'None')) else 0
+            vol_em = safe_float(r.get('volume') or r.get('volume_emissao'), 0.0)
+            score = (1 if vol_b3 > 0 else 0, vol_b3, has_anb, vol_em)
+
             item = {
                 'ticker': t,
                 'tipo': tipo,
                 'issuer': iss,
-                'vencimento': venc if venc and venc.lower() not in ('nan', 'none') else '-'
+                'vencimento': venc if venc and venc.lower() not in ('nan', 'none') else '-',
+                '_score': score,
             }
             if iss_key and iss_key not in ('nan', 'none', ''):
-                if iss_key not in EMITTER_ASSETS_MAP:
-                    EMITTER_ASSETS_MAP[iss_key] = []
-                EMITTER_ASSETS_MAP[iss_key].append(item)
+                EMITTER_ASSETS_MAP.setdefault(iss_key, []).append(item)
             if cnpj and cnpj not in ('nan', 'none', '', '-'):
-                if cnpj not in EMITTER_ASSETS_MAP:
-                    EMITTER_ASSETS_MAP[cnpj] = []
-                EMITTER_ASSETS_MAP[cnpj].append(item)
+                EMITTER_ASSETS_MAP.setdefault(cnpj, []).append(item)
             if setor and setor not in ('nan', 'none', '', '-'):
-                if setor not in SECTOR_ASSETS_MAP:
-                    SECTOR_ASSETS_MAP[setor] = []
-                SECTOR_ASSETS_MAP[setor].append(item)
+                SECTOR_ASSETS_MAP.setdefault(setor, []).append(item)
+
+        for k in EMITTER_ASSETS_MAP:
+            EMITTER_ASSETS_MAP[k].sort(key=lambda x: x['_score'], reverse=True)
+        for k in SECTOR_ASSETS_MAP:
+            SECTOR_ASSETS_MAP[k].sort(key=lambda x: x['_score'], reverse=True)
                 
         print("✅ Bases analíticas e índices de interlinking carregados!")
 
@@ -592,7 +635,10 @@ def generate_asset_html(row):
     else:
         regime_fiduciario = 'Padrão'
 
-    spread_badge = f"+{spread} vs NTN-B" if (spread and spread != '-') else "Preço Fechamento"
+    if spread and spread != '-':
+        spread_badge = f"{spread} vs NTN-B" if spread.startswith(("-", "+")) else f"+{spread} vs NTN-B"
+    else:
+        spread_badge = "Preço Fechamento"
 
     publico_alvo_val = str(row.get('publico_alvo') or '').strip()
     publico_alvo = publico_alvo_val if publico_alvo_val and publico_alvo_val.lower() not in ('nan', 'none', '') else 'Não Informado'
@@ -713,7 +759,7 @@ def generate_asset_html(row):
     else:
         asset_label = f"do {tipo} {ticker} emitido por {issuer}{cnpj_desc}"
 
-    lead_article = "" if asset_label.startswith("da ") else "do "
+    lead_article = "" if asset_label.startswith(("da ", "do ")) else "do "
     description = (
         f"Consulte dados de mercado {lead_article}{asset_label}. "
         f"Indexador {indexador}, vencimento em {vcto_br}{rating_phrase}{spread_phrase}{duration_phrase}. "
@@ -728,7 +774,7 @@ def generate_asset_html(row):
     volume_emissao_val = safe_fmt_pu(row.get('volume_emissao') or row.get('volume'))
     vol_str = f", com volume emitido de {volume_emissao_val}" if volume_emissao_val != '-' else ""
     spread_str = f" e spread indicativo de {spread} sobre a NTN-B soberana" if spread and spread != '-' else ""
-    duration_str = f" (duration modificada de {duration} anos)" if duration and duration != '-' else ""
+    duration_str = f" (duration modificada de {duration})" if duration and duration != '-' else ""
     rating_str = f", avaliado com rating {rating_norm} em escala nacional" if rating_norm and rating_norm != 'Sem Rating' else ""
 
     ai_executive_summary = (
@@ -746,6 +792,24 @@ def generate_asset_html(row):
             provider_data["taxID"] = emitter_info['cnpj_formatado']
         if emitter_info.get('site_ri'):
             provider_data["url"] = emitter_info['site_ri']
+
+    is_active_asset = str(row.get('status_ativo', '')).strip() == 'Ativo'
+    robots_content = "index, follow" if is_active_asset else "noindex, follow"
+
+    cat_hub_path = "/debentures/" if "deb" in tipo.lower() else ("/cri/" if tipo.upper() == "CRI" else ("/cra/" if tipo.upper() == "CRA" else "/"))
+    cat_hub_url = f"{BASE_URL}{cat_hub_path}"
+
+    resolved_issuer_slug = None
+    resolved_sector_slug = None
+    if HUBS_REGISTRY:
+        resolved_sector_slug = HUBS_REGISTRY["sector_slugs"].get(setor)
+        cand_name = (emitter_info.get("razao_social") if emitter_info and emitter_info.get("razao_social") else issuer).strip()
+        resolved_issuer_slug = (
+            HUBS_REGISTRY["issuer_slug_by_raw"].get(issuer_key)
+            or HUBS_REGISTRY["issuer_slug_by_canon"].get(norm_company_key(cand_name))
+            or HUBS_REGISTRY["issuer_slug_by_canon"].get(norm_company_key(issuer))
+            or (HUBS_REGISTRY["issuer_slug_by_cnpj"].get(cnpj_14_asset) if not is_cricra_asset else None)
+        )
 
     schema_json = json.dumps({
         "@context": "https://schema.org",
@@ -769,7 +833,7 @@ def generate_asset_html(row):
                         "@type": "ListItem",
                         "position": 2,
                         "name": f"{tipo}s",
-                        "item": f"{BASE_URL}/"
+                        "item": cat_hub_url
                     },
                     {
                         "@type": "ListItem",
@@ -817,13 +881,49 @@ def generate_asset_html(row):
     if not asset_docs and isin and isin != '-':
         asset_docs = DOCS_MAP.get(isin.upper(), [])
 
+    # Bloco de Títulos Relacionados (Internal Linking & Crawl Graph - Somente Ativos Vigentes)
+    related_same_issuer = []
+    iss_key = issuer.lower().strip()
+    cnpj = str(row.get('cnpj_emissor', '')).strip()
+    seen_rel = {ticker.upper()}
+
+    candidates_issuer = []
+    if EMITTER_ASSETS_MAP:
+        if iss_key in EMITTER_ASSETS_MAP:
+            candidates_issuer.extend(EMITTER_ASSETS_MAP[iss_key])
+        if cnpj and cnpj in EMITTER_ASSETS_MAP:
+            candidates_issuer.extend(EMITTER_ASSETS_MAP[cnpj])
+
+    for item in candidates_issuer:
+        tk = item['ticker'].upper()
+        if tk not in seen_rel:
+            seen_rel.add(tk)
+            related_same_issuer.append({k: v for k, v in item.items() if k != '_score'})
+            if len(related_same_issuer) >= 4:
+                break
+
+    related_same_sector = []
+    if SECTOR_ASSETS_MAP and setor and setor in SECTOR_ASSETS_MAP:
+        for item in SECTOR_ASSETS_MAP[setor]:
+            tk = item['ticker'].upper()
+            if tk not in seen_rel:
+                seen_rel.add(tk)
+                related_same_sector.append({k: v for k, v in item.items() if k != '_score'})
+                if len(related_same_sector) >= 4:
+                    break
+
     payload = {
         "asset": asset_dict,
         "prices": asset_prices,
         "emitter": emitter_info,
         "raiox_cnpj": raiox_cnpj,
         "paymentEvents": asset_payments,
-        "documents": asset_docs
+        "documents": asset_docs,
+        "aiSummary": ai_executive_summary,
+        "relatedIssuer": related_same_issuer,
+        "relatedSector": related_same_sector,
+        "issuerSlug": resolved_issuer_slug,
+        "sectorSlug": resolved_sector_slug,
     }
 
     payload = sanitize_json_nan(payload)
@@ -833,7 +933,8 @@ def generate_asset_html(row):
     emitter_section_html = ""
     if emitter_info:
         ri_button = f'<a href="{emitter_info["site_ri"]}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200">Portal de RI &rarr;</a>' if emitter_info.get("site_ri") else ""
-        raiox_button = f'<a href="/raiox-devedor?cnpj={raiox_cnpj}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold rounded-lg transition shadow-xs">Ir para análise do devedor &rarr;</a>' if raiox_cnpj else ""
+        issuer_hub_button = f'<a href="/emissor/{resolved_issuer_slug}/" class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold rounded-lg border border-slate-200">Todos os títulos do emissor &rarr;</a>' if resolved_issuer_slug else ""
+        raiox_button = f'<a href="/raiox-devedor/?cnpj={raiox_cnpj}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold rounded-lg transition shadow-xs">Ir para análise do devedor &rarr;</a>' if raiox_cnpj else ""
         primary_emitter_title = emitter_info.get("razao_social") or issuer
         fantasia_sub = f'<p class="text-xs text-slate-500 font-medium">{emitter_info["nome_fantasia"]}</p>' if emitter_info.get("nome_fantasia") and emitter_info.get("nome_fantasia") != primary_emitter_title else ""
         desc_box = f'<p class="text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100 mt-3">{emitter_info["descricao"]}</p>' if emitter_info.get("descricao") else ""
@@ -848,6 +949,7 @@ def generate_asset_html(row):
             </div>
             <div class="flex flex-wrap items-center gap-2">
               {raiox_button}
+              {issuer_hub_button}
               {ri_button}
             </div>
           </div>
@@ -955,37 +1057,6 @@ def generate_asset_html(row):
         </div>
         """
 
-    # Bloco de Títulos Relacionados (Internal Linking & Crawl Graph)
-    related_same_issuer = []
-    iss_key = issuer.lower().strip()
-    cnpj = str(row.get('cnpj_emissor', '')).strip()
-    seen_rel = {ticker.upper()}
-
-    candidates_issuer = []
-    if EMITTER_ASSETS_MAP:
-        if iss_key in EMITTER_ASSETS_MAP:
-            candidates_issuer.extend(EMITTER_ASSETS_MAP[iss_key])
-        if cnpj and cnpj in EMITTER_ASSETS_MAP:
-            candidates_issuer.extend(EMITTER_ASSETS_MAP[cnpj])
-
-    for item in candidates_issuer:
-        tk = item['ticker'].upper()
-        if tk not in seen_rel:
-            seen_rel.add(tk)
-            related_same_issuer.append(item)
-            if len(related_same_issuer) >= 4:
-                break
-
-    related_same_sector = []
-    if SECTOR_ASSETS_MAP and setor and setor in SECTOR_ASSETS_MAP:
-        for item in SECTOR_ASSETS_MAP[setor]:
-            tk = item['ticker'].upper()
-            if tk not in seen_rel:
-                seen_rel.add(tk)
-                related_same_sector.append(item)
-                if len(related_same_sector) >= 4:
-                    break
-
     related_issuer_cards = ""
     if related_same_issuer:
         cards_html = "".join([
@@ -1044,14 +1115,46 @@ def generate_asset_html(row):
         </div>
         """
 
+    related_sector_link = f'<a href="/setores/{resolved_sector_slug}/" class="text-xs font-bold text-emerald-700 hover:underline">Ver setor completo →</a>' if resolved_sector_slug else ""
+    related_issuer_link = f'<a href="/emissor/{resolved_issuer_slug}/" class="text-xs font-bold text-blue-600 hover:underline">Ver página do emissor →</a>' if resolved_issuer_slug else ""
+    setor_spec_html = f'<a href="/setores/{resolved_sector_slug}/" class="font-semibold text-blue-300 hover:underline">{setor}</a>' if resolved_sector_slug else f'<p class="font-semibold text-slate-100">{setor}</p>'
+    navbar_html = shared_navbar_html()
+    footer_html = shared_footer_html()
+
+    if related_issuer_cards:
+        related_issuer_cards = related_issuer_cards.replace(
+            f'<span>Outros Títulos Emitidos por {issuer}</span>',
+            f'<span>Outros Títulos Ativos de {issuer}</span>'
+        )
+        if related_issuer_link:
+            related_issuer_cards = related_issuer_cards.replace(
+                '</h4>',
+                f'</h4>\n          {related_issuer_link}',
+                1
+            )
+
+    if related_sector_cards:
+        related_sector_cards = related_sector_cards.replace(
+            f'<span>Títulos Semelhantes no Setor ({setor})</span>',
+            f'<span>Títulos Ativos no Setor ({setor})</span>'
+        )
+        if related_sector_link:
+            related_sector_cards = related_sector_cards.replace(
+                '</h4>',
+                f'</h4>\n          {related_sector_link}',
+                1
+            )
+
     related_assets_section_html = f"""
     <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-6">
       <div class="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h3 class="text-lg font-black text-slate-900">Títulos Relacionados & Mercado Secundário</h3>
-          <p class="text-xs text-slate-500">Explore emissões da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
+          <p class="text-xs text-slate-500">Explore emissões ativas da mesma companhia e oportunidades comparáveis no mesmo setor econômico.</p>
         </div>
-        <div class="flex items-center gap-2 text-xs font-semibold">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+          <a href="{cat_hub_path}" class="text-blue-600 hover:underline">{tipo}s</a>
+          <span class="text-slate-300">•</span>
           <a href="/negocios/" class="text-blue-600 hover:underline">Negócios B3</a>
           <span class="text-slate-300">•</span>
           <a href="/comparar/" class="text-blue-600 hover:underline">Comparador</a>
@@ -1066,6 +1169,8 @@ def generate_asset_html(row):
           <span>← Voltar à Página Inicial / Buscar Mais Ativos</span>
         </a>
         <div class="flex items-center gap-3">
+          <a href="/emissores/" class="hover:text-blue-600 transition">Emissores</a>
+          <span>•</span>
           <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
           <span>•</span>
           <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X de Emissores</a>
@@ -1093,7 +1198,7 @@ def generate_asset_html(row):
     <meta name="title" content="{title}" />
     <meta name="description" content="{description}" />
     <meta name="keywords" content="{ticker}, {issuer}, {tipo}, {isin}, debênture, CRI, CRA, renda fixa, taxa {indexador}, rating {rating}, spread de crédito, FIXDATA" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="{robots_content}" />
     <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
     <link rel="canonical" href="{page_url}" />
 
@@ -1131,63 +1236,16 @@ def generate_asset_html(row):
       }}(window.location))
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="importmap">
-    {{
-      "imports": {{
-        "vite": "https://esm.sh/vite@^7.3.1",
-        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-        "papaparse": "https://esm.sh/papaparse@^5.5.3",
-        "react": "https://esm.sh/react@^19.2.4",
-        "react-dom": "https://esm.sh/react-dom@^19.2.4",
-        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
-        "fuse.js": "https://esm.sh/fuse.js@^7.1.0",
-        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
-        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "recharts": "https://esm.sh/recharts@^2.15.1",
-        "chart.js": "https://esm.sh/chart.js@^4.5.1",
-        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1"
-      }}
-    }}
-    </script>
     <link rel="stylesheet" href="/index.css">
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-between items-center h-16">
-            <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
-              <div class="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-sm sm:text-base shadow-xs hover:bg-blue-700 transition">
-                FIX<span class="text-blue-200 font-extrabold">DATA</span>
-              </div>
-            </a>
-            <div class="hidden md:flex items-center gap-0.5 lg:gap-1">
-              <a href="/" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Home</a>
-              <a href="/raiox-devedor" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Raio-X Devedor</a>
-              <a href="/calculadora" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Calculadora</a>
-              <a href="/negocios" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Negócios B3</a>
-              <a href="/charts" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Crédito Privado</a>
-              <a href="/ntnb" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Curva NTN-B</a>
-              <a href="/primary" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Mercado Primário</a>
-              <a href="/contact" class="flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm text-slate-500 hover:bg-slate-50">Contato & Apoio</a>
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a href="/raiox-devedor" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                  <span>Entrar</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+{navbar_html}
 
       <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
-          <a href="/" class="hover:underline">{tipo}s</a> &gt;
+          <a href="{cat_hub_path}" class="hover:underline">{tipo}s</a> &gt;
           <span class="text-slate-800 font-bold">{ticker}</span>
         </div>
 
@@ -1283,7 +1341,7 @@ def generate_asset_html(row):
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Periodicidade de Cupons</span><p class="font-semibold text-slate-100">{periodicidade_cupom}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Próximo Cupom</span><p class="font-semibold text-emerald-400">{dt_prox_cupom_display}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">VNA / PU Par</span><p class="font-mono text-xs font-bold text-slate-100">VNA: {vna_display}<br /><span class="text-indigo-300">Par: {pu_par_display}</span></p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">{setor}</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span>{setor_spec_html}</div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">{agente_fiduciario}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">{coordenador_lider}</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">{prazo_anos_display}</p></div>
@@ -1302,6 +1360,7 @@ def generate_asset_html(row):
           Dados fornecidos por ANBIMA, CVM e B3 através do FIXDATA. Cotações e preços históricos sujeitos à liquidez do mercado secundário.
         </p>
       </main>
+{footer_html}
     </div>
     
     <script id="__PRELOADED_ASSET__" type="application/json">
@@ -1485,12 +1544,15 @@ STATIC_PAGES_META = [
     },
 ]
 
-def render_static_pages():
-    print("📄 Gerando páginas estáticas institucionais para SEO...")
+def render_static_pages(df_active_count: int = 7321):
+    print("📄 Gerando páginas estáticas institucionais enriquecidas para SEO/GEO...")
     bundle_tag = get_bundle_script()
+    navbar_html = shared_navbar_html()
+    footer_html = shared_footer_html()
     for p in STATIC_PAGES_META:
         slug = p["slug"]
         page_url = f"{BASE_URL}/{slug}/"
+        body_main_html, extra_ld = build_rich_static_page_body(slug, df_active_count, format_currency)
         html = f"""<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -1526,36 +1588,16 @@ def render_static_pages():
     <meta property="twitter:title" content="{p['title']}" />
     <meta property="twitter:description" content="{p['description']}" />
     <meta property="twitter:image" content="{BASE_URL}/icon-512x512.png" />
+    {extra_ld}
 
     <link rel="stylesheet" href="/index.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     {bundle_tag}
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-between items-center h-16">
-            <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
-              <div class="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-sm sm:text-base shadow-xs hover:bg-blue-700 transition">
-                FIX<span class="text-blue-200 font-extrabold">DATA</span>
-              </div>
-            </a>
-            <div class="text-xs text-slate-500 font-medium">Plataforma de Renda Fixa e Crédito Privado</div>
-          </div>
-        </div>
-      </nav>
-
-      <main class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 max-w-4xl mx-auto space-y-4">
-          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{p['h1']}</h1>
-          <p class="text-base sm:text-lg text-slate-600 leading-relaxed">{p['lead']}</p>
-          <div class="pt-4 border-t border-slate-100 flex items-center gap-2 text-sm text-slate-500">
-            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Carregando dados interativos em tempo real...</span>
-          </div>
-        </div>
-      </main>
+{navbar_html}
+{body_main_html}
+{footer_html}
     </div>
   </body>
 </html>"""
@@ -1566,7 +1608,7 @@ def render_static_pages():
                 f.write(html)
         print(f"   ✅ /{slug}/ gerada em public/ e docs/", flush=True)
 
-def render_home_page():
+def render_home_page(total_count: int = None, active_count: int = None):
     print("🏠 Gerando Home Page pré-renderizada com links estáticos dos 50 ativos mais líquidos...", flush=True)
     # 1. Carrega dados de mercado
     market_kpis_file = "public/data/b3_market_kpis.json"
@@ -1583,6 +1625,17 @@ def render_home_page():
     trades_dia = f"{ult.get('total_trades', 0):,}".replace(",", ".")
     ativos_dia = f"{ult.get('ativos_negociados', 0):,}".replace(",", ".")
     dt_dia = ult.get("data", "")
+
+    if total_count is None or active_count is None:
+        try:
+            df_tmp = get_assets()
+            total_count = len(df_tmp)
+            active_count = int((df_tmp["status_ativo"].astype(str).str.strip() == "Ativo").sum())
+        except Exception:
+            total_count = 15766
+            active_count = 7321
+    total_count_fmt = f"{total_count:,}".replace(",", ".")
+    active_count_fmt = f"{active_count:,}".replace(",", ".")
     
     # 2. Carrega Top 50 ativos mais negociados na B3
     top_50 = []
@@ -1603,10 +1656,13 @@ def render_home_page():
         top_50 = ult.get("top_ativos", [])
 
     rows_html = []
+    top3_tickers = []
     for it in top_50:
         tk = str(it.get('ticker', '')).strip()
         if not is_valid_ticker(tk):
             continue
+        if len(top3_tickers) < 3:
+            top3_tickers.append(tk)
         tipo = str(it.get('tipo', 'Título')).strip()
         devedor = str(it.get('devedor', '')).strip()
         vol = format_currency(it.get('volume_financeiro', 0))
@@ -1643,28 +1699,13 @@ def render_home_page():
         </tr>""")
 
     table_rows = "".join(rows_html)
+    dt_dia_br = f"{dt_dia[8:10]}/{dt_dia[5:7]}/{dt_dia[:4]}" if len(dt_dia) >= 10 and dt_dia[4] == "-" else dt_dia
+    top3_links = ", ".join(f'<a href="/asset/{tk.lower()}/" class="font-mono font-bold text-blue-600 hover:underline">{tk}</a>' for tk in top3_tickers)
+    navbar_html = shared_navbar_html()
+    footer_html = shared_footer_html()
 
     home_body_html = f"""
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-between items-center h-16">
-            <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
-              <div class="px-3 py-1 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black tracking-wider text-sm sm:text-base shadow-xs hover:bg-blue-700 transition">
-                FIX<span class="text-blue-200 font-extrabold">DATA</span>
-              </div>
-            </a>
-            <div class="hidden md:flex items-center gap-4 text-xs font-bold text-slate-600">
-              <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
-              <a href="/charts/" class="hover:text-blue-600 transition">Dashboard Secundário</a>
-              <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X do Devedor</a>
-              <a href="/agenda/" class="hover:text-blue-600 transition">Agenda de Pagamentos</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition">Calculadora</a>
-              <a href="/contact/" class="hover:text-blue-600 transition">Contato & Apoio</a>
-            </div>
-          </div>
-        </div>
-      </nav>
+{navbar_html}
 
       <main class="container mx-auto px-4 py-8 space-y-10">
         <!-- Hero Section Institucional -->
@@ -1677,7 +1718,7 @@ def render_home_page():
               Inteligência de Mercado para Debêntures, CRIs e CRAs
             </h1>
             <p class="text-slate-300 text-base md:text-lg leading-relaxed font-normal">
-              Acompanhe cotações em tempo real, taxas indicativas ANBIMA, spreads sobre a curva NTN-B, volume diário da B3, ratings e solvência de mais de 16.000 títulos corporativos brasileiros.
+              Acompanhe cotações em tempo real, taxas indicativas ANBIMA, spreads sobre a curva NTN-B, volume diário da B3, ratings e solvência de {active_count_fmt} títulos vigentes (e {total_count_fmt} no histórico completo CVM/ANBIMA).
             </p>
           </div>
         </div>
@@ -1700,11 +1741,62 @@ def render_home_page():
             <span class="text-[11px] text-slate-500">Títulos com liquidez no pregão</span>
           </div>
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-            <span class="text-xs font-bold text-slate-400 uppercase">Universo Monitorado</span>
-            <p class="text-2xl font-black text-purple-600">15.747</p>
-            <span class="text-[11px] text-slate-500">Debêntures, CRIs e CRAs CVM</span>
+            <span class="text-xs font-bold text-slate-400 uppercase">Ativos Vigentes</span>
+            <p class="text-2xl font-black text-purple-600">{active_count_fmt}</p>
+            <span class="text-[11px] text-slate-500">{total_count_fmt} títulos no cadastro CVM</span>
           </div>
         </div>
+
+        <!-- Panorama Diário Citável (GEO / LLMs) -->
+        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-5 sm:p-6 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Panorama Diário B3 &amp; ANBIMA</span>
+            <span class="text-[11px] font-semibold text-slate-500">Atualizado em {dt_dia_br}</span>
+          </div>
+          <p class="text-slate-700">
+            Em <strong>{dt_dia_br}</strong>, o mercado secundário brasileiro de crédito privado movimentou <strong>{vol_dia}</strong> em <strong>{trades_dia} negócios</strong> registrados na B3 sobre <strong>{ativos_dia} ativos</strong> de um universo de <strong>{active_count_fmt} títulos vigentes</strong> monitorados pelo FIXDATA (fixdatabrasil.com.br). Entre os papéis mais líquidos estão {top3_links}.
+          </p>
+        </section>
+
+        <!-- Explorar por Categoria, Setores & Emissores -->
+        <section class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg sm:text-xl font-black text-slate-900">Explorar por Categoria, Setores &amp; Emissores</h2>
+            <a href="/emissores/" class="text-xs font-bold text-blue-600 hover:underline">Diretório de Emissores →</a>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <a href="/debentures/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-400 transition group">
+              <span class="text-[10px] font-bold text-blue-600 uppercase">Instrumento</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-blue-600">Debêntures</h3>
+              <p class="text-[11px] text-slate-500">Papéis ativos &amp; B3</p>
+            </a>
+            <a href="/debentures-incentivadas/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-400 transition group">
+              <span class="text-[10px] font-bold text-emerald-600 uppercase">Isento de IR</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-emerald-700">Lei 12.431/11</h3>
+              <p class="text-[11px] text-slate-500">Incentivadas IPCA+</p>
+            </a>
+            <a href="/cri/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-violet-400 transition group">
+              <span class="text-[10px] font-bold text-violet-600 uppercase">Imobiliário</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-violet-700">CRIs Ativos</h3>
+              <p class="text-[11px] text-slate-500">Recebíveis imobiliários</p>
+            </a>
+            <a href="/cra/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-400 transition group">
+              <span class="text-[10px] font-bold text-teal-600 uppercase">Agronegócio</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-teal-700">CRAs Ativos</h3>
+              <p class="text-[11px] text-slate-500">Recebíveis do agro</p>
+            </a>
+            <a href="/setores/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-indigo-400 transition group">
+              <span class="text-[10px] font-bold text-indigo-600 uppercase">ANBIMA</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-indigo-700">Setores</h3>
+              <p class="text-[11px] text-slate-500">Energia, saneamento e mais</p>
+            </a>
+            <a href="/emissores/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-amber-400 transition group">
+              <span class="text-[10px] font-bold text-amber-600 uppercase">Companhias</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-amber-700">Emissores</h3>
+              <p class="text-[11px] text-slate-500">Top 500 devedores</p>
+            </a>
+          </div>
+        </section>
 
         <!-- Tabela Estática com Top 50 Ativos Mais Negociados -->
         <section class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm space-y-4">
@@ -1775,41 +1867,15 @@ def render_home_page():
         </section>
       </main>
 
-      <footer class="bg-white border-t border-slate-200 py-10 mt-20">
-        <div class="container mx-auto px-4 text-center space-y-3">
-          <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
-            <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
-            <span>•</span>
-            <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
-            <span>•</span>
-            <a href="/termos/" class="hover:text-blue-600 transition">Termos de Uso</a>
-            <span>•</span>
-            <a href="/privacidade/" class="hover:text-blue-600 transition">Privacidade (LGPD)</a>
-            <span>•</span>
-            <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
-            <span>•</span>
-            <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
-            <span>•</span>
-            <a href="/contact/" class="hover:text-blue-600 transition">Contato & Apoio</a>
-          </div>
-          <p class="text-slate-500 text-sm font-semibold">
-            &copy; {datetime.now().year} FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.
-          </p>
-          <p class="text-slate-400 text-xs font-medium">
-            Desenvolvido por <a href="https://www.linkedin.com/in/leonardo-contador-neves-096312119/" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-600 transition-colors font-bold">Leonardo Contador Neves</a>
-          </p>
-          <p class="text-slate-300 text-[10px] uppercase tracking-widest">
-            Base de dados CVM, ANBIMA e B3
-          </p>
-        </div>
-      </footer>
+{footer_html}
     """
 
     # 3. Gera template HTML determinístico e limpo para index.html, docs/index.html e public/index.html
     bundle_tag = get_bundle_script()
     source_script_tag = '<script type="module" src="/src/main.tsx"></script>'
 
-    def build_clean_home_doc(script_tag_to_inject: str) -> str:
+    def build_clean_home_doc(script_tag_to_inject: str, include_static_css: bool) -> str:
+        css_link = '<link rel="stylesheet" href="/index.css">' if include_static_css else ''
         return f"""<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -1825,19 +1891,18 @@ def render_home_page():
     <!-- SEO Primary Tags -->
     <title>FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário</title>
     <meta name="title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
-    <meta name="description" content="Plataforma de inteligência de mercado para mais de 16.000 Debêntures, CRIs e CRAs. Acompanhe taxas, spreads contra NTN-B, ratings, duration e preços diários de fechamento de forma gratuita." />
+    <meta name="description" content="Plataforma de inteligência de mercado para Debêntures, CRIs e CRAs ({active_count_fmt} ativos vigentes). Acompanhe taxas, spreads contra NTN-B, ratings, duration e preços diários de forma gratuita." />
     <meta name="keywords" content="FIXDATA, renda fixa, debêntures, CRI, CRA, mercado secundário, taxas indicativas, ANBIMA, NTN-B, spread de crédito, ratings, inteligência de renda fixa" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://fixdatabrasil.com.br/" />
     <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="https://fixdatabrasil.com.br/feed.xml" />
-    <meta name="google-site-verification" content="google5ed1f75e95ab450f.html" />
     <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
     
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://fixdatabrasil.com.br/" />
     <meta property="og:title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
-    <meta property="og:description" content="Acompanhe mais de 16.000 Debêntures, CRIs e CRAs com taxas, spreads, ratings e gráficos históricos de forma 100% gratuita." />
+    <meta property="og:description" content="Acompanhe Debêntures, CRIs e CRAs vigentes com taxas, spreads, ratings e gráficos históricos de forma 100% gratuita." />
     <meta property="og:site_name" content="FIXDATA" />
     <meta property="og:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
     
@@ -1881,30 +1946,7 @@ def render_home_page():
       }}(window.location))
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="/index.css">
-
-    <script type="importmap">
-    {{
-      "imports": {{
-        "vite": "https://esm.sh/vite@^7.3.1",
-        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-        "papaparse": "https://esm.sh/papaparse@^5.5.3",
-        "react": "https://esm.sh/react@^19.2.4",
-        "react-dom": "https://esm.sh/react-dom@^19.2.4",
-        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
-        "fuse.js": "https://esm.sh/fuse.js@^7.1.0",
-        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
-        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "recharts": "https://esm.sh/recharts@^2.15.1",
-        "chart.js": "https://esm.sh/chart.js@^4.5.1",
-        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1"
-      }}
-    }}
-    </script>
+    {css_link}
     {script_tag_to_inject}
   </head>
   <body class="bg-slate-50 text-slate-900">
@@ -1913,13 +1955,13 @@ def render_home_page():
 </html>
 """
 
-    docs_html = build_clean_home_doc(bundle_tag)
+    docs_html = build_clean_home_doc(bundle_tag, include_static_css=True)
     for out_p in ("docs/index.html", "public/index.html"):
         os.makedirs(os.path.dirname(out_p), exist_ok=True)
         with open(out_p, "w", encoding="utf-8") as f:
             f.write(docs_html)
 
-    root_html = build_clean_home_doc(source_script_tag)
+    root_html = build_clean_home_doc(source_script_tag, include_static_css=False)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(root_html)
 
@@ -1981,14 +2023,18 @@ def prune_orphaned_assets(valid_tickers: set, valid_json_names: set = None):
 def main():
     print("Iniciando pré-renderização estática de HTMLs para SEO...")
 
-    # Gera imediatamente páginas institucionais com canonical e SEO próprio
-    render_static_pages()
-
-    # Gera Home Page estática com os 50 ativos mais líquidos da B3
-    render_home_page()
-
     df = get_assets()
     init_maps(df)
+    active_count = len(HUBS_REGISTRY["active_df"]) if HUBS_REGISTRY else len(df)
+
+    # Gera imediatamente páginas institucionais enriquecidas com canonical e SEO próprio
+    render_static_pages(df_active_count=active_count)
+
+    # Gera Home Page estática com os 50 ativos mais líquidos da B3 + Panorama + Hubs
+    render_home_page(total_count=len(df), active_count=active_count)
+
+    # Gera hubs puramente estáticos (Categorias, Setores ANBIMA, Top 500 Emissores)
+    render_all_hub_pages(HUBS_REGISTRY, B3_SUMMARY_STATS, format_currency, normalize_rating, is_valid_ticker)
 
     rows = [row for _, row in df.iterrows()]
     print(f"Processando {len(rows)} ativos...")

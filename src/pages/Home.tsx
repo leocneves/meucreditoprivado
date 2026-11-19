@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchCSV, fetchMetadata, Asset, Metadata, DocsOverview, DistressSummary, normalizeRating, getRatingBadgeClass } from '../utils/csv';
 import { getCachedRaioXIndex, loadRaioXIndex, resolveRaioXCnpj, RaioXIndex } from '../utils/raioxLookup';
+import { assetPath } from '../utils/urls';
 import SearchBar from '../components/SearchBar';
 import Watchlist from '../components/Watchlist';
 import {
@@ -158,10 +159,6 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     try {
-      const hasSeen = localStorage.getItem('fixdata_primary_modal_v1');
-      if (!hasSeen) {
-        setShowPrimaryModal(true);
-      }
       const hasDismissedTelegram = localStorage.getItem('fixdata_telegram_banner_dismissed');
       if (hasDismissedTelegram) {
         setShowTelegramBanner(false);
@@ -1147,7 +1144,7 @@ const Home: React.FC = () => {
                       return (
                         <tr key={i} className="hover:bg-slate-50 transition">
                           <td className="p-2.5 font-bold">
-                            <Link to={`/asset/${a.ticker}`} className="text-blue-600 hover:underline">
+                            <Link to={assetPath(a.ticker)} className="text-blue-600 hover:underline">
                               {a.ticker}
                             </Link>
                           </td>
@@ -1185,8 +1182,8 @@ const Home: React.FC = () => {
                 {topEmissores.map((item, idx) => {
                   const matchedRaioXCnpj = resolveRaioXCnpj(raioxIndex, { issuer: item.name });
                   const destLink = matchedRaioXCnpj
-                    ? `/raiox-devedor?cnpj=${matchedRaioXCnpj}`
-                    : `/negocios?search=${encodeURIComponent(item.name)}`;
+                    ? `/raiox-devedor/?cnpj=${matchedRaioXCnpj}`
+                    : `/negocios/?search=${encodeURIComponent(item.name)}`;
                   return (
                     <Link
                       key={idx}
@@ -1323,7 +1320,7 @@ const Home: React.FC = () => {
                           {caso.tickers?.slice(0, 3).map(tk => (
                             <Link
                               key={tk}
-                              to={`/asset/${tk}`}
+                              to={assetPath(tk)}
                               className="font-mono font-bold text-[11px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 hover:bg-blue-500/40"
                             >
                               {tk}
@@ -1350,6 +1347,83 @@ const Home: React.FC = () => {
           </div>
         </section>
       )}
+
+      {/* ================= EXPLORAR POR CATEGORIA, SETORES & EMISSORES ================= */}
+      <section className="container mx-auto px-4 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+              Explorar por Categoria, Setores & Emissores
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Catálogos públicos organizados de ativos vigentes, setores ANBIMA e companhias emissoras.
+            </p>
+          </div>
+          <a
+            href="/emissores/"
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1"
+          >
+            <span>Ver Diretório de Emissores</span>
+            <ArrowRight size={14} />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <a
+            href="/debentures/"
+            className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-400 hover:shadow-sm transition group space-y-1"
+          >
+            <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Instrumento</span>
+            <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-blue-600">Debêntures</h3>
+            <p className="text-[11px] text-slate-500">Papéis ativos & liquidez B3</p>
+          </a>
+
+          <a
+            href="/debentures-incentivadas/"
+            className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-400 hover:shadow-sm transition group space-y-1"
+          >
+            <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Isento de IR</span>
+            <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-emerald-700">Lei 12.431/11</h3>
+            <p className="text-[11px] text-slate-500">Debêntures incentivadas</p>
+          </a>
+
+          <a
+            href="/cri/"
+            className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-violet-400 hover:shadow-sm transition group space-y-1"
+          >
+            <span className="text-[10px] font-bold text-violet-600 uppercase tracking-wider">Imobiliário</span>
+            <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-violet-700">CRIs Ativos</h3>
+            <p className="text-[11px] text-slate-500">Recebíveis imobiliários</p>
+          </a>
+
+          <a
+            href="/cra/"
+            className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-400 hover:shadow-sm transition group space-y-1"
+          >
+            <span className="text-[10px] font-bold text-teal-600 uppercase tracking-wider">Agronegócio</span>
+            <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-teal-700">CRAs Ativos</h3>
+            <p className="text-[11px] text-slate-500">Recebíveis do agro</p>
+          </a>
+
+          <a
+            href="/setores/"
+            className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-indigo-400 hover:shadow-sm transition group space-y-1"
+          >
+            <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">ANBIMA</span>
+            <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-indigo-700">Setores</h3>
+            <p className="text-[11px] text-slate-500">Energia, saneamento e mais</p>
+          </a>
+
+          <a
+            href="/emissores/"
+            className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-amber-400 hover:shadow-sm transition group space-y-1"
+          >
+            <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Companhias</span>
+            <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-amber-700">Emissores</h3>
+            <p className="text-[11px] text-slate-500">Top 500 devedores ativos</p>
+          </a>
+        </div>
+      </section>
 
       {/* ================= WATCHLIST ================= */}
       <section className="container mx-auto px-4 space-y-4">

@@ -13,6 +13,19 @@ export default defineConfig(({ mode, command }) => {
       build: {
         outDir: 'docs',
         emptyOutDir: false,
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                if (id.includes('firebase') || id.includes('@firebase')) return 'firebase-vendor';
+                if (id.includes('recharts') || id.includes('chart.js') || id.includes('react-chartjs-2') || id.includes('d3-')) return 'charts-vendor';
+                if (id.includes('posthog-js')) return 'analytics-vendor';
+                if (id.includes('papaparse') || id.includes('fuse.js')) return 'data-vendor';
+                if (id.includes('react-dom') || id.includes('react-router') || /\/react\//.test(id)) return 'react-vendor';
+              }
+            },
+          },
+        },
       },
       plugins: [
         react(),

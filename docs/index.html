@@ -13,19 +13,18 @@
     <!-- SEO Primary Tags -->
     <title>FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário</title>
     <meta name="title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
-    <meta name="description" content="Plataforma de inteligência de mercado para mais de 16.000 Debêntures, CRIs e CRAs. Acompanhe taxas, spreads contra NTN-B, ratings, duration e preços diários de fechamento de forma gratuita." />
+    <meta name="description" content="Plataforma de inteligência de mercado para Debêntures, CRIs e CRAs (7.321 ativos vigentes). Acompanhe taxas, spreads contra NTN-B, ratings, duration e preços diários de forma gratuita." />
     <meta name="keywords" content="FIXDATA, renda fixa, debêntures, CRI, CRA, mercado secundário, taxas indicativas, ANBIMA, NTN-B, spread de crédito, ratings, inteligência de renda fixa" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://fixdatabrasil.com.br/" />
     <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="https://fixdatabrasil.com.br/feed.xml" />
-    <meta name="google-site-verification" content="google5ed1f75e95ab450f.html" />
     <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
     
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://fixdatabrasil.com.br/" />
     <meta property="og:title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
-    <meta property="og:description" content="Acompanhe mais de 16.000 Debêntures, CRIs e CRAs com taxas, spreads, ratings e gráficos históricos de forma 100% gratuita." />
+    <meta property="og:description" content="Acompanhe Debêntures, CRIs e CRAs vigentes com taxas, spreads, ratings e gráficos históricos de forma 100% gratuita." />
     <meta property="og:site_name" content="FIXDATA" />
     <meta property="og:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
     
@@ -69,31 +68,14 @@
       }(window.location))
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="/index.css">
-
-    <script type="importmap">
-    {
-      "imports": {
-        "vite": "https://esm.sh/vite@^7.3.1",
-        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-        "papaparse": "https://esm.sh/papaparse@^5.5.3",
-        "react": "https://esm.sh/react@^19.2.4",
-        "react-dom": "https://esm.sh/react-dom@^19.2.4",
-        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
-        "fuse.js": "https://esm.sh/fuse.js@^7.1.0",
-        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
-        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "recharts": "https://esm.sh/recharts@^2.15.1",
-        "chart.js": "https://esm.sh/chart.js@^4.5.1",
-        "react-chartjs-2": "https://esm.sh/react-chartjs-2@^5.3.1"
-      }
-    }
-    </script>
-    <script type="module" crossorigin src="/assets/index-BDvznFiB.js"></script>
+    
+    <script type="module" crossorigin src="/assets/index-bDGAHIId.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-DnBxXqaB.js">
+    <link rel="modulepreload" crossorigin href="/assets/data-vendor-o2xKvFs6.js">
+    <link rel="modulepreload" crossorigin href="/assets/charts-vendor-B8w0vQsr.js">
+    <link rel="modulepreload" crossorigin href="/assets/firebase-vendor-BHwXFlGb.js">
+    <link rel="modulepreload" crossorigin href="/assets/analytics-vendor-CcfRGZij.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-DQt2KZ5k.css">
   </head>
   <body class="bg-slate-50 text-slate-900">
     <div id="root">
@@ -105,14 +87,16 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-4 text-xs font-bold text-slate-600">
-              <a href="/negocios/" class="hover:text-blue-600 transition">Negócios B3</a>
-              <a href="/charts/" class="hover:text-blue-600 transition">Dashboard Secundário</a>
-              <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition">Raio-X do Devedor</a>
-              <a href="/agenda/" class="hover:text-blue-600 transition">Agenda de Pagamentos</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition">Calculadora</a>
-              <a href="/contact/" class="hover:text-blue-600 transition">Contato & Apoio</a>
+            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
+              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
+              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
+              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
+              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
+              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
+              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
+              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
+              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
+              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
             </div>
           </div>
         </div>
@@ -129,7 +113,7 @@
               Inteligência de Mercado para Debêntures, CRIs e CRAs
             </h1>
             <p class="text-slate-300 text-base md:text-lg leading-relaxed font-normal">
-              Acompanhe cotações em tempo real, taxas indicativas ANBIMA, spreads sobre a curva NTN-B, volume diário da B3, ratings e solvência de mais de 16.000 títulos corporativos brasileiros.
+              Acompanhe cotações em tempo real, taxas indicativas ANBIMA, spreads sobre a curva NTN-B, volume diário da B3, ratings e solvência de 7.321 títulos vigentes (e 15.766 no histórico completo CVM/ANBIMA).
             </p>
           </div>
         </div>
@@ -152,11 +136,62 @@
             <span class="text-[11px] text-slate-500">Títulos com liquidez no pregão</span>
           </div>
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-            <span class="text-xs font-bold text-slate-400 uppercase">Universo Monitorado</span>
-            <p class="text-2xl font-black text-purple-600">15.747</p>
-            <span class="text-[11px] text-slate-500">Debêntures, CRIs e CRAs CVM</span>
+            <span class="text-xs font-bold text-slate-400 uppercase">Ativos Vigentes</span>
+            <p class="text-2xl font-black text-purple-600">7.321</p>
+            <span class="text-[11px] text-slate-500">15.766 títulos no cadastro CVM</span>
           </div>
         </div>
+
+        <!-- Panorama Diário Citável (GEO / LLMs) -->
+        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-5 sm:p-6 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Panorama Diário B3 &amp; ANBIMA</span>
+            <span class="text-[11px] font-semibold text-slate-500">Atualizado em 18/11/2026</span>
+          </div>
+          <p class="text-slate-700">
+            Em <strong>18/11/2026</strong>, o mercado secundário brasileiro de crédito privado movimentou <strong>R$ 5.06 Bi</strong> em <strong>17.839 negócios</strong> registrados na B3 sobre <strong>1.621 ativos</strong> de um universo de <strong>7.321 títulos vigentes</strong> monitorados pelo FIXDATA (fixdatabrasil.com.br). Entre os papéis mais líquidos estão <a href="/asset/cmgda5/" class="font-mono font-bold text-blue-600 hover:underline">CMGDA5</a>, <a href="/asset/cese11/" class="font-mono font-bold text-blue-600 hover:underline">CESE11</a>, <a href="/asset/rbrao3/" class="font-mono font-bold text-blue-600 hover:underline">RBRAO3</a>.
+          </p>
+        </section>
+
+        <!-- Explorar por Categoria, Setores & Emissores -->
+        <section class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg sm:text-xl font-black text-slate-900">Explorar por Categoria, Setores &amp; Emissores</h2>
+            <a href="/emissores/" class="text-xs font-bold text-blue-600 hover:underline">Diretório de Emissores →</a>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <a href="/debentures/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-400 transition group">
+              <span class="text-[10px] font-bold text-blue-600 uppercase">Instrumento</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-blue-600">Debêntures</h3>
+              <p class="text-[11px] text-slate-500">Papéis ativos &amp; B3</p>
+            </a>
+            <a href="/debentures-incentivadas/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-400 transition group">
+              <span class="text-[10px] font-bold text-emerald-600 uppercase">Isento de IR</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-emerald-700">Lei 12.431/11</h3>
+              <p class="text-[11px] text-slate-500">Incentivadas IPCA+</p>
+            </a>
+            <a href="/cri/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-violet-400 transition group">
+              <span class="text-[10px] font-bold text-violet-600 uppercase">Imobiliário</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-violet-700">CRIs Ativos</h3>
+              <p class="text-[11px] text-slate-500">Recebíveis imobiliários</p>
+            </a>
+            <a href="/cra/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-teal-400 transition group">
+              <span class="text-[10px] font-bold text-teal-600 uppercase">Agronegócio</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-teal-700">CRAs Ativos</h3>
+              <p class="text-[11px] text-slate-500">Recebíveis do agro</p>
+            </a>
+            <a href="/setores/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-indigo-400 transition group">
+              <span class="text-[10px] font-bold text-indigo-600 uppercase">ANBIMA</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-indigo-700">Setores</h3>
+              <p class="text-[11px] text-slate-500">Energia, saneamento e mais</p>
+            </a>
+            <a href="/emissores/" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-amber-400 transition group">
+              <span class="text-[10px] font-bold text-amber-600 uppercase">Companhias</span>
+              <h3 class="text-sm font-black text-slate-900 group-hover:text-amber-700">Emissores</h3>
+              <p class="text-[11px] text-slate-500">Top 500 devedores</p>
+            </a>
+          </div>
+        </section>
 
         <!-- Tabela Estática com Top 50 Ativos Mais Negociados -->
         <section class="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm space-y-4">
@@ -1527,9 +1562,22 @@
         </section>
       </main>
 
-      <footer class="bg-white border-t border-slate-200 py-10 mt-20">
+      <footer class="bg-white border-t border-slate-200 py-10 mt-16">
         <div class="container mx-auto px-4 text-center space-y-3">
-          <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
+          <div class="flex items-center justify-center gap-3 sm:gap-5 text-xs font-semibold text-slate-600 flex-wrap">
+            <a href="/debentures/" class="hover:text-blue-600 transition">Debêntures</a>
+            <span>•</span>
+            <a href="/debentures-incentivadas/" class="hover:text-blue-600 transition">Debêntures Incentivadas</a>
+            <span>•</span>
+            <a href="/cri/" class="hover:text-blue-600 transition">CRIs</a>
+            <span>•</span>
+            <a href="/cra/" class="hover:text-blue-600 transition">CRAs</a>
+            <span>•</span>
+            <a href="/emissores/" class="hover:text-blue-600 transition">Emissores</a>
+            <span>•</span>
+            <a href="/setores/" class="hover:text-blue-600 transition">Setores ANBIMA</a>
+          </div>
+          <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 flex-wrap">
             <a href="/metodologia/" class="hover:text-blue-600 transition">Metodologia</a>
             <span>•</span>
             <a href="/sobre/" class="hover:text-blue-600 transition">Sobre o FIXDATA</a>
@@ -1542,7 +1590,7 @@
             <span>•</span>
             <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
             <span>•</span>
-            <a href="/contact/" class="hover:text-blue-600 transition">Contato & Apoio</a>
+            <a href="/contact/" class="hover:text-blue-600 transition">Contato &amp; Apoio</a>
           </div>
           <p class="text-slate-500 text-sm font-semibold">
             &copy; 2026 FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário.

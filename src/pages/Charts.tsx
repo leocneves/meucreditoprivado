@@ -29,6 +29,7 @@ import SearchMultiSelect from '../components/SearchMultiSelect'
 import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar, Droplets, Filter, SlidersHorizontal, Info, ChevronDown, ChevronUp, RotateCcw, ArrowUpDown, Copy, CheckCircle2 } from 'lucide-react'
 import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
 import { getCachedRaioXIndex, loadRaioXIndex, resolveRaioXCnpj, RaioXIndex } from '../utils/raioxLookup'
+import { assetPath } from '../utils/urls'
 
 /* ================= HELPERS ================= */
 
@@ -2462,7 +2463,7 @@ const CreditDashboard: React.FC = () => {
                 return (
                   <tr key={`${a.ticker}_${a.isin || a.issuer || idx}`} className="hover:bg-slate-50 transition">
                     <td className="p-2.5 font-mono font-bold text-blue-600">
-                      <Link to={`/asset/${a.ticker}`} className="hover:underline">
+                      <Link to={assetPath(a.ticker)} className="hover:underline">
                         {a.ticker}
                       </Link>
                     </td>
