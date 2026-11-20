@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
     <title>FIXDATA — Radar de Renda Fixa e Mercado Secundário B3</title>
     <link>https://fixdatabrasil.com.br/</link>
-    <description>Atualizações diárias de negócios secundários de Debêntures, CRIs e CRAs na B3, emissões e agenda de proventos.</description>
-    <language>pt-br</language>
-    <lastBuildDate>Thu, 19 Nov 2026 21:28:12 -0300</lastBuildDate>
+    <description>Boletins diários de fechamento B3, destaques de liquidez de Debêntures, CRIs e CRAs e agenda de pagamentos do mercado de crédito privado brasileiro.</description>
+    <language>pt-BR</language>
+    <lastBuildDate>Fri, 20 Nov 2026 18:11:05 -0300</lastBuildDate>
+    <pubDate>Wed, 18 Nov 2026 18:30:00 -0300</pubDate>
     <atom:link href="https://fixdatabrasil.com.br/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://fixdatabrasil.com.br/icon-512x512.png</url>
@@ -13,564 +14,604 @@
       <link>https://fixdatabrasil.com.br/</link>
     </image>
     <item>
-      <title>[B3] CMGDA5 (Debênture) — Negociação de R$ 2.30 Bi a 7.34%</title>
-      <link>https://fixdatabrasil.com.br/asset/cmgda5/</link>
-      <guid isPermaLink="false">fixdata-trade-cmgda5-2026-10-06</guid>
-      <pubDate>Tue, 06 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CMGDA5 (Debênture), emitido por CEMIG DISTRIBUIÇÃO S/A, movimentou R$ 2.30 Bi no mercado secundário da B3 em 2026-10-06, com 2 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <title>Fechamento do Mercado Secundário B3 (18/11/2026): R$ 5,06 Bi em 17.839 negócios de Crédito Privado</title>
+      <link>https://fixdatabrasil.com.br/negocios/</link>
+      <guid isPermaLink="false">fixdata-fechamento-b3-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 18:30:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário</category>
+      <description>O mercado secundário de crédito privado da B3 movimentou R$ 5,06 Bi em 17.839 operações no pregão de 18/11/2026, com liquidez registrada em 1.621 debêntures, CRIs e CRAs. Veja os papéis mais negociados e as taxas médias ponderadas no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão de <strong>18/11/2026</strong>, o mercado secundário brasileiro de renda fixa privada na B3 registrou volume financeiro total de <strong>R$ 5,06 Bi</strong> ao longo de <strong>17.839 negócios</strong>.</p><p>Ao todo, <strong>1.621 ativos</strong> entre Debêntures, Certificados de Recebíveis Imobiliários (CRIs) e Certificados de Recebíveis do Agronegócio (CRAs) apresentaram liquidez na sessão dentro de um universo de 7.354 títulos vigentes monitorados pela plataforma FIXDATA.</p><p><strong>Destaques de volume no pregão:</strong></p><ul><li><a href="https://fixdatabrasil.com.br/asset/ainr11/"><strong>AINR11</strong></a> — Debênture (AEROPORTO INTERNACIONAL DO RIO S A): <strong>R$ 276,97 Mi</strong> em 9 negócios</li><li><a href="https://fixdatabrasil.com.br/asset/aalm12/"><strong>AALM12</strong></a> — Debênture (AURA ALMAS MINERAÇÃO S.A.): <strong>R$ 236,38 Mi</strong> em 18 negócios | Taxa média: CDI + 0,90%</li><li><a href="https://fixdatabrasil.com.br/asset/25a1801229/"><strong>25A1801229</strong></a> — CRI (OPEA SEC 406E): <strong>R$ 197,27 Mi</strong> em 4 negócios</li><li><a href="https://fixdatabrasil.com.br/asset/engic4/"><strong>ENGIC4</strong></a> — Debênture (ENERGISA S.A.): <strong>R$ 157,49 Mi</strong> em 16 negócios | Taxa média: CDI + 0,87%</li><li><a href="https://fixdatabrasil.com.br/asset/eltn19/"><strong>ELTN19</strong></a> — Debênture (AXIA ENERGIA NORTE S.A.): <strong>R$ 115,75 Mi</strong> em 1 negócio | Taxa média: CDI + 0,74%</li></ul><p>Acompanhe a tabela completa de negociações diárias, spreads sobre a curva NTN-B e preços unitários no <a href="https://fixdatabrasil.com.br/negocios/">Painel de Negócios Secundários B3 do FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] CMGDB6 (Debênture) — Negociação de R$ 657.54 Mi a 8.16%</title>
-      <link>https://fixdatabrasil.com.br/asset/cmgdb6/</link>
-      <guid isPermaLink="false">fixdata-trade-cmgdb6-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CMGDB6 (Debênture), emitido por CEMIG DISTRIBUIÇÃO S/A, movimentou R$ 657.54 Mi no mercado secundário da B3 em 2026-10-28, com 99 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] SBSPI8 (Debênture) — Negociação de R$ 431.49 Mi a 7.15%</title>
-      <link>https://fixdatabrasil.com.br/asset/sbspi8/</link>
-      <guid isPermaLink="false">fixdata-trade-sbspi8-2026-10-07</guid>
-      <pubDate>Wed, 07 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título SBSPI8 (Debênture), emitido por CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO, movimentou R$ 431.49 Mi no mercado secundário da B3 em 2026-10-07, com 46 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] SBSPJ8 (Debênture) — Negociação de R$ 367.42 Mi a 7.16%</title>
-      <link>https://fixdatabrasil.com.br/asset/sbspj8/</link>
-      <guid isPermaLink="false">fixdata-trade-sbspj8-2026-10-07</guid>
-      <pubDate>Wed, 07 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título SBSPJ8 (Debênture), emitido por CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO, movimentou R$ 367.42 Mi no mercado secundário da B3 em 2026-10-07, com 31 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] 23I1696564 (CRI) — Negociação de R$ 327.65 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/23i1696564/</link>
-      <guid isPermaLink="false">fixdata-trade-23i1696564-2026-10-29</guid>
-      <pubDate>Thu, 29 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRI</category>
-      <description>O título 23I1696564 (CRI), emitido por JFL REBOUÇAS II, movimentou R$ 327.65 Mi no mercado secundário da B3 em 2026-10-29, com 3 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] RDOE18 (Debênture) — Negociação de R$ 324.14 Mi a 7.11%</title>
-      <link>https://fixdatabrasil.com.br/asset/rdoe18/</link>
-      <guid isPermaLink="false">fixdata-trade-rdoe18-2026-10-20</guid>
-      <pubDate>Tue, 20 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título RDOE18 (Debênture), emitido por CONCESSIONÁRIA DO RODOANEL OESTE S.A., movimentou R$ 324.14 Mi no mercado secundário da B3 em 2026-10-20, com 12 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CRA024003E9 (CRA) — Negociação de R$ 314.25 Mi a 1.45%</title>
-      <link>https://fixdatabrasil.com.br/asset/cra024003e9/</link>
-      <guid isPermaLink="false">fixdata-trade-cra024003e9-2026-10-14</guid>
-      <pubDate>Wed, 14 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRA</category>
-      <description>O título CRA024003E9 (CRA), emitido por TERRA FORTE EMPREENDIMENTOS E PARTICIPAÇÕES S.A., movimentou R$ 314.25 Mi no mercado secundário da B3 em 2026-10-14, com 1 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CESE32 (Debênture) — Negociação de R$ 305.13 Mi a 7.60%</title>
-      <link>https://fixdatabrasil.com.br/asset/cese32/</link>
-      <guid isPermaLink="false">fixdata-trade-cese32-2026-10-15</guid>
-      <pubDate>Thu, 15 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CESE32 (Debênture), emitido por ENEVA S.A., movimentou R$ 305.13 Mi no mercado secundário da B3 em 2026-10-15, com 21 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CESE32 (Debênture) — Negociação de R$ 305.13 Mi a 7.60%</title>
-      <link>https://fixdatabrasil.com.br/asset/cese32/</link>
-      <guid isPermaLink="false">fixdata-trade-cese32-2026-10-15</guid>
-      <pubDate>Thu, 15 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CESE32 (Debênture), emitido por ENEVA S.A., movimentou R$ 305.13 Mi no mercado secundário da B3 em 2026-10-15, com 21 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] VERTC3 (Debênture) — Negociação de R$ 296.49 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/vertc3/</link>
-      <guid isPermaLink="false">fixdata-trade-vertc3-2026-10-07</guid>
-      <pubDate>Wed, 07 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título VERTC3 (Debênture), emitido por VERT COMPANHIA SECURITIZADORA, movimentou R$ 296.49 Mi no mercado secundário da B3 em 2026-10-07, com 1 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] JALL15 (Debênture) — Negociação de R$ 287.69 Mi a 8.29%</title>
-      <link>https://fixdatabrasil.com.br/asset/jall15/</link>
-      <guid isPermaLink="false">fixdata-trade-jall15-2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título JALL15 (Debênture), emitido por JALLES MACHADO S.A., movimentou R$ 287.69 Mi no mercado secundário da B3 em 2026-10-08, com 24 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] EGIEA6 (Debênture) — Negociação de R$ 277.67 Mi a 8.01%</title>
-      <link>https://fixdatabrasil.com.br/asset/egiea6/</link>
-      <guid isPermaLink="false">fixdata-trade-egiea6-2026-10-27</guid>
-      <pubDate>Tue, 27 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título EGIEA6 (Debênture), emitido por ENGIE BRASIL ENERGIA S.A., movimentou R$ 277.67 Mi no mercado secundário da B3 em 2026-10-27, com 147 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CEEBE3 (Debênture) — Negociação de R$ 247.27 Mi a 8.01%</title>
-      <link>https://fixdatabrasil.com.br/asset/ceebe3/</link>
-      <guid isPermaLink="false">fixdata-trade-ceebe3-2026-10-27</guid>
-      <pubDate>Tue, 27 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CEEBE3 (Debênture), emitido por CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA, movimentou R$ 247.27 Mi no mercado secundário da B3 em 2026-10-27, com 43 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] ROTY13 (Debênture) — Negociação de R$ 244.02 Mi a 8.08%</title>
-      <link>https://fixdatabrasil.com.br/asset/roty13/</link>
-      <guid isPermaLink="false">fixdata-trade-roty13-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título ROTY13 (Debênture), emitido por CONCESSIONARIA ROTA SOROCABANA SA, movimentou R$ 244.02 Mi no mercado secundário da B3 em 2026-10-28, com 15 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] SBSPI8 (Debênture) — Negociação de R$ 227.28 Mi a 7.57%</title>
-      <link>https://fixdatabrasil.com.br/asset/sbspi8/</link>
-      <guid isPermaLink="false">fixdata-trade-sbspi8-2026-10-15</guid>
-      <pubDate>Thu, 15 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título SBSPI8 (Debênture), emitido por CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO, movimentou R$ 227.28 Mi no mercado secundário da B3 em 2026-10-15, com 283 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] 26J5317544 (CRI) — Negociação de R$ 226.12 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/26j5317544/</link>
-      <guid isPermaLink="false">fixdata-trade-26j5317544-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRI</category>
-      <description>O título 26J5317544 (CRI), emitido por HGLG, movimentou R$ 226.12 Mi no mercado secundário da B3 em 2026-10-28, com 1 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] 26J5317544 (CRI) — Negociação de R$ 225.95 Mi a -100.00%</title>
-      <link>https://fixdatabrasil.com.br/asset/26j5317544/</link>
-      <guid isPermaLink="false">fixdata-trade-26j5317544-2026-10-27</guid>
-      <pubDate>Tue, 27 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRI</category>
-      <description>O título 26J5317544 (CRI), emitido por HGLG, movimentou R$ 225.95 Mi no mercado secundário da B3 em 2026-10-27, com 1 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] ROTY13 (Debênture) — Negociação de R$ 221.38 Mi a 8.06%</title>
-      <link>https://fixdatabrasil.com.br/asset/roty13/</link>
-      <guid isPermaLink="false">fixdata-trade-roty13-2026-10-30</guid>
-      <pubDate>Fri, 30 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título ROTY13 (Debênture), emitido por CONCESSIONARIA ROTA SOROCABANA SA, movimentou R$ 221.38 Mi no mercado secundário da B3 em 2026-10-30, com 640 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] ANHBB6 (Debênture) — Negociação de R$ 220.08 Mi a 8.12%</title>
-      <link>https://fixdatabrasil.com.br/asset/anhbb6/</link>
-      <guid isPermaLink="false">fixdata-trade-anhbb6-2026-10-30</guid>
-      <pubDate>Fri, 30 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título ANHBB6 (Debênture), emitido por CONCESSIONÁRIA DO SISTEMA ANHANGUERA-BANDEIRANTES S.A., movimentou R$ 220.08 Mi no mercado secundário da B3 em 2026-10-30, com 680 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] ECRD14 (Debênture) — Negociação de R$ 213.47 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/ecrd14/</link>
-      <guid isPermaLink="false">fixdata-trade-ecrd14-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título ECRD14 (Debênture), emitido por ECORIOMINAS CONCESSIONÁRIA DE RODOVIAS S.A., movimentou R$ 213.47 Mi no mercado secundário da B3 em 2026-10-28, com 47 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CSRNA3 (Debênture) — Negociação de R$ 211.32 Mi a 15.22%</title>
-      <link>https://fixdatabrasil.com.br/asset/csrna3/</link>
-      <guid isPermaLink="false">fixdata-trade-csrna3-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CSRNA3 (Debênture), emitido por CIA ENERGÉTICA DO RIO GRANDE DO NORTE, movimentou R$ 211.32 Mi no mercado secundário da B3 em 2026-10-28, com 53 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] RDOE18 (Debênture) — Negociação de R$ 211.03 Mi a 7.93%</title>
-      <link>https://fixdatabrasil.com.br/asset/rdoe18/</link>
-      <guid isPermaLink="false">fixdata-trade-rdoe18-2026-10-26</guid>
-      <pubDate>Mon, 26 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título RDOE18 (Debênture), emitido por CONCESSIONÁRIA DO RODOANEL OESTE S.A., movimentou R$ 211.03 Mi no mercado secundário da B3 em 2026-10-26, com 6 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] SBSPI8 (Debênture) — Negociação de R$ 206.13 Mi a 7.56%</title>
-      <link>https://fixdatabrasil.com.br/asset/sbspi8/</link>
-      <guid isPermaLink="false">fixdata-trade-sbspi8-2026-10-14</guid>
-      <pubDate>Wed, 14 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título SBSPI8 (Debênture), emitido por CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO, movimentou R$ 206.13 Mi no mercado secundário da B3 em 2026-10-14, com 233 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] VLIM27 (Debênture) — Negociação de R$ 205.86 Mi a 8.10%</title>
-      <link>https://fixdatabrasil.com.br/asset/vlim27/</link>
-      <guid isPermaLink="false">fixdata-trade-vlim27-2026-10-29</guid>
-      <pubDate>Thu, 29 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título VLIM27 (Debênture), emitido por VLI MULTIMODAL S.A, movimentou R$ 205.86 Mi no mercado secundário da B3 em 2026-10-29, com 628 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CHSF13 (Debênture) — Negociação de R$ 203.14 Mi a 7.84%</title>
-      <link>https://fixdatabrasil.com.br/asset/chsf13/</link>
-      <guid isPermaLink="false">fixdata-trade-chsf13-2026-11-09</guid>
-      <pubDate>Mon, 09 Nov 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CHSF13 (Debênture), emitido por AXIA ENERGIA NORDESTE S.A., movimentou R$ 203.14 Mi no mercado secundário da B3 em 2026-11-09, com 495 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] 26E4435499 (CRI) — Negociação de R$ 202.77 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/26e4435499/</link>
-      <guid isPermaLink="false">fixdata-trade-26e4435499-2026-10-26</guid>
-      <pubDate>Mon, 26 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRI</category>
-      <description>O título 26E4435499 (CRI), emitido por BTLC II, movimentou R$ 202.77 Mi no mercado secundário da B3 em 2026-10-26, com 4 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CRA025008HR (CRA) — Negociação de R$ 200.25 Mi a 7.84%</title>
-      <link>https://fixdatabrasil.com.br/asset/cra025008hr/</link>
-      <guid isPermaLink="false">fixdata-trade-cra025008hr-2026-10-19</guid>
-      <pubDate>Mon, 19 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRA</category>
-      <description>O título CRA025008HR (CRA), emitido por NARDINI AGROINDUSTRIAL LTDA., movimentou R$ 200.25 Mi no mercado secundário da B3 em 2026-10-19, com 7 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] ECOC13 (Debênture) — Negociação de R$ 197.72 Mi a 8.94%</title>
-      <link>https://fixdatabrasil.com.br/asset/ecoc13/</link>
-      <guid isPermaLink="false">fixdata-trade-ecoc13-2026-10-29</guid>
-      <pubDate>Thu, 29 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título ECOC13 (Debênture), emitido por ECO101 CONCESSIONÁRIA DE RODOVIAS S.A., movimentou R$ 197.72 Mi no mercado secundário da B3 em 2026-10-29, com 243 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] 25A1801229 (CRI) — Negociação de R$ 197.27 Mi</title>
+      <title>CRI 25A1801229 (OPEA SEC 406E) movimenta R$ 197,27 Mi na B3</title>
       <link>https://fixdatabrasil.com.br/asset/25a1801229/</link>
       <guid isPermaLink="false">fixdata-trade-25a1801229-2026-11-18</guid>
       <pubDate>Wed, 18 Nov 2026 18:00:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Mercado Secundário / CRI</category>
-      <description>O título 25A1801229 (CRI), emitido por PULVERIZADO / NÃO INFORMADO, movimentou R$ 197.27 Mi no mercado secundário da B3 em 2026-11-18, com 4 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <description>O título 25A1801229 (CRI), emitido por OPEA SEC 406E, registrou R$ 197,27 Mi em volume negociado na B3 em 18/11/2026, ao longo de 4 operações e preço unitário médio de R$ 1.114,13. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>25A1801229</strong> (CRI), lastreado em <strong>OPEA SEC 406E</strong>, concentrou volume financeiro de <strong>R$ 197,27 Mi</strong> em <strong>4 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> 25A1801229 (CRI)</li><li><strong>Devedor / Emissor:</strong> OPEA SEC 406E</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 197,27 Mi (4 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 13,01%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.114,13</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/09/2032</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/25a1801229/">25A1801229 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] 24D2858481 (CRI) — Negociação de R$ 182.21 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/24d2858481/</link>
-      <guid isPermaLink="false">fixdata-trade-24d2858481-2026-10-21</guid>
-      <pubDate>Wed, 21 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRI</category>
-      <description>O título 24D2858481 (CRI), emitido por MSB BARCELONA EMPREENDIMENTOS IMOBILIÁRIOS LTDA, movimentou R$ 182.21 Mi no mercado secundário da B3 em 2026-10-21, com 4 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <title>Debênture ENGIB9 (ENERGISA S.A.) movimenta R$ 115,01 Mi na B3 a IPCA + 8,50%</title>
+      <link>https://fixdatabrasil.com.br/asset/engib9/</link>
+      <guid isPermaLink="false">fixdata-trade-engib9-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:59:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título ENGIB9 (Debênture), emitido por ENERGISA S.A., registrou R$ 115,01 Mi em volume negociado na B3 em 18/11/2026, ao longo de 105 operações com taxa média ponderada de IPCA + 8,50% e preço unitário médio de R$ 1.060,93. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ENGIB9</strong> (Debênture), lastreado em <strong>ENERGISA S.A.</strong>, concentrou volume financeiro de <strong>R$ 115,01 Mi</strong> em <strong>105 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,50%.</p><ul><li><strong>Ativo:</strong> ENGIB9 (Debênture)</li><li><strong>Devedor / Emissor:</strong> ENERGISA S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 115,01 Mi (105 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,50%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.060,93</li><li><strong>Rating de crédito:</strong> AA+</li><li><strong>Vencimento:</strong> 15/09/2033</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/engib9/">ENGIB9 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] 23F2423591 (CRI) — Negociação de R$ 181.69 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/23f2423591/</link>
-      <guid isPermaLink="false">fixdata-trade-23f2423591-2026-10-21</guid>
-      <pubDate>Wed, 21 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRI</category>
-      <description>O título 23F2423591 (CRI), emitido por PULVERIZADO / NÃO INFORMADO, movimentou R$ 181.69 Mi no mercado secundário da B3 em 2026-10-21, com 4 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <title>Debênture ENMTC6 (ENERGISA MATO GROSSO-DISTRIBUIDORA DE ENERGIA S/A) movimenta R$ 90,18 Mi na B3 a IPCA + 8,88%</title>
+      <link>https://fixdatabrasil.com.br/asset/enmtc6/</link>
+      <guid isPermaLink="false">fixdata-trade-enmtc6-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:59:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título ENMTC6 (Debênture), emitido por ENERGISA MATO GROSSO-DISTRIBUIDORA DE ENERGIA S/A, registrou R$ 90,18 Mi em volume negociado na B3 em 18/11/2026, ao longo de 28 operações com taxa média ponderada de IPCA + 8,88% e preço unitário médio de R$ 918,54. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ENMTC6</strong> (Debênture), lastreado em <strong>ENERGISA MATO GROSSO-DISTRIBUIDORA DE ENERGIA S/A</strong>, concentrou volume financeiro de <strong>R$ 90,18 Mi</strong> em <strong>28 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,88%.</p><ul><li><strong>Ativo:</strong> ENMTC6 (Debênture)</li><li><strong>Devedor / Emissor:</strong> ENERGISA MATO GROSSO-DISTRIBUIDORA DE ENERGIA S/A</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 90,18 Mi (28 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,88%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 918,54</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/10/2040</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/enmtc6/">ENMTC6 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] CNRD12 (Debênture) — Negociação de R$ 179.06 Mi a 9.43%</title>
+      <title>Debênture IVIAA0 (CONCESSIONARIA DE RODOVIAS DO INTERIOR PAULISTA S/A) movimenta R$ 65,85 Mi na B3 a IPCA + 10,29%</title>
+      <link>https://fixdatabrasil.com.br/asset/iviaa0/</link>
+      <guid isPermaLink="false">fixdata-trade-iviaa0-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:59:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título IVIAA0 (Debênture), emitido por CONCESSIONARIA DE RODOVIAS DO INTERIOR PAULISTA S/A, registrou R$ 65,85 Mi em volume negociado na B3 em 18/11/2026, ao longo de 23 operações com taxa média ponderada de IPCA + 10,29% e preço unitário médio de R$ 931,96. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>IVIAA0</strong> (Debênture), lastreado em <strong>CONCESSIONARIA DE RODOVIAS DO INTERIOR PAULISTA S/A</strong>, concentrou volume financeiro de <strong>R$ 65,85 Mi</strong> em <strong>23 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 10,29%.</p><ul><li><strong>Ativo:</strong> IVIAA0 (Debênture)</li><li><strong>Devedor / Emissor:</strong> CONCESSIONARIA DE RODOVIAS DO INTERIOR PAULISTA S/A</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 65,85 Mi (23 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 10,29%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 931,96</li><li><strong>Rating de crédito:</strong> BR</li><li><strong>Vencimento:</strong> 15/05/2038</li><li><strong>Setor:</strong> Transporte e Logística</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/iviaa0/">IVIAA0 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI SEIS01IX33 (SK 42 EMPREENDIMENTO) movimenta R$ 65,49 Mi na B3</title>
+      <link>https://fixdatabrasil.com.br/asset/seis01ix33/</link>
+      <guid isPermaLink="false">fixdata-trade-seis01ix33-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:59:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título SEIS01IX33 (CRI), emitido por SK 42 EMPREENDIMENTO, registrou R$ 65,49 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações e preço unitário médio de R$ 1.001,94. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>SEIS01IX33</strong> (CRI), lastreado em <strong>SK 42 EMPREENDIMENTO</strong>, concentrou volume financeiro de <strong>R$ 65,49 Mi</strong> em <strong>2 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> SEIS01IX33 (CRI)</li><li><strong>Devedor / Emissor:</strong> SK 42 EMPREENDIMENTO</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 65,49 Mi (2 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 10,90%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.001,94</li><li><strong>Vencimento:</strong> 23/11/2033</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/seis01ix33/">SEIS01IX33 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture ECRD14 (ECORIOMINAS CONCESSIONÁRIA DE RODOVIAS S.A.) movimenta R$ 62,84 Mi na B3 a IPCA + 9,73%</title>
+      <link>https://fixdatabrasil.com.br/asset/ecrd14/</link>
+      <guid isPermaLink="false">fixdata-trade-ecrd14-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:59:10 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título ECRD14 (Debênture), emitido por ECORIOMINAS CONCESSIONÁRIA DE RODOVIAS S.A., registrou R$ 62,84 Mi em volume negociado na B3 em 18/11/2026, ao longo de 6 operações com taxa média ponderada de IPCA + 9,73% e preço unitário médio de R$ 989,06. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ECRD14</strong> (Debênture), lastreado em <strong>ECORIOMINAS CONCESSIONÁRIA DE RODOVIAS S.A.</strong>, concentrou volume financeiro de <strong>R$ 62,84 Mi</strong> em <strong>6 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 9,73%.</p><ul><li><strong>Ativo:</strong> ECRD14 (Debênture)</li><li><strong>Devedor / Emissor:</strong> ECORIOMINAS CONCESSIONÁRIA DE RODOVIAS S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 62,84 Mi (6 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 9,73%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 989,06</li><li><strong>Rating de crédito:</strong> BR</li><li><strong>Vencimento:</strong> 15/09/2047</li><li><strong>Setor:</strong> Transporte e Logística</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/ecrd14/">ECRD14 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture ISAEB0 (ISA ENERGIA BRASIL S.A.) movimenta R$ 59,69 Mi na B3 a IPCA + 8,33%</title>
+      <link>https://fixdatabrasil.com.br/asset/isaeb0/</link>
+      <guid isPermaLink="false">fixdata-trade-isaeb0-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:59:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título ISAEB0 (Debênture), emitido por ISA ENERGIA BRASIL S.A., registrou R$ 59,69 Mi em volume negociado na B3 em 18/11/2026, ao longo de 13 operações com taxa média ponderada de IPCA + 8,33% e preço unitário médio de R$ 933,61. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ISAEB0</strong> (Debênture), lastreado em <strong>ISA ENERGIA BRASIL S.A.</strong>, concentrou volume financeiro de <strong>R$ 59,69 Mi</strong> em <strong>13 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,33%.</p><ul><li><strong>Ativo:</strong> ISAEB0 (Debênture)</li><li><strong>Devedor / Emissor:</strong> ISA ENERGIA BRASIL S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 59,69 Mi (13 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,33%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 933,61</li><li><strong>Vencimento:</strong> 15/10/2037</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/isaeb0/">ISAEB0 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture BTCL12 (BRAZIL TOWER, CESSÃO DE INFRA-ESTRUTURAS S.A) movimenta R$ 52,51 Mi na B3 a IPCA + 10,34%</title>
+      <link>https://fixdatabrasil.com.br/asset/btcl12/</link>
+      <guid isPermaLink="false">fixdata-trade-btcl12-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:58:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título BTCL12 (Debênture), emitido por BRAZIL TOWER, CESSÃO DE INFRA-ESTRUTURAS S.A, registrou R$ 52,51 Mi em volume negociado na B3 em 18/11/2026, ao longo de 6 operações com taxa média ponderada de IPCA + 10,34% e preço unitário médio de R$ 1.126,67. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>BTCL12</strong> (Debênture), lastreado em <strong>BRAZIL TOWER, CESSÃO DE INFRA-ESTRUTURAS S.A</strong>, concentrou volume financeiro de <strong>R$ 52,51 Mi</strong> em <strong>6 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 10,34%.</p><ul><li><strong>Ativo:</strong> BTCL12 (Debênture)</li><li><strong>Devedor / Emissor:</strong> BRAZIL TOWER, CESSÃO DE INFRA-ESTRUTURAS S.A</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 52,51 Mi (6 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 10,34%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.126,67</li><li><strong>Vencimento:</strong> 15/02/2039</li><li><strong>Setor:</strong> TI e Telecomunicações</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/btcl12/">BTCL12 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 21K0732283 (GS SOUTO) movimenta R$ 49,18 Mi na B3</title>
+      <link>https://fixdatabrasil.com.br/asset/21k0732283/</link>
+      <guid isPermaLink="false">fixdata-trade-21k0732283-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:58:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 21K0732283 (CRI), emitido por GS SOUTO, registrou R$ 49,18 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações e preço unitário médio de R$ 1.075,46. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>21K0732283</strong> (CRI), lastreado em <strong>GS SOUTO</strong>, concentrou volume financeiro de <strong>R$ 49,18 Mi</strong> em <strong>2 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> 21K0732283 (CRI)</li><li><strong>Devedor / Emissor:</strong> GS SOUTO</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 49,18 Mi (2 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 11,00%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.075,46</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 14/11/2033</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/21k0732283/">21K0732283 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 26D2646505 (PLANTA) movimenta R$ 44,00 Mi na B3</title>
+      <link>https://fixdatabrasil.com.br/asset/26d2646505/</link>
+      <guid isPermaLink="false">fixdata-trade-26d2646505-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:58:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 26D2646505 (CRI), emitido por PLANTA, registrou R$ 44,00 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações e preço unitário médio de R$ 1.124,43. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>26D2646505</strong> (CRI), lastreado em <strong>PLANTA</strong>, concentrou volume financeiro de <strong>R$ 44,00 Mi</strong> em <strong>2 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> 26D2646505 (CRI)</li><li><strong>Devedor / Emissor:</strong> PLANTA</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 44,00 Mi (2 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 16,00%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.124,43</li><li><strong>Vencimento:</strong> 24/04/2029</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/26d2646505/">26D2646505 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture DESK18 (DESKTOP S.A) movimenta R$ 38,55 Mi na B3 a IPCA + 8,37%</title>
+      <link>https://fixdatabrasil.com.br/asset/desk18/</link>
+      <guid isPermaLink="false">fixdata-trade-desk18-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:58:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título DESK18 (Debênture), emitido por DESKTOP S.A, registrou R$ 38,55 Mi em volume negociado na B3 em 18/11/2026, ao longo de 4 operações com taxa média ponderada de IPCA + 8,37% e preço unitário médio de R$ 1.073,89. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>DESK18</strong> (Debênture), lastreado em <strong>DESKTOP S.A</strong>, concentrou volume financeiro de <strong>R$ 38,55 Mi</strong> em <strong>4 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,37%.</p><ul><li><strong>Ativo:</strong> DESK18 (Debênture)</li><li><strong>Devedor / Emissor:</strong> DESKTOP S.A</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 38,55 Mi (4 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,37%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.073,89</li><li><strong>Rating de crédito:</strong> BR</li><li><strong>Vencimento:</strong> 15/06/2032</li><li><strong>Setor:</strong> Comunicação</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/desk18/">DESK18 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture ELET42 (AXIA ENERGIA S.A.) movimenta R$ 36,79 Mi na B3 a IPCA + 7,48%</title>
+      <link>https://fixdatabrasil.com.br/asset/elet42/</link>
+      <guid isPermaLink="false">fixdata-trade-elet42-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:58:10 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título ELET42 (Debênture), emitido por AXIA ENERGIA S.A., registrou R$ 36,79 Mi em volume negociado na B3 em 18/11/2026, ao longo de 24 operações com taxa média ponderada de IPCA + 7,48% e preço unitário médio de R$ 1.436,87. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ELET42</strong> (Debênture), lastreado em <strong>AXIA ENERGIA S.A.</strong>, concentrou volume financeiro de <strong>R$ 36,79 Mi</strong> em <strong>24 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 7,48%.</p><ul><li><strong>Ativo:</strong> ELET42 (Debênture)</li><li><strong>Devedor / Emissor:</strong> AXIA ENERGIA S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 36,79 Mi (24 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 7,48%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.436,87</li><li><strong>Rating de crédito:</strong> BR</li><li><strong>Vencimento:</strong> 15/05/2029</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/elet42/">ELET42 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture AESLA9 (RGE SUL DISTRIBUIDORA DE ENERGIA S.A.) movimenta R$ 35,06 Mi na B3 a IPCA + 8,13%</title>
+      <link>https://fixdatabrasil.com.br/asset/aesla9/</link>
+      <guid isPermaLink="false">fixdata-trade-aesla9-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:58:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título AESLA9 (Debênture), emitido por RGE SUL DISTRIBUIDORA DE ENERGIA S.A., registrou R$ 35,06 Mi em volume negociado na B3 em 18/11/2026, ao longo de 8 operações com taxa média ponderada de IPCA + 8,13% e preço unitário médio de R$ 991,46. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>AESLA9</strong> (Debênture), lastreado em <strong>RGE SUL DISTRIBUIDORA DE ENERGIA S.A.</strong>, concentrou volume financeiro de <strong>R$ 35,06 Mi</strong> em <strong>8 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,13%.</p><ul><li><strong>Ativo:</strong> AESLA9 (Debênture)</li><li><strong>Devedor / Emissor:</strong> RGE SUL DISTRIBUIDORA DE ENERGIA S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 35,06 Mi (8 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,13%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 991,46</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/05/2035</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/aesla9/">AESLA9 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture CEED15 (CIA ESTADUAL DE DISTRIBUIÇÃO DE ENERGIA ELETRICA) movimenta R$ 34,29 Mi na B3 a IPCA + 8,82%</title>
+      <link>https://fixdatabrasil.com.br/asset/ceed15/</link>
+      <guid isPermaLink="false">fixdata-trade-ceed15-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:57:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título CEED15 (Debênture), emitido por CIA ESTADUAL DE DISTRIBUIÇÃO DE ENERGIA ELETRICA, registrou R$ 34,29 Mi em volume negociado na B3 em 18/11/2026, ao longo de 5 operações com taxa média ponderada de IPCA + 8,82% e preço unitário médio de R$ 976,85. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>CEED15</strong> (Debênture), lastreado em <strong>CIA ESTADUAL DE DISTRIBUIÇÃO DE ENERGIA ELETRICA</strong>, concentrou volume financeiro de <strong>R$ 34,29 Mi</strong> em <strong>5 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,82%.</p><ul><li><strong>Ativo:</strong> CEED15 (Debênture)</li><li><strong>Devedor / Emissor:</strong> CIA ESTADUAL DE DISTRIBUIÇÃO DE ENERGIA ELETRICA</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 34,29 Mi (5 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,82%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 976,85</li><li><strong>Rating de crédito:</strong> BR</li><li><strong>Vencimento:</strong> 15/05/2036</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/ceed15/">CEED15 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture CESE32 (ENEVA S.A.) movimenta R$ 33,69 Mi na B3 a IPCA + 8,39%</title>
+      <link>https://fixdatabrasil.com.br/asset/cese32/</link>
+      <guid isPermaLink="false">fixdata-trade-cese32-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:57:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título CESE32 (Debênture), emitido por ENEVA S.A., registrou R$ 33,69 Mi em volume negociado na B3 em 18/11/2026, ao longo de 14 operações com taxa média ponderada de IPCA + 8,39% e preço unitário médio de R$ 1.138,61. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>CESE32</strong> (Debênture), lastreado em <strong>ENEVA S.A.</strong>, concentrou volume financeiro de <strong>R$ 33,69 Mi</strong> em <strong>14 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,39%.</p><ul><li><strong>Ativo:</strong> CESE32 (Debênture)</li><li><strong>Devedor / Emissor:</strong> ENEVA S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 33,69 Mi (14 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,39%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.138,61</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/09/2030</li><li><strong>Setor:</strong> Empreendimentos e Participações</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/cese32/">CESE32 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 26E4609469 movimenta R$ 33,14 Mi no mercado secundário B3</title>
+      <link>https://fixdatabrasil.com.br/asset/26e4609469/</link>
+      <guid isPermaLink="false">fixdata-trade-26e4609469-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:57:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 26E4609469 (CRI) registrou R$ 33,14 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações e preço unitário médio de R$ 1.019,85. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>26E4609469</strong> (CRI) concentrou volume financeiro de <strong>R$ 33,14 Mi</strong> em <strong>2 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> 26E4609469 (CRI)</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 33,14 Mi (2 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 12,68%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.019,85</li><li><strong>Vencimento:</strong> 17/05/2030</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/26e4609469/">26E4609469 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture GASMA0 (COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG) movimenta R$ 31,16 Mi na B3 a IPCA + 6,62%</title>
+      <link>https://fixdatabrasil.com.br/asset/gasma0/</link>
+      <guid isPermaLink="false">fixdata-trade-gasma0-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:57:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título GASMA0 (Debênture), emitido por COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG, registrou R$ 31,16 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações com taxa média ponderada de IPCA + 6,62% e preço unitário médio de R$ 1.038,62. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>GASMA0</strong> (Debênture), lastreado em <strong>COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG</strong>, concentrou volume financeiro de <strong>R$ 31,16 Mi</strong> em <strong>2 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 6,62%.</p><ul><li><strong>Ativo:</strong> GASMA0 (Debênture)</li><li><strong>Devedor / Emissor:</strong> COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 31,16 Mi (2 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 6,62%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.038,62</li><li><strong>Rating de crédito:</strong> AA+</li><li><strong>Vencimento:</strong> 15/11/2035</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/gasma0/">GASMA0 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture ENTV13 (ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A.) movimenta R$ 27,16 Mi na B3 a IPCA + 9,44%</title>
+      <link>https://fixdatabrasil.com.br/asset/entv13/</link>
+      <guid isPermaLink="false">fixdata-trade-entv13-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:57:10 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título ENTV13 (Debênture), emitido por ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A., registrou R$ 27,16 Mi em volume negociado na B3 em 18/11/2026, ao longo de 7 operações com taxa média ponderada de IPCA + 9,44% e preço unitário médio de R$ 1.076,37. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ENTV13</strong> (Debênture), lastreado em <strong>ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A.</strong>, concentrou volume financeiro de <strong>R$ 27,16 Mi</strong> em <strong>7 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 9,44%.</p><ul><li><strong>Ativo:</strong> ENTV13 (Debênture)</li><li><strong>Devedor / Emissor:</strong> ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 27,16 Mi (7 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 9,44%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.076,37</li><li><strong>Rating de crédito:</strong> AA+</li><li><strong>Vencimento:</strong> 15/12/2036</li><li><strong>Setor:</strong> Transporte e Logística</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/entv13/">ENTV13 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 21A0772861 (SETIN) movimenta R$ 27,01 Mi na B3</title>
+      <link>https://fixdatabrasil.com.br/asset/21a0772861/</link>
+      <guid isPermaLink="false">fixdata-trade-21a0772861-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:57:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 21A0772861 (CRI), emitido por SETIN, registrou R$ 27,01 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações e preço unitário médio de R$ 1,59. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>21A0772861</strong> (CRI), lastreado em <strong>SETIN</strong>, concentrou volume financeiro de <strong>R$ 27,01 Mi</strong> em <strong>2 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> 21A0772861 (CRI)</li><li><strong>Devedor / Emissor:</strong> SETIN</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 27,01 Mi (2 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 9,03%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1,59</li><li><strong>Vencimento:</strong> 20/11/2026</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/21a0772861/">21A0772861 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture CHSF13 (AXIA ENERGIA NORDESTE S.A.) movimenta R$ 26,47 Mi na B3 a IPCA + 7,97%</title>
+      <link>https://fixdatabrasil.com.br/asset/chsf13/</link>
+      <guid isPermaLink="false">fixdata-trade-chsf13-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:56:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título CHSF13 (Debênture), emitido por AXIA ENERGIA NORDESTE S.A., registrou R$ 26,47 Mi em volume negociado na B3 em 18/11/2026, ao longo de 53 operações com taxa média ponderada de IPCA + 7,97% e preço unitário médio de R$ 1.096,26. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>CHSF13</strong> (Debênture), lastreado em <strong>AXIA ENERGIA NORDESTE S.A.</strong>, concentrou volume financeiro de <strong>R$ 26,47 Mi</strong> em <strong>53 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 7,97%.</p><ul><li><strong>Ativo:</strong> CHSF13 (Debênture)</li><li><strong>Devedor / Emissor:</strong> AXIA ENERGIA NORDESTE S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 26,47 Mi (53 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 7,97%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.096,26</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/06/2031</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/chsf13/">CHSF13 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture CMGTA1 (CEMIG GERAÇÃO E TRANSMISSÃO S/A) movimenta R$ 26,35 Mi na B3 a IPCA + 8,62%</title>
+      <link>https://fixdatabrasil.com.br/asset/cmgta1/</link>
+      <guid isPermaLink="false">fixdata-trade-cmgta1-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:56:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título CMGTA1 (Debênture), emitido por CEMIG GERAÇÃO E TRANSMISSÃO S/A, registrou R$ 26,35 Mi em volume negociado na B3 em 18/11/2026, ao longo de 8 operações com taxa média ponderada de IPCA + 8,62% e preço unitário médio de R$ 931,21. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>CMGTA1</strong> (Debênture), lastreado em <strong>CEMIG GERAÇÃO E TRANSMISSÃO S/A</strong>, concentrou volume financeiro de <strong>R$ 26,35 Mi</strong> em <strong>8 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,62%.</p><ul><li><strong>Ativo:</strong> CMGTA1 (Debênture)</li><li><strong>Devedor / Emissor:</strong> CEMIG GERAÇÃO E TRANSMISSÃO S/A</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 26,35 Mi (8 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,62%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 931,21</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/10/2037</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/cmgta1/">CMGTA1 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture CNRD12 (CONCESSIONARIA DA RODOVIA MS 306 S.A.) movimenta R$ 26,14 Mi na B3 a IPCA + 9,89%</title>
       <link>https://fixdatabrasil.com.br/asset/cnrd12/</link>
-      <guid isPermaLink="false">fixdata-trade-cnrd12-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-trade-cnrd12-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:56:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Mercado Secundário / Debênture</category>
-      <description>O título CNRD12 (Debênture), emitido por CONCESSIONARIA DA RODOVIA MS 306 S.A., movimentou R$ 179.06 Mi no mercado secundário da B3 em 2026-10-28, com 20 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <description>O título CNRD12 (Debênture), emitido por CONCESSIONARIA DA RODOVIA MS 306 S.A., registrou R$ 26,14 Mi em volume negociado na B3 em 18/11/2026, ao longo de 10 operações com taxa média ponderada de IPCA + 9,89% e preço unitário médio de R$ 909,52. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>CNRD12</strong> (Debênture), lastreado em <strong>CONCESSIONARIA DA RODOVIA MS 306 S.A.</strong>, concentrou volume financeiro de <strong>R$ 26,14 Mi</strong> em <strong>10 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 9,89%.</p><ul><li><strong>Ativo:</strong> CNRD12 (Debênture)</li><li><strong>Devedor / Emissor:</strong> CONCESSIONARIA DA RODOVIA MS 306 S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 26,14 Mi (10 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 9,89%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 909,52</li><li><strong>Vencimento:</strong> 15/05/2043</li><li><strong>Setor:</strong> Transporte e Logística</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/cnrd12/">CNRD12 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] CNRD12 (Debênture) — Negociação de R$ 178.26 Mi a 9.53%</title>
-      <link>https://fixdatabrasil.com.br/asset/cnrd12/</link>
-      <guid isPermaLink="false">fixdata-trade-cnrd12-2026-11-09</guid>
-      <pubDate>Mon, 09 Nov 2026 18:00:00 -0300</pubDate>
+      <title>Debênture VRDN12 (VIARONDON CONCESSIONÁRIA DE RODOVIA SA) movimenta R$ 23,91 Mi na B3 a IPCA + 9,49%</title>
+      <link>https://fixdatabrasil.com.br/asset/vrdn12/</link>
+      <guid isPermaLink="false">fixdata-trade-vrdn12-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:56:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Mercado Secundário / Debênture</category>
-      <description>O título CNRD12 (Debênture), emitido por CONCESSIONARIA DA RODOVIA MS 306 S.A., movimentou R$ 178.26 Mi no mercado secundário da B3 em 2026-11-09, com 12 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <description>O título VRDN12 (Debênture), emitido por VIARONDON CONCESSIONÁRIA DE RODOVIA SA, registrou R$ 23,91 Mi em volume negociado na B3 em 18/11/2026, ao longo de 15 operações com taxa média ponderada de IPCA + 9,49% e preço unitário médio de R$ 1.175,85. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>VRDN12</strong> (Debênture), lastreado em <strong>VIARONDON CONCESSIONÁRIA DE RODOVIA SA</strong>, concentrou volume financeiro de <strong>R$ 23,91 Mi</strong> em <strong>15 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 9,49%.</p><ul><li><strong>Ativo:</strong> VRDN12 (Debênture)</li><li><strong>Devedor / Emissor:</strong> VIARONDON CONCESSIONÁRIA DE RODOVIA SA</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 23,91 Mi (15 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 9,49%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.175,85</li><li><strong>Rating de crédito:</strong> AA-</li><li><strong>Vencimento:</strong> 15/12/2034</li><li><strong>Setor:</strong> Transporte e Logística</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/vrdn12/">VRDN12 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] BCPSA5 (Debênture) — Negociação de R$ 174.18 Mi a 6.68%</title>
-      <link>https://fixdatabrasil.com.br/asset/bcpsa5/</link>
-      <guid isPermaLink="false">fixdata-trade-bcpsa5-2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 18:00:00 -0300</pubDate>
+      <title>Debênture SBSPB6 (CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO) movimenta R$ 22,47 Mi na B3 a IPCA + 5,89%</title>
+      <link>https://fixdatabrasil.com.br/asset/sbspb6/</link>
+      <guid isPermaLink="false">fixdata-trade-sbspb6-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:56:10 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Mercado Secundário / Debênture</category>
-      <description>O título BCPSA5 (Debênture), emitido por BCP S/A, movimentou R$ 174.18 Mi no mercado secundário da B3 em 2026-10-08, com 36 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <description>O título SBSPB6 (Debênture), emitido por CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO, registrou R$ 22,47 Mi em volume negociado na B3 em 18/11/2026, ao longo de 10 operações com taxa média ponderada de IPCA + 5,89% e preço unitário médio de R$ 1.458,74. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>SBSPB6</strong> (Debênture), lastreado em <strong>CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO</strong>, concentrou volume financeiro de <strong>R$ 22,47 Mi</strong> em <strong>10 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 5,89%.</p><ul><li><strong>Ativo:</strong> SBSPB6 (Debênture)</li><li><strong>Devedor / Emissor:</strong> CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 22,47 Mi (10 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 5,89%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.458,74</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/07/2027</li><li><strong>Setor:</strong> Saneamento</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/sbspb6/">SBSPB6 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] CMGDB4 (Debênture) — Negociação de R$ 173.52 Mi a 7.32%</title>
-      <link>https://fixdatabrasil.com.br/asset/cmgdb4/</link>
-      <guid isPermaLink="false">fixdata-trade-cmgdb4-2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CMGDB4 (Debênture), emitido por CEMIG DISTRIBUIÇÃO S/A, movimentou R$ 173.52 Mi no mercado secundário da B3 em 2026-10-08, com 10 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CSRNA3 (Debênture) — Negociação de R$ 169.75 Mi a 15.14%</title>
-      <link>https://fixdatabrasil.com.br/asset/csrna3/</link>
-      <guid isPermaLink="false">fixdata-trade-csrna3-2026-10-27</guid>
-      <pubDate>Tue, 27 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CSRNA3 (Debênture), emitido por CIA ENERGÉTICA DO RIO GRANDE DO NORTE, movimentou R$ 169.75 Mi no mercado secundário da B3 em 2026-10-27, com 22 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CNRD12 (Debênture) — Negociação de R$ 169.33 Mi a 9.71%</title>
-      <link>https://fixdatabrasil.com.br/asset/cnrd12/</link>
-      <guid isPermaLink="false">fixdata-trade-cnrd12-2026-11-04</guid>
-      <pubDate>Wed, 04 Nov 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CNRD12 (Debênture), emitido por CONCESSIONARIA DA RODOVIA MS 306 S.A., movimentou R$ 169.33 Mi no mercado secundário da B3 em 2026-11-04, com 14 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] TRGP13 (Debênture) — Negociação de R$ 169.29 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/trgp13/</link>
-      <guid isPermaLink="false">fixdata-trade-trgp13-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título TRGP13 (Debênture), emitido por TECP - TRANSMISSORA DE ENERGIA CENTRAL PAULISTANA S.A., movimentou R$ 169.29 Mi no mercado secundário da B3 em 2026-10-28, com 43 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] CPLDA1 (Debênture) — Negociação de R$ 166.83 Mi a 8.07%</title>
-      <link>https://fixdatabrasil.com.br/asset/cplda1/</link>
-      <guid isPermaLink="false">fixdata-trade-cplda1-2026-11-06</guid>
-      <pubDate>Fri, 06 Nov 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título CPLDA1 (Debênture), emitido por COPEL DISTRIBUIÇÃO S.A., movimentou R$ 166.83 Mi no mercado secundário da B3 em 2026-11-06, com 15 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] PEJA23 (Debênture) — Negociação de R$ 165.47 Mi a 8.24%</title>
-      <link>https://fixdatabrasil.com.br/asset/peja23/</link>
-      <guid isPermaLink="false">fixdata-trade-peja23-2026-10-16</guid>
-      <pubDate>Fri, 16 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título PEJA23 (Debênture), emitido por PRIO FORTE S.A., movimentou R$ 165.47 Mi no mercado secundário da B3 em 2026-10-16, com 39 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] PEJA23 (Debênture) — Negociação de R$ 165.47 Mi a 8.24%</title>
-      <link>https://fixdatabrasil.com.br/asset/peja23/</link>
-      <guid isPermaLink="false">fixdata-trade-peja23-2026-10-16</guid>
-      <pubDate>Fri, 16 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título PEJA23 (Debênture), emitido por PRIO FORTE S.A., movimentou R$ 165.47 Mi no mercado secundário da B3 em 2026-10-16, com 39 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] SBSPK8 (Debênture) — Negociação de R$ 165.45 Mi a 7.75%</title>
-      <link>https://fixdatabrasil.com.br/asset/sbspk8/</link>
-      <guid isPermaLink="false">fixdata-trade-sbspk8-2026-10-28</guid>
-      <pubDate>Wed, 28 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / Debênture</category>
-      <description>O título SBSPK8 (Debênture), emitido por CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO, movimentou R$ 165.45 Mi no mercado secundário da B3 em 2026-10-28, com 92 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] 24I1345178 (CRI) — Negociação de R$ 162.62 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/24i1345178/</link>
-      <guid isPermaLink="false">fixdata-trade-24i1345178-2026-10-22</guid>
-      <pubDate>Thu, 22 Oct 2026 18:00:00 -0300</pubDate>
+      <title>CRI 24D3313768 (CURY CONSTRUTORA E INCORPORADORA S.A.) movimenta R$ 21,76 Mi na B3 a 100,20% do CDI</title>
+      <link>https://fixdatabrasil.com.br/asset/24d3313768/</link>
+      <guid isPermaLink="false">fixdata-trade-24d3313768-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:56:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Mercado Secundário / CRI</category>
-      <description>O título 24I1345178 (CRI), emitido por BGR B32 FUNDO DE INV, movimentou R$ 162.62 Mi no mercado secundário da B3 em 2026-10-22, com 3 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <description>O título 24D3313768 (CRI), emitido por CURY CONSTRUTORA E INCORPORADORA S.A., registrou R$ 21,76 Mi em volume negociado na B3 em 18/11/2026, ao longo de 63 operações com taxa média ponderada de 100,20% do CDI e preço unitário médio de R$ 1.066,80. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>24D3313768</strong> (CRI), lastreado em <strong>CURY CONSTRUTORA E INCORPORADORA S.A.</strong>, concentrou volume financeiro de <strong>R$ 21,76 Mi</strong> em <strong>63 negócios</strong> no mercado secundário com taxa média ponderada de 100,20% do CDI.</p><ul><li><strong>Ativo:</strong> 24D3313768 (CRI)</li><li><strong>Devedor / Emissor:</strong> CURY CONSTRUTORA E INCORPORADORA S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 21,76 Mi (63 negócios)</li><li><strong>Taxa média ponderada:</strong> 100,20% do CDI</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.066,80</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 31/05/2027</li><li><strong>Setor:</strong> Construção Civil</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/24d3313768/">24D3313768 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[B3] 24I1345178 (CRI) — Negociação de R$ 162.07 Mi</title>
-      <link>https://fixdatabrasil.com.br/asset/24i1345178/</link>
-      <guid isPermaLink="false">fixdata-trade-24i1345178-2026-10-26</guid>
-      <pubDate>Mon, 26 Oct 2026 18:00:00 -0300</pubDate>
-      <category>Mercado Secundário / CRI</category>
-      <description>O título 24I1345178 (CRI), emitido por BGR B32 FUNDO DE INV, movimentou R$ 162.07 Mi no mercado secundário da B3 em 2026-10-26, com 1 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[B3] AEGP0B (Debênture) — Negociação de R$ 160.78 Mi a 19.54%</title>
-      <link>https://fixdatabrasil.com.br/asset/aegp0b/</link>
-      <guid isPermaLink="false">fixdata-trade-aegp0b-2026-10-23</guid>
-      <pubDate>Fri, 23 Oct 2026 18:00:00 -0300</pubDate>
+      <title>Debênture ANHBB6 (CONCESSIONÁRIA DO SISTEMA ANHANGUERA-BANDEIRANTES S.A.) movimenta R$ 20,18 Mi na B3 a IPCA + 8,39%</title>
+      <link>https://fixdatabrasil.com.br/asset/anhbb6/</link>
+      <guid isPermaLink="false">fixdata-trade-anhbb6-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:55:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Mercado Secundário / Debênture</category>
-      <description>O título AEGP0B (Debênture), emitido por AEGEA SANEAMENTO E PARTICIPAÇÕES S.A., movimentou R$ 160.78 Mi no mercado secundário da B3 em 2026-10-23, com 2 negócios registrados. Consulte o histórico de taxas, spread sobre a curva NTN-B e ratings de crédito no FIXDATA.</description>
+      <description>O título ANHBB6 (Debênture), emitido por CONCESSIONÁRIA DO SISTEMA ANHANGUERA-BANDEIRANTES S.A., registrou R$ 20,18 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações com taxa média ponderada de IPCA + 8,39% e preço unitário médio de R$ 995,54. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ANHBB6</strong> (Debênture), lastreado em <strong>CONCESSIONÁRIA DO SISTEMA ANHANGUERA-BANDEIRANTES S.A.</strong>, concentrou volume financeiro de <strong>R$ 20,18 Mi</strong> em <strong>2 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,39%.</p><ul><li><strong>Ativo:</strong> ANHBB6 (Debênture)</li><li><strong>Devedor / Emissor:</strong> CONCESSIONÁRIA DO SISTEMA ANHANGUERA-BANDEIRANTES S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 20,18 Mi (2 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,39%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 995,54</li><li><strong>Rating de crédito:</strong> AAA</li><li><strong>Vencimento:</strong> 15/07/2037</li><li><strong>Setor:</strong> Transporte e Logística</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/anhbb6/">ANHBB6 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 11F0040500 — Pagamento de Juros programado para 2026-11-20</title>
+      <title>Debênture ENTV12 (ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A.) movimenta R$ 20,16 Mi na B3 a IPCA + 8,62%</title>
+      <link>https://fixdatabrasil.com.br/asset/entv12/</link>
+      <guid isPermaLink="false">fixdata-trade-entv12-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:55:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título ENTV12 (Debênture), emitido por ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A., registrou R$ 20,16 Mi em volume negociado na B3 em 18/11/2026, ao longo de 14 operações com taxa média ponderada de IPCA + 8,62% e preço unitário médio de R$ 1.462,43. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>ENTV12</strong> (Debênture), lastreado em <strong>ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A.</strong>, concentrou volume financeiro de <strong>R$ 20,16 Mi</strong> em <strong>14 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,62%.</p><ul><li><strong>Ativo:</strong> ENTV12 (Debênture)</li><li><strong>Devedor / Emissor:</strong> ENTREVIAS CONCESSIONÁRIA DE RODOVIAS S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 20,16 Mi (14 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,62%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.462,43</li><li><strong>Rating de crédito:</strong> AA+</li><li><strong>Vencimento:</strong> 15/12/2030</li><li><strong>Setor:</strong> Transporte e Logística</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/entv12/">ENTV12 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture RALM11 (RIALMA TRANSMISSORA DE ENERGIA V S.A.) movimenta R$ 20,12 Mi na B3</title>
+      <link>https://fixdatabrasil.com.br/asset/ralm11/</link>
+      <guid isPermaLink="false">fixdata-trade-ralm11-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:55:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título RALM11 (Debênture), emitido por RIALMA TRANSMISSORA DE ENERGIA V S.A., registrou R$ 20,12 Mi em volume negociado na B3 em 18/11/2026, ao longo de 16 operações e preço unitário médio de R$ 1.115,43. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>RALM11</strong> (Debênture), lastreado em <strong>RIALMA TRANSMISSORA DE ENERGIA V S.A.</strong>, concentrou volume financeiro de <strong>R$ 20,12 Mi</strong> em <strong>16 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> RALM11 (Debênture)</li><li><strong>Devedor / Emissor:</strong> RIALMA TRANSMISSORA DE ENERGIA V S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 20,12 Mi (16 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 7,83%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.115,43</li><li><strong>Vencimento:</strong> 15/12/2048</li><li><strong>Setor:</strong> Energia Elétrica</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/ralm11/">RALM11 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 24E3617804 (TRUE 334E) movimenta R$ 20,00 Mi na B3</title>
+      <link>https://fixdatabrasil.com.br/asset/24e3617804/</link>
+      <guid isPermaLink="false">fixdata-trade-24e3617804-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:55:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 24E3617804 (CRI), emitido por TRUE 334E, registrou R$ 20,00 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações e preço unitário médio de R$ 1.315,40. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>24E3617804</strong> (CRI), lastreado em <strong>TRUE 334E</strong>, concentrou volume financeiro de <strong>R$ 20,00 Mi</strong> em <strong>2 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> 24E3617804 (CRI)</li><li><strong>Devedor / Emissor:</strong> TRUE 334E</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 20,00 Mi (2 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 8,50%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.315,40</li><li><strong>Vencimento:</strong> 25/04/2044</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/24e3617804/">24E3617804 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 26D4894194 (SOLARGRID) movimenta R$ 17,96 Mi na B3 a CDI + 3,50%</title>
+      <link>https://fixdatabrasil.com.br/asset/26d4894194/</link>
+      <guid isPermaLink="false">fixdata-trade-26d4894194-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:55:10 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 26D4894194 (CRI), emitido por SOLARGRID, registrou R$ 17,96 Mi em volume negociado na B3 em 18/11/2026, ao longo de 4 operações com taxa média ponderada de CDI + 3,50% e preço unitário médio de R$ 1.101,62. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>26D4894194</strong> (CRI), lastreado em <strong>SOLARGRID</strong>, concentrou volume financeiro de <strong>R$ 17,96 Mi</strong> em <strong>4 negócios</strong> no mercado secundário com taxa média ponderada de CDI + 3,50%.</p><ul><li><strong>Ativo:</strong> 26D4894194 (CRI)</li><li><strong>Devedor / Emissor:</strong> SOLARGRID</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 17,96 Mi (4 negócios)</li><li><strong>Taxa média ponderada:</strong> CDI + 3,50%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.101,62</li><li><strong>Vencimento:</strong> 24/04/2041</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/26d4894194/">26D4894194 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 26G4824689 (VISCONDE INCORPORADO) movimenta R$ 16,22 Mi na B3</title>
+      <link>https://fixdatabrasil.com.br/asset/26g4824689/</link>
+      <guid isPermaLink="false">fixdata-trade-26g4824689-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:55:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 26G4824689 (CRI), emitido por VISCONDE INCORPORADO, registrou R$ 16,22 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações e preço unitário médio de R$ 998,76. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>26G4824689</strong> (CRI), lastreado em <strong>VISCONDE INCORPORADO</strong>, concentrou volume financeiro de <strong>R$ 16,22 Mi</strong> em <strong>2 negócios</strong> no mercado secundário.</p><ul><li><strong>Ativo:</strong> 26G4824689 (CRI)</li><li><strong>Devedor / Emissor:</strong> VISCONDE INCORPORADO</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 16,22 Mi (2 negócios)</li><li><strong>Remuneração na emissão:</strong> IPCA + 15,00%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 998,76</li><li><strong>Vencimento:</strong> 25/04/2033</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/26g4824689/">26G4824689 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 24G2816828 (LAGO DA PEDRA PARTI) movimenta R$ 15,09 Mi na B3 a CDI + 0,95%</title>
+      <link>https://fixdatabrasil.com.br/asset/24g2816828/</link>
+      <guid isPermaLink="false">fixdata-trade-24g2816828-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:54:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 24G2816828 (CRI), emitido por LAGO DA PEDRA PARTI, registrou R$ 15,09 Mi em volume negociado na B3 em 18/11/2026, ao longo de 2 operações com taxa média ponderada de CDI + 0,95% e preço unitário médio de R$ 1.006,31. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>24G2816828</strong> (CRI), lastreado em <strong>LAGO DA PEDRA PARTI</strong>, concentrou volume financeiro de <strong>R$ 15,09 Mi</strong> em <strong>2 negócios</strong> no mercado secundário com taxa média ponderada de CDI + 0,95%.</p><ul><li><strong>Ativo:</strong> 24G2816828 (CRI)</li><li><strong>Devedor / Emissor:</strong> LAGO DA PEDRA PARTI</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 15,09 Mi (2 negócios)</li><li><strong>Taxa média ponderada:</strong> CDI + 0,95%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 1.006,31</li><li><strong>Vencimento:</strong> 25/09/2029</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/24g2816828/">24G2816828 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Debênture SRBS11 (SRBT SUBHOLDING S.A.) movimenta R$ 15,00 Mi na B3 a IPCA + 8,10%</title>
+      <link>https://fixdatabrasil.com.br/asset/srbs11/</link>
+      <guid isPermaLink="false">fixdata-trade-srbs11-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:54:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / Debênture</category>
+      <description>O título SRBS11 (Debênture), emitido por SRBT SUBHOLDING S.A., registrou R$ 15,00 Mi em volume negociado na B3 em 18/11/2026, ao longo de 6 operações com taxa média ponderada de IPCA + 8,10% e preço unitário médio de R$ 999,29. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>SRBS11</strong> (Debênture), lastreado em <strong>SRBT SUBHOLDING S.A.</strong>, concentrou volume financeiro de <strong>R$ 15,00 Mi</strong> em <strong>6 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,10%.</p><ul><li><strong>Ativo:</strong> SRBS11 (Debênture)</li><li><strong>Devedor / Emissor:</strong> SRBT SUBHOLDING S.A.</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 15,00 Mi (6 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,10%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 999,29</li><li><strong>Vencimento:</strong> 15/12/2049</li><li><strong>Setor:</strong> Empreendimentos e Participações</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/srbs11/">SRBS11 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 24G1674104 (JHSF PARTICIPAÇÕES SA) movimenta R$ 12,12 Mi na B3 a IPCA + 8,37%</title>
+      <link>https://fixdatabrasil.com.br/asset/24g1674104/</link>
+      <guid isPermaLink="false">fixdata-trade-24g1674104-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:54:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 24G1674104 (CRI), emitido por JHSF PARTICIPAÇÕES SA, registrou R$ 12,12 Mi em volume negociado na B3 em 18/11/2026, ao longo de 18 operações com taxa média ponderada de IPCA + 8,37% e preço unitário médio de R$ 932,10. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>24G1674104</strong> (CRI), lastreado em <strong>JHSF PARTICIPAÇÕES SA</strong>, concentrou volume financeiro de <strong>R$ 12,12 Mi</strong> em <strong>18 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 8,37%.</p><ul><li><strong>Ativo:</strong> 24G1674104 (CRI)</li><li><strong>Devedor / Emissor:</strong> JHSF PARTICIPAÇÕES SA</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 12,12 Mi (18 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 8,37%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 932,10</li><li><strong>Vencimento:</strong> 17/07/2034</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/24g1674104/">24G1674104 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>CRI 26F2538567 (MRV FLEX 2T26) movimenta R$ 12,07 Mi na B3 a IPCA + 10,90%</title>
+      <link>https://fixdatabrasil.com.br/asset/26f2538567/</link>
+      <guid isPermaLink="false">fixdata-trade-26f2538567-2026-11-18</guid>
+      <pubDate>Wed, 18 Nov 2026 17:54:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
+      <category>Mercado Secundário / CRI</category>
+      <description>O título 26F2538567 (CRI), emitido por MRV FLEX 2T26, registrou R$ 12,07 Mi em volume negociado na B3 em 18/11/2026, ao longo de 8 operações com taxa média ponderada de IPCA + 10,90% e preço unitário médio de R$ 971,59. Consulte curva de taxas, spread NTN-B e fluxo de pagamentos no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>No pregão da B3 de <strong>18/11/2026</strong>, o papel <strong>26F2538567</strong> (CRI), lastreado em <strong>MRV FLEX 2T26</strong>, concentrou volume financeiro de <strong>R$ 12,07 Mi</strong> em <strong>8 negócios</strong> no mercado secundário com taxa média ponderada de IPCA + 10,90%.</p><ul><li><strong>Ativo:</strong> 26F2538567 (CRI)</li><li><strong>Devedor / Emissor:</strong> MRV FLEX 2T26</li><li><strong>Pregão de referência:</strong> 18/11/2026</li><li><strong>Volume financeiro:</strong> R$ 12,07 Mi (8 negócios)</li><li><strong>Taxa média ponderada:</strong> IPCA + 10,90%</li><li><strong>Preço médio ponderado (PU):</strong> R$ 971,59</li><li><strong>Vencimento:</strong> 21/11/2034</li><li><strong>Tributação:</strong> Isento de IR para Pessoa Física</li></ul><p>Acesse a ficha completa com histórico de preços unitários, comparativo de spread sobre a curva NTN-B e agenda de fluxos em <a href="https://fixdatabrasil.com.br/asset/26f2538567/">26F2538567 no FIXDATA</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
+    </item>
+    <item>
+      <title>Agenda de Proventos: 11F0040500 paga Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/11f0040500/</link>
-      <guid isPermaLink="false">fixdata-agenda-11f0040500-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-11f0040500-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 17:00:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 11F0040500 possui evento agendado de Pagamento de Juros no valor estimado de R$ 732633.5056 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 11F0040500 (CRI) (emissor BRAZILIAN) tem pagamento programado de Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 732.633,5056. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>11F0040500</strong> (CRI) de BRAZILIAN possui pagamento programado de <strong>Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 732.633,5056.</p><ul><li><strong>Ativo:</strong> 11F0040500 (CRI)</li><li><strong>Evento programado:</strong> Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> BRAZILIAN</li><li><strong>Valor unitário projetado:</strong> R$ 732.633,5056</li><li><strong>Remuneração contratual:</strong> IGP-M + 44,25%</li><li><strong>Vencimento final:</strong> 20/05/2041</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/11f0040500/">11F0040500 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 11K0018241 — Pagamento de Juros programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 11K0018241 paga Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/11k0018241/</link>
-      <guid isPermaLink="false">fixdata-agenda-11k0018241-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-11k0018241-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:59:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 11K0018241 possui evento agendado de Pagamento de Juros no valor estimado de R$ 13220.9498 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 11K0018241 (CRI) tem pagamento programado de Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 13.220,9498. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>11K0018241</strong> (CRI) possui pagamento programado de <strong>Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 13.220,9498.</p><ul><li><strong>Ativo:</strong> 11K0018241 (CRI)</li><li><strong>Evento programado:</strong> Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Valor unitário projetado:</strong> R$ 13.220,9498</li><li><strong>Remuneração contratual:</strong> IGP-M + 8,00%</li><li><strong>Vencimento final:</strong> 20/11/2041</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/11k0018241/">11K0018241 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 11K0018243 — Pagamento de Juros programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 11K0018243 paga Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/11k0018243/</link>
-      <guid isPermaLink="false">fixdata-agenda-11k0018243-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-11k0018243-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:59:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 11K0018243 possui evento agendado de Pagamento de Juros no valor estimado de R$ 98523.6177 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 11K0018243 (CRI) (emissor BRAZILIAN) tem pagamento programado de Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 98.523,6177. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>11K0018243</strong> (CRI) de BRAZILIAN possui pagamento programado de <strong>Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 98.523,6177.</p><ul><li><strong>Ativo:</strong> 11K0018243 (CRI)</li><li><strong>Evento programado:</strong> Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> BRAZILIAN</li><li><strong>Valor unitário projetado:</strong> R$ 98.523,6177</li><li><strong>Remuneração contratual:</strong> IGP-M + 51,11%</li><li><strong>Vencimento final:</strong> 20/11/2041</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/11k0018243/">11K0018243 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 11L0019395 — Pagamento de Juros programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 11L0019395 paga Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/11l0019395/</link>
-      <guid isPermaLink="false">fixdata-agenda-11l0019395-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-11l0019395-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:59:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 11L0019395 possui evento agendado de Pagamento de Juros no valor estimado de R$ 681416.1631 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 11L0019395 (CRI) (emissor BRAZILIAN) tem pagamento programado de Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 681.416,1631. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>11L0019395</strong> (CRI) de BRAZILIAN possui pagamento programado de <strong>Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 681.416,1631.</p><ul><li><strong>Ativo:</strong> 11L0019395 (CRI)</li><li><strong>Evento programado:</strong> Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> BRAZILIAN</li><li><strong>Valor unitário projetado:</strong> R$ 681.416,1631</li><li><strong>Remuneração contratual:</strong> IGP-M + 45,72%</li><li><strong>Vencimento final:</strong> 20/11/2041</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/11l0019395/">11L0019395 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 11L0019402 — Pagamento de Juros programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 11L0019402 paga Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/11l0019402/</link>
-      <guid isPermaLink="false">fixdata-agenda-11l0019402-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-11l0019402-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:59:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 11L0019402 possui evento agendado de Pagamento de Juros no valor estimado de R$ 418827.1658 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 11L0019402 (CRI) (emissor BRAZILIAN) tem pagamento programado de Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 418.827,1658. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>11L0019402</strong> (CRI) de BRAZILIAN possui pagamento programado de <strong>Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 418.827,1658.</p><ul><li><strong>Ativo:</strong> 11L0019402 (CRI)</li><li><strong>Evento programado:</strong> Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> BRAZILIAN</li><li><strong>Valor unitário projetado:</strong> R$ 418.827,1658</li><li><strong>Remuneração contratual:</strong> IGP-M + 40,61%</li><li><strong>Vencimento final:</strong> 20/11/2031</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/11l0019402/">11L0019402 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 16K0862724 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 16K0862724 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/16k0862724/</link>
-      <guid isPermaLink="false">fixdata-agenda-16k0862724-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-16k0862724-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:59:10 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 16K0862724 possui evento agendado de Amortização no valor estimado de R$ 100000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 16K0862724 (CRI) (emissor VALLE DO AÇAÍ) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 105.830,1000. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>16K0862724</strong> (CRI) de VALLE DO AÇAÍ possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 105.830,1000.</p><ul><li><strong>Ativo:</strong> 16K0862724 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> VALLE DO AÇAÍ</li><li><strong>Valor unitário projetado:</strong> R$ 105.830,1000</li><li><strong>Remuneração contratual:</strong> IPCA + 12,00%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/16k0862724/">16K0862724 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 16K0862724 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/16k0862724/</link>
-      <guid isPermaLink="false">fixdata-agenda-16k0862724-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 16K0862724 possui evento agendado de Pagamento de Juros no valor estimado de R$ 5830.1000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 16K0862781 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 16K0862781 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/16k0862781/</link>
-      <guid isPermaLink="false">fixdata-agenda-16k0862781-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-16k0862781-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:59:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 16K0862781 possui evento agendado de Amortização no valor estimado de R$ 100000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 16K0862781 (CRI) (emissor VALLE DO AÇAÍ) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 107.819,3000. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>16K0862781</strong> (CRI) de VALLE DO AÇAÍ possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 107.819,3000.</p><ul><li><strong>Ativo:</strong> 16K0862781 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> VALLE DO AÇAÍ</li><li><strong>Valor unitário projetado:</strong> R$ 107.819,3000</li><li><strong>Remuneração contratual:</strong> IPCA + 16,25%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/16k0862781/">16K0862781 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 16K0862781 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/16k0862781/</link>
-      <guid isPermaLink="false">fixdata-agenda-16k0862781-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 16K0862781 possui evento agendado de Pagamento de Juros no valor estimado de R$ 7819.3000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17J0083886 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 17J0083886 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/17j0083886/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083886-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-17j0083886-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:58:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083886 possui evento agendado de Amortização no valor estimado de R$ 100000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 17J0083886 (CRI) (emissor THCM) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 106.559,8000. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>17J0083886</strong> (CRI) de THCM possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 106.559,8000.</p><ul><li><strong>Ativo:</strong> 17J0083886 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> THCM</li><li><strong>Valor unitário projetado:</strong> R$ 106.559,8000</li><li><strong>Remuneração contratual:</strong> IPCA + 13,55%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/17j0083886/">17J0083886 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 17J0083886 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17j0083886/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083886-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083886 possui evento agendado de Pagamento de Juros no valor estimado de R$ 6559.8000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17J0083897 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 17J0083897 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/17j0083897/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083897-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-17j0083897-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:58:40 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083897 possui evento agendado de Amortização no valor estimado de R$ 100000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 17J0083897 (CRI) (emissor THCM) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 107.051,4000. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>17J0083897</strong> (CRI) de THCM possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 107.051,4000.</p><ul><li><strong>Ativo:</strong> 17J0083897 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> THCM</li><li><strong>Valor unitário projetado:</strong> R$ 107.051,4000</li><li><strong>Remuneração contratual:</strong> IPCA + 14,60%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/17j0083897/">17J0083897 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 17J0083897 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17j0083897/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083897-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083897 possui evento agendado de Pagamento de Juros no valor estimado de R$ 7051.4000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17J0083898 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 17J0083898 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/17j0083898/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083898-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-17j0083898-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:58:30 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083898 possui evento agendado de Amortização no valor estimado de R$ 1000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 17J0083898 (CRI) (emissor GRUPO LÍRIOS) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 1.053,9920. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>17J0083898</strong> (CRI) de GRUPO LÍRIOS possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 1.053,9920.</p><ul><li><strong>Ativo:</strong> 17J0083898 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> GRUPO LÍRIOS</li><li><strong>Valor unitário projetado:</strong> R$ 1.053,9920</li><li><strong>Remuneração contratual:</strong> IPCA + 11,09%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/17j0083898/">17J0083898 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 17J0083898 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17j0083898/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083898-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083898 possui evento agendado de Pagamento de Juros no valor estimado de R$ 53.9920 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17J0083906 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 17J0083906 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/17j0083906/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083906-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-17j0083906-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:58:20 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083906 possui evento agendado de Amortização no valor estimado de R$ 1000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 17J0083906 (CRI) (emissor GRUPO LÍRIOS) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 1.070,5140. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>17J0083906</strong> (CRI) de GRUPO LÍRIOS possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 1.070,5140.</p><ul><li><strong>Ativo:</strong> 17J0083906 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> GRUPO LÍRIOS</li><li><strong>Valor unitário projetado:</strong> R$ 1.070,5140</li><li><strong>Remuneração contratual:</strong> IPCA + 14,60%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/17j0083906/">17J0083906 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 17J0083906 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17j0083906/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0083906-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0083906 possui evento agendado de Pagamento de Juros no valor estimado de R$ 70.5140 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17J0869776 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 17J0869776 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/17j0869776/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0869776-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-17j0869776-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:58:10 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0869776 possui evento agendado de Amortização no valor estimado de R$ 1000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 17J0869776 (CRI) (emissor RESERVA VILLE) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 1.061,5080. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>17J0869776</strong> (CRI) de RESERVA VILLE possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 1.061,5080.</p><ul><li><strong>Ativo:</strong> 17J0869776 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> RESERVA VILLE</li><li><strong>Valor unitário projetado:</strong> R$ 1.061,5080</li><li><strong>Remuneração contratual:</strong> IGP-M + 12,68%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/17j0869776/">17J0869776 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 17J0869776 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17j0869776/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0869776-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0869776 possui evento agendado de Pagamento de Juros no valor estimado de R$ 61.5080 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17J0869781 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 17J0869781 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/17j0869781/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0869781-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-17j0869781-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:58:00 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0869781 possui evento agendado de Amortização no valor estimado de R$ 1000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 17J0869781 (CRI) (emissor RESERVA VILLE) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 1.072,3810. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>17J0869781</strong> (CRI) de RESERVA VILLE possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 1.072,3810.</p><ul><li><strong>Ativo:</strong> 17J0869781 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> RESERVA VILLE</li><li><strong>Valor unitário projetado:</strong> R$ 1.072,3810</li><li><strong>Remuneração contratual:</strong> IGP-M + 15,00%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/17j0869781/">17J0869781 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
     <item>
-      <title>[Agenda] 17J0869781 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17j0869781/</link>
-      <guid isPermaLink="false">fixdata-agenda-17j0869781-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17J0869781 possui evento agendado de Pagamento de Juros no valor estimado de R$ 72.3810 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17K0225738 — Amortização programado para 2026-11-20</title>
+      <title>Agenda de Proventos: 17K0225738 paga Amortização e Pagamento de Juros em 20/11/2026</title>
       <link>https://fixdatabrasil.com.br/asset/17k0225738/</link>
-      <guid isPermaLink="false">fixdata-agenda-17k0225738-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
+      <guid isPermaLink="false">fixdata-agenda-17k0225738-2026-11-20</guid>
+      <pubDate>Wed, 18 Nov 2026 16:57:50 -0300</pubDate>
+      <dc:creator>Redação FIXDATA</dc:creator>
       <category>Agenda de Pagamentos</category>
-      <description>O ativo 17K0225738 possui evento agendado de Amortização no valor estimado de R$ 1000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17K0225738 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17k0225738/</link>
-      <guid isPermaLink="false">fixdata-agenda-17k0225738-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17K0225738 possui evento agendado de Pagamento de Juros no valor estimado de R$ 54.9880 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17K0225740 — Amortização programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17k0225740/</link>
-      <guid isPermaLink="false">fixdata-agenda-17k0225740-2026-11-20-Amortização</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17K0225740 possui evento agendado de Amortização no valor estimado de R$ 1000.0000 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
-    </item>
-    <item>
-      <title>[Agenda] 17K0225740 — Pagamento de Juros programado para 2026-11-20</title>
-      <link>https://fixdatabrasil.com.br/asset/17k0225740/</link>
-      <guid isPermaLink="false">fixdata-agenda-17k0225740-2026-11-20-Pagamento_de_Juros</guid>
-      <pubDate>Fri, 20 Nov 2026 09:00:00 -0300</pubDate>
-      <category>Agenda de Pagamentos</category>
-      <description>O ativo 17K0225740 possui evento agendado de Pagamento de Juros no valor estimado de R$ 54.9880 na data contratual 2026-11-20. Acompanhe o cronograma completo de fluxos de caixa e vencimento no FIXDATA.</description>
+      <description>O ativo 17K0225738 (CRI) (emissor CEMARA) tem pagamento programado de Amortização e Pagamento de Juros para 20/11/2026, com valor unitário estimado em R$ 1.054,9880. Consulte o cronograma completo de cupons e amortizações no FIXDATA.</description>
+      <content:encoded><![CDATA[<p>Conforme cronograma contratual monitorado pelo FIXDATA, o papel <strong>17K0225738</strong> (CRI) de CEMARA possui pagamento programado de <strong>Amortização e Pagamento de Juros</strong> para o dia <strong>20/11/2026</strong>, com valor unitário estimado em R$ 1.054,9880.</p><ul><li><strong>Ativo:</strong> 17K0225738 (CRI)</li><li><strong>Evento programado:</strong> Amortização e Pagamento de Juros</li><li><strong>Data contratual prevista:</strong> 20/11/2026</li><li><strong>Emissor:</strong> CEMARA</li><li><strong>Valor unitário projetado:</strong> R$ 1.054,9880</li><li><strong>Remuneração contratual:</strong> IPCA + 11,30%</li><li><strong>Vencimento final:</strong> 20/11/2026</li></ul><p>Confira todas as parcelas futuras de juros e amortizações em <a href="https://fixdatabrasil.com.br/asset/17k0225738/">17K0225738 no FIXDATA</a> ou explore a <a href="https://fixdatabrasil.com.br/agenda/">Agenda Completa de Proventos</a>.</p>]]></content:encoded>
+      <media:content url="https://fixdatabrasil.com.br/icon-512x512.png" medium="image" type="image/png" width="512" height="512" />
+      <enclosure url="https://fixdatabrasil.com.br/icon-512x512.png" length="11196" type="image/png" />
     </item>
   </channel>
 </rss>

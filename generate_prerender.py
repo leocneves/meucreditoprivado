@@ -21,6 +21,7 @@ from prerender_hubs import (
     render_all_hub_pages,
     build_rich_static_page_body,
     safe_float,
+    GOOGLE_NEWS_SWG_SNIPPET,
 )
 
 BASE_URL = "https://fixdatabrasil.com.br"
@@ -1201,6 +1202,7 @@ def generate_asset_html(row):
     <meta name="robots" content="{robots_content}" />
     <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
     <link rel="canonical" href="{page_url}" />
+    <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="{BASE_URL}/feed.xml" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
@@ -1236,6 +1238,7 @@ def generate_asset_html(row):
       }}(window.location))
     </script>
 
+{GOOGLE_NEWS_SWG_SNIPPET}
     <link rel="stylesheet" href="/index.css">
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
@@ -1573,6 +1576,7 @@ def render_static_pages(df_active_count: int = 7321):
     <meta name="robots" content="index, follow" />
     <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
     <link rel="canonical" href="{page_url}" />
+    <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="{BASE_URL}/feed.xml" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website" />
@@ -1590,6 +1594,7 @@ def render_static_pages(df_active_count: int = 7321):
     <meta property="twitter:image" content="{BASE_URL}/icon-512x512.png" />
     {extra_ld}
 
+{GOOGLE_NEWS_SWG_SNIPPET}
     <link rel="stylesheet" href="/index.css">
     {bundle_tag}
   </head>
@@ -1946,6 +1951,7 @@ def render_home_page(total_count: int = None, active_count: int = None):
       }}(window.location))
     </script>
 
+{GOOGLE_NEWS_SWG_SNIPPET}
     {css_link}
     {script_tag_to_inject}
   </head>

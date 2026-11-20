@@ -68,8 +68,27 @@
       }(window.location))
     </script>
 
-    <link rel="stylesheet" href="/index.css">
+    <!-- Google News / Reader Revenue Manager (SwG Basic) -->
+    <script async type="application/javascript"
+            src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow87jiCw:openaccess",
+          clientOptions: { theme: "light", lang: "pt-BR" },
+        });
+      });
+    </script>
+    
     <script type="module" crossorigin src="/assets/index-bDGAHIId.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-DnBxXqaB.js">
+    <link rel="modulepreload" crossorigin href="/assets/data-vendor-o2xKvFs6.js">
+    <link rel="modulepreload" crossorigin href="/assets/charts-vendor-B8w0vQsr.js">
+    <link rel="modulepreload" crossorigin href="/assets/firebase-vendor-BHwXFlGb.js">
+    <link rel="modulepreload" crossorigin href="/assets/analytics-vendor-CcfRGZij.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-DQt2KZ5k.css">
   </head>
   <body class="bg-slate-50 text-slate-900">
     <div id="root">

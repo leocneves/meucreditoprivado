@@ -68,6 +68,19 @@
       }(window.location))
     </script>
 
+    <!-- Google News / Reader Revenue Manager (SwG Basic) -->
+    <script async type="application/javascript"
+            src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow87jiCw:openaccess",
+          clientOptions: { theme: "light", lang: "pt-BR" },
+        });
+      });
+    </script>
     
     <script type="module" src="/src/main.tsx"></script>
   </head>

@@ -26,6 +26,20 @@ import pandas as pd
 
 BASE_URL = "https://fixdatabrasil.com.br"
 
+GOOGLE_NEWS_SWG_SNIPPET = """    <!-- Google News / Reader Revenue Manager (SwG Basic) -->
+    <script async type="application/javascript"
+            src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
+    <script>
+      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+        basicSubscriptions.init({
+          type: "NewsArticle",
+          isPartOfType: ["Product"],
+          isPartOfProductId: "CAow87jiCw:openaccess",
+          clientOptions: { theme: "light", lang: "pt-BR" },
+        });
+      });
+    </script>"""
+
 RATING_SCORE_MAP = {
     "AAA": 21, "AA+": 20, "AA": 19, "AA-": 18,
     "A+": 17, "A": 16, "A-": 15,
@@ -517,6 +531,7 @@ def _render_pure_static_shell(
     <script type="application/ld+json">
 {schema_json}
     </script>
+{GOOGLE_NEWS_SWG_SNIPPET}
     <link rel="stylesheet" href="/index.css" />
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
