@@ -34,7 +34,7 @@ GOOGLE_NEWS_SWG_SNIPPET = """    <!-- Google News / Reader Revenue Manager (SwG 
         basicSubscriptions.init({
           type: "NewsArticle",
           isPartOfType: ["Product"],
-          isPartOfProductId: "CAow87jiCw:openaccess",
+          isPartOfProductId: "CAow9czODA:openaccess",
           clientOptions: { theme: "light", lang: "pt-BR" },
         });
       });
