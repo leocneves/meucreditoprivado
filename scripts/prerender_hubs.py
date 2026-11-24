@@ -204,6 +204,8 @@ def shared_footer_html() -> str:
             <span>•</span>
             <a href="/ntnb/" class="hover:text-blue-600 transition">Curva NTN-B</a>
             <span>•</span>
+            <a href="/noticias/" class="hover:text-blue-600 transition">Boletins de Mercado</a>
+            <span>•</span>
             <a href="/contact/" class="hover:text-blue-600 transition">Contato &amp; Apoio</a>
           </div>
           <p class="text-slate-500 text-sm font-semibold">
@@ -1477,6 +1479,10 @@ def build_rich_static_page_body(slug: str, df_active_count: int, format_currency
           </p>
           <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
             Todos os dias úteis após o fechamento do mercado, pipelines automatizados consolidam e higienizam bases oficiais da <strong>ANBIMA</strong>, <strong>B3</strong> e <strong>CVM</strong>, permitindo consulta gratuita a taxas indicativas, spreads sobre a curva NTN-B, agendas de pagamento e análise de solvência corporativa.
+          </p>
+          <h2 class="text-lg font-black text-slate-900 pt-2">Política Editorial &amp; Transparência</h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Os <a href="/noticias/" class="text-blue-600 font-semibold hover:underline">Boletins de Mercado FIXDATA</a> são gerados de forma determinística diretamente sobre bases públicas da B3, ANBIMA e CVM, com data-base auditável, assinatura editorial <strong>FIXDATA</strong> e canal aberto para retificações em <a href="/contact/" class="text-blue-600 font-semibold hover:underline">Contato</a>.
           </p>
           <div class="flex flex-wrap gap-3 pt-2">
             <a href="/metodologia/" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Ler Metodologia Completa →</a>

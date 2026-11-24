@@ -366,23 +366,122 @@ def build_market_wrap_item(kpis: dict, active_assets: dict, all_indexadores: dic
     }
 
 
+NOTICIAS_INDEX_JSON = "public/data/noticias_index.json"
+
+
+def load_noticias_items(now_br: datetime, limit: int = 20) -> list[dict]:
+    if not os.path.exists(NOTICIAS_INDEX_JSON):
+        return []
+    try:
+        with open(NOTICIAS_INDEX_JSON, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except Exception:
+        return []
+
+    rows = payload.get("items") or []
+    items = []
+    for row in rows[:limit]:
+        slug = str(row.get("slug") or "").strip()
+        titulo = str(row.get("titulo") or "").strip()
+        if not slug or not titulo:
+            continue
+
+        dt_str = str(row.get("publicado_em") or "").strip()
+        pub_dt = now_br
+        if dt_str:
+            try:
+                parsed = datetime.fromisoformat(dt_str)
+                pub_dt = parsed.replace(tzinfo=BRT) if parsed.tzinfo is None else parsed.astimezone(BRT)
+            except Exception:
+                pub_dt = now_br
+        if pub_dt > now_br:
+            pub_dt = now_br
+
+        url = str(row.get("url") or f"{BASE_URL}/noticias/{slug}/").strip()
+        og_image = str(row.get("og_image") or f"{BASE_URL}/noticias/og/{slug}.png").strip()
+
+        local_og = os.path.join("public", "noticias", "og", f"{slug}.png")
+        if not os.path.exists(local_og):
+            local_og = os.path.join("docs", "noticias", "og", f"{slug}.png")
+        media_len = os.path.getsize(local_og) if os.path.exists(local_og) else 0
+        if media_len > 0:
+            media_url = og_image
+            media_w = 1200
+            media_h = 675
+        else:
+            media_url = ICON_URL
+            media_w = 512
+            media_h = 512
+            media_len = 0
+
+        subtitulo = str(row.get("subtitulo") or "").strip()
+        resumo = str(row.get("resumo") or subtitulo or titulo).strip()
+        pontos = [str(p).strip() for p in (row.get("pontos_chave") or []) if str(p).strip()]
+        pts_html = (
+            "<ul>" + "".join(f"<li>{p}</li>" for p in pontos) + "</ul>"
+            if pontos
+            else ""
+        )
+        body_html = str(row.get("body_html") or "").strip()
+        if body_html:
+            body_html = re.sub(r'href="/([^"]*)"', rf'href="{BASE_URL}/\1"', body_html)
+
+        intro_html = f"<p><strong>{html.escape(subtitulo)}</strong></p>" if subtitulo else ""
+        content_html = (
+            f"{intro_html}{pts_html}{body_html}"
+            f'<p>Leia a edição completa no <a href="{html.escape(url)}">Boletim FIXDATA</a>.</p>'
+        )
+
+        items.append({
+            "title": titulo,
+            "link": url,
+            "guid": f"fixdata-noticia-{slug}",
+            "_pub_dt": pub_dt,
+            "pubDate": rfc822_date(pub_dt),
+            "category": str(row.get("secao") or "Boletim de Mercado").strip(),
+            "description": resumo,
+            "content_html": content_html,
+            "data_ref": str(row.get("data_ref") or "").strip()[:10],
+            "edicao_tipo": str(row.get("edicao_tipo") or "").strip(),
+            "media_url": media_url,
+            "media_w": media_w,
+            "media_h": media_h,
+            "media_len": media_len,
+        })
+    return items
+
+
 def generate_feed():
     print("📡 Gerando Feed RSS 2.0 otimizado para Google News Publisher Center...")
     now_br = datetime.now(BRT)
     active_assets, all_indexadores = load_active_assets()
     kpis = load_kpis_summary()
 
+    noticia_items = load_noticias_items(now_br, limit=20)
     trades = load_top_trades(active_assets, limit=35)
     payments = load_upcoming_payments(active_assets, now_br, days_ahead=14, limit=35)
 
     feed_items = []
     seen_links = set()
+    fechamento_dates = set()
 
-    # 1. Boletim diário editorial de fechamento B3
-    wrap_item = build_market_wrap_item(kpis, active_assets, all_indexadores, now_br)
-    if wrap_item:
-        feed_items.append(wrap_item)
-        seen_links.add(wrap_item["link"])
+    # 0. Boletins editoriais /noticias/<slug>/ no topo do feed
+    for n_item in noticia_items:
+        link = n_item["link"]
+        if link in seen_links:
+            continue
+        feed_items.append(n_item)
+        seen_links.add(link)
+        if n_item.get("edicao_tipo") == "fechamento" and n_item.get("data_ref"):
+            fechamento_dates.add(n_item["data_ref"])
+
+    # 1. Boletim diário editorial de fechamento B3 (somente se não houver boletim /noticias/ de fechamento na mesma data)
+    wrap_date = str((kpis.get("ultimo_pregao") or {}).get("data") or "").strip()[:10]
+    if wrap_date not in fechamento_dates:
+        wrap_item = build_market_wrap_item(kpis, active_assets, all_indexadores, now_br)
+        if wrap_item and wrap_item["link"] not in seen_links:
+            feed_items.append(wrap_item)
+            seen_links.add(wrap_item["link"])
 
     # 2. Destaques de negócios B3 do pregão mais recente
     latest_trade_dt_str = ""
@@ -593,19 +692,24 @@ def generate_feed():
         desc_clean = xml_escape(item["description"])
         cdata_body = safe_cdata(item["content_html"])
 
+        media_url = item.get("media_url") or ICON_URL
+        media_w = int(item.get("media_w") or 512)
+        media_h = int(item.get("media_h") or 512)
+        media_len = int(item.get("media_len") or 0) or icon_size
+
         xml_lines.append('    <item>')
         xml_lines.append(f'      <title>{title_clean}</title>')
         xml_lines.append(f'      <link>{xml_escape(item["link"])}</link>')
         xml_lines.append(f'      <guid isPermaLink="false">{xml_escape(item["guid"])}</guid>')
         xml_lines.append(f'      <pubDate>{item["pubDate"]}</pubDate>')
-        xml_lines.append('      <dc:creator>Redação FIXDATA</dc:creator>')
+        xml_lines.append('      <dc:creator>FIXDATA</dc:creator>')
         xml_lines.append(f'      <category>{cat_clean}</category>')
         xml_lines.append(f'      <description>{desc_clean}</description>')
         xml_lines.append(f'      <content:encoded><![CDATA[{cdata_body}]]></content:encoded>')
         xml_lines.append(
-            f'      <media:content url="{ICON_URL}" medium="image" type="image/png" width="512" height="512" />'
+            f'      <media:content url="{xml_escape(media_url)}" medium="image" type="image/png" width="{media_w}" height="{media_h}" />'
         )
-        xml_lines.append(f'      <enclosure url="{ICON_URL}" length="{icon_size}" type="image/png" />')
+        xml_lines.append(f'      <enclosure url="{xml_escape(media_url)}" length="{media_len}" type="image/png" />')
         xml_lines.append('    </item>')
 
     xml_lines.append('  </channel>')

@@ -194,9 +194,28 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Mostra URLs selecionadas sem enviar")
     parser.add_argument("--force", action="store_true", help="Ignora deduplicação diária")
     parser.add_argument("--no-wait", action="store_true", help="Não aguarda deploy do Netlify antes do envio")
+    parser.add_argument("--urls", nargs="+", default=None, help="Lista explícita de URLs para envio imediato (ignora trava diária geral)")
     args = parser.parse_args()
 
     print("=== Submissão Delta-Only IndexNow (Bing / Copilot) ===", flush=True)
+
+    if args.urls:
+        clean_urls = []
+        seen_u = set()
+        for raw_u in args.urls:
+            u = str(raw_u or "").strip()
+            if u.startswith(f"https://{HOST}/") and u not in seen_u:
+                seen_u.add(u)
+                clean_urls.append(u)
+        print(f"📋 Envio direcionado de {len(clean_urls)} URL(s): {clean_urls}", flush=True)
+        if args.dry_run:
+            print("🔍 [DRY RUN] Nenhuma requisição enviada ao IndexNow.", flush=True)
+            return
+        if not args.no_wait:
+            wait_for_live_deploy(read_local_metadata(), timeout_sec=120, interval_sec=15)
+        submit_batch(clean_urls)
+        return
+
     local_last_update = read_local_metadata()
     urls, latest_trade_date = get_delta_urls(MAX_URLS_PER_DAY)
     url_hash = hashlib.sha256("\n".join(urls).encode("utf-8")).hexdigest()[:16]

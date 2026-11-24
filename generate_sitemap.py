@@ -223,6 +223,37 @@ def main():
         except Exception as e:
             print(f"⚠️ Aviso ao ler {HUBS_MANIFEST}: {e}")
 
+    noticias_manifest = os.path.join("public", "data", "noticias_index.json")
+    if os.path.exists(noticias_manifest):
+        try:
+            with open(noticias_manifest, "r", encoding="utf-8") as f:
+                n_data = json.load(f)
+            n_items = n_data.get("items") or []
+            if n_items:
+                n_idx_loc = f"{BASE_URL}/noticias/"
+                if n_idx_loc not in seen_hubs:
+                    seen_hubs.add(n_idx_loc)
+                    hub_urls.append({
+                        "loc": n_idx_loc,
+                        "lastmod": parse_iso_date(n_items[0].get("data_ref") or n_items[0].get("publicado_em"), today_iso) or market_date,
+                        "changefreq": "daily",
+                        "priority": "0.95",
+                    })
+                for n_it in n_items:
+                    n_loc = str(n_it.get("url") or "").strip()
+                    if not n_loc or n_loc in seen_hubs:
+                        continue
+                    seen_hubs.add(n_loc)
+                    n_lm = parse_iso_date(n_it.get("data_ref") or n_it.get("publicado_em"), today_iso) or market_date
+                    hub_urls.append({
+                        "loc": n_loc,
+                        "lastmod": n_lm,
+                        "changefreq": "weekly",
+                        "priority": "0.9",
+                    })
+        except Exception as e:
+            print(f"⚠️ Aviso ao ler {noticias_manifest}: {e}")
+
     sitemaps_meta = [
         {"filename": "sitemap-hubs.xml", "urls": hub_urls, "lastmod": market_date},
         {"filename": "sitemap-hot.xml", "urls": hot_urls, "lastmod": market_date},
@@ -235,6 +266,17 @@ def main():
             write_xml(f"{d}/{sm['filename']}", content)
         index_entries.append({"loc": f"{BASE_URL}/{sm['filename']}", "lastmod": sm["lastmod"]})
         print(f"   ✅ {sm['filename']} — {len(sm['urls'])} URLs", flush=True)
+
+    news_sitemap_path = os.path.join("public", "sitemap-news.xml")
+    if os.path.exists(news_sitemap_path):
+        try:
+            with open(news_sitemap_path, "r", encoding="utf-8") as f:
+                news_xml = f.read()
+            if "<url>" in news_xml:
+                index_entries.append({"loc": f"{BASE_URL}/sitemap-news.xml", "lastmod": today_iso})
+                print("   ✅ sitemap-news.xml referenciado no sitemap index", flush=True)
+        except Exception:
+            pass
 
     index_content = build_sitemap_index(index_entries)
     for d in OUTPUT_DIRS:

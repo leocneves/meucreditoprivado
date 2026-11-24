@@ -131,6 +131,23 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
+
+      {/* Política Editorial & Fontes Oficiais (Google News / E-E-A-T) */}
+      <section className="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm space-y-4">
+        <h2 className="text-xl font-black text-slate-900">Política Editorial &amp; Fontes Oficiais</h2>
+        <p className="text-sm text-slate-600 leading-relaxed">
+          Os{' '}
+          <a href="/noticias/" className="font-bold text-blue-600 hover:underline">Boletins de Mercado FIXDATA</a>{' '}
+          são compilados automaticamente de forma determinística sob responsabilidade institucional do <strong>FIXDATA</strong>,
+          exclusivamente sobre dados públicos verificáveis da <strong>B3</strong> (negócios secundários e documentos FNET),{' '}
+          <strong>ANBIMA</strong> (taxas indicativas e curva NTN-B) e <strong>CVM</strong> (ofertas públicas SRE e demonstrativos DFP/ITR).
+        </p>
+        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Cada edição exibe data-base de referência, carimbo de horário oficial e metodologia aberta de cálculo, sem recomendações de compra ou venda.
+          Para solicitar revisões ou apontar divergências em registros públicos, utilize o{' '}
+          <Link to="/contact/" className="font-bold text-blue-600 hover:underline">canal de contato</Link>.
+        </p>
+      </section>
     </div>
   );
 }

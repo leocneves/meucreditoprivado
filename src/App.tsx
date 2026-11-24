@@ -604,6 +604,8 @@ const App: React.FC = () => {
                 <span>•</span>
                 <Link to="/ntnb/" className="hover:text-blue-600 transition">Curva NTN-B</Link>
                 <span>•</span>
+                <a href="/noticias/" className="hover:text-blue-600 transition">Boletins de Mercado</a>
+                <span>•</span>
                 <Link to="/contact/" className="hover:text-blue-600 transition">Contato & Apoio</Link>
               </div>
               <p className="text-slate-500 text-sm font-semibold">
