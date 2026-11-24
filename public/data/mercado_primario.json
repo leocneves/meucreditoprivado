@@ -1,25 +1,25 @@
 {
   "resumo": {
-    "total_ofertas_ano": 941,
-    "volume_total_ano_bi": 299.97,
-    "total_em_andamento": 14,
-    "volume_em_andamento_bi": 8.2,
-    "total_encerradas": 921,
-    "volume_encerradas_bi": 286.8,
-    "total_historico_base": 4567,
-    "volume_historico_base_bi": 1769.38,
+    "total_ofertas_ano": 945,
+    "volume_total_ano_bi": 300.41,
+    "total_em_andamento": 15,
+    "volume_em_andamento_bi": 8.16,
+    "total_encerradas": 924,
+    "volume_encerradas_bi": 287.29,
+    "total_historico_base": 4571,
+    "volume_historico_base_bi": 1769.83,
     "por_tipo": {
       "CRA": {
         "total": 92,
         "volume_bi": 12.96
       },
       "CRI": {
-        "total": 442,
-        "volume_bi": 41.31
+        "total": 445,
+        "volume_bi": 41.41
       },
       "DEB": {
-        "total": 407,
-        "volume_bi": 245.69
+        "total": 408,
+        "volume_bi": 246.04
       }
     },
     "por_ano": {
@@ -36,11 +36,11 @@
         "volume_bi": 552.56
       },
       "2026": {
-        "total": 941,
-        "volume_bi": 299.97
+        "total": 945,
+        "volume_bi": 300.41
       }
     },
-    "data_atualizacao": "2026-11-23 03:07:14"
+    "data_atualizacao": "2026-11-24 03:07:25"
   },
   "evolucao_anual": [
     {
@@ -84,11 +84,11 @@
     },
     {
       "ano": "2026",
-      "volume_bi": 299.97,
-      "total_ofertas": 941,
-      "ticket_medio_mi": 318.8,
-      "yoy_volume_pct": -45.7,
-      "yoy_qtd_pct": -27.1,
+      "volume_bi": 300.41,
+      "total_ofertas": 945,
+      "ticket_medio_mi": 317.9,
+      "yoy_volume_pct": -45.6,
+      "yoy_qtd_pct": -26.8,
       "mix_instrumentos": {
         "deb_pct": 81.9,
         "cri_pct": 13.8,
@@ -467,11 +467,11 @@
     },
     {
       "mes": "2026-11",
-      "volume_bi": 9.63,
-      "vol_deb_bi": 6.96,
-      "vol_cri_bi": 1.48,
+      "volume_bi": 10.08,
+      "vol_deb_bi": 7.31,
+      "vol_cri_bi": 1.58,
       "vol_cra_bi": 1.19,
-      "total_ofertas": 41
+      "total_ofertas": 45
     }
   ],
   "league_table": [
@@ -482,8 +482,8 @@
     },
     {
       "coordenador": "BANCO BRADESCO BBI S.A.",
-      "total_ofertas": 72,
-      "volume_bi": 47.58
+      "total_ofertas": 73,
+      "volume_bi": 47.61
     },
     {
       "coordenador": "BTG PACTUAL INVESTMENT BANKING LTDA.",
@@ -492,8 +492,8 @@
     },
     {
       "coordenador": "XP INVESTIMENTOS CCTVM S.A.",
-      "total_ofertas": 50,
-      "volume_bi": 32.52
+      "total_ofertas": 51,
+      "volume_bi": 32.87
     },
     {
       "coordenador": "BANCO SANTANDER (BRASIL) S.A.",
@@ -536,8 +536,8 @@
         "dot_color": "bg-orange-500",
         "total_ofertas": 74,
         "volume_total_reais": 53268489113.0,
-        "ofertas_ativas": 5,
-        "volume_ativo_reais": 871794906.0
+        "ofertas_ativas": 3,
+        "volume_ativo_reais": 676794906.0
       },
       {
         "id": "BRADESCO",
@@ -545,10 +545,10 @@
         "portal_url": "https://www.bradescobbi.com.br/",
         "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
         "dot_color": "bg-rose-600",
-        "total_ofertas": 48,
-        "volume_total_reais": 44165165830.0,
-        "ofertas_ativas": 5,
-        "volume_ativo_reais": 2678500000.0
+        "total_ofertas": 49,
+        "volume_total_reais": 44193665830.0,
+        "ofertas_ativas": 6,
+        "volume_ativo_reais": 2707000000.0
       },
       {
         "id": "BB_UBS",
@@ -578,10 +578,10 @@
         "portal_url": "https://ofertaspublicas.xpi.com.br/",
         "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
         "dot_color": "bg-amber-500",
-        "total_ofertas": 29,
-        "volume_total_reais": 18137312113.55,
-        "ofertas_ativas": 4,
-        "volume_ativo_reais": 1525284884.67
+        "total_ofertas": 30,
+        "volume_total_reais": 18487312113.55,
+        "ofertas_ativas": 5,
+        "volume_ativo_reais": 1875284884.67
       },
       {
         "id": "SANTANDER",
@@ -607,6 +607,62 @@
       }
     ],
     "todas_ofertas_distribuicao": [
+      {
+        "id_requerimento": "28791",
+        "banco_id": "BRADESCO",
+        "banco_nome": "Bradesco BBI",
+        "papel_banco": "Coordenador Líder",
+        "portal_url": "https://www.bradescobbi.com.br/",
+        "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+        "dot_color": "bg-rose-600",
+        "devedor": "VERT COMPANHIA SECURITIZADORA",
+        "emissor_tecnico": null,
+        "tipo_ativo": "CRI",
+        "valor_total_reais": 28500000.0,
+        "data_processo": "2026-11-23",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "IPCA + 8,84%",
+        "status_oferta": "Aguardando Bookbuilding",
+        "fase_oferta": "EM_BOOKBUILDING",
+        "fase_label": "Em Bookbuilding",
+        "badge_fase": "bg-purple-50 text-purple-700 border-purple-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/6c36ddcd-1e29-472e-ac16-4935edda87ec"
+          }
+        ]
+      },
+      {
+        "id_requerimento": "28792",
+        "banco_id": "XP",
+        "banco_nome": "XP Investimentos",
+        "papel_banco": "Coordenador Líder",
+        "portal_url": "https://ofertaspublicas.xpi.com.br/",
+        "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
+        "dot_color": "bg-amber-500",
+        "devedor": "COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG",
+        "emissor_tecnico": null,
+        "tipo_ativo": "DEB",
+        "valor_total_reais": 350000000.0,
+        "data_processo": "2026-11-23",
+        "data_vencimento": null,
+        "data_liquidacao": null,
+        "taxas_indicativas": "100% CDI",
+        "status_oferta": "Aguardando Bookbuilding",
+        "fase_oferta": "EM_BOOKBUILDING",
+        "fase_label": "Em Bookbuilding",
+        "badge_fase": "bg-purple-50 text-purple-700 border-purple-200",
+        "origem": "CVM_SRE",
+        "documentos": [
+          {
+            "nome_documento": "Aviso ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/1aa75a0a-9f43-4158-8faa-ae067da5f26e"
+          }
+        ]
+      },
       {
         "id_requerimento": "28745",
         "banco_id": "BRADESCO",
@@ -651,10 +707,10 @@
         "data_vencimento": null,
         "data_liquidacao": null,
         "taxas_indicativas": "IPCA +8,62% | IPCA + 8,62%",
-        "status_oferta": "Aguardando Bookbuilding",
-        "fase_oferta": "EM_BOOKBUILDING",
-        "fase_label": "Em Bookbuilding",
-        "badge_fase": "bg-purple-50 text-purple-700 border-purple-200",
+        "status_oferta": "Registro Concedido",
+        "fase_oferta": "DISTRIBUICAO_ATIVA",
+        "fase_label": "Registro Concedido (Em Distribuição)",
+        "badge_fase": "bg-emerald-50 text-emerald-700 border-emerald-200",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -808,6 +864,10 @@
           {
             "nome_documento": "Aviso ao Mercado",
             "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2567ddaa-4bc7-4ef1-b6ea-fc44fb5a2553"
+          },
+          {
+            "nome_documento": "Comunicado ao Mercado",
+            "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e6f206a9-bca2-4f99-a24d-c0af7595c9c7"
           }
         ]
       },
@@ -1119,10 +1179,10 @@
         "data_vencimento": null,
         "data_liquidacao": "2026-11-18",
         "taxas_indicativas": "100% da Taxa CDI + spread de 1,45%,",
-        "status_oferta": "Registro Concedido",
-        "fase_oferta": "DISTRIBUICAO_ATIVA",
-        "fase_label": "Registro Concedido (Em Distribuição)",
-        "badge_fase": "bg-emerald-50 text-emerald-700 border-emerald-200",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -1203,10 +1263,10 @@
         "data_vencimento": null,
         "data_liquidacao": null,
         "taxas_indicativas": "CDI + 3,10%",
-        "status_oferta": "Registro Concedido",
-        "fase_oferta": "DISTRIBUICAO_ATIVA",
-        "fase_label": "Registro Concedido (Em Distribuição)",
-        "badge_fase": "bg-emerald-50 text-emerald-700 border-emerald-200",
+        "status_oferta": "Oferta Encerrada",
+        "fase_oferta": "CONCLUIDA_RECENTE",
+        "fase_label": "Distribuída Recentemente",
+        "badge_fase": "bg-slate-100 text-slate-700 border-slate-200",
         "origem": "CVM_SRE",
         "documentos": [
           {
@@ -7931,8 +7991,8 @@
           "banco_nome": "Itaú BBA / Corretora",
           "volume_bi": 53.27,
           "total_ofertas": 74,
-          "ofertas_ativas": 5,
-          "share_pct": 28.6,
+          "ofertas_ativas": 3,
+          "share_pct": 28.5,
           "cor": "#EC7000",
           "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
           "dot_color": "bg-orange-500"
@@ -7940,9 +8000,9 @@
         {
           "banco_id": "BRADESCO",
           "banco_nome": "Bradesco BBI",
-          "volume_bi": 44.17,
-          "total_ofertas": 48,
-          "ofertas_ativas": 5,
+          "volume_bi": 44.19,
+          "total_ofertas": 49,
+          "ofertas_ativas": 6,
           "share_pct": 23.7,
           "cor": "#CC092F",
           "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
@@ -7973,10 +8033,10 @@
         {
           "banco_id": "XP",
           "banco_nome": "XP Investimentos",
-          "volume_bi": 18.14,
-          "total_ofertas": 29,
-          "ofertas_ativas": 4,
-          "share_pct": 9.7,
+          "volume_bi": 18.49,
+          "total_ofertas": 30,
+          "ofertas_ativas": 5,
+          "share_pct": 9.9,
           "cor": "#D97706",
           "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
           "dot_color": "bg-amber-500"
@@ -8004,7 +8064,7 @@
           "dot_color": "bg-indigo-600"
         }
       ],
-      "volume_total_esteira_bi": 186.35,
+      "volume_total_esteira_bi": 186.73,
       "series_anuais": [
         {
           "periodo": "2023",
@@ -8072,22 +8132,22 @@
         {
           "periodo": "2026",
           "label": "2026",
-          "total_bi": 299.97,
+          "total_bi": 300.42,
           "Itaú BBA": 73.57,
           "Itaú BBA_share": 24.5,
-          "Bradesco BBI": 47.59,
-          "Bradesco BBI_share": 15.9,
+          "Bradesco BBI": 47.62,
+          "Bradesco BBI_share": 15.8,
           "BTG Pactual": 35.48,
           "BTG Pactual_share": 11.8,
-          "XP Investimentos": 32.52,
-          "XP Investimentos_share": 10.8,
+          "XP Investimentos": 32.87,
+          "XP Investimentos_share": 10.9,
           "Santander": 22.73,
           "Santander_share": 7.6,
           "BB / UBS BB": 16.73,
           "BB / UBS BB_share": 5.6,
           "Banco Safra": 3.54,
           "Banco Safra_share": 1.2,
-          "Outros": 67.81,
+          "Outros": 67.88,
           "Outros_share": 22.6
         }
       ],
@@ -8410,23 +8470,23 @@
         {
           "periodo": "2026-T4",
           "label": "2026 T4",
-          "total_bi": 29.19,
+          "total_bi": 29.64,
           "Itaú BBA": 5.59,
-          "Itaú BBA_share": 19.1,
-          "Bradesco BBI": 3.73,
-          "Bradesco BBI_share": 12.8,
+          "Itaú BBA_share": 18.8,
+          "Bradesco BBI": 3.76,
+          "Bradesco BBI_share": 12.7,
           "BTG Pactual": 3.84,
-          "BTG Pactual_share": 13.1,
-          "XP Investimentos": 1.66,
-          "XP Investimentos_share": 5.7,
+          "BTG Pactual_share": 12.9,
+          "XP Investimentos": 2.01,
+          "XP Investimentos_share": 6.8,
           "Santander": 3.12,
-          "Santander_share": 10.7,
+          "Santander_share": 10.5,
           "BB / UBS BB": 2.0,
-          "BB / UBS BB_share": 6.9,
+          "BB / UBS BB_share": 6.7,
           "Banco Safra": 0.57,
-          "Banco Safra_share": 2.0,
-          "Outros": 8.7,
-          "Outros_share": 29.8
+          "Banco Safra_share": 1.9,
+          "Outros": 8.76,
+          "Outros_share": 29.6
         }
       ],
       "bancos_meta": [
@@ -8474,6 +8534,170 @@
     }
   },
   "ofertas_em_andamento": [
+    {
+      "id_requerimento": "28791",
+      "numero_processo": "SRE/3769/2026",
+      "numero_registro": "",
+      "tipo_ativo": "CRI",
+      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
+      "status_oferta": "Aguardando Bookbuilding",
+      "nome_emissor": "VERT COMPANHIA SECURITIZADORA",
+      "cnpj_emissor": "25005683000109",
+      "nome_devedor_real": null,
+      "cnpj_devedor_real": null,
+      "nome_coordenador_lider": "BANCO BRADESCO BBI S.A.",
+      "cnpj_coordenador_lider": "06271464000119",
+      "valor_total_reais": 28500000.0,
+      "data_processo": "2026-11-23",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28791_46016",
+          "descricao_serie": "Série Única",
+          "volume_serie_reais": 28500000.0,
+          "quantidade_ativos": 28500.0,
+          "pu_nominal": 1000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_maxima": "IPCA + 8,84%",
+          "taxa_remuneracao_final": "",
+          "data_emissao": "2026-11-19",
+          "data_vencimento": "2037-12-21",
+          "forma_amortizacao": "Mensal, customizada, após carência de 13 meses",
+          "avaliacao_risco": "N.A.",
+          "isin": "BRVERTCRIES0",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-11-23",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/6c36ddcd-1e29-472e-ac16-4935edda87ec"
+        }
+      ],
+      "participantes": [
+        {
+          "tipo_participante": "COORDENADOR",
+          "razao_social": "BANCO BRADESCO BBI S.A.",
+          "cnpj": "06271464000119"
+        },
+        {
+          "tipo_participante": "OFERTANTE",
+          "razao_social": "VERT COMPANHIA SECURITIZADORA",
+          "cnpj": "25005683000109"
+        },
+        {
+          "tipo_participante": "REQUERENTE",
+          "razao_social": "BANCO BRADESCO BBI S.A.",
+          "cnpj": "06271464000119"
+        },
+        {
+          "tipo_participante": "EMISSOR",
+          "razao_social": "VERT COMPANHIA SECURITIZADORA",
+          "cnpj": "25005683000109"
+        }
+      ],
+      "ativo_secundario": null,
+      "sindicato_distribuicao": [
+        {
+          "banco_id": "BRADESCO",
+          "banco_nome": "Bradesco BBI",
+          "portal_url": "https://www.bradescobbi.com.br/",
+          "badge_bg": "bg-rose-50 text-rose-700 border-rose-200",
+          "dot_color": "bg-rose-600",
+          "papel": "Coordenador Líder",
+          "is_lead": true,
+          "razao_social": "BANCO BRADESCO BBI S.A."
+        }
+      ]
+    },
+    {
+      "id_requerimento": "28792",
+      "numero_processo": "SRE/3770/2026",
+      "numero_registro": "",
+      "tipo_ativo": "DEB",
+      "nome_valor_mobiliario": "Debêntures",
+      "status_oferta": "Aguardando Bookbuilding",
+      "nome_emissor": "COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG",
+      "cnpj_emissor": "22261473000185",
+      "nome_devedor_real": "COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG",
+      "cnpj_devedor_real": "22261473000185",
+      "nome_coordenador_lider": "XP INVESTIMENTOS CCTVM S.A.",
+      "cnpj_coordenador_lider": "02332886000104",
+      "valor_total_reais": 350000000.0,
+      "data_processo": "2026-11-23",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": "11ª (DÉCIMA PRIMEIRA) EMISSÃO DE DEBÊNTURES SIMPLES, NÃO CONVERSÍVEIS EM AÇÕES, DA ESPÉCIE QUIROGRAFÁRIA, EM SÉRIE ÚNICA, PARA DISTRIBUIÇÃO PÚBLICA, DA COMPANHIA DE GÁS DE MINAS GERAIS – GASMIG",
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28792_46017",
+          "descricao_serie": "Série Única",
+          "volume_serie_reais": 350000000.0,
+          "quantidade_ativos": 350000.0,
+          "pu_nominal": 1000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_maxima": "100% CDI",
+          "taxa_remuneracao_final": "",
+          "data_emissao": "2026-12-04",
+          "data_vencimento": "2034-12-04",
+          "forma_amortizacao": "O saldo do Valor Nominal Unitário das Debêntures será amortizado em 3 (três) parcelas anuais e consecutivas, a partir do 6º (sexto) ano (inclusive) contado da Data de Emissão, sendo a primeira parcela devida em 4 de dezembro de 2032 e as demais parcelas devidas em cada uma das respectivas datas de amortização das Debêntures e conforme percentuais previstos na Escritura de Emissão.",
+          "avaliacao_risco": null,
+          "isin": "BRGASMDBS0A7",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-11-23",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/1aa75a0a-9f43-4158-8faa-ae067da5f26e"
+        }
+      ],
+      "participantes": [
+        {
+          "tipo_participante": "COORDENADOR",
+          "razao_social": "XP INVESTIMENTOS CCTVM S.A.",
+          "cnpj": "02332886000104"
+        },
+        {
+          "tipo_participante": "OFERTANTE",
+          "razao_social": "COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG",
+          "cnpj": "22261473000185"
+        },
+        {
+          "tipo_participante": "REQUERENTE",
+          "razao_social": "XP INVESTIMENTOS CCTVM S.A.",
+          "cnpj": "02332886000104"
+        },
+        {
+          "tipo_participante": "EMISSOR",
+          "razao_social": "COMPANHIA DE GÁS DE MINAS GERAIS - GASMIG",
+          "cnpj": "22261473000185"
+        }
+      ],
+      "ativo_secundario": null,
+      "sindicato_distribuicao": [
+        {
+          "banco_id": "XP",
+          "banco_nome": "XP Investimentos",
+          "portal_url": "https://ofertaspublicas.xpi.com.br/",
+          "badge_bg": "bg-amber-50 text-amber-700 border-amber-200",
+          "dot_color": "bg-amber-500",
+          "papel": "Coordenador Líder",
+          "is_lead": true,
+          "razao_social": "XP INVESTIMENTOS CCTVM S.A."
+        }
+      ]
+    },
     {
       "id_requerimento": "28745",
       "numero_processo": "SRE/3742/2026",
@@ -8569,104 +8793,6 @@
           "papel": "Coordenador Líder",
           "is_lead": true,
           "razao_social": "BANCO BRADESCO BBI S.A."
-        }
-      ]
-    },
-    {
-      "id_requerimento": "28743",
-      "numero_processo": "SRE/3721/2026",
-      "numero_registro": "",
-      "tipo_ativo": "CRI",
-      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
-      "status_oferta": "Aguardando Bookbuilding",
-      "nome_emissor": "OPEA SECURITIZADORA S.A.",
-      "cnpj_emissor": "02773542000122",
-      "nome_devedor_real": null,
-      "cnpj_devedor_real": null,
-      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-      "cnpj_coordenador_lider": "04845753000159",
-      "valor_total_reais": 421399000.0,
-      "data_processo": "2026-11-18",
-      "data_liquidacao_doc": null,
-      "data_vencimento_doc": null,
-      "possui_book": 0,
-      "resumo_oferta": null,
-      "matched_ticker": null,
-      "matched_isin": null,
-      "series": [
-        {
-          "id_serie": "28743_45954",
-          "descricao_serie": "CRI Sênior",
-          "volume_serie_reais": 421399000.0,
-          "quantidade_ativos": 210699.0,
-          "pu_nominal": 1000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_maxima": "IPCA +8,62%",
-          "taxa_remuneracao_final": "",
-          "data_emissao": "2026-11-16",
-          "data_vencimento": "2032-08-16",
-          "forma_amortizacao": "Customizada",
-          "avaliacao_risco": null,
-          "isin": null,
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "28743_45955",
-          "descricao_serie": "CRI Sub",
-          "volume_serie_reais": 421399000.0,
-          "quantidade_ativos": 210700.0,
-          "pu_nominal": 1000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_maxima": "IPCA + 8,62%",
-          "taxa_remuneracao_final": "",
-          "data_emissao": "2026-11-16",
-          "data_vencimento": "2041-12-16",
-          "forma_amortizacao": "Customizada",
-          "avaliacao_risco": null,
-          "isin": null,
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Aviso ao Mercado",
-          "data_publicacao": "2026-11-18",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4794cbfc-cdb0-4e79-a24c-4ea8812e90f2"
-        }
-      ],
-      "participantes": [
-        {
-          "tipo_participante": "COORDENADOR",
-          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-          "cnpj": "04845753000159"
-        },
-        {
-          "tipo_participante": "OFERTANTE",
-          "razao_social": "OPEA SECURITIZADORA S.A.",
-          "cnpj": "02773542000122"
-        },
-        {
-          "tipo_participante": "REQUERENTE",
-          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-          "cnpj": "04845753000159"
-        },
-        {
-          "tipo_participante": "EMISSOR",
-          "razao_social": "OPEA SECURITIZADORA S.A.",
-          "cnpj": "02773542000122"
-        }
-      ],
-      "ativo_secundario": null,
-      "sindicato_distribuicao": [
-        {
-          "banco_id": "ITAU",
-          "banco_nome": "Itaú BBA / Corretora",
-          "portal_url": "https://www.itaucorretora.com.br/pg-ofertas-publicas.aspx",
-          "badge_bg": "bg-orange-50 text-orange-700 border-orange-200",
-          "dot_color": "bg-orange-500",
-          "papel": "Coordenador Líder",
-          "is_lead": true,
-          "razao_social": "ITAU BBA ASSESSORIA FINANCEIRA S.A"
         }
       ]
     },
@@ -9125,6 +9251,11 @@
           "nome_documento": "Aviso ao Mercado",
           "data_publicacao": "2026-11-16",
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/2567ddaa-4bc7-4ef1-b6ea-fc44fb5a2553"
+        },
+        {
+          "nome_documento": "Comunicado ao Mercado",
+          "data_publicacao": "2026-11-23",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e6f206a9-bca2-4f99-a24d-c0af7595c9c7"
         }
       ],
       "participantes": [
@@ -9334,6 +9465,11 @@
           "nome_documento": "Comunicado ao Mercado",
           "data_publicacao": "2026-11-18",
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/fb04e688-76cc-4286-8de4-d9f0f1840356"
+        },
+        {
+          "nome_documento": "Comunicado ao Mercado",
+          "data_publicacao": "2026-11-23",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/fcedb080-1967-46f0-bcd4-6a6dc46792f8"
         }
       ],
       "participantes": [
@@ -10076,6 +10212,92 @@
   ],
   "ofertas_recentes": [
     {
+      "id_requerimento": "28785",
+      "numero_processo": "SRE/3763/2026",
+      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/726",
+      "tipo_ativo": "CRI",
+      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
+      "status_oferta": "Registro Concedido",
+      "nome_emissor": "OPEA SECURITIZADORA S.A.",
+      "cnpj_emissor": "02773542000122",
+      "nome_devedor_real": null,
+      "cnpj_devedor_real": null,
+      "nome_coordenador_lider": "OPEA SECURITIZADORA S.A.",
+      "cnpj_coordenador_lider": "02773542000122",
+      "valor_total_reais": 43906000.0,
+      "data_processo": "2026-11-23",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28785_46006",
+          "descricao_serie": "2ª Série",
+          "volume_serie_reais": 43906000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2037-01-10",
+          "avaliacao_risco": "N/A",
+          "isin": "BRRBRACIR473",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Anúncio de Início da Distribuição",
+          "data_publicacao": "2026-11-23",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/f45ff4f3-fcd5-483e-9a9c-8dfc4ff39eb3"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
+      "id_requerimento": "28775",
+      "numero_processo": "SRE/3754/2026",
+      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/725",
+      "tipo_ativo": "CRI",
+      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
+      "status_oferta": "Registro Concedido",
+      "nome_emissor": "LEVERAGE COMPANHIA SECURITIZADORA",
+      "cnpj_emissor": "48415978000140",
+      "nome_devedor_real": "CAIEIRAS RESIDENCE S",
+      "cnpj_devedor_real": null,
+      "nome_coordenador_lider": "LEVERAGE COMPANHIA SECURITIZADORA",
+      "cnpj_coordenador_lider": "48415978000140",
+      "valor_total_reais": 23900000.0,
+      "data_processo": "2026-11-23",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 0,
+      "resumo_oferta": "Oferta pública de distribuição dos Certificados de Recebíveis Imobiliários da Série Única da 116ª Emissão da Leverage Companhia Securitizadora, Lastreados em Créditos Imobiliários Devidos e Cedidos pela Caieiras Residence SPE Ltda.",
+      "matched_ticker": null,
+      "matched_isin": "BRLSECCRI7K7",
+      "series": [
+        {
+          "id_serie": "28775_45996",
+          "descricao_serie": "CRI da Série Única",
+          "volume_serie_reais": 23900000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2030-10-25",
+          "avaliacao_risco": "Não há.",
+          "isin": "BRLSECCRI7K7",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Anúncio de Início da Distribuição",
+          "data_publicacao": "2026-11-23",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e33e5fca-ab6c-486b-b1da-a31fd05b86b6"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
       "id_requerimento": "28763",
       "numero_processo": "SRE/3739/2026",
       "numero_registro": "CVM/SRE/AUT/CRA/PRI/2026/179",
@@ -10334,6 +10556,60 @@
           "nome_documento": "Anúncio de Início da Distribuição",
           "data_publicacao": "2026-11-18",
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/d1d04011-1897-45cd-acb2-837430a10558"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
+      "id_requerimento": "28743",
+      "numero_processo": "SRE/3721/2026",
+      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/727;CVM/SRE/AUT/CRI/PRI/2026/728",
+      "tipo_ativo": "CRI",
+      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
+      "status_oferta": "Registro Concedido",
+      "nome_emissor": "OPEA SECURITIZADORA S.A.",
+      "cnpj_emissor": "02773542000122",
+      "nome_devedor_real": null,
+      "cnpj_devedor_real": null,
+      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
+      "cnpj_coordenador_lider": "04845753000159",
+      "valor_total_reais": 421399000.0,
+      "data_processo": "2026-11-18",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 1,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28743_45954",
+          "descricao_serie": "CRI Sênior",
+          "volume_serie_reais": 421399000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2032-08-16",
+          "avaliacao_risco": null,
+          "isin": null,
+          "matched_ticker": null
+        },
+        {
+          "id_serie": "28743_45955",
+          "descricao_serie": "CRI Sub",
+          "volume_serie_reais": 421399000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2041-12-16",
+          "avaliacao_risco": null,
+          "isin": null,
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-11-18",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/4794cbfc-cdb0-4e79-a24c-4ea8812e90f2"
         }
       ],
       "ativo_secundario": null
@@ -10745,6 +11021,49 @@
       "ativo_secundario": null
     },
     {
+      "id_requerimento": "28663",
+      "numero_processo": "SRE/3653/2026",
+      "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/517",
+      "tipo_ativo": "DEB",
+      "nome_valor_mobiliario": "Debêntures",
+      "status_oferta": "Oferta Encerrada",
+      "nome_emissor": "BEMOL S.A.",
+      "cnpj_emissor": "04565289000147",
+      "nome_devedor_real": "BEMOL S.A.",
+      "cnpj_devedor_real": "04565289000147",
+      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
+      "cnpj_coordenador_lider": "04845753000159",
+      "valor_total_reais": 115000000.0,
+      "data_processo": "2026-11-10",
+      "data_liquidacao_doc": "2026-11-18",
+      "data_vencimento_doc": null,
+      "possui_book": 1,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28663_45819",
+          "descricao_serie": "Série Única",
+          "volume_serie_reais": 115000000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2031-11-13",
+          "avaliacao_risco": null,
+          "isin": "BRBMOLDBS032",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-11-10",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e1061691-7332-4e24-9f0a-ae56bd7844a9"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
       "id_requerimento": "28639",
       "numero_processo": "SRE/3636/2026",
       "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/511;CVM/SRE/AUT/DEB/PRI/2026/512",
@@ -10870,49 +11189,6 @@
         }
       ],
       "documentos": [],
-      "ativo_secundario": null
-    },
-    {
-      "id_requerimento": "28663",
-      "numero_processo": "SRE/3653/2026",
-      "numero_registro": "CVM/SRE/AUT/DEB/PRI/2026/517",
-      "tipo_ativo": "DEB",
-      "nome_valor_mobiliario": "Debêntures",
-      "status_oferta": "Registro Concedido",
-      "nome_emissor": "BEMOL S.A.",
-      "cnpj_emissor": "04565289000147",
-      "nome_devedor_real": "BEMOL S.A.",
-      "cnpj_devedor_real": "04565289000147",
-      "nome_coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A",
-      "cnpj_coordenador_lider": "04845753000159",
-      "valor_total_reais": 115000000.0,
-      "data_processo": "2026-11-10",
-      "data_liquidacao_doc": "2026-11-18",
-      "data_vencimento_doc": null,
-      "possui_book": 1,
-      "resumo_oferta": null,
-      "matched_ticker": null,
-      "matched_isin": null,
-      "series": [
-        {
-          "id_serie": "28663_45819",
-          "descricao_serie": "Série Única",
-          "volume_serie_reais": 115000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2031-11-13",
-          "avaliacao_risco": null,
-          "isin": "BRBMOLDBS032",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Aviso ao Mercado",
-          "data_publicacao": "2026-11-10",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/e1061691-7332-4e24-9f0a-ae56bd7844a9"
-        }
-      ],
       "ativo_secundario": null
     },
     {
@@ -11159,6 +11435,54 @@
       "ativo_secundario": null
     },
     {
+      "id_requerimento": "28602",
+      "numero_processo": "SRE/3599/2026",
+      "numero_registro": "CVM/SRE/AUT/CRA/PRI/2026/178",
+      "tipo_ativo": "CRA",
+      "nome_valor_mobiliario": "Certificados de Recebíveis do Agronegócio",
+      "status_oferta": "Oferta Encerrada",
+      "nome_emissor": "ECO. SEC. DTOS. CREDIT. AGRONEGÓCIOS S/A",
+      "cnpj_emissor": "10753164000143",
+      "nome_devedor_real": "INTEGRADA COOPERATIVA AGROINDUSTRIAL",
+      "cnpj_devedor_real": "00.993.264/0001-93",
+      "nome_coordenador_lider": "BANCO RABOBANK INTERNATIONAL BRASIL S.A.",
+      "cnpj_coordenador_lider": "01023570000160",
+      "valor_total_reais": 80000000.0,
+      "data_processo": "2026-11-05",
+      "data_liquidacao_doc": null,
+      "data_vencimento_doc": null,
+      "possui_book": 1,
+      "resumo_oferta": null,
+      "matched_ticker": null,
+      "matched_isin": null,
+      "series": [
+        {
+          "id_serie": "28602_45723",
+          "descricao_serie": "Certificado de Recebiveís do Agronegocio",
+          "volume_serie_reais": 80000000.0,
+          "book_taxa": "",
+          "taxa_remuneracao_final": "",
+          "data_vencimento": "2030-11-06",
+          "avaliacao_risco": null,
+          "isin": "BRECOACRANV9",
+          "matched_ticker": null
+        }
+      ],
+      "documentos": [
+        {
+          "nome_documento": "Aviso ao Mercado",
+          "data_publicacao": "2026-11-05",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/a50ef3b3-74d6-4b8f-ae74-4293c4c02063"
+        },
+        {
+          "nome_documento": "Comunicado ao Mercado",
+          "data_publicacao": "2026-11-13",
+          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/17631c63-0203-4170-b296-cf8785e82621"
+        }
+      ],
+      "ativo_secundario": null
+    },
+    {
       "id_requerimento": "28586",
       "numero_processo": "SRE/3595/2026",
       "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/698",
@@ -11240,54 +11564,6 @@
           "nome_documento": "Anúncio de Início da Distribuição",
           "data_publicacao": "2026-11-05",
           "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/f67807c8-2c7d-4eb6-b93f-017d2f419480"
-        }
-      ],
-      "ativo_secundario": null
-    },
-    {
-      "id_requerimento": "28602",
-      "numero_processo": "SRE/3599/2026",
-      "numero_registro": "CVM/SRE/AUT/CRA/PRI/2026/178",
-      "tipo_ativo": "CRA",
-      "nome_valor_mobiliario": "Certificados de Recebíveis do Agronegócio",
-      "status_oferta": "Registro Concedido",
-      "nome_emissor": "ECO. SEC. DTOS. CREDIT. AGRONEGÓCIOS S/A",
-      "cnpj_emissor": "10753164000143",
-      "nome_devedor_real": "INTEGRADA COOPERATIVA AGROINDUSTRIAL",
-      "cnpj_devedor_real": "00.993.264/0001-93",
-      "nome_coordenador_lider": "BANCO RABOBANK INTERNATIONAL BRASIL S.A.",
-      "cnpj_coordenador_lider": "01023570000160",
-      "valor_total_reais": 80000000.0,
-      "data_processo": "2026-11-05",
-      "data_liquidacao_doc": null,
-      "data_vencimento_doc": null,
-      "possui_book": 1,
-      "resumo_oferta": null,
-      "matched_ticker": null,
-      "matched_isin": null,
-      "series": [
-        {
-          "id_serie": "28602_45723",
-          "descricao_serie": "Certificado de Recebiveís do Agronegocio",
-          "volume_serie_reais": 80000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2030-11-06",
-          "avaliacao_risco": null,
-          "isin": "BRECOACRANV9",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Aviso ao Mercado",
-          "data_publicacao": "2026-11-05",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/a50ef3b3-74d6-4b8f-ae74-4293c4c02063"
-        },
-        {
-          "nome_documento": "Comunicado ao Mercado",
-          "data_publicacao": "2026-11-13",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/17631c63-0203-4170-b296-cf8785e82621"
         }
       ],
       "ativo_secundario": null
@@ -23778,281 +24054,6 @@
       "ativo_secundario": {
         "ticker": "RSAN18",
         "isin": "BRRSANDBS0E5"
-      }
-    },
-    {
-      "id_requerimento": "27682",
-      "numero_processo": "SRE/2750/2026",
-      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/528;CVM/SRE/AUT/CRI/PRI/2026/529;CVM/SRE/AUT/CRI/PRI/2026/530;CVM/SRE/AUT/CRI/PRI/2026/531;CVM/SRE/AUT/CRI/PRI/2026/532;CVM/SRE/AUT/CRI/PRI/2026/533;CVM/SRE/AUT/CRI/PRI/2026/534",
-      "tipo_ativo": "CRI",
-      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
-      "status_oferta": "Registro Concedido",
-      "nome_emissor": "CIA PROVINCIA DE SECURITIZAÇÃO",
-      "cnpj_emissor": "04200649000107",
-      "nome_devedor_real": "GUESTIER II",
-      "cnpj_devedor_real": null,
-      "nome_coordenador_lider": "CIA PROVINCIA DE SECURITIZAÇÃO",
-      "cnpj_coordenador_lider": "04200649000107",
-      "valor_total_reais": 68000000.0,
-      "data_processo": "2026-08-27",
-      "data_liquidacao_doc": "2026-08-28",
-      "data_vencimento_doc": null,
-      "possui_book": 0,
-      "resumo_oferta": null,
-      "matched_ticker": "26H4191089",
-      "matched_isin": "BRPVSCCRIBF3",
-      "series": [
-        {
-          "id_serie": "27682_44354",
-          "descricao_serie": "1ª Série",
-          "volume_serie_reais": 68000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2034-08-22",
-          "avaliacao_risco": "n/a",
-          "isin": "BRPVSCCRIBB2",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27682_44359",
-          "descricao_serie": "2ª Série",
-          "volume_serie_reais": 68000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2034-08-23",
-          "avaliacao_risco": "n/a",
-          "isin": "BRPVSCCRIBC0",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27682_44360",
-          "descricao_serie": "3ª Série",
-          "volume_serie_reais": 68000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "Não",
-          "data_vencimento": "2034-08-24",
-          "avaliacao_risco": "n/a",
-          "isin": "BRPVSCCRIBD8",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27682_44361",
-          "descricao_serie": "4ª Série",
-          "volume_serie_reais": 68000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2034-08-25",
-          "avaliacao_risco": "n/a",
-          "isin": "BRPVSCCRIBE6",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27682_44362",
-          "descricao_serie": "5ª Série",
-          "volume_serie_reais": 68000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2034-08-28",
-          "avaliacao_risco": "n/a",
-          "isin": "BRPVSCCRIBF3",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27682_44363",
-          "descricao_serie": "6ª Série",
-          "volume_serie_reais": 68000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2034-08-29",
-          "avaliacao_risco": "n/a",
-          "isin": "BRPVSCCRIBG1",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27682_44364",
-          "descricao_serie": "7ª Série",
-          "volume_serie_reais": 68000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2034-08-30",
-          "avaliacao_risco": "n/a",
-          "isin": "BRPVSCCRIBH9",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-08-27",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/cc90baf6-6f24-4430-92ca-23a056a46d4b"
-        }
-      ],
-      "ativo_secundario": {
-        "ticker": "26H4191089",
-        "isin": "BRPVSCCRIBF3"
-      }
-    },
-    {
-      "id_requerimento": "27646",
-      "numero_processo": "SRE/2734/2026",
-      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/522;CVM/SRE/AUT/CRI/PRI/2026/523;CVM/SRE/AUT/CRI/PRI/2026/524;CVM/SRE/AUT/CRI/PRI/2026/525",
-      "tipo_ativo": "CRI",
-      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
-      "status_oferta": "Registro Concedido",
-      "nome_emissor": "CIA PROVINCIA DE SECURITIZAÇÃO",
-      "cnpj_emissor": "04200649000107",
-      "nome_devedor_real": "CARVALHO HOSKEN",
-      "cnpj_devedor_real": null,
-      "nome_coordenador_lider": "OSLO CAPITAL DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS S.A.",
-      "cnpj_coordenador_lider": "13673855000125",
-      "valor_total_reais": 321000000.0,
-      "data_processo": "2026-08-27",
-      "data_liquidacao_doc": null,
-      "data_vencimento_doc": null,
-      "possui_book": 0,
-      "resumo_oferta": null,
-      "matched_ticker": "26F0581851",
-      "matched_isin": "BRPVSCCRIA07",
-      "series": [
-        {
-          "id_serie": "27646_44303",
-          "descricao_serie": "CRI Sênior 1ª Série",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-30",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9R3",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27646_44304",
-          "descricao_serie": "CRI Sênior 2ª Série",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-31",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9S1",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27646_44305",
-          "descricao_serie": "CRI Mezanino",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-30",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9T9",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27646_44306",
-          "descricao_serie": "CRI Júnior",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-30",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9U7",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-08-27",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/7a07b8ed-30d5-4c1d-874b-16ac8c032262"
-        },
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-09-16",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/5a77b71c-0c17-48e0-9f33-4f0832fb1d77"
-        }
-      ],
-      "ativo_secundario": {
-        "ticker": "26F0581851",
-        "isin": "BRPVSCCRIA07"
-      }
-    },
-    {
-      "id_requerimento": "27634",
-      "numero_processo": "SRE/2733/2026",
-      "numero_registro": "CVM/SRE/AUT/CRI/PRI/2026/518;CVM/SRE/AUT/CRI/PRI/2026/519;CVM/SRE/AUT/CRI/PRI/2026/520;CVM/SRE/AUT/CRI/PRI/2026/521",
-      "tipo_ativo": "CRI",
-      "nome_valor_mobiliario": "Certificados de Recebíveis Imobiliários",
-      "status_oferta": "Registro Concedido",
-      "nome_emissor": "CIA PROVINCIA DE SECURITIZAÇÃO",
-      "cnpj_emissor": "04200649000107",
-      "nome_devedor_real": "CARVALHO HOSKEN S.A.",
-      "cnpj_devedor_real": null,
-      "nome_coordenador_lider": "OSLO CAPITAL DISTRIBUIDORA DE TITULOS E VALORES MOBILIARIOS S.A.",
-      "cnpj_coordenador_lider": "13673855000125",
-      "valor_total_reais": 321000000.0,
-      "data_processo": "2026-08-27",
-      "data_liquidacao_doc": null,
-      "data_vencimento_doc": null,
-      "possui_book": 0,
-      "resumo_oferta": null,
-      "matched_ticker": "26E4672203",
-      "matched_isin": "BRPVSCCRI9R3",
-      "series": [
-        {
-          "id_serie": "27634_44282",
-          "descricao_serie": "CRI Sênior 1ª Série",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-30",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9R3",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27634_44284",
-          "descricao_serie": "CRI Sênior 2ª Série",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-31",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9S1",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27634_44286",
-          "descricao_serie": "CRI Mezanino",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-30",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9T9",
-          "matched_ticker": null
-        },
-        {
-          "id_serie": "27634_44287",
-          "descricao_serie": "CRI Júnior",
-          "volume_serie_reais": 321000000.0,
-          "book_taxa": "",
-          "taxa_remuneracao_final": "",
-          "data_vencimento": "2046-08-30",
-          "avaliacao_risco": null,
-          "isin": "BRPVSCCRI9U7",
-          "matched_ticker": null
-        }
-      ],
-      "documentos": [
-        {
-          "nome_documento": "Anúncio de Início da Distribuição",
-          "data_publicacao": "2026-08-27",
-          "url_download": "https://web.cvm.gov.br/sre-publico-cvm/rest/download/765ca601-0950-4657-8962-3b16fbb55dd9"
-        }
-      ],
-      "ativo_secundario": {
-        "ticker": "26E4672203",
-        "isin": "BRPVSCCRI9R3"
       }
     }
   ]
