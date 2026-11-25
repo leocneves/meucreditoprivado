@@ -5,6 +5,7 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx}',
     './generate_prerender.py',
     './scripts/prerender_hubs.py',
+    '/home/home/airflow/src/cp_noticias/**/*.py',
   ],
   theme: {
     extend: {

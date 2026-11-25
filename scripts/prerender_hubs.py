@@ -150,7 +150,7 @@ def fmt_taxa_short(row_dict: dict) -> str:
 
 
 def shared_navbar_html() -> str:
-    return """      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+    return """      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -158,19 +158,306 @@ def shared_navbar_html() -> str:
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>"""
 
 
@@ -536,11 +823,15 @@ def _render_pure_static_shell(
 {GOOGLE_NEWS_SWG_SNIPPET}
     <link rel="stylesheet" href="/index.css" />
   </head>
-  <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
+  <body class="bg-slate-50 text-slate-900 antialiased">
     <div id="root">
+      <div class="min-h-screen flex flex-col font-sans">
 {shared_navbar_html()}
+        <div class="flex-1">
 {body_main_html}
+        </div>
 {shared_footer_html()}
+      </div>
     </div>
 {extra_script}
   </body>
@@ -690,22 +981,22 @@ def render_category_hubs(active_df: pd.DataFrame, b3_stats: dict, format_currenc
             summary_p += f" Entre os ativos de maior destaque em liquidez estão {', '.join(top_tks)}."
 
         body_html = f"""
-      <main class="container mx-auto px-4 py-8 space-y-8 max-w-6xl">
+      <main class="container mx-auto px-4 py-8 space-y-8 max-w-7xl">
         <div class="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <span class="text-slate-800 font-bold">{esc(cat['name'])}</span>
         </div>
 
-        <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-7 md:p-10 text-white shadow-xl border border-slate-800 space-y-4">
-          <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-semibold uppercase tracking-wider">
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+          <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold uppercase tracking-wider">
             {esc(cat['badge'])}
           </div>
-          <h1 class="text-2xl sm:text-4xl font-black tracking-tight">{esc(cat['name'])}</h1>
-          <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">{esc(summary_p)}</p>
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{esc(cat['name'])}</h1>
+          <p class="text-slate-600 text-sm sm:text-base max-w-3xl leading-relaxed">{esc(summary_p)}</p>
           <div class="flex flex-wrap items-center gap-3 pt-1">
             {cat['extra_cta']}
-            <a href="/emissores/" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/15 transition">Explorar Top 500 Emissores →</a>
-            <a href="/setores/" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/15 transition">Explorar por Setor ANBIMA →</a>
+            <a href="/emissores/" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition">Explorar Top 500 Emissores →</a>
+            <a href="/setores/" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition">Explorar por Setor ANBIMA →</a>
           </div>
         </section>
 
@@ -830,17 +1121,17 @@ def render_sector_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
         sec_desc = f"Consulte {total_cnt} títulos vigentes do setor {sec_name} (Debêntures, CRIs e CRAs) com taxas, ratings, vencimentos e negociações B3 no FIXDATA."
 
         body_html = f"""
-      <main class="container mx-auto px-4 py-8 space-y-8 max-w-6xl">
+      <main class="container mx-auto px-4 py-8 space-y-8 max-w-7xl">
         <div class="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 flex-wrap">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/setores/" class="hover:underline">Setores ANBIMA</a> &gt;
           <span class="text-slate-800 font-bold">{esc(sec_name)}</span>
         </div>
 
-        <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-7 md:p-10 text-white shadow-xl border border-slate-800 space-y-4">
-          <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-semibold uppercase tracking-wider">Setor Econômico ANBIMA</span>
-          <h1 class="text-2xl sm:text-4xl font-black tracking-tight">{esc(sec_name)}</h1>
-          <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+          <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold uppercase tracking-wider">Setor Econômico ANBIMA</span>
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{esc(sec_name)}</h1>
+          <p class="text-slate-600 text-sm sm:text-base max-w-3xl leading-relaxed">
             O setor <strong>{esc(sec_name)}</strong> conta com <strong>{fmt_int(total_cnt)} títulos ativos</strong> monitorados pelo FIXDATA, somando volume emitido de <strong>{esc(format_currency_fn(total_vol))}</strong> em Debêntures, CRIs e CRAs.
           </p>
         </section>
@@ -916,15 +1207,15 @@ def render_sector_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
         )
 
     dir_body = f"""
-      <main class="container mx-auto px-4 py-8 space-y-8 max-w-6xl">
+      <main class="container mx-auto px-4 py-8 space-y-8 max-w-7xl">
         <div class="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <span class="text-slate-800 font-bold">Setores ANBIMA</span>
         </div>
-        <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-7 md:p-10 text-white shadow-xl border border-slate-800 space-y-3">
-          <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-semibold uppercase tracking-wider">Taxonomia Oficial ANBIMA</span>
-          <h1 class="text-2xl sm:text-4xl font-black tracking-tight">Setores Econômicos de Crédito Privado</h1>
-          <p class="text-slate-300 text-sm sm:text-base max-w-3xl">Explore Debêntures, CRIs e CRAs vigentes agrupados pelos setores econômicos oficiais da ANBIMA.</p>
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-3">
+          <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold uppercase tracking-wider">Taxonomia Oficial ANBIMA</span>
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Setores Econômicos de Crédito Privado</h1>
+          <p class="text-slate-600 text-sm sm:text-base max-w-3xl">Explore Debêntures, CRIs e CRAs vigentes agrupados pelos setores econômicos oficiais da ANBIMA.</p>
         </section>
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {"".join(dir_cards)}
@@ -1023,7 +1314,7 @@ def render_issuer_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
 
         # CTA Lead-Gen para o Raio-X (SEM expor balanços, EBITDA, Altman Z'', ICR ou Dívida Líquida)
         raiox_href = f"/raiox-devedor/?cnpj={esc(raiox_cnpj)}" if raiox_cnpj else "/raiox-devedor/"
-        ri_btn = f'<a href="{esc(site_ri)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/15 transition">Portal de RI Oficial ↗</a>' if site_ri else ""
+        ri_btn = f'<a href="{esc(site_ri)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold border border-slate-200 transition">Portal de RI Oficial ↗</a>' if site_ri else ""
 
         table_rows_html = _build_asset_table_rows(rows, b3_stats, format_currency_fn, normalize_rating_fn, limit=150)
 
@@ -1045,24 +1336,24 @@ def render_issuer_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
         kw = f"{name}, debêntures {name}, cri {name}, cra {name}, renda fixa, taxas, rating {cons_rating}, FIXDATA"
 
         body_html = f"""
-      <main class="container mx-auto px-4 py-8 space-y-8 max-w-6xl">
+      <main class="container mx-auto px-4 py-8 space-y-8 max-w-7xl">
         <div class="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 flex-wrap">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/emissores/" class="hover:underline">Emissores</a> &gt;
           <span class="text-slate-800 font-bold">{esc(name)}</span>
         </div>
 
-        <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-7 md:p-10 text-white shadow-xl border border-slate-800 space-y-4">
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
           <div class="flex flex-wrap items-center gap-2">
-            <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-semibold uppercase tracking-wider">Emissor / Devedor Corporativo</span>
-            <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold">Rating Vigente: {esc(cons_rating)}</span>
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold uppercase tracking-wider">Emissor / Devedor Corporativo</span>
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">Rating Vigente: {esc(cons_rating)}</span>
           </div>
-          <h1 class="text-2xl sm:text-4xl font-black tracking-tight">{esc(name)}</h1>
-          <p class="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed">
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{esc(name)}</h1>
+          <p class="text-slate-600 text-sm sm:text-base max-w-3xl leading-relaxed">
             <strong>{esc(name)}</strong>{f' (CNPJ {esc(cnpj_fmt)})' if cnpj_fmt != '-' else ''} possui <strong>{len(rows)} título(s) de dívida ativa</strong> mapeado(s) no FIXDATA ({esc(instr_str)}), totalizando <strong>{esc(format_currency_fn(total_em_vol))}</strong> em estoque emitido. Indexadores predominantes: {esc(idx_summary)}.
           </p>
           <div class="flex flex-wrap items-center gap-3 pt-1">
-            <a href="{raiox_href}" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-extrabold shadow-md transition">
+            <a href="{raiox_href}" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-extrabold shadow-sm transition">
               Abrir Raio-X de Solvência CVM (Gratuito) →
             </a>
             {ri_btn}
@@ -1172,15 +1463,15 @@ def render_issuer_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
         dir_rows = list(ex.map(_build_one_issuer, issuers_meta))
 
     dir_body = f"""
-      <main class="container mx-auto px-4 py-8 space-y-8 max-w-6xl">
+      <main class="container mx-auto px-4 py-8 space-y-8 max-w-7xl">
         <div class="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <span class="text-slate-800 font-bold">Emissores</span>
         </div>
-        <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-3xl p-7 md:p-10 text-white shadow-xl border border-slate-800 space-y-3">
-          <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-semibold uppercase tracking-wider">Diretório Corporativo</span>
-          <h1 class="text-2xl sm:text-4xl font-black tracking-tight">Top {len(issuers_meta)} Emissores de Crédito Privado</h1>
-          <p class="text-slate-300 text-sm sm:text-base max-w-3xl">Companhias emissoras e devedoras com títulos ativos (Debêntures, CRIs e CRAs) no mercado brasileiro, ordenadas por liquidez secundária e emissões.</p>
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-3">
+          <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold uppercase tracking-wider">Diretório Corporativo</span>
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Top {len(issuers_meta)} Emissores de Crédito Privado</h1>
+          <p class="text-slate-600 text-sm sm:text-base max-w-3xl">Companhias emissoras e devedoras com títulos ativos (Debêntures, CRIs e CRAs) no mercado brasileiro, ordenadas por liquidez secundária e emissões.</p>
         </section>
         <section class="bg-white rounded-3xl border border-slate-200 p-5 sm:p-8 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -1285,7 +1576,7 @@ def build_rich_static_page_body(slug: str, df_active_count: int, format_currency
                 pass
 
         body = f"""
-      <main class="container mx-auto px-4 py-8 space-y-8 max-w-6xl">
+      <main class="container mx-auto px-4 py-8 space-y-8 max-w-7xl">
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
           <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Negócios B3 — Mercado Secundário de Crédito Privado</h1>
           <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
@@ -1374,7 +1665,7 @@ def build_rich_static_page_body(slug: str, df_active_count: int, format_currency
                 f'</tr>'
             )
         body = f"""
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-6xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
           <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Mercado Primário — Ofertas Públicas CVM 160</h1>
           <p class="text-sm sm:text-base text-slate-600">
