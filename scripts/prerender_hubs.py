@@ -28,19 +28,7 @@ import pandas as pd
 
 BASE_URL = "https://fixdatabrasil.com.br"
 
-GOOGLE_NEWS_SWG_SNIPPET = """    <!-- Google News / Reader Revenue Manager (SwG Basic) -->
-    <script async type="application/javascript"
-            src="https://news.google.com/swg/js/v1/swg-basic.js"></script>
-    <script>
-      (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
-        basicSubscriptions.init({
-          type: "NewsArticle",
-          isPartOfType: ["Product"],
-          isPartOfProductId: "CAow9czODA:openaccess",
-          clientOptions: { theme: "light", lang: "pt-BR" },
-        });
-      });
-    </script>"""
+GOOGLE_NEWS_SWG_SNIPPET = ""
 
 RATING_SCORE_MAP = {
     "AAA": 21, "AA+": 20, "AA": 19, "AA-": 18,
