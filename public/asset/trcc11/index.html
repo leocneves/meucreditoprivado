@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "TRCC11", "item": "https://fixdatabrasil.com.br/asset/trcc11/"}]}, {"@type": "FinancialProduct", "name": "Debênture TRCC11 (TCC - TRANSMISSORA CAMINHO…)", "identifier": "TRCC11", "isin": "BRTRCCDBS003", "description": "Consulte dados de mercado da debênture TRCC11 emitida por TCC - TRANSMISSORA CAMINHO DO CAFE S.A. (CNPJ: 26.796.760/0001-40). Indexador IPCA, vencimento em 15/09/2028, rating AAA, spread de 0.48%, duration de 1.49 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo TRCC11 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por TCC - TRANSMISSORA CAMINHO DO CAFE S.A. (CNPJ: 26.796.760/0001-40), com taxa de emissão de IPCA + 6.53% a.a. e data de vencimento em 15/09/2028. O título encontra-se ativo, avaliado com rating AAA em escala nacional (duration modificada de 1.49 anos) e spread indicativo de 0.48% sobre a NTN-B soberana, com volume emitido de R$ 680.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/trcc11/", "category": "Debênture", "provider": {"@type": "Organization", "name": "TCC - TRANSMISSORA CAMINHO DO CAFE S.A.", "taxID": "26.796.760/0001-40"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">TRCC11</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo TRCC11 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por TCC - TRANSMISSORA CAMINHO DO CAFE S.A. (CNPJ: 26.796.760/0001-40), com taxa de emissão de IPCA + 6.53% a.a. e data de vencimento em 15/09/2028. O título encontra-se ativo, avaliado com rating AAA em escala nacional (duration modificada de 1.49 anos) e spread indicativo de 0.48% sobre a NTN-B soberana, com volume emitido de R$ 680.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/09/2028</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 1,8 anos (660 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 1,8 anos (659 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/energia-eletrica/" class="font-semibold text-blue-300 hover:underline">Energia Elétrica</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">PENTAGONO S/A DTVM</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO ITAU-BBA S/A</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">1,8 anos (660 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">1,8 anos (659 dias corridos)</p></div>
           </div>
         </div>
 
@@ -484,6 +760,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "TRCC11", "tipo": "Debênture", "issuer": "TCC - TRANSMISSORA CAMINHO DO CAFE S.A.", "indexador": "IPCA", "taxa_emissao": 6.5333, "taxa_negocio_b3": 7.54, "taxa_indicativa_anbima": 7.4105, "taxa_mercado": 7.8014, "taxa_ativo": 7.8014, "taxa_compra": "7,4605", "taxa_venda": "7,2727", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "969.0877", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 622154.28, "volume_emissao": 680000000.0, "volume": 680000000.0, "quantidade_emitida": 680000.0, "quantidade": 680000.0, "data_emissao": "2018-09-15", "vencimento": "2028-09-15", "emissao": 1.0, "serie": 1.0, "isin": "BRTRCCDBS003", "lei": 12.431, "cnpj_emissor": 26796760000140.0, "setor": "Energia Elétrica", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "BANCO ITAU-BBA S/A", "rating": "AAA(Bra)", "rating_original": "AAA(Bra)", "rating_agencia": "Fitch Ratings", "agencia": "Fitch Ratings", "rating_data": "14/01/2025", "divulgacao": "14/01/2025", "securitizadora": "Pentágono", "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 1.49, "ntnb_referencia": "15/08/2028", "taxa_ntnb": 7.29, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-03-15", "vna": 971.2745, "pu_par": 982.8075, "incentivada": "Sim", "rating_normalizado": "AAA", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.0047665206449809, "spread_anbima": 0.0011231242427067, "spread": 0.0047665206449809, "pu_mercado_mediano": 964.7965, "agio_desagio_pct": -1.83}, "prices": [{"date": "2026-05-29", "ticker": "TRCC11", "price": 1026.3728, "clean_price": 1026.3728, "yield": 7.7166, "fonte_yield": "B3", "spread_over_ref": -34.5}, {"date": "2026-06-01", "ticker": "TRCC11", "price": 1025.954069, "clean_price": 1025.954069, "yield": 7.7736, "fonte_yield": "ANBIMA", "spread_over_ref": -32.0}, {"date": "2026-06-02", "ticker": "TRCC11", "price": 1025.7733, "clean_price": 1025.7733, "yield": 7.817, "fonte_yield": "B3", "spread_over_ref": -31.7}, {"date": "2026-06-03", "ticker": "TRCC11", "price": 0.0, "clean_price": 0.0, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-05", "ticker": "TRCC11", "price": 0.0, "clean_price": 0.0, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-08", "ticker": "TRCC11", "price": 1019.40918, "clean_price": 1019.40918, "yield": 8.2939, "fonte_yield": "ANBIMA", "spread_over_ref": -34.8}, {"date": "2026-06-09", "ticker": "TRCC11", "price": 1019.47381, "clean_price": 1019.47381, "yield": 8.3245, "fonte_yield": "ANBIMA", "spread_over_ref": -35.5}, {"date": "2026-06-10", "ticker": "TRCC11", "price": 1014.2388, "clean_price": 1014.2388, "yield": 8.71, "fonte_yield": "B3", "spread_over_ref": -1.8}, {"date": "2026-06-11", "ticker": "TRCC11", "price": 1020.6681, "clean_price": 1020.6681, "yield": 8.357, "fonte_yield": "B3", "spread_over_ref": -15.6}, {"date": "2026-06-12", "ticker": "TRCC11", "price": 1020.3356, "clean_price": 1020.3356, "yield": 8.4234, "fonte_yield": "B3", "spread_over_ref": -6.0}, {"date": "2026-06-15", "ticker": "TRCC11", "price": 1025.438011, "clean_price": 1025.438011, "yield": 8.1543, "fonte_yield": "ANBIMA", "spread_over_ref": -32.4}, {"date": "2026-06-16", "ticker": "TRCC11", "price": 1018.4278, "clean_price": 1018.4278, "yield": 8.6367, "fonte_yield": "B3", "spread_over_ref": -2.1}, {"date": "2026-06-17", "ticker": "TRCC11", "price": 1021.6557, "clean_price": 1021.6557, "yield": 8.44, "fonte_yield": "B3", "spread_over_ref": -30.2}, {"date": "2026-06-18", "ticker": "TRCC11", "price": 1022.1236, "clean_price": 1022.1236, "yield": 8.4411, "fonte_yield": "B3", "spread_over_ref": -34.8}, {"date": "2026-06-19", "ticker": "TRCC11", "price": 1020.454857, "clean_price": 1020.454857, "yield": 8.5723, "fonte_yield": "ANBIMA", "spread_over_ref": -36.3}, {"date": "2026-06-22", "ticker": "TRCC11", "price": 1020.641125, "clean_price": 1020.641125, "yield": 8.5909, "fonte_yield": "ANBIMA", "spread_over_ref": -34.1}, {"date": "2026-06-23", "ticker": "TRCC11", "price": 1022.892085, "clean_price": 1022.892085, "yield": 8.4833, "fonte_yield": "ANBIMA", "spread_over_ref": -37.3}, {"date": "2026-06-24", "ticker": "TRCC11", "price": 1023.450835, "clean_price": 1023.450835, "yield": 8.479, "fonte_yield": "ANBIMA", "spread_over_ref": -37.7}, {"date": "2026-06-25", "ticker": "TRCC11", "price": 1024.584386, "clean_price": 1024.584386, "yield": 8.4395, "fonte_yield": "ANBIMA", "spread_over_ref": -40.1}, {"date": "2026-06-26", "ticker": "TRCC11", "price": 1025.0305, "clean_price": 1025.0305, "yield": 8.4395, "fonte_yield": "B3", "spread_over_ref": -33.6}, {"date": "2026-06-29", "ticker": "TRCC11", "price": 1027.703602, "clean_price": 1027.703602, "yield": 8.3052, "fonte_yield": "ANBIMA", "spread_over_ref": -47.1}, {"date": "2026-06-30", "ticker": "TRCC11", "price": 1029.051259, "clean_price": 1029.051259, "yield": 8.252, "fonte_yield": "ANBIMA", "spread_over_ref": -49.5}, {"date": "2026-07-01", "ticker": "TRCC11", "price": 1027.785826, "clean_price": 1027.785826, "yield": 8.3591, "fonte_yield": "ANBIMA", "spread_over_ref": -46.8}, {"date": "2026-07-02", "ticker": "TRCC11", "price": 1028.11154, "clean_price": 1028.11154, "yield": 8.3687, "fonte_yield": "ANBIMA", "spread_over_ref": -46.4}, {"date": "2026-07-03", "ticker": "TRCC11", "price": 1028.948, "clean_price": 1028.948, "yield": 8.377, "fonte_yield": "B3", "spread_over_ref": -37.1}, {"date": "2026-07-06", "ticker": "TRCC11", "price": 1031.977134, "clean_price": 1031.977134, "yield": 8.1896, "fonte_yield": "ANBIMA", "spread_over_ref": -47.0}, {"date": "2026-07-07", "ticker": "TRCC11", "price": 1032.361736, "clean_price": 1032.361736, "yield": 8.1953, "fonte_yield": "ANBIMA", "spread_over_ref": -48.3}, {"date": "2026-07-08", "ticker": "TRCC11", "price": 1033.439607, "clean_price": 1033.439607, "yield": 8.1582, "fonte_yield": "ANBIMA", "spread_over_ref": -51.4}, {"date": "2026-07-09", "ticker": "TRCC11", "price": 1036.313138, "clean_price": 1036.313138, "yield": 8.0102, "fonte_yield": "ANBIMA", "spread_over_ref": -57.1}, {"date": "2026-07-10", "ticker": "TRCC11", "price": 1037.077002, "clean_price": 1037.077002, "yield": 7.8985, "fonte_yield": "ANBIMA", "spread_over_ref": -67.4}, {"date": "2026-07-13", "ticker": "TRCC11", "price": 1037.102656, "clean_price": 1037.102656, "yield": 7.9209, "fonte_yield": "ANBIMA", "spread_over_ref": -62.5}, {"date": "2026-07-14", "ticker": "TRCC11", "price": 1037.4921, "clean_price": 1037.4921, "yield": 7.9209, "fonte_yield": "B3", "spread_over_ref": -52.0}, {"date": "2026-07-15", "ticker": "TRCC11", "price": 1044.9732, "clean_price": 1044.9732, "yield": 7.4841, "fonte_yield": "B3", "spread_over_ref": -86.1}, {"date": "2026-07-16", "ticker": "TRCC11", "price": 1040.8545, "clean_price": 1040.8545, "yield": 7.7624, "fonte_yield": "B3", "spread_over_ref": -59.3}, {"date": "2026-07-17", "ticker": "TRCC11", "price": 1044.8166, "clean_price": 1044.8166, "yield": 7.5435, "fonte_yield": "B3", "spread_over_ref": -88.2}, {"date": "2026-07-20", "ticker": "TRCC11", "price": 1038.550112, "clean_price": 1038.550112, "yield": 7.9574, "fonte_yield": "ANBIMA", "spread_over_ref": -56.4}, {"date": "2026-07-21", "ticker": "TRCC11", "price": 1034.7433, "clean_price": 1034.7433, "yield": 8.25, "fonte_yield": "B3", "spread_over_ref": -31.3}, {"date": "2026-07-22", "ticker": "TRCC11", "price": 1038.6721, "clean_price": 1038.6721, "yield": 8.0298, "fonte_yield": "B3", "spread_over_ref": -58.7}, {"date": "2026-07-23", "ticker": "TRCC11", "price": 1029.9859, "clean_price": 1029.9859, "yield": 8.58, "fonte_yield": "B3", "spread_over_ref": -4.2}, {"date": "2026-07-24", "ticker": "TRCC11", "price": 1038.67123, "clean_price": 1038.67123, "yield": 8.0556, "fonte_yield": "ANBIMA", "spread_over_ref": -42.5}, {"date": "2026-07-27", "ticker": "TRCC11", "price": 1047.3093, "clean_price": 1047.3093, "yield": 7.5401, "fonte_yield": "B3", "spread_over_ref": -84.2}, {"date": "2026-07-28", "ticker": "TRCC11", "price": 1045.2352, "clean_price": 1045.2352, "yield": 7.7198, "fonte_yield": "B3", "spread_over_ref": -67.6}, {"date": "2026-07-29", "ticker": "TRCC11", "price": 1037.931424, "clean_price": 1037.931424, "yield": 8.1318, "fonte_yield": "ANBIMA", "spread_over_ref": -39.7}, {"date": "2026-07-30", "ticker": "TRCC11", "price": 1038.902974, "clean_price": 1038.902974, "yield": 8.0918, "fonte_yield": "ANBIMA", "spread_over_ref": -43.4}, {"date": "2026-07-31", "ticker": "TRCC11", "price": 1048.106, "clean_price": 1048.106, "yield": 7.53, "fonte_yield": "B3", "spread_over_ref": -87.8}, {"date": "2026-08-03", "ticker": "TRCC11", "price": 1049.2241, "clean_price": 1049.2241, "yield": 7.48, "fonte_yield": "B3", "spread_over_ref": -87.6}, {"date": "2026-08-04", "ticker": "TRCC11", "price": 1040.853706, "clean_price": 1040.853706, "yield": 8.0328, "fonte_yield": "ANBIMA", "spread_over_ref": -41.8}, {"date": "2026-08-05", "ticker": "TRCC11", "price": 1036.8328, "clean_price": 1036.8328, "yield": 8.3379, "fonte_yield": "B3", "spread_over_ref": -10.3}, {"date": "2026-08-06", "ticker": "TRCC11", "price": 1041.632251, "clean_price": 1041.632251, "yield": 8.0267, "fonte_yield": "ANBIMA", "spread_over_ref": -40.9}, {"date": "2026-08-07", "ticker": "TRCC11", "price": 1043.819766, "clean_price": 1043.819766, "yield": 7.9079, "fonte_yield": "ANBIMA", "spread_over_ref": -41.1}, {"date": "2026-08-10", "ticker": "TRCC11", "price": 1043.3802, "clean_price": 1043.3802, "yield": 7.98, "fonte_yield": "B3", "spread_over_ref": -31.4}, {"date": "2026-08-11", "ticker": "TRCC11", "price": 1041.528, "clean_price": 1041.528, "yield": 8.1112, "fonte_yield": "B3", "spread_over_ref": -19.3}, {"date": "2026-08-12", "ticker": "TRCC11", "price": 1046.068565, "clean_price": 1046.068565, "yield": 7.8399, "fonte_yield": "ANBIMA", "spread_over_ref": -38.8}, {"date": "2026-08-13", "ticker": "TRCC11", "price": 1046.588488, "clean_price": 1046.588488, "yield": 7.8286, "fonte_yield": "ANBIMA", "spread_over_ref": -39.9}, {"date": "2026-08-14", "ticker": "TRCC11", "price": 1046.456865, "clean_price": 1046.456865, "yield": 7.8595, "fonte_yield": "ANBIMA", "spread_over_ref": -40.9}, {"date": "2026-08-17", "ticker": "TRCC11", "price": 1047.0128, "clean_price": 1047.0128, "yield": 7.8595, "fonte_yield": "B3", "spread_over_ref": -35.8}, {"date": "2026-08-18", "ticker": "TRCC11", "price": 1058.79, "clean_price": 1058.79, "yield": 7.1, "fonte_yield": "B3", "spread_over_ref": -105.3}, {"date": "2026-08-19", "ticker": "TRCC11", "price": 1048.798357, "clean_price": 1048.798357, "yield": 7.7567, "fonte_yield": "ANBIMA", "spread_over_ref": -38.5}, {"date": "2026-08-20", "ticker": "TRCC11", "price": 1050.249617, "clean_price": 1050.249617, "yield": 7.6755, "fonte_yield": "ANBIMA", "spread_over_ref": -39.2}, {"date": "2026-08-21", "ticker": "TRCC11", "price": 1050.103582, "clean_price": 1050.103582, "yield": 7.6983, "fonte_yield": "ANBIMA", "spread_over_ref": -34.4}, {"date": "2026-08-24", "ticker": "TRCC11", "price": 1051.0326, "clean_price": 1051.0326, "yield": 7.6571, "fonte_yield": "B3", "spread_over_ref": -41.2}, {"date": "2026-08-25", "ticker": "TRCC11", "price": 1050.1456, "clean_price": 1050.1456, "yield": 7.7224, "fonte_yield": "B3", "spread_over_ref": -34.9}, {"date": "2026-08-26", "ticker": "TRCC11", "price": 1049.735959, "clean_price": 1049.735959, "yield": 7.7628, "fonte_yield": "ANBIMA", "spread_over_ref": -33.0}, {"date": "2026-08-27", "ticker": "TRCC11", "price": 1054.2081, "clean_price": 1054.2081, "yield": 7.47, "fonte_yield": "B3", "spread_over_ref": -50.3}, {"date": "2026-08-28", "ticker": "TRCC11", "price": 1053.607033, "clean_price": 1053.607033, "yield": 7.5095, "fonte_yield": "ANBIMA", "spread_over_ref": -41.0}, {"date": "2026-08-31", "ticker": "TRCC11", "price": 1053.757525, "clean_price": 1053.757525, "yield": 7.5098, "fonte_yield": "ANBIMA", "spread_over_ref": -39.9}, {"date": "2026-09-01", "ticker": "TRCC11", "price": 1054.0681, "clean_price": 1054.0681, "yield": 7.5098, "fonte_yield": "B3", "spread_over_ref": -35.7}, {"date": "2026-09-02", "ticker": "TRCC11", "price": 1055.0336, "clean_price": 1055.0336, "yield": 7.456, "fonte_yield": "B3", "spread_over_ref": -36.8}, {"date": "2026-09-03", "ticker": "TRCC11", "price": 1056.1802, "clean_price": 1056.1802, "yield": 7.39, "fonte_yield": "B3", "spread_over_ref": -38.2}, {"date": "2026-09-04", "ticker": "TRCC11", "price": 1053.6329, "clean_price": 1053.6329, "yield": 7.57, "fonte_yield": "B3", "spread_over_ref": -16.7}, {"date": "2026-09-08", "ticker": "TRCC11", "price": 1058.7497, "clean_price": 1058.7497, "yield": 7.242, "fonte_yield": "B3", "spread_over_ref": -38.7}, {"date": "2026-09-09", "ticker": "TRCC11", "price": 1057.3819, "clean_price": 1057.3819, "yield": 7.33, "fonte_yield": "B3", "spread_over_ref": -31.4}, {"date": "2026-09-10", "ticker": "TRCC11", "price": 1067.6556, "clean_price": 1067.6556, "yield": 6.66, "fonte_yield": "B3", "spread_over_ref": -87.4}, {"date": "2026-09-11", "ticker": "TRCC11", "price": 1057.5812, "clean_price": 1057.5812, "yield": 7.3167, "fonte_yield": "B3", "spread_over_ref": -20.2}, {"date": "2026-09-14", "ticker": "TRCC11", "price": 988.2201, "clean_price": 988.2201, "yield": 5.9298, "fonte_yield": "B3", "spread_over_ref": -147.4}, {"date": "2026-09-15", "ticker": "TRCC11", "price": 955.7729, "clean_price": 955.7729, "yield": 6.9247, "fonte_yield": "B3", "spread_over_ref": -51.3}, {"date": "2026-09-16", "ticker": "TRCC11", "price": 953.009, "clean_price": 953.009, "yield": 7.1274, "fonte_yield": "B3", "spread_over_ref": -32.0}, {"date": "2026-09-17", "ticker": "TRCC11", "price": 955.59034, "clean_price": 955.59034, "yield": 6.967, "fonte_yield": "ANBIMA", "spread_over_ref": -36.9}, {"date": "2026-09-18", "ticker": "TRCC11", "price": 964.3222, "clean_price": 964.3222, "yield": 6.42, "fonte_yield": "B3", "spread_over_ref": -84.8}, {"date": "2026-09-21", "ticker": "TRCC11", "price": 956.504157, "clean_price": 956.504157, "yield": 6.9741, "fonte_yield": "ANBIMA", "spread_over_ref": -37.6}, {"date": "2026-09-22", "ticker": "TRCC11", "price": 956.9783, "clean_price": 956.9783, "yield": 7.011, "fonte_yield": "B3", "spread_over_ref": -38.1}, {"date": "2026-09-23", "ticker": "TRCC11", "price": 948.9891, "clean_price": 948.9891, "yield": 7.59, "fonte_yield": "B3", "spread_over_ref": 18.0}, {"date": "2026-09-24", "ticker": "TRCC11", "price": 955.496191, "clean_price": 955.496191, "yield": 7.146, "fonte_yield": "ANBIMA", "spread_over_ref": -23.7}, {"date": "2026-09-25", "ticker": "TRCC11", "price": 955.73849, "clean_price": 955.73849, "yield": 7.1646, "fonte_yield": "ANBIMA", "spread_over_ref": -19.1}, {"date": "2026-09-28", "ticker": "TRCC11", "price": 964.8161, "clean_price": 964.8161, "yield": 6.63, "fonte_yield": "B3", "spread_over_ref": -75.8}, {"date": "2026-09-29", "ticker": "TRCC11", "price": 952.3803, "clean_price": 952.3803, "yield": 7.5565, "fonte_yield": "B3", "spread_over_ref": 13.6}, {"date": "2026-09-30", "ticker": "TRCC11", "price": 956.543, "clean_price": 956.543, "yield": 7.311, "fonte_yield": "B3", "spread_over_ref": -4.9}, {"date": "2026-10-01", "ticker": "TRCC11", "price": 947.1778, "clean_price": 947.1778, "yield": 7.9991, "fonte_yield": "B3", "spread_over_ref": 59.5}, {"date": "2026-10-02", "ticker": "TRCC11", "price": 954.8854, "clean_price": 954.8854, "yield": 7.5078, "fonte_yield": "B3", "spread_over_ref": 14.7}, {"date": "2026-10-05", "ticker": "TRCC11", "price": 963.344155, "clean_price": 963.344155, "yield": 6.926, "fonte_yield": "ANBIMA", "spread_over_ref": -4.9}, {"date": "2026-10-06", "ticker": "TRCC11", "price": 962.3419, "clean_price": 962.3419, "yield": 7.0679, "fonte_yield": "B3", "spread_over_ref": 15.1}, {"date": "2026-10-07", "ticker": "TRCC11", "price": 965.0409, "clean_price": 965.0409, "yield": 6.9124, "fonte_yield": "B3", "spread_over_ref": 9.8}, {"date": "2026-10-08", "ticker": "TRCC11", "price": 971.179585, "clean_price": 971.179585, "yield": 6.511, "fonte_yield": "ANBIMA", "spread_over_ref": -16.3}, {"date": "2026-10-09", "ticker": "TRCC11", "price": 971.039, "clean_price": 971.039, "yield": 6.616, "fonte_yield": "B3", "spread_over_ref": -6.0}, {"date": "2026-10-13", "ticker": "TRCC11", "price": 972.426857, "clean_price": 972.426857, "yield": 6.5639, "fonte_yield": "ANBIMA", "spread_over_ref": -16.5}, {"date": "2026-10-14", "ticker": "TRCC11", "price": 972.232877, "clean_price": 972.232877, "yield": 6.6198, "fonte_yield": "ANBIMA", "spread_over_ref": -10.0}, {"date": "2026-10-15", "ticker": "TRCC11", "price": 971.248622, "clean_price": 971.248622, "yield": 6.7303, "fonte_yield": "ANBIMA", "spread_over_ref": -7.0}, {"date": "2026-10-16", "ticker": "TRCC11", "price": 960.9453, "clean_price": 960.9453, "yield": 7.4743, "fonte_yield": "B3", "spread_over_ref": 54.7}, {"date": "2026-10-19", "ticker": "TRCC11", "price": 968.735949, "clean_price": 968.735949, "yield": 6.9563, "fonte_yield": "ANBIMA", "spread_over_ref": 2.8}, {"date": "2026-10-20", "ticker": "TRCC11", "price": 976.8806, "clean_price": 976.8806, "yield": 6.42, "fonte_yield": "B3", "spread_over_ref": -39.9}, {"date": "2026-10-21", "ticker": "TRCC11", "price": 971.3656, "clean_price": 971.3656, "yield": 6.8266, "fonte_yield": "B3", "spread_over_ref": -0.3}, {"date": "2026-10-22", "ticker": "TRCC11", "price": 970.548364, "clean_price": 970.548364, "yield": 6.91, "fonte_yield": "ANBIMA", "spread_over_ref": 3.9}, {"date": "2026-10-23", "ticker": "TRCC11", "price": 970.963281, "clean_price": 970.963281, "yield": 6.9077, "fonte_yield": "ANBIMA", "spread_over_ref": 4.3}, {"date": "2026-10-26", "ticker": "TRCC11", "price": 955.79035, "clean_price": 955.79035, "yield": 7.9996, "fonte_yield": "ANBIMA", "spread_over_ref": 2.2}, {"date": "2026-10-27", "ticker": "TRCC11", "price": 958.1003, "clean_price": 958.1003, "yield": 7.861, "fonte_yield": "B3", "spread_over_ref": 3.3}, {"date": "2026-10-28", "ticker": "TRCC11", "price": 960.112018, "clean_price": 960.112018, "yield": 7.7437, "fonte_yield": "ANBIMA", "spread_over_ref": -6.1}, {"date": "2026-10-29", "ticker": "TRCC11", "price": 971.2628, "clean_price": 971.2628, "yield": 6.9756, "fonte_yield": "B3", "spread_over_ref": -66.8}, {"date": "2026-10-30", "ticker": "TRCC11", "price": 964.159364, "clean_price": 964.159364, "yield": 7.507, "fonte_yield": "ANBIMA", "spread_over_ref": -19.7}, {"date": "2026-11-03", "ticker": "TRCC11", "price": 975.1555, "clean_price": 975.1555, "yield": 6.75, "fonte_yield": "B3", "spread_over_ref": -92.7}, {"date": "2026-11-04", "ticker": "TRCC11", "price": 965.693041, "clean_price": 965.693041, "yield": 7.4503, "fonte_yield": "ANBIMA", "spread_over_ref": -22.8}, {"date": "2026-11-05", "ticker": "TRCC11", "price": 966.0652, "clean_price": 966.0652, "yield": 7.4503, "fonte_yield": "B3", "spread_over_ref": -15.8}, {"date": "2026-11-06", "ticker": "TRCC11", "price": 965.047791, "clean_price": 965.047791, "yield": 7.5509, "fonte_yield": "ANBIMA", "spread_over_ref": 3.8}, {"date": "2026-11-09", "ticker": "TRCC11", "price": 972.6115, "clean_price": 972.6115, "yield": 7.0321, "fonte_yield": "B3", "spread_over_ref": -39.5}, {"date": "2026-11-10", "ticker": "TRCC11", "price": 968.275652, "clean_price": 968.275652, "yield": 7.3709, "fonte_yield": "ANBIMA", "spread_over_ref": 0.1}, {"date": "2026-11-11", "ticker": "TRCC11", "price": 967.657, "clean_price": 967.657, "yield": 7.47, "fonte_yield": "B3", "spread_over_ref": 13.8}, {"date": "2026-11-12", "ticker": "TRCC11", "price": 967.2951, "clean_price": 967.2951, "yield": 7.4867, "fonte_yield": "B3", "spread_over_ref": 13.7}, {"date": "2026-11-13", "ticker": "TRCC11", "price": 975.2274, "clean_price": 975.2274, "yield": 6.9, "fonte_yield": "B3", "spread_over_ref": -39.3}, {"date": "2026-11-16", "ticker": "TRCC11", "price": 965.824767, "clean_price": 965.824767, "yield": 7.6098, "fonte_yield": "ANBIMA", "spread_over_ref": 13.0}, {"date": "2026-11-17", "ticker": "TRCC11", "price": 973.7914, "clean_price": 973.7914, "yield": 7.06, "fonte_yield": "B3", "spread_over_ref": -26.9}, {"date": "2026-11-18", "ticker": "TRCC11", "price": 958.5653, "clean_price": 958.5653, "yield": 8.22, "fonte_yield": "B3", "spread_over_ref": 87.6}, {"date": "2026-11-19", "ticker": "TRCC11", "price": 969.423692, "clean_price": 969.423692, "yield": 7.4467, "fonte_yield": "ANBIMA", "spread_over_ref": 1.6}, {"date": "2026-11-23", "ticker": "TRCC11", "price": 969.981284, "clean_price": 969.981284, "yield": 7.4395, "fonte_yield": "ANBIMA", "spread_over_ref": 12.1}, {"date": "2026-11-24", "ticker": "TRCC11", "price": 969.0877, "clean_price": 969.0877, "yield": 7.54, "fonte_yield": "B3", "spread_over_ref": 23.3}], "emitter": {"cnpj": "26796760000140", "cnpj_formatado": "26.796.760/0001-40", "razao_social": "TCC - TRANSMISSORA CAMINHO DO CAFE S.A.", "nome_fantasia": "TCC - TRANSMISSORA CAMINHO DO CAFE S.A.", "setor": "Energia Elétrica", "tipo_emissor": "Emissor / Devedor", "categoria_cvm": "Emissor / Devedor", "situacao_cvm": "Ativo", "site_ri": null, "municipio": null, "uf": null, "descricao": "TCC - TRANSMISSORA CAMINHO DO CAFE S.A. é emissor/devedor de ativos de renda fixa no mercado de capitais."}, "raiox_cnpj": null, "paymentEvents": [{"ticker": "TRCC11", "data_evento": "2027-03-15", "data_liquidacao": "2027-03-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "TRCC11", "data_evento": "2027-09-15", "data_liquidacao": "2027-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.215, "valor_real": null, "valor_projetado": 32.15, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "TRCC11", "data_evento": "2028-03-15", "data_liquidacao": "2028-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.215, "valor_real": null, "valor_projetado": 32.15, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "TRCC11", "data_evento": "2028-09-15", "data_liquidacao": "2028-09-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "TRCC11", "data_evento": "2028-09-15", "data_liquidacao": "2028-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.215, "valor_real": null, "valor_projetado": 32.15, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo TRCC11 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por TCC - TRANSMISSORA CAMINHO DO CAFE S.A. (CNPJ: 26.796.760/0001-40), com taxa de emissão de IPCA + 6.53% a.a. e data de vencimento em 15/09/2028. O título encontra-se ativo, avaliado com rating AAA em escala nacional (duration modificada de 1.49 anos) e spread indicativo de 0.48% sobre a NTN-B soberana, com volume emitido de R$ 680.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [], "relatedSector": [{"ticker": "EGIEA6", "tipo": "Debênture", "issuer": "ENGIE BRASIL ENERGIA S.A.", "vencimento": "2038-02-15"}, {"ticker": "TRGP13", "tipo": "Debênture", "issuer": "TECP - TRANSMISSORA DE ENERGIA CENTRAL PAULISTANA S.A.", "vencimento": "2038-01-15"}, {"ticker": "CHSF13", "tipo": "Debênture", "issuer": "AXIA ENERGIA NORDESTE S.A.", "vencimento": "2031-06-15"}, {"ticker": "CPLDA1", "tipo": "Debênture", "issuer": "COPEL DISTRIBUIÇÃO S.A.", "vencimento": "2038-01-15"}], "issuerSlug": "tcc-transmissora-caminho-do-cafe-s-a", "sectorSlug": "energia-eletrica"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

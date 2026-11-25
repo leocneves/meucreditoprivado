@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "UQFN14", "item": "https://fixdatabrasil.com.br/asset/uqfn14/"}]}, {"@type": "FinancialProduct", "name": "Debênture UQFN14 (UNIÃO QUÍMICA FARMACÊUTICA…)", "identifier": "UQFN14", "isin": "BRUQFNDBS045", "description": "Consulte dados de mercado da debênture UQFN14 emitida por UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A. (CNPJ: 60.665.981/0001-18). Indexador DI+, vencimento em 15/10/2026, rating AA, spread de 0.95%, duration de 0.00 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo UQFN14 é um título de crédito privado do tipo Debênture (comum) emitido por UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A. (CNPJ: 60.665.981/0001-18), com taxa de emissão de CDI + 1.90% a.a. e data de vencimento em 15/10/2026. O título encontra-se vencido, avaliado com rating AA em escala nacional (duration modificada de 0.00 anos) e spread indicativo de 0.95% sobre a NTN-B soberana, com volume emitido de R$ 600.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/uqfn14/", "category": "Debênture", "provider": {"@type": "Organization", "name": "UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A.", "taxID": "60.665.981/0001-18", "url": "https://www.uniaoquimica.com.br/"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">UQFN14</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo UQFN14 é um título de crédito privado do tipo Debênture (comum) emitido por UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A. (CNPJ: 60.665.981/0001-18), com taxa de emissão de CDI + 1.90% a.a. e data de vencimento em 15/10/2026. O título encontra-se vencido, avaliado com rating AA em escala nacional (duration modificada de 0.00 anos) e spread indicativo de 0.95% sobre a NTN-B soberana, com volume emitido de R$ 600.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -439,6 +715,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "UQFN14", "tipo": "Debênture", "issuer": "UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A.", "indexador": "DI+", "taxa_emissao": 1.9, "taxa_negocio_b3": 0.9376, "taxa_indicativa_anbima": 0.95, "taxa_mercado": null, "taxa_ativo": 0.95, "taxa_compra": "1,2821", "taxa_venda": "0,55", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "100.823", "data_ultimo_negocio": "2026-10-07", "data_anbima": "2026-10-14", "volume_negociado_b3": 34582.28, "volume_emissao": 600000000.0, "volume": 600000000.0, "quantidade_emitida": 600000.0, "quantidade": 600000.0, "data_emissao": "2021-10-15", "vencimento": "2026-10-15", "emissao": 4.0, "serie": 1.0, "isin": "BRUQFNDBS045", "lei": null, "cnpj_emissor": 60665981000118.0, "setor": "Indústria e Comércio", "agente_fiduciario": "VX PAVARINI DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA", "coordenador_lider": "BANCO BRADESCO BBI S/A", "rating": "AA- (bra)", "rating_original": "AA- (bra)", "rating_agencia": "Fitch Ratings", "agencia": "Fitch Ratings", "rating_data": "27/05/2026", "divulgacao": "27/05/2026", "securitizadora": null, "flag_vencido": 1, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Vencido", "duration": 0.0, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "-", "data_proximo_cupom": null, "vna": 93.75, "pu_par": 99.9924, "incentivada": "Não", "rating_normalizado": "AA-", "em_recuperacao_judicial": "Não", "fonte_precificacao": "ANBIMA Mercado (2026-10-14)", "spread_mercado": null, "spread_anbima": 0.0095, "spread": 0.0095, "pu_mercado_mediano": 100.823, "agio_desagio_pct": 0.83}, "prices": [{"date": "2026-05-29", "ticker": "UQFN14", "price": 95.84019, "clean_price": 95.84019, "yield": 0.9131, "fonte_yield": "ANBIMA", "spread_over_ref": 91.3}, {"date": "2026-06-01", "ticker": "UQFN14", "price": 95.891998, "clean_price": 95.891998, "yield": 0.921, "fonte_yield": "ANBIMA", "spread_over_ref": 92.1}, {"date": "2026-06-02", "ticker": "UQFN14", "price": 95.940098, "clean_price": 95.940098, "yield": 0.9396, "fonte_yield": "ANBIMA", "spread_over_ref": 94.0}, {"date": "2026-06-03", "ticker": "UQFN14", "price": 95.99714, "clean_price": 95.99714, "yield": 0.9332, "fonte_yield": "ANBIMA", "spread_over_ref": 93.3}, {"date": "2026-06-05", "ticker": "UQFN14", "price": 96.047114, "clean_price": 96.047114, "yield": 0.9471, "fonte_yield": "ANBIMA", "spread_over_ref": 94.7}, {"date": "2026-06-08", "ticker": "UQFN14", "price": 96.102273, "clean_price": 96.102273, "yield": 0.9463, "fonte_yield": "ANBIMA", "spread_over_ref": 94.6}, {"date": "2026-06-09", "ticker": "UQFN14", "price": 96.168857, "clean_price": 96.168857, "yield": 0.912, "fonte_yield": "ANBIMA", "spread_over_ref": 91.2}, {"date": "2026-06-10", "ticker": "UQFN14", "price": 96.227652, "clean_price": 96.227652, "yield": 0.9002, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-06-11", "ticker": "UQFN14", "price": 96.277897, "clean_price": 96.277897, "yield": 0.9139, "fonte_yield": "ANBIMA", "spread_over_ref": 91.4}, {"date": "2026-06-12", "ticker": "UQFN14", "price": 96.328766, "clean_price": 96.328766, "yield": 0.9261, "fonte_yield": "ANBIMA", "spread_over_ref": 92.6}, {"date": "2026-06-15", "ticker": "UQFN14", "price": 96.388621, "clean_price": 96.388621, "yield": 0.9111, "fonte_yield": "ANBIMA", "spread_over_ref": 91.1}, {"date": "2026-06-16", "ticker": "UQFN14", "price": 96.446916, "clean_price": 96.446916, "yield": 0.9007, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-06-17", "ticker": "UQFN14", "price": 96.495318, "clean_price": 96.495318, "yield": 0.9212, "fonte_yield": "ANBIMA", "spread_over_ref": 92.1}, {"date": "2026-06-18", "ticker": "UQFN14", "price": 96.550076, "clean_price": 96.550076, "yield": 0.9221, "fonte_yield": "ANBIMA", "spread_over_ref": 92.2}, {"date": "2026-06-19", "ticker": "UQFN14", "price": 96.607646, "clean_price": 96.607646, "yield": 0.9114, "fonte_yield": "ANBIMA", "spread_over_ref": 91.1}, {"date": "2026-06-22", "ticker": "UQFN14", "price": 96.665385, "clean_price": 96.665385, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-06-23", "ticker": "UQFN14", "price": 96.72003, "clean_price": 96.72003, "yield": 0.8986, "fonte_yield": "ANBIMA", "spread_over_ref": 89.9}, {"date": "2026-06-24", "ticker": "UQFN14", "price": 96.7743, "clean_price": 96.7743, "yield": 0.8985, "fonte_yield": "B3", "spread_over_ref": 89.8}, {"date": "2026-06-25", "ticker": "UQFN14", "price": 96.828131, "clean_price": 96.828131, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-06-26", "ticker": "UQFN14", "price": 96.882412, "clean_price": 96.882412, "yield": 0.9001, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-06-29", "ticker": "UQFN14", "price": 96.937012, "clean_price": 96.937012, "yield": 0.8992, "fonte_yield": "ANBIMA", "spread_over_ref": 89.9}, {"date": "2026-06-30", "ticker": "UQFN14", "price": 96.991151, "clean_price": 96.991151, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-01", "ticker": "UQFN14", "price": 97.045552, "clean_price": 97.045552, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-02", "ticker": "UQFN14", "price": 97.091622, "clean_price": 97.091622, "yield": 0.93, "fonte_yield": "ANBIMA", "spread_over_ref": 93.0}, {"date": "2026-07-03", "ticker": "UQFN14", "price": 97.142673, "clean_price": 97.142673, "yield": 0.9428, "fonte_yield": "ANBIMA", "spread_over_ref": 94.3}, {"date": "2026-07-06", "ticker": "UQFN14", "price": 97.199357, "clean_price": 97.199357, "yield": 0.9353, "fonte_yield": "ANBIMA", "spread_over_ref": 93.5}, {"date": "2026-07-07", "ticker": "UQFN14", "price": 97.258961, "clean_price": 97.258961, "yield": 0.9168, "fonte_yield": "ANBIMA", "spread_over_ref": 91.7}, {"date": "2026-07-08", "ticker": "UQFN14", "price": 97.3136, "clean_price": 97.3136, "yield": 0.9169, "fonte_yield": "B3", "spread_over_ref": 91.7}, {"date": "2026-07-09", "ticker": "UQFN14", "price": 97.372545, "clean_price": 97.372545, "yield": 0.9002, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-10", "ticker": "UQFN14", "price": 97.4272, "clean_price": 97.4272, "yield": 0.9002, "fonte_yield": "B3", "spread_over_ref": 90.0}, {"date": "2026-07-13", "ticker": "UQFN14", "price": 97.481858, "clean_price": 97.481858, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-14", "ticker": "UQFN14", "price": 97.536534, "clean_price": 97.536534, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-15", "ticker": "UQFN14", "price": 97.59124, "clean_price": 97.59124, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-16", "ticker": "UQFN14", "price": 97.645977, "clean_price": 97.645977, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-17", "ticker": "UQFN14", "price": 97.700745, "clean_price": 97.700745, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-20", "ticker": "UQFN14", "price": 97.755544, "clean_price": 97.755544, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-21", "ticker": "UQFN14", "price": 97.810374, "clean_price": 97.810374, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-22", "ticker": "UQFN14", "price": 97.865234, "clean_price": 97.865234, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-23", "ticker": "UQFN14", "price": 97.917155, "clean_price": 97.917155, "yield": 0.9133, "fonte_yield": "ANBIMA", "spread_over_ref": 91.3}, {"date": "2026-07-24", "ticker": "UQFN14", "price": 97.96701, "clean_price": 97.96701, "yield": 0.9366, "fonte_yield": "ANBIMA", "spread_over_ref": 93.7}, {"date": "2026-07-27", "ticker": "UQFN14", "price": 98.029136, "clean_price": 98.029136, "yield": 0.904, "fonte_yield": "ANBIMA", "spread_over_ref": 90.4}, {"date": "2026-07-28", "ticker": "UQFN14", "price": 98.084983, "clean_price": 98.084983, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-29", "ticker": "UQFN14", "price": 98.139872, "clean_price": 98.139872, "yield": 0.9006, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-07-30", "ticker": "UQFN14", "price": 98.195042, "clean_price": 98.195042, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-07-31", "ticker": "UQFN14", "price": 98.250118, "clean_price": 98.250118, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-03", "ticker": "UQFN14", "price": 98.305225, "clean_price": 98.305225, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-04", "ticker": "UQFN14", "price": 98.360363, "clean_price": 98.360363, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-05", "ticker": "UQFN14", "price": 98.415532, "clean_price": 98.415532, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-06", "ticker": "UQFN14", "price": 98.470731, "clean_price": 98.470731, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-07", "ticker": "UQFN14", "price": 98.525105, "clean_price": 98.525105, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-10", "ticker": "UQFN14", "price": 98.579507, "clean_price": 98.579507, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-11", "ticker": "UQFN14", "price": 98.633941, "clean_price": 98.633941, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-12", "ticker": "UQFN14", "price": 98.6884, "clean_price": 98.6884, "yield": 0.8999, "fonte_yield": "B3", "spread_over_ref": 90.0}, {"date": "2026-08-13", "ticker": "UQFN14", "price": 98.742897, "clean_price": 98.742897, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-14", "ticker": "UQFN14", "price": 98.797306, "clean_price": 98.797306, "yield": 0.9007, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-08-17", "ticker": "UQFN14", "price": 98.851973, "clean_price": 98.851973, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-18", "ticker": "UQFN14", "price": 98.906557, "clean_price": 98.906557, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-19", "ticker": "UQFN14", "price": 98.961169, "clean_price": 98.961169, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-20", "ticker": "UQFN14", "price": 99.015814, "clean_price": 99.015814, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-21", "ticker": "UQFN14", "price": 99.070488, "clean_price": 99.070488, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-24", "ticker": "UQFN14", "price": 99.125262, "clean_price": 99.125262, "yield": 0.8995, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-25", "ticker": "UQFN14", "price": 99.180158, "clean_price": 99.180158, "yield": 0.8983, "fonte_yield": "ANBIMA", "spread_over_ref": 89.8}, {"date": "2026-08-26", "ticker": "UQFN14", "price": 99.234691, "clean_price": 99.234691, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-27", "ticker": "UQFN14", "price": 99.289447, "clean_price": 99.289447, "yield": 0.9003, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-08-28", "ticker": "UQFN14", "price": 99.343623, "clean_price": 99.343623, "yield": 0.9055, "fonte_yield": "ANBIMA", "spread_over_ref": 90.5}, {"date": "2026-08-31", "ticker": "UQFN14", "price": 99.399069, "clean_price": 99.399069, "yield": 0.9008, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-09-01", "ticker": "UQFN14", "price": 99.454051, "clean_price": 99.454051, "yield": 0.9, "fonte_yield": "ANBIMA", "spread_over_ref": 90.0}, {"date": "2026-09-02", "ticker": "UQFN14", "price": 99.508661, "clean_price": 99.508661, "yield": 0.9027, "fonte_yield": "ANBIMA", "spread_over_ref": 90.3}, {"date": "2026-09-03", "ticker": "UQFN14", "price": 99.6186, "clean_price": 99.6186, "yield": 0.8988, "fonte_yield": "B3", "spread_over_ref": 89.9}, {"date": "2026-09-04", "ticker": "UQFN14", "price": 99.6189, "clean_price": 99.6189, "yield": 0.9002, "fonte_yield": "B3", "spread_over_ref": 90.0}, {"date": "2026-09-08", "ticker": "UQFN14", "price": 99.67, "clean_price": 99.67, "yield": 0.9383, "fonte_yield": "B3", "spread_over_ref": 93.8}, {"date": "2026-09-09", "ticker": "UQFN14", "price": 99.723867, "clean_price": 99.723867, "yield": 0.9517, "fonte_yield": "ANBIMA", "spread_over_ref": 95.2}, {"date": "2026-09-10", "ticker": "UQFN14", "price": 99.7791, "clean_price": 99.7791, "yield": 0.951, "fonte_yield": "B3", "spread_over_ref": 95.1}, {"date": "2026-09-11", "ticker": "UQFN14", "price": 99.834586, "clean_price": 99.834586, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-09-14", "ticker": "UQFN14", "price": 99.889908, "clean_price": 99.889908, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-09-15", "ticker": "UQFN14", "price": 99.945137, "clean_price": 99.945137, "yield": 0.9515, "fonte_yield": "ANBIMA", "spread_over_ref": 95.2}, {"date": "2026-09-16", "ticker": "UQFN14", "price": 100.000818, "clean_price": 100.000818, "yield": 0.9478, "fonte_yield": "ANBIMA", "spread_over_ref": 94.8}, {"date": "2026-09-17", "ticker": "UQFN14", "price": 100.0562, "clean_price": 100.0562, "yield": 0.9483, "fonte_yield": "B3", "spread_over_ref": 94.8}, {"date": "2026-09-18", "ticker": "UQFN14", "price": 100.110631, "clean_price": 100.110631, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-09-21", "ticker": "UQFN14", "price": 100.165716, "clean_price": 100.165716, "yield": 0.9428, "fonte_yield": "ANBIMA", "spread_over_ref": 94.3}, {"date": "2026-09-22", "ticker": "UQFN14", "price": 100.219867, "clean_price": 100.219867, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-09-23", "ticker": "UQFN14", "price": 100.274528, "clean_price": 100.274528, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-09-24", "ticker": "UQFN14", "price": 100.329165, "clean_price": 100.329165, "yield": 0.951, "fonte_yield": "ANBIMA", "spread_over_ref": 95.1}, {"date": "2026-09-25", "ticker": "UQFN14", "price": 100.383941, "clean_price": 100.383941, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-09-28", "ticker": "UQFN14", "price": 100.438694, "clean_price": 100.438694, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-09-29", "ticker": "UQFN14", "price": 100.493431, "clean_price": 100.493431, "yield": 0.951, "fonte_yield": "ANBIMA", "spread_over_ref": 95.1}, {"date": "2026-09-30", "ticker": "UQFN14", "price": 100.548285, "clean_price": 100.548285, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-10-01", "ticker": "UQFN14", "price": 100.603127, "clean_price": 100.603127, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-10-02", "ticker": "UQFN14", "price": 100.65783, "clean_price": 100.65783, "yield": 0.9553, "fonte_yield": "ANBIMA", "spread_over_ref": 95.5}, {"date": "2026-10-05", "ticker": "UQFN14", "price": 100.71393, "clean_price": 100.71393, "yield": 0.9128, "fonte_yield": "ANBIMA", "spread_over_ref": 91.3}, {"date": "2026-10-06", "ticker": "UQFN14", "price": 100.7687, "clean_price": 100.7687, "yield": 0.9135, "fonte_yield": "B3", "spread_over_ref": 91.3}, {"date": "2026-10-07", "ticker": "UQFN14", "price": 100.823, "clean_price": 100.823, "yield": 0.9376, "fonte_yield": "B3", "spread_over_ref": 93.8}, {"date": "2026-10-08", "ticker": "UQFN14", "price": 100.878041, "clean_price": 100.878041, "yield": 0.9336, "fonte_yield": "ANBIMA", "spread_over_ref": 93.4}, {"date": "2026-10-09", "ticker": "UQFN14", "price": 100.932802, "clean_price": 100.932802, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-10-13", "ticker": "UQFN14", "price": 100.987853, "clean_price": 100.987853, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-10-14", "ticker": "UQFN14", "price": 101.042934, "clean_price": 101.042934, "yield": 0.95, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}], "emitter": {"cnpj": "60665981000118", "cnpj_formatado": "60.665.981/0001-18", "razao_social": "UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A.", "nome_fantasia": "UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A.", "setor": "Farmacêutico e Higiene", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria B", "situacao_cvm": "ATIVO", "site_ri": "https://www.uniaoquimica.com.br/", "municipio": "EMBU-GUAÇU", "uf": "SP", "descricao": "UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A. é uma companhia aberta (Categoria B) com registro CVM na situação ATIVO, atuante no setor de Farmacêutico e Higiene."}, "raiox_cnpj": "60665981000118", "paymentEvents": [{"ticker": "UQFN14", "data_evento": "2026-10-15", "data_liquidacao": "2026-10-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo UQFN14 é um título de crédito privado do tipo Debênture (comum) emitido por UNIÃO QUÍMICA FARMACÊUTICA NACIONAL S.A. (CNPJ: 60.665.981/0001-18), com taxa de emissão de CDI + 1.90% a.a. e data de vencimento em 15/10/2026. O título encontra-se vencido, avaliado com rating AA em escala nacional (duration modificada de 0.00 anos) e spread indicativo de 0.95% sobre a NTN-B soberana, com volume emitido de R$ 600.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [], "relatedSector": [{"ticker": "SAJO12", "tipo": "Debênture", "issuer": "USINA SAO JOSE S/A", "vencimento": "2032-12-15"}, {"ticker": "BLAU16", "tipo": "Debênture", "issuer": "BLAU FARMACÊUTICA S.A.", "vencimento": "2028-09-25"}, {"ticker": "ECIR12", "tipo": "Debênture", "issuer": "ECONOMIA CIRCULAR PARTICIPAÇÕES S.A.", "vencimento": "2031-01-27"}], "issuerSlug": null, "sectorSlug": null}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

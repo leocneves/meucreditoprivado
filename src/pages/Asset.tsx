@@ -215,7 +215,6 @@ const AssetPage: React.FC = () => {
   const [prices, setPrices] = useState<PriceRecord[]>(initialPayload ? (initialPayload.prices || []) : []);
   const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>(initialPayload ? (initialPayload.paymentEvents || []) : []);
   const [documents, setDocuments] = useState<AssetDocument[]>(initialPayload ? (initialPayload.documents || []) : []);
-  const [aiSummary, setAiSummary] = useState<string | null>(initialPayload?.aiSummary || null);
   const [relatedIssuer, setRelatedIssuer] = useState<RelatedAssetItem[]>(initialPayload?.relatedIssuer || []);
   const [relatedSector, setRelatedSector] = useState<RelatedAssetItem[]>(initialPayload?.relatedSector || []);
   const [issuerSlug, setIssuerSlug] = useState<string | null>(initialPayload?.issuerSlug || null);
@@ -373,7 +372,6 @@ const AssetPage: React.FC = () => {
     setPrices(payload.prices || []);
     setEmitter(payload.emitter || null);
     setRaioxCnpj('raiox_cnpj' in payload ? (payload.raiox_cnpj || null) : null);
-    setAiSummary(payload.aiSummary || null);
     setRelatedIssuer(Array.isArray(payload.relatedIssuer) ? payload.relatedIssuer : []);
     setRelatedSector(Array.isArray(payload.relatedSector) ? payload.relatedSector : []);
     setIssuerSlug(payload.issuerSlug || null);
@@ -407,19 +405,46 @@ const AssetPage: React.FC = () => {
     ].filter(Boolean);
     document.title = `${tipoPrefix}${tickerStr}${issuerDisp ? ` (${issuerDisp})` : ''}${featParts.length ? ` — ${featParts.join(', ')}` : ''} | FIXDATA`;
 
-    const metaDesc = document.querySelector('meta[name="description"]');
     const spreadNum = found.spread !== undefined && found.spread !== null && !isNaN(Number(found.spread)) ? (Number(found.spread) * 100).toFixed(2) : null;
+    const summaryForGoogle =
+      payload.aiSummary ||
+      `O ativo ${tickerStr} é um título de crédito privado do tipo ${tipoStr} emitido por ${rawIssuerName || 'Emissor Privado'}${found.indexador && found.indexador !== '-' ? `, indexado a ${found.indexador}` : ''}${vctoStr ? `, com vencimento em ${vctoStr}` : ''}.${normR && normR !== 'Sem Rating' ? ` Rating normalizado: ${normR}.` : ''} Dados analíticos consolidados via FIXDATA (fixdatabrasil.com.br).`;
     const descText = payload.aiSummary
       ? payload.aiSummary.slice(0, 240)
       : `Consulte dados de mercado de ${tipoStr} ${tickerStr}${rawIssuerName ? ` emitido por ${rawIssuerName}` : ''}. Indexador ${found.indexador || '-'}, vencimento ${vctoStr || '-'}${normR && normR !== 'Sem Rating' ? `, rating ${normR}` : ''}${spreadNum ? `, spread de ${spreadNum}%` : ''}. Acompanhe taxas ANBIMA, negócios B3 e fluxo de pagamentos no FIXDATA.`;
+    const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute('content', descText);
     }
 
+    const canonicalUrl = `https://fixdatabrasil.com.br/asset/${canonicalTickerLower}/`;
     const metaCan = document.querySelector('link[rel="canonical"]');
     if (metaCan) {
-      metaCan.setAttribute('href', `https://fixdatabrasil.com.br/asset/${canonicalTickerLower}/`);
+      metaCan.setAttribute('href', canonicalUrl);
     }
+
+    let ldEl = document.getElementById('fixdata-asset-ldjson') as HTMLScriptElement | null;
+    if (!ldEl) {
+      ldEl = document.createElement('script');
+      ldEl.id = 'fixdata-asset-ldjson';
+      ldEl.type = 'application/ld+json';
+      document.head.appendChild(ldEl);
+    }
+    ldEl.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FinancialProduct',
+      name: `${tipoPrefix}${tickerStr}${rawIssuerName ? ` (${rawIssuerName})` : ''}`,
+      identifier: tickerStr,
+      ...(found.isin && found.isin !== '-' ? { isin: found.isin } : {}),
+      description: descText,
+      abstract: summaryForGoogle,
+      url: canonicalUrl,
+      category: tipoStr,
+      provider: {
+        '@type': 'Organization',
+        name: rawIssuerName || 'Emissor Privado',
+      },
+    });
   };
 
   useEffect(() => {
@@ -631,17 +656,10 @@ const AssetPage: React.FC = () => {
     : (asset.tipo || '').toUpperCase() === 'CRA'
     ? '/cra/'
     : '/';
-  const fallbackSummary =
-    `O ativo ${asset.ticker} é um título de crédito privado do tipo ${asset.tipo || 'Renda Fixa'} emitido por ${asset.issuer || 'Emissor Privado'}` +
-    `${taxaEmissaoFormatted ? `, com taxa de emissão de ${taxaEmissaoFormatted}` : ''}` +
-    `${asset.vencimento ? ` e vencimento em ${formatDatePretty(asset.vencimento)}` : ''}. ` +
-    `${normRating && normRating !== 'Sem Rating' ? `Rating normalizado: ${normRating}. ` : ''}` +
-    `Dados analíticos consolidados via FIXDATA (fixdatabrasil.com.br).`;
-  const effectiveAiSummary = aiSummary || fallbackSummary;
   const resolvedSectorSlug = sectorSlug || (asset.setor && !['Outros Serviços', 'Crédito Privado', '-'].includes(asset.setor) ? slugify(asset.setor) : null);
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="container mx-auto px-4 py-8 space-y-8 max-w-7xl">
 
       {/* BARRA DE NAVEGAÇÃO SUPERIOR & ABAS DO ATIVO */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-xs">
@@ -732,32 +750,6 @@ const AssetPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ================= SÍNTESE ANALÍTICA FIXDATA (GEO / SEO PRESERVADO NA HIDRATAÇÃO) ================= */}
-      <section className="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">
-              Síntese Analítica FIXDATA
-            </span>
-            <span className="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial de Mercado</span>
-          </div>
-          <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500">
-            <a href={categoryHubHref} className="text-blue-600 hover:underline">
-              {asset.tipo === 'Debênture' ? 'Todas as Debêntures' : asset.tipo === 'CRI' ? 'Todos os CRIs' : asset.tipo === 'CRA' ? 'Todos os CRAs' : 'Mercado'}
-            </a>
-            {issuerSlug && (
-              <>
-                <span className="text-slate-300">•</span>
-                <a href={`/emissor/${issuerSlug}/`} className="text-blue-600 hover:underline">
-                  Títulos do Emissor
-                </a>
-              </>
-            )}
-          </div>
-        </div>
-        <p className="font-normal text-slate-700">{effectiveAiSummary}</p>
-      </section>
-
       {/* ================= HERO CARD PRINCIPAL DO ATIVO ================= */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -770,7 +762,13 @@ const AssetPage: React.FC = () => {
               {asset.ticker}
             </h1>
             <p className="text-lg sm:text-xl font-semibold text-slate-600 mt-1">
-              {asset.issuer || 'Emissor Privado'}
+              {issuerSlug ? (
+                <a href={`/emissor/${issuerSlug}/`} className="hover:text-blue-600 transition-colors">
+                  {asset.issuer || 'Emissor Privado'}
+                </a>
+              ) : (
+                asset.issuer || 'Emissor Privado'
+              )}
             </p>
           </div>
 

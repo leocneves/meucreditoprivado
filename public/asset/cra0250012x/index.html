@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "CRAs", "item": "https://fixdatabrasil.com.br/cra/"}, {"@type": "ListItem", "position": 3, "name": "CRA0250012X", "item": "https://fixdatabrasil.com.br/asset/cra0250012x/"}]}, {"@type": "FinancialProduct", "name": "CRA0250012X (FS FLORESTAL S.A.)", "identifier": "CRA0250012X", "isin": "BRECOACRAII6", "description": "Consulte dados de mercado do CRA0250012X (CRA emitido por FS FLORESTAL S.A. (CNPJ: 47.242.860/0001-03)). Indexador Pré, vencimento em 15/03/2030, rating AA, spread de 4.79%, duration de 2.52 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo CRA0250012X é um título de crédito privado do tipo CRA (incentivado (isenção fiscal Lei 12.431/11)) emitido por FS FLORESTAL S.A. (CNPJ: 47.242.860/0001-03), com taxa de emissão de 17.86% a.a. Pré e data de vencimento em 15/03/2030. O título encontra-se ativo, avaliado com rating AA em escala nacional (duration modificada de 2.52 anos) e spread indicativo de 4.79% sobre a NTN-B soberana, com volume emitido de R$ 345.573.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/cra0250012x/", "category": "CRA", "provider": {"@type": "Organization", "name": "FS FLORESTAL S.A.", "taxID": "47.242.860/0001-03"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/cra/" class="hover:underline">CRAs</a> &gt;
           <span class="text-slate-800 font-bold">CRA0250012X</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo CRA0250012X é um título de crédito privado do tipo CRA (incentivado (isenção fiscal Lei 12.431/11)) emitido por FS FLORESTAL S.A. (CNPJ: 47.242.860/0001-03), com taxa de emissão de 17.86% a.a. Pré e data de vencimento em 15/03/2030. O título encontra-se ativo, avaliado com rating AA em escala nacional (duration modificada de 2.52 anos) e spread indicativo de 4.79% sobre a NTN-B soberana, com volume emitido de R$ 345.573.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/03/2030</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 3,3 anos (1206 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 3,3 anos (1205 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/agropecuaria/" class="font-semibold text-blue-300 hover:underline">Agropecuária</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">VÓRTX DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA.</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">XP Investimentos Corretora de Câmbio, Títulos e Valores Mobiliários S.A., BTG Pactual Investment Banking Ltda. e Banco Santander (Brasil) S.A.</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">3,3 anos (1206 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">3,3 anos (1205 dias corridos)</p></div>
           </div>
         </div>
 
@@ -535,6 +811,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "CRA0250012X", "tipo": "CRA", "issuer": "FS FLORESTAL S.A.", "indexador": "Pré", "taxa_emissao": 17.8565, "taxa_negocio_b3": 20.5925, "taxa_indicativa_anbima": 20.0241, "taxa_mercado": 20.5558, "taxa_ativo": 20.5558, "taxa_compra": "20,4369", "taxa_venda": "19,2947", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "947.2091", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 319209.46, "volume_emissao": 345573000.0, "volume": 345573000.0, "quantidade_emitida": 345573.0, "quantidade": 345573.0, "data_emissao": "2025-03-15", "vencimento": "2030-03-15", "emissao": 384.0, "serie": 1.0, "isin": "BRECOACRAII6", "lei": 12.431, "cnpj_emissor": 47242860000103.0, "setor": "Agropecuária", "agente_fiduciario": "VÓRTX DISTRIBUIDORA DE TÍTULOS E VALORES MOBILIÁRIOS LTDA.", "coordenador_lider": "XP Investimentos Corretora de Câmbio, Títulos e Valores Mobiliários S.A., BTG Pactual Investment Banking Ltda. e Banco Santander (Brasil) S.A.", "rating": "AA-sf(bra)", "rating_original": "AA-sf(bra)", "rating_agencia": "Fitch Ratings", "agencia": "Fitch Ratings", "rating_data": "07/05/2026", "divulgacao": "07/05/2026", "securitizadora": "Ecoagro", "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 2.52, "ntnb_referencia": "DI Futuro 2.5y", "taxa_ntnb": 15.048128, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "Mensal", "data_proximo_cupom": "2026-12-15", "vna": 1000.0, "pu_par": 1003.2899, "incentivada": "Sim", "rating_normalizado": "AA-SF", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.0478727650396884, "spread_anbima": 0.0432512209151287, "spread": 0.0478727650396884, "pu_mercado_mediano": 947.4601, "agio_desagio_pct": -5.56}, "prices": [{"date": "2026-05-29", "ticker": "CRA0250012X", "price": 1023.6152, "clean_price": 1023.6152, "yield": 17.1917, "fonte_yield": "B3", "spread_over_ref": 291.3}, {"date": "2026-06-01", "ticker": "CRA0250012X", "price": 1013.8726, "clean_price": 1013.8726, "yield": 17.6203, "fonte_yield": "B3", "spread_over_ref": 316.4}, {"date": "2026-06-02", "ticker": "CRA0250012X", "price": 996.8972, "clean_price": 996.8972, "yield": 18.3297, "fonte_yield": "B3", "spread_over_ref": 372.3}, {"date": "2026-06-03", "ticker": "CRA0250012X", "price": 979.203, "clean_price": 979.203, "yield": 19.1426, "fonte_yield": "B3", "spread_over_ref": 409.6}, {"date": "2026-06-05", "ticker": "CRA0250012X", "price": 1022.5411, "clean_price": 1022.5411, "yield": 17.334, "fonte_yield": "B3", "spread_over_ref": 225.6}, {"date": "2026-06-08", "ticker": "CRA0250012X", "price": 1002.9627, "clean_price": 1002.9627, "yield": 18.1681, "fonte_yield": "B3", "spread_over_ref": 281.1}, {"date": "2026-06-09", "ticker": "CRA0250012X", "price": 1021.8404, "clean_price": 1021.8404, "yield": 17.4198, "fonte_yield": "B3", "spread_over_ref": 211.4}, {"date": "2026-06-10", "ticker": "CRA0250012X", "price": 991.1057, "clean_price": 991.1057, "yield": 18.7373, "fonte_yield": "B3", "spread_over_ref": 325.6}, {"date": "2026-06-11", "ticker": "CRA0250012X", "price": 977.6206, "clean_price": 977.6206, "yield": 19.3329, "fonte_yield": "B3", "spread_over_ref": 413.5}, {"date": "2026-06-12", "ticker": "CRA0250012X", "price": 954.955, "clean_price": 954.955, "yield": 20.2912, "fonte_yield": "B3", "spread_over_ref": 506.8}, {"date": "2026-06-15", "ticker": "CRA0250012X", "price": 1023.7545, "clean_price": 1023.7545, "yield": 16.9158, "fonte_yield": "B3", "spread_over_ref": 223.0}, {"date": "2026-06-16", "ticker": "CRA0250012X", "price": 1008.8509, "clean_price": 1008.8509, "yield": 17.557, "fonte_yield": "B3", "spread_over_ref": 272.3}, {"date": "2026-06-17", "ticker": "CRA0250012X", "price": 1004.0661, "clean_price": 1004.0661, "yield": 17.7533, "fonte_yield": "B3", "spread_over_ref": 273.5}, {"date": "2026-06-18", "ticker": "CRA0250012X", "price": 992.9856, "clean_price": 992.9856, "yield": 18.2627, "fonte_yield": "B3", "spread_over_ref": 296.1}, {"date": "2026-06-19", "ticker": "CRA0250012X", "price": 978.4659, "clean_price": 978.4659, "yield": 18.9858, "fonte_yield": "B3", "spread_over_ref": 349.4}, {"date": "2026-06-22", "ticker": "CRA0250012X", "price": 945.4663, "clean_price": 945.4663, "yield": 20.6482, "fonte_yield": "B3", "spread_over_ref": 509.3}, {"date": "2026-06-23", "ticker": "CRA0250012X", "price": 996.6127, "clean_price": 996.6127, "yield": 18.1718, "fonte_yield": "B3", "spread_over_ref": 304.2}, {"date": "2026-06-24", "ticker": "CRA0250012X", "price": 1006.07013701, "clean_price": 1006.07013701, "yield": 17.7933, "fonte_yield": "ANBIMA", "spread_over_ref": 295.7}, {"date": "2026-06-25", "ticker": "CRA0250012X", "price": 1007.61267172, "clean_price": 1007.61267172, "yield": 17.7558, "fonte_yield": "ANBIMA", "spread_over_ref": 295.6}, {"date": "2026-06-26", "ticker": "CRA0250012X", "price": 1008.94197458, "clean_price": 1008.94197458, "yield": 17.7273, "fonte_yield": "ANBIMA", "spread_over_ref": 301.6}, {"date": "2026-06-29", "ticker": "CRA0250012X", "price": 1008.67203855, "clean_price": 1008.67203855, "yield": 17.7663, "fonte_yield": "ANBIMA", "spread_over_ref": 308.7}, {"date": "2026-06-30", "ticker": "CRA0250012X", "price": 1011.37301802, "clean_price": 1011.37301802, "yield": 17.6799, "fonte_yield": "ANBIMA", "spread_over_ref": 313.3}, {"date": "2026-07-01", "ticker": "CRA0250012X", "price": 1012.04793208, "clean_price": 1012.04793208, "yield": 17.679, "fonte_yield": "ANBIMA", "spread_over_ref": 296.5}, {"date": "2026-07-02", "ticker": "CRA0250012X", "price": 1013.38673515, "clean_price": 1013.38673515, "yield": 17.6501, "fonte_yield": "ANBIMA", "spread_over_ref": 280.3}, {"date": "2026-07-03", "ticker": "CRA0250012X", "price": 1013.24511583, "clean_price": 1013.24511583, "yield": 17.6837, "fonte_yield": "ANBIMA", "spread_over_ref": 295.5}, {"date": "2026-07-06", "ticker": "CRA0250012X", "price": 1015.46227084, "clean_price": 1015.46227084, "yield": 17.6177, "fonte_yield": "ANBIMA", "spread_over_ref": 296.7}, {"date": "2026-07-07", "ticker": "CRA0250012X", "price": 1016.57828268, "clean_price": 1016.57828268, "yield": 17.5982, "fonte_yield": "ANBIMA", "spread_over_ref": 286.6}, {"date": "2026-07-08", "ticker": "CRA0250012X", "price": 1016.07326418, "clean_price": 1016.07326418, "yield": 17.6472, "fonte_yield": "ANBIMA", "spread_over_ref": 285.1}, {"date": "2026-07-09", "ticker": "CRA0250012X", "price": 1015.88149599, "clean_price": 1015.88149599, "yield": 17.6831, "fonte_yield": "ANBIMA", "spread_over_ref": 298.8}, {"date": "2026-07-10", "ticker": "CRA0250012X", "price": 1018.57506953, "clean_price": 1018.57506953, "yield": 17.5968, "fonte_yield": "ANBIMA", "spread_over_ref": 310.4}, {"date": "2026-07-13", "ticker": "CRA0250012X", "price": 1021.66800572, "clean_price": 1021.66800572, "yield": 17.4938, "fonte_yield": "ANBIMA", "spread_over_ref": 285.6}, {"date": "2026-07-14", "ticker": "CRA0250012X", "price": 1024.07491749, "clean_price": 1024.07491749, "yield": 17.4199, "fonte_yield": "ANBIMA", "spread_over_ref": 292.7}, {"date": "2026-07-15", "ticker": "CRA0250012X", "price": 1010.98147087, "clean_price": 1010.98147087, "yield": 17.3904, "fonte_yield": "ANBIMA", "spread_over_ref": 291.1}, {"date": "2026-07-16", "ticker": "CRA0250012X", "price": 988.1599, "clean_price": 988.1599, "yield": 18.4114, "fonte_yield": "B3", "spread_over_ref": 373.5}, {"date": "2026-07-17", "ticker": "CRA0250012X", "price": 1014.3813, "clean_price": 1014.3813, "yield": 17.3333, "fonte_yield": "B3", "spread_over_ref": 258.8}, {"date": "2026-07-20", "ticker": "CRA0250012X", "price": 984.951, "clean_price": 984.951, "yield": 18.5992, "fonte_yield": "B3", "spread_over_ref": 364.4}, {"date": "2026-07-21", "ticker": "CRA0250012X", "price": 987.9199, "clean_price": 987.9199, "yield": 18.5183, "fonte_yield": "B3", "spread_over_ref": 355.4}, {"date": "2026-07-22", "ticker": "CRA0250012X", "price": 996.4033, "clean_price": 996.4033, "yield": 18.1708, "fonte_yield": "B3", "spread_over_ref": 316.5}, {"date": "2026-07-23", "ticker": "CRA0250012X", "price": 980.6186, "clean_price": 980.6186, "yield": 18.9222, "fonte_yield": "B3", "spread_over_ref": 366.2}, {"date": "2026-07-24", "ticker": "CRA0250012X", "price": 949.3896, "clean_price": 949.3896, "yield": 20.3746, "fonte_yield": "B3", "spread_over_ref": 512.9}, {"date": "2026-07-27", "ticker": "CRA0250012X", "price": 943.4223, "clean_price": 943.4223, "yield": 20.726, "fonte_yield": "B3", "spread_over_ref": 552.6}, {"date": "2026-07-28", "ticker": "CRA0250012X", "price": 978.3592, "clean_price": 978.3592, "yield": 19.203, "fonte_yield": "B3", "spread_over_ref": 430.4}, {"date": "2026-07-29", "ticker": "CRA0250012X", "price": 1004.8874, "clean_price": 1004.8874, "yield": 18.0319, "fonte_yield": "B3", "spread_over_ref": 330.3}, {"date": "2026-07-30", "ticker": "CRA0250012X", "price": 912.8724, "clean_price": 912.8724, "yield": 22.6517, "fonte_yield": "B3", "spread_over_ref": 741.3}, {"date": "2026-07-31", "ticker": "CRA0250012X", "price": 965.2332, "clean_price": 965.2332, "yield": 20.0684, "fonte_yield": "B3", "spread_over_ref": 517.7}, {"date": "2026-08-03", "ticker": "CRA0250012X", "price": 1008.9112, "clean_price": 1008.9112, "yield": 17.863, "fonte_yield": "B3", "spread_over_ref": 336.2}, {"date": "2026-08-04", "ticker": "CRA0250012X", "price": 999.8483, "clean_price": 999.8483, "yield": 18.2938, "fonte_yield": "B3", "spread_over_ref": 368.2}, {"date": "2026-08-05", "ticker": "CRA0250012X", "price": 997.8188, "clean_price": 997.8188, "yield": 18.5597, "fonte_yield": "B3", "spread_over_ref": 394.2}, {"date": "2026-08-06", "ticker": "CRA0250012X", "price": 1012.13956747, "clean_price": 1012.13956747, "yield": 17.7849, "fonte_yield": "ANBIMA", "spread_over_ref": 317.1}, {"date": "2026-08-07", "ticker": "CRA0250012X", "price": 990.0155, "clean_price": 990.0155, "yield": 18.8272, "fonte_yield": "B3", "spread_over_ref": 415.0}, {"date": "2026-08-10", "ticker": "CRA0250012X", "price": 994.4129, "clean_price": 994.4129, "yield": 18.6255, "fonte_yield": "B3", "spread_over_ref": 391.4}, {"date": "2026-08-11", "ticker": "CRA0250012X", "price": 1000.7388, "clean_price": 1000.7388, "yield": 18.3735, "fonte_yield": "B3", "spread_over_ref": 359.7}, {"date": "2026-08-12", "ticker": "CRA0250012X", "price": 997.0939, "clean_price": 997.0939, "yield": 18.5761, "fonte_yield": "B3", "spread_over_ref": 375.1}, {"date": "2026-08-13", "ticker": "CRA0250012X", "price": 1015.5585, "clean_price": 1015.5585, "yield": 17.7867, "fonte_yield": "B3", "spread_over_ref": 302.7}, {"date": "2026-08-14", "ticker": "CRA0250012X", "price": 990.6646, "clean_price": 990.6646, "yield": 18.8761, "fonte_yield": "B3", "spread_over_ref": 386.2}, {"date": "2026-08-17", "ticker": "CRA0250012X", "price": 986.8216, "clean_price": 986.8216, "yield": 18.4442, "fonte_yield": "B3", "spread_over_ref": 352.3}, {"date": "2026-08-18", "ticker": "CRA0250012X", "price": 979.2974, "clean_price": 979.2974, "yield": 18.815, "fonte_yield": "B3", "spread_over_ref": 385.5}, {"date": "2026-08-19", "ticker": "CRA0250012X", "price": 991.7275, "clean_price": 991.7275, "yield": 18.2855, "fonte_yield": "B3", "spread_over_ref": 349.5}, {"date": "2026-08-20", "ticker": "CRA0250012X", "price": 987.4247, "clean_price": 987.4247, "yield": 18.5138, "fonte_yield": "B3", "spread_over_ref": 364.1}, {"date": "2026-08-21", "ticker": "CRA0250012X", "price": 990.9953, "clean_price": 990.9953, "yield": 18.3802, "fonte_yield": "B3", "spread_over_ref": 365.0}, {"date": "2026-08-24", "ticker": "CRA0250012X", "price": 985.2689, "clean_price": 985.2689, "yield": 18.665, "fonte_yield": "B3", "spread_over_ref": 387.1}, {"date": "2026-08-25", "ticker": "CRA0250012X", "price": 993.605, "clean_price": 993.605, "yield": 18.3186, "fonte_yield": "B3", "spread_over_ref": 363.7}, {"date": "2026-08-26", "ticker": "CRA0250012X", "price": 992.8537, "clean_price": 992.8537, "yield": 18.3948, "fonte_yield": "B3", "spread_over_ref": 368.3}, {"date": "2026-08-27", "ticker": "CRA0250012X", "price": 993.1327, "clean_price": 993.1327, "yield": 18.4226, "fonte_yield": "B3", "spread_over_ref": 374.0}, {"date": "2026-08-28", "ticker": "CRA0250012X", "price": 1003.2426, "clean_price": 1003.2426, "yield": 17.9814, "fonte_yield": "B3", "spread_over_ref": 326.9}, {"date": "2026-08-31", "ticker": "CRA0250012X", "price": 987.3515, "clean_price": 987.3515, "yield": 18.7237, "fonte_yield": "B3", "spread_over_ref": 388.9}, {"date": "2026-09-01", "ticker": "CRA0250012X", "price": 981.6236, "clean_price": 981.6236, "yield": 19.0096, "fonte_yield": "B3", "spread_over_ref": 421.1}, {"date": "2026-09-02", "ticker": "CRA0250012X", "price": 1007.4788, "clean_price": 1007.4788, "yield": 17.898, "fonte_yield": "B3", "spread_over_ref": 336.9}, {"date": "2026-09-03", "ticker": "CRA0250012X", "price": 992.7088, "clean_price": 992.7088, "yield": 18.589, "fonte_yield": "B3", "spread_over_ref": 405.8}, {"date": "2026-09-04", "ticker": "CRA0250012X", "price": 985.5028, "clean_price": 985.5028, "yield": 18.939, "fonte_yield": "B3", "spread_over_ref": 439.3}, {"date": "2026-09-08", "ticker": "CRA0250012X", "price": 1002.5816, "clean_price": 1002.5816, "yield": 18.2233, "fonte_yield": "B3", "spread_over_ref": 390.8}, {"date": "2026-09-09", "ticker": "CRA0250012X", "price": 996.9673, "clean_price": 996.9673, "yield": 18.4843, "fonte_yield": "B3", "spread_over_ref": 398.8}, {"date": "2026-09-10", "ticker": "CRA0250012X", "price": 1005.6474, "clean_price": 1005.6474, "yield": 18.1201, "fonte_yield": "B3", "spread_over_ref": 369.9}, {"date": "2026-09-11", "ticker": "CRA0250012X", "price": 1018.5663, "clean_price": 1018.5663, "yield": 17.5801, "fonte_yield": "B3", "spread_over_ref": 321.6}, {"date": "2026-09-14", "ticker": "CRA0250012X", "price": 1020.9114, "clean_price": 1020.9114, "yield": 17.4592, "fonte_yield": "B3", "spread_over_ref": 308.3}, {"date": "2026-09-15", "ticker": "CRA0250012X", "price": 980.0343, "clean_price": 980.0343, "yield": 18.765, "fonte_yield": "B3", "spread_over_ref": 417.2}, {"date": "2026-09-16", "ticker": "CRA0250012X", "price": 993.3487, "clean_price": 993.3487, "yield": 18.195, "fonte_yield": "B3", "spread_over_ref": 369.8}, {"date": "2026-09-17", "ticker": "CRA0250012X", "price": 989.079, "clean_price": 989.079, "yield": 18.4217, "fonte_yield": "B3", "spread_over_ref": 394.7}, {"date": "2026-09-18", "ticker": "CRA0250012X", "price": 993.8762, "clean_price": 993.8762, "yield": 18.242, "fonte_yield": "B3", "spread_over_ref": 379.8}, {"date": "2026-09-21", "ticker": "CRA0250012X", "price": 979.3363, "clean_price": 979.3363, "yield": 18.9427, "fonte_yield": "B3", "spread_over_ref": 451.9}, {"date": "2026-09-22", "ticker": "CRA0250012X", "price": 1017.5441, "clean_price": 1017.5441, "yield": 17.2572, "fonte_yield": "B3", "spread_over_ref": 307.6}, {"date": "2026-09-23", "ticker": "CRA0250012X", "price": 983.1433, "clean_price": 983.1433, "yield": 18.8095, "fonte_yield": "B3", "spread_over_ref": 432.9}, {"date": "2026-09-24", "ticker": "CRA0250012X", "price": 991.5931, "clean_price": 991.5931, "yield": 18.4539, "fonte_yield": "B3", "spread_over_ref": 395.1}, {"date": "2026-09-25", "ticker": "CRA0250012X", "price": 975.2735, "clean_price": 975.2735, "yield": 19.2268, "fonte_yield": "B3", "spread_over_ref": 467.9}, {"date": "2026-09-28", "ticker": "CRA0250012X", "price": 990.2373, "clean_price": 990.2373, "yield": 18.595, "fonte_yield": "B3", "spread_over_ref": 403.5}, {"date": "2026-09-29", "ticker": "CRA0250012X", "price": 1000.2807, "clean_price": 1000.2807, "yield": 18.1462, "fonte_yield": "B3", "spread_over_ref": 373.4}, {"date": "2026-09-30", "ticker": "CRA0250012X", "price": 979.5879, "clean_price": 979.5879, "yield": 19.1599, "fonte_yield": "B3", "spread_over_ref": 465.1}, {"date": "2026-10-01", "ticker": "CRA0250012X", "price": 986.6123, "clean_price": 986.6123, "yield": 18.8294, "fonte_yield": "B3", "spread_over_ref": 430.3}, {"date": "2026-10-02", "ticker": "CRA0250012X", "price": 997.7461, "clean_price": 997.7461, "yield": 18.3518, "fonte_yield": "B3", "spread_over_ref": 394.2}, {"date": "2026-10-05", "ticker": "CRA0250012X", "price": 1009.5621, "clean_price": 1009.5621, "yield": 17.8458, "fonte_yield": "B3", "spread_over_ref": 461.1}, {"date": "2026-10-06", "ticker": "CRA0250012X", "price": 1000.7701, "clean_price": 1000.7701, "yield": 18.2828, "fonte_yield": "B3", "spread_over_ref": 510.2}, {"date": "2026-10-07", "ticker": "CRA0250012X", "price": 1004.3011, "clean_price": 1004.3011, "yield": 18.1572, "fonte_yield": "B3", "spread_over_ref": 500.2}, {"date": "2026-10-08", "ticker": "CRA0250012X", "price": 1020.3247, "clean_price": 1020.3247, "yield": 17.4489, "fonte_yield": "B3", "spread_over_ref": 447.6}, {"date": "2026-10-09", "ticker": "CRA0250012X", "price": 1013.4716, "clean_price": 1013.4716, "yield": 17.7907, "fonte_yield": "B3", "spread_over_ref": 488.6}, {"date": "2026-10-13", "ticker": "CRA0250012X", "price": 1013.7133, "clean_price": 1013.7133, "yield": 17.814, "fonte_yield": "B3", "spread_over_ref": 468.8}, {"date": "2026-10-14", "ticker": "CRA0250012X", "price": 1009.3513, "clean_price": 1009.3513, "yield": 18.0424, "fonte_yield": "B3", "spread_over_ref": 488.6}, {"date": "2026-10-15", "ticker": "CRA0250012X", "price": 996.9081, "clean_price": 996.9081, "yield": 18.0138, "fonte_yield": "B3", "spread_over_ref": 468.4}, {"date": "2026-10-16", "ticker": "CRA0250012X", "price": 998.3634, "clean_price": 998.3634, "yield": 17.9816, "fonte_yield": "B3", "spread_over_ref": 457.9}, {"date": "2026-10-19", "ticker": "CRA0250012X", "price": 1007.556, "clean_price": 1007.556, "yield": 17.5948, "fonte_yield": "B3", "spread_over_ref": 423.9}, {"date": "2026-10-20", "ticker": "CRA0250012X", "price": 1010.7648, "clean_price": 1010.7648, "yield": 17.4749, "fonte_yield": "B3", "spread_over_ref": 426.8}, {"date": "2026-10-21", "ticker": "CRA0250012X", "price": 1007.4755, "clean_price": 1007.4755, "yield": 17.6646, "fonte_yield": "B3", "spread_over_ref": 445.2}, {"date": "2026-10-22", "ticker": "CRA0250012X", "price": 1011.9386, "clean_price": 1011.9386, "yield": 17.4722, "fonte_yield": "B3", "spread_over_ref": 419.4}, {"date": "2026-10-23", "ticker": "CRA0250012X", "price": 1018.5153, "clean_price": 1018.5153, "yield": 17.2056, "fonte_yield": "B3", "spread_over_ref": 398.0}, {"date": "2026-10-26", "ticker": "CRA0250012X", "price": 963.0868, "clean_price": 963.0868, "yield": 19.8058, "fonte_yield": "B3", "spread_over_ref": 387.3}, {"date": "2026-10-27", "ticker": "CRA0250012X", "price": 986.6124, "clean_price": 986.6124, "yield": 18.7353, "fonte_yield": "B3", "spread_over_ref": 334.8}, {"date": "2026-10-28", "ticker": "CRA0250012X", "price": 977.7571, "clean_price": 977.7571, "yield": 19.1839, "fonte_yield": "B3", "spread_over_ref": 364.4}, {"date": "2026-10-29", "ticker": "CRA0250012X", "price": 963.5277, "clean_price": 963.5277, "yield": 19.9003, "fonte_yield": "B3", "spread_over_ref": 425.4}, {"date": "2026-10-30", "ticker": "CRA0250012X", "price": 965.105, "clean_price": 965.105, "yield": 19.8501, "fonte_yield": "B3", "spread_over_ref": 407.8}, {"date": "2026-11-03", "ticker": "CRA0250012X", "price": 960.9837, "clean_price": 960.9837, "yield": 20.0947, "fonte_yield": "B3", "spread_over_ref": 413.2}, {"date": "2026-11-04", "ticker": "CRA0250012X", "price": 968.7646, "clean_price": 968.7646, "yield": 19.7506, "fonte_yield": "B3", "spread_over_ref": 412.5}, {"date": "2026-11-05", "ticker": "CRA0250012X", "price": 971.8961, "clean_price": 971.8961, "yield": 19.632, "fonte_yield": "B3", "spread_over_ref": 411.5}, {"date": "2026-11-06", "ticker": "CRA0250012X", "price": 970.1899, "clean_price": 970.1899, "yield": 19.7374, "fonte_yield": "B3", "spread_over_ref": 425.2}, {"date": "2026-11-09", "ticker": "CRA0250012X", "price": 965.6232, "clean_price": 965.6232, "yield": 19.9993, "fonte_yield": "B3", "spread_over_ref": 454.7}, {"date": "2026-11-10", "ticker": "CRA0250012X", "price": 985.8989, "clean_price": 985.8989, "yield": 19.0558, "fonte_yield": "B3", "spread_over_ref": 369.0}, {"date": "2026-11-11", "ticker": "CRA0250012X", "price": 981.0765, "clean_price": 981.0765, "yield": 19.306, "fonte_yield": "B3", "spread_over_ref": 396.3}, {"date": "2026-11-12", "ticker": "CRA0250012X", "price": 969.8777, "clean_price": 969.8777, "yield": 19.8964, "fonte_yield": "B3", "spread_over_ref": 429.4}, {"date": "2026-11-13", "ticker": "CRA0250012X", "price": 980.4131, "clean_price": 980.4131, "yield": 19.4083, "fonte_yield": "B3", "spread_over_ref": 394.4}, {"date": "2026-11-16", "ticker": "CRA0250012X", "price": 951.1933, "clean_price": 951.1933, "yield": 20.1962, "fonte_yield": "B3", "spread_over_ref": 433.5}, {"date": "2026-11-17", "ticker": "CRA0250012X", "price": 970.5841, "clean_price": 970.5841, "yield": 19.2869, "fonte_yield": "B3", "spread_over_ref": 372.4}, {"date": "2026-11-18", "ticker": "CRA0250012X", "price": 944.526, "clean_price": 944.526, "yield": 20.6088, "fonte_yield": "B3", "spread_over_ref": 477.1}, {"date": "2026-11-19", "ticker": "CRA0250012X", "price": 944.1816, "clean_price": 944.1816, "yield": 20.6593, "fonte_yield": "B3", "spread_over_ref": 449.1}, {"date": "2026-11-23", "ticker": "CRA0250012X", "price": 955.7394, "clean_price": 955.7394, "yield": 20.118, "fonte_yield": "B3", "spread_over_ref": 421.6}, {"date": "2026-11-24", "ticker": "CRA0250012X", "price": 947.2091, "clean_price": 947.2091, "yield": 20.5925, "fonte_yield": "B3", "spread_over_ref": 481.9}], "emitter": {"cnpj": "47242860000103", "cnpj_formatado": "47.242.860/0001-03", "razao_social": "FS FLORESTAL S.A.", "nome_fantasia": "FS FLORESTAL S.A.", "setor": "Agropecuária", "tipo_emissor": "Devedor (CRI/CRA)", "categoria_cvm": "Devedor (CRI/CRA)", "situacao_cvm": "Ativo", "site_ri": null, "municipio": null, "uf": null, "descricao": "FS FLORESTAL S.A. é empresa devedora de lastro em títulos de crédito privado (CRI/CRA) no mercado de capitais."}, "raiox_cnpj": null, "paymentEvents": [{"ticker": "CRA0250012X", "data_evento": "2025-04-15", "data_liquidacao": "2025-04-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Liquidado", "flag_status": "Total", "fonte": "Agente IA - Gemini"}, {"ticker": "CRA0250012X", "data_evento": "2026-12-15", "data_liquidacao": "2026-12-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "CRA0250012X", "data_evento": "2030-03-15", "data_liquidacao": "2030-03-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Agente IA - Gemini"}, {"ticker": "CRA0250012X", "data_evento": "2030-03-15", "data_liquidacao": "2030-03-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Agente IA - Gemini"}], "documents": [{"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-11-05 14:40", "data_referencia": "2026-11-05", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1369899"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-10-22 18:27", "data_referencia": "2026-10-30 11:45", "categoria_documento": "Assembleia", "tipo_documento": "AGO/E", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1356804"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-09-18 10:15", "data_referencia": "2026-10-08 14:30", "categoria_documento": "Assembleia", "tipo_documento": "AGO/E", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1323543"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-08-06 17:23", "data_referencia": "2026-08-06", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1278841"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-07-30 17:33", "data_referencia": "06/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1270555"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-07-27 16:26", "data_referencia": "2026-07-20", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1265059"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-06-30 16:53", "data_referencia": "2026-03-31", "categoria_documento": "Informes Periódicos", "tipo_documento": "Demonstrações Financeiras", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1235040"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-06-30 10:43", "data_referencia": "05/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1233747"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-05-29 16:06", "data_referencia": "04/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1207584"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-05-20 14:37", "data_referencia": "2026-05-20", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agente Fiduciário", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1200028"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-05-08 16:49", "data_referencia": "2026-05-07", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1183239"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-04-30 23:00", "data_referencia": "03/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1178601"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-04-30 21:31", "data_referencia": "2026-04-30", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agente Fiduciário", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1178501"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-03-30 14:50", "data_referencia": "02/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1147926"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-02-26 17:03", "data_referencia": "01/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1122378"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-01-30 18:10", "data_referencia": "2026-01-30", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1098108"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2026-01-30 15:21", "data_referencia": "12/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1097493"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-12-29 00:13", "data_referencia": "11/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1071422"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-12-01 01:09", "data_referencia": "10/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1051003"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-11-07 16:55", "data_referencia": "2025-11-06", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1030494"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-10-30 15:24", "data_referencia": "09/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1024460"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-09-30 18:26", "data_referencia": "08/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1003128"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-08-28 11:43", "data_referencia": "07/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=979176"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-08-11 19:30", "data_referencia": "2025-08-11", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=965092"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-07-30 17:31", "data_referencia": "06/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=956500"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-06-30 00:05", "data_referencia": "05/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=934756"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-06-09 18:06", "data_referencia": "2025-06-06", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=920264"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-05-30 16:18", "data_referencia": "04/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=914712"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-05-07 14:54", "data_referencia": "2025-03-31", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=896025"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-04-30 21:08", "data_referencia": "2025-03-25", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agência de Rating", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=892482"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-04-25 15:01", "data_referencia": "03/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRA", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=884841"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-03-31 18:35", "data_referencia": "2025-03-31", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Anúncio de Encerramento de Distribuição Pública", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=869499"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-03-25 23:52", "data_referencia": "2025-03-25", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Anúncio de Início de Distribuição Pública", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=864439"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-03-25 23:51", "data_referencia": "2025-03-25", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Prospecto de Distribuição Pública", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=864438"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-03-25 14:01", "data_referencia": "2025-03-25", "categoria_documento": "Aditamento de Termo de Securitização", "tipo_documento": null, "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=863985"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-03-25 14:00", "data_referencia": "2025-02-26", "categoria_documento": "Aditamento de Termo de Securitização", "tipo_documento": null, "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=863977"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-03-24 20:49", "data_referencia": "2025-03-24", "categoria_documento": "Comunicado ao Mercado", "tipo_documento": "Outros Comunicados Não Considerados Fatos Relevantes ", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=863779"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-02-28 18:42", "data_referencia": "2025-02-28", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Prospecto de Distribuição Pública", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=851409"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-02-28 18:41", "data_referencia": "2025-02-28", "categoria_documento": "Comunicado ao Mercado", "tipo_documento": "Outros Comunicados Não Considerados Fatos Relevantes ", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=851405"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-02-28 18:40", "data_referencia": "2025-02-28", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Lâmina de Oferta de Securitização", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=851402"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-02-26 14:38", "data_referencia": "2025-02-25", "categoria_documento": "Termo de Securitização", "tipo_documento": null, "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=847877"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-02-26 14:37", "data_referencia": "2025-02-26", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Prospecto de Distribuição Pública", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=847874"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-02-26 14:36", "data_referencia": "2025-02-26", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Lâmina de Oferta de Securitização", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=847870"}, {"ticker": "CRA0250012X", "isin": "BRECOACRAII6", "data_entrega": "2025-02-26 14:35", "data_referencia": "2025-02-26", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Aviso ao Mercado", "securitizadora": "Eco Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=847868"}], "aiSummary": "O ativo CRA0250012X é um título de crédito privado do tipo CRA (incentivado (isenção fiscal Lei 12.431/11)) emitido por FS FLORESTAL S.A. (CNPJ: 47.242.860/0001-03), com taxa de emissão de 17.86% a.a. Pré e data de vencimento em 15/03/2030. O título encontra-se ativo, avaliado com rating AA em escala nacional (duration modificada de 2.52 anos) e spread indicativo de 4.79% sobre a NTN-B soberana, com volume emitido de R$ 345.573.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "CRA0240066D", "tipo": "CRA", "issuer": "FS FLORESTAL S.A.", "vencimento": "2030-06-15"}, {"ticker": "CRA0250012Y", "tipo": "CRA", "issuer": "FS FLORESTAL S.A.", "vencimento": "2031-03-17"}, {"ticker": "CRA0240066E", "tipo": "CRA", "issuer": "FS FLORESTAL S.A.", "vencimento": "2031-11-21"}, {"ticker": "CRA02200CI2", "tipo": "CRA", "issuer": "FS FLORESTAL S.A.", "vencimento": "2030-06-15"}], "relatedSector": [{"ticker": "CRA0220073P", "tipo": "CRA", "issuer": "MINERVA S/A", "vencimento": "2029-07-16"}, {"ticker": "CRA0240066A", "tipo": "CRA", "issuer": "CAMIL ALIMENTOS S/A", "vencimento": "2029-06-15"}, {"ticker": "CRA025007PT", "tipo": "CRA", "issuer": "SLC AGRICOLA SA", "vencimento": "2033-09-22"}, {"ticker": "CRA02500669", "tipo": "CRA", "issuer": "BRF S.A.", "vencimento": "2029-07-16"}], "issuerSlug": "fs-florestal-s-a", "sectorSlug": "agropecuaria"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

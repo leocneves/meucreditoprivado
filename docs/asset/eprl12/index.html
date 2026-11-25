@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "EPRL12", "item": "https://fixdatabrasil.com.br/asset/eprl12/"}]}, {"@type": "FinancialProduct", "name": "Debênture EPRL12 (EPR LITORAL PIONEIRO S.A.)", "identifier": "EPRL12", "isin": "BREPRLDBS065", "description": "Consulte dados de mercado da debênture EPRL12 emitida por EPR LITORAL PIONEIRO S.A. (CNPJ: 51.137.031/0001-20). Indexador IPCA, vencimento em 15/03/2049, spread de 2.08%, duration de 8.37 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo EPRL12 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por EPR LITORAL PIONEIRO S.A. (CNPJ: 51.137.031/0001-20), com taxa de emissão de IPCA + 8.20% a.a. e data de vencimento em 15/03/2049. O título encontra-se ativo (duration modificada de 8.37 anos) e spread indicativo de 2.08% sobre a NTN-B soberana, com volume emitido de R$ 450.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/eprl12/", "category": "Debênture", "provider": {"@type": "Organization", "name": "EPR LITORAL PIONEIRO S.A.", "taxID": "51.137.031/0001-20", "url": "https://eprlpioneiro.com.br/"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">EPRL12</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo EPRL12 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por EPR LITORAL PIONEIRO S.A. (CNPJ: 51.137.031/0001-20), com taxa de emissão de IPCA + 8.20% a.a. e data de vencimento em 15/03/2049. O título encontra-se ativo (duration modificada de 8.37 anos) e spread indicativo de 2.08% sobre a NTN-B soberana, com volume emitido de R$ 450.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/03/2049</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 22,3 anos (8146 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 22,3 anos (8145 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/transporte-e-logistica/" class="font-semibold text-blue-300 hover:underline">Transporte e Logística</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">OLIVEIRA TRUST DTVM S/A</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO BRADESCO BBI S/A</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">22,3 anos (8146 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">22,3 anos (8145 dias corridos)</p></div>
           </div>
         </div>
 
@@ -567,6 +843,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "EPRL12", "tipo": "Debênture", "issuer": "EPR LITORAL PIONEIRO S.A.", "indexador": "IPCA", "taxa_emissao": 8.203, "taxa_negocio_b3": 9.9247, "taxa_indicativa_anbima": 9.7634, "taxa_mercado": 9.9003, "taxa_ativo": 9.9003, "taxa_compra": "10,0393", "taxa_venda": "9,3532", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "928.1058", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 957805.15, "volume_emissao": 450000000.0, "volume": 450000000.0, "quantidade_emitida": 450000.0, "quantidade": 450000.0, "data_emissao": "2025-09-15", "vencimento": "2049-03-15", "emissao": 2.0, "serie": 1.0, "isin": "BREPRLDBS065", "lei": 12.431, "cnpj_emissor": 51137031000120.0, "setor": "Transporte e Logística", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "BANCO BRADESCO BBI S/A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 8.37, "ntnb_referencia": "15/08/2040", "taxa_ntnb": 7.66, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-03-15", "vna": 1047.7675, "pu_par": 1063.2881, "incentivada": "Sim", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.0208090284228124, "spread_anbima": 0.019537432658369, "spread": 0.0208090284228124, "pu_mercado_mediano": 929.653, "agio_desagio_pct": -12.57}, "prices": [{"date": "2026-05-29", "ticker": "EPRL12", "price": 1020.677827, "clean_price": 1020.677827, "yield": 8.556, "fonte_yield": "ANBIMA", "spread_over_ref": 102.1}, {"date": "2026-06-01", "ticker": "EPRL12", "price": 1021.265, "clean_price": 1021.265, "yield": 8.5561, "fonte_yield": "B3", "spread_over_ref": 97.1}, {"date": "2026-06-02", "ticker": "EPRL12", "price": 1014.449813, "clean_price": 1014.449813, "yield": 8.6448, "fonte_yield": "ANBIMA", "spread_over_ref": 100.9}, {"date": "2026-06-03", "ticker": "EPRL12", "price": 1004.459334, "clean_price": 1004.459334, "yield": 8.7735, "fonte_yield": "ANBIMA", "spread_over_ref": 102.1}, {"date": "2026-06-05", "ticker": "EPRL12", "price": 999.3139, "clean_price": 999.3139, "yield": 8.8484, "fonte_yield": "B3", "spread_over_ref": 92.6}, {"date": "2026-06-08", "ticker": "EPRL12", "price": 994.0856, "clean_price": 994.0856, "yield": 8.9165, "fonte_yield": "B3", "spread_over_ref": 93.7}, {"date": "2026-06-09", "ticker": "EPRL12", "price": 991.8235, "clean_price": 991.8235, "yield": 8.9584, "fonte_yield": "B3", "spread_over_ref": 98.3}, {"date": "2026-06-10", "ticker": "EPRL12", "price": 994.766305, "clean_price": 994.766305, "yield": 8.9226, "fonte_yield": "ANBIMA", "spread_over_ref": 100.8}, {"date": "2026-06-11", "ticker": "EPRL12", "price": 1015.311448, "clean_price": 1015.311448, "yield": 8.677, "fonte_yield": "ANBIMA", "spread_over_ref": 103.2}, {"date": "2026-06-12", "ticker": "EPRL12", "price": 1022.732159, "clean_price": 1022.732159, "yield": 8.604, "fonte_yield": "ANBIMA", "spread_over_ref": 101.3}, {"date": "2026-06-15", "ticker": "EPRL12", "price": 1020.680828, "clean_price": 1020.680828, "yield": 8.6362, "fonte_yield": "ANBIMA", "spread_over_ref": 100.5}, {"date": "2026-06-16", "ticker": "EPRL12", "price": 1016.767136, "clean_price": 1016.767136, "yield": 8.6894, "fonte_yield": "ANBIMA", "spread_over_ref": 98.2}, {"date": "2026-06-17", "ticker": "EPRL12", "price": 1007.969022, "clean_price": 1007.969022, "yield": 8.8028, "fonte_yield": "ANBIMA", "spread_over_ref": 99.5}, {"date": "2026-06-18", "ticker": "EPRL12", "price": 1008.4621, "clean_price": 1008.4621, "yield": 8.8028, "fonte_yield": "B3", "spread_over_ref": 97.3}, {"date": "2026-06-19", "ticker": "EPRL12", "price": 1001.863666, "clean_price": 1001.863666, "yield": 8.8905, "fonte_yield": "ANBIMA", "spread_over_ref": 98.7}, {"date": "2026-06-22", "ticker": "EPRL12", "price": 1004.96758, "clean_price": 1004.96758, "yield": 8.8581, "fonte_yield": "ANBIMA", "spread_over_ref": 98.5}, {"date": "2026-06-23", "ticker": "EPRL12", "price": 1002.046979, "clean_price": 1002.046979, "yield": 8.9005, "fonte_yield": "ANBIMA", "spread_over_ref": 99.7}, {"date": "2026-06-24", "ticker": "EPRL12", "price": 1004.817568, "clean_price": 1004.817568, "yield": 8.8722, "fonte_yield": "ANBIMA", "spread_over_ref": 99.5}, {"date": "2026-06-25", "ticker": "EPRL12", "price": 1006.731956, "clean_price": 1006.731956, "yield": 8.8546, "fonte_yield": "ANBIMA", "spread_over_ref": 100.6}, {"date": "2026-06-26", "ticker": "EPRL12", "price": 1007.4333, "clean_price": 1007.4333, "yield": 8.8546, "fonte_yield": "B3", "spread_over_ref": 93.9}, {"date": "2026-06-29", "ticker": "EPRL12", "price": 1003.007051, "clean_price": 1003.007051, "yield": 8.9126, "fonte_yield": "ANBIMA", "spread_over_ref": 98.5}, {"date": "2026-06-30", "ticker": "EPRL12", "price": 1003.1605, "clean_price": 1003.1605, "yield": 8.9168, "fonte_yield": "ANBIMA", "spread_over_ref": 98.6}, {"date": "2026-07-01", "ticker": "EPRL12", "price": 996.416784, "clean_price": 996.416784, "yield": 9.0076, "fonte_yield": "ANBIMA", "spread_over_ref": 99.0}, {"date": "2026-07-02", "ticker": "EPRL12", "price": 993.991604, "clean_price": 993.991604, "yield": 9.0445, "fonte_yield": "ANBIMA", "spread_over_ref": 99.4}, {"date": "2026-07-03", "ticker": "EPRL12", "price": 1002.91951, "clean_price": 1002.91951, "yield": 8.9382, "fonte_yield": "ANBIMA", "spread_over_ref": 99.3}, {"date": "2026-07-06", "ticker": "EPRL12", "price": 1006.045825, "clean_price": 1006.045825, "yield": 8.9053, "fonte_yield": "ANBIMA", "spread_over_ref": 100.2}, {"date": "2026-07-07", "ticker": "EPRL12", "price": 1011.493957, "clean_price": 1011.493957, "yield": 8.8438, "fonte_yield": "ANBIMA", "spread_over_ref": 98.3}, {"date": "2026-07-08", "ticker": "EPRL12", "price": 1011.9919, "clean_price": 1011.9919, "yield": 8.8438, "fonte_yield": "B3", "spread_over_ref": 97.6}, {"date": "2026-07-09", "ticker": "EPRL12", "price": 1013.190261, "clean_price": 1013.190261, "yield": 8.835, "fonte_yield": "ANBIMA", "spread_over_ref": 98.5}, {"date": "2026-07-10", "ticker": "EPRL12", "price": 1015.801111, "clean_price": 1015.801111, "yield": 8.7906, "fonte_yield": "ANBIMA", "spread_over_ref": 116.3}, {"date": "2026-07-13", "ticker": "EPRL12", "price": 1015.946149, "clean_price": 1015.946149, "yield": 8.7939, "fonte_yield": "ANBIMA", "spread_over_ref": 97.0}, {"date": "2026-07-14", "ticker": "EPRL12", "price": 1019.106848, "clean_price": 1019.106848, "yield": 8.7602, "fonte_yield": "ANBIMA", "spread_over_ref": 98.3}, {"date": "2026-07-15", "ticker": "EPRL12", "price": 1015.335812, "clean_price": 1015.335812, "yield": 8.8116, "fonte_yield": "ANBIMA", "spread_over_ref": 102.6}, {"date": "2026-07-16", "ticker": "EPRL12", "price": 1015.826259, "clean_price": 1015.826259, "yield": 8.811, "fonte_yield": "ANBIMA", "spread_over_ref": 102.5}, {"date": "2026-07-17", "ticker": "EPRL12", "price": 1010.517565, "clean_price": 1010.517565, "yield": 8.8822, "fonte_yield": "ANBIMA", "spread_over_ref": 104.4}, {"date": "2026-07-20", "ticker": "EPRL12", "price": 1010.9598, "clean_price": 1010.9598, "yield": 8.8822, "fonte_yield": "B3", "spread_over_ref": 102.6}, {"date": "2026-07-21", "ticker": "EPRL12", "price": 1009.9749, "clean_price": 1009.9749, "yield": 8.9, "fonte_yield": "B3", "spread_over_ref": 98.6}, {"date": "2026-07-22", "ticker": "EPRL12", "price": 1001.150844, "clean_price": 1001.150844, "yield": 9.0164, "fonte_yield": "ANBIMA", "spread_over_ref": 104.3}, {"date": "2026-07-23", "ticker": "EPRL12", "price": 1001.104355, "clean_price": 1001.104355, "yield": 9.0226, "fonte_yield": "ANBIMA", "spread_over_ref": 103.9}, {"date": "2026-07-24", "ticker": "EPRL12", "price": 1007.51205, "clean_price": 1007.51205, "yield": 8.9474, "fonte_yield": "ANBIMA", "spread_over_ref": 101.5}, {"date": "2026-07-27", "ticker": "EPRL12", "price": 1006.538356, "clean_price": 1006.538356, "yield": 8.9652, "fonte_yield": "ANBIMA", "spread_over_ref": 102.3}, {"date": "2026-07-28", "ticker": "EPRL12", "price": 1002.008717, "clean_price": 1002.008717, "yield": 9.028, "fonte_yield": "ANBIMA", "spread_over_ref": 126.1}, {"date": "2026-07-29", "ticker": "EPRL12", "price": 1002.4526, "clean_price": 1002.4526, "yield": 9.0181, "fonte_yield": "B3", "spread_over_ref": 94.0}, {"date": "2026-07-30", "ticker": "EPRL12", "price": 1000.924823, "clean_price": 1000.924823, "yield": 9.0421, "fonte_yield": "ANBIMA", "spread_over_ref": 114.7}, {"date": "2026-07-31", "ticker": "EPRL12", "price": 1008.656844, "clean_price": 1008.656844, "yield": 8.949, "fonte_yield": "ANBIMA", "spread_over_ref": 102.6}, {"date": "2026-08-03", "ticker": "EPRL12", "price": 1012.958584, "clean_price": 1012.958584, "yield": 8.8997, "fonte_yield": "ANBIMA", "spread_over_ref": 103.4}, {"date": "2026-08-04", "ticker": "EPRL12", "price": 1013.3234, "clean_price": 1013.3234, "yield": 8.8997, "fonte_yield": "B3", "spread_over_ref": 103.6}, {"date": "2026-08-05", "ticker": "EPRL12", "price": 1013.512105, "clean_price": 1013.512105, "yield": 8.9019, "fonte_yield": "ANBIMA", "spread_over_ref": 103.9}, {"date": "2026-08-06", "ticker": "EPRL12", "price": 1011.192999, "clean_price": 1011.192999, "yield": 8.9355, "fonte_yield": "ANBIMA", "spread_over_ref": 104.2}, {"date": "2026-08-07", "ticker": "EPRL12", "price": 1014.578699, "clean_price": 1014.578699, "yield": 8.8977, "fonte_yield": "ANBIMA", "spread_over_ref": 104.6}, {"date": "2026-08-10", "ticker": "EPRL12", "price": 1014.551677, "clean_price": 1014.551677, "yield": 8.9026, "fonte_yield": "ANBIMA", "spread_over_ref": 101.3}, {"date": "2026-08-11", "ticker": "EPRL12", "price": 1016.519538, "clean_price": 1016.519538, "yield": 8.8847, "fonte_yield": "ANBIMA", "spread_over_ref": 117.3}, {"date": "2026-08-12", "ticker": "EPRL12", "price": 1016.9929, "clean_price": 1016.9929, "yield": 8.8834, "fonte_yield": "B3", "spread_over_ref": 101.6}, {"date": "2026-08-13", "ticker": "EPRL12", "price": 1016.354644, "clean_price": 1016.354644, "yield": 8.8961, "fonte_yield": "ANBIMA", "spread_over_ref": 101.7}, {"date": "2026-08-14", "ticker": "EPRL12", "price": 1015.481293, "clean_price": 1015.481293, "yield": 8.9117, "fonte_yield": "ANBIMA", "spread_over_ref": 103.2}, {"date": "2026-08-17", "ticker": "EPRL12", "price": 1020.541275, "clean_price": 1020.541275, "yield": 8.8533, "fonte_yield": "ANBIMA", "spread_over_ref": 104.3}, {"date": "2026-08-18", "ticker": "EPRL12", "price": 1050.5558, "clean_price": 1050.5558, "yield": 8.4955, "fonte_yield": "B3", "spread_over_ref": 70.8}, {"date": "2026-08-19", "ticker": "EPRL12", "price": 1025.637414, "clean_price": 1025.637414, "yield": 8.7962, "fonte_yield": "ANBIMA", "spread_over_ref": 103.7}, {"date": "2026-08-20", "ticker": "EPRL12", "price": 1029.186474, "clean_price": 1029.186474, "yield": 8.7555, "fonte_yield": "ANBIMA", "spread_over_ref": 103.2}, {"date": "2026-08-21", "ticker": "EPRL12", "price": 1028.091267, "clean_price": 1028.091267, "yield": 8.7719, "fonte_yield": "ANBIMA", "spread_over_ref": 105.6}, {"date": "2026-08-24", "ticker": "EPRL12", "price": 1028.3314, "clean_price": 1028.3314, "yield": 8.7719, "fonte_yield": "B3", "spread_over_ref": 104.9}, {"date": "2026-08-25", "ticker": "EPRL12", "price": 1028.132876, "clean_price": 1028.132876, "yield": 8.7773, "fonte_yield": "ANBIMA", "spread_over_ref": 108.5}, {"date": "2026-08-26", "ticker": "EPRL12", "price": 1027.537424, "clean_price": 1027.537424, "yield": 8.7876, "fonte_yield": "ANBIMA", "spread_over_ref": 109.4}, {"date": "2026-08-27", "ticker": "EPRL12", "price": 1030.364871, "clean_price": 1030.364871, "yield": 8.7517, "fonte_yield": "ANBIMA", "spread_over_ref": 108.9}, {"date": "2026-08-28", "ticker": "EPRL12", "price": 1028.369342, "clean_price": 1028.369342, "yield": 8.7787, "fonte_yield": "ANBIMA", "spread_over_ref": 107.9}, {"date": "2026-08-31", "ticker": "EPRL12", "price": 1025.793085, "clean_price": 1025.793085, "yield": 8.813, "fonte_yield": "ANBIMA", "spread_over_ref": 108.0}, {"date": "2026-09-01", "ticker": "EPRL12", "price": 1029.774009, "clean_price": 1029.774009, "yield": 8.7663, "fonte_yield": "ANBIMA", "spread_over_ref": 105.6}, {"date": "2026-09-02", "ticker": "EPRL12", "price": 1029.973, "clean_price": 1029.973, "yield": 8.7663, "fonte_yield": "B3", "spread_over_ref": 112.4}, {"date": "2026-09-03", "ticker": "EPRL12", "price": 1028.2086, "clean_price": 1028.2086, "yield": 8.793, "fonte_yield": "B3", "spread_over_ref": 122.1}, {"date": "2026-09-04", "ticker": "EPRL12", "price": 1041.7208, "clean_price": 1041.7208, "yield": 8.6301, "fonte_yield": "B3", "spread_over_ref": 108.2}, {"date": "2026-09-08", "ticker": "EPRL12", "price": 1041.9622, "clean_price": 1041.9622, "yield": 8.6274, "fonte_yield": "B3", "spread_over_ref": 114.1}, {"date": "2026-09-09", "ticker": "EPRL12", "price": 1045.8663, "clean_price": 1045.8663, "yield": 8.5824, "fonte_yield": "B3", "spread_over_ref": 105.6}, {"date": "2026-09-10", "ticker": "EPRL12", "price": 1049.607477, "clean_price": 1049.607477, "yield": 8.5398, "fonte_yield": "ANBIMA", "spread_over_ref": 106.8}, {"date": "2026-09-11", "ticker": "EPRL12", "price": 1050.266803, "clean_price": 1050.266803, "yield": 8.5297, "fonte_yield": "ANBIMA", "spread_over_ref": 107.9}, {"date": "2026-09-14", "ticker": "EPRL12", "price": 1043.856738, "clean_price": 1043.856738, "yield": 8.6089, "fonte_yield": "ANBIMA", "spread_over_ref": 111.6}, {"date": "2026-09-15", "ticker": "EPRL12", "price": 996.740571, "clean_price": 996.740571, "yield": 8.677, "fonte_yield": "ANBIMA", "spread_over_ref": 113.8}, {"date": "2026-09-16", "ticker": "EPRL12", "price": 997.900564, "clean_price": 997.900564, "yield": 8.6701, "fonte_yield": "ANBIMA", "spread_over_ref": 115.5}, {"date": "2026-09-17", "ticker": "EPRL12", "price": 998.4954, "clean_price": 998.4954, "yield": 8.6701, "fonte_yield": "B3", "spread_over_ref": 118.3}, {"date": "2026-09-18", "ticker": "EPRL12", "price": 997.239145, "clean_price": 997.239145, "yield": 8.6927, "fonte_yield": "ANBIMA", "spread_over_ref": 117.3}, {"date": "2026-09-21", "ticker": "EPRL12", "price": 997.098501, "clean_price": 997.098501, "yield": 8.7017, "fonte_yield": "ANBIMA", "spread_over_ref": 119.3}, {"date": "2026-09-22", "ticker": "EPRL12", "price": 993.296239, "clean_price": 993.296239, "yield": 8.7557, "fonte_yield": "ANBIMA", "spread_over_ref": 126.0}, {"date": "2026-09-23", "ticker": "EPRL12", "price": 995.093818, "clean_price": 995.093818, "yield": 8.7409, "fonte_yield": "ANBIMA", "spread_over_ref": 124.4}, {"date": "2026-09-24", "ticker": "EPRL12", "price": 994.0851, "clean_price": 994.0851, "yield": 8.768, "fonte_yield": "B3", "spread_over_ref": 127.1}, {"date": "2026-09-25", "ticker": "EPRL12", "price": 995.7084, "clean_price": 995.7084, "yield": 8.748, "fonte_yield": "B3", "spread_over_ref": 125.8}, {"date": "2026-09-28", "ticker": "EPRL12", "price": 987.523064, "clean_price": 987.523064, "yield": 8.8652, "fonte_yield": "ANBIMA", "spread_over_ref": 136.4}, {"date": "2026-09-29", "ticker": "EPRL12", "price": 1012.5805, "clean_price": 1012.5805, "yield": 8.5667, "fonte_yield": "B3", "spread_over_ref": 115.8}, {"date": "2026-09-30", "ticker": "EPRL12", "price": 979.7129, "clean_price": 979.7129, "yield": 8.9887, "fonte_yield": "B3", "spread_over_ref": 152.3}, {"date": "2026-10-01", "ticker": "EPRL12", "price": 1002.3775, "clean_price": 1002.3775, "yield": 8.7149, "fonte_yield": "B3", "spread_over_ref": 124.9}, {"date": "2026-10-02", "ticker": "EPRL12", "price": 1006.676573, "clean_price": 1006.676573, "yield": 8.6625, "fonte_yield": "ANBIMA", "spread_over_ref": 129.7}, {"date": "2026-10-05", "ticker": "EPRL12", "price": 1042.924919, "clean_price": 1042.924919, "yield": 8.2423, "fonte_yield": "ANBIMA", "spread_over_ref": 133.8}, {"date": "2026-10-06", "ticker": "EPRL12", "price": 1043.5334, "clean_price": 1043.5334, "yield": 8.2432, "fonte_yield": "B3", "spread_over_ref": 138.9}, {"date": "2026-10-07", "ticker": "EPRL12", "price": 1051.762097, "clean_price": 1051.762097, "yield": 8.157, "fonte_yield": "ANBIMA", "spread_over_ref": 131.8}, {"date": "2026-10-08", "ticker": "EPRL12", "price": 1058.917813, "clean_price": 1058.917813, "yield": 8.0839, "fonte_yield": "ANBIMA", "spread_over_ref": 132.9}, {"date": "2026-10-09", "ticker": "EPRL12", "price": 1063.514503, "clean_price": 1063.514503, "yield": 8.0502, "fonte_yield": "ANBIMA", "spread_over_ref": 135.1}, {"date": "2026-10-13", "ticker": "EPRL12", "price": 1051.989414, "clean_price": 1051.989414, "yield": 8.1886, "fonte_yield": "ANBIMA", "spread_over_ref": 143.5}, {"date": "2026-10-14", "ticker": "EPRL12", "price": 1052.7273, "clean_price": 1052.7273, "yield": 8.1886, "fonte_yield": "B3", "spread_over_ref": 137.4}, {"date": "2026-10-15", "ticker": "EPRL12", "price": 1048.601, "clean_price": 1048.601, "yield": 8.2442, "fonte_yield": "B3", "spread_over_ref": 136.1}, {"date": "2026-10-16", "ticker": "EPRL12", "price": 1034.477964, "clean_price": 1034.477964, "yield": 8.4133, "fonte_yield": "ANBIMA", "spread_over_ref": 148.5}, {"date": "2026-10-19", "ticker": "EPRL12", "price": 1002.7581, "clean_price": 1002.7581, "yield": 8.806, "fonte_yield": "B3", "spread_over_ref": 185.0}, {"date": "2026-10-20", "ticker": "EPRL12", "price": 1028.138413, "clean_price": 1028.138413, "yield": 8.499, "fonte_yield": "ANBIMA", "spread_over_ref": 160.7}, {"date": "2026-10-21", "ticker": "EPRL12", "price": 1003.6877, "clean_price": 1003.6877, "yield": 8.806, "fonte_yield": "B3", "spread_over_ref": 195.6}, {"date": "2026-10-22", "ticker": "EPRL12", "price": 1023.2475, "clean_price": 1023.2475, "yield": 8.5739, "fonte_yield": "B3", "spread_over_ref": 179.9}, {"date": "2026-10-23", "ticker": "EPRL12", "price": 1045.008543, "clean_price": 1045.008543, "yield": 8.3177, "fonte_yield": "ANBIMA", "spread_over_ref": 165.6}, {"date": "2026-10-26", "ticker": "EPRL12", "price": 942.367437, "clean_price": 942.367437, "yield": 9.6123, "fonte_yield": "ANBIMA", "spread_over_ref": 154.8}, {"date": "2026-10-27", "ticker": "EPRL12", "price": 982.54438, "clean_price": 982.54438, "yield": 9.0864, "fonte_yield": "ANBIMA", "spread_over_ref": 138.5}, {"date": "2026-10-28", "ticker": "EPRL12", "price": 983.2376, "clean_price": 983.2376, "yield": 9.0847, "fonte_yield": "B3", "spread_over_ref": 135.2}, {"date": "2026-10-29", "ticker": "EPRL12", "price": 973.062035, "clean_price": 973.062035, "yield": 9.2201, "fonte_yield": "ANBIMA", "spread_over_ref": 144.9}, {"date": "2026-10-30", "ticker": "EPRL12", "price": 956.5521, "clean_price": 956.5521, "yield": 9.4481, "fonte_yield": "B3", "spread_over_ref": 161.9}, {"date": "2026-11-03", "ticker": "EPRL12", "price": 957.6121, "clean_price": 957.6121, "yield": 9.4365, "fonte_yield": "B3", "spread_over_ref": 156.3}, {"date": "2026-11-04", "ticker": "EPRL12", "price": 972.298472, "clean_price": 972.298472, "yield": 9.2472, "fonte_yield": "ANBIMA", "spread_over_ref": 146.8}, {"date": "2026-11-05", "ticker": "EPRL12", "price": 972.737, "clean_price": 972.737, "yield": 9.2472, "fonte_yield": "B3", "spread_over_ref": 148.8}, {"date": "2026-11-06", "ticker": "EPRL12", "price": 967.584263, "clean_price": 967.584263, "yield": 9.3206, "fonte_yield": "ANBIMA", "spread_over_ref": 163.5}, {"date": "2026-11-09", "ticker": "EPRL12", "price": 971.490621, "clean_price": 971.490621, "yield": 9.275, "fonte_yield": "ANBIMA", "spread_over_ref": 163.2}, {"date": "2026-11-10", "ticker": "EPRL12", "price": 969.2363, "clean_price": 969.2363, "yield": 9.3104, "fonte_yield": "B3", "spread_over_ref": 163.9}, {"date": "2026-11-11", "ticker": "EPRL12", "price": 970.457929, "clean_price": 970.457929, "yield": 9.3001, "fonte_yield": "ANBIMA", "spread_over_ref": 166.8}, {"date": "2026-11-12", "ticker": "EPRL12", "price": 956.623653, "clean_price": 956.623653, "yield": 9.482, "fonte_yield": "ANBIMA", "spread_over_ref": 176.8}, {"date": "2026-11-13", "ticker": "EPRL12", "price": 957.0313, "clean_price": 957.0313, "yield": 9.482, "fonte_yield": "B3", "spread_over_ref": 178.7}, {"date": "2026-11-16", "ticker": "EPRL12", "price": 947.380141, "clean_price": 947.380141, "yield": 9.6187, "fonte_yield": "ANBIMA", "spread_over_ref": 184.8}, {"date": "2026-11-17", "ticker": "EPRL12", "price": 949.856431, "clean_price": 949.856431, "yield": 9.592, "fonte_yield": "ANBIMA", "spread_over_ref": 189.5}, {"date": "2026-11-18", "ticker": "EPRL12", "price": 947.533821, "clean_price": 947.533821, "yield": 9.631, "fonte_yield": "ANBIMA", "spread_over_ref": 191.6}, {"date": "2026-11-19", "ticker": "EPRL12", "price": 933.5662, "clean_price": 933.5662, "yield": 9.8398, "fonte_yield": "B3", "spread_over_ref": 200.6}, {"date": "2026-11-23", "ticker": "EPRL12", "price": 934.2255, "clean_price": 934.2255, "yield": 9.8313, "fonte_yield": "B3", "spread_over_ref": 201.7}, {"date": "2026-11-24", "ticker": "EPRL12", "price": 928.1058, "clean_price": 928.1058, "yield": 9.9247, "fonte_yield": "B3", "spread_over_ref": 210.4}], "emitter": {"cnpj": "51137031000120", "cnpj_formatado": "51.137.031/0001-20", "razao_social": "EPR LITORAL PIONEIRO S.A.", "nome_fantasia": "EPR LITORAL PIONEIRO S.A.", "setor": "Serviços Transporte e Logística", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria B", "situacao_cvm": "ATIVO", "site_ri": "https://eprlpioneiro.com.br/", "municipio": "SÃO JOSÉ DOS PINHAIS", "uf": "PR", "descricao": "EPR LITORAL PIONEIRO S.A. é uma companhia aberta (Categoria B) com registro CVM na situação ATIVO, atuante no setor de Serviços Transporte e Logística."}, "raiox_cnpj": "51137031000120", "paymentEvents": [{"ticker": "EPRL12", "data_evento": "2027-03-15", "data_liquidacao": "2027-03-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "EPRL12", "data_evento": "2027-09-15", "data_liquidacao": "2027-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2028-03-15", "data_liquidacao": "2028-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2028-09-15", "data_liquidacao": "2028-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2029-03-15", "data_liquidacao": "2029-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2029-09-15", "data_liquidacao": "2029-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2030-03-15", "data_liquidacao": "2030-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2030-09-15", "data_liquidacao": "2030-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2031-03-15", "data_liquidacao": "2031-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2031-09-15", "data_liquidacao": "2031-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2032-03-15", "data_liquidacao": "2032-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2032-09-15", "data_liquidacao": "2032-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2033-03-15", "data_liquidacao": "2033-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2033-09-15", "data_liquidacao": "2033-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2034-03-15", "data_liquidacao": "2034-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2034-09-15", "data_liquidacao": "2034-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2035-03-15", "data_liquidacao": "2035-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2035-09-15", "data_liquidacao": "2035-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2036-03-15", "data_liquidacao": "2036-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2036-09-15", "data_liquidacao": "2036-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2037-03-15", "data_liquidacao": "2037-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2037-09-15", "data_liquidacao": "2037-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2038-03-15", "data_liquidacao": "2038-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2038-09-15", "data_liquidacao": "2038-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2039-03-15", "data_liquidacao": "2039-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2039-09-15", "data_liquidacao": "2039-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2040-03-15", "data_liquidacao": "2040-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2040-09-15", "data_liquidacao": "2040-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2041-03-15", "data_liquidacao": "2041-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2041-09-15", "data_liquidacao": "2041-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2042-03-15", "data_liquidacao": "2042-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2042-09-15", "data_liquidacao": "2042-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2043-03-15", "data_liquidacao": "2043-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2043-09-15", "data_liquidacao": "2043-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2044-03-15", "data_liquidacao": "2044-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2044-09-15", "data_liquidacao": "2044-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2045-03-15", "data_liquidacao": "2045-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2045-09-15", "data_liquidacao": "2045-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2046-03-15", "data_liquidacao": "2046-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2046-09-15", "data_liquidacao": "2046-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2047-03-15", "data_liquidacao": "2047-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2047-09-15", "data_liquidacao": "2047-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2048-03-15", "data_liquidacao": "2048-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2048-09-15", "data_liquidacao": "2048-09-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2049-03-15", "data_liquidacao": "2049-03-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EPRL12", "data_evento": "2049-03-15", "data_liquidacao": "2049-03-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0207, "valor_real": null, "valor_projetado": 40.207, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo EPRL12 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por EPR LITORAL PIONEIRO S.A. (CNPJ: 51.137.031/0001-20), com taxa de emissão de IPCA + 8.20% a.a. e data de vencimento em 15/03/2049. O título encontra-se ativo (duration modificada de 8.37 anos) e spread indicativo de 2.08% sobre a NTN-B soberana, com volume emitido de R$ 450.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "EPRL41", "tipo": "Debênture", "issuer": "EPR LITORAL PIONEIRO S.A.", "vencimento": "2049-03-15"}, {"ticker": "EPRL31", "tipo": "Debênture", "issuer": "EPR LITORAL PIONEIRO S.A.", "vencimento": "2049-03-15"}, {"ticker": "EPRL51", "tipo": "Debênture", "issuer": "EPR LITORAL PIONEIRO S.A.", "vencimento": "2049-03-15"}, {"ticker": "EPRL61", "tipo": "Debênture", "issuer": "EPR LITORAL PIONEIRO S.A.", "vencimento": "2049-03-15"}], "relatedSector": [{"ticker": "MRSAB3", "tipo": "Debênture", "issuer": "MRS LOGÍSTICA S/A", "vencimento": "2040-07-15"}, {"ticker": "RPTA14", "tipo": "Debênture", "issuer": "CONCESSIONARIA AUTO RAPOSO TAVARES SA-CART", "vencimento": "2036-03-15"}, {"ticker": "CNRD12", "tipo": "Debênture", "issuer": "CONCESSIONARIA DA RODOVIA MS 306 S.A.", "vencimento": "2043-05-15"}, {"ticker": "ANHBB6", "tipo": "Debênture", "issuer": "CONCESSIONÁRIA DO SISTEMA ANHANGUERA-BANDEIRANTES S.A.", "vencimento": "2037-07-15"}], "issuerSlug": "epr-litoral-pioneiro-s-a", "sectorSlug": "transporte-e-logistica"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

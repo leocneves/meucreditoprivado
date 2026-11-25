@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "ISPE13", "item": "https://fixdatabrasil.com.br/asset/ispe13/"}]}, {"@type": "FinancialProduct", "name": "Debênture ISPE13 (IGUÁ SERGIPE S.A.)", "identifier": "ISPE13", "isin": "BRISPEDBS010", "description": "Consulte dados de mercado da debênture ISPE13 emitida por IGUÁ SERGIPE S.A. (CNPJ: 58.070.452/0001-20). Indexador DI+, vencimento em 01/06/2029, rating A, spread de 2.77%, duration de 1.98 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo ISPE13 é um título de crédito privado do tipo Debênture (comum) emitido por IGUÁ SERGIPE S.A. (CNPJ: 58.070.452/0001-20), com taxa de emissão de CDI + 2.50% a.a. e data de vencimento em 01/06/2029. O título encontra-se resgatado, avaliado com rating A em escala nacional (duration modificada de 1.98 anos) e spread indicativo de 2.77% sobre a NTN-B soberana, com volume emitido de R$ 800.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/ispe13/", "category": "Debênture", "provider": {"@type": "Organization", "name": "IGUÁ SERGIPE S.A.", "taxID": "58.070.452/0001-20", "url": "https://igua.com.br/sergipe"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">ISPE13</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo ISPE13 é um título de crédito privado do tipo Debênture (comum) emitido por IGUÁ SERGIPE S.A. (CNPJ: 58.070.452/0001-20), com taxa de emissão de CDI + 2.50% a.a. e data de vencimento em 01/06/2029. O título encontra-se resgatado, avaliado com rating A em escala nacional (duration modificada de 1.98 anos) e spread indicativo de 2.77% sobre a NTN-B soberana, com volume emitido de R$ 800.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">01/06/2029</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 2,5 anos (919 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 2,5 anos (918 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/saneamento/" class="font-semibold text-blue-300 hover:underline">Saneamento</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">VORTX DTVM LTDA.</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">UBS BRASIL CORRETORA DE CAMBIO, TITULOS E VALORES MOBILIARIOS S.A.</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">2,5 anos (919 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">2,5 anos (918 dias corridos)</p></div>
           </div>
         </div>
 
@@ -522,6 +798,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "ISPE13", "tipo": "Debênture", "issuer": "IGUÁ SERGIPE S.A.", "indexador": "DI+", "taxa_emissao": 2.5, "taxa_negocio_b3": 2.8003, "taxa_indicativa_anbima": 2.7523, "taxa_mercado": 2.7742, "taxa_ativo": 2.7742, "taxa_compra": "3,05", "taxa_venda": "2,6197", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1071.0845", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 310614.49, "volume_emissao": 800000000.0, "volume": 800000000.0, "quantidade_emitida": 800000.0, "quantidade": 800000.0, "data_emissao": "2025-03-21", "vencimento": "2029-06-01", "emissao": 3.0, "serie": 1.0, "isin": "BRISPEDBS010", "lei": null, "cnpj_emissor": 58070452000120.0, "setor": "Saneamento", "agente_fiduciario": "VORTX DTVM LTDA.", "coordenador_lider": "UBS BRASIL CORRETORA DE CAMBIO, TITULOS E VALORES MOBILIARIOS S.A.", "rating": "brA", "rating_original": "brA", "rating_agencia": "S&P Global", "agencia": "S&P Global", "rating_data": "03/12/2025", "divulgacao": "03/12/2025", "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": 1.98, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2026-12-01", "vna": 1000.0, "pu_par": 1077.3128, "incentivada": "Não", "rating_normalizado": "A", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.027742, "spread_anbima": 0.027523, "spread": 0.027742, "pu_mercado_mediano": 1071.0295, "agio_desagio_pct": -0.58}, "prices": [{"date": "2026-05-29", "ticker": "ISPE13", "price": 1192.956077, "clean_price": 1192.956077, "yield": 2.4891, "fonte_yield": "ANBIMA", "spread_over_ref": 248.9}, {"date": "2026-06-01", "ticker": "ISPE13", "price": 999.966205, "clean_price": 999.966205, "yield": 2.5014, "fonte_yield": "ANBIMA", "spread_over_ref": 250.1}, {"date": "2026-06-02", "ticker": "ISPE13", "price": 1000.71882, "clean_price": 1000.71882, "yield": 2.4964, "fonte_yield": "ANBIMA", "spread_over_ref": 249.6}, {"date": "2026-06-03", "ticker": "ISPE13", "price": 1001.185266, "clean_price": 1001.185266, "yield": 2.5033, "fonte_yield": "ANBIMA", "spread_over_ref": 250.3}, {"date": "2026-06-05", "ticker": "ISPE13", "price": 1001.581613, "clean_price": 1001.581613, "yield": 2.5132, "fonte_yield": "ANBIMA", "spread_over_ref": 251.3}, {"date": "2026-06-08", "ticker": "ISPE13", "price": 1002.530565, "clean_price": 1002.530565, "yield": 2.5, "fonte_yield": "ANBIMA", "spread_over_ref": 250.0}, {"date": "2026-06-09", "ticker": "ISPE13", "price": 1003.1642, "clean_price": 1003.1642, "yield": 2.5, "fonte_yield": "B3", "spread_over_ref": 250.0}, {"date": "2026-06-10", "ticker": "ISPE13", "price": 1004.033915, "clean_price": 1004.033915, "yield": 2.4901, "fonte_yield": "ANBIMA", "spread_over_ref": 249.0}, {"date": "2026-06-11", "ticker": "ISPE13", "price": 1004.201342, "clean_price": 1004.201342, "yield": 2.5097, "fonte_yield": "ANBIMA", "spread_over_ref": 251.0}, {"date": "2026-06-12", "ticker": "ISPE13", "price": 1004.8364, "clean_price": 1004.8364, "yield": 2.5097, "fonte_yield": "B3", "spread_over_ref": 251.0}, {"date": "2026-06-15", "ticker": "ISPE13", "price": 1005.922273, "clean_price": 1005.922273, "yield": 2.4908, "fonte_yield": "ANBIMA", "spread_over_ref": 249.1}, {"date": "2026-06-16", "ticker": "ISPE13", "price": 1006.488485, "clean_price": 1006.488485, "yield": 2.4937, "fonte_yield": "ANBIMA", "spread_over_ref": 249.4}, {"date": "2026-06-17", "ticker": "ISPE13", "price": 1007.088537, "clean_price": 1007.088537, "yield": 2.4952, "fonte_yield": "ANBIMA", "spread_over_ref": 249.5}, {"date": "2026-06-18", "ticker": "ISPE13", "price": 1006.8886, "clean_price": 1006.8886, "yield": 2.5571, "fonte_yield": "B3", "spread_over_ref": 255.7}, {"date": "2026-06-19", "ticker": "ISPE13", "price": 1007.2928, "clean_price": 1007.2928, "yield": 2.54, "fonte_yield": "B3", "spread_over_ref": 254.0}, {"date": "2026-06-22", "ticker": "ISPE13", "price": 1009.078116, "clean_price": 1009.078116, "yield": 2.4911, "fonte_yield": "ANBIMA", "spread_over_ref": 249.1}, {"date": "2026-06-23", "ticker": "ISPE13", "price": 1009.756718, "clean_price": 1009.756718, "yield": 2.489, "fonte_yield": "ANBIMA", "spread_over_ref": 248.9}, {"date": "2026-06-24", "ticker": "ISPE13", "price": 1011.0151, "clean_price": 1011.0151, "yield": 2.489, "fonte_yield": "B3", "spread_over_ref": 248.9}, {"date": "2026-06-25", "ticker": "ISPE13", "price": 1011.091647, "clean_price": 1011.091647, "yield": 2.4858, "fonte_yield": "ANBIMA", "spread_over_ref": 248.6}, {"date": "2026-06-26", "ticker": "ISPE13", "price": 1011.626896, "clean_price": 1011.626896, "yield": 2.4898, "fonte_yield": "ANBIMA", "spread_over_ref": 249.0}, {"date": "2026-06-29", "ticker": "ISPE13", "price": 1012.266673, "clean_price": 1012.266673, "yield": 2.4894, "fonte_yield": "ANBIMA", "spread_over_ref": 248.9}, {"date": "2026-06-30", "ticker": "ISPE13", "price": 1012.966184, "clean_price": 1012.966184, "yield": 2.4865, "fonte_yield": "ANBIMA", "spread_over_ref": 248.7}, {"date": "2026-07-01", "ticker": "ISPE13", "price": 1013.9141, "clean_price": 1013.9141, "yield": 2.4865, "fonte_yield": "B3", "spread_over_ref": 248.7}, {"date": "2026-07-02", "ticker": "ISPE13", "price": 1013.3696, "clean_price": 1013.3696, "yield": 2.5498, "fonte_yield": "B3", "spread_over_ref": 255.0}, {"date": "2026-07-03", "ticker": "ISPE13", "price": 1013.7168, "clean_price": 1013.7168, "yield": 2.5356, "fonte_yield": "B3", "spread_over_ref": 253.6}, {"date": "2026-07-06", "ticker": "ISPE13", "price": 1015.367099, "clean_price": 1015.367099, "yield": 2.4918, "fonte_yield": "ANBIMA", "spread_over_ref": 249.2}, {"date": "2026-07-07", "ticker": "ISPE13", "price": 1016.180563, "clean_price": 1016.180563, "yield": 2.4841, "fonte_yield": "ANBIMA", "spread_over_ref": 248.4}, {"date": "2026-07-08", "ticker": "ISPE13", "price": 1016.609001, "clean_price": 1016.609001, "yield": 2.4928, "fonte_yield": "ANBIMA", "spread_over_ref": 249.3}, {"date": "2026-07-09", "ticker": "ISPE13", "price": 1017.2424, "clean_price": 1017.2424, "yield": 2.4928, "fonte_yield": "B3", "spread_over_ref": 249.3}, {"date": "2026-07-10", "ticker": "ISPE13", "price": 1018.1285, "clean_price": 1018.1285, "yield": 2.4821, "fonte_yield": "B3", "spread_over_ref": 248.2}, {"date": "2026-07-13", "ticker": "ISPE13", "price": 1018.805996, "clean_price": 1018.805996, "yield": 2.4802, "fonte_yield": "ANBIMA", "spread_over_ref": 248.0}, {"date": "2026-07-14", "ticker": "ISPE13", "price": 1019.4367, "clean_price": 1019.4367, "yield": 2.4804, "fonte_yield": "B3", "spread_over_ref": 248.0}, {"date": "2026-07-15", "ticker": "ISPE13", "price": 1021.6519, "clean_price": 1021.6519, "yield": 2.44, "fonte_yield": "B3", "spread_over_ref": 244.0}, {"date": "2026-07-16", "ticker": "ISPE13", "price": 1021.1835, "clean_price": 1021.1835, "yield": 2.46, "fonte_yield": "B3", "spread_over_ref": 246.0}, {"date": "2026-07-17", "ticker": "ISPE13", "price": 1021.31481, "clean_price": 1021.31481, "yield": 2.4815, "fonte_yield": "ANBIMA", "spread_over_ref": 248.2}, {"date": "2026-07-20", "ticker": "ISPE13", "price": 1021.603689, "clean_price": 1021.603689, "yield": 2.4964, "fonte_yield": "ANBIMA", "spread_over_ref": 249.6}, {"date": "2026-07-21", "ticker": "ISPE13", "price": 1022.561254, "clean_price": 1022.561254, "yield": 2.4826, "fonte_yield": "ANBIMA", "spread_over_ref": 248.3}, {"date": "2026-07-22", "ticker": "ISPE13", "price": 1023.107152, "clean_price": 1023.107152, "yield": 2.4865, "fonte_yield": "ANBIMA", "spread_over_ref": 248.7}, {"date": "2026-07-23", "ticker": "ISPE13", "price": 1023.193052, "clean_price": 1023.193052, "yield": 2.5103, "fonte_yield": "ANBIMA", "spread_over_ref": 251.0}, {"date": "2026-07-24", "ticker": "ISPE13", "price": 1024.861929, "clean_price": 1024.861929, "yield": 2.4658, "fonte_yield": "ANBIMA", "spread_over_ref": 246.6}, {"date": "2026-07-27", "ticker": "ISPE13", "price": 1025.4959, "clean_price": 1025.4959, "yield": 2.466, "fonte_yield": "B3", "spread_over_ref": 246.6}, {"date": "2026-07-28", "ticker": "ISPE13", "price": 1025.682263, "clean_price": 1025.682263, "yield": 2.4855, "fonte_yield": "ANBIMA", "spread_over_ref": 248.6}, {"date": "2026-07-29", "ticker": "ISPE13", "price": 1026.321, "clean_price": 1026.321, "yield": 2.4855, "fonte_yield": "B3", "spread_over_ref": 248.6}, {"date": "2026-07-30", "ticker": "ISPE13", "price": 1026.8933, "clean_price": 1026.8933, "yield": 2.4884, "fonte_yield": "B3", "spread_over_ref": 248.8}, {"date": "2026-07-31", "ticker": "ISPE13", "price": 1027.845189, "clean_price": 1027.845189, "yield": 2.4749, "fonte_yield": "ANBIMA", "spread_over_ref": 247.5}, {"date": "2026-08-03", "ticker": "ISPE13", "price": 1028.441436, "clean_price": 1028.441436, "yield": 2.4768, "fonte_yield": "ANBIMA", "spread_over_ref": 247.7}, {"date": "2026-08-04", "ticker": "ISPE13", "price": 1029.097, "clean_price": 1029.097, "yield": 2.4762, "fonte_yield": "B3", "spread_over_ref": 247.6}, {"date": "2026-08-05", "ticker": "ISPE13", "price": 1029.500763, "clean_price": 1029.500763, "yield": 2.4864, "fonte_yield": "ANBIMA", "spread_over_ref": 248.6}, {"date": "2026-08-06", "ticker": "ISPE13", "price": 1030.183193, "clean_price": 1030.183193, "yield": 2.4846, "fonte_yield": "ANBIMA", "spread_over_ref": 248.5}, {"date": "2026-08-07", "ticker": "ISPE13", "price": 1030.967811, "clean_price": 1030.967811, "yield": 2.478, "fonte_yield": "ANBIMA", "spread_over_ref": 247.8}, {"date": "2026-08-10", "ticker": "ISPE13", "price": 1031.274304, "clean_price": 1031.274304, "yield": 2.4922, "fonte_yield": "ANBIMA", "spread_over_ref": 249.2}, {"date": "2026-08-11", "ticker": "ISPE13", "price": 1032.020001, "clean_price": 1032.020001, "yield": 2.4873, "fonte_yield": "ANBIMA", "spread_over_ref": 248.7}, {"date": "2026-08-12", "ticker": "ISPE13", "price": 1032.37458, "clean_price": 1032.37458, "yield": 2.4995, "fonte_yield": "ANBIMA", "spread_over_ref": 249.9}, {"date": "2026-08-13", "ticker": "ISPE13", "price": 1032.997671, "clean_price": 1032.997671, "yield": 2.5, "fonte_yield": "ANBIMA", "spread_over_ref": 250.0}, {"date": "2026-08-14", "ticker": "ISPE13", "price": 1033.61664, "clean_price": 1033.61664, "yield": 2.5007, "fonte_yield": "ANBIMA", "spread_over_ref": 250.1}, {"date": "2026-08-17", "ticker": "ISPE13", "price": 1034.279309, "clean_price": 1034.279309, "yield": 2.4995, "fonte_yield": "ANBIMA", "spread_over_ref": 249.9}, {"date": "2026-08-18", "ticker": "ISPE13", "price": 1034.903618, "clean_price": 1034.903618, "yield": 2.5, "fonte_yield": "ANBIMA", "spread_over_ref": 250.0}, {"date": "2026-08-19", "ticker": "ISPE13", "price": 1035.539719, "clean_price": 1035.539719, "yield": 2.5, "fonte_yield": "ANBIMA", "spread_over_ref": 250.0}, {"date": "2026-08-20", "ticker": "ISPE13", "price": 1036.8132, "clean_price": 1036.8132, "yield": 2.5, "fonte_yield": "B3", "spread_over_ref": 250.0}, {"date": "2026-08-21", "ticker": "ISPE13", "price": 1037.466, "clean_price": 1037.466, "yield": 2.4993, "fonte_yield": "B3", "spread_over_ref": 249.9}, {"date": "2026-08-24", "ticker": "ISPE13", "price": 1030.7265, "clean_price": 1030.7265, "yield": 2.8181, "fonte_yield": "B3", "spread_over_ref": 281.8}, {"date": "2026-08-25", "ticker": "ISPE13", "price": 1026.6357, "clean_price": 1026.6357, "yield": 3.01, "fonte_yield": "B3", "spread_over_ref": 301.0}, {"date": "2026-08-26", "ticker": "ISPE13", "price": 1038.1286, "clean_price": 1038.1286, "yield": 2.5264, "fonte_yield": "B3", "spread_over_ref": 252.6}, {"date": "2026-08-27", "ticker": "ISPE13", "price": 1039.267231, "clean_price": 1039.267231, "yield": 2.5043, "fonte_yield": "ANBIMA", "spread_over_ref": 250.4}, {"date": "2026-08-28", "ticker": "ISPE13", "price": 1039.9062, "clean_price": 1039.9062, "yield": 2.5043, "fonte_yield": "B3", "spread_over_ref": 250.4}, {"date": "2026-08-31", "ticker": "ISPE13", "price": 1040.532, "clean_price": 1040.532, "yield": 2.5049, "fonte_yield": "B3", "spread_over_ref": 250.5}, {"date": "2026-09-01", "ticker": "ISPE13", "price": 1040.890056, "clean_price": 1040.890056, "yield": 2.5174, "fonte_yield": "ANBIMA", "spread_over_ref": 251.7}, {"date": "2026-09-02", "ticker": "ISPE13", "price": 1041.147372, "clean_price": 1041.147372, "yield": 2.5344, "fonte_yield": "ANBIMA", "spread_over_ref": 253.4}, {"date": "2026-09-03", "ticker": "ISPE13", "price": 1042.27887, "clean_price": 1042.27887, "yield": 2.5126, "fonte_yield": "ANBIMA", "spread_over_ref": 251.3}, {"date": "2026-09-04", "ticker": "ISPE13", "price": 1042.92, "clean_price": 1042.92, "yield": 2.5126, "fonte_yield": "B3", "spread_over_ref": 251.3}, {"date": "2026-09-08", "ticker": "ISPE13", "price": 1042.314608, "clean_price": 1042.314608, "yield": 2.5681, "fonte_yield": "ANBIMA", "spread_over_ref": 256.8}, {"date": "2026-09-09", "ticker": "ISPE13", "price": 1042.773756, "clean_price": 1042.773756, "yield": 2.5764, "fonte_yield": "ANBIMA", "spread_over_ref": 257.6}, {"date": "2026-09-10", "ticker": "ISPE13", "price": 1043.647973, "clean_price": 1043.647973, "yield": 2.5661, "fonte_yield": "ANBIMA", "spread_over_ref": 256.6}, {"date": "2026-09-11", "ticker": "ISPE13", "price": 1043.948197, "clean_price": 1043.948197, "yield": 2.5815, "fonte_yield": "ANBIMA", "spread_over_ref": 258.2}, {"date": "2026-09-14", "ticker": "ISPE13", "price": 1044.577783, "clean_price": 1044.577783, "yield": 2.5822, "fonte_yield": "ANBIMA", "spread_over_ref": 258.2}, {"date": "2026-09-15", "ticker": "ISPE13", "price": 1045.216994, "clean_price": 1045.216994, "yield": 2.5825, "fonte_yield": "ANBIMA", "spread_over_ref": 258.2}, {"date": "2026-09-16", "ticker": "ISPE13", "price": 1045.996378, "clean_price": 1045.996378, "yield": 2.5765, "fonte_yield": "ANBIMA", "spread_over_ref": 257.6}, {"date": "2026-09-17", "ticker": "ISPE13", "price": 1046.683771, "clean_price": 1046.683771, "yield": 2.5746, "fonte_yield": "ANBIMA", "spread_over_ref": 257.5}, {"date": "2026-09-18", "ticker": "ISPE13", "price": 1047.181116, "clean_price": 1047.181116, "yield": 2.5809, "fonte_yield": "ANBIMA", "spread_over_ref": 258.1}, {"date": "2026-09-21", "ticker": "ISPE13", "price": 1047.699813, "clean_price": 1047.699813, "yield": 2.5862, "fonte_yield": "ANBIMA", "spread_over_ref": 258.6}, {"date": "2026-09-22", "ticker": "ISPE13", "price": 1048.3382, "clean_price": 1048.3382, "yield": 2.5862, "fonte_yield": "B3", "spread_over_ref": 258.6}, {"date": "2026-09-23", "ticker": "ISPE13", "price": 1048.699047, "clean_price": 1048.699047, "yield": 2.5988, "fonte_yield": "ANBIMA", "spread_over_ref": 259.9}, {"date": "2026-09-24", "ticker": "ISPE13", "price": 1049.29154, "clean_price": 1049.29154, "yield": 2.601, "fonte_yield": "ANBIMA", "spread_over_ref": 260.1}, {"date": "2026-09-25", "ticker": "ISPE13", "price": 1049.979139, "clean_price": 1049.979139, "yield": 2.5988, "fonte_yield": "ANBIMA", "spread_over_ref": 259.9}, {"date": "2026-09-28", "ticker": "ISPE13", "price": 1051.073963, "clean_price": 1051.073963, "yield": 2.5782, "fonte_yield": "ANBIMA", "spread_over_ref": 257.8}, {"date": "2026-09-29", "ticker": "ISPE13", "price": 1048.3133, "clean_price": 1048.3133, "yield": 2.7627, "fonte_yield": "B3", "spread_over_ref": 276.3}, {"date": "2026-09-30", "ticker": "ISPE13", "price": 1052.41213, "clean_price": 1052.41213, "yield": 2.5755, "fonte_yield": "ANBIMA", "spread_over_ref": 257.6}, {"date": "2026-10-01", "ticker": "ISPE13", "price": 1052.899555, "clean_price": 1052.899555, "yield": 2.5825, "fonte_yield": "ANBIMA", "spread_over_ref": 258.2}, {"date": "2026-10-02", "ticker": "ISPE13", "price": 1053.750665, "clean_price": 1053.750665, "yield": 2.5729, "fonte_yield": "ANBIMA", "spread_over_ref": 257.3}, {"date": "2026-10-05", "ticker": "ISPE13", "price": 1054.357284, "clean_price": 1054.357284, "yield": 2.5739, "fonte_yield": "ANBIMA", "spread_over_ref": 257.4}, {"date": "2026-10-06", "ticker": "ISPE13", "price": 1056.558865, "clean_price": 1056.558865, "yield": 2.5033, "fonte_yield": "ANBIMA", "spread_over_ref": 250.3}, {"date": "2026-10-07", "ticker": "ISPE13", "price": 1055.809902, "clean_price": 1055.809902, "yield": 2.5662, "fonte_yield": "ANBIMA", "spread_over_ref": 256.6}, {"date": "2026-10-08", "ticker": "ISPE13", "price": 1056.12084, "clean_price": 1056.12084, "yield": 2.5812, "fonte_yield": "ANBIMA", "spread_over_ref": 258.1}, {"date": "2026-10-09", "ticker": "ISPE13", "price": 1056.380377, "clean_price": 1056.380377, "yield": 2.5986, "fonte_yield": "ANBIMA", "spread_over_ref": 259.9}, {"date": "2026-10-13", "ticker": "ISPE13", "price": 1056.540931, "clean_price": 1056.540931, "yield": 2.6208, "fonte_yield": "ANBIMA", "spread_over_ref": 262.1}, {"date": "2026-10-14", "ticker": "ISPE13", "price": 1058.3176, "clean_price": 1058.3176, "yield": 2.5986, "fonte_yield": "B3", "spread_over_ref": 259.9}, {"date": "2026-10-15", "ticker": "ISPE13", "price": 1058.3176, "clean_price": 1058.3176, "yield": 2.5986, "fonte_yield": "B3", "spread_over_ref": 259.9}, {"date": "2026-10-16", "ticker": "ISPE13", "price": 1058.374116, "clean_price": 1058.374116, "yield": 2.6258, "fonte_yield": "ANBIMA", "spread_over_ref": 262.6}, {"date": "2026-10-19", "ticker": "ISPE13", "price": 1058.502038, "clean_price": 1058.502038, "yield": 2.6496, "fonte_yield": "ANBIMA", "spread_over_ref": 265.0}, {"date": "2026-10-20", "ticker": "ISPE13", "price": 1059.359451, "clean_price": 1059.359451, "yield": 2.6398, "fonte_yield": "ANBIMA", "spread_over_ref": 264.0}, {"date": "2026-10-21", "ticker": "ISPE13", "price": 1059.509853, "clean_price": 1059.509853, "yield": 2.6627, "fonte_yield": "ANBIMA", "spread_over_ref": 266.3}, {"date": "2026-10-22", "ticker": "ISPE13", "price": 1060.295836, "clean_price": 1060.295836, "yield": 2.6565, "fonte_yield": "ANBIMA", "spread_over_ref": 265.6}, {"date": "2026-10-23", "ticker": "ISPE13", "price": 1061.613192, "clean_price": 1061.613192, "yield": 2.6256, "fonte_yield": "ANBIMA", "spread_over_ref": 262.6}, {"date": "2026-10-26", "ticker": "ISPE13", "price": 1062.188372, "clean_price": 1062.188372, "yield": 2.6313, "fonte_yield": "ANBIMA", "spread_over_ref": 263.1}, {"date": "2026-10-27", "ticker": "ISPE13", "price": 1063.712135, "clean_price": 1063.712135, "yield": 2.5898, "fonte_yield": "ANBIMA", "spread_over_ref": 259.0}, {"date": "2026-10-28", "ticker": "ISPE13", "price": 1062.924882, "clean_price": 1062.924882, "yield": 2.6573, "fonte_yield": "ANBIMA", "spread_over_ref": 265.7}, {"date": "2026-10-29", "ticker": "ISPE13", "price": 1064.283988, "clean_price": 1064.283988, "yield": 2.6239, "fonte_yield": "ANBIMA", "spread_over_ref": 262.4}, {"date": "2026-10-30", "ticker": "ISPE13", "price": 1063.413781, "clean_price": 1063.413781, "yield": 2.6958, "fonte_yield": "ANBIMA", "spread_over_ref": 269.6}, {"date": "2026-11-03", "ticker": "ISPE13", "price": 1063.967735, "clean_price": 1063.967735, "yield": 2.7007, "fonte_yield": "ANBIMA", "spread_over_ref": 270.1}, {"date": "2026-11-04", "ticker": "ISPE13", "price": 1065.677262, "clean_price": 1065.677262, "yield": 2.6503, "fonte_yield": "ANBIMA", "spread_over_ref": 265.0}, {"date": "2026-11-05", "ticker": "ISPE13", "price": 1066.248125, "clean_price": 1066.248125, "yield": 2.654, "fonte_yield": "ANBIMA", "spread_over_ref": 265.4}, {"date": "2026-11-06", "ticker": "ISPE13", "price": 1066.541106, "clean_price": 1066.541106, "yield": 2.671, "fonte_yield": "ANBIMA", "spread_over_ref": 267.1}, {"date": "2026-11-09", "ticker": "ISPE13", "price": 1066.145169, "clean_price": 1066.145169, "yield": 2.7207, "fonte_yield": "ANBIMA", "spread_over_ref": 272.1}, {"date": "2026-11-10", "ticker": "ISPE13", "price": 1066.350786, "clean_price": 1066.350786, "yield": 2.7421, "fonte_yield": "ANBIMA", "spread_over_ref": 274.2}, {"date": "2026-11-11", "ticker": "ISPE13", "price": 1066.773949, "clean_price": 1066.773949, "yield": 2.7531, "fonte_yield": "ANBIMA", "spread_over_ref": 275.3}, {"date": "2026-11-12", "ticker": "ISPE13", "price": 1066.779904, "clean_price": 1066.779904, "yield": 2.7845, "fonte_yield": "ANBIMA", "spread_over_ref": 278.4}, {"date": "2026-11-13", "ticker": "ISPE13", "price": 1067.952185, "clean_price": 1067.952185, "yield": 2.7598, "fonte_yield": "ANBIMA", "spread_over_ref": 276.0}, {"date": "2026-11-16", "ticker": "ISPE13", "price": 1068.931582, "clean_price": 1068.931582, "yield": 2.745, "fonte_yield": "ANBIMA", "spread_over_ref": 274.5}, {"date": "2026-11-17", "ticker": "ISPE13", "price": 1070.2437, "clean_price": 1070.2437, "yield": 2.7133, "fonte_yield": "ANBIMA", "spread_over_ref": 271.3}, {"date": "2026-11-18", "ticker": "ISPE13", "price": 1070.901, "clean_price": 1070.901, "yield": 2.7133, "fonte_yield": "B3", "spread_over_ref": 271.3}, {"date": "2026-11-19", "ticker": "ISPE13", "price": 1069.838965, "clean_price": 1069.838965, "yield": 2.7971, "fonte_yield": "ANBIMA", "spread_over_ref": 279.7}, {"date": "2026-11-23", "ticker": "ISPE13", "price": 1070.423429, "clean_price": 1070.423429, "yield": 2.8003, "fonte_yield": "ANBIMA", "spread_over_ref": 280.0}, {"date": "2026-11-24", "ticker": "ISPE13", "price": 1071.0845, "clean_price": 1071.0845, "yield": 2.8003, "fonte_yield": "B3", "spread_over_ref": 280.0}], "emitter": {"cnpj": "58070452000120", "cnpj_formatado": "58.070.452/0001-20", "razao_social": "IGUÁ SERGIPE S.A.", "nome_fantasia": "IGUÁ SERGIPE S.A.", "setor": "Emp. Adm. Part. - Saneamento, Serv. Água e Gás", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria B", "situacao_cvm": "ATIVO", "site_ri": "https://igua.com.br/sergipe", "municipio": "ARACAJU", "uf": "SE", "descricao": "IGUÁ SERGIPE S.A. é uma companhia aberta (Categoria B) com registro CVM na situação ATIVO, atuante no setor de Emp. Adm. Part. - Saneamento, Serv. Água e Gás."}, "raiox_cnpj": "58070452000120", "paymentEvents": [{"ticker": "ISPE13", "data_evento": "2026-12-01", "data_liquidacao": "2026-12-01", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "ISPE13", "data_evento": "2027-06-01", "data_liquidacao": "2027-06-01", "tipo_evento": "Pagamento de Juros", "taxa": 2.5, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ISPE13", "data_evento": "2027-12-01", "data_liquidacao": "2027-12-01", "tipo_evento": "Pagamento de Juros", "taxa": 2.5, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ISPE13", "data_evento": "2028-06-01", "data_liquidacao": "2028-06-01", "tipo_evento": "Pagamento de Juros", "taxa": 2.5, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ISPE13", "data_evento": "2028-12-01", "data_liquidacao": "2028-12-01", "tipo_evento": "Pagamento de Juros", "taxa": 2.5, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ISPE13", "data_evento": "2029-06-01", "data_liquidacao": "2029-06-01", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "ISPE13", "data_evento": "2029-06-01", "data_liquidacao": "2029-06-01", "tipo_evento": "Pagamento de Juros", "taxa": 2.5, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo ISPE13 é um título de crédito privado do tipo Debênture (comum) emitido por IGUÁ SERGIPE S.A. (CNPJ: 58.070.452/0001-20), com taxa de emissão de CDI + 2.50% a.a. e data de vencimento em 01/06/2029. O título encontra-se resgatado, avaliado com rating A em escala nacional (duration modificada de 1.98 anos) e spread indicativo de 2.77% sobre a NTN-B soberana, com volume emitido de R$ 800.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "ISPE14", "tipo": "Debênture", "issuer": "IGUÁ SERGIPE S.A.", "vencimento": "2046-05-15"}], "relatedSector": [{"ticker": "SBSPI8", "tipo": "Debênture", "issuer": "CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO", "vencimento": "2036-02-15"}, {"ticker": "SBSPJ8", "tipo": "Debênture", "issuer": "CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO", "vencimento": "2038-02-15"}, {"ticker": "SBSPK8", "tipo": "Debênture", "issuer": "CIA SANEAMENTO BÁSICO ESTADO SÃO PAULO", "vencimento": "2041-02-15"}, {"ticker": "RMSA12", "tipo": "Debênture", "issuer": "BRK AMBIENTAL - REGIÃO METROPOLITANA DE MACEIÓ S.A.", "vencimento": "2042-06-15"}], "issuerSlug": null, "sectorSlug": "saneamento"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "CMIN11", "item": "https://fixdatabrasil.com.br/asset/cmin11/"}]}, {"@type": "FinancialProduct", "name": "Debênture CMIN11 (CSN MINERAÇÃO S.A.)", "identifier": "CMIN11", "isin": "BRCMINDBS004", "description": "Consulte dados de mercado da debênture CMIN11 emitida por CSN MINERAÇÃO S.A. (CNPJ: 08.902.291/0001-15). Indexador IPCA, vencimento em 15/07/2031, spread de 12.79%, duration de 3.98 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo CMIN11 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por CSN MINERAÇÃO S.A. (CNPJ: 08.902.291/0001-15), com taxa de emissão de IPCA + 4.88% a.a. e data de vencimento em 15/07/2031. O título encontra-se ativo (duration modificada de 3.98 anos) e spread indicativo de 12.79% sobre a NTN-B soberana, com volume emitido de R$ 576.448.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/cmin11/", "category": "Debênture", "provider": {"@type": "Organization", "name": "CSN MINERAÇÃO S.A.", "taxID": "08.902.291/0001-15"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">CMIN11</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo CMIN11 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por CSN MINERAÇÃO S.A. (CNPJ: 08.902.291/0001-15), com taxa de emissão de IPCA + 4.88% a.a. e data de vencimento em 15/07/2031. O título encontra-se ativo (duration modificada de 3.98 anos) e spread indicativo de 12.79% sobre a NTN-B soberana, com volume emitido de R$ 576.448.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/07/2031</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 4,6 anos (1693 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 4,6 anos (1692 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/mineracao/" class="font-semibold text-blue-300 hover:underline">Mineração</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">OLIVEIRA TRUST DTVM S/A</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO BTG PACTUAL S.A.</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">4,6 anos (1693 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">4,6 anos (1692 dias corridos)</p></div>
           </div>
         </div>
 
@@ -555,6 +831,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "CMIN11", "tipo": "Debênture", "issuer": "CSN MINERAÇÃO S.A.", "indexador": "IPCA", "taxa_emissao": 4.879, "taxa_negocio_b3": 15.2754, "taxa_indicativa_anbima": 14.8063, "taxa_mercado": 21.534, "taxa_ativo": 21.534, "taxa_compra": "--", "taxa_venda": "11,5864", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "924.826", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 1569429.65, "volume_emissao": 576448000.0, "volume": 576448000.0, "quantidade_emitida": 576448.0, "quantidade": 576448.0, "data_emissao": "2021-07-15", "vencimento": "2031-07-15", "emissao": 1.0, "serie": 1.0, "isin": "BRCMINDBS004", "lei": 12.431, "cnpj_emissor": 8902291000115.0, "setor": "Mineração", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "BANCO BTG PACTUAL S.A.", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 3.98, "ntnb_referencia": "15/05/2031", "taxa_ntnb": 7.7481, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-01-15", "vna": 1328.7988, "pu_par": 1351.5984, "incentivada": "Sim", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.1279456435890749, "spread_anbima": 0.0655064915297811, "spread": 0.1279456435890749, "pu_mercado_mediano": 767.1151, "agio_desagio_pct": -43.24}, "prices": [{"date": "2026-05-29", "ticker": "CMIN11", "price": 873.3159, "clean_price": 873.3159, "yield": 15.5285, "fonte_yield": "B3", "spread_over_ref": 704.0}, {"date": "2026-06-01", "ticker": "CMIN11", "price": 895.2034, "clean_price": 895.2034, "yield": 14.8507, "fonte_yield": "B3", "spread_over_ref": 633.3}, {"date": "2026-06-02", "ticker": "CMIN11", "price": 894.141, "clean_price": 894.141, "yield": 14.9034, "fonte_yield": "B3", "spread_over_ref": 632.6}, {"date": "2026-06-03", "ticker": "CMIN11", "price": 901.4809, "clean_price": 901.4809, "yield": 14.7064, "fonte_yield": "B3", "spread_over_ref": 592.7}, {"date": "2026-06-05", "ticker": "CMIN11", "price": 890.6775, "clean_price": 890.6775, "yield": 15.0501, "fonte_yield": "B3", "spread_over_ref": 605.7}, {"date": "2026-06-08", "ticker": "CMIN11", "price": 875.5068, "clean_price": 875.5068, "yield": 15.5567, "fonte_yield": "B3", "spread_over_ref": 643.5}, {"date": "2026-06-09", "ticker": "CMIN11", "price": 882.7917, "clean_price": 882.7917, "yield": 15.3399, "fonte_yield": "B3", "spread_over_ref": 621.7}, {"date": "2026-06-10", "ticker": "CMIN11", "price": 896.5357, "clean_price": 896.5357, "yield": 14.9535, "fonte_yield": "B3", "spread_over_ref": 591.2}, {"date": "2026-06-11", "ticker": "CMIN11", "price": 894.3609, "clean_price": 894.3609, "yield": 15.0427, "fonte_yield": "B3", "spread_over_ref": 625.1}, {"date": "2026-06-12", "ticker": "CMIN11", "price": 918.51, "clean_price": 918.51, "yield": 14.3712, "fonte_yield": "B3", "spread_over_ref": 565.8}, {"date": "2026-06-15", "ticker": "CMIN11", "price": 894.9516, "clean_price": 894.9516, "yield": 15.0939, "fonte_yield": "B3", "spread_over_ref": 629.3}, {"date": "2026-06-16", "ticker": "CMIN11", "price": 889.977, "clean_price": 889.977, "yield": 15.2459, "fonte_yield": "B3", "spread_over_ref": 636.9}, {"date": "2026-06-17", "ticker": "CMIN11", "price": 889.0509, "clean_price": 889.0509, "yield": 15.3094, "fonte_yield": "B3", "spread_over_ref": 626.3}, {"date": "2026-06-18", "ticker": "CMIN11", "price": 893.9806, "clean_price": 893.9806, "yield": 15.1745, "fonte_yield": "B3", "spread_over_ref": 605.6}, {"date": "2026-06-19", "ticker": "CMIN11", "price": 890.6775, "clean_price": 890.6775, "yield": 15.2802, "fonte_yield": "B3", "spread_over_ref": 597.8}, {"date": "2026-06-22", "ticker": "CMIN11", "price": 903.501, "clean_price": 903.501, "yield": 14.9304, "fonte_yield": "B3", "spread_over_ref": 575.1}, {"date": "2026-06-23", "ticker": "CMIN11", "price": 892.1897, "clean_price": 892.1897, "yield": 15.275, "fonte_yield": "B3", "spread_over_ref": 613.3}, {"date": "2026-06-24", "ticker": "CMIN11", "price": 903.2745, "clean_price": 903.2745, "yield": 14.9696, "fonte_yield": "B3", "spread_over_ref": 590.4}, {"date": "2026-06-25", "ticker": "CMIN11", "price": 907.8026, "clean_price": 907.8026, "yield": 14.8469, "fonte_yield": "B3", "spread_over_ref": 584.0}, {"date": "2026-06-26", "ticker": "CMIN11", "price": 892.1295, "clean_price": 892.1295, "yield": 15.3488, "fonte_yield": "B3", "spread_over_ref": 634.0}, {"date": "2026-06-29", "ticker": "CMIN11", "price": 896.2258, "clean_price": 896.2258, "yield": 15.2266, "fonte_yield": "B3", "spread_over_ref": 624.9}, {"date": "2026-06-30", "ticker": "CMIN11", "price": 899.3851, "clean_price": 899.3851, "yield": 15.15, "fonte_yield": "B3", "spread_over_ref": 623.5}, {"date": "2026-07-01", "ticker": "CMIN11", "price": 899.7221, "clean_price": 899.7221, "yield": 15.1726, "fonte_yield": "B3", "spread_over_ref": 618.9}, {"date": "2026-07-02", "ticker": "CMIN11", "price": 900.5564, "clean_price": 900.5564, "yield": 15.1538, "fonte_yield": "B3", "spread_over_ref": 608.4}, {"date": "2026-07-03", "ticker": "CMIN11", "price": 919.0458, "clean_price": 919.0458, "yield": 14.6194, "fonte_yield": "B3", "spread_over_ref": 567.6}, {"date": "2026-07-06", "ticker": "CMIN11", "price": 897.6422, "clean_price": 897.6422, "yield": 15.3011, "fonte_yield": "B3", "spread_over_ref": 636.4}, {"date": "2026-07-07", "ticker": "CMIN11", "price": 906.0606, "clean_price": 906.0606, "yield": 15.052, "fonte_yield": "B3", "spread_over_ref": 614.6}, {"date": "2026-07-08", "ticker": "CMIN11", "price": 904.4097, "clean_price": 904.4097, "yield": 15.1295, "fonte_yield": "B3", "spread_over_ref": 622.8}, {"date": "2026-07-09", "ticker": "CMIN11", "price": 902.5487, "clean_price": 902.5487, "yield": 15.1902, "fonte_yield": "B3", "spread_over_ref": 635.9}, {"date": "2026-07-10", "ticker": "CMIN11", "price": 902.468, "clean_price": 902.468, "yield": 15.1736, "fonte_yield": "B3", "spread_over_ref": 634.4}, {"date": "2026-07-13", "ticker": "CMIN11", "price": 912.8908, "clean_price": 912.8908, "yield": 14.8779, "fonte_yield": "B3", "spread_over_ref": 611.3}, {"date": "2026-07-14", "ticker": "CMIN11", "price": 910.176, "clean_price": 910.176, "yield": 14.9766, "fonte_yield": "B3", "spread_over_ref": 628.9}, {"date": "2026-07-15", "ticker": "CMIN11", "price": 869.9958, "clean_price": 869.9958, "yield": 15.2698, "fonte_yield": "B3", "spread_over_ref": 658.6}, {"date": "2026-07-16", "ticker": "CMIN11", "price": 906.4509, "clean_price": 906.4509, "yield": 14.2162, "fonte_yield": "B3", "spread_over_ref": 561.0}, {"date": "2026-07-17", "ticker": "CMIN11", "price": 867.2792, "clean_price": 867.2792, "yield": 15.3888, "fonte_yield": "B3", "spread_over_ref": 658.5}, {"date": "2026-07-20", "ticker": "CMIN11", "price": 868.761661, "clean_price": 868.761661, "yield": 15.36, "fonte_yield": "ANBIMA", "spread_over_ref": 652.9}, {"date": "2026-07-21", "ticker": "CMIN11", "price": 828.256, "clean_price": 828.256, "yield": 16.6875, "fonte_yield": "B3", "spread_over_ref": 773.5}, {"date": "2026-07-22", "ticker": "CMIN11", "price": 868.498, "clean_price": 868.498, "yield": 15.4292, "fonte_yield": "B3", "spread_over_ref": 649.8}, {"date": "2026-07-23", "ticker": "CMIN11", "price": 837.1486, "clean_price": 837.1486, "yield": 16.4237, "fonte_yield": "B3", "spread_over_ref": 741.8}, {"date": "2026-07-24", "ticker": "CMIN11", "price": 835.6508, "clean_price": 835.6508, "yield": 16.4843, "fonte_yield": "B3", "spread_over_ref": 756.1}, {"date": "2026-07-27", "ticker": "CMIN11", "price": 849.932, "clean_price": 849.932, "yield": 16.0739, "fonte_yield": "B3", "spread_over_ref": 722.0}, {"date": "2026-07-28", "ticker": "CMIN11", "price": 867.7963, "clean_price": 867.7963, "yield": 15.4988, "fonte_yield": "B3", "spread_over_ref": 668.9}, {"date": "2026-07-29", "ticker": "CMIN11", "price": 840.7995, "clean_price": 840.7995, "yield": 16.3636, "fonte_yield": "B3", "spread_over_ref": 739.6}, {"date": "2026-07-30", "ticker": "CMIN11", "price": 858.4591, "clean_price": 858.4591, "yield": 15.8067, "fonte_yield": "B3", "spread_over_ref": 688.2}, {"date": "2026-07-31", "ticker": "CMIN11", "price": 921.0653, "clean_price": 921.0653, "yield": 13.9729, "fonte_yield": "B3", "spread_over_ref": 529.0}, {"date": "2026-08-03", "ticker": "CMIN11", "price": 853.5858, "clean_price": 853.5858, "yield": 16.0074, "fonte_yield": "B3", "spread_over_ref": 724.5}, {"date": "2026-08-04", "ticker": "CMIN11", "price": 854.1342, "clean_price": 854.1342, "yield": 15.99, "fonte_yield": "B3", "spread_over_ref": 721.1}, {"date": "2026-08-05", "ticker": "CMIN11", "price": 864.2137, "clean_price": 864.2137, "yield": 15.7061, "fonte_yield": "B3", "spread_over_ref": 697.2}, {"date": "2026-08-06", "ticker": "CMIN11", "price": 870.037745, "clean_price": 870.037745, "yield": 15.5213, "fonte_yield": "ANBIMA", "spread_over_ref": 674.7}, {"date": "2026-08-07", "ticker": "CMIN11", "price": 848.5066, "clean_price": 848.5066, "yield": 16.231, "fonte_yield": "B3", "spread_over_ref": 753.4}, {"date": "2026-08-10", "ticker": "CMIN11", "price": 840.0032, "clean_price": 840.0032, "yield": 16.5219, "fonte_yield": "B3", "spread_over_ref": 777.3}, {"date": "2026-08-11", "ticker": "CMIN11", "price": 864.933, "clean_price": 864.933, "yield": 15.7553, "fonte_yield": "B3", "spread_over_ref": 706.4}, {"date": "2026-08-12", "ticker": "CMIN11", "price": 869.7786, "clean_price": 869.7786, "yield": 15.6015, "fonte_yield": "B3", "spread_over_ref": 691.7}, {"date": "2026-08-13", "ticker": "CMIN11", "price": 868.5787, "clean_price": 868.5787, "yield": 15.6767, "fonte_yield": "B3", "spread_over_ref": 697.6}, {"date": "2026-08-14", "ticker": "CMIN11", "price": 859.2366, "clean_price": 859.2366, "yield": 15.995, "fonte_yield": "B3", "spread_over_ref": 720.2}, {"date": "2026-08-17", "ticker": "CMIN11", "price": 870.1004, "clean_price": 870.1004, "yield": 15.6462, "fonte_yield": "B3", "spread_over_ref": 693.7}, {"date": "2026-08-18", "ticker": "CMIN11", "price": 850.8064, "clean_price": 850.8064, "yield": 16.2786, "fonte_yield": "B3", "spread_over_ref": 752.5}, {"date": "2026-08-19", "ticker": "CMIN11", "price": 872.521, "clean_price": 872.521, "yield": 15.5893, "fonte_yield": "B3", "spread_over_ref": 696.8}, {"date": "2026-08-20", "ticker": "CMIN11", "price": 853.0491, "clean_price": 853.0491, "yield": 16.2367, "fonte_yield": "B3", "spread_over_ref": 761.7}, {"date": "2026-08-21", "ticker": "CMIN11", "price": 860.5016, "clean_price": 860.5016, "yield": 16.0055, "fonte_yield": "B3", "spread_over_ref": 742.2}, {"date": "2026-08-24", "ticker": "CMIN11", "price": 840.6409, "clean_price": 840.6409, "yield": 16.6769, "fonte_yield": "B3", "spread_over_ref": 801.5}, {"date": "2026-08-25", "ticker": "CMIN11", "price": 857.9327, "clean_price": 857.9327, "yield": 16.1068, "fonte_yield": "B3", "spread_over_ref": 747.8}, {"date": "2026-08-26", "ticker": "CMIN11", "price": 855.0387, "clean_price": 855.0387, "yield": 16.2242, "fonte_yield": "B3", "spread_over_ref": 758.0}, {"date": "2026-08-27", "ticker": "CMIN11", "price": 857.3059, "clean_price": 857.3059, "yield": 16.157, "fonte_yield": "B3", "spread_over_ref": 756.9}, {"date": "2026-08-28", "ticker": "CMIN11", "price": 865.994, "clean_price": 865.994, "yield": 15.8781, "fonte_yield": "B3", "spread_over_ref": 724.5}, {"date": "2026-08-31", "ticker": "CMIN11", "price": 880.3109, "clean_price": 880.3109, "yield": 15.4457, "fonte_yield": "B3", "spread_over_ref": 680.5}, {"date": "2026-09-01", "ticker": "CMIN11", "price": 863.7837, "clean_price": 863.7837, "yield": 15.9787, "fonte_yield": "B3", "spread_over_ref": 734.3}, {"date": "2026-09-02", "ticker": "CMIN11", "price": 861.997, "clean_price": 861.997, "yield": 16.056, "fonte_yield": "B3", "spread_over_ref": 745.9}, {"date": "2026-09-03", "ticker": "CMIN11", "price": 864.1312, "clean_price": 864.1312, "yield": 15.9948, "fonte_yield": "B3", "spread_over_ref": 747.8}, {"date": "2026-09-04", "ticker": "CMIN11", "price": 878.8426, "clean_price": 878.8426, "yield": 15.5418, "fonte_yield": "B3", "spread_over_ref": 710.0}, {"date": "2026-09-08", "ticker": "CMIN11", "price": 865.7936, "clean_price": 865.7936, "yield": 15.9757, "fonte_yield": "B3", "spread_over_ref": 763.5}, {"date": "2026-09-09", "ticker": "CMIN11", "price": 865.7932, "clean_price": 865.7932, "yield": 15.9754, "fonte_yield": "B3", "spread_over_ref": 761.3}, {"date": "2026-09-10", "ticker": "CMIN11", "price": 865.4435, "clean_price": 865.4435, "yield": 16.0131, "fonte_yield": "B3", "spread_over_ref": 777.1}, {"date": "2026-09-11", "ticker": "CMIN11", "price": 935.8818, "clean_price": 935.8818, "yield": 13.9758, "fonte_yield": "B3", "spread_over_ref": 597.0}, {"date": "2026-09-14", "ticker": "CMIN11", "price": 882.5493, "clean_price": 882.5493, "yield": 15.4673, "fonte_yield": "B3", "spread_over_ref": 730.4}, {"date": "2026-09-15", "ticker": "CMIN11", "price": 887.2746, "clean_price": 887.2746, "yield": 15.3381, "fonte_yield": "B3", "spread_over_ref": 711.8}, {"date": "2026-09-16", "ticker": "CMIN11", "price": 905.9552, "clean_price": 905.9552, "yield": 14.79, "fonte_yield": "B3", "spread_over_ref": 664.9}, {"date": "2026-09-17", "ticker": "CMIN11", "price": 888.3115, "clean_price": 888.3115, "yield": 15.3542, "fonte_yield": "B3", "spread_over_ref": 727.6}, {"date": "2026-09-18", "ticker": "CMIN11", "price": 875.9322, "clean_price": 875.9322, "yield": 15.7771, "fonte_yield": "B3", "spread_over_ref": 764.4}, {"date": "2026-09-21", "ticker": "CMIN11", "price": 878.6898, "clean_price": 878.6898, "yield": 15.6913, "fonte_yield": "B3", "spread_over_ref": 753.6}, {"date": "2026-09-22", "ticker": "CMIN11", "price": 931.2983, "clean_price": 931.2983, "yield": 14.1093, "fonte_yield": "B3", "spread_over_ref": 601.6}, {"date": "2026-09-23", "ticker": "CMIN11", "price": 900.9653, "clean_price": 900.9653, "yield": 15.0781, "fonte_yield": "B3", "spread_over_ref": 686.1}, {"date": "2026-09-24", "ticker": "CMIN11", "price": 956.1165, "clean_price": 956.1165, "yield": 13.4307, "fonte_yield": "B3", "spread_over_ref": 533.9}, {"date": "2026-09-25", "ticker": "CMIN11", "price": 902.1784, "clean_price": 902.1784, "yield": 15.0553, "fonte_yield": "B3", "spread_over_ref": 688.3}, {"date": "2026-09-28", "ticker": "CMIN11", "price": 882.0035, "clean_price": 882.0035, "yield": 15.7397, "fonte_yield": "B3", "spread_over_ref": 749.4}, {"date": "2026-09-29", "ticker": "CMIN11", "price": 903.1588, "clean_price": 903.1588, "yield": 15.1218, "fonte_yield": "B3", "spread_over_ref": 698.9}, {"date": "2026-09-30", "ticker": "CMIN11", "price": 885.4186, "clean_price": 885.4186, "yield": 15.6778, "fonte_yield": "B3", "spread_over_ref": 751.7}, {"date": "2026-10-01", "ticker": "CMIN11", "price": 890.557, "clean_price": 890.557, "yield": 15.5396, "fonte_yield": "B3", "spread_over_ref": 735.9}, {"date": "2026-10-02", "ticker": "CMIN11", "price": 882.6691, "clean_price": 882.6691, "yield": 15.8275, "fonte_yield": "B3", "spread_over_ref": 768.3}, {"date": "2026-10-05", "ticker": "CMIN11", "price": 917.5106, "clean_price": 917.5106, "yield": 14.7703, "fonte_yield": "B3", "spread_over_ref": 722.4}, {"date": "2026-10-06", "ticker": "CMIN11", "price": 923.1364, "clean_price": 923.1364, "yield": 14.6254, "fonte_yield": "B3", "spread_over_ref": 719.4}, {"date": "2026-10-07", "ticker": "CMIN11", "price": 905.1934, "clean_price": 905.1934, "yield": 15.1902, "fonte_yield": "B3", "spread_over_ref": 783.2}, {"date": "2026-10-08", "ticker": "CMIN11", "price": 925.749, "clean_price": 925.749, "yield": 14.5845, "fonte_yield": "B3", "spread_over_ref": 735.1}, {"date": "2026-10-09", "ticker": "CMIN11", "price": 902.48, "clean_price": 902.48, "yield": 15.3468, "fonte_yield": "B3", "spread_over_ref": 812.5}, {"date": "2026-10-13", "ticker": "CMIN11", "price": 969.3189, "clean_price": 969.3189, "yield": 13.3754, "fonte_yield": "B3", "spread_over_ref": 622.3}, {"date": "2026-10-14", "ticker": "CMIN11", "price": 967.3761, "clean_price": 967.3761, "yield": 13.4518, "fonte_yield": "B3", "spread_over_ref": 626.5}, {"date": "2026-10-15", "ticker": "CMIN11", "price": 967.9512, "clean_price": 967.9512, "yield": 13.4555, "fonte_yield": "B3", "spread_over_ref": 622.1}, {"date": "2026-10-16", "ticker": "CMIN11", "price": 920.0135, "clean_price": 920.0135, "yield": 14.8905, "fonte_yield": "B3", "spread_over_ref": 752.4}, {"date": "2026-10-19", "ticker": "CMIN11", "price": 856.471, "clean_price": 856.471, "yield": 16.969, "fonte_yield": "B3", "spread_over_ref": 947.0}, {"date": "2026-10-20", "ticker": "CMIN11", "price": 1002.5993, "clean_price": 1002.5993, "yield": 12.6192, "fonte_yield": "B3", "spread_over_ref": 548.3}, {"date": "2026-10-21", "ticker": "CMIN11", "price": 928.5039, "clean_price": 928.5039, "yield": 14.6979, "fonte_yield": "B3", "spread_over_ref": 743.9}, {"date": "2026-10-22", "ticker": "CMIN11", "price": 888.8125, "clean_price": 888.8125, "yield": 15.9723, "fonte_yield": "B3", "spread_over_ref": 865.6}, {"date": "2026-10-23", "ticker": "CMIN11", "price": 916.7704, "clean_price": 916.7704, "yield": 15.0852, "fonte_yield": "B3", "spread_over_ref": 787.3}, {"date": "2026-10-26", "ticker": "CMIN11", "price": 918.998846, "clean_price": 918.998846, "yield": 15.0297, "fonte_yield": "ANBIMA", "spread_over_ref": 660.1}, {"date": "2026-10-27", "ticker": "CMIN11", "price": 895.1514, "clean_price": 895.1514, "yield": 15.8, "fonte_yield": "B3", "spread_over_ref": 741.5}, {"date": "2026-10-28", "ticker": "CMIN11", "price": 861.4294, "clean_price": 861.4294, "yield": 16.9622, "fonte_yield": "B3", "spread_over_ref": 844.9}, {"date": "2026-10-29", "ticker": "CMIN11", "price": 808.4133, "clean_price": 808.4133, "yield": 18.8532, "fonte_yield": "B3", "spread_over_ref": 1023.3}, {"date": "2026-10-30", "ticker": "CMIN11", "price": 801.7265, "clean_price": 801.7265, "yield": 19.1235, "fonte_yield": "B3", "spread_over_ref": 1040.7}, {"date": "2026-11-03", "ticker": "CMIN11", "price": 859.0129, "clean_price": 859.0129, "yield": 17.0788, "fonte_yield": "B3", "spread_over_ref": 848.8}, {"date": "2026-11-04", "ticker": "CMIN11", "price": 827.7016, "clean_price": 827.7016, "yield": 18.2187, "fonte_yield": "B3", "spread_over_ref": 963.2}, {"date": "2026-11-05", "ticker": "CMIN11", "price": 859.133, "clean_price": 859.133, "yield": 17.1977, "fonte_yield": "B3", "spread_over_ref": 871.5}, {"date": "2026-11-06", "ticker": "CMIN11", "price": 829.4165, "clean_price": 829.4165, "yield": 18.2253, "fonte_yield": "B3", "spread_over_ref": 976.9}, {"date": "2026-11-09", "ticker": "CMIN11", "price": 927.622843, "clean_price": 927.622843, "yield": 14.9311, "fonte_yield": "ANBIMA", "spread_over_ref": 677.4}, {"date": "2026-11-10", "ticker": "CMIN11", "price": 941.61, "clean_price": 941.61, "yield": 14.54, "fonte_yield": "B3", "spread_over_ref": 644.6}, {"date": "2026-11-11", "ticker": "CMIN11", "price": 852.0744, "clean_price": 852.0744, "yield": 17.5191, "fonte_yield": "B3", "spread_over_ref": 926.9}, {"date": "2026-11-12", "ticker": "CMIN11", "price": 929.605339, "clean_price": 929.605339, "yield": 14.9078, "fonte_yield": "ANBIMA", "spread_over_ref": 674.3}, {"date": "2026-11-13", "ticker": "CMIN11", "price": 846.6353, "clean_price": 846.6353, "yield": 17.7069, "fonte_yield": "B3", "spread_over_ref": 934.3}, {"date": "2026-11-16", "ticker": "CMIN11", "price": 870.4584, "clean_price": 870.4584, "yield": 16.8797, "fonte_yield": "B3", "spread_over_ref": 844.5}, {"date": "2026-11-17", "ticker": "CMIN11", "price": 918.1088, "clean_price": 918.1088, "yield": 15.3447, "fonte_yield": "B3", "spread_over_ref": 714.8}, {"date": "2026-11-18", "ticker": "CMIN11", "price": 931.218054, "clean_price": 931.218054, "yield": 14.9362, "fonte_yield": "ANBIMA", "spread_over_ref": 675.7}, {"date": "2026-11-19", "ticker": "CMIN11", "price": 853.3383, "clean_price": 853.3383, "yield": 17.6867, "fonte_yield": "B3", "spread_over_ref": 917.1}, {"date": "2026-11-23", "ticker": "CMIN11", "price": 871.2419, "clean_price": 871.2419, "yield": 16.9508, "fonte_yield": "B3", "spread_over_ref": 855.0}, {"date": "2026-11-24", "ticker": "CMIN11", "price": 924.826, "clean_price": 924.826, "yield": 15.2754, "fonte_yield": "B3", "spread_over_ref": 698.6}], "emitter": {"cnpj": "08902291000115", "cnpj_formatado": "08.902.291/0001-15", "razao_social": "CSN MINERAÇÃO S.A.", "nome_fantasia": "CSN MINERAÇÃO S.A", "setor": "Extração Mineral", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": null, "municipio": "CONGONHAS", "uf": "MG", "descricao": "CSN MINERAÇÃO S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Extração Mineral."}, "raiox_cnpj": "08902291000115", "paymentEvents": [{"ticker": "CMIN11", "data_evento": "2027-01-15", "data_liquidacao": "2027-01-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "CMIN11", "data_evento": "2027-07-15", "data_liquidacao": "2027-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2028-01-15", "data_liquidacao": "2028-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2028-07-15", "data_liquidacao": "2028-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2029-01-15", "data_liquidacao": "2029-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2029-07-15", "data_liquidacao": "2029-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2030-01-15", "data_liquidacao": "2030-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2030-07-15", "data_liquidacao": "2030-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2031-01-15", "data_liquidacao": "2031-01-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2031-07-15", "data_liquidacao": "2031-07-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "CMIN11", "data_evento": "2031-07-15", "data_liquidacao": "2031-07-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.4104, "valor_real": null, "valor_projetado": 24.104, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo CMIN11 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por CSN MINERAÇÃO S.A. (CNPJ: 08.902.291/0001-15), com taxa de emissão de IPCA + 4.88% a.a. e data de vencimento em 15/07/2031. O título encontra-se ativo (duration modificada de 3.98 anos) e spread indicativo de 12.79% sobre a NTN-B soberana, com volume emitido de R$ 576.448.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "CMIN12", "tipo": "Debênture", "issuer": "CSN MINERAÇÃO S.A.", "vencimento": "2032-07-15"}, {"ticker": "CMIN22", "tipo": "Debênture", "issuer": "CSN MINERAÇÃO S.A.", "vencimento": "2037-07-15"}, {"ticker": "CMIN21", "tipo": "Debênture", "issuer": "CSN MINERAÇÃO S.A.", "vencimento": "2036-07-15"}], "relatedSector": [{"ticker": "VALEC1", "tipo": "Debênture", "issuer": "VALE S.A.", "vencimento": "2035-05-15"}, {"ticker": "VALED1", "tipo": "Debênture", "issuer": "VALE S.A.", "vencimento": "2037-05-15"}, {"ticker": "VALEB1", "tipo": "Debênture", "issuer": "VALE S.A.", "vencimento": "2032-05-15"}, {"ticker": "VALEA0", "tipo": "Debênture", "issuer": "VALE S.A.", "vencimento": "2034-10-15"}], "issuerSlug": "csn-mineracao-s-a", "sectorSlug": "mineracao"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

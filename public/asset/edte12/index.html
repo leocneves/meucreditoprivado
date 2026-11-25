@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "EDTE12", "item": "https://fixdatabrasil.com.br/asset/edte12/"}]}, {"@type": "FinancialProduct", "name": "Debênture EDTE12 (EDTE - EMPRESA DIAMANTINA…)", "identifier": "EDTE12", "isin": "BREDITDBS014", "description": "Consulte dados de mercado da debênture EDTE12 emitida por EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A. (CNPJ: 24.870.962/0001-60). Indexador IPCA, vencimento em 15/12/2028, rating AAA, spread de 0.24%, duration de 1.37 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo EDTE12 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A. (CNPJ: 24.870.962/0001-60), com taxa de emissão de IPCA + 5.29% a.a. e data de vencimento em 15/12/2028. O título encontra-se resgatado, avaliado com rating AAA em escala nacional (duration modificada de 1.37 anos) e spread indicativo de 0.24% sobre a NTN-B soberana, com volume emitido de R$ 315.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/edte12/", "category": "Debênture", "provider": {"@type": "Organization", "name": "EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A.", "taxID": "24.870.962/0001-60"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">EDTE12</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo EDTE12 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A. (CNPJ: 24.870.962/0001-60), com taxa de emissão de IPCA + 5.29% a.a. e data de vencimento em 15/12/2028. O título encontra-se resgatado, avaliado com rating AAA em escala nacional (duration modificada de 1.37 anos) e spread indicativo de 0.24% sobre a NTN-B soberana, com volume emitido de R$ 315.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/12/2028</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 2,1 anos (751 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 2,1 anos (750 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/energia-eletrica/" class="font-semibold text-blue-300 hover:underline">Energia Elétrica</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">PENTAGONO S/A DTVM</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO SANTANDER (BRASIL) S/A</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">2,1 anos (751 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">2,1 anos (750 dias corridos)</p></div>
           </div>
         </div>
 
@@ -492,6 +768,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "EDTE12", "tipo": "Debênture", "issuer": "EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A.", "indexador": "IPCA", "taxa_emissao": 5.2939, "taxa_negocio_b3": 7.5309, "taxa_indicativa_anbima": 7.4378, "taxa_mercado": 7.5465, "taxa_ativo": 7.5465, "taxa_compra": "7,5239", "taxa_venda": "7,356", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1036.8006", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 1204762.36, "volume_emissao": 315000000.0, "volume": 315000000.0, "quantidade_emitida": 315000.0, "quantidade": 315000.0, "data_emissao": "2018-12-15", "vencimento": "2028-12-15", "emissao": 2.0, "serie": 1.0, "isin": "BREDITDBS014", "lei": 12.431, "cnpj_emissor": 24870962000160.0, "setor": "Energia Elétrica", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "BANCO SANTANDER (BRASIL) S/A", "rating": "AAA(Bra)", "rating_original": "AAA(Bra)", "rating_agencia": "Fitch Ratings", "agencia": "Fitch Ratings", "rating_data": "08/01/2026", "divulgacao": "08/01/2026", "securitizadora": "Pentágono", "flag_vencido": 0, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": 1.37, "ntnb_referencia": "15/08/2028", "taxa_ntnb": 7.29, "publico_alvo": "Não Informado", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2026-12-15", "vna": 1156.6116, "pu_par": 1067.2681, "incentivada": "Sim", "rating_normalizado": "AAA", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.002390716748998, "spread_anbima": 0.0013775747972784, "spread": 0.002390716748998, "pu_mercado_mediano": 1036.5752, "agio_desagio_pct": -2.88}, "prices": [{"date": "2026-05-29", "ticker": "EDTE12", "price": 1102.7391, "clean_price": 1102.7391, "yield": 7.7989, "fonte_yield": "B3", "spread_over_ref": -26.9}, {"date": "2026-06-01", "ticker": "EDTE12", "price": 1101.507369, "clean_price": 1101.507369, "yield": 7.9073, "fonte_yield": "ANBIMA", "spread_over_ref": -19.7}, {"date": "2026-06-02", "ticker": "EDTE12", "price": 1102.129, "clean_price": 1102.129, "yield": 7.9065, "fonte_yield": "B3", "spread_over_ref": -23.4}, {"date": "2026-06-03", "ticker": "EDTE12", "price": 1102.8456, "clean_price": 1102.8456, "yield": 7.9, "fonte_yield": "B3", "spread_over_ref": -42.0}, {"date": "2026-06-05", "ticker": "EDTE12", "price": 1096.155167, "clean_price": 1096.155167, "yield": 8.3368, "fonte_yield": "ANBIMA", "spread_over_ref": -18.6}, {"date": "2026-06-08", "ticker": "EDTE12", "price": 1096.7774, "clean_price": 1096.7774, "yield": 8.3368, "fonte_yield": "B3", "spread_over_ref": -30.8}, {"date": "2026-06-09", "ticker": "EDTE12", "price": 1099.9801, "clean_price": 1099.9801, "yield": 8.1825, "fonte_yield": "B3", "spread_over_ref": -48.5}, {"date": "2026-06-10", "ticker": "EDTE12", "price": 1097.0939, "clean_price": 1097.0939, "yield": 8.3948, "fonte_yield": "B3", "spread_over_ref": -30.8}, {"date": "2026-06-11", "ticker": "EDTE12", "price": 1101.585858, "clean_price": 1101.585858, "yield": 8.1588, "fonte_yield": "ANBIMA", "spread_over_ref": -33.9}, {"date": "2026-06-12", "ticker": "EDTE12", "price": 1106.5025, "clean_price": 1106.5025, "yield": 7.95, "fonte_yield": "B3", "spread_over_ref": -49.6}, {"date": "2026-06-15", "ticker": "EDTE12", "price": 985.3969, "clean_price": 985.3969, "yield": 8.0625, "fonte_yield": "B3", "spread_over_ref": -40.9}, {"date": "2026-06-16", "ticker": "EDTE12", "price": 994.5805, "clean_price": 994.5805, "yield": 7.538, "fonte_yield": "B3", "spread_over_ref": -103.2}, {"date": "2026-06-17", "ticker": "EDTE12", "price": 981.6615, "clean_price": 981.6615, "yield": 8.3456, "fonte_yield": "B3", "spread_over_ref": -38.9}, {"date": "2026-06-18", "ticker": "EDTE12", "price": 988.1484, "clean_price": 988.1484, "yield": 7.979, "fonte_yield": "B3", "spread_over_ref": -77.3}, {"date": "2026-06-19", "ticker": "EDTE12", "price": 982.7694, "clean_price": 982.7694, "yield": 8.3337, "fonte_yield": "B3", "spread_over_ref": -58.2}, {"date": "2026-06-22", "ticker": "EDTE12", "price": 983.3421, "clean_price": 983.3421, "yield": 8.3283, "fonte_yield": "B3", "spread_over_ref": -58.2}, {"date": "2026-06-23", "ticker": "EDTE12", "price": 993.8159, "clean_price": 993.8159, "yield": 7.7169, "fonte_yield": "B3", "spread_over_ref": -107.7}, {"date": "2026-06-24", "ticker": "EDTE12", "price": 974.7208, "clean_price": 974.7208, "yield": 8.9499, "fonte_yield": "B3", "spread_over_ref": 5.5}, {"date": "2026-06-25", "ticker": "EDTE12", "price": 982.8449, "clean_price": 982.8449, "yield": 8.4516, "fonte_yield": "B3", "spread_over_ref": -39.0}, {"date": "2026-06-26", "ticker": "EDTE12", "price": 988.748, "clean_price": 988.748, "yield": 8.1096, "fonte_yield": "B3", "spread_over_ref": -63.9}, {"date": "2026-06-29", "ticker": "EDTE12", "price": 997.6346, "clean_price": 997.6346, "yield": 7.5908, "fonte_yield": "B3", "spread_over_ref": -112.7}, {"date": "2026-06-30", "ticker": "EDTE12", "price": 987.5575, "clean_price": 987.5575, "yield": 8.2375, "fonte_yield": "B3", "spread_over_ref": -50.8}, {"date": "2026-07-01", "ticker": "EDTE12", "price": 997.7639, "clean_price": 997.7639, "yield": 7.6365, "fonte_yield": "B3", "spread_over_ref": -113.2}, {"date": "2026-07-02", "ticker": "EDTE12", "price": 1001.2663, "clean_price": 1001.2663, "yield": 7.45, "fonte_yield": "B3", "spread_over_ref": -130.8}, {"date": "2026-07-03", "ticker": "EDTE12", "price": 1000.0766, "clean_price": 1000.0766, "yield": 7.549, "fonte_yield": "B3", "spread_over_ref": -113.2}, {"date": "2026-07-06", "ticker": "EDTE12", "price": 991.920785, "clean_price": 991.920785, "yield": 8.0782, "fonte_yield": "ANBIMA", "spread_over_ref": -57.2}, {"date": "2026-07-07", "ticker": "EDTE12", "price": 993.5442, "clean_price": 993.5442, "yield": 8.0061, "fonte_yield": "B3", "spread_over_ref": -65.7}, {"date": "2026-07-08", "ticker": "EDTE12", "price": 1001.3117, "clean_price": 1001.3117, "yield": 7.554, "fonte_yield": "B3", "spread_over_ref": -107.0}, {"date": "2026-07-09", "ticker": "EDTE12", "price": 999.6591, "clean_price": 999.6591, "yield": 7.6834, "fonte_yield": "B3", "spread_over_ref": -87.2}, {"date": "2026-07-10", "ticker": "EDTE12", "price": 990.2468, "clean_price": 990.2468, "yield": 8.2066, "fonte_yield": "B3", "spread_over_ref": -39.0}, {"date": "2026-07-13", "ticker": "EDTE12", "price": 998.5669, "clean_price": 998.5669, "yield": 7.71, "fonte_yield": "B3", "spread_over_ref": -82.0}, {"date": "2026-07-14", "ticker": "EDTE12", "price": 989.5205, "clean_price": 989.5205, "yield": 8.3, "fonte_yield": "B3", "spread_over_ref": -17.0}, {"date": "2026-07-15", "ticker": "EDTE12", "price": 1002.0746, "clean_price": 1002.0746, "yield": 7.54, "fonte_yield": "B3", "spread_over_ref": -80.9}, {"date": "2026-07-16", "ticker": "EDTE12", "price": 1007.3397, "clean_price": 1007.3397, "yield": 7.236, "fonte_yield": "B3", "spread_over_ref": -107.9}, {"date": "2026-07-17", "ticker": "EDTE12", "price": 1007.8006, "clean_price": 1007.8006, "yield": 7.231, "fonte_yield": "B3", "spread_over_ref": -117.0}, {"date": "2026-07-20", "ticker": "EDTE12", "price": 995.4728, "clean_price": 995.4728, "yield": 8.05, "fonte_yield": "B3", "spread_over_ref": -47.9}, {"date": "2026-07-21", "ticker": "EDTE12", "price": 998.084, "clean_price": 998.084, "yield": 7.909, "fonte_yield": "B3", "spread_over_ref": -62.7}, {"date": "2026-07-22", "ticker": "EDTE12", "price": 996.1856, "clean_price": 996.1856, "yield": 8.0559, "fonte_yield": "B3", "spread_over_ref": -56.3}, {"date": "2026-07-23", "ticker": "EDTE12", "price": 991.56, "clean_price": 991.56, "yield": 8.3527, "fonte_yield": "B3", "spread_over_ref": -25.1}, {"date": "2026-07-24", "ticker": "EDTE12", "price": 1000.4632, "clean_price": 1000.4632, "yield": 7.8122, "fonte_yield": "B3", "spread_over_ref": -65.0}, {"date": "2026-07-27", "ticker": "EDTE12", "price": 1000.320385, "clean_price": 1000.320385, "yield": 7.8456, "fonte_yield": "ANBIMA", "spread_over_ref": -56.0}, {"date": "2026-07-28", "ticker": "EDTE12", "price": 1004.0212, "clean_price": 1004.0212, "yield": 7.6369, "fonte_yield": "B3", "spread_over_ref": -75.3}, {"date": "2026-07-29", "ticker": "EDTE12", "price": 1006.1555, "clean_price": 1006.1555, "yield": 7.4774, "fonte_yield": "B3", "spread_over_ref": -100.0}, {"date": "2026-07-30", "ticker": "EDTE12", "price": 999.765509, "clean_price": 999.765509, "yield": 7.9028, "fonte_yield": "ANBIMA", "spread_over_ref": -60.8}, {"date": "2026-07-31", "ticker": "EDTE12", "price": 1000.452384, "clean_price": 1000.452384, "yield": 7.8795, "fonte_yield": "ANBIMA", "spread_over_ref": -55.5}, {"date": "2026-08-03", "ticker": "EDTE12", "price": 1009.5471, "clean_price": 1009.5471, "yield": 7.3203, "fonte_yield": "B3", "spread_over_ref": -102.3}, {"date": "2026-08-04", "ticker": "EDTE12", "price": 1002.3683, "clean_price": 1002.3683, "yield": 7.8175, "fonte_yield": "B3", "spread_over_ref": -61.6}, {"date": "2026-08-05", "ticker": "EDTE12", "price": 1005.1469, "clean_price": 1005.1469, "yield": 7.64, "fonte_yield": "B3", "spread_over_ref": -74.7}, {"date": "2026-08-06", "ticker": "EDTE12", "price": 1001.809603, "clean_price": 1001.809603, "yield": 7.8753, "fonte_yield": "ANBIMA", "spread_over_ref": -54.8}, {"date": "2026-08-07", "ticker": "EDTE12", "price": 1005.9909, "clean_price": 1005.9909, "yield": 7.628, "fonte_yield": "B3", "spread_over_ref": -66.9}, {"date": "2026-08-10", "ticker": "EDTE12", "price": 1004.544, "clean_price": 1004.544, "yield": 7.7419, "fonte_yield": "B3", "spread_over_ref": -53.4}, {"date": "2026-08-11", "ticker": "EDTE12", "price": 1011.2956, "clean_price": 1011.2956, "yield": 7.3575, "fonte_yield": "B3", "spread_over_ref": -88.9}, {"date": "2026-08-12", "ticker": "EDTE12", "price": 1006.7685, "clean_price": 1006.7685, "yield": 7.6696, "fonte_yield": "B3", "spread_over_ref": -54.6}, {"date": "2026-08-13", "ticker": "EDTE12", "price": 1009.1595, "clean_price": 1009.1595, "yield": 7.5164, "fonte_yield": "B3", "spread_over_ref": -68.7}, {"date": "2026-08-14", "ticker": "EDTE12", "price": 1006.6122, "clean_price": 1006.6122, "yield": 7.7186, "fonte_yield": "B3", "spread_over_ref": -53.9}, {"date": "2026-08-17", "ticker": "EDTE12", "price": 1006.4195, "clean_price": 1006.4195, "yield": 7.7358, "fonte_yield": "B3", "spread_over_ref": -47.2}, {"date": "2026-08-18", "ticker": "EDTE12", "price": 1009.4306, "clean_price": 1009.4306, "yield": 7.5536, "fonte_yield": "B3", "spread_over_ref": -63.4}, {"date": "2026-08-19", "ticker": "EDTE12", "price": 1015.0397, "clean_price": 1015.0397, "yield": 7.2003, "fonte_yield": "B3", "spread_over_ref": -89.9}, {"date": "2026-08-20", "ticker": "EDTE12", "price": 1008.1487, "clean_price": 1008.1487, "yield": 7.673, "fonte_yield": "B3", "spread_over_ref": -39.5}, {"date": "2026-08-21", "ticker": "EDTE12", "price": 1023.2942, "clean_price": 1023.2942, "yield": 6.7, "fonte_yield": "B3", "spread_over_ref": -126.8}, {"date": "2026-08-24", "ticker": "EDTE12", "price": 1010.4301, "clean_price": 1010.4301, "yield": 7.5364, "fonte_yield": "B3", "spread_over_ref": -52.3}, {"date": "2026-08-25", "ticker": "EDTE12", "price": 1011.6493, "clean_price": 1011.6493, "yield": 7.4684, "fonte_yield": "B3", "spread_over_ref": -58.4}, {"date": "2026-08-26", "ticker": "EDTE12", "price": 1008.4864, "clean_price": 1008.4864, "yield": 7.6895, "fonte_yield": "B3", "spread_over_ref": -39.8}, {"date": "2026-08-27", "ticker": "EDTE12", "price": 1008.3413, "clean_price": 1008.3413, "yield": 7.7008, "fonte_yield": "B3", "spread_over_ref": -28.9}, {"date": "2026-08-28", "ticker": "EDTE12", "price": 1009.2552, "clean_price": 1009.2552, "yield": 7.64, "fonte_yield": "B3", "spread_over_ref": -28.9}, {"date": "2026-08-31", "ticker": "EDTE12", "price": 1013.76498, "clean_price": 1013.76498, "yield": 7.3507, "fonte_yield": "ANBIMA", "spread_over_ref": -54.6}, {"date": "2026-09-01", "ticker": "EDTE12", "price": 1012.9002, "clean_price": 1012.9002, "yield": 7.4237, "fonte_yield": "B3", "spread_over_ref": -43.7}, {"date": "2026-09-02", "ticker": "EDTE12", "price": 1013.9436, "clean_price": 1013.9436, "yield": 7.358, "fonte_yield": "B3", "spread_over_ref": -45.9}, {"date": "2026-09-03", "ticker": "EDTE12", "price": 1014.8464, "clean_price": 1014.8464, "yield": 7.3165, "fonte_yield": "B3", "spread_over_ref": -45.0}, {"date": "2026-09-04", "ticker": "EDTE12", "price": 1015.0082, "clean_price": 1015.0082, "yield": 7.306, "fonte_yield": "B3", "spread_over_ref": -41.2}, {"date": "2026-09-08", "ticker": "EDTE12", "price": 1015.0878, "clean_price": 1015.0878, "yield": 7.315, "fonte_yield": "B3", "spread_over_ref": -31.9}, {"date": "2026-09-09", "ticker": "EDTE12", "price": 1015.5581, "clean_price": 1015.5581, "yield": 7.2934, "fonte_yield": "B3", "spread_over_ref": -34.8}, {"date": "2026-09-10", "ticker": "EDTE12", "price": 1019.5608, "clean_price": 1019.5608, "yield": 7.0383, "fonte_yield": "B3", "spread_over_ref": -52.2}, {"date": "2026-09-11", "ticker": "EDTE12", "price": 1018.8523, "clean_price": 1018.8523, "yield": 7.0663, "fonte_yield": "B3", "spread_over_ref": -43.5}, {"date": "2026-09-14", "ticker": "EDTE12", "price": 1018.1305, "clean_price": 1018.1305, "yield": 7.1252, "fonte_yield": "B3", "spread_over_ref": -36.3}, {"date": "2026-09-15", "ticker": "EDTE12", "price": 1019.3137, "clean_price": 1019.3137, "yield": 7.0456, "fonte_yield": "B3", "spread_over_ref": -40.1}, {"date": "2026-09-16", "ticker": "EDTE12", "price": 1020.5729, "clean_price": 1020.5729, "yield": 6.9979, "fonte_yield": "B3", "spread_over_ref": -44.0}, {"date": "2026-09-17", "ticker": "EDTE12", "price": 1019.6003, "clean_price": 1019.6003, "yield": 7.1, "fonte_yield": "B3", "spread_over_ref": -24.6}, {"date": "2026-09-18", "ticker": "EDTE12", "price": 1023.8236, "clean_price": 1023.8236, "yield": 6.852, "fonte_yield": "ANBIMA", "spread_over_ref": -44.5}, {"date": "2026-09-21", "ticker": "EDTE12", "price": 1024.0395, "clean_price": 1024.0395, "yield": 6.8757, "fonte_yield": "B3", "spread_over_ref": -46.7}, {"date": "2026-09-22", "ticker": "EDTE12", "price": 1024.7357, "clean_price": 1024.7357, "yield": 6.8975, "fonte_yield": "B3", "spread_over_ref": -48.6}, {"date": "2026-09-23", "ticker": "EDTE12", "price": 1024.1113, "clean_price": 1024.1113, "yield": 6.9484, "fonte_yield": "B3", "spread_over_ref": -41.8}, {"date": "2026-09-24", "ticker": "EDTE12", "price": 1021.895, "clean_price": 1021.895, "yield": 7.1309, "fonte_yield": "B3", "spread_over_ref": -25.1}, {"date": "2026-09-25", "ticker": "EDTE12", "price": 1030.4326, "clean_price": 1030.4326, "yield": 6.588, "fonte_yield": "B3", "spread_over_ref": -72.8}, {"date": "2026-09-28", "ticker": "EDTE12", "price": 1026.7795, "clean_price": 1026.7795, "yield": 6.92, "fonte_yield": "B3", "spread_over_ref": -48.8}, {"date": "2026-09-29", "ticker": "EDTE12", "price": 1022.533, "clean_price": 1022.533, "yield": 7.298, "fonte_yield": "B3", "spread_over_ref": -10.5}, {"date": "2026-09-30", "ticker": "EDTE12", "price": 1020.7016, "clean_price": 1020.7016, "yield": 7.4252, "fonte_yield": "B3", "spread_over_ref": 5.8}, {"date": "2026-10-01", "ticker": "EDTE12", "price": 1019.5514, "clean_price": 1019.5514, "yield": 7.595, "fonte_yield": "B3", "spread_over_ref": 21.9}, {"date": "2026-10-02", "ticker": "EDTE12", "price": 1024.966152, "clean_price": 1024.966152, "yield": 7.2174, "fonte_yield": "ANBIMA", "spread_over_ref": -12.4}, {"date": "2026-10-05", "ticker": "EDTE12", "price": 1030.595944, "clean_price": 1030.595944, "yield": 6.8722, "fonte_yield": "ANBIMA", "spread_over_ref": -9.9}, {"date": "2026-10-06", "ticker": "EDTE12", "price": 1025.9995, "clean_price": 1025.9995, "yield": 7.2514, "fonte_yield": "B3", "spread_over_ref": 32.2}, {"date": "2026-10-07", "ticker": "EDTE12", "price": 1028.1813, "clean_price": 1028.1813, "yield": 7.1374, "fonte_yield": "B3", "spread_over_ref": 30.9}, {"date": "2026-10-08", "ticker": "EDTE12", "price": 1031.7146, "clean_price": 1031.7146, "yield": 6.9343, "fonte_yield": "B3", "spread_over_ref": 23.4}, {"date": "2026-10-09", "ticker": "EDTE12", "price": 1039.4847, "clean_price": 1039.4847, "yield": 6.5287, "fonte_yield": "B3", "spread_over_ref": -14.2}, {"date": "2026-10-13", "ticker": "EDTE12", "price": 1035.1004, "clean_price": 1035.1004, "yield": 6.8826, "fonte_yield": "B3", "spread_over_ref": 13.4}, {"date": "2026-10-14", "ticker": "EDTE12", "price": 1028.64, "clean_price": 1028.64, "yield": 7.34, "fonte_yield": "B3", "spread_over_ref": 57.5}, {"date": "2026-10-15", "ticker": "EDTE12", "price": 1032.3283, "clean_price": 1032.3283, "yield": 7.1463, "fonte_yield": "B3", "spread_over_ref": 31.9}, {"date": "2026-10-16", "ticker": "EDTE12", "price": 1032.9535, "clean_price": 1032.9535, "yield": 7.1209, "fonte_yield": "B3", "spread_over_ref": 21.6}, {"date": "2026-10-19", "ticker": "EDTE12", "price": 1033.7015, "clean_price": 1033.7015, "yield": 7.0921, "fonte_yield": "B3", "spread_over_ref": 15.5}, {"date": "2026-10-20", "ticker": "EDTE12", "price": 1035.9239, "clean_price": 1035.9239, "yield": 7.0432, "fonte_yield": "B3", "spread_over_ref": 18.5}, {"date": "2026-10-21", "ticker": "EDTE12", "price": 1031.5833, "clean_price": 1031.5833, "yield": 7.3, "fonte_yield": "B3", "spread_over_ref": 44.0}, {"date": "2026-10-22", "ticker": "EDTE12", "price": 1036.9719, "clean_price": 1036.9719, "yield": 6.9739, "fonte_yield": "B3", "spread_over_ref": 9.9}, {"date": "2026-10-23", "ticker": "EDTE12", "price": 1042.6326, "clean_price": 1042.6326, "yield": 6.5774, "fonte_yield": "B3", "spread_over_ref": -26.6}, {"date": "2026-10-26", "ticker": "EDTE12", "price": 1008.3983, "clean_price": 1008.3983, "yield": 9.11, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-10-27", "ticker": "EDTE12", "price": 1021.0821, "clean_price": 1021.0821, "yield": 8.1822, "fonte_yield": "B3", "spread_over_ref": 33.1}, {"date": "2026-10-28", "ticker": "EDTE12", "price": 1024.7392, "clean_price": 1024.7392, "yield": 7.93, "fonte_yield": "B3", "spread_over_ref": 11.1}, {"date": "2026-10-29", "ticker": "EDTE12", "price": 1030.659302, "clean_price": 1030.659302, "yield": 7.5282, "fonte_yield": "ANBIMA", "spread_over_ref": -15.5}, {"date": "2026-10-30", "ticker": "EDTE12", "price": 1031.3222, "clean_price": 1031.3222, "yield": 7.5092, "fonte_yield": "B3", "spread_over_ref": -19.5}, {"date": "2026-11-03", "ticker": "EDTE12", "price": 1027.1141, "clean_price": 1027.1141, "yield": 7.8642, "fonte_yield": "B3", "spread_over_ref": 10.7}, {"date": "2026-11-04", "ticker": "EDTE12", "price": 1029.1348, "clean_price": 1029.1348, "yield": 7.7318, "fonte_yield": "B3", "spread_over_ref": 3.3}, {"date": "2026-11-05", "ticker": "EDTE12", "price": 1031.5207, "clean_price": 1031.5207, "yield": 7.6116, "fonte_yield": "B3", "spread_over_ref": -0.8}, {"date": "2026-11-06", "ticker": "EDTE12", "price": 1031.5221, "clean_price": 1031.5221, "yield": 7.612, "fonte_yield": "B3", "spread_over_ref": 9.5}, {"date": "2026-11-09", "ticker": "EDTE12", "price": 1029.5175, "clean_price": 1029.5175, "yield": 7.79, "fonte_yield": "B3", "spread_over_ref": 31.0}, {"date": "2026-11-10", "ticker": "EDTE12", "price": 1031.814, "clean_price": 1031.814, "yield": 7.65, "fonte_yield": "B3", "spread_over_ref": 26.1}, {"date": "2026-11-11", "ticker": "EDTE12", "price": 1035.5815, "clean_price": 1035.5815, "yield": 7.4145, "fonte_yield": "B3", "spread_over_ref": 8.6}, {"date": "2026-11-12", "ticker": "EDTE12", "price": 1042.4211, "clean_price": 1042.4211, "yield": 6.8796, "fonte_yield": "B3", "spread_over_ref": -42.9}, {"date": "2026-11-13", "ticker": "EDTE12", "price": 1035.0449, "clean_price": 1035.0449, "yield": 7.4488, "fonte_yield": "B3", "spread_over_ref": 11.8}, {"date": "2026-11-16", "ticker": "EDTE12", "price": 1031.1867, "clean_price": 1031.1867, "yield": 7.8025, "fonte_yield": "B3", "spread_over_ref": 30.9}, {"date": "2026-11-17", "ticker": "EDTE12", "price": 1031.5463, "clean_price": 1031.5463, "yield": 7.775, "fonte_yield": "B3", "spread_over_ref": 39.7}, {"date": "2026-11-18", "ticker": "EDTE12", "price": 1036.0798, "clean_price": 1036.0798, "yield": 7.4722, "fonte_yield": "B3", "spread_over_ref": 17.9}, {"date": "2026-11-19", "ticker": "EDTE12", "price": 1036.903051, "clean_price": 1036.903051, "yield": 7.4474, "fonte_yield": "ANBIMA", "spread_over_ref": 1.6}, {"date": "2026-11-23", "ticker": "EDTE12", "price": 1033.8279, "clean_price": 1033.8279, "yield": 7.7224, "fonte_yield": "B3", "spread_over_ref": 38.4}, {"date": "2026-11-24", "ticker": "EDTE12", "price": 1036.8006, "clean_price": 1036.8006, "yield": 7.5309, "fonte_yield": "B3", "spread_over_ref": 22.5}], "emitter": {"cnpj": "24870962000160", "cnpj_formatado": "24.870.962/0001-60", "razao_social": "EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A.", "nome_fantasia": "EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A.", "setor": "Energia Elétrica", "tipo_emissor": "Emissor / Devedor", "categoria_cvm": "Emissor / Devedor", "situacao_cvm": "Ativo", "site_ri": null, "municipio": null, "uf": null, "descricao": "EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A. é emissor/devedor de ativos de renda fixa no mercado de capitais."}, "raiox_cnpj": null, "paymentEvents": [{"ticker": "EDTE12", "data_evento": "2026-12-15", "data_liquidacao": "2026-12-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "EDTE12", "data_evento": "2027-06-15", "data_liquidacao": "2027-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.6128, "valor_real": null, "valor_projetado": 26.128, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EDTE12", "data_evento": "2027-12-15", "data_liquidacao": "2027-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.6128, "valor_real": null, "valor_projetado": 26.128, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EDTE12", "data_evento": "2028-06-15", "data_liquidacao": "2028-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.6128, "valor_real": null, "valor_projetado": 26.128, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EDTE12", "data_evento": "2028-12-15", "data_liquidacao": "2028-12-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "EDTE12", "data_evento": "2028-12-15", "data_liquidacao": "2028-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 2.6128, "valor_real": null, "valor_projetado": 26.128, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo EDTE12 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por EDTE - EMPRESA DIAMANTINA DE TRANSMISSAO DE ENERGIA S.A. (CNPJ: 24.870.962/0001-60), com taxa de emissão de IPCA + 5.29% a.a. e data de vencimento em 15/12/2028. O título encontra-se resgatado, avaliado com rating AAA em escala nacional (duration modificada de 1.37 anos) e spread indicativo de 0.24% sobre a NTN-B soberana, com volume emitido de R$ 315.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [], "relatedSector": [{"ticker": "EGIEA6", "tipo": "Debênture", "issuer": "ENGIE BRASIL ENERGIA S.A.", "vencimento": "2038-02-15"}, {"ticker": "TRGP13", "tipo": "Debênture", "issuer": "TECP - TRANSMISSORA DE ENERGIA CENTRAL PAULISTANA S.A.", "vencimento": "2038-01-15"}, {"ticker": "CHSF13", "tipo": "Debênture", "issuer": "AXIA ENERGIA NORDESTE S.A.", "vencimento": "2031-06-15"}, {"ticker": "CPLDA1", "tipo": "Debênture", "issuer": "COPEL DISTRIBUIÇÃO S.A.", "vencimento": "2038-01-15"}], "issuerSlug": null, "sectorSlug": "energia-eletrica"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

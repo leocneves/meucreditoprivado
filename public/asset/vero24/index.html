@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "VERO24", "item": "https://fixdatabrasil.com.br/asset/vero24/"}]}, {"@type": "FinancialProduct", "name": "Debênture VERO24 (VERO S.A.)", "identifier": "VERO24", "isin": "BRVERODBS059", "description": "Consulte dados de mercado da debênture VERO24 emitida por VERO S.A. (CNPJ: 31.748.174/0001-60). Indexador IPCA, vencimento em 15/10/2031, rating A, spread de 8.61%, duration de 3.79 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo VERO24 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por VERO S.A. (CNPJ: 31.748.174/0001-60), com taxa de emissão de IPCA + 8.35% a.a. e data de vencimento em 15/10/2031. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.79 anos) e spread indicativo de 8.61% sobre a NTN-B soberana, com volume emitido de R$ 259.032.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/vero24/", "category": "Debênture", "provider": {"@type": "Organization", "name": "VERO S.A.", "taxID": "31.748.174/0001-60", "url": "http://www.vero-ri.com.br/"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">VERO24</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo VERO24 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por VERO S.A. (CNPJ: 31.748.174/0001-60), com taxa de emissão de IPCA + 8.35% a.a. e data de vencimento em 15/10/2031. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.79 anos) e spread indicativo de 8.61% sobre a NTN-B soberana, com volume emitido de R$ 259.032.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/10/2031</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 4,9 anos (1785 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 4,9 anos (1784 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/ti-e-telecomunicacoes/" class="font-semibold text-blue-300 hover:underline">TI e Telecomunicações</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">VORTX DTVM LTDA.</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BTG PACTUAL INVESTMENT BANKING LTDA.</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">4,9 anos (1785 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">4,9 anos (1784 dias corridos)</p></div>
           </div>
         </div>
 
@@ -567,6 +843,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "VERO24", "tipo": "Debênture", "issuer": "VERO S.A.", "indexador": "IPCA", "taxa_emissao": 8.3524, "taxa_negocio_b3": 15.5615, "taxa_indicativa_anbima": null, "taxa_mercado": 17.0184, "taxa_ativo": 17.0184, "taxa_compra": "--", "taxa_venda": "--", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "883.1612", "data_ultimo_negocio": "2026-11-23", "data_anbima": "2026-11-24", "volume_negociado_b3": 45924.38, "volume_emissao": 259032000.0, "volume": 259032000.0, "quantidade_emitida": 259032.0, "quantidade": 259032.0, "data_emissao": "2024-10-15", "vencimento": "2031-10-15", "emissao": 4.0, "serie": 2.0, "isin": "BRVERODBS059", "lei": 12.431, "cnpj_emissor": 31748174000160.0, "setor": "TI e Telecomunicações", "agente_fiduciario": "VORTX DTVM LTDA.", "coordenador_lider": "BTG PACTUAL INVESTMENT BANKING LTDA.", "rating": "brA+", "rating_original": "brA+", "rating_agencia": "S&P Global National Ratings", "agencia": "S&P Global National Ratings", "rating_data": "06/11/2025", "divulgacao": "06/11/2025", "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 3.79, "ntnb_referencia": "15/05/2031", "taxa_ntnb": 7.7388, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-04-15", "vna": 1109.8442, "pu_par": 1119.0686, "incentivada": "Sim", "rating_normalizado": "A+", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-23)", "spread_mercado": 0.0861305305052588, "spread_anbima": null, "spread": 0.0861305305052588, "pu_mercado_mediano": 845.6633, "agio_desagio_pct": -24.43}, "prices": [{"date": "2026-05-29", "ticker": "VERO24", "price": 880.262418, "clean_price": 880.262418, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-01", "ticker": "VERO24", "price": 880.68219, "clean_price": 880.68219, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-02", "ticker": "VERO24", "price": 888.786918, "clean_price": 888.786918, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-03", "ticker": "VERO24", "price": 884.387442, "clean_price": 884.387442, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-05", "ticker": "VERO24", "price": 882.479519, "clean_price": 882.479519, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-08", "ticker": "VERO24", "price": 867.532067, "clean_price": 867.532067, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-09", "ticker": "VERO24", "price": 841.7566, "clean_price": 841.7566, "yield": 16.01, "fonte_yield": "B3", "spread_over_ref": 683.4}, {"date": "2026-06-10", "ticker": "VERO24", "price": 867.352913, "clean_price": 867.352913, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-11", "ticker": "VERO24", "price": 874.133445, "clean_price": 874.133445, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-12", "ticker": "VERO24", "price": 871.912324, "clean_price": 871.912324, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-15", "ticker": "VERO24", "price": 877.522468, "clean_price": 877.522468, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-16", "ticker": "VERO24", "price": 872.864006, "clean_price": 872.864006, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-17", "ticker": "VERO24", "price": 872.562096, "clean_price": 872.562096, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-18", "ticker": "VERO24", "price": 886.737787, "clean_price": 886.737787, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-19", "ticker": "VERO24", "price": 908.1995, "clean_price": 908.1995, "yield": 13.985, "fonte_yield": "B3", "spread_over_ref": 478.7}, {"date": "2026-06-22", "ticker": "VERO24", "price": 929.3965, "clean_price": 929.3965, "yield": 13.3351, "fonte_yield": "B3", "spread_over_ref": 428.3}, {"date": "2026-06-23", "ticker": "VERO24", "price": 899.211555, "clean_price": 899.211555, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-24", "ticker": "VERO24", "price": 890.387547, "clean_price": 890.387547, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-25", "ticker": "VERO24", "price": 903.386876, "clean_price": 903.386876, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-26", "ticker": "VERO24", "price": 906.130189, "clean_price": 906.130189, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-29", "ticker": "VERO24", "price": 915.807906, "clean_price": 915.807906, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-06-30", "ticker": "VERO24", "price": 789.7195, "clean_price": 789.7195, "yield": 18.3839, "fonte_yield": "B3", "spread_over_ref": 921.8}, {"date": "2026-07-01", "ticker": "VERO24", "price": 966.2139, "clean_price": 966.2139, "yield": 12.3366, "fonte_yield": "B3", "spread_over_ref": 357.4}, {"date": "2026-07-02", "ticker": "VERO24", "price": 955.9754, "clean_price": 955.9754, "yield": 12.665, "fonte_yield": "B3", "spread_over_ref": 379.1}, {"date": "2026-07-03", "ticker": "VERO24", "price": 955.7248, "clean_price": 955.7248, "yield": 12.6938, "fonte_yield": "B3", "spread_over_ref": 390.1}, {"date": "2026-07-06", "ticker": "VERO24", "price": 957.188, "clean_price": 957.188, "yield": 12.6704, "fonte_yield": "B3", "spread_over_ref": 393.8}, {"date": "2026-07-07", "ticker": "VERO24", "price": 950.4022, "clean_price": 950.4022, "yield": 12.905, "fonte_yield": "B3", "spread_over_ref": 416.6}, {"date": "2026-07-08", "ticker": "VERO24", "price": 942.0749, "clean_price": 942.0749, "yield": 13.18, "fonte_yield": "B3", "spread_over_ref": 442.9}, {"date": "2026-07-09", "ticker": "VERO24", "price": 915.183732, "clean_price": 915.183732, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-07-10", "ticker": "VERO24", "price": 907.7838, "clean_price": 907.7838, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-07-13", "ticker": "VERO24", "price": 922.662, "clean_price": 922.662, "yield": 13.8675, "fonte_yield": "B3", "spread_over_ref": 518.0}, {"date": "2026-07-14", "ticker": "VERO24", "price": 914.241518, "clean_price": 914.241518, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-07-15", "ticker": "VERO24", "price": 995.0437, "clean_price": 995.0437, "yield": 11.6907, "fonte_yield": "B3", "spread_over_ref": 327.7}, {"date": "2026-07-16", "ticker": "VERO24", "price": 907.414316, "clean_price": 907.414316, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-07-17", "ticker": "VERO24", "price": 972.2281, "clean_price": 972.2281, "yield": 12.3959, "fonte_yield": "B3", "spread_over_ref": 382.1}, {"date": "2026-07-20", "ticker": "VERO24", "price": 771.7374, "clean_price": 771.7374, "yield": 19.55, "fonte_yield": "B3", "spread_over_ref": 1039.8}, {"date": "2026-07-21", "ticker": "VERO24", "price": 756.2965, "clean_price": 756.2965, "yield": 20.3305, "fonte_yield": "B3", "spread_over_ref": 1109.8}, {"date": "2026-07-22", "ticker": "VERO24", "price": 918.832564, "clean_price": 918.832564, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-07-23", "ticker": "VERO24", "price": 985.8392, "clean_price": 985.8392, "yield": 12.0514, "fonte_yield": "B3", "spread_over_ref": 338.4}, {"date": "2026-07-24", "ticker": "VERO24", "price": 919.938504, "clean_price": 919.938504, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-07-27", "ticker": "VERO24", "price": 911.440224, "clean_price": 911.440224, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-07-28", "ticker": "VERO24", "price": 986.6274, "clean_price": 986.6274, "yield": 12.0733, "fonte_yield": "B3", "spread_over_ref": 352.5}, {"date": "2026-07-29", "ticker": "VERO24", "price": 898.6558, "clean_price": 898.6558, "yield": 14.89, "fonte_yield": "B3", "spread_over_ref": 603.6}, {"date": "2026-07-30", "ticker": "VERO24", "price": 913.8152, "clean_price": 913.8152, "yield": 14.3965, "fonte_yield": "B3", "spread_over_ref": 558.1}, {"date": "2026-07-31", "ticker": "VERO24", "price": 910.76321, "clean_price": 910.76321, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-08-03", "ticker": "VERO24", "price": 810.2159, "clean_price": 810.2159, "yield": 18.1987, "fonte_yield": "B3", "spread_over_ref": 927.1}, {"date": "2026-08-04", "ticker": "VERO24", "price": 899.3598, "clean_price": 899.3598, "yield": 14.94, "fonte_yield": "B3", "spread_over_ref": 624.0}, {"date": "2026-08-05", "ticker": "VERO24", "price": 952.7788, "clean_price": 952.7788, "yield": 13.2591, "fonte_yield": "B3", "spread_over_ref": 470.9}, {"date": "2026-08-06", "ticker": "VERO24", "price": 927.793497, "clean_price": 927.793497, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-08-07", "ticker": "VERO24", "price": 901.6013, "clean_price": 901.6013, "yield": 14.9224, "fonte_yield": "B3", "spread_over_ref": 632.3}, {"date": "2026-08-10", "ticker": "VERO24", "price": 929.227569, "clean_price": 929.227569, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-08-11", "ticker": "VERO24", "price": 899.9687, "clean_price": 899.9687, "yield": 15.0518, "fonte_yield": "B3", "spread_over_ref": 641.4}, {"date": "2026-08-12", "ticker": "VERO24", "price": 930.5847, "clean_price": 930.5847, "yield": 14.0343, "fonte_yield": "B3", "spread_over_ref": 546.7}, {"date": "2026-08-13", "ticker": "VERO24", "price": 931.0961, "clean_price": 931.0961, "yield": 14.0302, "fonte_yield": "B3", "spread_over_ref": 545.3}, {"date": "2026-08-14", "ticker": "VERO24", "price": 941.5983, "clean_price": 941.5983, "yield": 13.7072, "fonte_yield": "B3", "spread_over_ref": 508.8}, {"date": "2026-08-17", "ticker": "VERO24", "price": 935.155002, "clean_price": 935.155002, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-08-18", "ticker": "VERO24", "price": 938.1067, "clean_price": 938.1067, "yield": 13.8333, "fonte_yield": "B3", "spread_over_ref": 526.4}, {"date": "2026-08-19", "ticker": "VERO24", "price": 993.7615, "clean_price": 993.7615, "yield": 12.1046, "fonte_yield": "B3", "spread_over_ref": 374.3}, {"date": "2026-08-20", "ticker": "VERO24", "price": 989.4596, "clean_price": 989.4596, "yield": 12.25, "fonte_yield": "B3", "spread_over_ref": 392.6}, {"date": "2026-08-21", "ticker": "VERO24", "price": 680.3565, "clean_price": 680.3565, "yield": 24.5, "fonte_yield": "B3", "spread_over_ref": 1528.8}, {"date": "2026-08-24", "ticker": "VERO24", "price": 725.8085, "clean_price": 725.8085, "yield": 22.6757, "fonte_yield": "B3", "spread_over_ref": 1356.9}, {"date": "2026-08-25", "ticker": "VERO24", "price": 991.5854, "clean_price": 991.5854, "yield": 12.23, "fonte_yield": "B3", "spread_over_ref": 388.9}, {"date": "2026-08-26", "ticker": "VERO24", "price": 925.2611, "clean_price": 925.2611, "yield": 14.3759, "fonte_yield": "B3", "spread_over_ref": 586.9}, {"date": "2026-08-27", "ticker": "VERO24", "price": 924.942347, "clean_price": 924.942347, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-08-28", "ticker": "VERO24", "price": 930.733936, "clean_price": 930.733936, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-08-31", "ticker": "VERO24", "price": 925.59621, "clean_price": 925.59621, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-09-01", "ticker": "VERO24", "price": 991.7322, "clean_price": 991.7322, "yield": 12.3, "fonte_yield": "B3", "spread_over_ref": 393.8}, {"date": "2026-09-02", "ticker": "VERO24", "price": 979.7267, "clean_price": 979.7267, "yield": 12.685, "fonte_yield": "B3", "spread_over_ref": 433.8}, {"date": "2026-09-03", "ticker": "VERO24", "price": 660.5312, "clean_price": 660.5312, "yield": 26.4645, "fonte_yield": "B3", "spread_over_ref": 1717.9}, {"date": "2026-09-04", "ticker": "VERO24", "price": 924.966992, "clean_price": 924.966992, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-09-08", "ticker": "VERO24", "price": 869.0975, "clean_price": 869.0975, "yield": 16.5429, "fonte_yield": "B3", "spread_over_ref": 816.1}, {"date": "2026-09-09", "ticker": "VERO24", "price": 928.7847, "clean_price": 928.7847, "yield": 14.3992, "fonte_yield": "B3", "spread_over_ref": 615.0}, {"date": "2026-09-10", "ticker": "VERO24", "price": 933.920634, "clean_price": 933.920634, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-09-11", "ticker": "VERO24", "price": 1009.6983, "clean_price": 1009.6983, "yield": 11.86, "fonte_yield": "B3", "spread_over_ref": 400.3}, {"date": "2026-09-14", "ticker": "VERO24", "price": 999.5555, "clean_price": 999.5555, "yield": 12.1819, "fonte_yield": "B3", "spread_over_ref": 425.1}, {"date": "2026-09-15", "ticker": "VERO24", "price": 934.89488, "clean_price": 934.89488, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-09-16", "ticker": "VERO24", "price": 942.3894, "clean_price": 942.3894, "yield": 14.0408, "fonte_yield": "B3", "spread_over_ref": 595.3}, {"date": "2026-09-17", "ticker": "VERO24", "price": 999.695, "clean_price": 999.695, "yield": 12.22, "fonte_yield": "B3", "spread_over_ref": 436.2}, {"date": "2026-09-18", "ticker": "VERO24", "price": 929.6463, "clean_price": 929.6463, "yield": 14.5093, "fonte_yield": "B3", "spread_over_ref": 646.6}, {"date": "2026-09-21", "ticker": "VERO24", "price": 1001.7559, "clean_price": 1001.7559, "yield": 12.185, "fonte_yield": "B3", "spread_over_ref": 427.7}, {"date": "2026-09-22", "ticker": "VERO24", "price": 1001.4124, "clean_price": 1001.4124, "yield": 12.21, "fonte_yield": "B3", "spread_over_ref": 425.2}, {"date": "2026-09-23", "ticker": "VERO24", "price": 999.1575, "clean_price": 999.1575, "yield": 12.2927, "fonte_yield": "B3", "spread_over_ref": 427.4}, {"date": "2026-09-24", "ticker": "VERO24", "price": 932.875078, "clean_price": 932.875078, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-09-25", "ticker": "VERO24", "price": 999.8376, "clean_price": 999.8376, "yield": 12.3, "fonte_yield": "B3", "spread_over_ref": 432.3}, {"date": "2026-09-28", "ticker": "VERO24", "price": 929.198212, "clean_price": 929.198212, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-09-29", "ticker": "VERO24", "price": 934.916003, "clean_price": 934.916003, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-09-30", "ticker": "VERO24", "price": 930.230399, "clean_price": 930.230399, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-01", "ticker": "VERO24", "price": 992.8144, "clean_price": 992.8144, "yield": 12.5932, "fonte_yield": "B3", "spread_over_ref": 462.2}, {"date": "2026-10-02", "ticker": "VERO24", "price": 935.837823, "clean_price": 935.837823, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-05", "ticker": "VERO24", "price": 835.3265, "clean_price": 835.3265, "yield": 19.5139, "fonte_yield": "B3", "spread_over_ref": 1165.5}, {"date": "2026-10-06", "ticker": "VERO24", "price": 989.9433, "clean_price": 989.9433, "yield": 12.7249, "fonte_yield": "B3", "spread_over_ref": 541.6}, {"date": "2026-10-07", "ticker": "VERO24", "price": 930.591724, "clean_price": 930.591724, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-08", "ticker": "VERO24", "price": 1018.3557, "clean_price": 1018.3557, "yield": 11.8621, "fonte_yield": "B3", "spread_over_ref": 480.1}, {"date": "2026-10-09", "ticker": "VERO24", "price": 926.943328, "clean_price": 926.943328, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-13", "ticker": "VERO24", "price": 919.938949, "clean_price": 919.938949, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-14", "ticker": "VERO24", "price": 922.436566, "clean_price": 922.436566, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-15", "ticker": "VERO24", "price": 871.790604, "clean_price": 871.790604, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-16", "ticker": "VERO24", "price": 882.369376, "clean_price": 882.369376, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-19", "ticker": "VERO24", "price": 898.956723, "clean_price": 898.956723, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-20", "ticker": "VERO24", "price": 884.049536, "clean_price": 884.049536, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-21", "ticker": "VERO24", "price": 900.796645, "clean_price": 900.796645, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-22", "ticker": "VERO24", "price": 891.305622, "clean_price": 891.305622, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-23", "ticker": "VERO24", "price": 891.678306, "clean_price": 891.678306, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-26", "ticker": "VERO24", "price": 882.756305, "clean_price": 882.756305, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-27", "ticker": "VERO24", "price": 900.447346, "clean_price": 900.447346, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-28", "ticker": "VERO24", "price": 894.716463, "clean_price": 894.716463, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-29", "ticker": "VERO24", "price": 900.320691, "clean_price": 900.320691, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-10-30", "ticker": "VERO24", "price": 893.766161, "clean_price": 893.766161, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-03", "ticker": "VERO24", "price": 902.850146, "clean_price": 902.850146, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-04", "ticker": "VERO24", "price": 909.578637, "clean_price": 909.578637, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-05", "ticker": "VERO24", "price": 910.460263, "clean_price": 910.460263, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-06", "ticker": "VERO24", "price": 894.711801, "clean_price": 894.711801, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-09", "ticker": "VERO24", "price": 888.903533, "clean_price": 888.903533, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-10", "ticker": "VERO24", "price": 879.757746, "clean_price": 879.757746, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-11", "ticker": "VERO24", "price": 879.953274, "clean_price": 879.953274, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-12", "ticker": "VERO24", "price": 879.053545, "clean_price": 879.053545, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-13", "ticker": "VERO24", "price": 764.4177, "clean_price": 764.4177, "yield": 20.175, "fonte_yield": "B3", "spread_over_ref": 1163.6}, {"date": "2026-11-16", "ticker": "VERO24", "price": 875.1737, "clean_price": 875.1737, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-17", "ticker": "VERO24", "price": 883.133244, "clean_price": 883.133244, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-18", "ticker": "VERO24", "price": 883.420994, "clean_price": 883.420994, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-19", "ticker": "VERO24", "price": 882.7839, "clean_price": 882.7839, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}, {"date": "2026-11-23", "ticker": "VERO24", "price": 883.1612, "clean_price": 883.1612, "yield": 15.5615, "fonte_yield": "B3", "spread_over_ref": 726.1}, {"date": "2026-11-24", "ticker": "VERO24", "price": 893.879551, "clean_price": 893.879551, "yield": -0.0, "fonte_yield": "ANBIMA", "spread_over_ref": null}], "emitter": {"cnpj": "31748174000160", "cnpj_formatado": "31.748.174/0001-60", "razao_social": "VERO S.A.", "nome_fantasia": "VERO S.A.", "setor": "Telecomunicações", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "http://www.vero-ri.com.br/", "municipio": "SÃO PAULO", "uf": "SP", "descricao": "VERO S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Telecomunicações."}, "raiox_cnpj": "31748174000160", "paymentEvents": [{"ticker": "VERO24", "data_evento": "2027-04-15", "data_liquidacao": "2027-04-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "VERO24", "data_evento": "2027-10-15", "data_liquidacao": "2027-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2028-04-15", "data_liquidacao": "2028-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2028-10-15", "data_liquidacao": "2028-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2029-04-15", "data_liquidacao": "2029-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2029-10-15", "data_liquidacao": "2029-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2030-04-15", "data_liquidacao": "2030-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2030-10-15", "data_liquidacao": "2030-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2031-04-15", "data_liquidacao": "2031-04-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2031-10-15", "data_liquidacao": "2031-10-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VERO24", "data_evento": "2031-10-15", "data_liquidacao": "2031-10-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.0925, "valor_real": null, "valor_projetado": 40.925, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo VERO24 é um título de crédito privado do tipo Debênture (incentivado (isenção fiscal Lei 12.431/11)) emitido por VERO S.A. (CNPJ: 31.748.174/0001-60), com taxa de emissão de IPCA + 8.35% a.a. e data de vencimento em 15/10/2031. O título encontra-se ativo, avaliado com rating A em escala nacional (duration modificada de 3.79 anos) e spread indicativo de 8.61% sobre a NTN-B soberana, com volume emitido de R$ 259.032.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "VERO13", "tipo": "Debênture", "issuer": "VERO S.A.", "vencimento": "2031-03-15"}, {"ticker": "VERO44", "tipo": "Debênture", "issuer": "VERO S.A.", "vencimento": "2034-10-15"}, {"ticker": "VERO25", "tipo": "Debênture", "issuer": "VERO S.A.", "vencimento": "2032-07-15"}, {"ticker": "VERO23", "tipo": "Debênture", "issuer": "VERO S.A.", "vencimento": "2031-03-15"}], "relatedSector": [{"ticker": "BCPSA7", "tipo": "Debênture", "issuer": "BCP S/A", "vencimento": "2036-01-15"}, {"ticker": "BCPSA5", "tipo": "Debênture", "issuer": "BCP S/A", "vencimento": "2029-03-15"}, {"ticker": "BTEL13", "tipo": "Debênture", "issuer": "V. TAL - REDE NEUTRA DE TELECOMUNICAÇÕES S.A.", "vencimento": "2032-04-15"}, {"ticker": "TIMS12", "tipo": "Debênture", "issuer": "TIM S.A.", "vencimento": "2028-06-15"}], "issuerSlug": "vero-s-a", "sectorSlug": "ti-e-telecomunicacoes"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

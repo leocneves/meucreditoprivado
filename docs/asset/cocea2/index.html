@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "COCEA2", "item": "https://fixdatabrasil.com.br/asset/cocea2/"}]}, {"@type": "FinancialProduct", "name": "Debênture COCEA2 (CIA ENERG CEARA - COELCE)", "identifier": "COCEA2", "isin": "BRCOCEDBS0I6", "description": "Consulte dados de mercado da debênture COCEA2 emitida por CIA ENERG CEARA - COELCE (CNPJ: 07.047.251/0001-70). Indexador DI+, vencimento em 15/05/2029, spread de 1.92%, duration de 2.12 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo COCEA2 é um título de crédito privado do tipo Debênture (comum) emitido por CIA ENERG CEARA - COELCE (CNPJ: 07.047.251/0001-70), com taxa de emissão de CDI + 1.10% a.a. e data de vencimento em 15/05/2029. O título encontra-se resgatado (duration modificada de 2.12 anos) e spread indicativo de 1.92% sobre a NTN-B soberana, com volume emitido de R$ 950.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/cocea2/", "category": "Debênture", "provider": {"@type": "Organization", "name": "CIA ENERG CEARA - COELCE", "taxID": "07.047.251/0001-70"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">COCEA2</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo COCEA2 é um título de crédito privado do tipo Debênture (comum) emitido por CIA ENERG CEARA - COELCE (CNPJ: 07.047.251/0001-70), com taxa de emissão de CDI + 1.10% a.a. e data de vencimento em 15/05/2029. O título encontra-se resgatado (duration modificada de 2.12 anos) e spread indicativo de 1.92% sobre a NTN-B soberana, com volume emitido de R$ 950.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/05/2029</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 2,5 anos (902 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 2,5 anos (901 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/energia-eletrica/" class="font-semibold text-blue-300 hover:underline">Energia Elétrica</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">OLIVEIRA TRUST DTVM S/A</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO BTG PACTUAL S.A.</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">2,5 anos (902 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">2,5 anos (901 dias corridos)</p></div>
           </div>
         </div>
 
@@ -519,6 +795,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "COCEA2", "tipo": "Debênture", "issuer": "CIA ENERG CEARA - COELCE", "indexador": "DI+", "taxa_emissao": 1.1, "taxa_negocio_b3": 1.9598, "taxa_indicativa_anbima": 1.9863, "taxa_mercado": 1.9168, "taxa_ativo": 1.9168, "taxa_compra": "2,1919", "taxa_venda": "1,7125", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "984.9026", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 285621.76, "volume_emissao": 950000000.0, "volume": 950000000.0, "quantidade_emitida": 950000.0, "quantidade": 950000.0, "data_emissao": "2025-05-15", "vencimento": "2029-05-15", "emissao": 12.0, "serie": 1.0, "isin": "BRCOCEDBS0I6", "lei": null, "cnpj_emissor": 7047251000170.0, "setor": "Energia Elétrica", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "BANCO BTG PACTUAL S.A.", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "flag_vencido": 0, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": 2.12, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-05-17", "vna": 1000.0, "pu_par": 1002.7595, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.019168, "spread_anbima": 0.019863, "spread": 0.019168, "pu_mercado_mediano": 984.9422, "agio_desagio_pct": -1.78}, "prices": [{"date": "2026-05-29", "ticker": "COCEA2", "price": 1005.8337, "clean_price": 1005.8337, "yield": 1.0982, "fonte_yield": "B3", "spread_over_ref": 109.8}, {"date": "2026-06-01", "ticker": "COCEA2", "price": 1006.564129, "clean_price": 1006.564129, "yield": 1.0921, "fonte_yield": "ANBIMA", "spread_over_ref": 109.2}, {"date": "2026-06-02", "ticker": "COCEA2", "price": 1007.3338, "clean_price": 1007.3338, "yield": 1.0844, "fonte_yield": "ANBIMA", "spread_over_ref": 108.4}, {"date": "2026-06-03", "ticker": "COCEA2", "price": 1008.6036, "clean_price": 1008.6036, "yield": 1.0801, "fonte_yield": "B3", "spread_over_ref": 108.0}, {"date": "2026-06-05", "ticker": "COCEA2", "price": 1008.1145, "clean_price": 1008.1145, "yield": 1.1001, "fonte_yield": "B3", "spread_over_ref": 110.0}, {"date": "2026-06-08", "ticker": "COCEA2", "price": 1009.2851, "clean_price": 1009.2851, "yield": 1.0758, "fonte_yield": "B3", "spread_over_ref": 107.6}, {"date": "2026-06-09", "ticker": "COCEA2", "price": 1009.974624, "clean_price": 1009.974624, "yield": 1.0713, "fonte_yield": "ANBIMA", "spread_over_ref": 107.1}, {"date": "2026-06-10", "ticker": "COCEA2", "price": 1010.593138, "clean_price": 1010.593138, "yield": 1.0698, "fonte_yield": "ANBIMA", "spread_over_ref": 107.0}, {"date": "2026-06-11", "ticker": "COCEA2", "price": 1011.185157, "clean_price": 1011.185157, "yield": 1.0695, "fonte_yield": "ANBIMA", "spread_over_ref": 106.9}, {"date": "2026-06-12", "ticker": "COCEA2", "price": 1010.5441, "clean_price": 1010.5441, "yield": 1.12, "fonte_yield": "B3", "spread_over_ref": 112.0}, {"date": "2026-06-15", "ticker": "COCEA2", "price": 1012.327, "clean_price": 1012.327, "yield": 1.0705, "fonte_yield": "B3", "spread_over_ref": 107.0}, {"date": "2026-06-16", "ticker": "COCEA2", "price": 1012.891557, "clean_price": 1012.891557, "yield": 1.0713, "fonte_yield": "ANBIMA", "spread_over_ref": 107.1}, {"date": "2026-06-17", "ticker": "COCEA2", "price": 1013.365576, "clean_price": 1013.365576, "yield": 1.0758, "fonte_yield": "ANBIMA", "spread_over_ref": 107.6}, {"date": "2026-06-18", "ticker": "COCEA2", "price": 1014.028405, "clean_price": 1014.028405, "yield": 1.0725, "fonte_yield": "ANBIMA", "spread_over_ref": 107.2}, {"date": "2026-06-19", "ticker": "COCEA2", "price": 1014.61081, "clean_price": 1014.61081, "yield": 1.0722, "fonte_yield": "ANBIMA", "spread_over_ref": 107.2}, {"date": "2026-06-22", "ticker": "COCEA2", "price": 1015.1868, "clean_price": 1015.1868, "yield": 1.0722, "fonte_yield": "B3", "spread_over_ref": 107.2}, {"date": "2026-06-23", "ticker": "COCEA2", "price": 1015.981156, "clean_price": 1015.981156, "yield": 1.0632, "fonte_yield": "ANBIMA", "spread_over_ref": 106.3}, {"date": "2026-06-24", "ticker": "COCEA2", "price": 1017.1342, "clean_price": 1017.1342, "yield": 1.0632, "fonte_yield": "B3", "spread_over_ref": 106.3}, {"date": "2026-06-25", "ticker": "COCEA2", "price": 1016.789857, "clean_price": 1016.789857, "yield": 1.0776, "fonte_yield": "ANBIMA", "spread_over_ref": 107.8}, {"date": "2026-06-26", "ticker": "COCEA2", "price": 1017.423052, "clean_price": 1017.423052, "yield": 1.0753, "fonte_yield": "ANBIMA", "spread_over_ref": 107.5}, {"date": "2026-06-29", "ticker": "COCEA2", "price": 1018.287322, "clean_price": 1018.287322, "yield": 1.0634, "fonte_yield": "ANBIMA", "spread_over_ref": 106.3}, {"date": "2026-06-30", "ticker": "COCEA2", "price": 1018.930945, "clean_price": 1018.930945, "yield": 1.0607, "fonte_yield": "ANBIMA", "spread_over_ref": 106.1}, {"date": "2026-07-01", "ticker": "COCEA2", "price": 1020.0871, "clean_price": 1020.0871, "yield": 1.0607, "fonte_yield": "B3", "spread_over_ref": 106.1}, {"date": "2026-07-02", "ticker": "COCEA2", "price": 1020.0061, "clean_price": 1020.0061, "yield": 1.0882, "fonte_yield": "B3", "spread_over_ref": 108.8}, {"date": "2026-07-03", "ticker": "COCEA2", "price": 1020.8387, "clean_price": 1020.8387, "yield": 1.0776, "fonte_yield": "B3", "spread_over_ref": 107.8}, {"date": "2026-07-06", "ticker": "COCEA2", "price": 1020.8559, "clean_price": 1020.8559, "yield": 1.0769, "fonte_yield": "B3", "spread_over_ref": 107.7}, {"date": "2026-07-07", "ticker": "COCEA2", "price": 1021.167, "clean_price": 1021.167, "yield": 1.0882, "fonte_yield": "B3", "spread_over_ref": 108.8}, {"date": "2026-07-08", "ticker": "COCEA2", "price": 1022.420786, "clean_price": 1022.420786, "yield": 1.0599, "fonte_yield": "ANBIMA", "spread_over_ref": 106.0}, {"date": "2026-07-09", "ticker": "COCEA2", "price": 1023.0007, "clean_price": 1023.0007, "yield": 1.0599, "fonte_yield": "B3", "spread_over_ref": 106.0}, {"date": "2026-07-10", "ticker": "COCEA2", "price": 1023.700626, "clean_price": 1023.700626, "yield": 1.055, "fonte_yield": "ANBIMA", "spread_over_ref": 105.5}, {"date": "2026-07-13", "ticker": "COCEA2", "price": 1024.210428, "clean_price": 1024.210428, "yield": 1.0579, "fonte_yield": "ANBIMA", "spread_over_ref": 105.8}, {"date": "2026-07-14", "ticker": "COCEA2", "price": 1024.7912, "clean_price": 1024.7912, "yield": 1.0579, "fonte_yield": "B3", "spread_over_ref": 105.8}, {"date": "2026-07-15", "ticker": "COCEA2", "price": 1025.5617, "clean_price": 1025.5617, "yield": 1.05, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-07-16", "ticker": "COCEA2", "price": 1026.066491, "clean_price": 1026.066491, "yield": 1.0532, "fonte_yield": "ANBIMA", "spread_over_ref": 105.3}, {"date": "2026-07-17", "ticker": "COCEA2", "price": 1026.6482, "clean_price": 1026.6482, "yield": 1.0532, "fonte_yield": "B3", "spread_over_ref": 105.3}, {"date": "2026-07-20", "ticker": "COCEA2", "price": 1027.1406, "clean_price": 1027.1406, "yield": 1.0569, "fonte_yield": "B3", "spread_over_ref": 105.7}, {"date": "2026-07-21", "ticker": "COCEA2", "price": 1027.819575, "clean_price": 1027.819575, "yield": 1.0528, "fonte_yield": "ANBIMA", "spread_over_ref": 105.3}, {"date": "2026-07-22", "ticker": "COCEA2", "price": 1027.638, "clean_price": 1027.638, "yield": 1.11, "fonte_yield": "B3", "spread_over_ref": 111.0}, {"date": "2026-07-23", "ticker": "COCEA2", "price": 1028.1085, "clean_price": 1028.1085, "yield": 1.09, "fonte_yield": "B3", "spread_over_ref": 109.0}, {"date": "2026-07-24", "ticker": "COCEA2", "price": 1029.525768, "clean_price": 1029.525768, "yield": 1.0546, "fonte_yield": "ANBIMA", "spread_over_ref": 105.5}, {"date": "2026-07-27", "ticker": "COCEA2", "price": 1030.077631, "clean_price": 1030.077631, "yield": 1.056, "fonte_yield": "ANBIMA", "spread_over_ref": 105.6}, {"date": "2026-07-28", "ticker": "COCEA2", "price": 1030.954, "clean_price": 1030.954, "yield": 1.0436, "fonte_yield": "B3", "spread_over_ref": 104.4}, {"date": "2026-07-29", "ticker": "COCEA2", "price": 1031.352961, "clean_price": 1031.352961, "yield": 1.0515, "fonte_yield": "ANBIMA", "spread_over_ref": 105.2}, {"date": "2026-07-30", "ticker": "COCEA2", "price": 1032.011016, "clean_price": 1032.011016, "yield": 1.0484, "fonte_yield": "ANBIMA", "spread_over_ref": 104.8}, {"date": "2026-07-31", "ticker": "COCEA2", "price": 1032.572698, "clean_price": 1032.572698, "yield": 1.0494, "fonte_yield": "ANBIMA", "spread_over_ref": 104.9}, {"date": "2026-08-03", "ticker": "COCEA2", "price": 1033.494406, "clean_price": 1033.494406, "yield": 1.0351, "fonte_yield": "ANBIMA", "spread_over_ref": 103.5}, {"date": "2026-08-04", "ticker": "COCEA2", "price": 1033.739152, "clean_price": 1033.739152, "yield": 1.0496, "fonte_yield": "ANBIMA", "spread_over_ref": 105.0}, {"date": "2026-08-05", "ticker": "COCEA2", "price": 1034.325, "clean_price": 1034.325, "yield": 1.0496, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-08-06", "ticker": "COCEA2", "price": 1034.850132, "clean_price": 1034.850132, "yield": 1.0522, "fonte_yield": "ANBIMA", "spread_over_ref": 105.2}, {"date": "2026-08-07", "ticker": "COCEA2", "price": 1035.96114, "clean_price": 1035.96114, "yield": 1.0294, "fonte_yield": "ANBIMA", "spread_over_ref": 102.9}, {"date": "2026-08-10", "ticker": "COCEA2", "price": 1036.5244, "clean_price": 1036.5244, "yield": 1.03, "fonte_yield": "B3", "spread_over_ref": 103.0}, {"date": "2026-08-11", "ticker": "COCEA2", "price": 1036.634503, "clean_price": 1036.634503, "yield": 1.05, "fonte_yield": "ANBIMA", "spread_over_ref": 105.0}, {"date": "2026-08-12", "ticker": "COCEA2", "price": 1037.213, "clean_price": 1037.213, "yield": 1.05, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-08-13", "ticker": "COCEA2", "price": 1037.7662, "clean_price": 1037.7662, "yield": 1.0511, "fonte_yield": "B3", "spread_over_ref": 105.1}, {"date": "2026-08-14", "ticker": "COCEA2", "price": 1038.348796, "clean_price": 1038.348796, "yield": 1.0509, "fonte_yield": "ANBIMA", "spread_over_ref": 105.1}, {"date": "2026-08-17", "ticker": "COCEA2", "price": 1038.965656, "clean_price": 1038.965656, "yield": 1.0493, "fonte_yield": "ANBIMA", "spread_over_ref": 104.9}, {"date": "2026-08-18", "ticker": "COCEA2", "price": 1040.1256, "clean_price": 1040.1256, "yield": 1.0493, "fonte_yield": "B3", "spread_over_ref": 104.9}, {"date": "2026-08-19", "ticker": "COCEA2", "price": 1040.1234, "clean_price": 1040.1234, "yield": 1.0494, "fonte_yield": "B3", "spread_over_ref": 104.9}, {"date": "2026-08-20", "ticker": "COCEA2", "price": 1041.2764, "clean_price": 1041.2764, "yield": 1.0498, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-08-21", "ticker": "COCEA2", "price": 1041.964448, "clean_price": 1041.964448, "yield": 1.02, "fonte_yield": "ANBIMA", "spread_over_ref": 102.0}, {"date": "2026-08-24", "ticker": "COCEA2", "price": 1041.853127, "clean_price": 1041.853127, "yield": 1.05, "fonte_yield": "ANBIMA", "spread_over_ref": 105.0}, {"date": "2026-08-25", "ticker": "COCEA2", "price": 1042.4346, "clean_price": 1042.4346, "yield": 1.05, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-08-26", "ticker": "COCEA2", "price": 1043.0818, "clean_price": 1043.0818, "yield": 1.048, "fonte_yield": "B3", "spread_over_ref": 104.8}, {"date": "2026-08-27", "ticker": "COCEA2", "price": 1041.1788, "clean_price": 1041.1788, "yield": 1.1557, "fonte_yield": "B3", "spread_over_ref": 115.6}, {"date": "2026-08-28", "ticker": "COCEA2", "price": 1044.1704, "clean_price": 1044.1704, "yield": 1.0505, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-08-31", "ticker": "COCEA2", "price": 1044.6154, "clean_price": 1044.6154, "yield": 1.0565, "fonte_yield": "B3", "spread_over_ref": 105.7}, {"date": "2026-09-01", "ticker": "COCEA2", "price": 1045.377395, "clean_price": 1045.377395, "yield": 1.0487, "fonte_yield": "ANBIMA", "spread_over_ref": 104.9}, {"date": "2026-09-02", "ticker": "COCEA2", "price": 1045.925181, "clean_price": 1045.925181, "yield": 1.0503, "fonte_yield": "ANBIMA", "spread_over_ref": 105.0}, {"date": "2026-09-03", "ticker": "COCEA2", "price": 1046.555278, "clean_price": 1046.555278, "yield": 1.0483, "fonte_yield": "ANBIMA", "spread_over_ref": 104.8}, {"date": "2026-09-04", "ticker": "COCEA2", "price": 1047.114334, "clean_price": 1047.114334, "yield": 1.0494, "fonte_yield": "ANBIMA", "spread_over_ref": 104.9}, {"date": "2026-09-08", "ticker": "COCEA2", "price": 1047.676734, "clean_price": 1047.676734, "yield": 1.0504, "fonte_yield": "ANBIMA", "spread_over_ref": 105.0}, {"date": "2026-09-09", "ticker": "COCEA2", "price": 1048.2614, "clean_price": 1048.2614, "yield": 1.0504, "fonte_yield": "B3", "spread_over_ref": 105.0}, {"date": "2026-09-10", "ticker": "COCEA2", "price": 1045.452, "clean_price": 1045.452, "yield": 1.2, "fonte_yield": "B3", "spread_over_ref": 120.0}, {"date": "2026-09-11", "ticker": "COCEA2", "price": 1046.0415, "clean_price": 1046.0415, "yield": 1.2, "fonte_yield": "B3", "spread_over_ref": 120.0}, {"date": "2026-09-14", "ticker": "COCEA2", "price": 1047.738354, "clean_price": 1047.738354, "yield": 1.151, "fonte_yield": "ANBIMA", "spread_over_ref": 115.1}, {"date": "2026-09-15", "ticker": "COCEA2", "price": 1048.3272, "clean_price": 1048.3272, "yield": 1.151, "fonte_yield": "B3", "spread_over_ref": 115.1}, {"date": "2026-09-16", "ticker": "COCEA2", "price": 1049.2942, "clean_price": 1049.2942, "yield": 1.1601, "fonte_yield": "B3", "spread_over_ref": 116.0}, {"date": "2026-09-17", "ticker": "COCEA2", "price": 1049.517054, "clean_price": 1049.517054, "yield": 1.1505, "fonte_yield": "ANBIMA", "spread_over_ref": 115.1}, {"date": "2026-09-18", "ticker": "COCEA2", "price": 1049.935858, "clean_price": 1049.935858, "yield": 1.1577, "fonte_yield": "ANBIMA", "spread_over_ref": 115.8}, {"date": "2026-09-21", "ticker": "COCEA2", "price": 1047.9148, "clean_price": 1047.9148, "yield": 1.3, "fonte_yield": "B3", "spread_over_ref": 130.0}, {"date": "2026-09-22", "ticker": "COCEA2", "price": 1050.0163, "clean_price": 1050.0163, "yield": 1.2059, "fonte_yield": "B3", "spread_over_ref": 120.6}, {"date": "2026-09-23", "ticker": "COCEA2", "price": 1051.149054, "clean_price": 1051.149054, "yield": 1.1814, "fonte_yield": "ANBIMA", "spread_over_ref": 118.1}, {"date": "2026-09-24", "ticker": "COCEA2", "price": 1047.9867, "clean_price": 1047.9867, "yield": 1.3495, "fonte_yield": "B3", "spread_over_ref": 134.9}, {"date": "2026-09-25", "ticker": "COCEA2", "price": 1052.3477, "clean_price": 1052.3477, "yield": 1.18, "fonte_yield": "B3", "spread_over_ref": 118.0}, {"date": "2026-09-28", "ticker": "COCEA2", "price": 1049.233213, "clean_price": 1049.233213, "yield": 1.3464, "fonte_yield": "ANBIMA", "spread_over_ref": 134.6}, {"date": "2026-09-29", "ticker": "COCEA2", "price": 1046.6958, "clean_price": 1046.6958, "yield": 1.515, "fonte_yield": "B3", "spread_over_ref": 151.5}, {"date": "2026-09-30", "ticker": "COCEA2", "price": 1047.7159, "clean_price": 1047.7159, "yield": 1.4683, "fonte_yield": "B3", "spread_over_ref": 146.8}, {"date": "2026-10-01", "ticker": "COCEA2", "price": 1050.150348, "clean_price": 1050.150348, "yield": 1.3847, "fonte_yield": "ANBIMA", "spread_over_ref": 138.5}, {"date": "2026-10-02", "ticker": "COCEA2", "price": 1050.801885, "clean_price": 1050.801885, "yield": 1.3818, "fonte_yield": "ANBIMA", "spread_over_ref": 138.2}, {"date": "2026-10-05", "ticker": "COCEA2", "price": 1051.035856, "clean_price": 1051.035856, "yield": 1.3957, "fonte_yield": "ANBIMA", "spread_over_ref": 139.6}, {"date": "2026-10-06", "ticker": "COCEA2", "price": 1048.5953, "clean_price": 1048.5953, "yield": 1.56, "fonte_yield": "B3", "spread_over_ref": 156.0}, {"date": "2026-10-07", "ticker": "COCEA2", "price": 1049.0287, "clean_price": 1049.0287, "yield": 1.54, "fonte_yield": "B3", "spread_over_ref": 154.0}, {"date": "2026-10-08", "ticker": "COCEA2", "price": 1050.8108, "clean_price": 1050.8108, "yield": 1.4861, "fonte_yield": "B3", "spread_over_ref": 148.6}, {"date": "2026-10-09", "ticker": "COCEA2", "price": 1051.7254, "clean_price": 1051.7254, "yield": 1.4714, "fonte_yield": "B3", "spread_over_ref": 147.1}, {"date": "2026-10-13", "ticker": "COCEA2", "price": 1052.520821, "clean_price": 1052.520821, "yield": 1.4627, "fonte_yield": "ANBIMA", "spread_over_ref": 146.3}, {"date": "2026-10-14", "ticker": "COCEA2", "price": 1053.6689, "clean_price": 1053.6689, "yield": 1.4627, "fonte_yield": "B3", "spread_over_ref": 146.3}, {"date": "2026-10-15", "ticker": "COCEA2", "price": 1053.7688, "clean_price": 1053.7688, "yield": 1.4842, "fonte_yield": "B3", "spread_over_ref": 148.4}, {"date": "2026-10-16", "ticker": "COCEA2", "price": 1054.028935, "clean_price": 1054.028935, "yield": 1.4762, "fonte_yield": "ANBIMA", "spread_over_ref": 147.6}, {"date": "2026-10-19", "ticker": "COCEA2", "price": 1053.87168, "clean_price": 1053.87168, "yield": 1.5107, "fonte_yield": "ANBIMA", "spread_over_ref": 151.1}, {"date": "2026-10-20", "ticker": "COCEA2", "price": 1054.497643, "clean_price": 1054.497643, "yield": 1.509, "fonte_yield": "ANBIMA", "spread_over_ref": 150.9}, {"date": "2026-10-21", "ticker": "COCEA2", "price": 1055.0964, "clean_price": 1055.0964, "yield": 1.509, "fonte_yield": "B3", "spread_over_ref": 150.9}, {"date": "2026-10-22", "ticker": "COCEA2", "price": 1055.507298, "clean_price": 1055.507298, "yield": 1.518, "fonte_yield": "ANBIMA", "spread_over_ref": 151.8}, {"date": "2026-10-23", "ticker": "COCEA2", "price": 1056.838006, "clean_price": 1056.838006, "yield": 1.4842, "fonte_yield": "ANBIMA", "spread_over_ref": 148.4}, {"date": "2026-10-26", "ticker": "COCEA2", "price": 1055.281098, "clean_price": 1055.281098, "yield": 1.5923, "fonte_yield": "ANBIMA", "spread_over_ref": 159.2}, {"date": "2026-10-27", "ticker": "COCEA2", "price": 1055.619359, "clean_price": 1055.619359, "yield": 1.603, "fonte_yield": "ANBIMA", "spread_over_ref": 160.3}, {"date": "2026-10-28", "ticker": "COCEA2", "price": 1056.5234, "clean_price": 1056.5234, "yield": 1.603, "fonte_yield": "B3", "spread_over_ref": 160.3}, {"date": "2026-10-29", "ticker": "COCEA2", "price": 1055.982185, "clean_price": 1055.982185, "yield": 1.6428, "fonte_yield": "ANBIMA", "spread_over_ref": 164.3}, {"date": "2026-10-30", "ticker": "COCEA2", "price": 1056.297507, "clean_price": 1056.297507, "yield": 1.657, "fonte_yield": "ANBIMA", "spread_over_ref": 165.7}, {"date": "2026-11-03", "ticker": "COCEA2", "price": 1056.61674, "clean_price": 1056.61674, "yield": 1.6712, "fonte_yield": "ANBIMA", "spread_over_ref": 167.1}, {"date": "2026-11-04", "ticker": "COCEA2", "price": 1057.516382, "clean_price": 1057.516382, "yield": 1.6562, "fonte_yield": "ANBIMA", "spread_over_ref": 165.6}, {"date": "2026-11-05", "ticker": "COCEA2", "price": 1058.057237, "clean_price": 1058.057237, "yield": 1.6588, "fonte_yield": "ANBIMA", "spread_over_ref": 165.9}, {"date": "2026-11-06", "ticker": "COCEA2", "price": 1057.818015, "clean_price": 1057.818015, "yield": 1.6989, "fonte_yield": "ANBIMA", "spread_over_ref": 169.9}, {"date": "2026-11-09", "ticker": "COCEA2", "price": 1058.397174, "clean_price": 1058.397174, "yield": 1.6999, "fonte_yield": "ANBIMA", "spread_over_ref": 170.0}, {"date": "2026-11-10", "ticker": "COCEA2", "price": 1059.0054, "clean_price": 1059.0054, "yield": 1.6999, "fonte_yield": "B3", "spread_over_ref": 170.0}, {"date": "2026-11-11", "ticker": "COCEA2", "price": 1059.071124, "clean_price": 1059.071124, "yield": 1.7256, "fonte_yield": "ANBIMA", "spread_over_ref": 172.6}, {"date": "2026-11-12", "ticker": "COCEA2", "price": 1058.34722, "clean_price": 1058.34722, "yield": 1.7902, "fonte_yield": "ANBIMA", "spread_over_ref": 179.0}, {"date": "2026-11-13", "ticker": "COCEA2", "price": 1059.656999, "clean_price": 1059.656999, "yield": 1.7565, "fonte_yield": "ANBIMA", "spread_over_ref": 175.7}, {"date": "2026-11-16", "ticker": "COCEA2", "price": 986.1923, "clean_price": 986.1923, "yield": 1.7565, "fonte_yield": "B3", "spread_over_ref": 175.7}, {"date": "2026-11-17", "ticker": "COCEA2", "price": 986.7941, "clean_price": 986.7941, "yield": 1.7565, "fonte_yield": "B3", "spread_over_ref": 175.7}, {"date": "2026-11-18", "ticker": "COCEA2", "price": 988.1255, "clean_price": 988.1255, "yield": 1.719, "fonte_yield": "B3", "spread_over_ref": 171.9}, {"date": "2026-11-19", "ticker": "COCEA2", "price": 983.2798, "clean_price": 983.2798, "yield": 2.01, "fonte_yield": "B3", "spread_over_ref": 201.0}, {"date": "2026-11-23", "ticker": "COCEA2", "price": 983.7359, "clean_price": 983.7359, "yield": 1.99, "fonte_yield": "B3", "spread_over_ref": 199.0}, {"date": "2026-11-24", "ticker": "COCEA2", "price": 984.9026, "clean_price": 984.9026, "yield": 1.9598, "fonte_yield": "B3", "spread_over_ref": 196.0}], "emitter": {"cnpj": "07047251000170", "cnpj_formatado": "07.047.251/0001-70", "razao_social": "CIA ENERG CEARA - COELCE", "nome_fantasia": "CIA ENERG CEARA - COELCE", "setor": "Energia Elétrica", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": null, "municipio": "FORTALEZA", "uf": "CE", "descricao": "CIA ENERG CEARA - COELCE é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Energia Elétrica."}, "raiox_cnpj": "07047251000170", "paymentEvents": [{"ticker": "COCEA2", "data_evento": "2027-05-17", "data_liquidacao": "2027-05-17", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "COCEA2", "data_evento": "2027-11-17", "data_liquidacao": "2027-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 1.1, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "COCEA2", "data_evento": "2028-05-17", "data_liquidacao": "2028-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 1.1, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "COCEA2", "data_evento": "2028-11-17", "data_liquidacao": "2028-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 1.1, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "COCEA2", "data_evento": "2029-05-15", "data_liquidacao": "2029-05-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo COCEA2 é um título de crédito privado do tipo Debênture (comum) emitido por CIA ENERG CEARA - COELCE (CNPJ: 07.047.251/0001-70), com taxa de emissão de CDI + 1.10% a.a. e data de vencimento em 15/05/2029. O título encontra-se resgatado (duration modificada de 2.12 anos) e spread indicativo de 1.92% sobre a NTN-B soberana, com volume emitido de R$ 950.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "COCEB2", "tipo": "Debênture", "issuer": "CIA ENERG CEARA - COELCE", "vencimento": "2030-05-15"}, {"ticker": "COCE18", "tipo": "Debênture", "issuer": "CIA ENERG CEARA - COELCE", "vencimento": "2032-05-15"}], "relatedSector": [{"ticker": "EGIEA6", "tipo": "Debênture", "issuer": "ENGIE BRASIL ENERGIA S.A.", "vencimento": "2038-02-15"}, {"ticker": "TRGP13", "tipo": "Debênture", "issuer": "TECP - TRANSMISSORA DE ENERGIA CENTRAL PAULISTANA S.A.", "vencimento": "2038-01-15"}, {"ticker": "CHSF13", "tipo": "Debênture", "issuer": "AXIA ENERGIA NORDESTE S.A.", "vencimento": "2031-06-15"}, {"ticker": "CPLDA1", "tipo": "Debênture", "issuer": "COPEL DISTRIBUIÇÃO S.A.", "vencimento": "2038-01-15"}], "issuerSlug": "cia-energ-ceara-coelce", "sectorSlug": "energia-eletrica"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

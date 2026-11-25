@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "VAMO33", "item": "https://fixdatabrasil.com.br/asset/vamo33/"}]}, {"@type": "FinancialProduct", "name": "Debênture VAMO33 (VAMOS LOCAÇÃO DE CAMINHÕES…)", "identifier": "VAMO33", "isin": "BRVAMODBS041", "description": "Consulte dados de mercado da debênture VAMO33 emitida por VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A. (CNPJ: 23.373.000/0001-32). Indexador IPCA, vencimento em 15/06/2031, rating AA, spread de 7.02%, duration de 3.01 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo VAMO33 é um título de crédito privado do tipo Debênture (comum) emitido por VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A. (CNPJ: 23.373.000/0001-32), com taxa de emissão de IPCA + 6.36% a.a. e data de vencimento em 15/06/2031. O título encontra-se resgatado, avaliado com rating AA em escala nacional (duration modificada de 3.01 anos) e spread indicativo de 7.02% sobre a NTN-B soberana, com volume emitido de R$ 464.460.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/vamo33/", "category": "Debênture", "provider": {"@type": "Organization", "name": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "taxID": "23.373.000/0001-32", "url": "https://ri.grupovamos.com.br/"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">VAMO33</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo VAMO33 é um título de crédito privado do tipo Debênture (comum) emitido por VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A. (CNPJ: 23.373.000/0001-32), com taxa de emissão de IPCA + 6.36% a.a. e data de vencimento em 15/06/2031. O título encontra-se resgatado, avaliado com rating AA em escala nacional (duration modificada de 3.01 anos) e spread indicativo de 7.02% sobre a NTN-B soberana, com volume emitido de R$ 464.460.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/06/2031</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 4,6 anos (1663 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 4,6 anos (1662 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/locacao-de-veiculos/" class="font-semibold text-blue-300 hover:underline">Locação de Veículos</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">PENTAGONO S/A DTVM</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">BANCO BTG PACTUAL S.A.</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">4,6 anos (1663 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">4,6 anos (1662 dias corridos)</p></div>
           </div>
         </div>
 
@@ -567,6 +843,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "VAMO33", "tipo": "Debênture", "issuer": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "indexador": "IPCA", "taxa_emissao": 6.3605, "taxa_negocio_b3": 15.9, "taxa_indicativa_anbima": 14.8635, "taxa_mercado": 15.2498, "taxa_ativo": 15.2498, "taxa_compra": "--", "taxa_venda": "--", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1058.0408", "data_ultimo_negocio": "2026-11-24", "data_anbima": "2026-11-24", "volume_negociado_b3": 25392.98, "volume_emissao": 464460000.0, "volume": 464460000.0, "quantidade_emitida": 464460.0, "quantidade": 464460.0, "data_emissao": "2021-06-15", "vencimento": "2031-06-15", "emissao": 3.0, "serie": 3.0, "isin": "BRVAMODBS041", "lei": null, "cnpj_emissor": 23373000000132.0, "setor": "Locação de Veículos", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "BANCO BTG PACTUAL S.A.", "rating": "Br.AA+", "rating_original": "Br.AA+", "rating_agencia": "Standard & Poor's", "agencia": "Standard & Poor's", "rating_data": "23/07/2026", "divulgacao": "23/07/2026", "securitizadora": "Pentágono", "flag_vencido": 0, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": 3.01, "ntnb_referencia": "15/08/2030", "taxa_ntnb": 7.6891, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2026-12-15", "vna": 1338.5092, "pu_par": 1375.7005, "incentivada": "Não", "rating_normalizado": "BR", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.0702085912130383, "spread_anbima": 0.0666214129377997, "spread": 0.0702085912130383, "pu_mercado_mediano": 1075.3244, "agio_desagio_pct": -21.83}, "prices": [{"date": "2026-05-29", "ticker": "VAMO33", "price": 1038.71, "clean_price": 1038.71, "yield": 15.0447, "fonte_yield": "B3", "spread_over_ref": 651.8}, {"date": "2026-06-01", "ticker": "VAMO33", "price": 1012.6673, "clean_price": 1012.6673, "yield": 15.9167, "fonte_yield": "B3", "spread_over_ref": 724.5}, {"date": "2026-06-02", "ticker": "VAMO33", "price": 1061.2236, "clean_price": 1061.2236, "yield": 14.3592, "fonte_yield": "B3", "spread_over_ref": 573.5}, {"date": "2026-06-03", "ticker": "VAMO33", "price": 1009.5656, "clean_price": 1009.5656, "yield": 16.0818, "fonte_yield": "B3", "spread_over_ref": 710.7}, {"date": "2026-06-05", "ticker": "VAMO33", "price": 996.0455, "clean_price": 996.0455, "yield": 16.5926, "fonte_yield": "B3", "spread_over_ref": 738.6}, {"date": "2026-06-08", "ticker": "VAMO33", "price": 1092.7808, "clean_price": 1092.7808, "yield": 13.42, "fonte_yield": "B3", "spread_over_ref": 436.4}, {"date": "2026-06-09", "ticker": "VAMO33", "price": 993.7672, "clean_price": 993.7672, "yield": 16.7255, "fonte_yield": "B3", "spread_over_ref": 738.8}, {"date": "2026-06-10", "ticker": "VAMO33", "price": 994.0019, "clean_price": 994.0019, "yield": 16.7492, "fonte_yield": "B3", "spread_over_ref": 746.9}, {"date": "2026-06-11", "ticker": "VAMO33", "price": 1044.0696, "clean_price": 1044.0696, "yield": 15.1111, "fonte_yield": "B3", "spread_over_ref": 621.4}, {"date": "2026-06-12", "ticker": "VAMO33", "price": 984.2323, "clean_price": 984.2323, "yield": 16.5529, "fonte_yield": "B3", "spread_over_ref": 756.7}, {"date": "2026-06-15", "ticker": "VAMO33", "price": 1031.3802, "clean_price": 1031.3802, "yield": 14.2825, "fonte_yield": "B3", "spread_over_ref": 544.6}, {"date": "2026-06-16", "ticker": "VAMO33", "price": 970.6241, "clean_price": 970.6241, "yield": 16.3115, "fonte_yield": "B3", "spread_over_ref": 725.8}, {"date": "2026-06-17", "ticker": "VAMO33", "price": 962.8319, "clean_price": 962.8319, "yield": 16.6077, "fonte_yield": "B3", "spread_over_ref": 735.8}, {"date": "2026-06-18", "ticker": "VAMO33", "price": 1041.1377, "clean_price": 1041.1377, "yield": 14.038, "fonte_yield": "B3", "spread_over_ref": 491.1}, {"date": "2026-06-19", "ticker": "VAMO33", "price": 1025.939, "clean_price": 1025.939, "yield": 14.5302, "fonte_yield": "B3", "spread_over_ref": 519.3}, {"date": "2026-06-22", "ticker": "VAMO33", "price": 972.8986, "clean_price": 972.8986, "yield": 16.3544, "fonte_yield": "B3", "spread_over_ref": 696.3}, {"date": "2026-06-23", "ticker": "VAMO33", "price": 961.9156, "clean_price": 961.9156, "yield": 16.7636, "fonte_yield": "B3", "spread_over_ref": 742.6}, {"date": "2026-06-24", "ticker": "VAMO33", "price": 1057.6175, "clean_price": 1057.6175, "yield": 13.57, "fonte_yield": "B3", "spread_over_ref": 451.9}, {"date": "2026-06-25", "ticker": "VAMO33", "price": 993.0046, "clean_price": 993.0046, "yield": 15.75, "fonte_yield": "B3", "spread_over_ref": 657.6}, {"date": "2026-06-26", "ticker": "VAMO33", "price": 1060.7774, "clean_price": 1060.7774, "yield": 13.5141, "fonte_yield": "B3", "spread_over_ref": 457.8}, {"date": "2026-06-29", "ticker": "VAMO33", "price": 1008.8344, "clean_price": 1008.8344, "yield": 15.2673, "fonte_yield": "B3", "spread_over_ref": 617.2}, {"date": "2026-06-30", "ticker": "VAMO33", "price": 1044.5209, "clean_price": 1044.5209, "yield": 14.0757, "fonte_yield": "B3", "spread_over_ref": 512.0}, {"date": "2026-07-01", "ticker": "VAMO33", "price": 1050.4871, "clean_price": 1050.4871, "yield": 13.9026, "fonte_yield": "B3", "spread_over_ref": 489.2}, {"date": "2026-07-02", "ticker": "VAMO33", "price": 1046.27244, "clean_price": 1046.27244, "yield": 14.0591, "fonte_yield": "ANBIMA", "spread_over_ref": 496.9}, {"date": "2026-07-03", "ticker": "VAMO33", "price": 967.3737, "clean_price": 967.3737, "yield": 16.75, "fonte_yield": "B3", "spread_over_ref": 753.4}, {"date": "2026-07-06", "ticker": "VAMO33", "price": 1051.318034, "clean_price": 1051.318034, "yield": 13.943, "fonte_yield": "ANBIMA", "spread_over_ref": 502.6}, {"date": "2026-07-07", "ticker": "VAMO33", "price": 1040.9863, "clean_price": 1040.9863, "yield": 14.3199, "fonte_yield": "B3", "spread_over_ref": 536.4}, {"date": "2026-07-08", "ticker": "VAMO33", "price": 1033.292, "clean_price": 1033.292, "yield": 14.5723, "fonte_yield": "B3", "spread_over_ref": 560.6}, {"date": "2026-07-09", "ticker": "VAMO33", "price": 988.9083, "clean_price": 988.9083, "yield": 16.0937, "fonte_yield": "B3", "spread_over_ref": 709.6}, {"date": "2026-07-10", "ticker": "VAMO33", "price": 1054.0867, "clean_price": 1054.0867, "yield": 13.8974, "fonte_yield": "B3", "spread_over_ref": 516.6}, {"date": "2026-07-13", "ticker": "VAMO33", "price": 980.1392, "clean_price": 980.1392, "yield": 16.4, "fonte_yield": "B3", "spread_over_ref": 741.2}, {"date": "2026-07-14", "ticker": "VAMO33", "price": 1014.8697, "clean_price": 1014.8697, "yield": 15.2569, "fonte_yield": "B3", "spread_over_ref": 646.2}, {"date": "2026-07-15", "ticker": "VAMO33", "price": 1041.5343, "clean_price": 1041.5343, "yield": 14.36, "fonte_yield": "B3", "spread_over_ref": 567.0}, {"date": "2026-07-16", "ticker": "VAMO33", "price": 1062.735, "clean_price": 1062.735, "yield": 13.7, "fonte_yield": "B3", "spread_over_ref": 506.4}, {"date": "2026-07-17", "ticker": "VAMO33", "price": 1044.7137, "clean_price": 1044.7137, "yield": 14.3006, "fonte_yield": "B3", "spread_over_ref": 551.6}, {"date": "2026-07-20", "ticker": "VAMO33", "price": 1060.8852, "clean_price": 1060.8852, "yield": 13.8, "fonte_yield": "B3", "spread_over_ref": 500.3}, {"date": "2026-07-21", "ticker": "VAMO33", "price": 1031.3983, "clean_price": 1031.3983, "yield": 14.7856, "fonte_yield": "B3", "spread_over_ref": 590.3}, {"date": "2026-07-22", "ticker": "VAMO33", "price": 1035.2982, "clean_price": 1035.2982, "yield": 14.6733, "fonte_yield": "B3", "spread_over_ref": 571.5}, {"date": "2026-07-23", "ticker": "VAMO33", "price": 1035.1283, "clean_price": 1035.1283, "yield": 14.7027, "fonte_yield": "B3", "spread_over_ref": 575.5}, {"date": "2026-07-24", "ticker": "VAMO33", "price": 1015.3966, "clean_price": 1015.3966, "yield": 15.3962, "fonte_yield": "B3", "spread_over_ref": 648.4}, {"date": "2026-07-27", "ticker": "VAMO33", "price": 1042.087386, "clean_price": 1042.087386, "yield": 14.5151, "fonte_yield": "ANBIMA", "spread_over_ref": 572.8}, {"date": "2026-07-28", "ticker": "VAMO33", "price": 1047.3782, "clean_price": 1047.3782, "yield": 14.3706, "fonte_yield": "B3", "spread_over_ref": 564.7}, {"date": "2026-07-29", "ticker": "VAMO33", "price": 1054.6672, "clean_price": 1054.6672, "yield": 14.1258, "fonte_yield": "B3", "spread_over_ref": 530.3}, {"date": "2026-07-30", "ticker": "VAMO33", "price": 1022.6565, "clean_price": 1022.6565, "yield": 15.2262, "fonte_yield": "B3", "spread_over_ref": 634.6}, {"date": "2026-07-31", "ticker": "VAMO33", "price": 1033.1, "clean_price": 1033.1, "yield": 14.87, "fonte_yield": "B3", "spread_over_ref": 607.1}, {"date": "2026-08-03", "ticker": "VAMO33", "price": 1004.3522, "clean_price": 1004.3522, "yield": 15.8935, "fonte_yield": "B3", "spread_over_ref": 708.4}, {"date": "2026-08-04", "ticker": "VAMO33", "price": 985.8937, "clean_price": 985.8937, "yield": 16.55, "fonte_yield": "B3", "spread_over_ref": 766.5}, {"date": "2026-08-05", "ticker": "VAMO33", "price": 1045.1445, "clean_price": 1045.1445, "yield": 14.5304, "fonte_yield": "B3", "spread_over_ref": 583.1}, {"date": "2026-08-06", "ticker": "VAMO33", "price": 1045.664675, "clean_price": 1045.664675, "yield": 14.5298, "fonte_yield": "ANBIMA", "spread_over_ref": 579.1}, {"date": "2026-08-07", "ticker": "VAMO33", "price": 1044.0412, "clean_price": 1044.0412, "yield": 14.6108, "fonte_yield": "B3", "spread_over_ref": 600.3}, {"date": "2026-08-10", "ticker": "VAMO33", "price": 989.7687, "clean_price": 989.7687, "yield": 16.5, "fonte_yield": "B3", "spread_over_ref": 772.7}, {"date": "2026-08-11", "ticker": "VAMO33", "price": 1050.2843, "clean_price": 1050.2843, "yield": 14.47, "fonte_yield": "B3", "spread_over_ref": 587.5}, {"date": "2026-08-12", "ticker": "VAMO33", "price": 1060.877, "clean_price": 1060.877, "yield": 14.1308, "fonte_yield": "B3", "spread_over_ref": 553.1}, {"date": "2026-08-13", "ticker": "VAMO33", "price": 1067.7225, "clean_price": 1067.7225, "yield": 13.9204, "fonte_yield": "B3", "spread_over_ref": 531.8}, {"date": "2026-08-14", "ticker": "VAMO33", "price": 1072.3701, "clean_price": 1072.3701, "yield": 13.785, "fonte_yield": "B3", "spread_over_ref": 514.4}, {"date": "2026-08-17", "ticker": "VAMO33", "price": 1066.0115, "clean_price": 1066.0115, "yield": 14.0157, "fonte_yield": "B3", "spread_over_ref": 540.4}, {"date": "2026-08-18", "ticker": "VAMO33", "price": 1006.8317, "clean_price": 1006.8317, "yield": 16.0366, "fonte_yield": "B3", "spread_over_ref": 726.9}, {"date": "2026-08-19", "ticker": "VAMO33", "price": 1068.5072, "clean_price": 1068.5072, "yield": 13.964, "fonte_yield": "B3", "spread_over_ref": 542.0}, {"date": "2026-08-20", "ticker": "VAMO33", "price": 1066.637478, "clean_price": 1066.637478, "yield": 14.0258, "fonte_yield": "ANBIMA", "spread_over_ref": 552.7}, {"date": "2026-08-21", "ticker": "VAMO33", "price": 1018.136, "clean_price": 1018.136, "yield": 15.6958, "fonte_yield": "B3", "spread_over_ref": 708.3}, {"date": "2026-08-24", "ticker": "VAMO33", "price": 1082.1118, "clean_price": 1082.1118, "yield": 13.5559, "fonte_yield": "B3", "spread_over_ref": 506.4}, {"date": "2026-08-25", "ticker": "VAMO33", "price": 1066.0387, "clean_price": 1066.0387, "yield": 14.1032, "fonte_yield": "B3", "spread_over_ref": 555.6}, {"date": "2026-08-26", "ticker": "VAMO33", "price": 1074.3679, "clean_price": 1074.3679, "yield": 13.8413, "fonte_yield": "B3", "spread_over_ref": 530.1}, {"date": "2026-08-27", "ticker": "VAMO33", "price": 1076.4812, "clean_price": 1076.4812, "yield": 13.7705, "fonte_yield": "B3", "spread_over_ref": 530.4}, {"date": "2026-08-28", "ticker": "VAMO33", "price": 1001.4581, "clean_price": 1001.4581, "yield": 16.3478, "fonte_yield": "B3", "spread_over_ref": 765.0}, {"date": "2026-08-31", "ticker": "VAMO33", "price": 1074.27764, "clean_price": 1074.27764, "yield": 13.8646, "fonte_yield": "ANBIMA", "spread_over_ref": 531.3}, {"date": "2026-09-01", "ticker": "VAMO33", "price": 1055.8992, "clean_price": 1055.8992, "yield": 14.5, "fonte_yield": "B3", "spread_over_ref": 595.2}, {"date": "2026-09-02", "ticker": "VAMO33", "price": 1054.1067, "clean_price": 1054.1067, "yield": 14.5811, "fonte_yield": "B3", "spread_over_ref": 607.4}, {"date": "2026-09-03", "ticker": "VAMO33", "price": 1010.1871, "clean_price": 1010.1871, "yield": 16.1, "fonte_yield": "B3", "spread_over_ref": 755.0}, {"date": "2026-09-04", "ticker": "VAMO33", "price": 1055.9172, "clean_price": 1055.9172, "yield": 14.5484, "fonte_yield": "B3", "spread_over_ref": 616.1}, {"date": "2026-09-08", "ticker": "VAMO33", "price": 1013.8935, "clean_price": 1013.8935, "yield": 16.0, "fonte_yield": "B3", "spread_over_ref": 763.7}, {"date": "2026-09-09", "ticker": "VAMO33", "price": 1015.8232, "clean_price": 1015.8232, "yield": 15.9524, "fonte_yield": "B3", "spread_over_ref": 756.2}, {"date": "2026-09-10", "ticker": "VAMO33", "price": 1063.1323, "clean_price": 1063.1323, "yield": 14.3406, "fonte_yield": "B3", "spread_over_ref": 618.6}, {"date": "2026-09-11", "ticker": "VAMO33", "price": 1091.4195, "clean_price": 1091.4195, "yield": 13.4018, "fonte_yield": "B3", "spread_over_ref": 540.5}, {"date": "2026-09-14", "ticker": "VAMO33", "price": 1060.9504, "clean_price": 1060.9504, "yield": 14.432, "fonte_yield": "B3", "spread_over_ref": 634.0}, {"date": "2026-09-15", "ticker": "VAMO33", "price": 1062.3929, "clean_price": 1062.3929, "yield": 14.3896, "fonte_yield": "B3", "spread_over_ref": 623.2}, {"date": "2026-09-16", "ticker": "VAMO33", "price": 1025.0371, "clean_price": 1025.0371, "yield": 15.7, "fonte_yield": "B3", "spread_over_ref": 747.8}, {"date": "2026-09-17", "ticker": "VAMO33", "price": 1108.893, "clean_price": 1108.893, "yield": 12.943, "fonte_yield": "B3", "spread_over_ref": 500.9}, {"date": "2026-09-18", "ticker": "VAMO33", "price": 1108.509, "clean_price": 1108.509, "yield": 12.9566, "fonte_yield": "B3", "spread_over_ref": 501.7}, {"date": "2026-09-21", "ticker": "VAMO33", "price": 1067.5384, "clean_price": 1067.5384, "yield": 14.35, "fonte_yield": "B3", "spread_over_ref": 626.8}, {"date": "2026-09-22", "ticker": "VAMO33", "price": 1022.9649, "clean_price": 1022.9649, "yield": 15.8979, "fonte_yield": "B3", "spread_over_ref": 765.7}, {"date": "2026-09-23", "ticker": "VAMO33", "price": 1089.32382, "clean_price": 1089.32382, "yield": 13.6549, "fonte_yield": "ANBIMA", "spread_over_ref": 552.0}, {"date": "2026-09-24", "ticker": "VAMO33", "price": 1072.4745, "clean_price": 1072.4745, "yield": 14.27, "fonte_yield": "B3", "spread_over_ref": 609.2}, {"date": "2026-09-25", "ticker": "VAMO33", "price": 1093.036894, "clean_price": 1093.036894, "yield": 13.5886, "fonte_yield": "ANBIMA", "spread_over_ref": 550.2}, {"date": "2026-09-28", "ticker": "VAMO33", "price": 1042.6615, "clean_price": 1042.6615, "yield": 15.3734, "fonte_yield": "B3", "spread_over_ref": 713.4}, {"date": "2026-09-29", "ticker": "VAMO33", "price": 1078.0197, "clean_price": 1078.0197, "yield": 14.1755, "fonte_yield": "B3", "spread_over_ref": 609.9}, {"date": "2026-09-30", "ticker": "VAMO33", "price": 1079.5101, "clean_price": 1079.5101, "yield": 14.15, "fonte_yield": "B3", "spread_over_ref": 608.6}, {"date": "2026-10-01", "ticker": "VAMO33", "price": 1098.0999, "clean_price": 1098.0999, "yield": 13.5661, "fonte_yield": "ANBIMA", "spread_over_ref": 549.7}, {"date": "2026-10-02", "ticker": "VAMO33", "price": 1099.246954, "clean_price": 1099.246954, "yield": 13.559, "fonte_yield": "ANBIMA", "spread_over_ref": 552.6}, {"date": "2026-10-05", "ticker": "VAMO33", "price": 1101.585, "clean_price": 1101.585, "yield": 13.5587, "fonte_yield": "B3", "spread_over_ref": 604.3}, {"date": "2026-10-06", "ticker": "VAMO33", "price": 1047.3421, "clean_price": 1047.3421, "yield": 15.3876, "fonte_yield": "B3", "spread_over_ref": 786.3}, {"date": "2026-10-07", "ticker": "VAMO33", "price": 1136.729, "clean_price": 1136.729, "yield": 12.5348, "fonte_yield": "B3", "spread_over_ref": 531.0}, {"date": "2026-10-08", "ticker": "VAMO33", "price": 1120.13135, "clean_price": 1120.13135, "yield": 13.0035, "fonte_yield": "ANBIMA", "spread_over_ref": 585.8}, {"date": "2026-10-09", "ticker": "VAMO33", "price": 1064.7066, "clean_price": 1064.7066, "yield": 14.9091, "fonte_yield": "B3", "spread_over_ref": 772.2}, {"date": "2026-10-13", "ticker": "VAMO33", "price": 1125.4582, "clean_price": 1125.4582, "yield": 12.9247, "fonte_yield": "B3", "spread_over_ref": 578.5}, {"date": "2026-10-14", "ticker": "VAMO33", "price": 1055.5394, "clean_price": 1055.5394, "yield": 15.2981, "fonte_yield": "B3", "spread_over_ref": 798.7}, {"date": "2026-10-15", "ticker": "VAMO33", "price": 1061.7879, "clean_price": 1061.7879, "yield": 15.115, "fonte_yield": "B3", "spread_over_ref": 774.7}, {"date": "2026-10-16", "ticker": "VAMO33", "price": 1054.8275, "clean_price": 1054.8275, "yield": 15.385, "fonte_yield": "B3", "spread_over_ref": 795.5}, {"date": "2026-10-19", "ticker": "VAMO33", "price": 1104.6897, "clean_price": 1104.6897, "yield": 13.7215, "fonte_yield": "B3", "spread_over_ref": 639.5}, {"date": "2026-10-20", "ticker": "VAMO33", "price": 1084.2668, "clean_price": 1084.2668, "yield": 14.4359, "fonte_yield": "B3", "spread_over_ref": 715.4}, {"date": "2026-10-21", "ticker": "VAMO33", "price": 1160.9446, "clean_price": 1160.9446, "yield": 11.9802, "fonte_yield": "B3", "spread_over_ref": 486.7}, {"date": "2026-10-22", "ticker": "VAMO33", "price": 1162.2382, "clean_price": 1162.2382, "yield": 11.9442, "fonte_yield": "B3", "spread_over_ref": 485.1}, {"date": "2026-10-23", "ticker": "VAMO33", "price": 1116.1172, "clean_price": 1116.1172, "yield": 13.4498, "fonte_yield": "B3", "spread_over_ref": 629.6}, {"date": "2026-10-26", "ticker": "VAMO33", "price": 1123.1858, "clean_price": 1123.1858, "yield": 13.21, "fonte_yield": "B3", "spread_over_ref": 486.1}, {"date": "2026-10-27", "ticker": "VAMO33", "price": 1055.0788, "clean_price": 1055.0788, "yield": 15.55, "fonte_yield": "B3", "spread_over_ref": 716.5}, {"date": "2026-10-28", "ticker": "VAMO33", "price": 1086.2387, "clean_price": 1086.2387, "yield": 14.4947, "fonte_yield": "B3", "spread_over_ref": 613.1}, {"date": "2026-10-29", "ticker": "VAMO33", "price": 1043.726, "clean_price": 1043.726, "yield": 16.0103, "fonte_yield": "B3", "spread_over_ref": 756.3}, {"date": "2026-10-30", "ticker": "VAMO33", "price": 1088.4446, "clean_price": 1088.4446, "yield": 14.4646, "fonte_yield": "B3", "spread_over_ref": 605.5}, {"date": "2026-11-03", "ticker": "VAMO33", "price": 1038.7869, "clean_price": 1038.7869, "yield": 16.2436, "fonte_yield": "B3", "spread_over_ref": 768.3}, {"date": "2026-11-04", "ticker": "VAMO33", "price": 1044.0817, "clean_price": 1044.0817, "yield": 16.0811, "fonte_yield": "B3", "spread_over_ref": 765.6}, {"date": "2026-11-05", "ticker": "VAMO33", "price": 1075.0749, "clean_price": 1075.0749, "yield": 15.0126, "fonte_yield": "B3", "spread_over_ref": 669.1}, {"date": "2026-11-06", "ticker": "VAMO33", "price": 962.5668, "clean_price": 962.5668, "yield": 19.3, "fonte_yield": "B3", "spread_over_ref": 1077.1}, {"date": "2026-11-09", "ticker": "VAMO33", "price": 946.4018, "clean_price": 946.4018, "yield": 20.01, "fonte_yield": "B3", "spread_over_ref": 1148.3}, {"date": "2026-11-10", "ticker": "VAMO33", "price": 1088.4889, "clean_price": 1088.4889, "yield": 14.6, "fonte_yield": "B3", "spread_over_ref": 650.6}, {"date": "2026-11-11", "ticker": "VAMO33", "price": 1083.2302, "clean_price": 1083.2302, "yield": 14.8079, "fonte_yield": "B3", "spread_over_ref": 676.8}, {"date": "2026-11-12", "ticker": "VAMO33", "price": 1038.3488, "clean_price": 1038.3488, "yield": 16.4283, "fonte_yield": "B3", "spread_over_ref": 818.5}, {"date": "2026-11-13", "ticker": "VAMO33", "price": 1054.6061, "clean_price": 1054.6061, "yield": 15.8513, "fonte_yield": "B3", "spread_over_ref": 766.0}, {"date": "2026-11-16", "ticker": "VAMO33", "price": 1052.4776, "clean_price": 1052.4776, "yield": 15.9568, "fonte_yield": "B3", "spread_over_ref": 759.7}, {"date": "2026-11-17", "ticker": "VAMO33", "price": 1085.2622, "clean_price": 1085.2622, "yield": 14.86, "fonte_yield": "B3", "spread_over_ref": 670.8}, {"date": "2026-11-18", "ticker": "VAMO33", "price": 1054.2771, "clean_price": 1054.2771, "yield": 15.9479, "fonte_yield": "B3", "spread_over_ref": 772.8}, {"date": "2026-11-19", "ticker": "VAMO33", "price": 1063.2242, "clean_price": 1063.2242, "yield": 15.6549, "fonte_yield": "B3", "spread_over_ref": 731.2}, {"date": "2026-11-23", "ticker": "VAMO33", "price": 1074.5363, "clean_price": 1074.5363, "yield": 15.2765, "fonte_yield": "B3", "spread_over_ref": 704.4}, {"date": "2026-11-24", "ticker": "VAMO33", "price": 1058.0408, "clean_price": 1058.0408, "yield": 15.9, "fonte_yield": "B3", "spread_over_ref": 762.5}], "emitter": {"cnpj": "23373000000132", "cnpj_formatado": "23.373.000/0001-32", "razao_social": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "nome_fantasia": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "setor": "Serviços Transporte e Logística", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://ri.grupovamos.com.br/", "municipio": "SÃO PAULO", "uf": "SP", "descricao": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Serviços Transporte e Logística."}, "raiox_cnpj": "23373000000132", "paymentEvents": [{"ticker": "VAMO33", "data_evento": "2026-12-15", "data_liquidacao": "2026-12-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "VAMO33", "data_evento": "2027-06-15", "data_liquidacao": "2027-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2027-12-15", "data_liquidacao": "2027-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2028-06-15", "data_liquidacao": "2028-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2028-12-15", "data_liquidacao": "2028-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2029-06-15", "data_liquidacao": "2029-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2029-12-15", "data_liquidacao": "2029-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2030-06-15", "data_liquidacao": "2030-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2030-12-15", "data_liquidacao": "2030-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2031-06-15", "data_liquidacao": "2031-06-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "VAMO33", "data_evento": "2031-06-15", "data_liquidacao": "2031-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 3.1312, "valor_real": null, "valor_projetado": 31.312, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo VAMO33 é um título de crédito privado do tipo Debênture (comum) emitido por VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A. (CNPJ: 23.373.000/0001-32), com taxa de emissão de IPCA + 6.36% a.a. e data de vencimento em 15/06/2031. O título encontra-se resgatado, avaliado com rating AA em escala nacional (duration modificada de 3.01 anos) e spread indicativo de 7.02% sobre a NTN-B soberana, com volume emitido de R$ 464.460.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "CRA020003PY", "tipo": "CRA", "issuer": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "vencimento": "2030-11-18"}, {"ticker": "CRA023000MC", "tipo": "CRA", "issuer": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "vencimento": "2030-01-15"}, {"ticker": "CRA020001US", "tipo": "CRA", "issuer": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "vencimento": "2027-06-15"}, {"ticker": "CRA023000GP", "tipo": "CRA", "issuer": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "vencimento": "2028-01-17"}], "relatedSector": [{"ticker": "OVSA16", "tipo": "Debênture", "issuer": "UNIDAS LOCAÇÕES E SERVIÇOS S.A.", "vencimento": "2029-06-15"}, {"ticker": "23J1127308", "tipo": "CRI", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "vencimento": "2028-10-16"}, {"ticker": "CRA022008C7", "tipo": "CRA", "issuer": "COMPANHIA DE LOCAÇÃO DAS AMERICAS", "vencimento": "2028-09-15"}, {"ticker": "MVLV26", "tipo": "Debênture", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "vencimento": "2028-06-15"}], "issuerSlug": "vamos-locacao-de-caminhoes-maquinas-e-equipamentos-s-a", "sectorSlug": "locacao-de-veiculos"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>

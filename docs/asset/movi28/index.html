@@ -36,7 +36,7 @@
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
-    <script type="application/ld+json">
+    <script id="fixdata-asset-ldjson" type="application/ld+json">
 {"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "name": "FIXDATA", "alternateName": ["FixData", "Meu Crédito Privado"], "url": "https://fixdatabrasil.com.br/"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "FIXDATA", "item": "https://fixdatabrasil.com.br/"}, {"@type": "ListItem", "position": 2, "name": "Debêntures", "item": "https://fixdatabrasil.com.br/debentures/"}, {"@type": "ListItem", "position": 3, "name": "MOVI28", "item": "https://fixdatabrasil.com.br/asset/movi28/"}]}, {"@type": "FinancialProduct", "name": "Debênture MOVI28 (MOVIDA PARTICIPAÇÕES S.A.)", "identifier": "MOVI28", "isin": "BRMOVIDBS0J5", "description": "Consulte dados de mercado da debênture MOVI28 emitida por MOVIDA PARTICIPAÇÕES S.A. (CNPJ: 21.314.559/0001-66). Indexador IPCA, vencimento em 15/06/2032, rating AA, spread de 9.29%, duration de 3.74 anos. Acompanhe histórico de negociações ANBIMA, gráficos e fluxo de pagamentos no FIXDATA.", "abstract": "O ativo MOVI28 é um título de crédito privado do tipo Debênture (comum) emitido por MOVIDA PARTICIPAÇÕES S.A. (CNPJ: 21.314.559/0001-66), com taxa de emissão de IPCA + 8.34% a.a. e data de vencimento em 15/06/2032. O título encontra-se resgatado, avaliado com rating AA em escala nacional (duration modificada de 3.74 anos) e spread indicativo de 9.29% sobre a NTN-B soberana, com volume emitido de R$ 591.831.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "url": "https://fixdatabrasil.com.br/asset/movi28/", "category": "Debênture", "provider": {"@type": "Organization", "name": "MOVIDA PARTICIPAÇÕES S.A.", "taxID": "21.314.559/0001-66", "url": "https://ri.movida.com.br/"}}]}
     </script>
 
@@ -71,7 +71,7 @@
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
-      <nav class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
+      <nav id="fixdata-static-nav" class="bg-white border-b border-slate-200 sticky top-0 z-[100]">
         <div class="container mx-auto px-4">
           <div class="flex justify-between items-center h-16">
             <a href="/" class="flex items-center shrink-0" title="FIXDATA — Página Inicial">
@@ -79,38 +79,314 @@
                 FIX<span class="text-blue-200 font-extrabold">DATA</span>
               </div>
             </a>
-            <div class="hidden md:flex items-center gap-2 lg:gap-4 text-xs font-bold text-slate-600">
-              <a href="/" class="hover:text-blue-600 transition whitespace-nowrap">Início</a>
-              <a href="/debentures/" class="hover:text-blue-600 transition whitespace-nowrap">Debêntures</a>
-              <a href="/cri/" class="hover:text-blue-600 transition whitespace-nowrap">CRIs</a>
-              <a href="/cra/" class="hover:text-blue-600 transition whitespace-nowrap">CRAs</a>
-              <a href="/negocios/" class="hover:text-blue-600 transition whitespace-nowrap">Negócios B3</a>
-              <a href="/emissores/" class="hover:text-blue-600 transition whitespace-nowrap">Emissores</a>
-              <a href="/setores/" class="hover:text-blue-600 transition whitespace-nowrap">Setores</a>
-              <a href="/raiox-devedor/" class="hover:text-blue-600 transition whitespace-nowrap">Raio-X Devedor</a>
-              <a href="/calculadora/" class="hover:text-blue-600 transition whitespace-nowrap">Calculadora</a>
+
+            <button
+              type="button"
+              data-mobile-toggle="true"
+              class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg transition cursor-pointer"
+              aria-label="Abrir menu de navegação"
+              aria-expanded="false"
+            >
+              <svg data-mobile-icon="open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+              <svg data-mobile-icon="close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+
+            <div class="hidden md:flex items-center gap-1 lg:gap-1.5">
+              <a
+                href="/"
+                data-nav-direct="/"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Início</span>
+              </a>
+
+              <div class="relative" data-nav-dropdown="mercados">
+                <button
+                  type="button"
+                  data-dropdown-trigger="mercados"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                  <span>Mercados</span>
+                  <svg data-chevron="mercados" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="mercados" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/negocios/" data-nav-sub="/negocios" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Negócios B3</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Negócios secundários, volume diário e VWAP</p>
+                        </div>
+                      </a>
+                      <a href="/charts/" data-nav-sub="/charts" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Dashboard Secundário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Spreads ANBIMA, dispersão de PU e taxas indicativas</p>
+                        </div>
+                      </a>
+                      <a href="/ntnb/" data-nav-sub="/ntnb" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Curva NTN-B</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Estrutura a termo do juro real e prêmios de risco</p>
+                        </div>
+                      </a>
+                      <a href="/primary/" data-nav-sub="/primary" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Mercado Primário</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Ofertas públicas CVM 160 e emissões em andamento</p>
+                        </div>
+                      </a>
+                      <a href="/agenda/" data-nav-sub="/agenda" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Agenda de Pagamentos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Cronograma de amortizações e cupons futuros</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative" data-nav-dropdown="ferramentas">
+                <button
+                  type="button"
+                  data-dropdown-trigger="ferramentas"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  aria-expanded="false"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                  <span>Ferramentas</span>
+                  <svg data-chevron="ferramentas" width="14" height="14" class="transition-transform duration-200 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div data-dropdown-panel="ferramentas" class="hidden absolute top-full left-0 pt-1.5 z-[110]">
+                  <div class="w-80 lg:w-88 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 ring-1 ring-slate-900/5">
+                    <div class="space-y-1">
+                      <a href="/raiox-devedor/" data-nav-sub="/raiox-devedor" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Raio-X do Devedor</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Demonstrações CVM, solvência, ratings e dívida</p>
+                        </div>
+                      </a>
+                      <a href="/calculadora/" data-nav-sub="/calculadora" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Calculadora de Renda Fixa</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Simulador de Duration, PU, cupom e equivalência</p>
+                        </div>
+                      </a>
+                      <a href="/comparar/" data-nav-sub="/comparar" class="flex items-start gap-3 p-2.5 rounded-xl transition-all group/item hover:bg-slate-50 text-slate-700">
+                        <div class="p-2 rounded-lg shrink-0 transition-colors bg-slate-100 text-slate-600 group-hover/item:bg-blue-50">
+                          <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <span class="text-xs lg:text-sm font-bold block text-slate-800 group-hover/item:text-blue-600 transition-colors">Comparador de Ativos</span>
+                          <p class="text-[11px] text-slate-400 group-hover/item:text-slate-500 leading-snug line-clamp-1 mt-0.5">Comparação direta de taxas, spread e rating</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/contact/"
+                data-nav-direct="/contact"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs lg:text-sm whitespace-nowrap transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+              >
+                <svg width="17" height="17" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+                <span>Contato &amp; Apoio</span>
+              </a>
+
+              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <a
+                  href="/raiox-devedor/"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Entrar</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
+          <div class="pb-3 mb-2 border-b border-slate-100">
+            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Entrar com o Google</span>
+            </a>
+          </div>
+          <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Início</span>
+          </a>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="mercados" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Mercados</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="mercados" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/negocios/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Negócios B3</a>
+              <a href="/charts/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Dashboard Secundário</a>
+              <a href="/ntnb/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Curva NTN-B</a>
+              <a href="/primary/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Mercado Primário</a>
+              <a href="/agenda/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Agenda de Pagamentos</a>
+            </div>
+          </div>
+          <div class="border border-slate-100 rounded-xl overflow-hidden">
+            <button type="button" data-mobile-group-btn="ferramentas" class="w-full flex items-center justify-between p-3 font-bold transition-colors text-slate-700 hover:bg-slate-50">
+              <span>Ferramentas</span>
+              <svg width="16" height="16" class="text-slate-400 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-mobile-group-panel="ferramentas" class="hidden bg-slate-50/60 p-2 space-y-1 border-t border-slate-100">
+              <a href="/raiox-devedor/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Raio-X do Devedor</a>
+              <a href="/calculadora/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Calculadora de Renda Fixa</a>
+              <a href="/comparar/" class="flex items-center p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:text-blue-600">Comparador de Ativos</a>
+            </div>
+          </div>
+          <a href="/contact/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
+            <svg width="18" height="18" class="text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>
+            <span>Contato &amp; Apoio</span>
+          </a>
+        </div>
+
+        <script>
+          (function () {
+            var nav = document.getElementById('fixdata-static-nav');
+            if (!nav || nav.dataset.bound === 'true') return;
+            nav.dataset.bound = 'true';
+            var timer = null;
+            var drops = nav.querySelectorAll('[data-nav-dropdown]');
+
+            function closeAll() {
+              drops.forEach(function (wrap) {
+                var panel = wrap.querySelector('[data-dropdown-panel]');
+                var btn = wrap.querySelector('[data-dropdown-trigger]');
+                var ch = wrap.querySelector('[data-chevron]');
+                if (panel) panel.classList.add('hidden');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                if (ch) ch.classList.remove('rotate-180', 'text-blue-600');
+              });
+            }
+
+            function openOne(id) {
+              if (timer) clearTimeout(timer);
+              closeAll();
+              var wrap = nav.querySelector('[data-nav-dropdown="' + id + '"]');
+              if (!wrap) return;
+              var panel = wrap.querySelector('[data-dropdown-panel]');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              var ch = wrap.querySelector('[data-chevron]');
+              if (panel) panel.classList.remove('hidden');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+              if (ch) ch.classList.add('rotate-180', 'text-blue-600');
+            }
+
+            drops.forEach(function (wrap) {
+              var id = wrap.getAttribute('data-nav-dropdown');
+              var btn = wrap.querySelector('[data-dropdown-trigger]');
+              wrap.addEventListener('mouseenter', function () { openOne(id); });
+              wrap.addEventListener('mouseleave', function () {
+                timer = setTimeout(closeAll, 150);
+              });
+              if (btn) {
+                btn.addEventListener('click', function (ev) {
+                  ev.stopPropagation();
+                  var panel = wrap.querySelector('[data-dropdown-panel]');
+                  var isOpen = panel && !panel.classList.contains('hidden');
+                  if (isOpen) closeAll();
+                  else openOne(id);
+                });
+              }
+            });
+
+            document.addEventListener('mousedown', function (ev) {
+              if (!nav.contains(ev.target)) closeAll();
+            });
+            document.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Escape') closeAll();
+            });
+
+            var mobToggle = nav.querySelector('[data-mobile-toggle]');
+            var mobMenu = nav.querySelector('[data-mobile-menu]');
+            if (mobToggle && mobMenu) {
+              mobToggle.addEventListener('click', function () {
+                var openNow = mobMenu.classList.contains('hidden');
+                mobMenu.classList.toggle('hidden', !openNow);
+                mobToggle.setAttribute('aria-expanded', openNow ? 'true' : 'false');
+                var iO = mobToggle.querySelector('[data-mobile-icon="open"]');
+                var iC = mobToggle.querySelector('[data-mobile-icon="close"]');
+                if (iO) iO.classList.toggle('hidden', openNow);
+                if (iC) iC.classList.toggle('hidden', !openNow);
+              });
+            }
+
+            nav.querySelectorAll('[data-mobile-group-btn]').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var gid = b.getAttribute('data-mobile-group-btn');
+                var pnl = nav.querySelector('[data-mobile-group-panel="' + gid + '"]');
+                if (pnl) pnl.classList.toggle('hidden');
+              });
+            });
+
+            var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+            nav.querySelectorAll('[data-nav-direct]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-direct');
+              if ((tgt === '/' && path === '/') || (tgt !== '/' && (path === tgt || path.indexOf(tgt + '/') === 0))) {
+                a.classList.add('bg-blue-50', 'text-blue-600');
+                a.classList.remove('text-slate-600');
+              }
+            });
+            nav.querySelectorAll('[data-nav-sub]').forEach(function (a) {
+              var tgt = a.getAttribute('data-nav-sub');
+              if (path === tgt || path.indexOf(tgt + '/') === 0) {
+                a.classList.add('bg-blue-50/80', 'text-blue-900');
+              }
+            });
+          })();
+        </script>
       </nav>
 
-      <main class="container mx-auto px-4 py-8 space-y-6 max-w-5xl">
+      <main class="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
         <div class="text-sm text-slate-500 flex items-center gap-1.5">
           <a href="/" class="hover:underline">Início</a> &gt;
           <a href="/debentures/" class="hover:underline">Debêntures</a> &gt;
           <span class="text-slate-800 font-bold">MOVI28</span>
         </div>
-
-        <!-- Bloco de Síntese Analítica / Resumo Executivo para IAs e Analistas -->
-        <section class="bg-gradient-to-r from-blue-50/70 via-slate-50 to-indigo-50/50 border border-blue-100 rounded-2xl p-4 sm:p-5 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-xs">
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white">Síntese Analítica FIXDATA</span>
-            <span class="text-[11px] font-semibold text-slate-500">Resumo Executivo Oficial para Mercado e IAs</span>
-          </div>
-          <p class="font-normal text-slate-700">
-            O ativo MOVI28 é um título de crédito privado do tipo Debênture (comum) emitido por MOVIDA PARTICIPAÇÕES S.A. (CNPJ: 21.314.559/0001-66), com taxa de emissão de IPCA + 8.34% a.a. e data de vencimento em 15/06/2032. O título encontra-se resgatado, avaliado com rating AA em escala nacional (duration modificada de 3.74 anos) e spread indicativo de 9.29% sobre a NTN-B soberana, com volume emitido de R$ 591.831.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).
-          </p>
-        </section>
 
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
@@ -168,7 +444,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">15/06/2032</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 5,6 anos (2029 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 5,6 anos (2028 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -196,7 +472,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><a href="/setores/locacao-de-veiculos/" class="font-semibold text-blue-300 hover:underline">Locação de Veículos</a></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">PENTAGONO S/A DTVM</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">XP INVESTIMENTOS CORRETORA DE CAMBIO, TITULOS E VALORES MOBILIARIOS S/A</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">5,6 anos (2029 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">5,6 anos (2028 dias corridos)</p></div>
           </div>
         </div>
 
@@ -567,6 +843,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "MOVI28", "tipo": "Debênture", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "indexador": "IPCA", "taxa_emissao": 8.3368, "taxa_negocio_b3": 18.5774, "taxa_indicativa_anbima": null, "taxa_mercado": 17.857, "taxa_ativo": 17.857, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "900.3615", "data_ultimo_negocio": "2026-11-24", "data_anbima": null, "volume_negociado_b3": 1175872.12, "volume_emissao": 591831000.0, "volume": 591831000.0, "quantidade_emitida": 591831.0, "quantidade": 591831.0, "data_emissao": "2022-06-15", "vencimento": "2032-06-15", "emissao": 8.0, "serie": 2.0, "isin": "BRMOVIDBS0J5", "lei": null, "cnpj_emissor": 21314559000166.0, "setor": "Locação de Veículos", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "XP INVESTIMENTOS CORRETORA DE CAMBIO, TITULOS E VALORES MOBILIARIOS S/A", "rating": "AA(Bra)", "rating_original": "AA(Bra)", "rating_agencia": "Fitch Ratings", "agencia": "Fitch Ratings", "rating_data": "01/06/2026", "divulgacao": "01/06/2026", "securitizadora": "Pentágono", "flag_vencido": 0, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": 3.74, "ntnb_referencia": "15/08/2032", "taxa_ntnb": 7.84, "publico_alvo": "Público Geral", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2026-12-15", "vna": 1198.6755, "pu_par": 1242.103, "incentivada": "Não", "rating_normalizado": "AA", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-24)", "spread_mercado": 0.0928876112759644, "spread_anbima": null, "spread": 0.0928876112759644, "pu_mercado_mediano": 920.5322, "agio_desagio_pct": -25.89}, "prices": [{"date": "2026-05-29", "ticker": "MOVI28", "price": 1009.1757, "clean_price": 1009.1757, "yield": 13.8329, "fonte_yield": "B3", "spread_over_ref": 552.1}, {"date": "2026-06-01", "ticker": "MOVI28", "price": 988.1789, "clean_price": 988.1789, "yield": 14.4526, "fonte_yield": "B3", "spread_over_ref": 601.4}, {"date": "2026-06-02", "ticker": "MOVI28", "price": 1003.5046, "clean_price": 1003.5046, "yield": 13.9991, "fonte_yield": "B3", "spread_over_ref": 553.4}, {"date": "2026-06-03", "ticker": "MOVI28", "price": 993.0347, "clean_price": 993.0347, "yield": 14.3269, "fonte_yield": "B3", "spread_over_ref": 565.9}, {"date": "2026-06-05", "ticker": "MOVI28", "price": 1015.9993, "clean_price": 1015.9993, "yield": 13.6907, "fonte_yield": "B3", "spread_over_ref": 491.5}, {"date": "2026-06-08", "ticker": "MOVI28", "price": 979.36, "clean_price": 979.36, "yield": 14.7857, "fonte_yield": "B3", "spread_over_ref": 586.0}, {"date": "2026-06-09", "ticker": "MOVI28", "price": 978.6732, "clean_price": 978.6732, "yield": 14.8312, "fonte_yield": "B3", "spread_over_ref": 588.0}, {"date": "2026-06-10", "ticker": "MOVI28", "price": 988.4275, "clean_price": 988.4275, "yield": 14.5641, "fonte_yield": "B3", "spread_over_ref": 567.7}, {"date": "2026-06-11", "ticker": "MOVI28", "price": 981.9288, "clean_price": 981.9288, "yield": 14.7796, "fonte_yield": "B3", "spread_over_ref": 610.6}, {"date": "2026-06-12", "ticker": "MOVI28", "price": 999.7927, "clean_price": 999.7927, "yield": 14.2879, "fonte_yield": "B3", "spread_over_ref": 568.2}, {"date": "2026-06-15", "ticker": "MOVI28", "price": 950.1021, "clean_price": 950.1021, "yield": 14.3938, "fonte_yield": "B3", "spread_over_ref": 575.8}, {"date": "2026-06-16", "ticker": "MOVI28", "price": 951.6053, "clean_price": 951.6053, "yield": 14.3681, "fonte_yield": "B3", "spread_over_ref": 564.7}, {"date": "2026-06-17", "ticker": "MOVI28", "price": 945.2248, "clean_price": 945.2248, "yield": 14.5809, "fonte_yield": "B3", "spread_over_ref": 565.3}, {"date": "2026-06-18", "ticker": "MOVI28", "price": 989.4872, "clean_price": 989.4872, "yield": 13.3247, "fonte_yield": "B3", "spread_over_ref": 442.7}, {"date": "2026-06-19", "ticker": "MOVI28", "price": 993.0899, "clean_price": 993.0899, "yield": 13.2233, "fonte_yield": "B3", "spread_over_ref": 420.7}, {"date": "2026-06-22", "ticker": "MOVI28", "price": 997.2536, "clean_price": 997.2536, "yield": 13.1254, "fonte_yield": "B3", "spread_over_ref": 421.3}, {"date": "2026-06-23", "ticker": "MOVI28", "price": 949.8565, "clean_price": 949.8565, "yield": 14.5392, "fonte_yield": "B3", "spread_over_ref": 555.5}, {"date": "2026-06-24", "ticker": "MOVI28", "price": 964.8446, "clean_price": 964.8446, "yield": 14.0988, "fonte_yield": "B3", "spread_over_ref": 519.9}, {"date": "2026-06-25", "ticker": "MOVI28", "price": 945.7006, "clean_price": 945.7006, "yield": 14.7087, "fonte_yield": "B3", "spread_over_ref": 580.6}, {"date": "2026-06-26", "ticker": "MOVI28", "price": 946.87, "clean_price": 946.87, "yield": 14.6905, "fonte_yield": "B3", "spread_over_ref": 582.0}, {"date": "2026-06-29", "ticker": "MOVI28", "price": 873.1751, "clean_price": 873.1751, "yield": 17.0704, "fonte_yield": "B3", "spread_over_ref": 804.2}, {"date": "2026-06-30", "ticker": "MOVI28", "price": 872.6969, "clean_price": 872.6969, "yield": 17.1, "fonte_yield": "B3", "spread_over_ref": 812.6}, {"date": "2026-07-01", "ticker": "MOVI28", "price": 871.6882, "clean_price": 871.6882, "yield": 17.158, "fonte_yield": "B3", "spread_over_ref": 809.5}, {"date": "2026-07-02", "ticker": "MOVI28", "price": 879.077, "clean_price": 879.077, "yield": 16.938, "fonte_yield": "B3", "spread_over_ref": 781.1}, {"date": "2026-07-03", "ticker": "MOVI28", "price": 962.142, "clean_price": 962.142, "yield": 14.3064, "fonte_yield": "B3", "spread_over_ref": 547.1}, {"date": "2026-07-06", "ticker": "MOVI28", "price": 962.538, "clean_price": 962.538, "yield": 14.3144, "fonte_yield": "B3", "spread_over_ref": 552.5}, {"date": "2026-07-07", "ticker": "MOVI28", "price": 875.845, "clean_price": 875.845, "yield": 17.1179, "fonte_yield": "B3", "spread_over_ref": 812.2}, {"date": "2026-07-08", "ticker": "MOVI28", "price": 873.7734, "clean_price": 873.7734, "yield": 17.2185, "fonte_yield": "B3", "spread_over_ref": 822.5}, {"date": "2026-07-09", "ticker": "MOVI28", "price": 874.2843, "clean_price": 874.2843, "yield": 17.2374, "fonte_yield": "B3", "spread_over_ref": 831.2}, {"date": "2026-07-10", "ticker": "MOVI28", "price": 872.7464, "clean_price": 872.7464, "yield": 17.25, "fonte_yield": "B3", "spread_over_ref": 832.4}, {"date": "2026-07-13", "ticker": "MOVI28", "price": 870.7338, "clean_price": 870.7338, "yield": 17.3321, "fonte_yield": "B3", "spread_over_ref": 843.7}, {"date": "2026-07-14", "ticker": "MOVI28", "price": 877.9745, "clean_price": 877.9745, "yield": 17.1117, "fonte_yield": "B3", "spread_over_ref": 829.6}, {"date": "2026-07-15", "ticker": "MOVI28", "price": 891.2989, "clean_price": 891.2989, "yield": 16.7155, "fonte_yield": "B3", "spread_over_ref": 793.0}, {"date": "2026-07-16", "ticker": "MOVI28", "price": 863.2705, "clean_price": 863.2705, "yield": 17.7052, "fonte_yield": "B3", "spread_over_ref": 884.4}, {"date": "2026-07-17", "ticker": "MOVI28", "price": 928.3098, "clean_price": 928.3098, "yield": 15.5476, "fonte_yield": "B3", "spread_over_ref": 675.1}, {"date": "2026-07-20", "ticker": "MOVI28", "price": 898.2016, "clean_price": 898.2016, "yield": 16.5254, "fonte_yield": "B3", "spread_over_ref": 762.5}, {"date": "2026-07-21", "ticker": "MOVI28", "price": 962.0535, "clean_price": 962.0535, "yield": 14.5753, "fonte_yield": "B3", "spread_over_ref": 578.1}, {"date": "2026-07-22", "ticker": "MOVI28", "price": 973.1086, "clean_price": 973.1086, "yield": 14.2093, "fonte_yield": "B3", "spread_over_ref": 536.9}, {"date": "2026-07-23", "ticker": "MOVI28", "price": 853.0256, "clean_price": 853.0256, "yield": 18.1697, "fonte_yield": "B3", "spread_over_ref": 902.7}, {"date": "2026-07-24", "ticker": "MOVI28", "price": 800.5305, "clean_price": 800.5305, "yield": 20.15, "fonte_yield": "B3", "spread_over_ref": 1093.2}, {"date": "2026-07-27", "ticker": "MOVI28", "price": 782.4098, "clean_price": 782.4098, "yield": 21.0943, "fonte_yield": "B3", "spread_over_ref": 1184.3}, {"date": "2026-07-28", "ticker": "MOVI28", "price": 749.693, "clean_price": 749.693, "yield": 22.3221, "fonte_yield": "B3", "spread_over_ref": 1297.7}, {"date": "2026-07-29", "ticker": "MOVI28", "price": 803.903, "clean_price": 803.903, "yield": 20.2083, "fonte_yield": "B3", "spread_over_ref": 1094.6}, {"date": "2026-07-30", "ticker": "MOVI28", "price": 758.0156, "clean_price": 758.0156, "yield": 22.0311, "fonte_yield": "B3", "spread_over_ref": 1262.9}, {"date": "2026-07-31", "ticker": "MOVI28", "price": 925.4018, "clean_price": 925.4018, "yield": 15.8824, "fonte_yield": "B3", "spread_over_ref": 706.5}, {"date": "2026-08-03", "ticker": "MOVI28", "price": 919.7958, "clean_price": 919.7958, "yield": 16.2566, "fonte_yield": "B3", "spread_over_ref": 748.4}, {"date": "2026-08-04", "ticker": "MOVI28", "price": 774.9438, "clean_price": 774.9438, "yield": 21.4305, "fonte_yield": "B3", "spread_over_ref": 1223.8}, {"date": "2026-08-05", "ticker": "MOVI28", "price": 777.9871, "clean_price": 777.9871, "yield": 21.3406, "fonte_yield": "B3", "spread_over_ref": 1217.5}, {"date": "2026-08-07", "ticker": "MOVI28", "price": 773.0337, "clean_price": 773.0337, "yield": 21.5806, "fonte_yield": "B3", "spread_over_ref": 1246.7}, {"date": "2026-08-10", "ticker": "MOVI28", "price": 939.399, "clean_price": 939.399, "yield": 15.4282, "fonte_yield": "B3", "spread_over_ref": 674.0}, {"date": "2026-08-11", "ticker": "MOVI28", "price": 943.8376, "clean_price": 943.8376, "yield": 15.3355, "fonte_yield": "B3", "spread_over_ref": 665.5}, {"date": "2026-08-12", "ticker": "MOVI28", "price": 960.1574, "clean_price": 960.1574, "yield": 14.8268, "fonte_yield": "B3", "spread_over_ref": 618.4}, {"date": "2026-08-13", "ticker": "MOVI28", "price": 964.3005, "clean_price": 964.3005, "yield": 14.7778, "fonte_yield": "B3", "spread_over_ref": 612.4}, {"date": "2026-08-14", "ticker": "MOVI28", "price": 869.8703, "clean_price": 869.8703, "yield": 18.1728, "fonte_yield": "B3", "spread_over_ref": 919.7}, {"date": "2026-08-17", "ticker": "MOVI28", "price": 983.0404, "clean_price": 983.0404, "yield": 14.1673, "fonte_yield": "B3", "spread_over_ref": 554.4}, {"date": "2026-08-18", "ticker": "MOVI28", "price": 952.0909, "clean_price": 952.0909, "yield": 15.1411, "fonte_yield": "B3", "spread_over_ref": 645.4}, {"date": "2026-08-19", "ticker": "MOVI28", "price": 957.7955, "clean_price": 957.7955, "yield": 14.9734, "fonte_yield": "B3", "spread_over_ref": 637.8}, {"date": "2026-08-20", "ticker": "MOVI28", "price": 953.3621, "clean_price": 953.3621, "yield": 15.12, "fonte_yield": "B3", "spread_over_ref": 655.8}, {"date": "2026-08-21", "ticker": "MOVI28", "price": 964.1286, "clean_price": 964.1286, "yield": 14.8093, "fonte_yield": "B3", "spread_over_ref": 628.6}, {"date": "2026-08-24", "ticker": "MOVI28", "price": 960.1796, "clean_price": 960.1796, "yield": 14.9352, "fonte_yield": "B3", "spread_over_ref": 638.2}, {"date": "2026-08-25", "ticker": "MOVI28", "price": 951.7757, "clean_price": 951.7757, "yield": 15.2305, "fonte_yield": "B3", "spread_over_ref": 667.5}, {"date": "2026-08-26", "ticker": "MOVI28", "price": 951.6393, "clean_price": 951.6393, "yield": 15.2292, "fonte_yield": "B3", "spread_over_ref": 666.1}, {"date": "2026-08-27", "ticker": "MOVI28", "price": 951.9816, "clean_price": 951.9816, "yield": 15.2229, "fonte_yield": "B3", "spread_over_ref": 670.9}, {"date": "2026-08-28", "ticker": "MOVI28", "price": 958.3756, "clean_price": 958.3756, "yield": 15.0317, "fonte_yield": "B3", "spread_over_ref": 646.8}, {"date": "2026-08-31", "ticker": "MOVI28", "price": 949.6593, "clean_price": 949.6593, "yield": 15.3291, "fonte_yield": "B3", "spread_over_ref": 669.7}, {"date": "2026-09-01", "ticker": "MOVI28", "price": 885.3417, "clean_price": 885.3417, "yield": 17.5052, "fonte_yield": "B3", "spread_over_ref": 875.1}, {"date": "2026-09-02", "ticker": "MOVI28", "price": 928.0453, "clean_price": 928.0453, "yield": 16.1552, "fonte_yield": "B3", "spread_over_ref": 754.7}, {"date": "2026-09-03", "ticker": "MOVI28", "price": 875.2962, "clean_price": 875.2962, "yield": 18.0297, "fonte_yield": "B3", "spread_over_ref": 937.0}, {"date": "2026-09-04", "ticker": "MOVI28", "price": 824.4737, "clean_price": 824.4737, "yield": 19.8569, "fonte_yield": "B3", "spread_over_ref": 1111.1}, {"date": "2026-09-08", "ticker": "MOVI28", "price": 891.901, "clean_price": 891.901, "yield": 17.4273, "fonte_yield": "B3", "spread_over_ref": 898.1}, {"date": "2026-09-09", "ticker": "MOVI28", "price": 869.636, "clean_price": 869.636, "yield": 18.2722, "fonte_yield": "B3", "spread_over_ref": 973.0}, {"date": "2026-09-10", "ticker": "MOVI28", "price": 835.7786, "clean_price": 835.7786, "yield": 19.6338, "fonte_yield": "B3", "spread_over_ref": 1112.1}, {"date": "2026-09-11", "ticker": "MOVI28", "price": 826.2921, "clean_price": 826.2921, "yield": 19.8398, "fonte_yield": "B3", "spread_over_ref": 1139.4}, {"date": "2026-09-14", "ticker": "MOVI28", "price": 903.4068, "clean_price": 903.4068, "yield": 17.2741, "fonte_yield": "B3", "spread_over_ref": 894.2}, {"date": "2026-09-15", "ticker": "MOVI28", "price": 851.5836, "clean_price": 851.5836, "yield": 19.2458, "fonte_yield": "B3", "spread_over_ref": 1069.7}, {"date": "2026-09-16", "ticker": "MOVI28", "price": 806.0125, "clean_price": 806.0125, "yield": 20.8524, "fonte_yield": "B3", "spread_over_ref": 1222.8}, {"date": "2026-09-17", "ticker": "MOVI28", "price": 810.9546, "clean_price": 810.9546, "yield": 20.6658, "fonte_yield": "B3", "spread_over_ref": 1213.5}, {"date": "2026-09-18", "ticker": "MOVI28", "price": 1013.7883, "clean_price": 1013.7883, "yield": 13.5504, "fonte_yield": "B3", "spread_over_ref": 549.6}, {"date": "2026-09-21", "ticker": "MOVI28", "price": 1002.8541, "clean_price": 1002.8541, "yield": 13.888, "fonte_yield": "B3", "spread_over_ref": 582.4}, {"date": "2026-09-22", "ticker": "MOVI28", "price": 1009.1067, "clean_price": 1009.1067, "yield": 13.7372, "fonte_yield": "B3", "spread_over_ref": 566.1}, {"date": "2026-09-23", "ticker": "MOVI28", "price": 1013.0889, "clean_price": 1013.0889, "yield": 13.6176, "fonte_yield": "B3", "spread_over_ref": 551.4}, {"date": "2026-09-24", "ticker": "MOVI28", "price": 976.1592, "clean_price": 976.1592, "yield": 14.7766, "fonte_yield": "B3", "spread_over_ref": 659.0}, {"date": "2026-09-25", "ticker": "MOVI28", "price": 973.7237, "clean_price": 973.7237, "yield": 14.873, "fonte_yield": "B3", "spread_over_ref": 670.0}, {"date": "2026-09-28", "ticker": "MOVI28", "price": 976.8642, "clean_price": 976.8642, "yield": 14.8201, "fonte_yield": "B3", "spread_over_ref": 662.5}, {"date": "2026-09-29", "ticker": "MOVI28", "price": 982.9116, "clean_price": 982.9116, "yield": 14.657, "fonte_yield": "B3", "spread_over_ref": 654.8}, {"date": "2026-09-30", "ticker": "MOVI28", "price": 1021.0936, "clean_price": 1021.0936, "yield": 13.5452, "fonte_yield": "B3", "spread_over_ref": 551.0}, {"date": "2026-10-01", "ticker": "MOVI28", "price": 1019.0219, "clean_price": 1019.0219, "yield": 13.6093, "fonte_yield": "B3", "spread_over_ref": 554.6}, {"date": "2026-10-02", "ticker": "MOVI28", "price": 987.3007, "clean_price": 987.3007, "yield": 14.6052, "fonte_yield": "B3", "spread_over_ref": 655.0}, {"date": "2026-10-05", "ticker": "MOVI28", "price": 987.4753, "clean_price": 987.4753, "yield": 14.6237, "fonte_yield": "B3", "spread_over_ref": 708.7}, {"date": "2026-10-06", "ticker": "MOVI28", "price": 980.9868, "clean_price": 980.9868, "yield": 14.8666, "fonte_yield": "B3", "spread_over_ref": 741.2}, {"date": "2026-10-07", "ticker": "MOVI28", "price": 1007.2699, "clean_price": 1007.2699, "yield": 14.066, "fonte_yield": "B3", "spread_over_ref": 676.5}, {"date": "2026-10-08", "ticker": "MOVI28", "price": 1015.4859, "clean_price": 1015.4859, "yield": 13.8432, "fonte_yield": "B3", "spread_over_ref": 664.9}, {"date": "2026-10-09", "ticker": "MOVI28", "price": 1017.2646, "clean_price": 1017.2646, "yield": 13.842, "fonte_yield": "B3", "spread_over_ref": 670.9}, {"date": "2026-10-13", "ticker": "MOVI28", "price": 1054.1473, "clean_price": 1054.1473, "yield": 12.8121, "fonte_yield": "B3", "spread_over_ref": 569.4}, {"date": "2026-10-14", "ticker": "MOVI28", "price": 1064.4259, "clean_price": 1064.4259, "yield": 12.5476, "fonte_yield": "B3", "spread_over_ref": 541.6}, {"date": "2026-10-15", "ticker": "MOVI28", "price": 1058.6529, "clean_price": 1058.6529, "yield": 12.7232, "fonte_yield": "B3", "spread_over_ref": 553.0}, {"date": "2026-10-19", "ticker": "MOVI28", "price": 1027.0902, "clean_price": 1027.0902, "yield": 13.6819, "fonte_yield": "B3", "spread_over_ref": 637.2}, {"date": "2026-10-20", "ticker": "MOVI28", "price": 1065.8918, "clean_price": 1065.8918, "yield": 12.5867, "fonte_yield": "B3", "spread_over_ref": 541.7}, {"date": "2026-10-21", "ticker": "MOVI28", "price": 1088.812, "clean_price": 1088.812, "yield": 11.9526, "fonte_yield": "B3", "spread_over_ref": 483.3}, {"date": "2026-10-22", "ticker": "MOVI28", "price": 1090.6924, "clean_price": 1090.6924, "yield": 11.8998, "fonte_yield": "B3", "spread_over_ref": 480.8}, {"date": "2026-10-23", "ticker": "MOVI28", "price": 1023.1817, "clean_price": 1023.1817, "yield": 13.8656, "fonte_yield": "B3", "spread_over_ref": 669.6}, {"date": "2026-10-27", "ticker": "MOVI28", "price": 996.751, "clean_price": 996.751, "yield": 14.7162, "fonte_yield": "B3", "spread_over_ref": 635.7}, {"date": "2026-10-28", "ticker": "MOVI28", "price": 979.0758, "clean_price": 979.0758, "yield": 15.3297, "fonte_yield": "B3", "spread_over_ref": 687.6}, {"date": "2026-10-29", "ticker": "MOVI28", "price": 988.0332, "clean_price": 988.0332, "yield": 15.0826, "fonte_yield": "B3", "spread_over_ref": 667.7}, {"date": "2026-10-30", "ticker": "MOVI28", "price": 942.0939, "clean_price": 942.0939, "yield": 16.6266, "fonte_yield": "B3", "spread_over_ref": 804.8}, {"date": "2026-11-03", "ticker": "MOVI28", "price": 920.6968, "clean_price": 920.6968, "yield": 17.3578, "fonte_yield": "B3", "spread_over_ref": 869.5}, {"date": "2026-11-04", "ticker": "MOVI28", "price": 933.8419, "clean_price": 933.8419, "yield": 16.9584, "fonte_yield": "B3", "spread_over_ref": 841.6}, {"date": "2026-11-05", "ticker": "MOVI28", "price": 979.0846, "clean_price": 979.0846, "yield": 15.4147, "fonte_yield": "B3", "spread_over_ref": 700.4}, {"date": "2026-11-06", "ticker": "MOVI28", "price": 997.8382, "clean_price": 997.8382, "yield": 14.828, "fonte_yield": "B3", "spread_over_ref": 654.6}, {"date": "2026-11-09", "ticker": "MOVI28", "price": 1013.6403, "clean_price": 1013.6403, "yield": 14.3575, "fonte_yield": "B3", "spread_over_ref": 617.1}, {"date": "2026-11-10", "ticker": "MOVI28", "price": 1005.2959, "clean_price": 1005.2959, "yield": 14.6301, "fonte_yield": "B3", "spread_over_ref": 644.5}, {"date": "2026-11-11", "ticker": "MOVI28", "price": 1031.249, "clean_price": 1031.249, "yield": 13.8467, "fonte_yield": "B3", "spread_over_ref": 577.6}, {"date": "2026-11-12", "ticker": "MOVI28", "price": 966.3767, "clean_price": 966.3767, "yield": 16.0196, "fonte_yield": "B3", "spread_over_ref": 770.3}, {"date": "2026-11-13", "ticker": "MOVI28", "price": 974.8154, "clean_price": 974.8154, "yield": 15.7948, "fonte_yield": "B3", "spread_over_ref": 749.2}, {"date": "2026-11-16", "ticker": "MOVI28", "price": 951.0744, "clean_price": 951.0744, "yield": 16.507, "fonte_yield": "B3", "spread_over_ref": 804.8}, {"date": "2026-11-17", "ticker": "MOVI28", "price": 985.6856, "clean_price": 985.6856, "yield": 15.4302, "fonte_yield": "B3", "spread_over_ref": 716.8}, {"date": "2026-11-18", "ticker": "MOVI28", "price": 941.0114, "clean_price": 941.0114, "yield": 16.8824, "fonte_yield": "B3", "spread_over_ref": 847.8}, {"date": "2026-11-19", "ticker": "MOVI28", "price": 1041.5022, "clean_price": 1041.5022, "yield": 13.7305, "fonte_yield": "B3", "spread_over_ref": 539.3}, {"date": "2026-11-23", "ticker": "MOVI28", "price": 1001.6056, "clean_price": 1001.6056, "yield": 14.9016, "fonte_yield": "B3", "spread_over_ref": 651.9}, {"date": "2026-11-24", "ticker": "MOVI28", "price": 900.3615, "clean_price": 900.3615, "yield": 18.5774, "fonte_yield": "B3", "spread_over_ref": 995.7}], "emitter": {"cnpj": "21314559000166", "cnpj_formatado": "21.314.559/0001-66", "razao_social": "MOVIDA PARTICIPAÇÕES S.A.", "nome_fantasia": "MOVIDA PARTICIPAÇÕES S.A.", "setor": "Serviços Transporte e Logística", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://ri.movida.com.br/", "municipio": "SÃO PAULO", "uf": "SP", "descricao": "MOVIDA PARTICIPAÇÕES S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Serviços Transporte e Logística."}, "raiox_cnpj": "21314559000166", "paymentEvents": [{"ticker": "MOVI28", "data_evento": "2026-12-15", "data_liquidacao": "2026-12-15", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "MOVI28", "data_evento": "2027-06-15", "data_liquidacao": "2027-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2027-12-15", "data_liquidacao": "2027-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2028-06-15", "data_liquidacao": "2028-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2028-12-15", "data_liquidacao": "2028-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2029-06-15", "data_liquidacao": "2029-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2029-12-15", "data_liquidacao": "2029-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2030-06-15", "data_liquidacao": "2030-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2030-12-15", "data_liquidacao": "2030-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2031-06-15", "data_liquidacao": "2031-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2031-12-15", "data_liquidacao": "2031-12-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2032-06-15", "data_liquidacao": "2032-06-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "MOVI28", "data_evento": "2032-06-15", "data_liquidacao": "2032-06-15", "tipo_evento": "Pagamento de Juros", "taxa": 4.085, "valor_real": null, "valor_projetado": 40.85, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo MOVI28 é um título de crédito privado do tipo Debênture (comum) emitido por MOVIDA PARTICIPAÇÕES S.A. (CNPJ: 21.314.559/0001-66), com taxa de emissão de IPCA + 8.34% a.a. e data de vencimento em 15/06/2032. O título encontra-se resgatado, avaliado com rating AA em escala nacional (duration modificada de 3.74 anos) e spread indicativo de 9.29% sobre a NTN-B soberana, com volume emitido de R$ 591.831.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "23F1519397", "tipo": "CRI", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "vencimento": "2028-06-16"}, {"ticker": "23J1127308", "tipo": "CRI", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "vencimento": "2028-10-16"}, {"ticker": "23J1127331", "tipo": "CRI", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "vencimento": "2033-10-17"}, {"ticker": "23F1514014", "tipo": "CRI", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "vencimento": "2028-06-16"}], "relatedSector": [{"ticker": "OVSA16", "tipo": "Debênture", "issuer": "UNIDAS LOCAÇÕES E SERVIÇOS S.A.", "vencimento": "2029-06-15"}, {"ticker": "CRA022008C7", "tipo": "CRA", "issuer": "COMPANHIA DE LOCAÇÃO DAS AMERICAS", "vencimento": "2028-09-15"}, {"ticker": "MVLV26", "tipo": "Debênture", "issuer": "MOVIDA PARTICIPAÇÕES S.A.", "vencimento": "2028-06-15"}, {"ticker": "VAMOA4", "tipo": "Debênture", "issuer": "VAMOS LOCAÇÃO DE CAMINHÕES, MÁQUINAS E EQUIPAMENTOS S.A.", "vencimento": "2032-01-20"}], "issuerSlug": "movida-participacoes-s-a", "sectorSlug": "locacao-de-veiculos"}
     </script>
-    <script type="module" crossorigin src="/assets/index-C3AcgIZr.js"></script>
+    <script type="module" crossorigin src="/assets/index-D1O6r4EP.js"></script>
   </body>
 </html>
