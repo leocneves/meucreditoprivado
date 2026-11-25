@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { assetPath } from '../utils/urls';
 import {
@@ -235,9 +235,43 @@ interface PrimaryData {
   ofertas_recentes: SREOffer[];
 }
 
+const INVALID_TEXT_TOKENS = new Set([
+  '', '-', 'none', 'null', 'nan', 'sim', 'não', 'nao', 's', 'n',
+  'n.a.', 'n.a', 'n/a', 'não aplicável', 'nao aplicavel',
+  'a definir', 'definida', 'não informado', 'nao informado', 'sem rating',
+  '0', '0,00', '0.00', '0,0000'
+]);
+
+const SECURITIZADORA_REGEX =
+  /securitiz|habitasec|virgo|opea|true\s*sec|vert\s+companhia|bari\b|ceres\s+sec|canal\s+companhia|prov[ií]ncia|bsi\s+capital|fortesec|cibrasec|travessia|leverage|octante|[eé]xes|ecoagro|eco\.?\s*sec|riza|gaia|[aá]pice|barzel|quadra|bastion|brazilian\s+securities|b\.sec/i;
+
+const isSecuritizadoraName = (name?: string | null): boolean => {
+  if (!name) return false;
+  return SECURITIZADORA_REGEX.test(name.trim());
+};
+
+const cleanRateText = (val?: string | null): string => {
+  if (!val) return '';
+  const cleaned = val.replace(/\s+/g, ' ').trim();
+  const low = cleaned.toLowerCase();
+  if (INVALID_TEXT_TOKENS.has(low)) return '';
+  if (/^(?:br)?[a-d][+-]?(?:\([a-z]+\))?$/i.test(cleaned)) return '';
+  if (!/\d/.test(cleaned)) return '';
+  if (cleaned.length > 90) return '';
+  return cleaned;
+};
+
+const cleanRatingText = (val?: string | null): string => {
+  if (!val) return '';
+  const cleaned = val.replace(/\s+/g, ' ').trim();
+  if (INVALID_TEXT_TOKENS.has(cleaned.toLowerCase())) return '';
+  return cleaned;
+};
+
 const Primary: React.FC = () => {
   const [data, setData] = useState<PrimaryData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'ANDAMENTO' | 'DISTRIBUICAO' | 'ENCERRADAS' | 'LEAGUE'>('ANDAMENTO');
   const [selectedBank, setSelectedBank] = useState<string>('TODOS');
   const [bankSearch, setBankSearch] = useState<string>('');
@@ -258,37 +292,56 @@ const Primary: React.FC = () => {
 
   /* ================= CARREGAMENTO DOS DADOS ================= */
 
-  useEffect(() => {
-    const loadPrimaryData = async () => {
-      try {
-        const res = await fetch('./data/mercado_primario.json');
-        if (!res.ok) throw new Error('Falha ao carregar mercado_primario.json');
-        const json: PrimaryData = await res.json();
-        setData(json);
-      } catch (err) {
-        console.error('Erro ao carregar dados do mercado primário:', err);
-      } finally {
-        setLoading(false);
+  const loadPrimaryData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/data/mercado_primario.json');
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status} ao consultar /data/mercado_primario.json`);
       }
-    };
-    loadPrimaryData();
+      const rawText = await res.text();
+      const trimmed = rawText.trim();
+      if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) {
+        throw new Error('Resposta inválida do servidor ao carregar o Mercado Primário.');
+      }
+      const sanitized = rawText
+        .replace(/:\s*NaN\b/g, ': null')
+        .replace(/:\s*-?Infinity\b/g, ': null');
+      const json: PrimaryData = JSON.parse(sanitized);
+      setData(json);
+    } catch (err: any) {
+      console.error('Erro ao carregar dados do mercado primário:', err);
+      setError(
+        err?.message ||
+          'Não foi possível carregar os dados do Mercado Primário (CVM SRE). Tente novamente em instantes.'
+      );
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadPrimaryData();
+  }, [loadPrimaryData]);
 
   /* ================= HELPERS DE FORMATAÇÃO E INDEXADOR ================= */
 
-  const formatBRL = (val?: number) => {
-    if (!val || isNaN(val)) return '-';
-    if (val >= 1e9) {
-      return `R$ ${(val / 1e9).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bi`;
+  const formatBRL = (val?: number | null) => {
+    const num = Number(val);
+    if (!val || isNaN(num) || num <= 0) return '-';
+    if (num >= 1e9) {
+      return `R$ ${(num / 1e9).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bi`;
     }
-    return `R$ ${(val / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Mi`;
+    return `R$ ${(num / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Mi`;
   };
 
-  const formatDate = (dtStr?: string, dtEmissao?: string) => {
+  const formatDate = (dtStr?: string | null, dtEmissao?: string | null) => {
     if (!dtStr) return '-';
-    const s = dtStr.trim();
+    const s = String(dtStr).trim();
+    if (!s || INVALID_TEXT_TOKENS.has(s.toLowerCase())) return '-';
     // Se vencimento for menor ou igual à data de emissão, trata-se de inconsistência cadastral
-    if (dtEmissao && s <= dtEmissao.trim()) {
+    if (dtEmissao && s <= String(dtEmissao).trim()) {
       return 'A definir';
     }
     if (s.includes('-')) {
@@ -320,19 +373,46 @@ const Primary: React.FC = () => {
   };
 
   const getOfferIndexer = (oferta: SREOffer): string => {
-    if (!oferta.series || oferta.series.length === 0) return 'OUTROS';
-    const allTexts = oferta.series
+    const textos = (oferta.series || [])
       .map(
         s =>
-          `${s.taxa_remuneracao_maxima || ''} ${s.taxa_remuneracao_final || ''} ${s.book_taxa || ''} ${s.descricao_serie || ''}`
+          `${cleanRateText(s.taxa_remuneracao_final)} ${cleanRateText(s.taxa_remuneracao_maxima)} ${cleanRateText(s.book_taxa)} ${s.descricao_serie || ''}`
       )
       .join(' ')
-      .toUpperCase();
+      .trim() || String(oferta.resumo_oferta || '');
 
-    if (allTexts.includes('IPCA') || allTexts.includes('NTN-B')) return 'IPCA+';
-    if (allTexts.includes('% CDI') || allTexts.includes('% DO CDI') || allTexts.includes('%CDI')) return '% CDI';
-    if (allTexts.includes('CDI +') || allTexts.includes('CDI+') || allTexts.includes('DI +')) return 'CDI+';
-    if (allTexts.includes('PRÉ') || allTexts.includes('PRE') || allTexts.includes('% A.A.')) return 'PRÉ';
+    const u = textos.toUpperCase();
+    if (!u) return 'OUTROS';
+
+    if (u.includes('IPCA') || u.includes('NTN-B') || u.includes('IGP')) return 'IPCA+';
+
+    const hasDiOrCdi = /\b(CD?I|TAXA\s+DI)\b/.test(u) || u.includes('DI1F');
+    const hasAdditiveSpread =
+      u.includes('CDI +') ||
+      u.includes('CDI+') ||
+      u.includes('DI +') ||
+      u.includes('DI+') ||
+      u.includes('ACRESCID') ||
+      u.includes('SPREAD') ||
+      u.includes('SOBRETAXA');
+
+    if (hasDiOrCdi && hasAdditiveSpread) return 'CDI+';
+    if (
+      u.includes('% CDI') ||
+      u.includes('% DO CDI') ||
+      u.includes('% DA TAXA DI') ||
+      u.includes('% DI') ||
+      u.includes('%CDI')
+    ) {
+      return '% CDI';
+    }
+    if (hasDiOrCdi) return 'CDI+';
+    if (
+      /\bPR[ÉE]\b|PREFIXAD/.test(u) ||
+      (/\d+[.,]\d+\s*%\s*(?:A\.A\.|AO ANO)/.test(u) && !hasDiOrCdi && !u.includes('IPCA'))
+    ) {
+      return 'PRÉ';
+    }
     return 'OUTROS';
   };
 
@@ -340,7 +420,8 @@ const Primary: React.FC = () => {
 
   const ofertasFiltradas = useMemo(() => {
     if (!data) return [];
-    const sourceList = activeTab === 'ANDAMENTO' ? data.ofertas_em_andamento : data.ofertas_recentes;
+    const sourceList =
+      activeTab === 'ANDAMENTO' ? data.ofertas_em_andamento || [] : data.ofertas_recentes || [];
 
     return sourceList.filter(o => {
       const matchesTipo = filterTipo === 'TODOS' || o.tipo_ativo === filterTipo;
@@ -351,14 +432,18 @@ const Primary: React.FC = () => {
       const q = search.toLowerCase().trim();
       if (!q) return matchesTipo && matchesAno && matchesIndexador;
 
+      const inReqId = (o.id_requerimento || '').toLowerCase() === q || (o.id_requerimento || '').toLowerCase().includes(q);
       const inEmissor = (o.nome_emissor || '').toLowerCase().includes(q);
       const inDevedor = (o.nome_devedor_real || '').toLowerCase().includes(q);
+      const inValorMob = (o.nome_valor_mobiliario || '').toLowerCase().includes(q);
       const inLider = (o.nome_coordenador_lider || '').toLowerCase().includes(q);
       const inProcesso = (o.numero_processo || '').toLowerCase().includes(q);
       const inSeries = (o.series || []).some(
         s =>
           (s.descricao_serie || '').toLowerCase().includes(q) ||
           (s.taxa_remuneracao_maxima || '').toLowerCase().includes(q) ||
+          (s.taxa_remuneracao_final || '').toLowerCase().includes(q) ||
+          (s.book_taxa || '').toLowerCase().includes(q) ||
           (s.isin || '').toLowerCase().includes(q)
       );
       const inTicker = o.ativo_secundario ? o.ativo_secundario.ticker.toLowerCase().includes(q) : false;
@@ -367,7 +452,7 @@ const Primary: React.FC = () => {
         matchesTipo &&
         matchesAno &&
         matchesIndexador &&
-        (inEmissor || inDevedor || inLider || inProcesso || inSeries || inTicker)
+        (inReqId || inEmissor || inDevedor || inValorMob || inLider || inProcesso || inSeries || inTicker)
       );
     });
   }, [data, activeTab, filterTipo, filterAno, filterIndexador, search]);
@@ -469,6 +554,33 @@ const Primary: React.FC = () => {
     return series;
   }, [data, msGranularity, msHistoryRange]);
 
+  const dcmInsights = useMemo(() => {
+    const anuais = data?.distribuicao_bancos?.analytics?.series_anuais || [];
+    if (anuais.length < 2) return null;
+    const findYear = (yr: string) => anuais.find(a => a.periodo === yr);
+    const y2023 = findYear('2023') || anuais[0];
+    const y2025 = findYear('2025') || anuais[Math.max(0, anuais.length - 2)];
+    const yCurr = anuais[anuais.length - 1];
+    const ranking = (data?.distribuicao_bancos?.analytics?.bancos_meta || []).map(b => ({
+      nome: b.nome,
+      share: Number(yCurr?.[`${b.nome}_share`] ?? 0)
+    }));
+    const leader = ranking.filter(r => r.nome !== 'Outros').sort((a, b) => b.share - a.share)[0];
+    const itauShares = anuais.map(a => Number(a['Itaú BBA_share'] ?? 0)).filter(v => v > 0);
+    return {
+      currAno: yCurr.periodo,
+      bradesco23: Number(y2023?.['Bradesco BBI_share'] ?? 0).toFixed(1),
+      bradesco25: Number(y2025?.['Bradesco BBI_share'] ?? 0).toFixed(1),
+      bradescoCurr: Number(yCurr?.['Bradesco BBI_share'] ?? 0).toFixed(1),
+      itauMin: itauShares.length ? Math.min(...itauShares).toFixed(1) : '0.0',
+      itauMax: itauShares.length ? Math.max(...itauShares).toFixed(1) : '0.0',
+      itauCurr: Number(yCurr?.['Itaú BBA_share'] ?? 0).toFixed(1),
+      leaderNome: leader?.nome || 'Itaú BBA',
+      xpCurr: Number(yCurr?.['XP Investimentos_share'] ?? 0).toFixed(1),
+      btgCurr: Number(yCurr?.['BTG Pactual_share'] ?? 0).toFixed(1)
+    };
+  }, [data]);
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl space-y-8">
       {/* ================= CABEÇALHO INSTITUCIONAL ================= */}
@@ -489,7 +601,7 @@ const Primary: React.FC = () => {
           </div>
         </div>
 
-        {data?.resumo && (
+        {data?.resumo?.data_atualizacao && (
           <div className="flex items-center gap-3 text-xs text-slate-500 self-start md:self-auto">
             <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 font-medium">
               <Clock size={13} className="text-slate-500" />
@@ -504,6 +616,23 @@ const Primary: React.FC = () => {
         <div className="flex flex-col items-center justify-center py-24 space-y-4">
           <div className="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-sm font-medium text-slate-500">Consultando registros do sistema SRE CVM...</p>
+        </div>
+      ) : error || !data ? (
+        <div className="bg-rose-50/70 border border-rose-200 rounded-2xl p-8 text-center space-y-3 max-w-2xl mx-auto my-8">
+          <AlertCircle size={36} className="mx-auto text-rose-600" />
+          <h2 className="text-lg font-extrabold text-rose-950">
+            Falha ao carregar o painel do Mercado Primário
+          </h2>
+          <p className="text-sm text-rose-800">
+            {error || 'Os dados consolidados de ofertas CVM 160 não puderam ser obtidos neste momento.'}
+          </p>
+          <button
+            type="button"
+            onClick={loadPrimaryData}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition cursor-pointer shadow-sm"
+          >
+            Tentar novamente
+          </button>
         </div>
       ) : (
         <>
@@ -554,15 +683,19 @@ const Primary: React.FC = () => {
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-amber-300 transition">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-500 mb-1">
                 <span>Base Histórica CVM 160</span>
-                <span className="text-amber-600 font-bold">2023 - 2026</span>
+                <span className="text-amber-600 font-bold">
+                  {data.evolucao_anual && data.evolucao_anual.length >= 2
+                    ? `${data.evolucao_anual[0].ano} - ${data.evolucao_anual[data.evolucao_anual.length - 1].ano}`
+                    : '2023 - 2026'}
+                </span>
               </div>
               <p className="text-2xl font-black text-slate-900">
-                {data?.resumo?.total_historico_base?.toLocaleString('pt-BR') || '4.485'}{' '}
+                {(data?.resumo?.total_historico_base || 0).toLocaleString('pt-BR')}{' '}
                 <span className="text-xs font-normal text-slate-500">ofertas</span>
               </p>
               <p className="text-xs text-slate-400 mt-1">
                 R${' '}
-                {(data?.resumo?.volume_historico_base_bi || 1750).toLocaleString('pt-BR', { minimumFractionDigits: 0 })}{' '}
+                {(data?.resumo?.volume_historico_base_bi || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0 })}{' '}
                 Bi acumulados
               </p>
             </div>
@@ -681,7 +814,7 @@ const Primary: React.FC = () => {
                   <button
                     onClick={() => setChartPeriod('12M')}
                     className={`px-2 py-1 rounded-md transition cursor-pointer ${
-                      chartPeriod === '12M' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'hover:text-slate-900'
+                      chartPeriod === '12M' ? 'bg-white text-slate-900 shadow-sm font-bold' : 'hover:text-slate-900'
                     }`}
                   >
                     12 meses
@@ -689,7 +822,7 @@ const Primary: React.FC = () => {
                   <button
                     onClick={() => setChartPeriod('24M')}
                     className={`px-2 py-1 rounded-md transition cursor-pointer ${
-                      chartPeriod === '24M' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'hover:text-slate-900'
+                      chartPeriod === '24M' ? 'bg-white text-slate-900 shadow-sm font-bold' : 'hover:text-slate-900'
                     }`}
                   >
                     24 meses
@@ -697,10 +830,10 @@ const Primary: React.FC = () => {
                   <button
                     onClick={() => setChartPeriod('ALL')}
                     className={`px-2 py-1 rounded-md transition cursor-pointer ${
-                      chartPeriod === 'ALL' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'hover:text-slate-900'
+                      chartPeriod === 'ALL' ? 'bg-white text-slate-900 shadow-sm font-bold' : 'hover:text-slate-900'
                     }`}
                   >
-                    Tudo (46m)
+                    Tudo ({data?.serie_mensal?.length || 0}m)
                   </button>
                 </div>
               </div>
@@ -774,7 +907,7 @@ const Primary: React.FC = () => {
               >
                 <span className="w-2 h-2 rounded-full bg-purple-600" />
                 Em Andamento (Bookbuilding)
-                <span className="px-1.5 py-0.2 rounded-full bg-purple-100 text-purple-800 text-[10px]">
+                <span className="px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[10px]">
                   {data?.ofertas_em_andamento?.length || 0}
                 </span>
               </button>
@@ -792,7 +925,7 @@ const Primary: React.FC = () => {
               >
                 <Landmark size={14} className="text-indigo-600" />
                 Distribuição Bancária
-                <span className="px-1.5 py-0.2 rounded-full bg-indigo-100 text-indigo-800 text-[10px]">
+                <span className="px-1.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px]">
                   {data?.distribuicao_bancos?.todas_ofertas_distribuicao?.length || 0}
                 </span>
               </button>
@@ -808,7 +941,7 @@ const Primary: React.FC = () => {
               >
                 <CheckCircle2 size={14} className="text-blue-600" />
                 Ofertas Encerradas
-                <span className="px-1.5 py-0.2 rounded-full bg-blue-100 text-blue-800 text-[10px]">
+                <span className="px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px]">
                   {data?.ofertas_recentes?.length || 0}
                 </span>
               </button>
@@ -1041,7 +1174,7 @@ const Primary: React.FC = () => {
                                 onClick={() => setSelectedBank(isSelected ? 'TODOS' : b.banco_id)}
                                 className={`p-2.5 rounded-xl border transition cursor-pointer flex flex-col gap-1.5 ${
                                   isSelected
-                                    ? 'bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-500/20 shadow-xs'
+                                    ? 'bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-500/20 shadow-sm'
                                     : 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200/80'
                                 }`}
                               >
@@ -1114,7 +1247,8 @@ const Primary: React.FC = () => {
                             Evolução Temporal no Mercado Primário
                           </h4>
                           <p className="text-xs text-slate-500 mt-1">
-                            Dinâmica de aceleração e desaceleração dos 7 maiores bancos como Coordenador Líder (4.485 ofertas).
+                            Dinâmica dos principais bancos como Coordenador Líder (
+                            {(data?.resumo?.total_historico_base || 0).toLocaleString('pt-BR')} ofertas monitoradas).
                           </p>
                         </div>
 
@@ -1126,7 +1260,7 @@ const Primary: React.FC = () => {
                               onClick={() => setMsGranularity('TRIMESTRAL')}
                               className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
                                 msGranularity === 'TRIMESTRAL'
-                                  ? 'bg-white text-indigo-700 shadow-xs'
+                                  ? 'bg-white text-indigo-700 shadow-sm'
                                   : 'text-slate-600 hover:text-slate-900'
                               }`}
                             >
@@ -1136,7 +1270,7 @@ const Primary: React.FC = () => {
                               onClick={() => setMsGranularity('ANUAL')}
                               className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
                                 msGranularity === 'ANUAL'
-                                  ? 'bg-white text-indigo-700 shadow-xs'
+                                  ? 'bg-white text-indigo-700 shadow-sm'
                                   : 'text-slate-600 hover:text-slate-900'
                               }`}
                             >
@@ -1150,7 +1284,7 @@ const Primary: React.FC = () => {
                               onClick={() => setMsMetric('SHARE')}
                               className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
                                 msMetric === 'SHARE'
-                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  ? 'bg-white text-slate-900 shadow-sm'
                                   : 'text-slate-600 hover:text-slate-900'
                               }`}
                             >
@@ -1160,7 +1294,7 @@ const Primary: React.FC = () => {
                               onClick={() => setMsMetric('VOLUME')}
                               className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
                                 msMetric === 'VOLUME'
-                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  ? 'bg-white text-slate-900 shadow-sm'
                                   : 'text-slate-600 hover:text-slate-900'
                               }`}
                             >
@@ -1175,7 +1309,7 @@ const Primary: React.FC = () => {
                               title="Barras Empilhadas"
                               className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
                                 msChartType === 'BAR'
-                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  ? 'bg-white text-slate-900 shadow-sm'
                                   : 'text-slate-600 hover:text-slate-900'
                               }`}
                             >
@@ -1186,7 +1320,7 @@ const Primary: React.FC = () => {
                               title="Área Contínua Empilhada"
                               className={`px-2 py-1 rounded-md transition cursor-pointer font-bold ${
                                 msChartType === 'AREA'
-                                  ? 'bg-white text-slate-900 shadow-xs'
+                                  ? 'bg-white text-slate-900 shadow-sm'
                                   : 'text-slate-600 hover:text-slate-900'
                               }`}
                             >
@@ -1200,7 +1334,9 @@ const Primary: React.FC = () => {
                       {msGranularity === 'TRIMESTRAL' && (
                         <div className="flex items-center justify-between pt-3 pb-1 text-xs">
                           <span className="text-[11px] text-slate-400 font-medium">
-                            {msHistoryRange === '8T' ? 'Exibindo últimos 8 trimestres (2 anos)' : 'Exibindo série histórica completa (16 trimestres)'}
+                            {msHistoryRange === '8T'
+                              ? 'Exibindo últimos 8 trimestres (2 anos)'
+                              : `Exibindo série histórica completa (${data?.distribuicao_bancos?.analytics?.series_trimestrais?.length || 0} trimestres)`}
                           </span>
                           <div className="flex items-center gap-1">
                             <button
@@ -1221,7 +1357,7 @@ const Primary: React.FC = () => {
                                   : 'text-slate-400 hover:text-slate-600'
                               }`}
                             >
-                              Todos (16T)
+                              Todos ({data?.distribuicao_bancos?.analytics?.series_trimestrais?.length || 0}T)
                             </button>
                           </div>
                         </div>
@@ -1423,34 +1559,43 @@ const Primary: React.FC = () => {
                     </div>
 
                     {/* Destaques de Dinâmica / DCM Insights */}
-                    <div className="pt-3 mt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
-                      <div className="p-2 rounded-lg bg-rose-50/70 border border-rose-100 text-rose-900 flex flex-col justify-between">
-                        <span className="font-extrabold text-[10px] uppercase tracking-wider text-rose-600">
-                          Aceleração Bradesco BBI
-                        </span>
-                        <p className="mt-0.5 leading-tight">
-                          Evolução contínua de <strong>9,3%</strong> (2023) para <strong>14,1%</strong> (2025) e <strong>15,8%</strong> em 2026.
-                        </p>
-                      </div>
+                    {dcmInsights && (
+                      <div className="pt-3 mt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+                        <div className="p-2 rounded-lg bg-rose-50/70 border border-rose-100 text-rose-900 flex flex-col justify-between">
+                          <span className="font-extrabold text-[10px] uppercase tracking-wider text-rose-600">
+                            Aceleração Bradesco BBI
+                          </span>
+                          <p className="mt-0.5 leading-tight">
+                            Evolução de <strong>{dcmInsights.bradesco23}%</strong> (2023) para{' '}
+                            <strong>{dcmInsights.bradesco25}%</strong> (2025) e{' '}
+                            <strong>{dcmInsights.bradescoCurr}%</strong> em {dcmInsights.currAno}.
+                          </p>
+                        </div>
 
-                      <div className="p-2 rounded-lg bg-orange-50/70 border border-orange-100 text-orange-900 flex flex-col justify-between">
-                        <span className="font-extrabold text-[10px] uppercase tracking-wider text-orange-600">
-                          Liderança Histórica Itaú
-                        </span>
-                        <p className="mt-0.5 leading-tight">
-                          Maior coordenador do primário, sustentando entre <strong>24,6% e 32,9%</strong> de share em volume.
-                        </p>
-                      </div>
+                        <div className="p-2 rounded-lg bg-orange-50/70 border border-orange-100 text-orange-900 flex flex-col justify-between">
+                          <span className="font-extrabold text-[10px] uppercase tracking-wider text-orange-600">
+                            Liderança Histórica ({dcmInsights.leaderNome})
+                          </span>
+                          <p className="mt-0.5 leading-tight">
+                            Itaú BBA sustenta entre{' '}
+                            <strong>
+                              {dcmInsights.itauMin}% e {dcmInsights.itauMax}%
+                            </strong>{' '}
+                            de share em volume ({dcmInsights.itauCurr}% em {dcmInsights.currAno}).
+                          </p>
+                        </div>
 
-                      <div className="p-2 rounded-lg bg-amber-50/70 border border-amber-100 text-amber-900 flex flex-col justify-between">
-                        <span className="font-extrabold text-[10px] uppercase tracking-wider text-amber-600">
-                          Disputa Top 3 (XP & BTG)
-                        </span>
-                        <p className="mt-0.5 leading-tight">
-                          Forte equilíbrio no primário com <strong>11,1%</strong> (XP) vs <strong>11,9%</strong> (BTG) em 2026.
-                        </p>
+                        <div className="p-2 rounded-lg bg-amber-50/70 border border-amber-100 text-amber-900 flex flex-col justify-between">
+                          <span className="font-extrabold text-[10px] uppercase tracking-wider text-amber-600">
+                            Disputa Top 3 (XP & BTG)
+                          </span>
+                          <p className="mt-0.5 leading-tight">
+                            Forte equilíbrio no primário com <strong>{dcmInsights.xpCurr}%</strong> (XP) vs{' '}
+                            <strong>{dcmInsights.btgCurr}%</strong> (BTG) em {dcmInsights.currAno}.
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -1490,7 +1635,7 @@ const Primary: React.FC = () => {
                     >
                       <span>Todos os Bancos</span>
                       <span
-                        className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                        className={`px-1.5 py-0.5 rounded-full text-[10px] ${
                           selectedBank === 'TODOS' ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
                         }`}
                       >
@@ -1511,7 +1656,7 @@ const Primary: React.FC = () => {
                         <span className={`w-2 h-2 rounded-full ${b.dot_color}`} />
                         <span>{b.nome}</span>
                         <span
-                          className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                          className={`px-1.5 py-0.5 rounded-full text-[10px] ${
                             selectedBank === b.id ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'
                           }`}
                         >
@@ -1541,7 +1686,7 @@ const Primary: React.FC = () => {
                           onClick={() => setBankFilterFase(f.id)}
                           className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 border ${
                             bankFilterFase === f.id
-                              ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs font-bold'
+                              ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm font-bold'
                               : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
                           }`}
                         >
@@ -1550,7 +1695,7 @@ const Primary: React.FC = () => {
                           )}
                           <span>{f.label}</span>
                           <span
-                            className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                            className={`px-1.5 py-0.5 rounded-full text-[10px] ${
                               bankFilterFase === f.id ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
                             }`}
                           >
@@ -1600,7 +1745,7 @@ const Primary: React.FC = () => {
               </div>
 
               {/* Box de Scroll de Ofertas Distribuídas */}
-              <div className="bg-slate-50/70 p-3 sm:p-4 rounded-3xl border border-slate-200/80 shadow-xs">
+              <div className="bg-slate-50/70 p-3 sm:p-4 rounded-3xl border border-slate-200/80 shadow-sm">
                 <div className="flex items-center justify-between text-xs text-slate-500 font-semibold px-2 pb-2.5">
                   <span>
                     Exibindo <strong>{ofertasBancoFiltradas.length}</strong> ofertas distribuídas
@@ -1626,7 +1771,7 @@ const Primary: React.FC = () => {
                     {ofertasBancoFiltradas.map((item, bIdx) => (
                       <div
                         key={bIdx}
-                        className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 shadow-xs transition flex flex-col justify-between space-y-3"
+                        className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 shadow-sm transition flex flex-col justify-between space-y-3"
                       >
                         <div className="space-y-2.5">
                           {/* Badges Topo: Banco, Papel, Fase e Ativo */}
@@ -1710,7 +1855,7 @@ const Primary: React.FC = () => {
                                 className="font-bold text-purple-700 block text-xs leading-tight"
                                 title={item.taxas_indicativas || 'Sob consulta'}
                               >
-                                {item.taxas_indicativas || 'Ver prospecto'}
+                                {cleanRateText(item.taxas_indicativas) || 'Ver prospecto'}
                               </span>
                             </div>
                           </div>
@@ -1745,13 +1890,13 @@ const Primary: React.FC = () => {
                             {item.id_requerimento && (
                               <button
                                 onClick={() => {
-                                  if (item.fase_oferta === 'EM_BOOKBUILDING') {
-                                    setActiveTab('ANDAMENTO');
-                                    setSearch(item.devedor);
-                                  } else {
-                                    setActiveTab('ENCERRADAS');
-                                    setSearch(item.devedor);
-                                  }
+                                  setFilterTipo('TODOS');
+                                  setFilterIndexador('TODOS');
+                                  setFilterAno('TODOS');
+                                  setPage(1);
+                                  setActiveTab(item.fase_oferta === 'EM_BOOKBUILDING' ? 'ANDAMENTO' : 'ENCERRADAS');
+                                  setSearch(item.id_requerimento || item.devedor);
+                                  setExpandedOffer(item.id_requerimento || null);
                                 }}
                                 className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition cursor-pointer ${
                                   item.fase_oferta === 'EM_BOOKBUILDING'
@@ -1782,10 +1927,25 @@ const Primary: React.FC = () => {
                   <p className="text-xs text-slate-400">
                     Tente buscar por outro termo ou alterar o filtro de instrumento, indexador ou ano.
                   </p>
+                  {(filterTipo !== 'TODOS' || filterAno !== 'TODOS' || filterIndexador !== 'TODOS' || search.trim() !== '') && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFilterTipo('TODOS');
+                        setFilterAno('TODOS');
+                        setFilterIndexador('TODOS');
+                        setSearch('');
+                        setPage(1);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition cursor-pointer"
+                    >
+                      Limpar filtros
+                    </button>
+                  )}
                 </div>
               ) : (
                 /* Box com Scroll de tamanho fixo para não poluir a tela */
-                <div className="bg-slate-50/70 p-3 sm:p-4 rounded-3xl border border-slate-200/80 shadow-xs">
+                <div className="bg-slate-50/70 p-3 sm:p-4 rounded-3xl border border-slate-200/80 shadow-sm">
                   <div className="flex items-center justify-between text-xs text-slate-500 font-semibold px-2 pb-2.5">
                     <span>
                       Exibindo <strong>{paginatedOfertas.length}</strong> de{' '}
@@ -1798,7 +1958,7 @@ const Primary: React.FC = () => {
                   {activeTab === 'ANDAMENTO' &&
                     data?.distribuicao_bancos?.bancos_disponiveis &&
                     data.distribuicao_bancos.bancos_disponiveis.length > 0 && (
-                      <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2 mb-3">
+                      <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2 mb-3">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2">
                           <div className="flex items-center gap-1.5">
                             <Landmark size={15} className="text-indigo-600" />
@@ -1823,12 +1983,12 @@ const Primary: React.FC = () => {
                                 setSelectedBank(b.id);
                                 setActiveTab('DISTRIBUICAO');
                               }}
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition cursor-pointer hover:shadow-xs ${b.badge_bg}`}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition cursor-pointer hover:shadow-sm ${b.badge_bg}`}
                               title={`Ver ofertas coordenadas ou distribuídas por ${b.nome}`}
                             >
                               <span className={`w-1.5 h-1.5 rounded-full ${b.dot_color}`} />
                               <span>{b.nome}</span>
-                              <span className="px-1 py-0.2 rounded-full bg-white/80 text-slate-700 text-[10px]">
+                              <span className="px-1 py-0.5 rounded-full bg-white/80 text-slate-700 text-[10px]">
                                 {b.total_ofertas}
                               </span>
                             </button>
@@ -1846,7 +2006,7 @@ const Primary: React.FC = () => {
                       return (
                         <div
                           key={oferta.id_requerimento}
-                          className="bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition overflow-hidden"
+                          className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-slate-300 transition overflow-hidden"
                         >
                           {/* Top Bar da Oferta */}
                           <div className="p-4 sm:p-5 space-y-3.5">
@@ -1882,7 +2042,7 @@ const Primary: React.FC = () => {
                                   {activeTab === 'ENCERRADAS' && oferta.ativo_secundario && (
                                     <Link
                                       to={assetPath(oferta.ativo_secundario.ticker)}
-                                      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold transition shadow-xs"
+                                      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold transition shadow-sm"
                                       title={`Ver ativo ${oferta.ativo_secundario.ticker} no mercado secundário`}
                                     >
                                       <span>Secundário: {oferta.ativo_secundario.ticker}</span>
@@ -1898,7 +2058,9 @@ const Primary: React.FC = () => {
                                 </div>
 
                                 {/* Devedor Real vs Securitizadora */}
-                                {oferta.nome_devedor_real && oferta.nome_devedor_real !== oferta.nome_emissor ? (
+                                {oferta.nome_devedor_real &&
+                                oferta.nome_devedor_real !== oferta.nome_emissor &&
+                                !isSecuritizadoraName(oferta.nome_devedor_real) ? (
                                   <div>
                                     <h3 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">
                                       {oferta.nome_devedor_real}
@@ -1948,7 +2110,7 @@ const Primary: React.FC = () => {
                                           setSelectedBank(b.banco_id);
                                           setActiveTab('DISTRIBUICAO');
                                         }}
-                                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border transition cursor-pointer hover:shadow-2xs ${
+                                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border transition cursor-pointer hover:shadow-sm ${
                                           b.is_lead
                                             ? 'bg-amber-50 text-amber-900 border-amber-300 font-extrabold'
                                             : `${b.badge_bg} hover:brightness-95`
@@ -1988,43 +2150,46 @@ const Primary: React.FC = () => {
                             {/* Prévia das Séries e Taxas Limite (se não expandido) */}
                             {!isExpanded && temSeries && (
                               <div className="pt-2.5 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                                {oferta.series!.slice(0, 3).map((serie, sIdx) => (
-                                  <div
-                                    key={sIdx}
-                                    className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-xs space-y-1"
-                                  >
-                                    <div className="flex items-center justify-between font-bold text-slate-700">
-                                      <span className="truncate pr-1">{serie.descricao_serie}</span>
-                                      {serie.data_vencimento && (
-                                        <span className="text-[10px] text-slate-400 whitespace-nowrap">
-                                          Venc. {formatDate(serie.data_vencimento, serie.data_emissao)}
-                                        </span>
+                                {oferta.series!.slice(0, 3).map((serie, sIdx) => {
+                                  const rateAnd =
+                                    cleanRateText(serie.taxa_remuneracao_maxima) ||
+                                    cleanRateText(serie.book_taxa) ||
+                                    'A definir';
+                                  const rateEnc =
+                                    cleanRateText(serie.taxa_remuneracao_final) ||
+                                    cleanRateText(serie.book_taxa) ||
+                                    cleanRateText(serie.taxa_remuneracao_maxima) ||
+                                    'Ver escritura';
+                                  return (
+                                    <div
+                                      key={sIdx}
+                                      className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-xs space-y-1"
+                                    >
+                                      <div className="flex items-center justify-between font-bold text-slate-700">
+                                        <span className="truncate pr-1">{serie.descricao_serie}</span>
+                                        {serie.data_vencimento && (
+                                          <span className="text-[10px] text-slate-400 whitespace-nowrap">
+                                            Venc. {formatDate(serie.data_vencimento, serie.data_emissao)}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="text-[11px] text-slate-600">
+                                        {activeTab === 'ANDAMENTO' ? (
+                                          <span>
+                                            Teto Book: <strong className="text-purple-700">{rateAnd}</strong>
+                                          </span>
+                                        ) : (
+                                          <span>
+                                            Taxa Final: <strong className="text-emerald-700">{rateEnc}</strong>
+                                          </span>
+                                        )}
+                                      </div>
+                                      {serie.isin && (
+                                        <div className="text-[10px] text-slate-400 font-mono">ISIN: {serie.isin}</div>
                                       )}
                                     </div>
-                                    <div className="text-[11px] text-slate-600">
-                                      {activeTab === 'ANDAMENTO' ? (
-                                        <span>
-                                          Teto Book:{' '}
-                                          <strong className="text-purple-700">
-                                            {serie.taxa_remuneracao_maxima || serie.book_taxa || 'A definir'}
-                                          </strong>
-                                        </span>
-                                      ) : (
-                                        <span>
-                                          Taxa Final:{' '}
-                                          <strong className="text-emerald-700">
-                                            {serie.taxa_remuneracao_final ||
-                                              serie.taxa_remuneracao_maxima ||
-                                              'Definida'}
-                                          </strong>
-                                        </span>
-                                      )}
-                                    </div>
-                                    {serie.isin && (
-                                      <div className="text-[10px] text-slate-400 font-mono">ISIN: {serie.isin}</div>
-                                    )}
-                                  </div>
-                                ))}
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
@@ -2041,81 +2206,96 @@ const Primary: React.FC = () => {
 
                                 {temSeries ? (
                                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                    {oferta.series!.map((s, idx) => (
-                                      <div
-                                        key={idx}
-                                        className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2 text-xs"
-                                      >
-                                        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                                          <span className="font-extrabold text-slate-900">{s.descricao_serie}</span>
-                                          {s.avaliacao_risco && (
-                                            <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">
-                                              Rating: {s.avaliacao_risco}
-                                            </span>
-                                          )}
-                                        </div>
-
-                                        <div className="space-y-1.5">
-                                          <div className="flex justify-between">
-                                            <span className="text-slate-500">Volume da Série:</span>
-                                            <span className="font-bold text-slate-800">
-                                              {formatBRL(s.volume_serie_reais)}
-                                            </span>
+                                    {oferta.series!.map((s, idx) => {
+                                      const ratingClean = cleanRatingText(s.avaliacao_risco);
+                                      const taxaMaxClean = cleanRateText(s.taxa_remuneracao_maxima);
+                                      const taxaFinalClean = cleanRateText(s.taxa_remuneracao_final);
+                                      const taxaBookClean = cleanRateText(s.book_taxa);
+                                      const puNum = Number(s.pu_nominal);
+                                      return (
+                                        <div
+                                          key={idx}
+                                          className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2 text-xs"
+                                        >
+                                          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                                            <span className="font-extrabold text-slate-900">{s.descricao_serie}</span>
+                                            {ratingClean && (
+                                              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                                                Rating: {ratingClean}
+                                              </span>
+                                            )}
                                           </div>
 
-                                          {s.taxa_remuneracao_maxima && (
-                                            <div className="flex justify-between gap-2">
-                                              <span className="text-slate-500">Teto Bookbuilding:</span>
-                                              <span className="font-bold text-purple-700 text-right">
-                                                {s.taxa_remuneracao_maxima}
+                                          <div className="space-y-1.5">
+                                            <div className="flex justify-between">
+                                              <span className="text-slate-500">Volume da Série:</span>
+                                              <span className="font-bold text-slate-800">
+                                                {formatBRL(s.volume_serie_reais)}
                                               </span>
                                             </div>
-                                          )}
 
-                                          {s.taxa_remuneracao_final &&
-                                            s.taxa_remuneracao_final !== s.taxa_remuneracao_maxima && (
+                                            {taxaMaxClean && (
                                               <div className="flex justify-between gap-2">
-                                                <span className="text-slate-500">Taxa Final Cortada:</span>
-                                                <span className="font-bold text-emerald-700 text-right">
-                                                  {s.taxa_remuneracao_final}
+                                                <span className="text-slate-500">Teto Bookbuilding:</span>
+                                                <span className="font-bold text-purple-700 text-right">
+                                                  {taxaMaxClean}
                                                 </span>
                                               </div>
                                             )}
 
-                                          {s.isin && (
-                                            <div className="flex justify-between items-center py-0.5">
-                                              <span className="text-slate-500">Código ISIN:</span>
-                                              <span className="font-mono text-slate-900 font-bold bg-slate-100 px-1.5 py-0.5 rounded text-[11px] border border-slate-200">
-                                                {s.isin}
+                                            {taxaFinalClean && taxaFinalClean !== taxaMaxClean && (
+                                              <div className="flex justify-between gap-2">
+                                                <span className="text-slate-500">Taxa Final Cortada:</span>
+                                                <span className="font-bold text-emerald-700 text-right">
+                                                  {taxaFinalClean}
+                                                </span>
+                                              </div>
+                                            )}
+
+                                            {!taxaFinalClean && !taxaMaxClean && taxaBookClean && (
+                                              <div className="flex justify-between gap-2">
+                                                <span className="text-slate-500">Taxa de Book:</span>
+                                                <span className="font-bold text-emerald-700 text-right">
+                                                  {taxaBookClean}
+                                                </span>
+                                              </div>
+                                            )}
+
+                                            {s.isin && (
+                                              <div className="flex justify-between items-center py-0.5">
+                                                <span className="text-slate-500">Código ISIN:</span>
+                                                <span className="font-mono text-slate-900 font-bold bg-slate-100 px-1.5 py-0.5 rounded text-[11px] border border-slate-200">
+                                                  {s.isin}
+                                                </span>
+                                              </div>
+                                            )}
+
+                                            <div className="flex justify-between">
+                                              <span className="text-slate-500">Vencimento:</span>
+                                              <span className="font-semibold text-slate-800">
+                                                {formatDate(s.data_vencimento, s.data_emissao)}
                                               </span>
                                             </div>
-                                          )}
 
-                                          <div className="flex justify-between">
-                                            <span className="text-slate-500">Vencimento:</span>
-                                            <span className="font-semibold text-slate-800">
-                                              {formatDate(s.data_vencimento, s.data_emissao)}
-                                            </span>
+                                            {s.forma_amortizacao && cleanRatingText(s.forma_amortizacao) && (
+                                              <div className="flex justify-between gap-2">
+                                                <span className="text-slate-500">Amortização:</span>
+                                                <span className="font-semibold text-slate-800 text-right">{s.forma_amortizacao}</span>
+                                              </div>
+                                            )}
+
+                                            {!isNaN(puNum) && puNum > 0 && (
+                                              <div className="flex justify-between">
+                                                <span className="text-slate-500">PU Unitário:</span>
+                                                <span className="font-mono text-slate-700">
+                                                  R$ {puNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </span>
+                                              </div>
+                                            )}
                                           </div>
-
-                                          {s.forma_amortizacao && (
-                                            <div className="flex justify-between">
-                                              <span className="text-slate-500">Amortização:</span>
-                                              <span className="font-semibold text-slate-800">{s.forma_amortizacao}</span>
-                                            </div>
-                                          )}
-
-                                          {s.pu_nominal && (
-                                            <div className="flex justify-between">
-                                              <span className="text-slate-500">PU Unitário:</span>
-                                              <span className="font-mono text-slate-700">
-                                                R$ {s.pu_nominal.toFixed(2)}
-                                              </span>
-                                            </div>
-                                          )}
                                         </div>
-                                      </div>
-                                    ))}
+                                      );
+                                    })}
                                   </div>
                                 ) : (
                                   <p className="text-xs text-slate-400">
@@ -2221,7 +2401,7 @@ const Primary: React.FC = () => {
                             }}
                             className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold transition cursor-pointer ${
                               page === pNum
-                                ? 'bg-purple-600 text-white shadow-xs'
+                                ? 'bg-purple-600 text-white shadow-sm'
                                 : 'hover:bg-slate-100 text-slate-700 border border-slate-200'
                             }`}
                           >

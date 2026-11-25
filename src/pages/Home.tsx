@@ -188,11 +188,11 @@ const Home: React.FC = () => {
     const loadData = async () => {
       try {
         const [assetsData, metaData, docsoverviewData, distressData, cashflowData] = await Promise.all([
-          fetchCSV<Asset>('./data/assets_master.csv'),
+          fetchCSV<Asset>('/data/assets_master.csv'),
           fetchMetadata(),
-          fetchCSV<DocsOverview>('./data/docs_overview.csv'),
-          fetch('./data/distress_summary.json').then(r => r.ok ? r.json() : null).catch(() => null),
-          fetch('./data/cashflow_wall.json').then(r => r.ok ? r.json() : null).catch(() => null)
+          fetchCSV<DocsOverview>('/data/docs_overview.csv'),
+          fetch('/data/distress_summary.json').then(r => r.ok ? r.json() : null).catch(() => null),
+          fetch('/data/cashflow_wall.json').then(r => r.ok ? r.json() : null).catch(() => null)
         ]);
 
         setAssets(assetsData || []);

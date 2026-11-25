@@ -119,7 +119,7 @@ const Navbar = () => {
     if (cleanTarget === '/negocios') return cleanCurrent === '/negocios' || cleanCurrent === '/trades';
     if (cleanTarget === '/charts') return cleanCurrent === '/charts';
     if (cleanTarget === '/ntnb') return cleanCurrent === '/ntnb' || cleanCurrent === '/dashboard-ntnb';
-    if (cleanTarget === '/primary') return cleanCurrent === '/primary';
+    if (cleanTarget === '/primary') return cleanCurrent === '/primary' || cleanCurrent === '/primario' || cleanCurrent === '/mercado-primario';
     if (cleanTarget === '/agenda') return cleanCurrent === '/agenda' || cleanCurrent === '/agenda-pagamentos';
     if (cleanTarget === '/raiox-devedor') return cleanCurrent === '/raiox-devedor' || cleanCurrent === '/devedor';
     if (cleanTarget === '/calculadora') return cleanCurrent === '/calculadora' || cleanCurrent === '/calculator' || cleanCurrent === '/grossup';
@@ -560,6 +560,8 @@ const App: React.FC = () => {
                 }
               />
               <Route path="/primary" element={<Primary />} />
+              <Route path="/primario" element={<Primary />} />
+              <Route path="/mercado-primario" element={<Primary />} />
               <Route path="/agenda" element={<AgendaPage />} />
               <Route path="/agenda-pagamentos" element={<AgendaPage />} />
               <Route path="/comparar" element={<ComparatorPage />} />
