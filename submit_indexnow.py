@@ -69,11 +69,35 @@ def get_delta_urls(limit: int = MAX_URLS_PER_DAY) -> tuple[list[str], str]:
         "primary/",
         "emissores/",
         "setores/",
+        "noticias/",
+        "rankings/",
+        "rankings/debentures-incentivadas-ipca/",
+        "rankings/debentures-rating-aaa/",
+        "rankings/maiores-volumes-b3/",
+        "rankings/maiores-spreads-ntnb/",
+        "rankings/ofertas-publicas-cvm-160/",
     ]
     urls = [f"https://{HOST}/{p}" for p in core_paths]
     seen = set(urls)
 
+    # Boletins recentes (/noticias/)
+    noticias_path = os.path.join(BASE_DIR, "public", "data", "noticias_index.json")
+    if os.path.exists(noticias_path):
+        try:
+            with open(noticias_path, "r", encoding="utf-8") as f:
+                n_data = json.load(f)
+            for item in (n_data.get("items") or [])[:4]:
+                slug = str(item.get("slug") or "").strip().strip("/")
+                if slug:
+                    u = f"https://{HOST}/noticias/{slug}/"
+                    if u not in seen:
+                        seen.add(u)
+                        urls.append(u)
+        except Exception:
+            pass
+
     active_tickers = set()
+    ticker_to_issuer = {}
     if os.path.exists(ASSETS_CSV):
         try:
             with open(ASSETS_CSV, "r", encoding="utf-8", errors="ignore") as f:
@@ -82,10 +106,28 @@ def get_delta_urls(limit: int = MAX_URLS_PER_DAY) -> tuple[list[str], str]:
                         tk = str(r.get("ticker") or "").strip().upper()
                         if is_valid_ticker(tk):
                             active_tickers.add(tk)
+                            iss_nm = str(r.get("issuer") or "").strip().lower()
+                            if iss_nm:
+                                ticker_to_issuer[tk] = iss_nm
         except Exception as e:
             print(f"⚠️ Aviso ao ler {ASSETS_CSV}: {e}")
 
+    issuer_name_to_slug = {}
+    manifest_path = os.path.join(BASE_DIR, "public", "data", "seo_hubs_manifest.json")
+    if os.path.exists(manifest_path):
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                man = json.load(f)
+            for sl, info in (man.get("issuer_slugs") or {}).items():
+                nm = str((info or {}).get("name") or "").strip().lower()
+                if nm and sl:
+                    issuer_name_to_slug[nm] = sl
+        except Exception:
+            pass
+
     latest_trade_date = ""
+    traded_asset_urls = []
+    traded_issuer_urls = []
     if os.path.exists(TRADES_RECENT_CSV):
         try:
             rows = []
@@ -111,11 +153,25 @@ def get_delta_urls(limit: int = MAX_URLS_PER_DAY) -> tuple[list[str], str]:
                 u = f"https://{HOST}/asset/{tk.lower()}/"
                 if u not in seen:
                     seen.add(u)
-                    urls.append(u)
-                if len(urls) >= limit:
-                    break
+                    traded_asset_urls.append(u)
+                iss_nm = ticker_to_issuer.get(tk, "")
+                iss_sl = issuer_name_to_slug.get(iss_nm)
+                if iss_sl and len(traded_issuer_urls) < 70:
+                    iu = f"https://{HOST}/emissor/{iss_sl}/"
+                    if iu not in seen:
+                        seen.add(iu)
+                        traded_issuer_urls.append(iu)
         except Exception as e:
             print(f"⚠️ Aviso ao ler {TRADES_RECENT_CSV}: {e}")
+
+    for u in traded_issuer_urls:
+        if len(urls) >= limit:
+            break
+        urls.append(u)
+    for u in traded_asset_urls:
+        if len(urls) >= limit:
+            break
+        urls.append(u)
 
     return urls[:limit], latest_trade_date
 

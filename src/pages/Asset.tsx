@@ -423,6 +423,35 @@ const AssetPage: React.FC = () => {
       metaCan.setAttribute('href', canonicalUrl);
     }
 
+    let metaRobots = document.querySelector('meta[name="robots"]');
+    if (!metaRobots) {
+      metaRobots = document.createElement('meta');
+      metaRobots.setAttribute('name', 'robots');
+      document.head.appendChild(metaRobots);
+    }
+    metaRobots.setAttribute('content', String(found.status_ativo || '').trim() === 'Ativo' ? 'index, follow' : 'noindex, follow');
+
+    const rawModDate = [found.data_ultimo_negocio, (found as any).data_anbima, found.data_emissao]
+      .map((d) => String(d || '').trim().slice(0, 10))
+      .find((d) => /^\d{4}-\d{2}-\d{2}$/.test(d));
+
+    const additionalProperty: Array<{ '@type': string; name: string; value: string }> = [];
+    if (found.indexador && found.indexador !== '-') {
+      additionalProperty.push({ '@type': 'PropertyValue', name: 'Indexador', value: String(found.indexador) });
+    }
+    if (vctoStr && vctoStr !== '-') {
+      additionalProperty.push({ '@type': 'PropertyValue', name: 'Vencimento', value: vctoStr });
+    }
+    if (normR && normR !== 'Sem Rating' && normR !== '-') {
+      additionalProperty.push({ '@type': 'PropertyValue', name: 'Rating Nacional', value: String(normR) });
+    }
+    if (found.setor && found.setor !== '-') {
+      additionalProperty.push({ '@type': 'PropertyValue', name: 'Setor ANBIMA', value: String(found.setor) });
+    }
+    if (spreadNum) {
+      additionalProperty.push({ '@type': 'PropertyValue', name: 'Spread', value: `${spreadNum}%` });
+    }
+
     let ldEl = document.getElementById('fixdata-asset-ldjson') as HTMLScriptElement | null;
     if (!ldEl) {
       ldEl = document.createElement('script');
@@ -432,18 +461,32 @@ const AssetPage: React.FC = () => {
     }
     ldEl.textContent = JSON.stringify({
       '@context': 'https://schema.org',
-      '@type': 'FinancialProduct',
-      name: `${tipoPrefix}${tickerStr}${rawIssuerName ? ` (${rawIssuerName})` : ''}`,
-      identifier: tickerStr,
-      ...(found.isin && found.isin !== '-' ? { isin: found.isin } : {}),
-      description: descText,
-      abstract: summaryForGoogle,
-      url: canonicalUrl,
-      category: tipoStr,
-      provider: {
-        '@type': 'Organization',
-        name: rawIssuerName || 'Emissor Privado',
-      },
+      '@graph': [
+        {
+          '@type': 'WebPage',
+          url: canonicalUrl,
+          name: document.title,
+          ...(rawModDate ? { dateModified: rawModDate } : {}),
+          inLanguage: 'pt-BR',
+        },
+        {
+          '@type': 'FinancialProduct',
+          name: `${tipoPrefix}${tickerStr}${rawIssuerName ? ` (${rawIssuerName})` : ''}`,
+          identifier: tickerStr,
+          ...(found.isin && found.isin !== '-' ? { isin: found.isin } : {}),
+          description: descText,
+          abstract: summaryForGoogle,
+          ...(rawModDate ? { dateModified: rawModDate } : {}),
+          ...(additionalProperty.length ? { additionalProperty } : {}),
+          url: canonicalUrl,
+          category: tipoStr,
+          provider: {
+            '@type': 'Organization',
+            name: rawIssuerName || 'Emissor Privado',
+            ...(payload.issuerSlug ? { url: `https://fixdatabrasil.com.br/emissor/${payload.issuerSlug}/` } : {}),
+          },
+        },
+      ],
     });
   };
 
@@ -594,6 +637,18 @@ const AssetPage: React.FC = () => {
       isMounted = false;
     };
   }, [ticker]);
+
+  useEffect(() => {
+    if (!loading && !asset) {
+      let metaRobots = document.querySelector('meta[name="robots"]');
+      if (!metaRobots) {
+        metaRobots = document.createElement('meta');
+        metaRobots.setAttribute('name', 'robots');
+        document.head.appendChild(metaRobots);
+      }
+      metaRobots.setAttribute('content', 'noindex, nofollow');
+    }
+  }, [loading, asset]);
 
   const toggleFavorite = () => {
     const targetTicker = (asset?.ticker || ticker || '').trim().toUpperCase();

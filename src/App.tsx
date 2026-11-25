@@ -592,6 +592,8 @@ const App: React.FC = () => {
                 <a href="/emissores/" className="hover:text-blue-600 transition">Emissores</a>
                 <span>•</span>
                 <a href="/setores/" className="hover:text-blue-600 transition">Setores ANBIMA</a>
+                <span>•</span>
+                <a href="/rankings/" className="hover:text-blue-600 transition">Rankings</a>
               </div>
               <div className="flex items-center justify-center gap-4 sm:gap-6 text-xs font-semibold text-slate-500 mb-2 flex-wrap">
                 <Link to="/metodologia/" className="hover:text-blue-600 transition">Metodologia</Link>

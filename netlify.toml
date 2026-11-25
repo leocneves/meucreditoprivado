@@ -35,8 +35,3 @@
   from = "/api/news"
   to = "/.netlify/functions/news"
   status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200

@@ -387,7 +387,7 @@ def init_maps(df=None):
         if df is None:
             df = get_assets()
 
-        print("🏛️ Construindo registro de hubs (setores & Top 500 emissores)...")
+        print("🏛️ Construindo registro de hubs (setores & emissores ativos)...")
         HUBS_REGISTRY, hubs_manifest = build_seo_hubs_registry(
             df=df,
             emitters_map=EMITTERS_MAP,
@@ -399,7 +399,7 @@ def init_maps(df=None):
             normalize_rating_fn=normalize_rating,
             is_valid_ticker_fn=is_valid_ticker,
             b3_stats=B3_SUMMARY_STATS,
-            max_issuers=500,
+            max_issuers=1500,
         )
         write_hub_manifest(hubs_manifest)
         
@@ -812,6 +812,45 @@ def generate_asset_html(row):
             or (HUBS_REGISTRY["issuer_slug_by_cnpj"].get(cnpj_14_asset) if not is_cricra_asset else None)
         )
 
+    if resolved_issuer_slug:
+        if provider_data.get("url"):
+            provider_data["sameAs"] = provider_data["url"]
+        provider_data["url"] = f"{BASE_URL}/emissor/{resolved_issuer_slug}/"
+
+    b3_last_dt = str((B3_SUMMARY_STATS or {}).get(ticker.upper(), {}).get('last_dt') or '').strip()[:10]
+    mod_candidates = [
+        d for d in (
+            b3_last_dt,
+            str(row.get('data_ultimo_negocio') or '').strip()[:10],
+            str(row.get('data_anbima') or '').strip()[:10],
+            str(row.get('data_emissao') or '').strip()[:10],
+        )
+        if re.match(r"^\d{4}-\d{2}-\d{2}$", d)
+    ]
+    asset_lastmod_iso = max(mod_candidates) if mod_candidates else datetime.now().strftime('%Y-%m-%d')
+
+    is_incent_bool = str(row.get('incentivada', '')).strip().lower() in ('sim', 'true', '1')
+    additional_props = []
+    if indexador and indexador != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "Indexador", "value": indexador})
+    if taxa_mercado and taxa_mercado != 'Sem cotação':
+        additional_props.append({"@type": "PropertyValue", "name": "Taxa Secundário", "value": taxa_mercado})
+    if taxa_emissao and taxa_emissao != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "Taxa de Emissão", "value": taxa_emissao})
+    if pu_mercado and pu_mercado != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "PU Mercado", "value": pu_mercado})
+    if spread and spread != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "Spread", "value": spread})
+    if duration and duration != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "Duration", "value": duration})
+    if rating_norm and rating_norm != 'Sem Rating' and rating_norm != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "Rating Nacional", "value": rating_norm})
+    if vcto_br and vcto_br != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "Vencimento", "value": vcto_br})
+    if setor and setor != '-':
+        additional_props.append({"@type": "PropertyValue", "name": "Setor ANBIMA", "value": setor})
+    additional_props.append({"@type": "PropertyValue", "name": "Lei 12.431/11 (Isento PF)", "value": "Sim" if is_incent_bool else "Não"})
+
     schema_json = json.dumps({
         "@context": "https://schema.org",
         "@graph": [
@@ -820,6 +859,13 @@ def generate_asset_html(row):
                 "name": "FIXDATA",
                 "alternateName": ["FixData", "Meu Crédito Privado"],
                 "url": f"{BASE_URL}/"
+            },
+            {
+                "@type": "WebPage",
+                "url": page_url,
+                "name": title,
+                "dateModified": asset_lastmod_iso,
+                "inLanguage": "pt-BR"
             },
             {
                 "@type": "BreadcrumbList",
@@ -851,6 +897,8 @@ def generate_asset_html(row):
                 "isin": isin,
                 "description": description,
                 "abstract": ai_executive_summary,
+                "dateModified": asset_lastmod_iso,
+                "additionalProperty": additional_props,
                 "url": page_url,
                 "category": tipo,
                 "provider": provider_data

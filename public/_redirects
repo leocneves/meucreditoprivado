@@ -25,7 +25,34 @@ http://meucreditoprivado.netlify.app/* https://fixdatabrasil.com.br/:splat 301!
 /feed.xml          /feed.xml           200
 /robots.txt        /robots.txt         200
 /llms.txt          /llms.txt           200
+/llms-full.txt     /llms-full.txt      200
 /api/news          /.netlify/functions/news 200
 
-# 4. Fallback SPA
-/*                 /index.html         200
+# 4. Rotas SPA explícitas (evita Soft-404 global em URLs inexistentes para o Bingbot/OAI-SearchBot)
+/asset/*           /index.html         200
+/raiox-devedor*    /index.html         200
+/devedor*          /index.html         200
+/calculadora*      /index.html         200
+/calculator*       /index.html         200
+/grossup*          /index.html         200
+/negocios*         /index.html         200
+/trades*           /index.html         200
+/charts*           /index.html         200
+/ntnb*             /index.html         200
+/dashboard-ntnb*   /index.html         200
+/primary*          /index.html         200
+/primario*         /index.html         200
+/mercado-primario* /index.html         200
+/agenda*           /index.html         200
+/comparar*         /index.html         200
+/comparator*       /index.html         200
+/metodologia*      /index.html         200
+/methodology*      /index.html         200
+/sobre*            /index.html         200
+/about*            /index.html         200
+/termos*           /index.html         200
+/terms*            /index.html         200
+/privacidade*      /index.html         200
+/privacy*          /index.html         200
+/contact*          /index.html         200
+/apoiar*           /index.html         200
