@@ -20,6 +20,7 @@ import os
 import re
 import shutil
 import unicodedata
+import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
@@ -1327,8 +1328,59 @@ def render_issuer_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
         idx_summary = ", ".join(f"{k} ({v})" for k, v in sorted(indexers.items(), key=lambda x: x[1], reverse=True)[:4])
 
         # CTA Lead-Gen para o Raio-X (SEM expor balanços, EBITDA, Altman Z'', ICR ou Dívida Líquida)
-        raiox_href = f"/raiox-devedor/?cnpj={esc(raiox_cnpj)}" if raiox_cnpj else "/raiox-devedor/"
+        raiox_href = f"/raiox-devedor/?cnpj={esc(raiox_cnpj)}" if raiox_cnpj else None
         ri_btn = f'<a href="{esc(site_ri)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold border border-slate-200 transition">Portal de RI Oficial ↗</a>' if site_ri else ""
+        if raiox_href:
+            hero_actions_html = f"""
+            <a href="{raiox_href}" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-extrabold shadow-sm transition">
+              Abrir Raio-X de Solvência CVM (Gratuito) →
+            </a>
+            {ri_btn}"""
+        else:
+            neg_href = f"/negocios/?search={esc(urllib.parse.quote(name))}"
+            hero_actions_html = f"""
+            <span class="px-3.5 py-2 rounded-xl bg-slate-100 text-slate-500 text-xs font-semibold border border-slate-200" title="Emissor de capital fechado ou SPE dispensado de divulgar DFP/ITR na CVM">
+              Sem balanço DFP/ITR aberto na CVM
+            </span>
+            <a href="{neg_href}" class="px-4 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs sm:text-sm font-bold border border-blue-200 transition">
+              Consultar Negócios na B3 →
+            </a>
+            {ri_btn}"""
+
+        if raiox_href:
+            bottom_cta_html = f"""
+        <!-- Lead-Gen CTA para o Raio-X (sem expor indicadores contábeis gateados) -->
+        <section class="bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-50 border border-blue-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="space-y-2 max-w-2xl">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase bg-blue-600 text-white">Análise Fundamentalista CVM • 100% Gratuita</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900">Quer analisar a solvência e o balanço de {esc(name)}?</h2>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Acesse o <strong>Raio-X do Devedor</strong> para consultar demonstrativos DFP/ITR da CVM, Dívida Líquida/EBITDA, Índice de Cobertura de Juros (ICR), modelo Altman Z'' e evolução histórica de ratings. Desbloqueio imediato e gratuito com sua conta Google.
+            </p>
+          </div>
+          <a href="{raiox_href}" class="shrink-0 inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900 hover:bg-blue-700 text-white text-xs sm:text-sm font-black shadow-md transition">
+            <span>Desbloquear Raio-X do Devedor →</span>
+          </a>
+        </section>"""
+        else:
+            bottom_cta_html = f"""
+        <section class="bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-50 border border-blue-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="space-y-2 max-w-2xl">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase bg-blue-600 text-white">Ferramentas Quantitativas • Acesso Gratuito</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900">Compare as taxas e o retorno líquido dos títulos de {esc(name)}</h2>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Este devedor não divulga demonstrações contábeis DFP/ITR de companhia aberta na CVM. Você pode comparar diretamente os spreads, durations e ratings dos papéis ativos acima ou simular a equivalência fiscal (gross-up de IR) gratuitamente.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2.5 shrink-0">
+            <a href="/comparar/" class="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-black shadow-md transition">
+              <span>Comparar Ativos →</span>
+            </a>
+            <a href="/calculadora/" class="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 text-xs sm:text-sm font-bold transition">
+              <span>Calculadora Gross-up →</span>
+            </a>
+          </div>
+        </section>"""
 
         table_rows_html = _build_asset_table_rows(rows, b3_stats, format_currency_fn, normalize_rating_fn, limit=150)
 
@@ -1383,10 +1435,7 @@ def render_issuer_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
             <strong>{esc(name)}</strong>{f' (CNPJ {esc(cnpj_fmt)})' if cnpj_fmt != '-' else ''} possui <strong>{len(rows)} título(s) de dívida ativa</strong> mapeado(s) no FIXDATA ({esc(instr_str)}), totalizando <strong>{esc(format_currency_fn(total_em_vol))}</strong> em estoque emitido. Indexadores predominantes: {esc(idx_summary)}.
           </p>
           <div class="flex flex-wrap items-center gap-3 pt-1">
-            <a href="{raiox_href}" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-extrabold shadow-sm transition">
-              Abrir Raio-X de Solvência CVM (Gratuito) →
-            </a>
-            {ri_btn}
+            {hero_actions_html}
           </div>
         </section>
 
@@ -1439,19 +1488,7 @@ def render_issuer_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
           </div>
         </section>
 
-        <!-- Lead-Gen CTA para o Raio-X (sem expor indicadores contábeis gateados) -->
-        <section class="bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-50 border border-blue-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div class="space-y-2 max-w-2xl">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase bg-blue-600 text-white">Análise Fundamentalista CVM • 100% Gratuita</span>
-            <h2 class="text-xl sm:text-2xl font-black text-slate-900">Quer analisar a solvência e o balanço de {esc(name)}?</h2>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Acesse o <strong>Raio-X do Devedor</strong> para consultar demonstrativos DFP/ITR da CVM, Dívida Líquida/EBITDA, Índice de Cobertura de Juros (ICR), modelo Altman Z'' e evolução histórica de ratings. Desbloqueio imediato e gratuito com sua conta Google.
-            </p>
-          </div>
-          <a href="{raiox_href}" class="shrink-0 inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900 hover:bg-blue-700 text-white text-xs sm:text-sm font-black shadow-md transition">
-            <span>Desbloquear Raio-X do Devedor →</span>
-          </a>
-        </section>
+        {bottom_cta_html}
       </main>"""
 
         sorted_iss_rows = sorted(rows, key=lambda r: _asset_sort_tuple(r, b3_stats), reverse=True)
@@ -1494,9 +1531,17 @@ def render_issuer_hubs(registry: dict, b3_stats: dict, format_currency_fn, norma
                 "acceptedAnswer": {
                     "@type": "Answer",
                     "text": (
-                        f"{name}{f' (CNPJ {cnpj_fmt})' if cnpj_fmt != '-' else ''} atua no setor {setor_name} "
-                        f"com situação cadastral {cvm_sit} e sede em {sede}. Demonstrativos financeiros completos estão "
-                        f"disponíveis gratuitamente no Raio-X do Devedor ({BASE_URL}{raiox_href})."
+                        (
+                            f"{name}{f' (CNPJ {cnpj_fmt})' if cnpj_fmt != '-' else ''} atua no setor {setor_name} "
+                            f"com situação cadastral {cvm_sit} e sede em {sede}. Demonstrativos financeiros completos estão "
+                            f"disponíveis gratuitamente no Raio-X do Devedor ({BASE_URL}{raiox_href})."
+                        )
+                        if raiox_href
+                        else (
+                            f"{name}{f' (CNPJ {cnpj_fmt})' if cnpj_fmt != '-' else ''} atua no setor {setor_name} "
+                            f"com situação cadastral {cvm_sit} e sede em {sede}. Os títulos de dívida ativa, taxas indicativas e "
+                            f"ratings de {name} são consolidados em {BASE_URL}/emissor/{sl}/."
+                        )
                     ),
                 },
             },

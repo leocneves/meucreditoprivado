@@ -308,6 +308,7 @@ const DebtorRadar: React.FC = () => {
   // Devedor selecionado
   const [selectedCnpj, setSelectedCnpj] = useState<string>(searchParams.get("cnpj") || "");
   const [currentDevedor, setCurrentDevedor] = useState<DevedorItem | null>(null);
+  const [unmappedTarget, setUnmappedTarget] = useState<{ cnpj?: string; search?: string } | null>(null);
 
   // Pares setoriais selecionados para o benchmark de mercado
   const [selectedPeersCnpjs, setSelectedPeersCnpjs] = useState<string[]>([]);
@@ -335,6 +336,7 @@ const DebtorRadar: React.FC = () => {
   // Função central de seleção de devedor com atualização instantânea (0ms)
   const handleSelectDevedor = (cnpj: string) => {
     const clean = String(cnpj).replace(/\D/g, "");
+    setUnmappedTarget(null);
     setSelectedCnpj(clean);
     try {
       const newUrl = new URL(window.location.href);
@@ -375,25 +377,28 @@ const DebtorRadar: React.FC = () => {
 
           const urlCnpj = searchParams.get("cnpj");
           const urlSearch = searchParams.get("search") || searchParams.get("q");
+          const explicitCnpj = (urlCnpj || "").trim();
+          const explicitSearch = (urlSearch || "").trim();
+          const hasExplicitQuery = Boolean(explicitCnpj || explicitSearch);
 
           let defaultDev: DevedorItem | undefined = undefined;
-          if (urlCnpj) {
-            const cleanUrl = urlCnpj.replace(/\D/g, "");
+          if (explicitCnpj) {
+            const cleanUrl = explicitCnpj.replace(/\D/g, "");
             const paddedUrl = cleanUrl.length >= 11 && cleanUrl.length < 14 ? cleanUrl.padStart(14, "0") : cleanUrl;
             defaultDev = devs.find(
               (d: DevedorItem) =>
                 d.cnpj === paddedUrl ||
                 d.cnpj === cleanUrl ||
-                d.cnpj === urlCnpj ||
-                d.cnpj_formatado === urlCnpj
+                d.cnpj === explicitCnpj ||
+                d.cnpj_formatado === explicitCnpj
             );
             if (!defaultDev && paddedUrl.length >= 8) {
               const root8 = paddedUrl.slice(0, 8);
               defaultDev = devs.find((d: DevedorItem) => (d.cnpj || "").slice(0, 8) === root8);
             }
           }
-          if (!defaultDev && urlSearch) {
-            const sLower = urlSearch.toLowerCase().trim();
+          if (!defaultDev && explicitSearch) {
+            const sLower = explicitSearch.toLowerCase();
             defaultDev =
               devs.find(
                 (d: DevedorItem) =>
@@ -407,16 +412,27 @@ const DebtorRadar: React.FC = () => {
               );
           }
 
-          if (!defaultDev) {
-            defaultDev =
+          if (defaultDev) {
+            setUnmappedTarget(null);
+            setSelectedCnpj(defaultDev.cnpj);
+            setCurrentDevedor(defaultDev);
+          } else if (hasExplicitQuery) {
+            setUnmappedTarget({
+              cnpj: explicitCnpj || undefined,
+              search: explicitSearch || undefined,
+            });
+            setSelectedCnpj("");
+            setCurrentDevedor(null);
+          } else {
+            const showcaseDev =
               devs.find((d: DevedorItem) => d.razao_social.includes("PETROBRAS")) ||
               devs.find((d: DevedorItem) => d.razao_social.includes("VALE")) ||
               devs[0];
-          }
-
-          if (defaultDev) {
-            setSelectedCnpj(defaultDev.cnpj);
-            setCurrentDevedor(defaultDev);
+            if (showcaseDev) {
+              setUnmappedTarget(null);
+              setSelectedCnpj(showcaseDev.cnpj);
+              setCurrentDevedor(showcaseDev);
+            }
           }
         }
       } catch (err) {
@@ -2019,6 +2035,62 @@ const DebtorRadar: React.FC = () => {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        ) : unmappedTarget ? (
+          <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 shadow-sm space-y-5 my-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-extrabold uppercase tracking-wider">
+                <AlertTriangle size={14} className="text-amber-600" />
+                Demonstrações CVM Não Disponíveis
+              </span>
+              {unmappedTarget.cnpj && (
+                <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-mono font-semibold">
+                  CNPJ:{" "}
+                  {(() => {
+                    const d = unmappedTarget.cnpj.replace(/\D/g, "");
+                    return d.length === 14
+                      ? `${d.slice(0, 2)}.${d.slice(2, 5)}.${d.slice(5, 8)}/${d.slice(8, 12)}-${d.slice(12)}`
+                      : unmappedTarget.cnpj;
+                  })()}
+                </span>
+              )}
+              {unmappedTarget.search && (
+                <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold">
+                  Consulta: {unmappedTarget.search}
+                </span>
+              )}
+            </div>
+
+            <div className="space-y-2 max-w-3xl">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+                Este devedor não possui balanço aberto (DFP/ITR) mapeado na CVM
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Emissores de capital fechado (Ltda. ou S.A. de capital fechado), Sociedades de Propósito Específico (SPEs) e patrimônios separados de CRI/CRA são dispensados pela CVM de divulgar demonstrações contábeis trimestrais abertas. Utilize a busca acima para consultar qualquer uma das {devedoresResumo.length || 851} companhias abertas monitoradas ou confira os títulos deste emissor no mercado secundário.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link
+                to={unmappedTarget.search ? `/negocios/?search=${encodeURIComponent(unmappedTarget.search)}` : "/negocios/"}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-extrabold shadow-xs transition"
+              >
+                <span>Consultar Negócios na B3 →</span>
+              </Link>
+              <a
+                href="/emissores/"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs sm:text-sm font-bold transition"
+              >
+                <span>Diretório de Emissores →</span>
+              </a>
+              <button
+                type="button"
+                onClick={() => handleSelectDevedor("33000167000101")}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 text-xs font-bold transition cursor-pointer"
+              >
+                <span>Ver exemplo (Petrobras)</span>
+              </button>
             </div>
           </div>
         ) : null}
