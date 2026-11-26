@@ -208,10 +208,11 @@
                 <span>Contato &amp; Apoio</span>
               </a>
 
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a
-                  href="/raiox-devedor/"
-                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+              <div data-static-auth-desktop="true" class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <button
+                  type="button"
+                  data-static-login="navbar"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -220,15 +221,15 @@
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                   </svg>
                   <span>Entrar</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
-          <div class="pb-3 mb-2 border-b border-slate-100">
-            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+          <div data-static-auth-mobile="true" class="pb-3 mb-2 border-b border-slate-100">
+            <button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -236,7 +237,7 @@
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
               <span>Entrar com o Google</span>
-            </a>
+            </button>
           </div>
           <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -365,6 +366,211 @@
                 a.classList.add('bg-blue-50/80', 'text-blue-900');
               }
             });
+
+            var AUTH_KEY = 'fixdata_auth_user';
+            var googleSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>';
+            var googleSvgMob = googleSvg.replace('w-3.5 h-3.5', 'w-4 h-4');
+            var logoutSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>';
+
+            function escH(s) {
+              return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            }
+
+            function readCachedUser() {
+              try {
+                var raw = window.localStorage && window.localStorage.getItem(AUTH_KEY);
+                if (!raw) return null;
+                var parsed = JSON.parse(raw);
+                return parsed && parsed.uid ? parsed : null;
+              } catch (e) {
+                return null;
+              }
+            }
+
+            function writeCachedUser(u) {
+              try {
+                if (!window.localStorage) return;
+                if (u && u.uid) window.localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+                else window.localStorage.removeItem(AUTH_KEY);
+              } catch (e) {}
+            }
+
+            function renderAuth(u) {
+              var desktopEl = nav.querySelector('[data-static-auth-desktop]');
+              var mobileEl = nav.querySelector('[data-static-auth-mobile]');
+              if (u && u.uid) {
+                var fullName = String(u.displayName || '').trim() || (u.email ? String(u.email).split('@')[0] : 'Investidor');
+                var firstName = fullName.split(' ')[0] || 'Investidor';
+                var initial = fullName.charAt(0).toUpperCase() || 'F';
+                var email = String(u.email || '').trim();
+                var rawPhoto = String(u.photoURL || '').trim();
+                var safePhoto = (rawPhoto.indexOf('https://') === 0 || rawPhoto.indexOf('http://') === 0) ? rawPhoto : '';
+                if (desktopEl) {
+                  desktopEl.innerHTML =
+                    '<div class="flex items-center gap-2">' +
+                      (safePhoto
+                        ? '<img src="' + escH(safePhoto) + '" alt="' + escH(firstName) + '" class="w-7 h-7 rounded-full border border-slate-200 object-cover" referrerpolicy="no-referrer" />'
+                        : '<span class="w-7 h-7 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">' + escH(initial) + '</span>') +
+                      '<span class="text-xs font-bold text-slate-700 max-w-[100px] truncate">' + escH(firstName) + '</span>' +
+                      '<button type="button" data-static-logout="true" title="Sair da conta" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer">' + logoutSvg + '</button>' +
+                    '</div>';
+                }
+                if (mobileEl) {
+                  mobileEl.innerHTML =
+                    '<div class="flex items-center justify-between gap-2">' +
+                      '<div class="flex items-center gap-2.5 min-w-0">' +
+                        (safePhoto
+                          ? '<img src="' + escH(safePhoto) + '" alt="' + escH(fullName) + '" class="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0" referrerpolicy="no-referrer" />'
+                          : '<span class="w-8 h-8 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">' + escH(initial) + '</span>') +
+                        '<div class="min-w-0">' +
+                          '<p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">' + escH(fullName) + '</p>' +
+                          (email ? '<p class="text-[11px] text-slate-500 truncate max-w-[180px]">' + escH(email) + '</p>' : '') +
+                        '</div>' +
+                      '</div>' +
+                      '<button type="button" data-static-logout="true" class="px-2.5 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition shrink-0 cursor-pointer">Sair</button>' +
+                    '</div>';
+                }
+                return;
+              }
+              if (desktopEl) {
+                desktopEl.innerHTML =
+                  '<button type="button" data-static-login="navbar" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">' +
+                    googleSvg + '<span>Entrar</span>' +
+                  '</button>';
+              }
+              if (mobileEl) {
+                mobileEl.innerHTML =
+                  '<button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">' +
+                    googleSvgMob + '<span>Entrar com o Google</span>' +
+                  '</button>';
+              }
+            }
+
+            function setLoginLoading(isLoading) {
+              nav.querySelectorAll('[data-static-login]').forEach(function (btn) {
+                btn.disabled = !!isLoading;
+                btn.classList.toggle('opacity-60', !!isLoading);
+                var lbl = btn.querySelector('span');
+                if (lbl) {
+                  if (isLoading) {
+                    if (!btn.dataset.origLabel) btn.dataset.origLabel = lbl.textContent;
+                    lbl.textContent = 'Entrando...';
+                  } else if (btn.dataset.origLabel) {
+                    lbl.textContent = btn.dataset.origLabel;
+                  }
+                }
+              });
+            }
+
+            function syncFromFirebaseIndexedDb() {
+              try {
+                if (!window.indexedDB || typeof window.indexedDB.databases !== 'function') return;
+                window.indexedDB.databases().then(function (dbs) {
+                  var exists = Array.isArray(dbs) && dbs.some(function (d) { return d && d.name === 'firebaseLocalStorageDb'; });
+                  if (!exists) return;
+                  var req = window.indexedDB.open('firebaseLocalStorageDb');
+                  req.onupgradeneeded = function (ev) {
+                    if (ev && ev.target && ev.target.transaction) {
+                      try { ev.target.transaction.abort(); } catch (e) {}
+                    }
+                  };
+                  req.onsuccess = function () {
+                    var idb = req.result;
+                    try {
+                      if (!idb.objectStoreNames || !idb.objectStoreNames.contains('firebaseLocalStorage')) {
+                        idb.close();
+                        return;
+                      }
+                      var tx = idb.transaction(['firebaseLocalStorage'], 'readonly');
+                      var store = tx.objectStore('firebaseLocalStorage');
+                      var allReq = store.getAll();
+                      allReq.onsuccess = function () {
+                        var rows = allReq.result || [];
+                        var found = null;
+                        for (var i = 0; i < rows.length; i++) {
+                          var row = rows[i];
+                          if (row && typeof row.fbase_key === 'string' && row.fbase_key.indexOf('firebase:authUser:') === 0 && row.value) {
+                            var val = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+                            if (val && val.uid) {
+                              found = {
+                                uid: String(val.uid),
+                                displayName: String(val.displayName || ''),
+                                email: String(val.email || ''),
+                                photoURL: String(val.photoURL || '')
+                              };
+                              break;
+                            }
+                          }
+                        }
+                        if (found) {
+                          writeCachedUser(found);
+                          renderAuth(found);
+                        } else if (readCachedUser()) {
+                          writeCachedUser(null);
+                          renderAuth(null);
+                        }
+                      };
+                      tx.oncomplete = function () { try { idb.close(); } catch (e) {} };
+                      tx.onerror = function () { try { idb.close(); } catch (e) {} };
+                    } catch (e) {
+                      try { idb.close(); } catch (err) {}
+                    }
+                  };
+                }).catch(function () {});
+              } catch (e) {}
+            }
+
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
+            nav.addEventListener('click', function (ev) {
+              var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
+              if (loginBtn) {
+                ev.preventDefault();
+                var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
+                setLoginLoading(true);
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
+                  .then(function (u) {
+                    setLoginLoading(false);
+                    if (u) renderAuth(u);
+                  })
+                  .catch(function (err) {
+                    setLoginLoading(false);
+                    console.error('Erro no login:', err);
+                  });
+                return;
+              }
+              var logoutBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-logout]') : null;
+              if (logoutBtn) {
+                ev.preventDefault();
+                logoutBtn.disabled = true;
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLogout(); })
+                  .then(function () {
+                    renderAuth(null);
+                  })
+                  .catch(function (err) {
+                    logoutBtn.disabled = false;
+                    console.error('Erro no logout:', err);
+                  });
+              }
+            });
+
+            window.addEventListener('storage', function (ev) {
+              if (ev && ev.key === AUTH_KEY) renderAuth(readCachedUser());
+            });
+
+            var initialCachedUser = readCachedUser();
+            if (initialCachedUser) renderAuth(initialCachedUser);
+            syncFromFirebaseIndexedDb();
           })();
         </script>
       </nav>
@@ -744,6 +950,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "ALSO15", "tipo": "Debênture", "issuer": "ALLOS S.A.", "indexador": "DI+", "taxa_emissao": 1.43, "taxa_negocio_b3": null, "taxa_indicativa_anbima": null, "taxa_mercado": null, "taxa_ativo": 1.43, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": null, "data_ultimo_negocio": null, "data_anbima": null, "volume_negociado_b3": null, "volume_emissao": 234500000.0, "volume": 234500000.0, "quantidade_emitida": 234500.0, "quantidade": 234500.0, "data_emissao": "2022-03-15", "vencimento": "2025-02-14", "emissao": 5.0, "serie": 1.0, "isin": "BRALSODBS049", "lei": null, "cnpj_emissor": 5878397000132.0, "setor": "Serviços Imobiliários", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "BANCO BRADESCO BBI S/A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "flag_vencido": 1, "flag_resgatado": 1, "flag_b3": 0, "status_ativo": "Resgatado", "duration": null, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "-", "data_proximo_cupom": null, "vna": 1000.0, "pu_par": 1051.9653, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Vencido / Sem Precificação", "spread_mercado": null, "spread_anbima": null, "spread": 0.0143, "pu_mercado_mediano": 1000.0, "agio_desagio_pct": -4.94}, "prices": [], "emitter": {"cnpj": "05878397000132", "cnpj_formatado": "05.878.397/0001-32", "razao_social": "ALLOS S.A.", "nome_fantasia": "ALLOS S.A.", "setor": "Emp. Adm. Part. - Comércio (Atacado e Varejo)", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": null, "municipio": "RIO DE JANEIRO", "uf": "RJ", "descricao": "ALLOS S.A. é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Emp. Adm. Part. - Comércio (Atacado e Varejo)."}, "raiox_cnpj": "05878397000132", "paymentEvents": [{"ticker": "ALSO15", "data_evento": "2025-02-14", "data_liquidacao": "2025-02-14", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo ALSO15 é um título de crédito privado do tipo Debênture (comum) emitido por ALLOS S.A. (CNPJ: 05.878.397/0001-32), com taxa de emissão de CDI + 1.43% a.a. e data de vencimento em 14/02/2025. O título encontra-se resgatado e spread indicativo de 1.43% sobre a NTN-B soberana, com volume emitido de R$ 234.500.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "26C3164285", "tipo": "CRI", "issuer": "ALLOS S.A.", "vencimento": "2031-03-12"}, {"ticker": "26C3170159", "tipo": "CRI", "issuer": "ALLOS S.A.", "vencimento": "2036-03-12"}, {"ticker": "25A1527197", "tipo": "CRI", "issuer": "ALLOS S.A.", "vencimento": "2032-01-22"}, {"ticker": "24D0006602", "tipo": "CRI", "issuer": "ALLOS S.A.", "vencimento": "2029-04-16"}], "relatedSector": [{"ticker": "IGTAB0", "tipo": "Debênture", "issuer": "IGUATEMI EMPRESA DE SHOPPING CENTERS S/A", "vencimento": "2027-09-28"}, {"ticker": "24E1393588", "tipo": "CRI", "issuer": "MULTIPLAN - EMPREEND IMOBILIARIOS S.A.", "vencimento": "2029-05-17"}, {"ticker": "22E1314836", "tipo": "CRI", "issuer": "SAO CARLOS EMPREEND E PARTICIPACOES S.A.", "vencimento": "2029-09-17"}, {"ticker": "21G0065100", "tipo": "CRI", "issuer": "ALIANSCE SONAE SHOPPING CENTERS S.A.", "vencimento": "2028-07-17"}], "issuerSlug": "allos-s-a", "sectorSlug": "servicos-imobiliarios"}
     </script>
-    <script type="module" crossorigin src="/assets/index-DsuL71c1.js"></script>
+    <script type="module" crossorigin src="/assets/index-BbEErR7e.js"></script>
   </body>
 </html>

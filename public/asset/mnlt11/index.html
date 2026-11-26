@@ -208,10 +208,11 @@
                 <span>Contato &amp; Apoio</span>
               </a>
 
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a
-                  href="/raiox-devedor/"
-                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+              <div data-static-auth-desktop="true" class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <button
+                  type="button"
+                  data-static-login="navbar"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -220,15 +221,15 @@
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                   </svg>
                   <span>Entrar</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
-          <div class="pb-3 mb-2 border-b border-slate-100">
-            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+          <div data-static-auth-mobile="true" class="pb-3 mb-2 border-b border-slate-100">
+            <button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -236,7 +237,7 @@
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
               <span>Entrar com o Google</span>
-            </a>
+            </button>
           </div>
           <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -365,6 +366,211 @@
                 a.classList.add('bg-blue-50/80', 'text-blue-900');
               }
             });
+
+            var AUTH_KEY = 'fixdata_auth_user';
+            var googleSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>';
+            var googleSvgMob = googleSvg.replace('w-3.5 h-3.5', 'w-4 h-4');
+            var logoutSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>';
+
+            function escH(s) {
+              return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            }
+
+            function readCachedUser() {
+              try {
+                var raw = window.localStorage && window.localStorage.getItem(AUTH_KEY);
+                if (!raw) return null;
+                var parsed = JSON.parse(raw);
+                return parsed && parsed.uid ? parsed : null;
+              } catch (e) {
+                return null;
+              }
+            }
+
+            function writeCachedUser(u) {
+              try {
+                if (!window.localStorage) return;
+                if (u && u.uid) window.localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+                else window.localStorage.removeItem(AUTH_KEY);
+              } catch (e) {}
+            }
+
+            function renderAuth(u) {
+              var desktopEl = nav.querySelector('[data-static-auth-desktop]');
+              var mobileEl = nav.querySelector('[data-static-auth-mobile]');
+              if (u && u.uid) {
+                var fullName = String(u.displayName || '').trim() || (u.email ? String(u.email).split('@')[0] : 'Investidor');
+                var firstName = fullName.split(' ')[0] || 'Investidor';
+                var initial = fullName.charAt(0).toUpperCase() || 'F';
+                var email = String(u.email || '').trim();
+                var rawPhoto = String(u.photoURL || '').trim();
+                var safePhoto = (rawPhoto.indexOf('https://') === 0 || rawPhoto.indexOf('http://') === 0) ? rawPhoto : '';
+                if (desktopEl) {
+                  desktopEl.innerHTML =
+                    '<div class="flex items-center gap-2">' +
+                      (safePhoto
+                        ? '<img src="' + escH(safePhoto) + '" alt="' + escH(firstName) + '" class="w-7 h-7 rounded-full border border-slate-200 object-cover" referrerpolicy="no-referrer" />'
+                        : '<span class="w-7 h-7 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">' + escH(initial) + '</span>') +
+                      '<span class="text-xs font-bold text-slate-700 max-w-[100px] truncate">' + escH(firstName) + '</span>' +
+                      '<button type="button" data-static-logout="true" title="Sair da conta" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer">' + logoutSvg + '</button>' +
+                    '</div>';
+                }
+                if (mobileEl) {
+                  mobileEl.innerHTML =
+                    '<div class="flex items-center justify-between gap-2">' +
+                      '<div class="flex items-center gap-2.5 min-w-0">' +
+                        (safePhoto
+                          ? '<img src="' + escH(safePhoto) + '" alt="' + escH(fullName) + '" class="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0" referrerpolicy="no-referrer" />'
+                          : '<span class="w-8 h-8 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">' + escH(initial) + '</span>') +
+                        '<div class="min-w-0">' +
+                          '<p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">' + escH(fullName) + '</p>' +
+                          (email ? '<p class="text-[11px] text-slate-500 truncate max-w-[180px]">' + escH(email) + '</p>' : '') +
+                        '</div>' +
+                      '</div>' +
+                      '<button type="button" data-static-logout="true" class="px-2.5 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition shrink-0 cursor-pointer">Sair</button>' +
+                    '</div>';
+                }
+                return;
+              }
+              if (desktopEl) {
+                desktopEl.innerHTML =
+                  '<button type="button" data-static-login="navbar" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">' +
+                    googleSvg + '<span>Entrar</span>' +
+                  '</button>';
+              }
+              if (mobileEl) {
+                mobileEl.innerHTML =
+                  '<button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">' +
+                    googleSvgMob + '<span>Entrar com o Google</span>' +
+                  '</button>';
+              }
+            }
+
+            function setLoginLoading(isLoading) {
+              nav.querySelectorAll('[data-static-login]').forEach(function (btn) {
+                btn.disabled = !!isLoading;
+                btn.classList.toggle('opacity-60', !!isLoading);
+                var lbl = btn.querySelector('span');
+                if (lbl) {
+                  if (isLoading) {
+                    if (!btn.dataset.origLabel) btn.dataset.origLabel = lbl.textContent;
+                    lbl.textContent = 'Entrando...';
+                  } else if (btn.dataset.origLabel) {
+                    lbl.textContent = btn.dataset.origLabel;
+                  }
+                }
+              });
+            }
+
+            function syncFromFirebaseIndexedDb() {
+              try {
+                if (!window.indexedDB || typeof window.indexedDB.databases !== 'function') return;
+                window.indexedDB.databases().then(function (dbs) {
+                  var exists = Array.isArray(dbs) && dbs.some(function (d) { return d && d.name === 'firebaseLocalStorageDb'; });
+                  if (!exists) return;
+                  var req = window.indexedDB.open('firebaseLocalStorageDb');
+                  req.onupgradeneeded = function (ev) {
+                    if (ev && ev.target && ev.target.transaction) {
+                      try { ev.target.transaction.abort(); } catch (e) {}
+                    }
+                  };
+                  req.onsuccess = function () {
+                    var idb = req.result;
+                    try {
+                      if (!idb.objectStoreNames || !idb.objectStoreNames.contains('firebaseLocalStorage')) {
+                        idb.close();
+                        return;
+                      }
+                      var tx = idb.transaction(['firebaseLocalStorage'], 'readonly');
+                      var store = tx.objectStore('firebaseLocalStorage');
+                      var allReq = store.getAll();
+                      allReq.onsuccess = function () {
+                        var rows = allReq.result || [];
+                        var found = null;
+                        for (var i = 0; i < rows.length; i++) {
+                          var row = rows[i];
+                          if (row && typeof row.fbase_key === 'string' && row.fbase_key.indexOf('firebase:authUser:') === 0 && row.value) {
+                            var val = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+                            if (val && val.uid) {
+                              found = {
+                                uid: String(val.uid),
+                                displayName: String(val.displayName || ''),
+                                email: String(val.email || ''),
+                                photoURL: String(val.photoURL || '')
+                              };
+                              break;
+                            }
+                          }
+                        }
+                        if (found) {
+                          writeCachedUser(found);
+                          renderAuth(found);
+                        } else if (readCachedUser()) {
+                          writeCachedUser(null);
+                          renderAuth(null);
+                        }
+                      };
+                      tx.oncomplete = function () { try { idb.close(); } catch (e) {} };
+                      tx.onerror = function () { try { idb.close(); } catch (e) {} };
+                    } catch (e) {
+                      try { idb.close(); } catch (err) {}
+                    }
+                  };
+                }).catch(function () {});
+              } catch (e) {}
+            }
+
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
+            nav.addEventListener('click', function (ev) {
+              var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
+              if (loginBtn) {
+                ev.preventDefault();
+                var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
+                setLoginLoading(true);
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
+                  .then(function (u) {
+                    setLoginLoading(false);
+                    if (u) renderAuth(u);
+                  })
+                  .catch(function (err) {
+                    setLoginLoading(false);
+                    console.error('Erro no login:', err);
+                  });
+                return;
+              }
+              var logoutBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-logout]') : null;
+              if (logoutBtn) {
+                ev.preventDefault();
+                logoutBtn.disabled = true;
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLogout(); })
+                  .then(function () {
+                    renderAuth(null);
+                  })
+                  .catch(function (err) {
+                    logoutBtn.disabled = false;
+                    console.error('Erro no logout:', err);
+                  });
+              }
+            });
+
+            window.addEventListener('storage', function (ev) {
+              if (ev && ev.key === AUTH_KEY) renderAuth(readCachedUser());
+            });
+
+            var initialCachedUser = readCachedUser();
+            if (initialCachedUser) renderAuth(initialCachedUser);
+            syncFromFirebaseIndexedDb();
           })();
         </script>
       </nav>
@@ -718,6 +924,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "MNLT11", "tipo": "Debênture", "issuer": "MNLT S.A.", "indexador": "DI+", "taxa_emissao": 1.75, "taxa_negocio_b3": 0.84, "taxa_indicativa_anbima": 0.844, "taxa_mercado": null, "taxa_ativo": 0.844, "taxa_compra": "1,0837", "taxa_venda": "0,6067", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1076.42", "data_ultimo_negocio": "2026-10-13", "data_anbima": "2026-10-14", "volume_negociado_b3": 155004.48, "volume_emissao": 1000000000.0, "volume": 1000000000.0, "quantidade_emitida": 1000000.0, "quantidade": 1000000.0, "data_emissao": "2023-10-15", "vencimento": "2026-10-15", "emissao": 1.0, "serie": 1.0, "isin": "BRMNLTDBS002", "lei": null, "cnpj_emissor": 12592831000189.0, "setor": "Financeiro", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "XP INVESTIMENTOS CORRETORA DE CAMBIO, TITULOS E VALORES MOBILIARIOS S/A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": null, "flag_vencido": 1, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": 0.0, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "-", "data_proximo_cupom": null, "vna": 1000.0, "pu_par": 1076.964, "incentivada": "Não", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "ANBIMA Mercado (2026-10-14)", "spread_mercado": null, "spread_anbima": 0.00844, "spread": 0.00844, "pu_mercado_mediano": 1076.42, "agio_desagio_pct": -0.05}, "prices": [{"date": "2026-06-01", "ticker": "MNLT11", "price": 1022.196456, "clean_price": 1022.196456, "yield": 0.8944, "fonte_yield": "ANBIMA", "spread_over_ref": 89.4}, {"date": "2026-06-02", "ticker": "MNLT11", "price": 1022.825331, "clean_price": 1022.825331, "yield": 0.882, "fonte_yield": "ANBIMA", "spread_over_ref": 88.2}, {"date": "2026-06-03", "ticker": "MNLT11", "price": 1023.315101, "clean_price": 1023.315101, "yield": 0.9066, "fonte_yield": "ANBIMA", "spread_over_ref": 90.7}, {"date": "2026-06-05", "ticker": "MNLT11", "price": 1024.103898, "clean_price": 1024.103898, "yield": 0.8511, "fonte_yield": "ANBIMA", "spread_over_ref": 85.1}, {"date": "2026-06-08", "ticker": "MNLT11", "price": 1024.47251, "clean_price": 1024.47251, "yield": 0.9091, "fonte_yield": "ANBIMA", "spread_over_ref": 90.9}, {"date": "2026-06-09", "ticker": "MNLT11", "price": 1025.0564, "clean_price": 1025.0564, "yield": 0.9091, "fonte_yield": "B3", "spread_over_ref": 90.9}, {"date": "2026-06-10", "ticker": "MNLT11", "price": 1025.577435, "clean_price": 1025.577435, "yield": 0.9267, "fonte_yield": "ANBIMA", "spread_over_ref": 92.7}, {"date": "2026-06-11", "ticker": "MNLT11", "price": 1026.29299, "clean_price": 1026.29299, "yield": 0.89, "fonte_yield": "ANBIMA", "spread_over_ref": 89.0}, {"date": "2026-06-12", "ticker": "MNLT11", "price": 1026.8771, "clean_price": 1026.8771, "yield": 0.89, "fonte_yield": "B3", "spread_over_ref": 89.0}, {"date": "2026-06-15", "ticker": "MNLT11", "price": 1027.405663, "clean_price": 1027.405663, "yield": 0.9061, "fonte_yield": "ANBIMA", "spread_over_ref": 90.6}, {"date": "2026-06-16", "ticker": "MNLT11", "price": 1027.985593, "clean_price": 1027.985593, "yield": 0.9077, "fonte_yield": "ANBIMA", "spread_over_ref": 90.8}, {"date": "2026-06-17", "ticker": "MNLT11", "price": 1028.56021, "clean_price": 1028.56021, "yield": 0.911, "fonte_yield": "ANBIMA", "spread_over_ref": 91.1}, {"date": "2026-06-18", "ticker": "MNLT11", "price": 1029.147163, "clean_price": 1029.147163, "yield": 0.9108, "fonte_yield": "ANBIMA", "spread_over_ref": 91.1}, {"date": "2026-06-19", "ticker": "MNLT11", "price": 1029.641841, "clean_price": 1029.641841, "yield": 0.9358, "fonte_yield": "ANBIMA", "spread_over_ref": 93.6}, {"date": "2026-06-22", "ticker": "MNLT11", "price": 1030.320875, "clean_price": 1030.320875, "yield": 0.9053, "fonte_yield": "ANBIMA", "spread_over_ref": 90.5}, {"date": "2026-06-23", "ticker": "MNLT11", "price": 1030.89444, "clean_price": 1030.89444, "yield": 0.9067, "fonte_yield": "ANBIMA", "spread_over_ref": 90.7}, {"date": "2026-06-24", "ticker": "MNLT11", "price": 1031.477095, "clean_price": 1031.477095, "yield": 0.9054, "fonte_yield": "ANBIMA", "spread_over_ref": 90.5}, {"date": "2026-06-25", "ticker": "MNLT11", "price": 1032.002987, "clean_price": 1032.002987, "yield": 0.9221, "fonte_yield": "ANBIMA", "spread_over_ref": 92.2}, {"date": "2026-06-26", "ticker": "MNLT11", "price": 1032.572715, "clean_price": 1032.572715, "yield": 0.9253, "fonte_yield": "ANBIMA", "spread_over_ref": 92.5}, {"date": "2026-06-29", "ticker": "MNLT11", "price": 1033.194268, "clean_price": 1033.194268, "yield": 0.9119, "fonte_yield": "ANBIMA", "spread_over_ref": 91.2}, {"date": "2026-06-30", "ticker": "MNLT11", "price": 1033.755966, "clean_price": 1033.755966, "yield": 0.9179, "fonte_yield": "ANBIMA", "spread_over_ref": 91.8}, {"date": "2026-07-01", "ticker": "MNLT11", "price": 1036.2036, "clean_price": 1036.2036, "yield": 0.3, "fonte_yield": "B3", "spread_over_ref": 30.0}, {"date": "2026-07-02", "ticker": "MNLT11", "price": 1034.849363, "clean_price": 1034.849363, "yield": 0.9408, "fonte_yield": "ANBIMA", "spread_over_ref": 94.1}, {"date": "2026-07-03", "ticker": "MNLT11", "price": 1035.476296, "clean_price": 1035.476296, "yield": 0.9255, "fonte_yield": "ANBIMA", "spread_over_ref": 92.5}, {"date": "2026-07-06", "ticker": "MNLT11", "price": 1036.100348, "clean_price": 1036.100348, "yield": 0.9109, "fonte_yield": "ANBIMA", "spread_over_ref": 91.1}, {"date": "2026-07-07", "ticker": "MNLT11", "price": 1036.787817, "clean_price": 1036.787817, "yield": 0.8738, "fonte_yield": "ANBIMA", "spread_over_ref": 87.4}, {"date": "2026-07-08", "ticker": "MNLT11", "price": 1037.288313, "clean_price": 1037.288313, "yield": 0.9022, "fonte_yield": "ANBIMA", "spread_over_ref": 90.2}, {"date": "2026-07-09", "ticker": "MNLT11", "price": 1037.869366, "clean_price": 1037.869366, "yield": 0.9025, "fonte_yield": "ANBIMA", "spread_over_ref": 90.2}, {"date": "2026-07-10", "ticker": "MNLT11", "price": 1038.454335, "clean_price": 1038.454335, "yield": 0.9015, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-07-13", "ticker": "MNLT11", "price": 1039.028486, "clean_price": 1039.028486, "yield": 0.9046, "fonte_yield": "ANBIMA", "spread_over_ref": 90.5}, {"date": "2026-07-14", "ticker": "MNLT11", "price": 1039.613047, "clean_price": 1039.613047, "yield": 0.904, "fonte_yield": "ANBIMA", "spread_over_ref": 90.4}, {"date": "2026-07-15", "ticker": "MNLT11", "price": 1040.197097, "clean_price": 1040.197097, "yield": 0.9037, "fonte_yield": "ANBIMA", "spread_over_ref": 90.4}, {"date": "2026-07-16", "ticker": "MNLT11", "price": 1040.777579, "clean_price": 1040.777579, "yield": 0.9049, "fonte_yield": "ANBIMA", "spread_over_ref": 90.5}, {"date": "2026-07-17", "ticker": "MNLT11", "price": 1041.448644, "clean_price": 1041.448644, "yield": 0.8706, "fonte_yield": "ANBIMA", "spread_over_ref": 87.1}, {"date": "2026-07-20", "ticker": "MNLT11", "price": 1042.117112, "clean_price": 1042.117112, "yield": 0.8364, "fonte_yield": "ANBIMA", "spread_over_ref": 83.6}, {"date": "2026-07-21", "ticker": "MNLT11", "price": 1042.651744, "clean_price": 1042.651744, "yield": 0.8556, "fonte_yield": "ANBIMA", "spread_over_ref": 85.6}, {"date": "2026-07-22", "ticker": "MNLT11", "price": 1043.224559, "clean_price": 1043.224559, "yield": 0.8598, "fonte_yield": "ANBIMA", "spread_over_ref": 86.0}, {"date": "2026-07-23", "ticker": "MNLT11", "price": 1043.765402, "clean_price": 1043.765402, "yield": 0.8777, "fonte_yield": "ANBIMA", "spread_over_ref": 87.8}, {"date": "2026-07-24", "ticker": "MNLT11", "price": 1044.324863, "clean_price": 1044.324863, "yield": 0.8884, "fonte_yield": "ANBIMA", "spread_over_ref": 88.8}, {"date": "2026-07-27", "ticker": "MNLT11", "price": 1045.003373, "clean_price": 1045.003373, "yield": 0.8479, "fonte_yield": "ANBIMA", "spread_over_ref": 84.8}, {"date": "2026-07-28", "ticker": "MNLT11", "price": 1045.520611, "clean_price": 1045.520611, "yield": 0.8774, "fonte_yield": "ANBIMA", "spread_over_ref": 87.7}, {"date": "2026-07-29", "ticker": "MNLT11", "price": 1046.118765, "clean_price": 1046.118765, "yield": 0.8717, "fonte_yield": "ANBIMA", "spread_over_ref": 87.2}, {"date": "2026-07-30", "ticker": "MNLT11", "price": 1046.692344, "clean_price": 1046.692344, "yield": 0.8772, "fonte_yield": "ANBIMA", "spread_over_ref": 87.7}, {"date": "2026-07-31", "ticker": "MNLT11", "price": 1048.7654, "clean_price": 1048.7654, "yield": 0.45, "fonte_yield": "B3", "spread_over_ref": 45.0}, {"date": "2026-08-03", "ticker": "MNLT11", "price": 1047.879236, "clean_price": 1047.879236, "yield": 0.8704, "fonte_yield": "ANBIMA", "spread_over_ref": 87.0}, {"date": "2026-08-04", "ticker": "MNLT11", "price": 1048.439982, "clean_price": 1048.439982, "yield": 0.8829, "fonte_yield": "ANBIMA", "spread_over_ref": 88.3}, {"date": "2026-08-05", "ticker": "MNLT11", "price": 1049.7341, "clean_price": 1049.7341, "yield": 0.5349, "fonte_yield": "B3", "spread_over_ref": 53.5}, {"date": "2026-08-06", "ticker": "MNLT11", "price": 1049.654247, "clean_price": 1049.654247, "yield": 0.8631, "fonte_yield": "ANBIMA", "spread_over_ref": 86.3}, {"date": "2026-08-07", "ticker": "MNLT11", "price": 1051.0745, "clean_price": 1051.0745, "yield": 0.4307, "fonte_yield": "B3", "spread_over_ref": 43.1}, {"date": "2026-08-10", "ticker": "MNLT11", "price": 1050.8378, "clean_price": 1050.8378, "yield": 0.8489, "fonte_yield": "B3", "spread_over_ref": 84.9}, {"date": "2026-08-11", "ticker": "MNLT11", "price": 1051.39964, "clean_price": 1051.39964, "yield": 0.8576, "fonte_yield": "ANBIMA", "spread_over_ref": 85.8}, {"date": "2026-08-12", "ticker": "MNLT11", "price": 1052.7504, "clean_price": 1052.7504, "yield": 0.4349, "fonte_yield": "B3", "spread_over_ref": 43.5}, {"date": "2026-08-13", "ticker": "MNLT11", "price": 1053.9126, "clean_price": 1053.9126, "yield": 0.1, "fonte_yield": "B3", "spread_over_ref": 10.0}, {"date": "2026-08-14", "ticker": "MNLT11", "price": 1053.8073, "clean_price": 1053.8073, "yield": 0.4733, "fonte_yield": "B3", "spread_over_ref": 47.3}, {"date": "2026-08-17", "ticker": "MNLT11", "price": 1055.0102, "clean_price": 1055.0102, "yield": 0.1, "fonte_yield": "B3", "spread_over_ref": 10.0}, {"date": "2026-08-18", "ticker": "MNLT11", "price": 1055.5499, "clean_price": 1055.5499, "yield": 0.1057, "fonte_yield": "B3", "spread_over_ref": 10.6}, {"date": "2026-08-19", "ticker": "MNLT11", "price": 1056.1089, "clean_price": 1056.1089, "yield": 0.1, "fonte_yield": "B3", "spread_over_ref": 10.0}, {"date": "2026-08-20", "ticker": "MNLT11", "price": 1055.4991, "clean_price": 1055.4991, "yield": 0.8314, "fonte_yield": "B3", "spread_over_ref": 83.1}, {"date": "2026-08-21", "ticker": "MNLT11", "price": 1057.2087, "clean_price": 1057.2087, "yield": 0.1, "fonte_yield": "B3", "spread_over_ref": 10.0}, {"date": "2026-08-24", "ticker": "MNLT11", "price": 1057.7591, "clean_price": 1057.7591, "yield": 0.1, "fonte_yield": "B3", "spread_over_ref": 10.0}, {"date": "2026-08-25", "ticker": "MNLT11", "price": 1057.5586, "clean_price": 1057.5586, "yield": 0.6132, "fonte_yield": "B3", "spread_over_ref": 61.3}, {"date": "2026-08-26", "ticker": "MNLT11", "price": 1057.818251, "clean_price": 1057.818251, "yield": 0.8334, "fonte_yield": "ANBIMA", "spread_over_ref": 83.3}, {"date": "2026-08-27", "ticker": "MNLT11", "price": 1058.43435, "clean_price": 1058.43435, "yield": 0.8081, "fonte_yield": "ANBIMA", "spread_over_ref": 80.8}, {"date": "2026-08-28", "ticker": "MNLT11", "price": 1059.046719, "clean_price": 1059.046719, "yield": 0.7843, "fonte_yield": "ANBIMA", "spread_over_ref": 78.4}, {"date": "2026-08-31", "ticker": "MNLT11", "price": 1059.588656, "clean_price": 1059.588656, "yield": 0.8137, "fonte_yield": "ANBIMA", "spread_over_ref": 81.4}, {"date": "2026-09-01", "ticker": "MNLT11", "price": 1060.179392, "clean_price": 1060.179392, "yield": 0.8063, "fonte_yield": "ANBIMA", "spread_over_ref": 80.6}, {"date": "2026-09-02", "ticker": "MNLT11", "price": 1060.775054, "clean_price": 1060.775054, "yield": 0.7946, "fonte_yield": "ANBIMA", "spread_over_ref": 79.5}, {"date": "2026-09-03", "ticker": "MNLT11", "price": 1061.353813, "clean_price": 1061.353813, "yield": 0.7968, "fonte_yield": "ANBIMA", "spread_over_ref": 79.7}, {"date": "2026-09-04", "ticker": "MNLT11", "price": 1061.929006, "clean_price": 1061.929006, "yield": 0.8026, "fonte_yield": "ANBIMA", "spread_over_ref": 80.3}, {"date": "2026-09-08", "ticker": "MNLT11", "price": 1062.5113, "clean_price": 1062.5113, "yield": 0.8027, "fonte_yield": "B3", "spread_over_ref": 80.3}, {"date": "2026-09-09", "ticker": "MNLT11", "price": 1063.090045, "clean_price": 1063.090045, "yield": 0.8063, "fonte_yield": "ANBIMA", "spread_over_ref": 80.6}, {"date": "2026-09-10", "ticker": "MNLT11", "price": 1063.678256, "clean_price": 1063.678256, "yield": 0.8012, "fonte_yield": "ANBIMA", "spread_over_ref": 80.1}, {"date": "2026-09-11", "ticker": "MNLT11", "price": 1064.258087, "clean_price": 1064.258087, "yield": 0.8047, "fonte_yield": "ANBIMA", "spread_over_ref": 80.5}, {"date": "2026-09-14", "ticker": "MNLT11", "price": 1064.844879, "clean_price": 1064.844879, "yield": 0.8013, "fonte_yield": "ANBIMA", "spread_over_ref": 80.1}, {"date": "2026-09-15", "ticker": "MNLT11", "price": 1065.4299, "clean_price": 1065.4299, "yield": 0.8, "fonte_yield": "B3", "spread_over_ref": 80.0}, {"date": "2026-09-16", "ticker": "MNLT11", "price": 1066.012547, "clean_price": 1066.012547, "yield": 0.8017, "fonte_yield": "ANBIMA", "spread_over_ref": 80.2}, {"date": "2026-09-17", "ticker": "MNLT11", "price": 1066.574551, "clean_price": 1066.574551, "yield": 0.8299, "fonte_yield": "ANBIMA", "spread_over_ref": 83.0}, {"date": "2026-09-18", "ticker": "MNLT11", "price": 1067.145573, "clean_price": 1067.145573, "yield": 0.8374, "fonte_yield": "ANBIMA", "spread_over_ref": 83.7}, {"date": "2026-09-21", "ticker": "MNLT11", "price": 1067.721815, "clean_price": 1067.721815, "yield": 0.8389, "fonte_yield": "ANBIMA", "spread_over_ref": 83.9}, {"date": "2026-09-22", "ticker": "MNLT11", "price": 1068.299376, "clean_price": 1068.299376, "yield": 0.8391, "fonte_yield": "ANBIMA", "spread_over_ref": 83.9}, {"date": "2026-09-23", "ticker": "MNLT11", "price": 1068.880532, "clean_price": 1068.880532, "yield": 0.8341, "fonte_yield": "ANBIMA", "spread_over_ref": 83.4}, {"date": "2026-09-24", "ticker": "MNLT11", "price": 1069.456112, "clean_price": 1069.456112, "yield": 0.8384, "fonte_yield": "ANBIMA", "spread_over_ref": 83.8}, {"date": "2026-09-25", "ticker": "MNLT11", "price": 1070.02914, "clean_price": 1070.02914, "yield": 0.8486, "fonte_yield": "ANBIMA", "spread_over_ref": 84.9}, {"date": "2026-09-28", "ticker": "MNLT11", "price": 1070.602626, "clean_price": 1070.602626, "yield": 0.8602, "fonte_yield": "ANBIMA", "spread_over_ref": 86.0}, {"date": "2026-09-29", "ticker": "MNLT11", "price": 1071.184949, "clean_price": 1071.184949, "yield": 0.8555, "fonte_yield": "ANBIMA", "spread_over_ref": 85.5}, {"date": "2026-09-30", "ticker": "MNLT11", "price": 1071.765, "clean_price": 1071.765, "yield": 0.8559, "fonte_yield": "B3", "spread_over_ref": 85.6}, {"date": "2026-10-01", "ticker": "MNLT11", "price": 1072.344645, "clean_price": 1072.344645, "yield": 0.8585, "fonte_yield": "ANBIMA", "spread_over_ref": 85.9}, {"date": "2026-10-02", "ticker": "MNLT11", "price": 1072.925735, "clean_price": 1072.925735, "yield": 0.8583, "fonte_yield": "ANBIMA", "spread_over_ref": 85.8}, {"date": "2026-10-05", "ticker": "MNLT11", "price": 1073.517965, "clean_price": 1073.517965, "yield": 0.8214, "fonte_yield": "ANBIMA", "spread_over_ref": 82.1}, {"date": "2026-10-06", "ticker": "MNLT11", "price": 1074.096892, "clean_price": 1074.096892, "yield": 0.826, "fonte_yield": "ANBIMA", "spread_over_ref": 82.6}, {"date": "2026-10-07", "ticker": "MNLT11", "price": 1074.683441, "clean_price": 1074.683441, "yield": 0.7978, "fonte_yield": "ANBIMA", "spread_over_ref": 79.8}, {"date": "2026-10-08", "ticker": "MNLT11", "price": 1075.259465, "clean_price": 1075.259465, "yield": 0.8196, "fonte_yield": "ANBIMA", "spread_over_ref": 82.0}, {"date": "2026-10-09", "ticker": "MNLT11", "price": 1075.837865, "clean_price": 1075.837865, "yield": 0.8397, "fonte_yield": "ANBIMA", "spread_over_ref": 84.0}, {"date": "2026-10-13", "ticker": "MNLT11", "price": 1076.42, "clean_price": 1076.42, "yield": 0.84, "fonte_yield": "B3", "spread_over_ref": 84.0}, {"date": "2026-10-14", "ticker": "MNLT11", "price": 1077.002229, "clean_price": 1077.002229, "yield": 0.844, "fonte_yield": "ANBIMA", "spread_over_ref": 84.4}], "emitter": {"cnpj": "12592831000189", "cnpj_formatado": "12.592.831/0001-89", "razao_social": "MNLT S.A.", "nome_fantasia": "MNLT S.A.", "setor": "Emp. Adm. Part. - Sem Setor Principal", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria B", "situacao_cvm": "CANCELADA", "site_ri": null, "municipio": "SÃO PAULO", "uf": "SP", "descricao": "MNLT S.A. é uma companhia aberta (Categoria B) com registro CVM na situação CANCELADA, atuante no setor de Emp. Adm. Part. - Sem Setor Principal."}, "raiox_cnpj": "12592831000189", "paymentEvents": [{"ticker": "MNLT11", "data_evento": "2026-10-15", "data_liquidacao": "2026-10-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo MNLT11 é um título de crédito privado do tipo Debênture (comum) emitido por MNLT S.A. (CNPJ: 12.592.831/0001-89), com taxa de emissão de CDI + 1.75% a.a. e data de vencimento em 15/10/2026. O título encontra-se resgatado (duration modificada de 0.00 anos) e spread indicativo de 0.84% sobre a NTN-B soberana, com volume emitido de R$ 1.000.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [], "relatedSector": [{"ticker": "25I0014209", "tipo": "CRI", "issuer": "MULTIPLAN EMPREENDIMENTOS", "vencimento": "2035-09-19"}, {"ticker": "CRA022007EP", "tipo": "CRA", "issuer": "KLABIN S.A.", "vencimento": "2034-05-15"}, {"ticker": "CRA020002H1", "tipo": "CRA", "issuer": "BRF S.A.", "vencimento": "2030-07-15"}, {"ticker": "VERTL6", "tipo": "Debênture", "issuer": "VERT COMPANHIA SECURITIZADORA", "vencimento": "2028-02-21"}], "issuerSlug": null, "sectorSlug": "financeiro"}
     </script>
-    <script type="module" crossorigin src="/assets/index-DsuL71c1.js"></script>
+    <script type="module" crossorigin src="/assets/index-BbEErR7e.js"></script>
   </body>
 </html>

@@ -208,10 +208,11 @@
                 <span>Contato &amp; Apoio</span>
               </a>
 
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a
-                  href="/raiox-devedor/"
-                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+              <div data-static-auth-desktop="true" class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <button
+                  type="button"
+                  data-static-login="navbar"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -220,15 +221,15 @@
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                   </svg>
                   <span>Entrar</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
-          <div class="pb-3 mb-2 border-b border-slate-100">
-            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+          <div data-static-auth-mobile="true" class="pb-3 mb-2 border-b border-slate-100">
+            <button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -236,7 +237,7 @@
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
               <span>Entrar com o Google</span>
-            </a>
+            </button>
           </div>
           <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -365,6 +366,211 @@
                 a.classList.add('bg-blue-50/80', 'text-blue-900');
               }
             });
+
+            var AUTH_KEY = 'fixdata_auth_user';
+            var googleSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>';
+            var googleSvgMob = googleSvg.replace('w-3.5 h-3.5', 'w-4 h-4');
+            var logoutSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>';
+
+            function escH(s) {
+              return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            }
+
+            function readCachedUser() {
+              try {
+                var raw = window.localStorage && window.localStorage.getItem(AUTH_KEY);
+                if (!raw) return null;
+                var parsed = JSON.parse(raw);
+                return parsed && parsed.uid ? parsed : null;
+              } catch (e) {
+                return null;
+              }
+            }
+
+            function writeCachedUser(u) {
+              try {
+                if (!window.localStorage) return;
+                if (u && u.uid) window.localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+                else window.localStorage.removeItem(AUTH_KEY);
+              } catch (e) {}
+            }
+
+            function renderAuth(u) {
+              var desktopEl = nav.querySelector('[data-static-auth-desktop]');
+              var mobileEl = nav.querySelector('[data-static-auth-mobile]');
+              if (u && u.uid) {
+                var fullName = String(u.displayName || '').trim() || (u.email ? String(u.email).split('@')[0] : 'Investidor');
+                var firstName = fullName.split(' ')[0] || 'Investidor';
+                var initial = fullName.charAt(0).toUpperCase() || 'F';
+                var email = String(u.email || '').trim();
+                var rawPhoto = String(u.photoURL || '').trim();
+                var safePhoto = (rawPhoto.indexOf('https://') === 0 || rawPhoto.indexOf('http://') === 0) ? rawPhoto : '';
+                if (desktopEl) {
+                  desktopEl.innerHTML =
+                    '<div class="flex items-center gap-2">' +
+                      (safePhoto
+                        ? '<img src="' + escH(safePhoto) + '" alt="' + escH(firstName) + '" class="w-7 h-7 rounded-full border border-slate-200 object-cover" referrerpolicy="no-referrer" />'
+                        : '<span class="w-7 h-7 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">' + escH(initial) + '</span>') +
+                      '<span class="text-xs font-bold text-slate-700 max-w-[100px] truncate">' + escH(firstName) + '</span>' +
+                      '<button type="button" data-static-logout="true" title="Sair da conta" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer">' + logoutSvg + '</button>' +
+                    '</div>';
+                }
+                if (mobileEl) {
+                  mobileEl.innerHTML =
+                    '<div class="flex items-center justify-between gap-2">' +
+                      '<div class="flex items-center gap-2.5 min-w-0">' +
+                        (safePhoto
+                          ? '<img src="' + escH(safePhoto) + '" alt="' + escH(fullName) + '" class="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0" referrerpolicy="no-referrer" />'
+                          : '<span class="w-8 h-8 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">' + escH(initial) + '</span>') +
+                        '<div class="min-w-0">' +
+                          '<p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">' + escH(fullName) + '</p>' +
+                          (email ? '<p class="text-[11px] text-slate-500 truncate max-w-[180px]">' + escH(email) + '</p>' : '') +
+                        '</div>' +
+                      '</div>' +
+                      '<button type="button" data-static-logout="true" class="px-2.5 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition shrink-0 cursor-pointer">Sair</button>' +
+                    '</div>';
+                }
+                return;
+              }
+              if (desktopEl) {
+                desktopEl.innerHTML =
+                  '<button type="button" data-static-login="navbar" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">' +
+                    googleSvg + '<span>Entrar</span>' +
+                  '</button>';
+              }
+              if (mobileEl) {
+                mobileEl.innerHTML =
+                  '<button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">' +
+                    googleSvgMob + '<span>Entrar com o Google</span>' +
+                  '</button>';
+              }
+            }
+
+            function setLoginLoading(isLoading) {
+              nav.querySelectorAll('[data-static-login]').forEach(function (btn) {
+                btn.disabled = !!isLoading;
+                btn.classList.toggle('opacity-60', !!isLoading);
+                var lbl = btn.querySelector('span');
+                if (lbl) {
+                  if (isLoading) {
+                    if (!btn.dataset.origLabel) btn.dataset.origLabel = lbl.textContent;
+                    lbl.textContent = 'Entrando...';
+                  } else if (btn.dataset.origLabel) {
+                    lbl.textContent = btn.dataset.origLabel;
+                  }
+                }
+              });
+            }
+
+            function syncFromFirebaseIndexedDb() {
+              try {
+                if (!window.indexedDB || typeof window.indexedDB.databases !== 'function') return;
+                window.indexedDB.databases().then(function (dbs) {
+                  var exists = Array.isArray(dbs) && dbs.some(function (d) { return d && d.name === 'firebaseLocalStorageDb'; });
+                  if (!exists) return;
+                  var req = window.indexedDB.open('firebaseLocalStorageDb');
+                  req.onupgradeneeded = function (ev) {
+                    if (ev && ev.target && ev.target.transaction) {
+                      try { ev.target.transaction.abort(); } catch (e) {}
+                    }
+                  };
+                  req.onsuccess = function () {
+                    var idb = req.result;
+                    try {
+                      if (!idb.objectStoreNames || !idb.objectStoreNames.contains('firebaseLocalStorage')) {
+                        idb.close();
+                        return;
+                      }
+                      var tx = idb.transaction(['firebaseLocalStorage'], 'readonly');
+                      var store = tx.objectStore('firebaseLocalStorage');
+                      var allReq = store.getAll();
+                      allReq.onsuccess = function () {
+                        var rows = allReq.result || [];
+                        var found = null;
+                        for (var i = 0; i < rows.length; i++) {
+                          var row = rows[i];
+                          if (row && typeof row.fbase_key === 'string' && row.fbase_key.indexOf('firebase:authUser:') === 0 && row.value) {
+                            var val = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+                            if (val && val.uid) {
+                              found = {
+                                uid: String(val.uid),
+                                displayName: String(val.displayName || ''),
+                                email: String(val.email || ''),
+                                photoURL: String(val.photoURL || '')
+                              };
+                              break;
+                            }
+                          }
+                        }
+                        if (found) {
+                          writeCachedUser(found);
+                          renderAuth(found);
+                        } else if (readCachedUser()) {
+                          writeCachedUser(null);
+                          renderAuth(null);
+                        }
+                      };
+                      tx.oncomplete = function () { try { idb.close(); } catch (e) {} };
+                      tx.onerror = function () { try { idb.close(); } catch (e) {} };
+                    } catch (e) {
+                      try { idb.close(); } catch (err) {}
+                    }
+                  };
+                }).catch(function () {});
+              } catch (e) {}
+            }
+
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
+            nav.addEventListener('click', function (ev) {
+              var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
+              if (loginBtn) {
+                ev.preventDefault();
+                var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
+                setLoginLoading(true);
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
+                  .then(function (u) {
+                    setLoginLoading(false);
+                    if (u) renderAuth(u);
+                  })
+                  .catch(function (err) {
+                    setLoginLoading(false);
+                    console.error('Erro no login:', err);
+                  });
+                return;
+              }
+              var logoutBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-logout]') : null;
+              if (logoutBtn) {
+                ev.preventDefault();
+                logoutBtn.disabled = true;
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLogout(); })
+                  .then(function () {
+                    renderAuth(null);
+                  })
+                  .catch(function (err) {
+                    logoutBtn.disabled = false;
+                    console.error('Erro no logout:', err);
+                  });
+              }
+            });
+
+            window.addEventListener('storage', function (ev) {
+              if (ev && ev.key === AUTH_KEY) renderAuth(readCachedUser());
+            });
+
+            var initialCachedUser = readCachedUser();
+            if (initialCachedUser) renderAuth(initialCachedUser);
+            syncFromFirebaseIndexedDb();
           })();
         </script>
       </nav>
@@ -777,6 +983,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "CEEBA3", "tipo": "Debênture", "issuer": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA", "indexador": "DI+", "taxa_emissao": 1.34, "taxa_negocio_b3": 0.8411, "taxa_indicativa_anbima": 0.839, "taxa_mercado": null, "taxa_ativo": 0.839, "taxa_compra": "1,0922", "taxa_venda": "0,5", "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1067.8751", "data_ultimo_negocio": "2026-09-25", "data_anbima": "2026-10-14", "volume_negociado_b3": 557430.82, "volume_emissao": 160000000.0, "volume": 160000000.0, "quantidade_emitida": 160000.0, "quantidade": 160000.0, "data_emissao": "2021-10-15", "vencimento": "2026-10-15", "emissao": 13.0, "serie": 1.0, "isin": "BRCEEBDBS0G3", "lei": null, "cnpj_emissor": 15139629000194.0, "setor": "Energia Elétrica", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "UBS BRASIL CORRETORA DE CAMBIO, TITULOS E VALORES MOBILIARIOS S.A.", "rating": "Br.AAA", "rating_original": "Br.AAA", "rating_agencia": "Standard & Poor's", "agencia": "Standard & Poor's", "rating_data": "24/04/2026", "divulgacao": "24/04/2026", "securitizadora": "Pentágono", "flag_vencido": 1, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": 0.0, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "-", "data_proximo_cupom": null, "vna": 1000.0, "pu_par": 1074.8092, "incentivada": "Não", "rating_normalizado": "BR", "em_recuperacao_judicial": "Não", "fonte_precificacao": "ANBIMA Mercado (2026-10-14)", "spread_mercado": null, "spread_anbima": 0.00839, "spread": 0.00839, "pu_mercado_mediano": 1067.8751, "agio_desagio_pct": -0.65}, "prices": [{"date": "2026-06-01", "ticker": "CEEBA3", "price": 1020.13034, "clean_price": 1020.13034, "yield": 0.8956, "fonte_yield": "ANBIMA", "spread_over_ref": 89.6}, {"date": "2026-06-02", "ticker": "CEEBA3", "price": 1020.414372, "clean_price": 1020.414372, "yield": 0.9743, "fonte_yield": "ANBIMA", "spread_over_ref": 97.4}, {"date": "2026-06-03", "ticker": "CEEBA3", "price": 1021.266618, "clean_price": 1021.266618, "yield": 0.9025, "fonte_yield": "ANBIMA", "spread_over_ref": 90.2}, {"date": "2026-06-05", "ticker": "CEEBA3", "price": 1021.671369, "clean_price": 1021.671369, "yield": 0.9504, "fonte_yield": "ANBIMA", "spread_over_ref": 95.0}, {"date": "2026-06-08", "ticker": "CEEBA3", "price": 1022.442238, "clean_price": 1022.442238, "yield": 0.8993, "fonte_yield": "ANBIMA", "spread_over_ref": 89.9}, {"date": "2026-06-09", "ticker": "CEEBA3", "price": 1022.994877, "clean_price": 1022.994877, "yield": 0.9075, "fonte_yield": "ANBIMA", "spread_over_ref": 90.8}, {"date": "2026-06-10", "ticker": "CEEBA3", "price": 1023.60257, "clean_price": 1023.60257, "yield": 0.9006, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-06-11", "ticker": "CEEBA3", "price": 1024.174624, "clean_price": 1024.174624, "yield": 0.9037, "fonte_yield": "ANBIMA", "spread_over_ref": 90.4}, {"date": "2026-06-12", "ticker": "CEEBA3", "price": 1024.749701, "clean_price": 1024.749701, "yield": 0.9061, "fonte_yield": "ANBIMA", "spread_over_ref": 90.6}, {"date": "2026-06-15", "ticker": "CEEBA3", "price": 1025.177269, "clean_price": 1025.177269, "yield": 0.9512, "fonte_yield": "ANBIMA", "spread_over_ref": 95.1}, {"date": "2026-06-16", "ticker": "CEEBA3", "price": 1025.913062, "clean_price": 1025.913062, "yield": 0.9075, "fonte_yield": "ANBIMA", "spread_over_ref": 90.8}, {"date": "2026-06-17", "ticker": "CEEBA3", "price": 1026.569263, "clean_price": 1026.569263, "yield": 0.8864, "fonte_yield": "ANBIMA", "spread_over_ref": 88.6}, {"date": "2026-06-18", "ticker": "CEEBA3", "price": 1027.169845, "clean_price": 1027.169845, "yield": 0.8815, "fonte_yield": "ANBIMA", "spread_over_ref": 88.1}, {"date": "2026-06-19", "ticker": "CEEBA3", "price": 1027.6004, "clean_price": 1027.6004, "yield": 0.9252, "fonte_yield": "ANBIMA", "spread_over_ref": 92.5}, {"date": "2026-06-22", "ticker": "CEEBA3", "price": 1027.217, "clean_price": 1027.217, "yield": 1.2192, "fonte_yield": "B3", "spread_over_ref": 121.9}, {"date": "2026-06-23", "ticker": "CEEBA3", "price": 1028.768752, "clean_price": 1028.768752, "yield": 0.9211, "fonte_yield": "ANBIMA", "spread_over_ref": 92.1}, {"date": "2026-06-24", "ticker": "CEEBA3", "price": 1029.41219, "clean_price": 1029.41219, "yield": 0.9006, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-06-25", "ticker": "CEEBA3", "price": 1029.9896, "clean_price": 1029.9896, "yield": 0.9006, "fonte_yield": "B3", "spread_over_ref": 90.1}, {"date": "2026-06-26", "ticker": "CEEBA3", "price": 1030.567321, "clean_price": 1030.567321, "yield": 0.9006, "fonte_yield": "ANBIMA", "spread_over_ref": 90.1}, {"date": "2026-06-29", "ticker": "CEEBA3", "price": 1031.134277, "clean_price": 1031.134277, "yield": 0.9042, "fonte_yield": "ANBIMA", "spread_over_ref": 90.4}, {"date": "2026-06-30", "ticker": "CEEBA3", "price": 1031.734407, "clean_price": 1031.734407, "yield": 0.8971, "fonte_yield": "ANBIMA", "spread_over_ref": 89.7}, {"date": "2026-07-01", "ticker": "CEEBA3", "price": 1032.292845, "clean_price": 1032.292845, "yield": 0.9038, "fonte_yield": "ANBIMA", "spread_over_ref": 90.4}, {"date": "2026-07-02", "ticker": "CEEBA3", "price": 1032.894233, "clean_price": 1032.894233, "yield": 0.8963, "fonte_yield": "ANBIMA", "spread_over_ref": 89.6}, {"date": "2026-07-03", "ticker": "CEEBA3", "price": 1033.409914, "clean_price": 1033.409914, "yield": 0.918, "fonte_yield": "ANBIMA", "spread_over_ref": 91.8}, {"date": "2026-07-06", "ticker": "CEEBA3", "price": 1034.05754, "clean_price": 1034.05754, "yield": 0.8947, "fonte_yield": "ANBIMA", "spread_over_ref": 89.5}, {"date": "2026-07-07", "ticker": "CEEBA3", "price": 1034.609963, "clean_price": 1034.609963, "yield": 0.9043, "fonte_yield": "ANBIMA", "spread_over_ref": 90.4}, {"date": "2026-07-08", "ticker": "CEEBA3", "price": 1035.217125, "clean_price": 1035.217125, "yield": 0.8948, "fonte_yield": "ANBIMA", "spread_over_ref": 89.5}, {"date": "2026-07-09", "ticker": "CEEBA3", "price": 1035.794223, "clean_price": 1035.794223, "yield": 0.896, "fonte_yield": "ANBIMA", "spread_over_ref": 89.6}, {"date": "2026-07-10", "ticker": "CEEBA3", "price": 1036.345804, "clean_price": 1036.345804, "yield": 0.9067, "fonte_yield": "ANBIMA", "spread_over_ref": 90.7}, {"date": "2026-07-13", "ticker": "CEEBA3", "price": 1036.960723, "clean_price": 1036.960723, "yield": 0.8943, "fonte_yield": "ANBIMA", "spread_over_ref": 89.4}, {"date": "2026-07-14", "ticker": "CEEBA3", "price": 1037.583491, "clean_price": 1037.583491, "yield": 0.8787, "fonte_yield": "ANBIMA", "spread_over_ref": 87.9}, {"date": "2026-07-15", "ticker": "CEEBA3", "price": 1038.155697, "clean_price": 1038.155697, "yield": 0.8821, "fonte_yield": "ANBIMA", "spread_over_ref": 88.2}, {"date": "2026-07-16", "ticker": "CEEBA3", "price": 1038.721545, "clean_price": 1038.721545, "yield": 0.8882, "fonte_yield": "ANBIMA", "spread_over_ref": 88.8}, {"date": "2026-07-17", "ticker": "CEEBA3", "price": 1039.3037, "clean_price": 1039.3037, "yield": 0.8882, "fonte_yield": "B3", "spread_over_ref": 88.8}, {"date": "2026-07-20", "ticker": "CEEBA3", "price": 1039.956235, "clean_price": 1039.956235, "yield": 0.8601, "fonte_yield": "ANBIMA", "spread_over_ref": 86.0}, {"date": "2026-07-21", "ticker": "CEEBA3", "price": 1040.565162, "clean_price": 1040.565162, "yield": 0.849, "fonte_yield": "ANBIMA", "spread_over_ref": 84.9}, {"date": "2026-07-22", "ticker": "CEEBA3", "price": 1041.114326, "clean_price": 1041.114326, "yield": 0.8624, "fonte_yield": "ANBIMA", "spread_over_ref": 86.2}, {"date": "2026-07-23", "ticker": "CEEBA3", "price": 1041.686741, "clean_price": 1041.686741, "yield": 0.8666, "fonte_yield": "ANBIMA", "spread_over_ref": 86.7}, {"date": "2026-07-24", "ticker": "CEEBA3", "price": 1042.275715, "clean_price": 1042.275715, "yield": 0.864, "fonte_yield": "ANBIMA", "spread_over_ref": 86.4}, {"date": "2026-07-27", "ticker": "CEEBA3", "price": 1042.845514, "clean_price": 1042.845514, "yield": 0.8698, "fonte_yield": "ANBIMA", "spread_over_ref": 87.0}, {"date": "2026-07-28", "ticker": "CEEBA3", "price": 1043.401647, "clean_price": 1043.401647, "yield": 0.882, "fonte_yield": "ANBIMA", "spread_over_ref": 88.2}, {"date": "2026-07-29", "ticker": "CEEBA3", "price": 1044.010087, "clean_price": 1044.010087, "yield": 0.8712, "fonte_yield": "ANBIMA", "spread_over_ref": 87.1}, {"date": "2026-07-30", "ticker": "CEEBA3", "price": 1044.625399, "clean_price": 1044.625399, "yield": 0.857, "fonte_yield": "ANBIMA", "spread_over_ref": 85.7}, {"date": "2026-07-31", "ticker": "CEEBA3", "price": 1045.180248, "clean_price": 1045.180248, "yield": 0.8707, "fonte_yield": "ANBIMA", "spread_over_ref": 87.1}, {"date": "2026-08-03", "ticker": "CEEBA3", "price": 1045.752052, "clean_price": 1045.752052, "yield": 0.877, "fonte_yield": "ANBIMA", "spread_over_ref": 87.7}, {"date": "2026-08-04", "ticker": "CEEBA3", "price": 1045.7521, "clean_price": 1045.7521, "yield": 1.1621, "fonte_yield": "B3", "spread_over_ref": 116.2}, {"date": "2026-08-05", "ticker": "CEEBA3", "price": 1046.956071, "clean_price": 1046.956071, "yield": 0.8609, "fonte_yield": "ANBIMA", "spread_over_ref": 86.1}, {"date": "2026-08-06", "ticker": "CEEBA3", "price": 1047.527834, "clean_price": 1047.527834, "yield": 0.8679, "fonte_yield": "ANBIMA", "spread_over_ref": 86.8}, {"date": "2026-08-07", "ticker": "CEEBA3", "price": 1048.06385, "clean_price": 1048.06385, "yield": 0.8891, "fonte_yield": "ANBIMA", "spread_over_ref": 88.9}, {"date": "2026-08-10", "ticker": "CEEBA3", "price": 1048.661839, "clean_price": 1048.661839, "yield": 0.8787, "fonte_yield": "ANBIMA", "spread_over_ref": 87.9}, {"date": "2026-08-11", "ticker": "CEEBA3", "price": 1049.236479, "clean_price": 1049.236479, "yield": 0.8806, "fonte_yield": "ANBIMA", "spread_over_ref": 88.1}, {"date": "2026-08-12", "ticker": "CEEBA3", "price": 1049.836842, "clean_price": 1049.836842, "yield": 0.8686, "fonte_yield": "ANBIMA", "spread_over_ref": 86.9}, {"date": "2026-08-13", "ticker": "CEEBA3", "price": 1050.401918, "clean_price": 1050.401918, "yield": 0.8761, "fonte_yield": "ANBIMA", "spread_over_ref": 87.6}, {"date": "2026-08-14", "ticker": "CEEBA3", "price": 1050.985448, "clean_price": 1050.985448, "yield": 0.8735, "fonte_yield": "ANBIMA", "spread_over_ref": 87.4}, {"date": "2026-08-17", "ticker": "CEEBA3", "price": 1051.529913, "clean_price": 1051.529913, "yield": 0.894, "fonte_yield": "ANBIMA", "spread_over_ref": 89.4}, {"date": "2026-08-18", "ticker": "CEEBA3", "price": 1052.149858, "clean_price": 1052.149858, "yield": 0.8701, "fonte_yield": "ANBIMA", "spread_over_ref": 87.0}, {"date": "2026-08-19", "ticker": "CEEBA3", "price": 1052.732972, "clean_price": 1052.732972, "yield": 0.868, "fonte_yield": "ANBIMA", "spread_over_ref": 86.8}, {"date": "2026-08-20", "ticker": "CEEBA3", "price": 1053.311996, "clean_price": 1053.311996, "yield": 0.8686, "fonte_yield": "ANBIMA", "spread_over_ref": 86.9}, {"date": "2026-08-21", "ticker": "CEEBA3", "price": 1053.881571, "clean_price": 1053.881571, "yield": 0.8756, "fonte_yield": "ANBIMA", "spread_over_ref": 87.6}, {"date": "2026-08-24", "ticker": "CEEBA3", "price": 1054.428135, "clean_price": 1054.428135, "yield": 0.8986, "fonte_yield": "ANBIMA", "spread_over_ref": 89.9}, {"date": "2026-08-25", "ticker": "CEEBA3", "price": 1055.037177, "clean_price": 1055.037177, "yield": 0.8801, "fonte_yield": "ANBIMA", "spread_over_ref": 88.0}, {"date": "2026-08-26", "ticker": "CEEBA3", "price": 1055.646876, "clean_price": 1055.646876, "yield": 0.8603, "fonte_yield": "ANBIMA", "spread_over_ref": 86.0}, {"date": "2026-08-27", "ticker": "CEEBA3", "price": 1056.224282, "clean_price": 1056.224282, "yield": 0.8631, "fonte_yield": "ANBIMA", "spread_over_ref": 86.3}, {"date": "2026-08-28", "ticker": "CEEBA3", "price": 1056.804773, "clean_price": 1056.804773, "yield": 0.864, "fonte_yield": "ANBIMA", "spread_over_ref": 86.4}, {"date": "2026-08-31", "ticker": "CEEBA3", "price": 1056.9347, "clean_price": 1056.9347, "yield": 1.2153, "fonte_yield": "B3", "spread_over_ref": 121.5}, {"date": "2026-09-01", "ticker": "CEEBA3", "price": 1057.96318, "clean_price": 1057.96318, "yield": 0.8688, "fonte_yield": "ANBIMA", "spread_over_ref": 86.9}, {"date": "2026-09-02", "ticker": "CEEBA3", "price": 1058.545338, "clean_price": 1058.545338, "yield": 0.8694, "fonte_yield": "ANBIMA", "spread_over_ref": 86.9}, {"date": "2026-09-03", "ticker": "CEEBA3", "price": 1059.128099, "clean_price": 1059.128099, "yield": 0.8698, "fonte_yield": "ANBIMA", "spread_over_ref": 87.0}, {"date": "2026-09-04", "ticker": "CEEBA3", "price": 1059.719432, "clean_price": 1059.719432, "yield": 0.8629, "fonte_yield": "ANBIMA", "spread_over_ref": 86.3}, {"date": "2026-09-08", "ticker": "CEEBA3", "price": 1060.298586, "clean_price": 1060.298586, "yield": 0.867, "fonte_yield": "ANBIMA", "spread_over_ref": 86.7}, {"date": "2026-09-09", "ticker": "CEEBA3", "price": 1060.8827, "clean_price": 1060.8827, "yield": 0.867, "fonte_yield": "B3", "spread_over_ref": 86.7}, {"date": "2026-09-10", "ticker": "CEEBA3", "price": 1061.465382, "clean_price": 1061.465382, "yield": 0.8687, "fonte_yield": "ANBIMA", "spread_over_ref": 86.9}, {"date": "2026-09-11", "ticker": "CEEBA3", "price": 1062.054132, "clean_price": 1062.054132, "yield": 0.8646, "fonte_yield": "ANBIMA", "spread_over_ref": 86.5}, {"date": "2026-09-14", "ticker": "CEEBA3", "price": 1062.639637, "clean_price": 1062.639637, "yield": 0.864, "fonte_yield": "ANBIMA", "spread_over_ref": 86.4}, {"date": "2026-09-15", "ticker": "CEEBA3", "price": 1063.231923, "clean_price": 1063.231923, "yield": 0.856, "fonte_yield": "ANBIMA", "spread_over_ref": 85.6}, {"date": "2026-09-16", "ticker": "CEEBA3", "price": 1063.832659, "clean_price": 1063.832659, "yield": 0.8375, "fonte_yield": "ANBIMA", "spread_over_ref": 83.8}, {"date": "2026-09-17", "ticker": "CEEBA3", "price": 1064.397644, "clean_price": 1064.397644, "yield": 0.8624, "fonte_yield": "ANBIMA", "spread_over_ref": 86.2}, {"date": "2026-09-18", "ticker": "CEEBA3", "price": 1064.979198, "clean_price": 1064.979198, "yield": 0.8562, "fonte_yield": "ANBIMA", "spread_over_ref": 85.6}, {"date": "2026-09-21", "ticker": "CEEBA3", "price": 1065.557125, "clean_price": 1065.557125, "yield": 0.8548, "fonte_yield": "ANBIMA", "spread_over_ref": 85.5}, {"date": "2026-09-22", "ticker": "CEEBA3", "price": 1066.133511, "clean_price": 1066.133511, "yield": 0.856, "fonte_yield": "ANBIMA", "spread_over_ref": 85.6}, {"date": "2026-09-23", "ticker": "CEEBA3", "price": 1066.726289, "clean_price": 1066.726289, "yield": 0.8318, "fonte_yield": "ANBIMA", "spread_over_ref": 83.2}, {"date": "2026-09-24", "ticker": "CEEBA3", "price": 1067.297612, "clean_price": 1067.297612, "yield": 0.8412, "fonte_yield": "ANBIMA", "spread_over_ref": 84.1}, {"date": "2026-09-25", "ticker": "CEEBA3", "price": 1067.8751, "clean_price": 1067.8751, "yield": 0.8411, "fonte_yield": "B3", "spread_over_ref": 84.1}, {"date": "2026-09-28", "ticker": "CEEBA3", "price": 1068.449767, "clean_price": 1068.449767, "yield": 0.8477, "fonte_yield": "ANBIMA", "spread_over_ref": 84.8}, {"date": "2026-09-29", "ticker": "CEEBA3", "price": 1069.028449, "clean_price": 1069.028449, "yield": 0.8472, "fonte_yield": "ANBIMA", "spread_over_ref": 84.7}, {"date": "2026-09-30", "ticker": "CEEBA3", "price": 1069.614639, "clean_price": 1069.614639, "yield": 0.8295, "fonte_yield": "ANBIMA", "spread_over_ref": 83.0}, {"date": "2026-10-01", "ticker": "CEEBA3", "price": 1070.191063, "clean_price": 1070.191063, "yield": 0.8345, "fonte_yield": "ANBIMA", "spread_over_ref": 83.5}, {"date": "2026-10-02", "ticker": "CEEBA3", "price": 1070.762897, "clean_price": 1070.762897, "yield": 0.8553, "fonte_yield": "ANBIMA", "spread_over_ref": 85.5}, {"date": "2026-10-05", "ticker": "CEEBA3", "price": 1071.351503, "clean_price": 1071.351503, "yield": 0.8262, "fonte_yield": "ANBIMA", "spread_over_ref": 82.6}, {"date": "2026-10-06", "ticker": "CEEBA3", "price": 1071.928653, "clean_price": 1071.928653, "yield": 0.834, "fonte_yield": "ANBIMA", "spread_over_ref": 83.4}, {"date": "2026-10-07", "ticker": "CEEBA3", "price": 1072.509629, "clean_price": 1072.509629, "yield": 0.8282, "fonte_yield": "ANBIMA", "spread_over_ref": 82.8}, {"date": "2026-10-08", "ticker": "CEEBA3", "price": 1073.090148, "clean_price": 1073.090148, "yield": 0.8241, "fonte_yield": "ANBIMA", "spread_over_ref": 82.4}, {"date": "2026-10-09", "ticker": "CEEBA3", "price": 1073.669776, "clean_price": 1073.669776, "yield": 0.8268, "fonte_yield": "ANBIMA", "spread_over_ref": 82.7}, {"date": "2026-10-13", "ticker": "CEEBA3", "price": 1074.249182, "clean_price": 1074.249182, "yield": 0.8385, "fonte_yield": "ANBIMA", "spread_over_ref": 83.9}, {"date": "2026-10-14", "ticker": "CEEBA3", "price": 1074.830368, "clean_price": 1074.830368, "yield": 0.839, "fonte_yield": "ANBIMA", "spread_over_ref": 83.9}], "emitter": {"cnpj": "15139629000194", "cnpj_formatado": "15.139.629/0001-94", "razao_social": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA", "nome_fantasia": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA", "setor": "Energia Elétrica", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://ri.neoenergia.com/", "municipio": "SALVADOR", "uf": "BA", "descricao": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Energia Elétrica."}, "raiox_cnpj": "15139629000194", "paymentEvents": [{"ticker": "CEEBA3", "data_evento": "2026-10-15", "data_liquidacao": "2026-10-15", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo CEEBA3 é um título de crédito privado do tipo Debênture (comum) emitido por CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA (CNPJ: 15.139.629/0001-94), com taxa de emissão de CDI + 1.34% a.a. e data de vencimento em 15/10/2026. O título encontra-se resgatado, avaliado com rating AAA em escala nacional (duration modificada de 0.00 anos) e spread indicativo de 0.84% sobre a NTN-B soberana, com volume emitido de R$ 160.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "CEEBE3", "tipo": "Debênture", "issuer": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA", "vencimento": "2031-03-15"}, {"ticker": "CEEBC0", "tipo": "Debênture", "issuer": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA", "vencimento": "2032-04-25"}, {"ticker": "CEEBF3", "tipo": "Debênture", "issuer": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA", "vencimento": "2033-03-15"}, {"ticker": "CEEBB6", "tipo": "Debênture", "issuer": "CIA DE ELETRICIDADE DO ESTADO DA BAHIA - COELBA", "vencimento": "2030-08-15"}], "relatedSector": [{"ticker": "EGIEA6", "tipo": "Debênture", "issuer": "ENGIE BRASIL ENERGIA S.A.", "vencimento": "2038-02-15"}, {"ticker": "TRGP13", "tipo": "Debênture", "issuer": "TECP - TRANSMISSORA DE ENERGIA CENTRAL PAULISTANA S.A.", "vencimento": "2038-01-15"}, {"ticker": "CHSF13", "tipo": "Debênture", "issuer": "AXIA ENERGIA NORDESTE S.A.", "vencimento": "2031-06-15"}, {"ticker": "CPLDA1", "tipo": "Debênture", "issuer": "COPEL DISTRIBUIÇÃO S.A.", "vencimento": "2038-01-15"}], "issuerSlug": "cia-de-eletricidade-do-estado-da-bahia-coelba", "sectorSlug": "energia-eletrica"}
     </script>
-    <script type="module" crossorigin src="/assets/index-DsuL71c1.js"></script>
+    <script type="module" crossorigin src="/assets/index-BbEErR7e.js"></script>
   </body>
 </html>

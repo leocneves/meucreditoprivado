@@ -208,10 +208,11 @@
                 <span>Contato &amp; Apoio</span>
               </a>
 
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a
-                  href="/raiox-devedor/"
-                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+              <div data-static-auth-desktop="true" class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <button
+                  type="button"
+                  data-static-login="navbar"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -220,15 +221,15 @@
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                   </svg>
                   <span>Entrar</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
-          <div class="pb-3 mb-2 border-b border-slate-100">
-            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+          <div data-static-auth-mobile="true" class="pb-3 mb-2 border-b border-slate-100">
+            <button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -236,7 +237,7 @@
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
               <span>Entrar com o Google</span>
-            </a>
+            </button>
           </div>
           <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -365,6 +366,211 @@
                 a.classList.add('bg-blue-50/80', 'text-blue-900');
               }
             });
+
+            var AUTH_KEY = 'fixdata_auth_user';
+            var googleSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>';
+            var googleSvgMob = googleSvg.replace('w-3.5 h-3.5', 'w-4 h-4');
+            var logoutSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>';
+
+            function escH(s) {
+              return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            }
+
+            function readCachedUser() {
+              try {
+                var raw = window.localStorage && window.localStorage.getItem(AUTH_KEY);
+                if (!raw) return null;
+                var parsed = JSON.parse(raw);
+                return parsed && parsed.uid ? parsed : null;
+              } catch (e) {
+                return null;
+              }
+            }
+
+            function writeCachedUser(u) {
+              try {
+                if (!window.localStorage) return;
+                if (u && u.uid) window.localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+                else window.localStorage.removeItem(AUTH_KEY);
+              } catch (e) {}
+            }
+
+            function renderAuth(u) {
+              var desktopEl = nav.querySelector('[data-static-auth-desktop]');
+              var mobileEl = nav.querySelector('[data-static-auth-mobile]');
+              if (u && u.uid) {
+                var fullName = String(u.displayName || '').trim() || (u.email ? String(u.email).split('@')[0] : 'Investidor');
+                var firstName = fullName.split(' ')[0] || 'Investidor';
+                var initial = fullName.charAt(0).toUpperCase() || 'F';
+                var email = String(u.email || '').trim();
+                var rawPhoto = String(u.photoURL || '').trim();
+                var safePhoto = (rawPhoto.indexOf('https://') === 0 || rawPhoto.indexOf('http://') === 0) ? rawPhoto : '';
+                if (desktopEl) {
+                  desktopEl.innerHTML =
+                    '<div class="flex items-center gap-2">' +
+                      (safePhoto
+                        ? '<img src="' + escH(safePhoto) + '" alt="' + escH(firstName) + '" class="w-7 h-7 rounded-full border border-slate-200 object-cover" referrerpolicy="no-referrer" />'
+                        : '<span class="w-7 h-7 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">' + escH(initial) + '</span>') +
+                      '<span class="text-xs font-bold text-slate-700 max-w-[100px] truncate">' + escH(firstName) + '</span>' +
+                      '<button type="button" data-static-logout="true" title="Sair da conta" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer">' + logoutSvg + '</button>' +
+                    '</div>';
+                }
+                if (mobileEl) {
+                  mobileEl.innerHTML =
+                    '<div class="flex items-center justify-between gap-2">' +
+                      '<div class="flex items-center gap-2.5 min-w-0">' +
+                        (safePhoto
+                          ? '<img src="' + escH(safePhoto) + '" alt="' + escH(fullName) + '" class="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0" referrerpolicy="no-referrer" />'
+                          : '<span class="w-8 h-8 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">' + escH(initial) + '</span>') +
+                        '<div class="min-w-0">' +
+                          '<p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">' + escH(fullName) + '</p>' +
+                          (email ? '<p class="text-[11px] text-slate-500 truncate max-w-[180px]">' + escH(email) + '</p>' : '') +
+                        '</div>' +
+                      '</div>' +
+                      '<button type="button" data-static-logout="true" class="px-2.5 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition shrink-0 cursor-pointer">Sair</button>' +
+                    '</div>';
+                }
+                return;
+              }
+              if (desktopEl) {
+                desktopEl.innerHTML =
+                  '<button type="button" data-static-login="navbar" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">' +
+                    googleSvg + '<span>Entrar</span>' +
+                  '</button>';
+              }
+              if (mobileEl) {
+                mobileEl.innerHTML =
+                  '<button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">' +
+                    googleSvgMob + '<span>Entrar com o Google</span>' +
+                  '</button>';
+              }
+            }
+
+            function setLoginLoading(isLoading) {
+              nav.querySelectorAll('[data-static-login]').forEach(function (btn) {
+                btn.disabled = !!isLoading;
+                btn.classList.toggle('opacity-60', !!isLoading);
+                var lbl = btn.querySelector('span');
+                if (lbl) {
+                  if (isLoading) {
+                    if (!btn.dataset.origLabel) btn.dataset.origLabel = lbl.textContent;
+                    lbl.textContent = 'Entrando...';
+                  } else if (btn.dataset.origLabel) {
+                    lbl.textContent = btn.dataset.origLabel;
+                  }
+                }
+              });
+            }
+
+            function syncFromFirebaseIndexedDb() {
+              try {
+                if (!window.indexedDB || typeof window.indexedDB.databases !== 'function') return;
+                window.indexedDB.databases().then(function (dbs) {
+                  var exists = Array.isArray(dbs) && dbs.some(function (d) { return d && d.name === 'firebaseLocalStorageDb'; });
+                  if (!exists) return;
+                  var req = window.indexedDB.open('firebaseLocalStorageDb');
+                  req.onupgradeneeded = function (ev) {
+                    if (ev && ev.target && ev.target.transaction) {
+                      try { ev.target.transaction.abort(); } catch (e) {}
+                    }
+                  };
+                  req.onsuccess = function () {
+                    var idb = req.result;
+                    try {
+                      if (!idb.objectStoreNames || !idb.objectStoreNames.contains('firebaseLocalStorage')) {
+                        idb.close();
+                        return;
+                      }
+                      var tx = idb.transaction(['firebaseLocalStorage'], 'readonly');
+                      var store = tx.objectStore('firebaseLocalStorage');
+                      var allReq = store.getAll();
+                      allReq.onsuccess = function () {
+                        var rows = allReq.result || [];
+                        var found = null;
+                        for (var i = 0; i < rows.length; i++) {
+                          var row = rows[i];
+                          if (row && typeof row.fbase_key === 'string' && row.fbase_key.indexOf('firebase:authUser:') === 0 && row.value) {
+                            var val = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+                            if (val && val.uid) {
+                              found = {
+                                uid: String(val.uid),
+                                displayName: String(val.displayName || ''),
+                                email: String(val.email || ''),
+                                photoURL: String(val.photoURL || '')
+                              };
+                              break;
+                            }
+                          }
+                        }
+                        if (found) {
+                          writeCachedUser(found);
+                          renderAuth(found);
+                        } else if (readCachedUser()) {
+                          writeCachedUser(null);
+                          renderAuth(null);
+                        }
+                      };
+                      tx.oncomplete = function () { try { idb.close(); } catch (e) {} };
+                      tx.onerror = function () { try { idb.close(); } catch (e) {} };
+                    } catch (e) {
+                      try { idb.close(); } catch (err) {}
+                    }
+                  };
+                }).catch(function () {});
+              } catch (e) {}
+            }
+
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
+            nav.addEventListener('click', function (ev) {
+              var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
+              if (loginBtn) {
+                ev.preventDefault();
+                var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
+                setLoginLoading(true);
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
+                  .then(function (u) {
+                    setLoginLoading(false);
+                    if (u) renderAuth(u);
+                  })
+                  .catch(function (err) {
+                    setLoginLoading(false);
+                    console.error('Erro no login:', err);
+                  });
+                return;
+              }
+              var logoutBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-logout]') : null;
+              if (logoutBtn) {
+                ev.preventDefault();
+                logoutBtn.disabled = true;
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLogout(); })
+                  .then(function () {
+                    renderAuth(null);
+                  })
+                  .catch(function (err) {
+                    logoutBtn.disabled = false;
+                    console.error('Erro no logout:', err);
+                  });
+              }
+            });
+
+            window.addEventListener('storage', function (ev) {
+              if (ev && ev.key === AUTH_KEY) renderAuth(readCachedUser());
+            });
+
+            var initialCachedUser = readCachedUser();
+            if (initialCachedUser) renderAuth(initialCachedUser);
+            syncFromFirebaseIndexedDb();
           })();
         </script>
       </nav>
@@ -432,7 +638,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">17/05/2032</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 5,5 anos (1999 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 5,5 anos (1998 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -460,7 +666,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Outros Serviços</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">-</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">-</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">5,5 anos (1999 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">5,5 anos (1998 dias corridos)</p></div>
           </div>
         </div>
 
@@ -751,6 +957,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "25E0053938", "tipo": "CRI", "issuer": "JHSF IV", "indexador": "Pré", "taxa_emissao": 14.2217, "taxa_negocio_b3": 18.36, "taxa_indicativa_anbima": null, "taxa_mercado": 18.1311, "taxa_ativo": 18.1311, "taxa_compra": null, "taxa_venda": null, "pu_emissao": null, "pu": null, "pu_mercado": "879.3676", "data_ultimo_negocio": "2026-11-19", "data_anbima": null, "volume_negociado_b3": 140698.82, "volume_emissao": null, "volume": null, "quantidade_emitida": 139747.0, "quantidade": 139747.0, "data_emissao": null, "vencimento": "2032-05-17", "emissao": 450.0, "serie": 3.0, "isin": "BRRBRACRIV56", "lei": 12.431, "cnpj_emissor": null, "setor": "Outros Serviços", "agente_fiduciario": null, "coordenador_lider": null, "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": "RB Capital", "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 3.96, "ntnb_referencia": "DI Futuro 4.0y", "taxa_ntnb": 15.697984, "publico_alvo": "Não Informado", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2027-05-17", "vna": null, "pu_par": null, "incentivada": "Sim", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-19)", "spread_mercado": 0.0210298910653448, "spread_anbima": null, "spread": 0.0210298910653448, "pu_mercado_mediano": 885.1868, "agio_desagio_pct": null}, "prices": [{"date": "2026-06-02", "ticker": "25E0053938", "price": 971.5234, "clean_price": 971.5234, "yield": 15.265, "fonte_yield": "B3", "spread_over_ref": 93.4}, {"date": "2026-06-03", "ticker": "25E0053938", "price": 976.9762, "clean_price": 976.9762, "yield": 15.1, "fonte_yield": "B3", "spread_over_ref": 48.0}, {"date": "2026-06-05", "ticker": "25E0053938", "price": 940.9053, "clean_price": 940.9053, "yield": 16.23, "fonte_yield": "B3", "spread_over_ref": 123.5}, {"date": "2026-06-08", "ticker": "25E0053938", "price": 991.894, "clean_price": 991.894, "yield": 14.69, "fonte_yield": "B3", "spread_over_ref": -22.4}, {"date": "2026-06-09", "ticker": "25E0053938", "price": 954.5339, "clean_price": 954.5339, "yield": 15.855, "fonte_yield": "B3", "spread_over_ref": 75.8}, {"date": "2026-06-11", "ticker": "25E0053938", "price": 960.68, "clean_price": 960.68, "yield": 15.68, "fonte_yield": "B3", "spread_over_ref": 93.5}, {"date": "2026-06-15", "ticker": "25E0053938", "price": 997.2629, "clean_price": 997.2629, "yield": 14.6241, "fonte_yield": "B3", "spread_over_ref": 20.1}, {"date": "2026-06-18", "ticker": "25E0053938", "price": 939.202, "clean_price": 939.202, "yield": 16.4471, "fonte_yield": "B3", "spread_over_ref": 132.0}, {"date": "2026-06-19", "ticker": "25E0053938", "price": 989.3028, "clean_price": 989.3028, "yield": 14.91, "fonte_yield": "B3", "spread_over_ref": -12.7}, {"date": "2026-07-16", "ticker": "25E0053938", "price": 976.5811, "clean_price": 976.5811, "yield": 15.62, "fonte_yield": "B3", "spread_over_ref": 103.8}, {"date": "2026-07-17", "ticker": "25E0053938", "price": 948.1852, "clean_price": 948.1852, "yield": 16.5647, "fonte_yield": "B3", "spread_over_ref": 168.0}, {"date": "2026-07-21", "ticker": "25E0053938", "price": 967.1709, "clean_price": 967.1709, "yield": 15.97, "fonte_yield": "B3", "spread_over_ref": 109.5}, {"date": "2026-07-22", "ticker": "25E0053938", "price": 1000.5143, "clean_price": 1000.5143, "yield": 14.9554, "fonte_yield": "B3", "spread_over_ref": 13.5}, {"date": "2026-07-30", "ticker": "25E0053938", "price": 991.04, "clean_price": 991.04, "yield": 15.3502, "fonte_yield": "B3", "spread_over_ref": 73.8}, {"date": "2026-08-07", "ticker": "25E0053938", "price": 983.4, "clean_price": 983.4, "yield": 15.69, "fonte_yield": "B3", "spread_over_ref": 115.3}, {"date": "2026-08-10", "ticker": "25E0053938", "price": 1031.2041, "clean_price": 1031.2041, "yield": 14.25, "fonte_yield": "B3", "spread_over_ref": -17.1}, {"date": "2026-08-12", "ticker": "25E0053938", "price": 1008.6281, "clean_price": 1008.6281, "yield": 14.9748, "fonte_yield": "B3", "spread_over_ref": 36.3}, {"date": "2026-08-13", "ticker": "25E0053938", "price": 986.3276, "clean_price": 986.3276, "yield": 15.67, "fonte_yield": "B3", "spread_over_ref": 92.0}, {"date": "2026-08-18", "ticker": "25E0053938", "price": 978.6108, "clean_price": 978.6108, "yield": 15.97, "fonte_yield": "B3", "spread_over_ref": 107.7}, {"date": "2026-08-19", "ticker": "25E0053938", "price": 980.5968, "clean_price": 980.5968, "yield": 15.9267, "fonte_yield": "B3", "spread_over_ref": 114.7}, {"date": "2026-08-20", "ticker": "25E0053938", "price": 1019.7583, "clean_price": 1019.7583, "yield": 14.725, "fonte_yield": "B3", "spread_over_ref": 4.7}, {"date": "2026-08-21", "ticker": "25E0053938", "price": 1015.8781, "clean_price": 1015.8781, "yield": 14.86, "fonte_yield": "B3", "spread_over_ref": 32.1}, {"date": "2026-08-24", "ticker": "25E0053938", "price": 1017.8333, "clean_price": 1017.8333, "yield": 14.8169, "fonte_yield": "B3", "spread_over_ref": 26.3}, {"date": "2026-08-26", "ticker": "25E0053938", "price": 1014.1249, "clean_price": 1014.1249, "yield": 14.965, "fonte_yield": "B3", "spread_over_ref": 45.4}, {"date": "2026-08-27", "ticker": "25E0053938", "price": 982.0262, "clean_price": 982.0262, "yield": 15.99, "fonte_yield": "B3", "spread_over_ref": 134.3}, {"date": "2026-08-31", "ticker": "25E0053938", "price": 1003.3132, "clean_price": 1003.3132, "yield": 15.3714, "fonte_yield": "B3", "spread_over_ref": 67.9}, {"date": "2026-09-02", "ticker": "25E0053938", "price": 1027.8593, "clean_price": 1027.8593, "yield": 14.6298, "fonte_yield": "B3", "spread_over_ref": 25.7}, {"date": "2026-09-09", "ticker": "25E0053938", "price": 1021.2217, "clean_price": 1021.2217, "yield": 14.9, "fonte_yield": "B3", "spread_over_ref": 62.6}, {"date": "2026-09-10", "ticker": "25E0053938", "price": 995.3181, "clean_price": 995.3181, "yield": 15.73, "fonte_yield": "B3", "spread_over_ref": 139.9}, {"date": "2026-09-14", "ticker": "25E0053938", "price": 996.9558, "clean_price": 996.9558, "yield": 15.7168, "fonte_yield": "B3", "spread_over_ref": 131.4}, {"date": "2026-09-15", "ticker": "25E0053938", "price": 1023.8232, "clean_price": 1023.8232, "yield": 14.89, "fonte_yield": "B3", "spread_over_ref": 51.4}, {"date": "2026-09-16", "ticker": "25E0053938", "price": 1023.0893, "clean_price": 1023.0893, "yield": 14.93, "fonte_yield": "B3", "spread_over_ref": 62.0}, {"date": "2026-09-17", "ticker": "25E0053938", "price": 1009.8449, "clean_price": 1009.8449, "yield": 15.3624, "fonte_yield": "B3", "spread_over_ref": 103.7}, {"date": "2026-09-18", "ticker": "25E0053938", "price": 1038.1044, "clean_price": 1038.1044, "yield": 14.5066, "fonte_yield": "B3", "spread_over_ref": 30.9}, {"date": "2026-09-21", "ticker": "25E0053938", "price": 1002.7841, "clean_price": 1002.7841, "yield": 15.6232, "fonte_yield": "B3", "spread_over_ref": 139.1}, {"date": "2026-09-22", "ticker": "25E0053938", "price": 1026.6008, "clean_price": 1026.6008, "yield": 14.8924, "fonte_yield": "B3", "spread_over_ref": 79.4}, {"date": "2026-09-23", "ticker": "25E0053938", "price": 1017.0403, "clean_price": 1017.0403, "yield": 15.225, "fonte_yield": "B3", "spread_over_ref": 98.6}, {"date": "2026-09-25", "ticker": "25E0053938", "price": 995.8076, "clean_price": 995.8076, "yield": 15.92, "fonte_yield": "B3", "spread_over_ref": 161.7}, {"date": "2026-09-28", "ticker": "25E0053938", "price": 1030.8839, "clean_price": 1030.8839, "yield": 14.8308, "fonte_yield": "B3", "spread_over_ref": 56.0}, {"date": "2026-09-29", "ticker": "25E0053938", "price": 995.8134, "clean_price": 995.8134, "yield": 15.9694, "fonte_yield": "B3", "spread_over_ref": 161.5}, {"date": "2026-09-30", "ticker": "25E0053938", "price": 1036.6387, "clean_price": 1036.6387, "yield": 14.6877, "fonte_yield": "B3", "spread_over_ref": 52.6}, {"date": "2026-10-01", "ticker": "25E0053938", "price": 1022.2658, "clean_price": 1022.2658, "yield": 15.15, "fonte_yield": "B3", "spread_over_ref": 84.0}, {"date": "2026-10-02", "ticker": "25E0053938", "price": 1028.2654, "clean_price": 1028.2654, "yield": 14.9867, "fonte_yield": "B3", "spread_over_ref": 73.2}, {"date": "2026-10-06", "ticker": "25E0053938", "price": 1060.8272, "clean_price": 1060.8272, "yield": 14.0256, "fonte_yield": "B3", "spread_over_ref": 114.4}, {"date": "2026-10-07", "ticker": "25E0053938", "price": 1073.1496, "clean_price": 1073.1496, "yield": 13.6782, "fonte_yield": "B3", "spread_over_ref": 81.4}, {"date": "2026-10-13", "ticker": "25E0053938", "price": 1020.946, "clean_price": 1020.946, "yield": 15.3365, "fonte_yield": "B3", "spread_over_ref": 236.8}, {"date": "2026-10-14", "ticker": "25E0053938", "price": 1071.4211, "clean_price": 1071.4211, "yield": 13.7941, "fonte_yield": "B3", "spread_over_ref": 98.1}, {"date": "2026-10-15", "ticker": "25E0053938", "price": 1046.0749, "clean_price": 1046.0749, "yield": 14.5756, "fonte_yield": "B3", "spread_over_ref": 150.8}, {"date": "2026-10-16", "ticker": "25E0053938", "price": 1040.6115, "clean_price": 1040.6115, "yield": 14.7599, "fonte_yield": "B3", "spread_over_ref": 159.4}, {"date": "2026-10-20", "ticker": "25E0053938", "price": 985.6554, "clean_price": 985.6554, "yield": 16.59, "fonte_yield": "B3", "spread_over_ref": 333.8}, {"date": "2026-10-21", "ticker": "25E0053938", "price": 1028.8716, "clean_price": 1028.8716, "yield": 15.2004, "fonte_yield": "B3", "spread_over_ref": 212.9}, {"date": "2026-10-22", "ticker": "25E0053938", "price": 1078.7072, "clean_price": 1078.7072, "yield": 13.6743, "fonte_yield": "B3", "spread_over_ref": 72.8}, {"date": "2026-11-04", "ticker": "25E0053938", "price": 969.9471, "clean_price": 969.9471, "yield": 17.32, "fonte_yield": "B3", "spread_over_ref": 177.1}, {"date": "2026-11-05", "ticker": "25E0053938", "price": 1023.0235, "clean_price": 1023.0235, "yield": 15.55, "fonte_yield": "B3", "spread_over_ref": 30.6}, {"date": "2026-11-09", "ticker": "25E0053938", "price": 988.3658, "clean_price": 988.3658, "yield": 16.745, "fonte_yield": "B3", "spread_over_ref": 143.7}, {"date": "2026-11-11", "ticker": "25E0053938", "price": 990.1645, "clean_price": 990.1645, "yield": 16.725, "fonte_yield": "B3", "spread_over_ref": 142.7}, {"date": "2026-11-17", "ticker": "25E0053938", "price": 907.7222, "clean_price": 907.7222, "yield": 17.265, "fonte_yield": "B3", "spread_over_ref": 173.9}, {"date": "2026-11-19", "ticker": "25E0053938", "price": 879.3676, "clean_price": 879.3676, "yield": 18.36, "fonte_yield": "B3", "spread_over_ref": 230.1}], "emitter": null, "raiox_cnpj": null, "paymentEvents": [{"ticker": "25E0053938", "data_evento": "2027-05-17", "data_liquidacao": "2027-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2027-11-17", "data_liquidacao": "2027-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2028-05-17", "data_liquidacao": "2028-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2028-11-17", "data_liquidacao": "2028-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2029-05-17", "data_liquidacao": "2029-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2029-11-17", "data_liquidacao": "2029-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2030-05-17", "data_liquidacao": "2030-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2030-11-17", "data_liquidacao": "2030-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2031-05-17", "data_liquidacao": "2031-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2031-11-17", "data_liquidacao": "2031-11-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2032-05-17", "data_liquidacao": "2032-05-17", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "25E0053938", "data_evento": "2032-05-17", "data_liquidacao": "2032-05-17", "tipo_evento": "Pagamento de Juros", "taxa": 6.8746, "valor_real": null, "valor_projetado": 68.746, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo 25E0053938 é um título de crédito privado do tipo CRI (incentivado (isenção fiscal Lei 12.431/11)) emitido por JHSF IV, com taxa de emissão de 14.22% a.a. Pré e data de vencimento em 17/05/2032. O título encontra-se ativo (duration modificada de 3.96 anos) e spread indicativo de 2.10% sobre a NTN-B soberana. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [], "relatedSector": [{"ticker": "CERT11", "tipo": "Debênture", "issuer": "CONCESSIONARIA ECOVIAS RAPOSO-CASTELO S.A", "vencimento": "2029-03-15"}, {"ticker": "ROTY13", "tipo": "Debênture", "issuer": "CONCESSIONARIA ROTA SOROCABANA SA", "vencimento": "2031-03-15"}, {"ticker": "26E4435499", "tipo": "CRI", "issuer": "BTLC II", "vencimento": "2027-12-21"}, {"ticker": "25J3017471", "tipo": "CRI", "issuer": "OPEA SEC 518E", "vencimento": "2032-10-15"}], "issuerSlug": "jhsf-iv", "sectorSlug": null}
     </script>
-    <script type="module" crossorigin src="/assets/index-DsuL71c1.js"></script>
+    <script type="module" crossorigin src="/assets/index-BbEErR7e.js"></script>
   </body>
 </html>

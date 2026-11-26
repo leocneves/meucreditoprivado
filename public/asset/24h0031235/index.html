@@ -208,10 +208,11 @@
                 <span>Contato &amp; Apoio</span>
               </a>
 
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a
-                  href="/raiox-devedor/"
-                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+              <div data-static-auth-desktop="true" class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <button
+                  type="button"
+                  data-static-login="navbar"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -220,15 +221,15 @@
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                   </svg>
                   <span>Entrar</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
-          <div class="pb-3 mb-2 border-b border-slate-100">
-            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+          <div data-static-auth-mobile="true" class="pb-3 mb-2 border-b border-slate-100">
+            <button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -236,7 +237,7 @@
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
               <span>Entrar com o Google</span>
-            </a>
+            </button>
           </div>
           <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -365,6 +366,211 @@
                 a.classList.add('bg-blue-50/80', 'text-blue-900');
               }
             });
+
+            var AUTH_KEY = 'fixdata_auth_user';
+            var googleSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>';
+            var googleSvgMob = googleSvg.replace('w-3.5 h-3.5', 'w-4 h-4');
+            var logoutSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>';
+
+            function escH(s) {
+              return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            }
+
+            function readCachedUser() {
+              try {
+                var raw = window.localStorage && window.localStorage.getItem(AUTH_KEY);
+                if (!raw) return null;
+                var parsed = JSON.parse(raw);
+                return parsed && parsed.uid ? parsed : null;
+              } catch (e) {
+                return null;
+              }
+            }
+
+            function writeCachedUser(u) {
+              try {
+                if (!window.localStorage) return;
+                if (u && u.uid) window.localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+                else window.localStorage.removeItem(AUTH_KEY);
+              } catch (e) {}
+            }
+
+            function renderAuth(u) {
+              var desktopEl = nav.querySelector('[data-static-auth-desktop]');
+              var mobileEl = nav.querySelector('[data-static-auth-mobile]');
+              if (u && u.uid) {
+                var fullName = String(u.displayName || '').trim() || (u.email ? String(u.email).split('@')[0] : 'Investidor');
+                var firstName = fullName.split(' ')[0] || 'Investidor';
+                var initial = fullName.charAt(0).toUpperCase() || 'F';
+                var email = String(u.email || '').trim();
+                var rawPhoto = String(u.photoURL || '').trim();
+                var safePhoto = (rawPhoto.indexOf('https://') === 0 || rawPhoto.indexOf('http://') === 0) ? rawPhoto : '';
+                if (desktopEl) {
+                  desktopEl.innerHTML =
+                    '<div class="flex items-center gap-2">' +
+                      (safePhoto
+                        ? '<img src="' + escH(safePhoto) + '" alt="' + escH(firstName) + '" class="w-7 h-7 rounded-full border border-slate-200 object-cover" referrerpolicy="no-referrer" />'
+                        : '<span class="w-7 h-7 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">' + escH(initial) + '</span>') +
+                      '<span class="text-xs font-bold text-slate-700 max-w-[100px] truncate">' + escH(firstName) + '</span>' +
+                      '<button type="button" data-static-logout="true" title="Sair da conta" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer">' + logoutSvg + '</button>' +
+                    '</div>';
+                }
+                if (mobileEl) {
+                  mobileEl.innerHTML =
+                    '<div class="flex items-center justify-between gap-2">' +
+                      '<div class="flex items-center gap-2.5 min-w-0">' +
+                        (safePhoto
+                          ? '<img src="' + escH(safePhoto) + '" alt="' + escH(fullName) + '" class="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0" referrerpolicy="no-referrer" />'
+                          : '<span class="w-8 h-8 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">' + escH(initial) + '</span>') +
+                        '<div class="min-w-0">' +
+                          '<p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">' + escH(fullName) + '</p>' +
+                          (email ? '<p class="text-[11px] text-slate-500 truncate max-w-[180px]">' + escH(email) + '</p>' : '') +
+                        '</div>' +
+                      '</div>' +
+                      '<button type="button" data-static-logout="true" class="px-2.5 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition shrink-0 cursor-pointer">Sair</button>' +
+                    '</div>';
+                }
+                return;
+              }
+              if (desktopEl) {
+                desktopEl.innerHTML =
+                  '<button type="button" data-static-login="navbar" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">' +
+                    googleSvg + '<span>Entrar</span>' +
+                  '</button>';
+              }
+              if (mobileEl) {
+                mobileEl.innerHTML =
+                  '<button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">' +
+                    googleSvgMob + '<span>Entrar com o Google</span>' +
+                  '</button>';
+              }
+            }
+
+            function setLoginLoading(isLoading) {
+              nav.querySelectorAll('[data-static-login]').forEach(function (btn) {
+                btn.disabled = !!isLoading;
+                btn.classList.toggle('opacity-60', !!isLoading);
+                var lbl = btn.querySelector('span');
+                if (lbl) {
+                  if (isLoading) {
+                    if (!btn.dataset.origLabel) btn.dataset.origLabel = lbl.textContent;
+                    lbl.textContent = 'Entrando...';
+                  } else if (btn.dataset.origLabel) {
+                    lbl.textContent = btn.dataset.origLabel;
+                  }
+                }
+              });
+            }
+
+            function syncFromFirebaseIndexedDb() {
+              try {
+                if (!window.indexedDB || typeof window.indexedDB.databases !== 'function') return;
+                window.indexedDB.databases().then(function (dbs) {
+                  var exists = Array.isArray(dbs) && dbs.some(function (d) { return d && d.name === 'firebaseLocalStorageDb'; });
+                  if (!exists) return;
+                  var req = window.indexedDB.open('firebaseLocalStorageDb');
+                  req.onupgradeneeded = function (ev) {
+                    if (ev && ev.target && ev.target.transaction) {
+                      try { ev.target.transaction.abort(); } catch (e) {}
+                    }
+                  };
+                  req.onsuccess = function () {
+                    var idb = req.result;
+                    try {
+                      if (!idb.objectStoreNames || !idb.objectStoreNames.contains('firebaseLocalStorage')) {
+                        idb.close();
+                        return;
+                      }
+                      var tx = idb.transaction(['firebaseLocalStorage'], 'readonly');
+                      var store = tx.objectStore('firebaseLocalStorage');
+                      var allReq = store.getAll();
+                      allReq.onsuccess = function () {
+                        var rows = allReq.result || [];
+                        var found = null;
+                        for (var i = 0; i < rows.length; i++) {
+                          var row = rows[i];
+                          if (row && typeof row.fbase_key === 'string' && row.fbase_key.indexOf('firebase:authUser:') === 0 && row.value) {
+                            var val = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+                            if (val && val.uid) {
+                              found = {
+                                uid: String(val.uid),
+                                displayName: String(val.displayName || ''),
+                                email: String(val.email || ''),
+                                photoURL: String(val.photoURL || '')
+                              };
+                              break;
+                            }
+                          }
+                        }
+                        if (found) {
+                          writeCachedUser(found);
+                          renderAuth(found);
+                        } else if (readCachedUser()) {
+                          writeCachedUser(null);
+                          renderAuth(null);
+                        }
+                      };
+                      tx.oncomplete = function () { try { idb.close(); } catch (e) {} };
+                      tx.onerror = function () { try { idb.close(); } catch (e) {} };
+                    } catch (e) {
+                      try { idb.close(); } catch (err) {}
+                    }
+                  };
+                }).catch(function () {});
+              } catch (e) {}
+            }
+
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
+            nav.addEventListener('click', function (ev) {
+              var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
+              if (loginBtn) {
+                ev.preventDefault();
+                var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
+                setLoginLoading(true);
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
+                  .then(function (u) {
+                    setLoginLoading(false);
+                    if (u) renderAuth(u);
+                  })
+                  .catch(function (err) {
+                    setLoginLoading(false);
+                    console.error('Erro no login:', err);
+                  });
+                return;
+              }
+              var logoutBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-logout]') : null;
+              if (logoutBtn) {
+                ev.preventDefault();
+                logoutBtn.disabled = true;
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLogout(); })
+                  .then(function () {
+                    renderAuth(null);
+                  })
+                  .catch(function (err) {
+                    logoutBtn.disabled = false;
+                    console.error('Erro no logout:', err);
+                  });
+              }
+            });
+
+            window.addEventListener('storage', function (ev) {
+              if (ev && ev.key === AUTH_KEY) renderAuth(readCachedUser());
+            });
+
+            var initialCachedUser = readCachedUser();
+            if (initialCachedUser) renderAuth(initialCachedUser);
+            syncFromFirebaseIndexedDb();
           })();
         </script>
       </nav>
@@ -432,7 +638,7 @@
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Vencimento</span>
               <p class="text-base font-extrabold text-slate-900">17/08/2034</p>
-              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 7,7 anos (2821 dias corridos)</span>
+              <span class="text-[11px] text-emerald-700 font-bold">Prazo: 7,7 anos (2820 dias corridos)</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
               <span class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Volume Total</span>
@@ -460,7 +666,7 @@
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Setor Econômico (ANBIMA)</span><p class="font-semibold text-slate-100">Outros Serviços</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Agente Fiduciário</span><p class="font-semibold text-slate-100 truncate">OLIVEIRA TRUST DTVM S/A</p></div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Coordenador Líder</span><p class="font-semibold text-slate-100 truncate">ITAU BBA ASSESSORIA FINANCEIRA S.A</p></div>
-            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">7,7 anos (2821 dias corridos)</p></div>
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/70"><span class="text-slate-400 text-xs font-bold uppercase block mb-1">Prazo até Vencimento</span><p class="font-semibold text-emerald-400">7,7 anos (2820 dias corridos)</p></div>
           </div>
         </div>
 
@@ -810,6 +1016,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "24H0031235", "tipo": "CRI", "issuer": "PRP PARTICIPAÇÕES LTDA.", "indexador": "IPCA", "taxa_emissao": 9.9811, "taxa_negocio_b3": 11.755, "taxa_indicativa_anbima": null, "taxa_mercado": 11.7641, "taxa_ativo": 11.7641, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "818.5688", "data_ultimo_negocio": "2026-11-25", "data_anbima": null, "volume_negociado_b3": 26194.21, "volume_emissao": 85000000.0, "volume": 85000000.0, "quantidade_emitida": 85.0, "quantidade": 85.0, "data_emissao": "2024-04-15", "vencimento": "2034-08-17", "emissao": 158.0, "serie": 1.0, "isin": "BRIMWLCRIJE6", "lei": 12.431, "cnpj_emissor": 8769451000108.0, "setor": "Outros Serviços", "agente_fiduciario": "OLIVEIRA TRUST DTVM S/A", "coordenador_lider": "ITAU BBA ASSESSORIA FINANCEIRA S.A", "rating": null, "rating_original": null, "rating_agencia": null, "agencia": null, "rating_data": null, "divulgacao": null, "securitizadora": "Oliveira Trust / Isec", "flag_vencido": 0, "flag_resgatado": 0, "flag_b3": 1, "status_ativo": "Ativo", "duration": 5.42, "ntnb_referencia": "15/05/2035", "taxa_ntnb": 7.8479, "publico_alvo": "Investidor Qualificado (Pós Lock-up)", "periodicidade_cupom": "Semestral", "data_proximo_cupom": "2026-12-17", "vna": null, "pu_par": null, "incentivada": "Sim", "rating_normalizado": "Sem Rating", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Mercado B3 (2026-11-25)", "spread_mercado": 0.0363122508644118, "spread_anbima": null, "spread": 0.0363122508644118, "pu_mercado_mediano": 818.3422, "agio_desagio_pct": null}, "prices": [{"date": "2026-06-09", "ticker": "24H0031235", "price": 850.3061, "clean_price": 850.3061, "yield": 12.155, "fonte_yield": "B3", "spread_over_ref": 364.6}, {"date": "2026-06-10", "ticker": "24H0031235", "price": 850.1656, "clean_price": 850.1656, "yield": 12.19, "fonte_yield": "B3", "spread_over_ref": 372.5}, {"date": "2026-06-15", "ticker": "24H0031235", "price": 857.9489, "clean_price": 857.9489, "yield": 11.945, "fonte_yield": "B3", "spread_over_ref": 375.5}, {"date": "2026-06-19", "ticker": "24H0031235", "price": 838.9806, "clean_price": 838.9806, "yield": 12.1837, "fonte_yield": "B3", "spread_over_ref": 362.6}, {"date": "2026-07-16", "ticker": "24H0031235", "price": 859.2414, "clean_price": 859.2414, "yield": 11.8085, "fonte_yield": "B3", "spread_over_ref": 352.6}, {"date": "2026-07-20", "ticker": "24H0031235", "price": 790.9506, "clean_price": 790.9506, "yield": 14.1811, "fonte_yield": "B3", "spread_over_ref": 564.5}, {"date": "2026-07-22", "ticker": "24H0031235", "price": 841.3121, "clean_price": 841.3121, "yield": 11.945, "fonte_yield": "B3", "spread_over_ref": 343.3}, {"date": "2026-07-23", "ticker": "24H0031235", "price": 840.4644, "clean_price": 840.4644, "yield": 12.0, "fonte_yield": "B3", "spread_over_ref": 347.4}, {"date": "2026-07-24", "ticker": "24H0031235", "price": 840.6926, "clean_price": 840.6926, "yield": 12.0086, "fonte_yield": "B3", "spread_over_ref": 354.9}, {"date": "2026-08-05", "ticker": "24H0031235", "price": 849.9767, "clean_price": 849.9767, "yield": 11.76, "fonte_yield": "B3", "spread_over_ref": 341.6}, {"date": "2026-08-12", "ticker": "24H0031235", "price": 854.0847, "clean_price": 854.0847, "yield": 11.6767, "fonte_yield": "B3", "spread_over_ref": 337.4}, {"date": "2026-08-13", "ticker": "24H0031235", "price": 799.112, "clean_price": 799.112, "yield": 14.199, "fonte_yield": "B3", "spread_over_ref": 569.1}, {"date": "2026-08-18", "ticker": "24H0031235", "price": 854.6939, "clean_price": 854.6939, "yield": 11.725, "fonte_yield": "B3", "spread_over_ref": 342.8}, {"date": "2026-08-28", "ticker": "24H0031235", "price": 843.9971, "clean_price": 843.9971, "yield": 11.595, "fonte_yield": "B3", "spread_over_ref": 342.0}, {"date": "2026-09-04", "ticker": "24H0031235", "price": 798.6801, "clean_price": 798.6801, "yield": 13.7488, "fonte_yield": "B3", "spread_over_ref": 560.7}, {"date": "2026-09-08", "ticker": "24H0031235", "price": 851.0865, "clean_price": 851.0865, "yield": 11.3932, "fonte_yield": "B3", "spread_over_ref": 351.1}, {"date": "2026-09-21", "ticker": "24H0031235", "price": 845.4296, "clean_price": 845.4296, "yield": 11.095, "fonte_yield": "B3", "spread_over_ref": 323.2}, {"date": "2026-09-22", "ticker": "24H0031235", "price": 843.775, "clean_price": 843.775, "yield": 11.175, "fonte_yield": "B3", "spread_over_ref": 331.3}, {"date": "2026-09-25", "ticker": "24H0031235", "price": 842.4172, "clean_price": 842.4172, "yield": 11.2617, "fonte_yield": "B3", "spread_over_ref": 340.3}, {"date": "2026-10-08", "ticker": "24H0031235", "price": 863.2139, "clean_price": 863.2139, "yield": 10.4659, "fonte_yield": "B3", "spread_over_ref": 347.4}, {"date": "2026-10-13", "ticker": "24H0031235", "price": 846.1206, "clean_price": 846.1206, "yield": 11.2117, "fonte_yield": "B3", "spread_over_ref": 417.4}, {"date": "2026-10-14", "ticker": "24H0031235", "price": 808.5004, "clean_price": 808.5004, "yield": 12.9297, "fonte_yield": "B3", "spread_over_ref": 574.5}, {"date": "2026-10-15", "ticker": "24H0031235", "price": 846.0592, "clean_price": 846.0592, "yield": 11.2356, "fonte_yield": "B3", "spread_over_ref": 410.5}, {"date": "2026-10-16", "ticker": "24H0031235", "price": 844.7955, "clean_price": 844.7955, "yield": 11.3, "fonte_yield": "B3", "spread_over_ref": 411.6}, {"date": "2026-10-19", "ticker": "24H0031235", "price": 825.7131, "clean_price": 825.7131, "yield": 11.4408, "fonte_yield": "B3", "spread_over_ref": 423.5}, {"date": "2026-10-20", "ticker": "24H0031235", "price": 800.0412, "clean_price": 800.0412, "yield": 12.6525, "fonte_yield": "B3", "spread_over_ref": 541.8}, {"date": "2026-10-21", "ticker": "24H0031235", "price": 829.4681, "clean_price": 829.4681, "yield": 11.335, "fonte_yield": "B3", "spread_over_ref": 422.0}, {"date": "2026-10-22", "ticker": "24H0031235", "price": 826.7371, "clean_price": 826.7371, "yield": 11.4903, "fonte_yield": "B3", "spread_over_ref": 441.3}, {"date": "2026-10-23", "ticker": "24H0031235", "price": 830.1949, "clean_price": 830.1949, "yield": 11.362, "fonte_yield": "B3", "spread_over_ref": 434.6}, {"date": "2026-10-27", "ticker": "24H0031235", "price": 826.748, "clean_price": 826.748, "yield": 11.575, "fonte_yield": "B3", "spread_over_ref": 347.8}, {"date": "2026-10-28", "ticker": "24H0031235", "price": 828.0498, "clean_price": 828.0498, "yield": 11.5485, "fonte_yield": "B3", "spread_over_ref": 342.0}, {"date": "2026-10-29", "ticker": "24H0031235", "price": 819.5249, "clean_price": 819.5249, "yield": 11.9611, "fonte_yield": "B3", "spread_over_ref": 378.6}, {"date": "2026-10-30", "ticker": "24H0031235", "price": 819.7924, "clean_price": 819.7924, "yield": 11.98, "fonte_yield": "B3", "spread_over_ref": 373.6}, {"date": "2026-11-03", "ticker": "24H0031235", "price": 818.9676, "clean_price": 818.9676, "yield": 12.049, "fonte_yield": "B3", "spread_over_ref": 376.0}, {"date": "2026-11-04", "ticker": "24H0031235", "price": 789.0584, "clean_price": 789.0584, "yield": 13.5, "fonte_yield": "B3", "spread_over_ref": 519.6}, {"date": "2026-11-09", "ticker": "24H0031235", "price": 827.2012, "clean_price": 827.2012, "yield": 11.7996, "fonte_yield": "B3", "spread_over_ref": 379.5}, {"date": "2026-11-10", "ticker": "24H0031235", "price": 783.2039, "clean_price": 783.2039, "yield": 13.9398, "fonte_yield": "B3", "spread_over_ref": 577.2}, {"date": "2026-11-16", "ticker": "24H0031235", "price": 833.1927, "clean_price": 833.1927, "yield": 11.685, "fonte_yield": "B3", "spread_over_ref": 358.8}, {"date": "2026-11-17", "ticker": "24H0031235", "price": 781.8014, "clean_price": 781.8014, "yield": 14.175, "fonte_yield": "B3", "spread_over_ref": 596.6}, {"date": "2026-11-24", "ticker": "24H0031235", "price": 818.1364, "clean_price": 818.1364, "yield": 11.755, "fonte_yield": "B3", "spread_over_ref": 358.6}, {"date": "2026-11-25", "ticker": "24H0031235", "price": 818.5688, "clean_price": 818.5688, "yield": 11.755, "fonte_yield": "B3", "spread_over_ref": 362.3}], "emitter": null, "raiox_cnpj": null, "paymentEvents": [{"ticker": "24H0031235", "data_evento": "2026-12-17", "data_liquidacao": "2026-12-17", "tipo_evento": "Pagamento de Juros", "taxa": null, "valor_real": null, "valor_projetado": null, "status": "Previsto", "flag_status": "Total", "fonte": "ANBIMA Oficial"}, {"ticker": "24H0031235", "data_evento": "2027-06-17", "data_liquidacao": "2027-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2027-12-17", "data_liquidacao": "2027-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2028-06-17", "data_liquidacao": "2028-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2028-12-17", "data_liquidacao": "2028-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2029-06-17", "data_liquidacao": "2029-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2029-12-17", "data_liquidacao": "2029-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2030-06-17", "data_liquidacao": "2030-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2030-12-17", "data_liquidacao": "2030-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2031-06-17", "data_liquidacao": "2031-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2031-12-17", "data_liquidacao": "2031-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2032-06-17", "data_liquidacao": "2032-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2032-12-17", "data_liquidacao": "2032-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2033-06-17", "data_liquidacao": "2033-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2033-12-17", "data_liquidacao": "2033-12-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2034-06-17", "data_liquidacao": "2034-06-17", "tipo_evento": "Pagamento de Juros", "taxa": 4.8719, "valor_real": null, "valor_projetado": 48.719, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}, {"ticker": "24H0031235", "data_evento": "2034-08-17", "data_liquidacao": "2034-08-17", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [{"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-08-27 17:17", "data_referencia": "07/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1302463"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-08-19 18:51", "data_referencia": "2026-08-19 11:40", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1297066"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-08-11 17:58", "data_referencia": "2026-08-11 11:40", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1283502"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-08-09 10:58", "data_referencia": "2026-08-19 11:40", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1280847"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-07-29 15:28", "data_referencia": "06/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1267483"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-07-17 17:57", "data_referencia": "2026-08-11 11:40", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1252618"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-06-26 12:37", "data_referencia": "05/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1229677"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-06-08 11:45", "data_referencia": "2026-03-31", "categoria_documento": "Informes Periódicos", "tipo_documento": "Demonstrações Financeiras", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1213643"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-05-27 12:36", "data_referencia": "04/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1205081"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-05-13 17:14", "data_referencia": "2026-05-13 10:40", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1189110"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-04-30 16:20", "data_referencia": "2026-04-30", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agente Fiduciário", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1176375"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-04-30 13:09", "data_referencia": "03/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1175007"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-04-27 18:27", "data_referencia": "2026-04-27 10:40", "categoria_documento": "Assembleia", "tipo_documento": "AGO/E", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1170670"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-04-01 09:59", "data_referencia": "2026-04-27 10:40", "categoria_documento": "Assembleia", "tipo_documento": "AGO/E", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1152319"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-03-27 14:13", "data_referencia": "02/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1146701"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-03-04 14:59", "data_referencia": "01/2026", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1127777"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-02-10 17:50", "data_referencia": "2026-01-27", "categoria_documento": "Aditamento de Termo de Securitização", "tipo_documento": null, "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1107253"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-02-09 18:58", "data_referencia": "12/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1106054"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2026-01-23 18:06", "data_referencia": "11/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1091177"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-12-12 14:50", "data_referencia": "10/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1060450"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-11-10 09:52", "data_referencia": "09/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1031798"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-10-24 17:24", "data_referencia": "08/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=1020038"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-09-23 16:43", "data_referencia": "07/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=996249"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-09-12 14:04", "data_referencia": "2025-09-03 17:00", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=989223"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-09-03 20:56", "data_referencia": "2025-09-03 17:00", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=983477"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-08-26 23:56", "data_referencia": "2025-09-03 17:00", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=978426"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-08-11 12:16", "data_referencia": "06/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=964369"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-07-24 15:55", "data_referencia": "2025-07-24 10:00", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=952121"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-07-24 12:21", "data_referencia": "05/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=951917"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-06-24 17:42", "data_referencia": "2025-07-24 10:00", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=930876"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-06-24 17:40", "data_referencia": "2025-07-24 10:00", "categoria_documento": "Assembleia", "tipo_documento": "AGE", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=930874"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-06-16 15:47", "data_referencia": "2025-03-31", "categoria_documento": "Informes Periódicos", "tipo_documento": "Demonstrações Financeiras", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=925844"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-06-11 16:18", "data_referencia": "04/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=922022"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-05-02 18:02", "data_referencia": "03/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=893494"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-04-29 17:31", "data_referencia": "2025-04-29", "categoria_documento": "Relatórios", "tipo_documento": "Relatório de Agente Fiduciário", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=887252"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-04-07 11:04", "data_referencia": "02/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=873845"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-03-10 10:19", "data_referencia": "01/2025", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=853937"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-01-30 13:42", "data_referencia": "12/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=828353"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2025-01-02 20:14", "data_referencia": "11/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=812463"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-12-20 14:07", "data_referencia": "10/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=805652"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-10-30 10:41", "data_referencia": "09/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=767989"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-09-27 12:42", "data_referencia": "08/2024", "categoria_documento": "Informes Periódicos", "tipo_documento": "Informe Mensal de CRI", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=746882"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-09-03 10:59", "data_referencia": "2024-09-02", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Anúncio de Encerramento de Distribuição Pública", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=731247"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-08-28 22:42", "data_referencia": "2024-08-28", "categoria_documento": "Aditamento de Termo de Securitização", "tipo_documento": null, "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=728652"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-08-28 15:47", "data_referencia": "2024-08-28", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Anúncio de Início de Distribuição Pública", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=727762"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-08-28 15:43", "data_referencia": "2024-08-28", "categoria_documento": "Comunicado ao Mercado", "tipo_documento": "Outros Comunicados Não Considerados Fatos Relevantes ", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=727738"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-08-28 14:35", "data_referencia": "2024-07-31", "categoria_documento": "Termo de Securitização", "tipo_documento": null, "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=727502"}, {"ticker": "24H0031235", "isin": "BRIMWLCRIJE6", "data_entrega": "2024-08-01 23:11", "data_referencia": "2024-08-01", "categoria_documento": "Documentos de Oferta de Distribuição Pública", "tipo_documento": "Aviso ao Mercado", "securitizadora": "Isec Securitizadora", "link_download": "https://fnet.bmfbovespa.com.br/fnet/publico/downloadDocumento?id=710223"}], "aiSummary": "O ativo 24H0031235 é um título de crédito privado do tipo CRI (incentivado (isenção fiscal Lei 12.431/11)) emitido por PRP PARTICIPAÇÕES LTDA., com taxa de emissão de IPCA + 9.98% a.a. e data de vencimento em 17/08/2034. O título encontra-se ativo (duration modificada de 5.42 anos) e spread indicativo de 3.63% sobre a NTN-B soberana, com volume emitido de R$ 85.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [{"ticker": "CRA021002NF", "tipo": "CRA", "issuer": "PETROBRAS DISTRIBUIDORA S.A.", "vencimento": "2031-09-15"}, {"ticker": "21I0931497", "tipo": "CRI", "issuer": "BLUEMACAW CATUAÍ TRIPLE A FUNDO DE INVESTIMENTO IMOBILIÁRIO", "vencimento": "2031-09-15"}, {"ticker": "21K0001812", "tipo": "CRI", "issuer": "ULTRA SOM SERVIÇOS MÉDICOS S.A.", "vencimento": "2031-12-15"}, {"ticker": "25L0014618", "tipo": "CRI", "issuer": "PULV DIRECIONAL VI", "vencimento": "2033-11-16"}], "relatedSector": [{"ticker": "CERT11", "tipo": "Debênture", "issuer": "CONCESSIONARIA ECOVIAS RAPOSO-CASTELO S.A", "vencimento": "2029-03-15"}, {"ticker": "ROTY13", "tipo": "Debênture", "issuer": "CONCESSIONARIA ROTA SOROCABANA SA", "vencimento": "2031-03-15"}, {"ticker": "26E4435499", "tipo": "CRI", "issuer": "BTLC II", "vencimento": "2027-12-21"}, {"ticker": "25J3017471", "tipo": "CRI", "issuer": "OPEA SEC 518E", "vencimento": "2032-10-15"}], "issuerSlug": "prp-participacoes-ltda", "sectorSlug": null}
     </script>
-    <script type="module" crossorigin src="/assets/index-DsuL71c1.js"></script>
+    <script type="module" crossorigin src="/assets/index-BbEErR7e.js"></script>
   </body>
 </html>

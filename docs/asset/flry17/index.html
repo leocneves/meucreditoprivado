@@ -208,10 +208,11 @@
                 <span>Contato &amp; Apoio</span>
               </a>
 
-              <div class="ml-2 pl-2 border-l border-slate-200 flex items-center">
-                <a
-                  href="/raiox-devedor/"
-                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs"
+              <div data-static-auth-desktop="true" class="ml-2 pl-2 border-l border-slate-200 flex items-center">
+                <button
+                  type="button"
+                  data-static-login="navbar"
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -220,15 +221,15 @@
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                   </svg>
                   <span>Entrar</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         <div data-mobile-menu="true" class="hidden md:hidden bg-white border-t border-slate-100 p-4 space-y-2 shadow-lg">
-          <div class="pb-3 mb-2 border-b border-slate-100">
-            <a href="/raiox-devedor/" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs">
+          <div data-static-auth-mobile="true" class="pb-3 mb-2 border-b border-slate-100">
+            <button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -236,7 +237,7 @@
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
               <span>Entrar com o Google</span>
-            </a>
+            </button>
           </div>
           <a href="/" class="flex items-center gap-3 p-3 rounded-xl font-bold transition-all text-slate-700 hover:bg-slate-50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
@@ -365,6 +366,211 @@
                 a.classList.add('bg-blue-50/80', 'text-blue-900');
               }
             });
+
+            var AUTH_KEY = 'fixdata_auth_user';
+            var googleSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>';
+            var googleSvgMob = googleSvg.replace('w-3.5 h-3.5', 'w-4 h-4');
+            var logoutSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>';
+
+            function escH(s) {
+              return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            }
+
+            function readCachedUser() {
+              try {
+                var raw = window.localStorage && window.localStorage.getItem(AUTH_KEY);
+                if (!raw) return null;
+                var parsed = JSON.parse(raw);
+                return parsed && parsed.uid ? parsed : null;
+              } catch (e) {
+                return null;
+              }
+            }
+
+            function writeCachedUser(u) {
+              try {
+                if (!window.localStorage) return;
+                if (u && u.uid) window.localStorage.setItem(AUTH_KEY, JSON.stringify(u));
+                else window.localStorage.removeItem(AUTH_KEY);
+              } catch (e) {}
+            }
+
+            function renderAuth(u) {
+              var desktopEl = nav.querySelector('[data-static-auth-desktop]');
+              var mobileEl = nav.querySelector('[data-static-auth-mobile]');
+              if (u && u.uid) {
+                var fullName = String(u.displayName || '').trim() || (u.email ? String(u.email).split('@')[0] : 'Investidor');
+                var firstName = fullName.split(' ')[0] || 'Investidor';
+                var initial = fullName.charAt(0).toUpperCase() || 'F';
+                var email = String(u.email || '').trim();
+                var rawPhoto = String(u.photoURL || '').trim();
+                var safePhoto = (rawPhoto.indexOf('https://') === 0 || rawPhoto.indexOf('http://') === 0) ? rawPhoto : '';
+                if (desktopEl) {
+                  desktopEl.innerHTML =
+                    '<div class="flex items-center gap-2">' +
+                      (safePhoto
+                        ? '<img src="' + escH(safePhoto) + '" alt="' + escH(firstName) + '" class="w-7 h-7 rounded-full border border-slate-200 object-cover" referrerpolicy="no-referrer" />'
+                        : '<span class="w-7 h-7 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">' + escH(initial) + '</span>') +
+                      '<span class="text-xs font-bold text-slate-700 max-w-[100px] truncate">' + escH(firstName) + '</span>' +
+                      '<button type="button" data-static-logout="true" title="Sair da conta" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer">' + logoutSvg + '</button>' +
+                    '</div>';
+                }
+                if (mobileEl) {
+                  mobileEl.innerHTML =
+                    '<div class="flex items-center justify-between gap-2">' +
+                      '<div class="flex items-center gap-2.5 min-w-0">' +
+                        (safePhoto
+                          ? '<img src="' + escH(safePhoto) + '" alt="' + escH(fullName) + '" class="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0" referrerpolicy="no-referrer" />'
+                          : '<span class="w-8 h-8 rounded-full border border-slate-200 bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">' + escH(initial) + '</span>') +
+                        '<div class="min-w-0">' +
+                          '<p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">' + escH(fullName) + '</p>' +
+                          (email ? '<p class="text-[11px] text-slate-500 truncate max-w-[180px]">' + escH(email) + '</p>' : '') +
+                        '</div>' +
+                      '</div>' +
+                      '<button type="button" data-static-logout="true" class="px-2.5 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition shrink-0 cursor-pointer">Sair</button>' +
+                    '</div>';
+                }
+                return;
+              }
+              if (desktopEl) {
+                desktopEl.innerHTML =
+                  '<button type="button" data-static-login="navbar" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer">' +
+                    googleSvg + '<span>Entrar</span>' +
+                  '</button>';
+              }
+              if (mobileEl) {
+                mobileEl.innerHTML =
+                  '<button type="button" data-static-login="navbar_mobile" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">' +
+                    googleSvgMob + '<span>Entrar com o Google</span>' +
+                  '</button>';
+              }
+            }
+
+            function setLoginLoading(isLoading) {
+              nav.querySelectorAll('[data-static-login]').forEach(function (btn) {
+                btn.disabled = !!isLoading;
+                btn.classList.toggle('opacity-60', !!isLoading);
+                var lbl = btn.querySelector('span');
+                if (lbl) {
+                  if (isLoading) {
+                    if (!btn.dataset.origLabel) btn.dataset.origLabel = lbl.textContent;
+                    lbl.textContent = 'Entrando...';
+                  } else if (btn.dataset.origLabel) {
+                    lbl.textContent = btn.dataset.origLabel;
+                  }
+                }
+              });
+            }
+
+            function syncFromFirebaseIndexedDb() {
+              try {
+                if (!window.indexedDB || typeof window.indexedDB.databases !== 'function') return;
+                window.indexedDB.databases().then(function (dbs) {
+                  var exists = Array.isArray(dbs) && dbs.some(function (d) { return d && d.name === 'firebaseLocalStorageDb'; });
+                  if (!exists) return;
+                  var req = window.indexedDB.open('firebaseLocalStorageDb');
+                  req.onupgradeneeded = function (ev) {
+                    if (ev && ev.target && ev.target.transaction) {
+                      try { ev.target.transaction.abort(); } catch (e) {}
+                    }
+                  };
+                  req.onsuccess = function () {
+                    var idb = req.result;
+                    try {
+                      if (!idb.objectStoreNames || !idb.objectStoreNames.contains('firebaseLocalStorage')) {
+                        idb.close();
+                        return;
+                      }
+                      var tx = idb.transaction(['firebaseLocalStorage'], 'readonly');
+                      var store = tx.objectStore('firebaseLocalStorage');
+                      var allReq = store.getAll();
+                      allReq.onsuccess = function () {
+                        var rows = allReq.result || [];
+                        var found = null;
+                        for (var i = 0; i < rows.length; i++) {
+                          var row = rows[i];
+                          if (row && typeof row.fbase_key === 'string' && row.fbase_key.indexOf('firebase:authUser:') === 0 && row.value) {
+                            var val = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+                            if (val && val.uid) {
+                              found = {
+                                uid: String(val.uid),
+                                displayName: String(val.displayName || ''),
+                                email: String(val.email || ''),
+                                photoURL: String(val.photoURL || '')
+                              };
+                              break;
+                            }
+                          }
+                        }
+                        if (found) {
+                          writeCachedUser(found);
+                          renderAuth(found);
+                        } else if (readCachedUser()) {
+                          writeCachedUser(null);
+                          renderAuth(null);
+                        }
+                      };
+                      tx.oncomplete = function () { try { idb.close(); } catch (e) {} };
+                      tx.onerror = function () { try { idb.close(); } catch (e) {} };
+                    } catch (e) {
+                      try { idb.close(); } catch (err) {}
+                    }
+                  };
+                }).catch(function () {});
+              } catch (e) {}
+            }
+
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
+            nav.addEventListener('click', function (ev) {
+              var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
+              if (loginBtn) {
+                ev.preventDefault();
+                var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
+                setLoginLoading(true);
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
+                  .then(function (u) {
+                    setLoginLoading(false);
+                    if (u) renderAuth(u);
+                  })
+                  .catch(function (err) {
+                    setLoginLoading(false);
+                    console.error('Erro no login:', err);
+                  });
+                return;
+              }
+              var logoutBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-logout]') : null;
+              if (logoutBtn) {
+                ev.preventDefault();
+                logoutBtn.disabled = true;
+                loadStaticAuth()
+                  .then(function (mod) { return mod.staticLogout(); })
+                  .then(function () {
+                    renderAuth(null);
+                  })
+                  .catch(function (err) {
+                    logoutBtn.disabled = false;
+                    console.error('Erro no logout:', err);
+                  });
+              }
+            });
+
+            window.addEventListener('storage', function (ev) {
+              if (ev && ev.key === AUTH_KEY) renderAuth(readCachedUser());
+            });
+
+            var initialCachedUser = readCachedUser();
+            if (initialCachedUser) renderAuth(initialCachedUser);
+            syncFromFirebaseIndexedDb();
           })();
         </script>
       </nav>
@@ -718,6 +924,6 @@
     <script id="__PRELOADED_ASSET__" type="application/json">
 {"asset": {"ticker": "FLRY17", "tipo": "Debênture", "issuer": "FLEURY SA", "indexador": "DI+", "taxa_emissao": 1.35, "taxa_negocio_b3": 0.5564, "taxa_indicativa_anbima": null, "taxa_mercado": null, "taxa_ativo": 1.35, "taxa_compra": null, "taxa_venda": null, "pu_emissao": "1000.0", "pu": "1000.0", "pu_mercado": "1022.2467", "data_ultimo_negocio": "2026-05-29", "data_anbima": null, "volume_negociado_b3": 9688853.8, "volume_emissao": 350000000.0, "volume": 350000000.0, "quantidade_emitida": 350000.0, "quantidade": 350000.0, "data_emissao": "2022-04-22", "vencimento": "2026-08-28", "emissao": 7.0, "serie": 1.0, "isin": "BRFLRYDBS0C8", "lei": null, "cnpj_emissor": 60840055000131.0, "setor": "Assistência Médica", "agente_fiduciario": "PENTAGONO S/A DTVM", "coordenador_lider": "BANCO ITAU-BBA S/A", "rating": "AAA.br", "rating_original": "AAA.br", "rating_agencia": "Moody's", "agencia": "Moody's", "rating_data": "10/08/2026", "divulgacao": "10/08/2026", "securitizadora": null, "flag_vencido": 1, "flag_resgatado": 1, "flag_b3": 1, "status_ativo": "Resgatado", "duration": null, "ntnb_referencia": null, "taxa_ntnb": null, "publico_alvo": "Investidor Qualificado", "periodicidade_cupom": "-", "data_proximo_cupom": null, "vna": 1000.0, "pu_par": 1070.5689, "incentivada": "Não", "rating_normalizado": "AAA", "em_recuperacao_judicial": "Não", "fonte_precificacao": "Vencido / Sem Precificação", "spread_mercado": null, "spread_anbima": null, "spread": 0.0135, "pu_mercado_mediano": 1022.2467, "agio_desagio_pct": -4.51}, "prices": [{"date": "2026-06-01", "ticker": "FLRY17", "price": 1022.785338, "clean_price": 1022.785338, "yield": 0.5597, "fonte_yield": "ANBIMA", "spread_over_ref": 56.0}, {"date": "2026-06-02", "ticker": "FLRY17", "price": 1023.361875, "clean_price": 1023.361875, "yield": 0.5588, "fonte_yield": "ANBIMA", "spread_over_ref": 55.9}, {"date": "2026-06-03", "ticker": "FLRY17", "price": 1024.129692, "clean_price": 1024.129692, "yield": 0.5354, "fonte_yield": "ANBIMA", "spread_over_ref": 53.5}, {"date": "2026-06-05", "ticker": "FLRY17", "price": 1024.443908, "clean_price": 1024.443908, "yield": 0.5652, "fonte_yield": "ANBIMA", "spread_over_ref": 56.5}, {"date": "2026-06-08", "ticker": "FLRY17", "price": 1025.039873, "clean_price": 1025.039873, "yield": 0.5621, "fonte_yield": "ANBIMA", "spread_over_ref": 56.2}, {"date": "2026-06-09", "ticker": "FLRY17", "price": 1025.709526, "clean_price": 1025.709526, "yield": 0.5503, "fonte_yield": "ANBIMA", "spread_over_ref": 55.0}, {"date": "2026-06-10", "ticker": "FLRY17", "price": 1026.3614, "clean_price": 1026.3614, "yield": 0.5406, "fonte_yield": "ANBIMA", "spread_over_ref": 54.1}, {"date": "2026-06-11", "ticker": "FLRY17", "price": 1026.914358, "clean_price": 1026.914358, "yield": 0.5428, "fonte_yield": "ANBIMA", "spread_over_ref": 54.3}, {"date": "2026-06-12", "ticker": "FLRY17", "price": 1027.462071, "clean_price": 1027.462071, "yield": 0.5455, "fonte_yield": "ANBIMA", "spread_over_ref": 54.5}, {"date": "2026-06-15", "ticker": "FLRY17", "price": 1028.08264, "clean_price": 1028.08264, "yield": 0.5396, "fonte_yield": "ANBIMA", "spread_over_ref": 54.0}, {"date": "2026-06-16", "ticker": "FLRY17", "price": 1028.71408, "clean_price": 1028.71408, "yield": 0.5323, "fonte_yield": "ANBIMA", "spread_over_ref": 53.2}, {"date": "2026-06-17", "ticker": "FLRY17", "price": 1029.280494, "clean_price": 1029.280494, "yield": 0.5328, "fonte_yield": "ANBIMA", "spread_over_ref": 53.3}, {"date": "2026-06-18", "ticker": "FLRY17", "price": 1029.806902, "clean_price": 1029.806902, "yield": 0.5384, "fonte_yield": "ANBIMA", "spread_over_ref": 53.8}, {"date": "2026-06-19", "ticker": "FLRY17", "price": 1030.329199, "clean_price": 1030.329199, "yield": 0.5434, "fonte_yield": "ANBIMA", "spread_over_ref": 54.3}, {"date": "2026-06-22", "ticker": "FLRY17", "price": 1030.815783, "clean_price": 1030.815783, "yield": 0.5529, "fonte_yield": "ANBIMA", "spread_over_ref": 55.3}, {"date": "2026-06-23", "ticker": "FLRY17", "price": 1031.424356, "clean_price": 1031.424356, "yield": 0.5474, "fonte_yield": "ANBIMA", "spread_over_ref": 54.7}, {"date": "2026-06-24", "ticker": "FLRY17", "price": 1032.061087, "clean_price": 1032.061087, "yield": 0.5384, "fonte_yield": "ANBIMA", "spread_over_ref": 53.8}, {"date": "2026-06-25", "ticker": "FLRY17", "price": 1032.66558, "clean_price": 1032.66558, "yield": 0.5334, "fonte_yield": "ANBIMA", "spread_over_ref": 53.3}, {"date": "2026-06-26", "ticker": "FLRY17", "price": 1033.197393, "clean_price": 1033.197393, "yield": 0.5375, "fonte_yield": "ANBIMA", "spread_over_ref": 53.8}, {"date": "2026-06-29", "ticker": "FLRY17", "price": 1033.553573, "clean_price": 1033.553573, "yield": 0.5638, "fonte_yield": "ANBIMA", "spread_over_ref": 56.4}, {"date": "2026-06-30", "ticker": "FLRY17", "price": 1033.825601, "clean_price": 1033.825601, "yield": 0.6011, "fonte_yield": "ANBIMA", "spread_over_ref": 60.1}, {"date": "2026-07-01", "ticker": "FLRY17", "price": 1034.827476, "clean_price": 1034.827476, "yield": 0.5458, "fonte_yield": "ANBIMA", "spread_over_ref": 54.6}, {"date": "2026-07-02", "ticker": "FLRY17", "price": 1035.61638, "clean_price": 1035.61638, "yield": 0.5173, "fonte_yield": "ANBIMA", "spread_over_ref": 51.7}, {"date": "2026-07-03", "ticker": "FLRY17", "price": 1036.100804, "clean_price": 1036.100804, "yield": 0.5277, "fonte_yield": "ANBIMA", "spread_over_ref": 52.8}, {"date": "2026-07-06", "ticker": "FLRY17", "price": 1036.560543, "clean_price": 1036.560543, "yield": 0.5414, "fonte_yield": "ANBIMA", "spread_over_ref": 54.1}, {"date": "2026-07-07", "ticker": "FLRY17", "price": 1036.935091, "clean_price": 1036.935091, "yield": 0.5663, "fonte_yield": "ANBIMA", "spread_over_ref": 56.6}, {"date": "2026-07-08", "ticker": "FLRY17", "price": 1037.517616, "clean_price": 1037.517616, "yield": 0.5644, "fonte_yield": "ANBIMA", "spread_over_ref": 56.4}, {"date": "2026-07-09", "ticker": "FLRY17", "price": 1038.247874, "clean_price": 1038.247874, "yield": 0.5432, "fonte_yield": "ANBIMA", "spread_over_ref": 54.3}, {"date": "2026-07-10", "ticker": "FLRY17", "price": 1038.860912, "clean_price": 1038.860912, "yield": 0.5373, "fonte_yield": "ANBIMA", "spread_over_ref": 53.7}, {"date": "2026-07-13", "ticker": "FLRY17", "price": 1039.406674, "clean_price": 1039.406674, "yield": 0.5402, "fonte_yield": "ANBIMA", "spread_over_ref": 54.0}, {"date": "2026-07-14", "ticker": "FLRY17", "price": 1040.038317, "clean_price": 1040.038317, "yield": 0.5318, "fonte_yield": "ANBIMA", "spread_over_ref": 53.2}, {"date": "2026-07-15", "ticker": "FLRY17", "price": 1040.611782, "clean_price": 1040.611782, "yield": 0.5311, "fonte_yield": "ANBIMA", "spread_over_ref": 53.1}, {"date": "2026-07-16", "ticker": "FLRY17", "price": 1041.181854, "clean_price": 1041.181854, "yield": 0.5309, "fonte_yield": "ANBIMA", "spread_over_ref": 53.1}, {"date": "2026-07-17", "ticker": "FLRY17", "price": 1041.742979, "clean_price": 1041.742979, "yield": 0.5319, "fonte_yield": "ANBIMA", "spread_over_ref": 53.2}, {"date": "2026-07-20", "ticker": "FLRY17", "price": 1042.318214, "clean_price": 1042.318214, "yield": 0.5311, "fonte_yield": "ANBIMA", "spread_over_ref": 53.1}, {"date": "2026-07-21", "ticker": "FLRY17", "price": 1042.886089, "clean_price": 1042.886089, "yield": 0.5313, "fonte_yield": "ANBIMA", "spread_over_ref": 53.1}, {"date": "2026-07-22", "ticker": "FLRY17", "price": 1043.457949, "clean_price": 1043.457949, "yield": 0.531, "fonte_yield": "ANBIMA", "spread_over_ref": 53.1}, {"date": "2026-07-23", "ticker": "FLRY17", "price": 1043.976141, "clean_price": 1043.976141, "yield": 0.5381, "fonte_yield": "ANBIMA", "spread_over_ref": 53.8}, {"date": "2026-07-24", "ticker": "FLRY17", "price": 1044.469652, "clean_price": 1044.469652, "yield": 0.5488, "fonte_yield": "ANBIMA", "spread_over_ref": 54.9}, {"date": "2026-07-27", "ticker": "FLRY17", "price": 1045.098053, "clean_price": 1045.098053, "yield": 0.5409, "fonte_yield": "ANBIMA", "spread_over_ref": 54.1}, {"date": "2026-07-28", "ticker": "FLRY17", "price": 1045.689684, "clean_price": 1045.689684, "yield": 0.5381, "fonte_yield": "ANBIMA", "spread_over_ref": 53.8}, {"date": "2026-07-29", "ticker": "FLRY17", "price": 1046.141018, "clean_price": 1046.141018, "yield": 0.555, "fonte_yield": "ANBIMA", "spread_over_ref": 55.5}, {"date": "2026-07-30", "ticker": "FLRY17", "price": 1046.875134, "clean_price": 1046.875134, "yield": 0.5322, "fonte_yield": "ANBIMA", "spread_over_ref": 53.2}, {"date": "2026-07-31", "ticker": "FLRY17", "price": 1047.417578, "clean_price": 1047.417578, "yield": 0.5364, "fonte_yield": "ANBIMA", "spread_over_ref": 53.6}, {"date": "2026-08-03", "ticker": "FLRY17", "price": 1048.035555, "clean_price": 1048.035555, "yield": 0.5299, "fonte_yield": "ANBIMA", "spread_over_ref": 53.0}, {"date": "2026-08-04", "ticker": "FLRY17", "price": 1048.602545, "clean_price": 1048.602545, "yield": 0.5307, "fonte_yield": "ANBIMA", "spread_over_ref": 53.1}, {"date": "2026-08-05", "ticker": "FLRY17", "price": 1049.263594, "clean_price": 1049.263594, "yield": 0.518, "fonte_yield": "ANBIMA", "spread_over_ref": 51.8}, {"date": "2026-08-06", "ticker": "FLRY17", "price": 1049.759086, "clean_price": 1049.759086, "yield": 0.5292, "fonte_yield": "ANBIMA", "spread_over_ref": 52.9}, {"date": "2026-08-07", "ticker": "FLRY17", "price": 1050.276813, "clean_price": 1050.276813, "yield": 0.536, "fonte_yield": "ANBIMA", "spread_over_ref": 53.6}, {"date": "2026-08-10", "ticker": "FLRY17", "price": 1050.863489, "clean_price": 1050.863489, "yield": 0.5328, "fonte_yield": "ANBIMA", "spread_over_ref": 53.3}, {"date": "2026-08-11", "ticker": "FLRY17", "price": 1051.31996, "clean_price": 1051.31996, "yield": 0.5488, "fonte_yield": "ANBIMA", "spread_over_ref": 54.9}, {"date": "2026-08-12", "ticker": "FLRY17", "price": 1051.910911, "clean_price": 1051.910911, "yield": 0.5451, "fonte_yield": "ANBIMA", "spread_over_ref": 54.5}, {"date": "2026-08-13", "ticker": "FLRY17", "price": 1052.426743, "clean_price": 1052.426743, "yield": 0.5526, "fonte_yield": "ANBIMA", "spread_over_ref": 55.3}, {"date": "2026-08-14", "ticker": "FLRY17", "price": 1052.921389, "clean_price": 1052.921389, "yield": 0.5634, "fonte_yield": "ANBIMA", "spread_over_ref": 56.3}, {"date": "2026-08-17", "ticker": "FLRY17", "price": 1053.54785, "clean_price": 1053.54785, "yield": 0.5545, "fonte_yield": "ANBIMA", "spread_over_ref": 55.5}, {"date": "2026-08-18", "ticker": "FLRY17", "price": 1054.222713, "clean_price": 1054.222713, "yield": 0.5382, "fonte_yield": "ANBIMA", "spread_over_ref": 53.8}, {"date": "2026-08-19", "ticker": "FLRY17", "price": 1054.8154, "clean_price": 1054.8154, "yield": 0.5343, "fonte_yield": "ANBIMA", "spread_over_ref": 53.4}, {"date": "2026-08-20", "ticker": "FLRY17", "price": 1055.37675, "clean_price": 1055.37675, "yield": 0.5352, "fonte_yield": "ANBIMA", "spread_over_ref": 53.5}, {"date": "2026-08-21", "ticker": "FLRY17", "price": 1055.910686, "clean_price": 1055.910686, "yield": 0.5404, "fonte_yield": "ANBIMA", "spread_over_ref": 54.0}, {"date": "2026-08-24", "ticker": "FLRY17", "price": 1056.467154, "clean_price": 1056.467154, "yield": 0.5422, "fonte_yield": "ANBIMA", "spread_over_ref": 54.2}, {"date": "2026-08-25", "ticker": "FLRY17", "price": 1057.116937, "clean_price": 1057.116937, "yield": 0.5295, "fonte_yield": "ANBIMA", "spread_over_ref": 52.9}, {"date": "2026-08-26", "ticker": "FLRY17", "price": 1057.657825, "clean_price": 1057.657825, "yield": 0.5338, "fonte_yield": "ANBIMA", "spread_over_ref": 53.4}, {"date": "2026-08-27", "ticker": "FLRY17", "price": 1055.124973, "clean_price": 1055.124973, "yield": 0.5411, "fonte_yield": "ANBIMA", "spread_over_ref": 54.1}], "emitter": {"cnpj": "60840055000131", "cnpj_formatado": "60.840.055/0001-31", "razao_social": "FLEURY SA", "nome_fantasia": "FLEURY SA", "setor": "Serviços Médicos", "tipo_emissor": "Companhia Aberta", "categoria_cvm": "Categoria A", "situacao_cvm": "ATIVO", "site_ri": "https://ri.fleury.com.br/", "municipio": "SÃO PAULO", "uf": "SP", "descricao": "FLEURY SA é uma companhia aberta (Categoria A) com registro CVM na situação ATIVO, atuante no setor de Serviços Médicos."}, "raiox_cnpj": "60840055000131", "paymentEvents": [{"ticker": "FLRY17", "data_evento": "2026-08-28", "data_liquidacao": "2026-08-28", "tipo_evento": "Amortização", "taxa": null, "valor_real": null, "valor_projetado": 1000.0, "status": "Previsto", "flag_status": "Total", "fonte": "Cronograma Contratual"}], "documents": [], "aiSummary": "O ativo FLRY17 é um título de crédito privado do tipo Debênture (comum) emitido por FLEURY SA (CNPJ: 60.840.055/0001-31), com taxa de emissão de CDI + 1.35% a.a. e data de vencimento em 28/08/2026. O título encontra-se resgatado, avaliado com rating AAA em escala nacional e spread indicativo de 1.35% sobre a NTN-B soberana, com volume emitido de R$ 350.000.000,00. Dados analíticos consolidados, fluxo de pagamentos e negociações de mercado secundário via FIXDATA (fixdatabrasil.com.br).", "relatedIssuer": [], "relatedSector": [{"ticker": "22J0305579", "tipo": "CRI", "issuer": "DIAGNOSTICOS DA AMERICA SA", "vencimento": "2027-10-15"}, {"ticker": "21D0862572", "tipo": "CRI", "issuer": "REDE D'OR SÃO LUIZ S.A.", "vencimento": "2036-05-15"}, {"ticker": "23H0027402", "tipo": "CRI", "issuer": "REDE D'OR SÃO LUIZ S.A.", "vencimento": "2028-08-15"}, {"ticker": "23L1737622", "tipo": "CRI", "issuer": "REDE D'OR SÃO LUIZ S.A.", "vencimento": "2033-12-15"}], "issuerSlug": null, "sectorSlug": "assistencia-medica"}
     </script>
-    <script type="module" crossorigin src="/assets/index-DsuL71c1.js"></script>
+    <script type="module" crossorigin src="/assets/index-BbEErR7e.js"></script>
   </body>
 </html>
