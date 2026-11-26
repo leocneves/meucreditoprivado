@@ -69,8 +69,15 @@
     </script>
 
 
-    <link rel="stylesheet" href="/index.css">
+    
     <script type="module" crossorigin src="/assets/index-CprJDI7g.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-DnBxXqaB.js">
+    <link rel="modulepreload" crossorigin href="/assets/data-vendor-o2xKvFs6.js">
+    <link rel="modulepreload" crossorigin href="/assets/charts-vendor-B8w0vQsr.js">
+    <link rel="modulepreload" crossorigin href="/assets/firebase-vendor-Cw-6yy1k.js">
+    <link rel="modulepreload" crossorigin href="/assets/authLead-Bpv8E32e.js">
+    <link rel="modulepreload" crossorigin href="/assets/analytics-vendor-CcfRGZij.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-dfJ-jhZV.css">
   </head>
   <body class="bg-slate-50 text-slate-900">
     <div id="root">
@@ -540,13 +547,18 @@
               } catch (e) {}
             }
 
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
             nav.addEventListener('click', function (ev) {
               var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
               if (loginBtn) {
                 ev.preventDefault();
                 var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
                 setLoginLoading(true);
-                import('/assets/static-auth.js')
+                loadStaticAuth()
                   .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
                   .then(function (u) {
                     setLoginLoading(false);
@@ -562,7 +574,7 @@
               if (logoutBtn) {
                 ev.preventDefault();
                 logoutBtn.disabled = true;
-                import('/assets/static-auth.js')
+                loadStaticAuth()
                   .then(function (mod) { return mod.staticLogout(); })
                   .then(function () {
                     renderAuth(null);

@@ -606,13 +606,18 @@ def shared_navbar_html() -> str:
               } catch (e) {}
             }
 
+            function loadStaticAuth() {
+              var modUrl = window.location.origin + '/assets/static-auth.js';
+              return import(modUrl);
+            }
+
             nav.addEventListener('click', function (ev) {
               var loginBtn = ev.target && ev.target.closest ? ev.target.closest('[data-static-login]') : null;
               if (loginBtn) {
                 ev.preventDefault();
                 var origin = loginBtn.getAttribute('data-static-login') || 'navbar';
                 setLoginLoading(true);
-                import('/assets/static-auth.js')
+                loadStaticAuth()
                   .then(function (mod) { return mod.staticLoginWithGoogle(origin); })
                   .then(function (u) {
                     setLoginLoading(false);
@@ -628,7 +633,7 @@ def shared_navbar_html() -> str:
               if (logoutBtn) {
                 ev.preventDefault();
                 logoutBtn.disabled = true;
-                import('/assets/static-auth.js')
+                loadStaticAuth()
                   .then(function (mod) { return mod.staticLogout(); })
                   .then(function () {
                     renderAuth(null);
