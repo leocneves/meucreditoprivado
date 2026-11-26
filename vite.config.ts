@@ -14,7 +14,17 @@ export default defineConfig(({ mode, command }) => {
         outDir: 'docs',
         emptyOutDir: false,
         rollupOptions: {
+          preserveEntrySignatures: 'exports-only',
+          input: {
+            index: path.resolve(__dirname, 'index.html'),
+            'static-auth': path.resolve(__dirname, 'src/staticAuthBridge.ts'),
+          },
           output: {
+            entryFileNames(chunkInfo) {
+              return chunkInfo.name === 'static-auth'
+                ? 'assets/static-auth.js'
+                : 'assets/index-[hash].js';
+            },
             manualChunks(id) {
               if (id.includes('node_modules')) {
                 if (id.includes('firebase') || id.includes('@firebase')) return 'firebase-vendor';

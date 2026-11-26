@@ -94,6 +94,14 @@ if (fs.existsSync(assetsDir) && fs.existsSync(currentBundlePath)) {
   }
 }
 
+const docsStaticAuthPath = path.join(assetsDir, 'static-auth.js');
+const publicAssetsDir = path.join(rootDir, 'public', 'assets');
+const publicStaticAuthPath = path.join(publicAssetsDir, 'static-auth.js');
+if (fs.existsSync(docsStaticAuthPath)) {
+  fs.mkdirSync(publicAssetsDir, { recursive: true });
+  fs.copyFileSync(docsStaticAuthPath, publicStaticAuthPath);
+}
+
 console.log(
   `✅ Bundle sincronizado (${currentBundleSrc}): ${updatedStatic} páginas estáticas, ${syncedBundles} bundles legados e ${syncedCssCount} arquivos index.css atualizados.`
 );

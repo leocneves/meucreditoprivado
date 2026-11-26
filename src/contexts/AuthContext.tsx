@@ -5,9 +5,10 @@ import {
   signOut,
   onAuthStateChanged
 } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db, googleProvider, isFirebaseConfigured } from '../utils/firebase';
+import { auth, googleProvider, isFirebaseConfigured } from '../utils/firebase';
 import { posthog } from '../utils/posthog';
+import { syncAuthCache } from '../utils/authCache';
+import { recordUserLead } from '../utils/authLead';
 
 interface AuthContextType {
   user: User | null;
@@ -51,6 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      syncAuthCache(currentUser);
       setUser(currentUser);
       setLoading(false);
 
@@ -79,26 +81,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const result = await signInWithPopup(auth, googleProvider);
       const loggedUser = result.user;
 
-      // Salva o lead automaticamente no Firestore se configurado
-      if (db && loggedUser) {
-        try {
-          const leadRef = doc(db, 'leads', loggedUser.uid);
-          await setDoc(
-            leadRef,
-            {
-              uid: loggedUser.uid,
-              email: loggedUser.email,
-              displayName: loggedUser.displayName,
-              photoURL: loggedUser.photoURL,
-              origin,
-              lastLoginAt: serverTimestamp(),
-              createdAt: serverTimestamp()
-            },
-            { merge: true }
-          );
-        } catch (dbErr) {
-          console.warn('Aviso: Não foi possível salvar lead no Firestore:', dbErr);
-        }
+      if (loggedUser) {
+        syncAuthCache(loggedUser);
+        await recordUserLead(loggedUser, origin);
       }
 
       setUser(loggedUser);
@@ -127,6 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await signOut(auth);
       posthog.reset();
+      syncAuthCache(null);
       setUser(null);
     } catch (err) {
       console.error('Erro ao sair:', err);
