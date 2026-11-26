@@ -1818,22 +1818,6 @@ def render_home_page(total_count: int = None, active_count: int = None):
           </p>
         </section>
 
-        <!-- Faixa Discreta: Download CSV Completo no Dashboard Secundário -->
-        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="space-y-0.5">
-            <div class="flex items-center gap-2 flex-wrap">
-              <h2 class="text-sm font-bold text-slate-900">Base Completa disponível para Download em .CSV</h2>
-              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Grátis com login • 27 colunas</span>
-            </div>
-            <p class="text-xs text-slate-500">
-              Exporte gratuitamente a planilha estruturada de Debêntures, CRIs e CRAs (Excel ou Python) na aba <strong>Dashboard Secundário</strong>.
-            </p>
-          </div>
-          <a href="/charts/" class="inline-flex items-center justify-center px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-xs shrink-0">
-            Baixar .CSV no Dashboard →
-          </a>
-        </section>
-
         <!-- Explorar por Categoria, Setores & Emissores -->
         <section class="space-y-3">
           <div class="flex items-center justify-between">
@@ -1941,6 +1925,12 @@ def render_home_page(total_count: int = None, active_count: int = None):
             </a>
           </div>
         </section>
+
+        <div class="flex justify-center pt-2">
+          <a href="/charts/" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-700 text-xs sm:text-sm font-semibold shadow-xs transition">
+            <span>Base Completa disponível para Download em .CSV gratuitamente após o login</span>
+          </a>
+        </div>
       </main>
 
 {footer_html}

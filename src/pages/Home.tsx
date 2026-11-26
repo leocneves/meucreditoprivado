@@ -649,35 +649,6 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Faixa Discreta: Download da Base Completa em .CSV no Dashboard Secundário */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-start sm:items-center gap-3.5 min-w-0">
-            <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
-              <Download size={20} />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-sm font-bold text-slate-900">
-                  Base Completa disponível para Download em .CSV
-                </h2>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Grátis com login • 27 colunas
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Exporte gratuitamente a planilha estruturada de Debêntures, CRIs e CRAs (Excel ou Python) na aba <strong>Dashboard Secundário</strong>.
-              </p>
-            </div>
-          </div>
-          <Link
-            to="/charts"
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm shrink-0"
-          >
-            <span>Baixar .CSV no Dashboard</span>
-            <ArrowUpRight size={15} />
-          </Link>
-        </div>
       </section>
 
       {/* ================= GRÁFICOS: SEÇÃO DE ESTRUTURA DO MERCADO ================= */}
@@ -1465,6 +1436,17 @@ const Home: React.FC = () => {
 
         {!loading && <Watchlist assets={assets} />}
       </section>
+
+      <div className="container mx-auto px-4 flex justify-center">
+        <Link
+          to="/charts"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-700 text-xs sm:text-sm font-semibold shadow-xs transition"
+        >
+          <Download size={16} />
+          <span>Base Completa disponível para Download em .CSV gratuitamente após o login</span>
+          <ArrowUpRight size={15} />
+        </Link>
+      </div>
 
       {/* ================= MODAL DE AVISO: MERCADO PRIMÁRIO ================= */}
       {showPrimaryModal && (
