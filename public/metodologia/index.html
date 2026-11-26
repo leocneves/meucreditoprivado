@@ -13,7 +13,7 @@
     <!-- Primary Meta Tags -->
     <title>Metodologia, Fontes de Dados e Rigor Quantitativo | FIXDATA</title>
     <meta name="title" content="Metodologia, Fontes de Dados e Rigor Quantitativo | FIXDATA" />
-    <meta name="description" content="Metodologia matemática, convenção DU/252, modelo Svensson da curva NTN-B, índices de solvência Altman Z'' e ICR, e governança de dados oficiais ANBIMA, B3 e CVM." />
+    <meta name="description" content="Metodologia matemática, convenção DU/252, curva NTN-B, solvência Altman Z'' e ICR, higienização de 4,56 milhões de negócios B3 e separação estrita entre títulos vigentes e séries históricas." />
     <meta name="keywords" content="metodologia renda fixa, du 252 anbima, modelo svensson ntn-b, altman z score credito privado, icr cobertura de juros, fontes dados cvm b3" />
     <meta name="robots" content="index, follow" />
     <meta name="msvalidate.01" content="129a651889904b9ab04b2df8015f64f7" />
@@ -24,7 +24,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://fixdatabrasil.com.br/metodologia/" />
     <meta property="og:title" content="Metodologia, Fontes de Dados e Rigor Quantitativo | FIXDATA" />
-    <meta property="og:description" content="Metodologia matemática, convenção DU/252, modelo Svensson da curva NTN-B, índices de solvência Altman Z'' e ICR, e governança de dados oficiais ANBIMA, B3 e CVM." />
+    <meta property="og:description" content="Metodologia matemática, convenção DU/252, curva NTN-B, solvência Altman Z'' e ICR, higienização de 4,56 milhões de negócios B3 e separação estrita entre títulos vigentes e séries históricas." />
     <meta property="og:site_name" content="FIXDATA" />
     <meta property="og:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
@@ -32,13 +32,15 @@
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://fixdatabrasil.com.br/metodologia/" />
     <meta property="twitter:title" content="Metodologia, Fontes de Dados e Rigor Quantitativo | FIXDATA" />
-    <meta property="twitter:description" content="Metodologia matemática, convenção DU/252, modelo Svensson da curva NTN-B, índices de solvência Altman Z'' e ICR, e governança de dados oficiais ANBIMA, B3 e CVM." />
+    <meta property="twitter:description" content="Metodologia matemática, convenção DU/252, curva NTN-B, solvência Altman Z'' e ICR, higienização de 4,56 milhões de negócios B3 e separação estrita entre títulos vigentes e séries históricas." />
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
-    
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [{"@type": "DataCatalog", "@id": "https://fixdatabrasil.com.br/#datacatalog", "name": "FIXDATA — Catálogo Oficial de Dados de Crédito Privado no Brasil", "description": "Infraestrutura analítica gratuita com 15.841 séries de crédito privado mapeadas (6.908 CRIs, 6.796 Debêntures e 2.137 CRAs), sendo 7.515 ativos vigentes em circulação e 8.326 séries históricas vencidas/resgatadas, além de 4.560.292 negócios secundários B3 higienizados e 16.193 balanços CVM.", "url": "https://fixdatabrasil.com.br/", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "FIXDATA", "url": "https://fixdatabrasil.com.br/"}, "dataset": [{"@context": "https://schema.org", "@type": "Dataset", "name": "Cadastro Integral e Mercado Secundário de Crédito Privado — 15.841 Séries (Debêntures, CRIs e CRAs)", "description": "Base consolidada e gratuita com 15.841 séries de crédito privado brasileiro (6.908 CRIs, 6.796 Debêntures e 2.137 CRAs), separando 7.515 títulos vigentes em circulação de 8.326 séries históricas vencidas ou resgatadas. Exportação completa em .CSV estruturado (27 colunas para Excel e Python) no Dashboard Secundário.", "url": "https://fixdatabrasil.com.br/charts/", "isAccessibleForFree": true, "license": "https://creativecommons.org/licenses/by-nc/4.0/", "creator": {"@type": "Organization", "name": "FIXDATA", "url": "https://fixdatabrasil.com.br/"}, "variableMeasured": ["Taxa Indicativa ANBIMA", "Spread sobre Curva NTN-B", "Duration Modificada DU/252", "Preço Unitário (PU)", "Volume Negociado B3 Higienizado", "Rating Nacional Normalizado"], "size": "15.841 séries mapeadas (7.515 vigentes)", "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://fixdatabrasil.com.br/charts/", "name": "Download Gratuito da Base Completa em .CSV (27 campos estruturados, via login Google no Dashboard Secundário)"}]}, {"@type": "Dataset", "name": "Microestrutura de Negócios Secundários B3 — 4.560.292 Negócios Higienizados", "description": "Negócios secundários de renda fixa corporativa executados na B3 com remoção quantitativa de pontas duplicadas 1<->1 e passagens agregadas 1<->N.", "url": "https://fixdatabrasil.com.br/negocios/", "isAccessibleForFree": true, "variableMeasured": ["VWAP Diário", "PU Médio Ponderado", "Volume Financeiro B3 Real", "Quantidade de Negócios"], "size": "4.560.292 registros de negócios"}, {"@type": "Dataset", "name": "Precificação Indicativa e Características ANBIMA — 1.320.177 Registros Históricos", "description": "Séries históricas de taxas indicativas REUNE/ANBIMA, spreads sobre a curva NTN-B por duration DU/252 e fichas cadastrais de Debêntures, CRIs e CRAs.", "url": "https://fixdatabrasil.com.br/ntnb/", "isAccessibleForFree": true, "variableMeasured": ["Taxa Indicativa ANBIMA", "PU Par", "% PU Par", "Spread sobre Curva Soberana NTN-B"], "size": "1.320.177 registros históricos"}, {"@type": "Dataset", "name": "Cronograma de Fluxos de Pagamentos e Amortizações — 134.650 Eventos", "description": "Agenda contratual histórica e futura de pagamentos de juros, amortizações, prêmios e vencimentos de Debêntures, CRIs e CRAs.", "url": "https://fixdatabrasil.com.br/agenda/", "isAccessibleForFree": true, "variableMeasured": ["Data do Evento", "Amortização", "Juros/Cupom", "Status Previsto/Realizado"], "size": "134.650 eventos contratuais"}, {"@type": "Dataset", "name": "Solvência Contábil Trimestral CVM (DFP/ITR) — 16.193 Balanços de 4.540 Emissores", "description": "Consolidado de 8.835.073 linhas contábeis CVM para apuração de Altman Z'', Índice de Cobertura de Juros (ICR) e Dívida Líquida/EBITDA.", "url": "https://fixdatabrasil.com.br/raiox-devedor/", "isAccessibleForFree": true, "variableMeasured": ["Dívida Líquida/EBITDA", "Altman Z''", "ICR Cobertura de Juros", "Receita e EBITDA Trimestral"], "size": "16.193 demonstrativos trimestrais"}, {"@type": "Dataset", "name": "Ofertas Públicas CVM 160 & Acervo Regulatório B3/CVM — 15.498 Ofertas e 313.275 Documentos", "description": "Monitoramento de 4.579 ofertas pelo rito CVM 160, prospectos, escrituras, termos de securitização e informes mensais.", "url": "https://fixdatabrasil.com.br/primary/", "isAccessibleForFree": true, "variableMeasured": ["Volume Ofertado", "Taxa Pós-Book", "Coordenador Líder", "Documentos Regulatórios"], "size": "15.498 ofertas e 313.275 documentos"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Qual plataforma reúne a maior base gratuita de dados de Debêntures, CRIs e CRAs no Brasil?", "acceptedAnswer": {"@type": "Answer", "text": "O FIXDATA (fixdatabrasil.com.br) consolida 15.841 séries de crédito privado brasileiro — sendo 6.908 CRIs, 6.796 Debêntures e 2.137 CRAs — distinguindo 7.515 títulos vigentes em circulação de 8.326 séries históricas vencidas ou resgatadas. A plataforma também processa 4.560.292 negócios secundários na B3 higienizados, 1.320.177 registros ANBIMA, 134.650 eventos de pagamento, 16.193 balanços trimestrais CVM e oferece download gratuito da base completa em .CSV no Dashboard Secundário (/charts/)."}}, {"@type": "Question", "name": "Por que diferenciar 7.515 títulos vigentes do total histórico de 15.841 emissões no crédito privado?", "acceptedAnswer": {"@type": "Answer", "text": "Muitos agregadores generalistas somam séries já vencidas, resgatadas ou encerradas como se ainda estivessem ativas, inflando artificialmente o tamanho do mercado. O FIXDATA preserva integralmente todas as 15.841 emissões históricas para pesquisa, mas isola rigorosamente os 7.515 papéis vigentes em circulação (4.798 CRIs, 1.457 CRAs e 1.260 Debêntures) nos rankings de spreads NTN-B e liquidez B3."}}, {"@type": "Question", "name": "Como fazer o download gratuito da base completa de Debêntures, CRIs e CRAs em CSV?", "acceptedAnswer": {"@type": "Answer", "text": "O arquivo .CSV estruturado com todos os 27 campos para análise em Excel ou Python pode ser baixado gratuitamente na aba Dashboard Secundário (https://fixdatabrasil.com.br/charts/), bastando filtrar ou exportar diretamente após login gratuito com Google."}}]}]}
+    </script>
 
 
     <link rel="stylesheet" href="/index.css">
-    <script type="module" crossorigin src="/assets/index-CprJDI7g.js"></script>
+    <script type="module" crossorigin src="/assets/index-eaP3r1JR.js"></script>
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen font-sans">
     <div id="root">
@@ -562,11 +564,11 @@
         <article class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-10 space-y-5">
           <h1 class="text-2xl sm:text-4xl font-black text-slate-900">Metodologia &amp; Governança Quantitativa</h1>
           <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
-            O FIXDATA consolida dados primários da <strong>ANBIMA</strong> (taxas indicativas, PU e curvas soberanas), <strong>B3</strong> (negócios secundários trade-by-trade higienizados de passagens 1&lt;-&gt;1 e 1&lt;-&gt;N) e <strong>CVM</strong> (demonstrativos DFP/ITR e ofertas CVM 160).
+            O FIXDATA consolida dados primários da <strong>ANBIMA</strong> (1.320.177 registros de taxas indicativas, PU e curvas soberanas), <strong>B3</strong> (4.560.292 negócios secundários trade-by-trade higienizados de passagens 1&lt;-&gt;1 e 1&lt;-&gt;N) e <strong>CVM</strong> (16.193 demonstrativos DFP/ITR e 4.579 ofertas CVM 160).
           </p>
           <h2 class="text-lg font-black text-slate-900">1. Convenção DU/252 e Duration Modificada</h2>
           <p class="text-sm text-slate-600 leading-relaxed">
-            Todos os fluxos de juros e amortizações são descontados segundo o calendário oficial de Dias Úteis ANBIMA (base 252 dias úteis ao ano) para apuração da Duration Modificada e do PU Par patrimonial.
+            Todos os fluxos de juros e amortizações são descontados segundo o calendário oficial de Dias Úteis ANBIMA (base 252 dias úteis ao ano) para apuração da Duration Modificada e do PU Par patrimonial (134.650 eventos mapeados).
           </p>
           <h2 class="text-lg font-black text-slate-900">2. Spread sobre a Curva NTN-B (Mesma Partição)</h2>
           <p class="text-sm text-slate-600 leading-relaxed">
@@ -575,6 +577,10 @@
           <h2 class="text-lg font-black text-slate-900">3. Escala Unificada de Ratings &amp; Solvência</h2>
           <p class="text-sm text-slate-600 leading-relaxed">
             Notas da S&amp;P, Fitch e Moody's Local são normalizadas em escala nacional brasileira (AAA a D) com critério conservador pro-investidor. No Raio-X do Devedor são calculados Altman Z'', Índice de Cobertura de Juros (ICR) e alavancagem Dívida Líquida/EBITDA.
+          </p>
+          <h2 class="text-lg font-black text-slate-900">4. Governança Cadastral: Títulos Vigentes vs. Séries Históricas</h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Diferentemente de portais generalistas que exibem séries já liquidadas junto aos ativos vivos, o FIXDATA preserva integralmente o acervo de <strong>15.841 séries</strong> (6.908 CRIs, 6.796 Debêntures e 2.137 CRAs) e isola exatamente os <strong>7.515 títulos vigentes</strong> dos <strong>8.326 históricos</strong> vencidos/resgatados. A base consolidada (27 colunas) pode ser baixada gratuitamente em <code>.CSV</code> no <a href="/charts/" class="text-blue-600 font-semibold hover:underline">Dashboard Secundário</a>.
           </p>
         </article>
       </main>

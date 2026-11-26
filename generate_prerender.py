@@ -20,6 +20,8 @@ from prerender_hubs import (
     write_hub_manifest,
     render_all_hub_pages,
     build_rich_static_page_body,
+    compute_inventory_stats,
+    build_datacatalog_faq_jsonld,
     safe_float,
     GOOGLE_NEWS_SWG_SNIPPET,
 )
@@ -1488,11 +1490,11 @@ STATIC_PAGES_META = [
     },
     {
         "slug": "charts",
-        "title": "Painel Analítico de Spreads e Mercado Secundário ANBIMA | FIXDATA",
-        "description": "Gráficos interativos de spreads sobre a curva NTN-B, dispersão de PU, duration e prêmios de risco de crédito privado no Brasil.",
-        "keywords": "spreads anbima, dispersão de taxas, ntn-b spread, duration crédito privado, gráficos de renda fixa",
-        "h1": "Dashboard Analítico de Mercado Secundário",
-        "lead": "Análise quantitativa de taxas indicativas ANBIMA, dispersão de preços unitários e prêmios de risco.",
+        "title": "Dashboard Secundário & Download CSV de Debêntures, CRIs e CRAs | FIXDATA",
+        "description": "Gráficos interativos de spreads sobre a curva NTN-B, dispersão de PU, duration e download gratuito da base completa em .CSV (27 colunas para Excel e Python) sobre mais de 15.800 séries mapeadas.",
+        "keywords": "download csv credito privado, exportar debentures cri cra csv, spreads anbima, dispersão de taxas, ntn-b spread, duration crédito privado, gráficos de renda fixa",
+        "h1": "Dashboard Secundário & Download da Base (.CSV)",
+        "lead": "Análise quantitativa de taxas indicativas ANBIMA, spreads NTN-B e exportação gratuita da planilha completa em .CSV.",
     },
     {
         "slug": "ntnb",
@@ -1553,18 +1555,18 @@ STATIC_PAGES_META = [
     {
         "slug": "metodologia",
         "title": "Metodologia, Fontes de Dados e Rigor Quantitativo | FIXDATA",
-        "description": "Metodologia matemática, convenção DU/252, modelo Svensson da curva NTN-B, índices de solvência Altman Z'' e ICR, e governança de dados oficiais ANBIMA, B3 e CVM.",
+        "description": "Metodologia matemática, convenção DU/252, curva NTN-B, solvência Altman Z'' e ICR, higienização de 4,56 milhões de negócios B3 e separação estrita entre títulos vigentes e séries históricas.",
         "keywords": "metodologia renda fixa, du 252 anbima, modelo svensson ntn-b, altman z score credito privado, icr cobertura de juros, fontes dados cvm b3",
         "h1": "Metodologia & Transparência de Dados",
-        "lead": "Fundamentos quantitativos, convenções financeiras e fontes oficiais de dados do FIXDATA para análise de crédito privado brasileiro.",
+        "lead": "Fundamentos quantitativos, convenções financeiras e governança de dados oficiais do FIXDATA para análise de crédito privado brasileiro.",
     },
     {
         "slug": "sobre",
-        "title": "Sobre o FIXDATA | Quem Somos, Missão e Governança",
-        "description": "Conheça o FIXDATA, infraestrutura analítica independente criada por Leonardo Contador Neves para democratizar dados de Debêntures, CRIs e CRAs no Brasil.",
-        "keywords": "sobre fixdata, quem somos, leonardo contador neves, crédito privado brasil, governança de dados",
+        "title": "Sobre o FIXDATA | Maior Base Aberta de Crédito Privado do Brasil",
+        "description": "Conheça o FIXDATA: maior base aberta de crédito privado no Brasil com mais de 15.800 séries mapeadas de CRIs, Debêntures e CRAs, 4,56 milhões de negócios B3 higienizados, balanços CVM e download em .CSV.",
+        "keywords": "sobre fixdata, quem somos, leonardo contador neves, crédito privado brasil, governança de dados, base dados debentures cri cra",
         "h1": "Sobre o FIXDATA",
-        "lead": "Infraestrutura analítica independente que traz transparência, rigor matemático e dados abertos para o mercado de Renda Fixa no Brasil.",
+        "lead": "Infraestrutura analítica independente com cobertura integral do mercado de Debêntures, CRIs e CRAs no Brasil.",
     },
     {
         "slug": "termos",
@@ -1584,15 +1586,17 @@ STATIC_PAGES_META = [
     },
 ]
 
-def render_static_pages(df_active_count: int = 7321):
+def render_static_pages(df_active_count: int = 7515, inv: dict | None = None):
     print("📄 Gerando páginas estáticas institucionais enriquecidas para SEO/GEO...")
+    if inv is None:
+        inv = HUBS_REGISTRY.get("inventory") if HUBS_REGISTRY else compute_inventory_stats()
     bundle_tag = get_bundle_script()
     navbar_html = shared_navbar_html()
     footer_html = shared_footer_html()
     for p in STATIC_PAGES_META:
         slug = p["slug"]
         page_url = f"{BASE_URL}/{slug}/"
-        body_main_html, extra_ld = build_rich_static_page_body(slug, df_active_count, format_currency)
+        body_main_html, extra_ld = build_rich_static_page_body(slug, df_active_count, format_currency, inv=inv)
         html = f"""<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -1668,16 +1672,30 @@ def render_home_page(total_count: int = None, active_count: int = None):
     ativos_dia = f"{ult.get('ativos_negociados', 0):,}".replace(",", ".")
     dt_dia = ult.get("data", "")
 
-    if total_count is None or active_count is None:
+    inv = HUBS_REGISTRY.get("inventory") if HUBS_REGISTRY else None
+    if inv is None or total_count is None or active_count is None:
         try:
-            df_tmp = get_assets()
-            total_count = len(df_tmp)
-            active_count = int((df_tmp["status_ativo"].astype(str).str.strip() == "Ativo").sum())
+            df_tmp = HUBS_REGISTRY.get("all_df") if HUBS_REGISTRY and HUBS_REGISTRY.get("all_df") is not None else get_assets()
+            inv = compute_inventory_stats(df_tmp)
         except Exception:
-            total_count = 15766
-            active_count = 7321
+            inv = compute_inventory_stats()
+        if total_count is None:
+            total_count = inv["total"]
+        if active_count is None:
+            active_count = inv["active"]
     total_count_fmt = f"{total_count:,}".replace(",", ".")
     active_count_fmt = f"{active_count:,}".replace(",", ".")
+    hist_count_fmt = f"{inv['historical']:,}".replace(",", ".")
+    cri_total_fmt = f"{inv['cri_total']:,}".replace(",", ".")
+    deb_total_fmt = f"{inv['deb_total']:,}".replace(",", ".")
+    cra_total_fmt = f"{inv['cra_total']:,}".replace(",", ".")
+    b3_clean_fmt = f"{inv['b3_trades_clean']:,}".replace(",", ".")
+    home_extra_ld = build_datacatalog_faq_jsonld(inv)
+    home_meta_desc = (
+        f"Maior base aberta de crédito privado do Brasil: {total_count_fmt} séries de CRIs ({cri_total_fmt}), "
+        f"Debêntures ({deb_total_fmt}) e CRAs ({cra_total_fmt}) — {active_count_fmt} títulos vigentes em circulação e "
+        f"{hist_count_fmt} séries históricas — com {b3_clean_fmt} negócios B3 higienizados, spreads NTN-B, solvência CVM e download gratuito em .CSV no Dashboard Secundário."
+    )
     
     # 2. Carrega Top 50 ativos mais negociados na B3
     top_50 = []
@@ -1760,7 +1778,7 @@ def render_home_page(total_count: int = None, active_count: int = None):
               Inteligência de Mercado para Debêntures, CRIs e CRAs
             </h1>
             <p class="text-slate-300 text-base md:text-lg leading-relaxed font-normal">
-              Acompanhe cotações em tempo real, taxas indicativas ANBIMA, spreads sobre a curva NTN-B, volume diário da B3, ratings e solvência de {active_count_fmt} títulos vigentes (e {total_count_fmt} no histórico completo CVM/ANBIMA).
+              Acompanhe cotações, taxas indicativas ANBIMA, spreads sobre a curva NTN-B, volume diário da B3, ratings e solvência de {total_count_fmt} séries mapeadas ({cri_total_fmt} CRIs, {deb_total_fmt} Debêntures e {cra_total_fmt} CRAs) — sendo {active_count_fmt} títulos vigentes em circulação e {hist_count_fmt} séries históricas.
             </p>
           </div>
         </div>
@@ -1785,7 +1803,7 @@ def render_home_page(total_count: int = None, active_count: int = None):
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
             <span class="text-xs font-bold text-slate-400 uppercase">Ativos Vigentes</span>
             <p class="text-2xl font-black text-purple-600">{active_count_fmt}</p>
-            <span class="text-[11px] text-slate-500">{total_count_fmt} títulos no cadastro CVM</span>
+            <span class="text-[11px] text-slate-500">{total_count_fmt} séries totais no cadastro CVM</span>
           </div>
         </div>
 
@@ -1796,8 +1814,24 @@ def render_home_page(total_count: int = None, active_count: int = None):
             <span class="text-[11px] font-semibold text-slate-500">Atualizado em {dt_dia_br}</span>
           </div>
           <p class="text-slate-700">
-            Em <strong>{dt_dia_br}</strong>, o mercado secundário brasileiro de crédito privado movimentou <strong>{vol_dia}</strong> em <strong>{trades_dia} negócios</strong> registrados na B3 sobre <strong>{ativos_dia} ativos</strong> de um universo de <strong>{active_count_fmt} títulos vigentes</strong> monitorados pelo FIXDATA (fixdatabrasil.com.br). Entre os papéis mais líquidos estão {top3_links}.
+            Em <strong>{dt_dia_br}</strong>, o mercado secundário brasileiro de crédito privado movimentou <strong>{vol_dia}</strong> em <strong>{trades_dia} negócios</strong> registrados na B3 sobre <strong>{ativos_dia} ativos</strong>. Ao todo, o FIXDATA consolida <strong>{total_count_fmt} séries mapeadas</strong> ({cri_total_fmt} CRIs, {deb_total_fmt} Debêntures e {cra_total_fmt} CRAs — sendo <strong>{active_count_fmt} títulos vigentes</strong> em circulação e <strong>{hist_count_fmt} séries históricas</strong>), <strong>{b3_clean_fmt} negócios B3</strong> higienizados e balanços CVM. Entre os papéis mais líquidos estão {top3_links}.
           </p>
+        </section>
+
+        <!-- Faixa Discreta: Download CSV Completo no Dashboard Secundário -->
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-0.5">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-sm font-bold text-slate-900">Base Completa disponível para Download em .CSV</h2>
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Grátis com login • 27 colunas</span>
+            </div>
+            <p class="text-xs text-slate-500">
+              Exporte gratuitamente a planilha estruturada de Debêntures, CRIs e CRAs (Excel ou Python) na aba <strong>Dashboard Secundário</strong>.
+            </p>
+          </div>
+          <a href="/charts/" class="inline-flex items-center justify-center px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-xs shrink-0">
+            Baixar .CSV no Dashboard →
+          </a>
         </section>
 
         <!-- Explorar por Categoria, Setores & Emissores -->
@@ -1933,8 +1967,8 @@ def render_home_page(total_count: int = None, active_count: int = None):
     <!-- SEO Primary Tags -->
     <title>FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário</title>
     <meta name="title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
-    <meta name="description" content="Plataforma de inteligência de mercado para Debêntures, CRIs e CRAs ({active_count_fmt} ativos vigentes). Acompanhe taxas, spreads contra NTN-B, ratings, duration e preços diários de forma gratuita." />
-    <meta name="keywords" content="FIXDATA, renda fixa, debêntures, CRI, CRA, mercado secundário, taxas indicativas, ANBIMA, NTN-B, spread de crédito, ratings, inteligência de renda fixa" />
+    <meta name="description" content="{home_meta_desc}" />
+    <meta name="keywords" content="FIXDATA, renda fixa, debêntures, CRI, CRA, mercado secundário, taxas indicativas, ANBIMA, NTN-B, spread de crédito, ratings, inteligência de renda fixa, download csv credito privado" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://fixdatabrasil.com.br/" />
     <link rel="alternate" type="application/rss+xml" title="FIXDATA — Feed RSS de Mercado Secundário" href="https://fixdatabrasil.com.br/feed.xml" />
@@ -1944,14 +1978,14 @@ def render_home_page(total_count: int = None, active_count: int = None):
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://fixdatabrasil.com.br/" />
     <meta property="og:title" content="FIXDATA — Inteligência e Dados de Renda Fixa e Mercado Secundário" />
-    <meta property="og:description" content="Acompanhe Debêntures, CRIs e CRAs vigentes com taxas, spreads, ratings e gráficos históricos de forma 100% gratuita." />
+    <meta property="og:description" content="{home_meta_desc}" />
     <meta property="og:site_name" content="FIXDATA" />
     <meta property="og:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="FIXDATA — Inteligência e Dados de Renda Fixa" />
-    <meta property="twitter:description" content="Raio-x do mercado secundário de Debêntures, CRIs e CRAs com spreads e ratings." />
+    <meta property="twitter:description" content="{home_meta_desc}" />
     <meta property="twitter:image" content="https://fixdatabrasil.com.br/icon-512x512.png" />
 
     <!-- Google Search Structured Data (Site Name & Organization) -->
@@ -1973,6 +2007,7 @@ def render_home_page(total_count: int = None, active_count: int = None):
       "logo": "https://fixdatabrasil.com.br/icon-512x512.png"
     }}
     </script>
+    {home_extra_ld}
 
     <!-- GitHub Pages Single Page Apps Routing Handler -->
     <script type="text/javascript">
