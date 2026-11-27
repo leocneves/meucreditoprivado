@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { assetPath } from '../utils/urls';
+import { captureEvent } from '../utils/posthog';
 import { 
   ArrowLeftRight, 
   Search, 
@@ -13,6 +14,8 @@ import {
   ChevronLeft, 
   ChevronRight, 
   ArrowUpDown, 
+  ArrowUp,
+  ArrowDown,
   SlidersHorizontal,
   Calendar,
   Building2,
@@ -226,6 +229,62 @@ const formatDateBR = (isoDate?: string) => {
   return isoDate;
 };
 
+const RATING_RANK: Record<string, number> = {
+  AAA: 21, 'AA+': 20, AA: 19, 'AA-': 18,
+  'A+': 17, A: 16, 'A-': 15,
+  'BBB+': 14, BBB: 13, 'BBB-': 12,
+  'BB+': 11, BB: 10, 'BB-': 9,
+  'B+': 8, B: 7, 'B-': 6,
+  'CCC+': 5, CCC: 4, 'CCC-': 3,
+  CC: 2, C: 1, D: 0
+};
+
+/** Maps national credit ratings to an ordinal score, returning -1 when absent. */
+const getRatingScore = (rating?: string | null): number => {
+  const clean = String(rating || '')
+    .toUpperCase()
+    .replace(/\(BRA\)|\.BR/g, '')
+    .trim();
+  if (!clean || clean === '-' || clean === 'NAN' || clean === 'N/D' || clean === 'SEM RATING') {
+    return -1;
+  }
+  if (RATING_RANK[clean] !== undefined) return RATING_RANK[clean];
+  const base = clean.split(' ')[0];
+  return RATING_RANK[base] !== undefined ? RATING_RANK[base] : -1;
+};
+
+/** Compares numeric values while always sorting missing (null) entries to the bottom. */
+const compareNullableNumbers = (valA: number | null, valB: number | null, dir: 'asc' | 'desc'): number => {
+  if (valA === null && valB === null) return 0;
+  if (valA === null) return 1;
+  if (valB === null) return -1;
+  return dir === 'asc' ? valA - valB : valB - valA;
+};
+
+/** Compares optional strings while always sorting empty placeholders to the bottom. */
+const compareOptionalStrings = (rawA?: string | null, rawB?: string | null, dir: 'asc' | 'desc' = 'asc'): number => {
+  const clean = (v?: string | null) => {
+    const s = String(v || '').trim();
+    const low = s.toLowerCase();
+    return (!s || s === '-' || low === 'nan' || low === 'n/d') ? '' : s;
+  };
+  const a = clean(rawA);
+  const b = clean(rawB);
+  if (!a && !b) return 0;
+  if (!a) return 1;
+  if (!b) return -1;
+  const cmp = a.localeCompare(b, 'pt-BR');
+  return dir === 'asc' ? cmp : -cmp;
+};
+
+/** Renders an unambiguous active directional arrow or neutral sort indicator. */
+const renderSortIcon = (isActive: boolean, direction: 'asc' | 'desc') => {
+  if (!isActive) return <ArrowUpDown size={12} className="text-slate-400 shrink-0" />;
+  return direction === 'asc'
+    ? <ArrowUp size={12} className="text-blue-600 shrink-0" />
+    : <ArrowDown size={12} className="text-blue-600 shrink-0" />;
+};
+
 /* ================= CUSTOM TOOLTIP DO GRÁFICO ================= */
 
 const CustomChartTooltip: React.FC<{
@@ -374,12 +433,32 @@ const Trades: React.FC = () => {
   const [noRateSortDirection, setNoRateSortDirection] = useState<'asc' | 'desc'>('desc');
 
   // Ordenação da Tabela
-  const [sortField, setSortField] = useState<'volume' | 'trades' | 'taxa' | 'pu' | 'ticker'>('volume');
+  const [sortField, setSortField] = useState<'volume' | 'trades' | 'taxa' | 'pu' | 'ticker' | 'data'>('volume');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
-  // Paginação
+  // Paginação & Scroll Refs
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
+  const tradesTableRef = useRef<HTMLDivElement>(null);
+  const noRateTableRef = useRef<HTMLDivElement>(null);
+
+  const handleMainSort = (field: 'volume' | 'trades' | 'taxa' | 'pu' | 'ticker' | 'data') => {
+    setCurrentPage(1);
+    if (sortField === field) {
+      setSortDirection(d => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection(field === 'ticker' ? 'asc' : 'desc');
+    }
+  };
+
+  useEffect(() => {
+    if (tradesTableRef.current) tradesTableRef.current.scrollTop = 0;
+  }, [currentPage, sortField, sortDirection]);
+
+  useEffect(() => {
+    if (noRateTableRef.current) noRateTableRef.current.scrollTop = 0;
+  }, [noRatePage, noRateSortField, noRateSortDirection]);
 
   /* ================= CARGA DE DADOS COM CRUZAMENTO CADASTRAL ================= */
 
@@ -647,39 +726,51 @@ const Trades: React.FC = () => {
   /* ================= ORDENAÇÃO ================= */
 
   const sortedTrades = useMemo(() => {
+    const parseOptNum = (v?: number | string | null) => {
+      const n = Number(v);
+      return Number.isFinite(n) && n > 0 ? n : null;
+    };
     const list = [...filteredTrades];
     return list.sort((a, b) => {
-      let valA: number | string = 0;
-      let valB: number | string = 0;
-
       switch (sortField) {
         case 'volume':
-          valA = Number(a.volume_financeiro) || 0;
-          valB = Number(b.volume_financeiro) || 0;
-          break;
+          return compareNullableNumbers(
+            parseOptNum(a.volume_financeiro),
+            parseOptNum(b.volume_financeiro),
+            sortDirection
+          );
         case 'trades':
-          valA = Number(a.qtd_negocios) || 0;
-          valB = Number(b.qtd_negocios) || 0;
-          break;
-        case 'taxa':
-          valA = Number(a.taxa_media_ponderada) || 0;
-          valB = Number(b.taxa_media_ponderada) || 0;
-          break;
-        case 'pu':
-          valA = Number(a.preco_medio_ponderado) || 0;
-          valB = Number(b.preco_medio_ponderado) || 0;
-          break;
-        case 'ticker': {
-          const strA = (a.ticker || '').toString();
-          const strB = (b.ticker || '').toString();
-          return sortDirection === 'asc' ? strA.localeCompare(strB) : strB.localeCompare(strA);
+          return compareNullableNumbers(
+            parseOptNum(a.qtd_negocios),
+            parseOptNum(b.qtd_negocios),
+            sortDirection
+          );
+        case 'taxa': {
+          const txA = Number(a.taxa_media_ponderada);
+          const txB = Number(b.taxa_media_ponderada);
+          return compareNullableNumbers(
+            Number.isFinite(txA) && txA !== 0 ? txA : null,
+            Number.isFinite(txB) && txB !== 0 ? txB : null,
+            sortDirection
+          );
         }
+        case 'pu':
+          return compareNullableNumbers(
+            parseOptNum(a.preco_medio_ponderado),
+            parseOptNum(b.preco_medio_ponderado),
+            sortDirection
+          );
+        case 'ticker':
+          return compareOptionalStrings(a.ticker, b.ticker, sortDirection);
+        case 'data':
+          return compareOptionalStrings(a.data_negocio, b.data_negocio, sortDirection);
         default:
-          valA = Number(a.volume_financeiro) || 0;
-          valB = Number(b.volume_financeiro) || 0;
+          return compareNullableNumbers(
+            parseOptNum(a.volume_financeiro),
+            parseOptNum(b.volume_financeiro),
+            sortDirection
+          );
       }
-
-      return sortDirection === 'asc' ? (valA as number) - (valB as number) : (valB as number) - (valA as number);
     });
   }, [filteredTrades, sortField, sortDirection]);
 
@@ -1169,6 +1260,10 @@ const Trades: React.FC = () => {
 
   const exportFilteredCSV = () => {
     if (!sortedTrades.length) return;
+    captureEvent('csv_download_clicked', {
+      source: 'negocios_trades',
+      rows_count: sortedTrades.length
+    });
 
     const headers = [
       'Data Negócio', 'Ticker', 'ISIN', 'Tipo', 'Emissor/Devedor', 'Setor', 'Indexador', 
@@ -1271,71 +1366,101 @@ const Trades: React.FC = () => {
       | 'taxa_emissao'
       | 'rating'
       | 'duration'
-      | 'vencimento'
+      | 'vencimento',
+    cycleDurationMaturity: boolean = false
   ) => {
+    setNoRatePage(1);
+
+    // O cabeçalho "Duration / Venc." cicla de forma previsível:
+    // duration (desc) -> duration (asc) -> vencimento (asc) -> vencimento (desc) -> duration (desc)
+    if (cycleDurationMaturity) {
+      if (noRateSortField === 'duration') {
+        if (noRateSortDirection === 'desc') {
+          setNoRateSortDirection('asc');
+        } else {
+          setNoRateSortField('vencimento');
+          setNoRateSortDirection('asc');
+        }
+        return;
+      }
+      if (noRateSortField === 'vencimento') {
+        if (noRateSortDirection === 'asc') {
+          setNoRateSortDirection('desc');
+        } else {
+          setNoRateSortField('duration');
+          setNoRateSortDirection('desc');
+        }
+        return;
+      }
+      setNoRateSortField('duration');
+      setNoRateSortDirection('desc');
+      return;
+    }
+
     if (noRateSortField === field) {
       setNoRateSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
     } else {
       setNoRateSortField(field);
       setNoRateSortDirection(
-        ['volume', 'trades', 'pu', 'duration', 'taxa_emissao'].includes(field) ? 'desc' : 'asc'
+        ['volume', 'trades', 'pu', 'duration', 'taxa_emissao', 'rating', 'pregao'].includes(field)
+          ? 'desc'
+          : 'asc'
       );
     }
   };
 
   const sortedNoRateAssets = useMemo(() => {
+    const parseOptRate = (v?: number | string | null) => {
+      if (v === undefined || v === null || v === '') return null;
+      const n = typeof v === 'number' ? v : parseFloat(String(v).replace(',', '.'));
+      return Number.isFinite(n) ? n : null;
+    };
+    const parseOptPosNum = (v?: number | string | null) => {
+      const n = Number(v);
+      return Number.isFinite(n) && n > 0 ? n : null;
+    };
     const list = [...filteredNoRateAssets];
     return list.sort((a, b) => {
-      let comparison = 0;
-
       switch (noRateSortField) {
         case 'volume':
-          comparison = (a.total_volume || 0) - (b.total_volume || 0);
-          break;
+          return compareNullableNumbers(parseOptPosNum(a.total_volume), parseOptPosNum(b.total_volume), noRateSortDirection);
         case 'trades':
-          comparison = (a.total_trades || 0) - (b.total_trades || 0);
-          break;
+          return compareNullableNumbers(parseOptPosNum(a.total_trades), parseOptPosNum(b.total_trades), noRateSortDirection);
         case 'pu':
-          comparison = (a.ultimo_pu || a.vwap_medio || 0) - (b.ultimo_pu || b.vwap_medio || 0);
-          break;
+          return compareNullableNumbers(
+            parseOptPosNum(a.ultimo_pu || a.vwap_medio),
+            parseOptPosNum(b.ultimo_pu || b.vwap_medio),
+            noRateSortDirection
+          );
         case 'pregao':
-          comparison = String(a.ultimo_pregao || '').localeCompare(String(b.ultimo_pregao || ''));
-          break;
+          return compareOptionalStrings(a.ultimo_pregao, b.ultimo_pregao, noRateSortDirection);
         case 'ticker':
-          comparison = String(a.ticker || '').localeCompare(String(b.ticker || ''));
-          break;
+          return compareOptionalStrings(a.ticker, b.ticker, noRateSortDirection);
         case 'tipo':
-          comparison = String(a.tipo || '').localeCompare(String(b.tipo || ''));
-          break;
+          return compareOptionalStrings(a.tipo, b.tipo, noRateSortDirection);
         case 'devedor':
-          comparison = String(a.devedor || '').localeCompare(String(b.devedor || ''));
-          break;
+          return compareOptionalStrings(a.devedor, b.devedor, noRateSortDirection);
         case 'setor':
-          comparison = String(a.setor || '').localeCompare(String(b.setor || ''));
-          break;
+          return compareOptionalStrings(a.setor, b.setor, noRateSortDirection);
         case 'indexador':
-          comparison = String(a.indexador || '').localeCompare(String(b.indexador || ''));
-          break;
-        case 'taxa_emissao': {
-          const txA = typeof a.taxa_emissao === 'number' ? a.taxa_emissao : parseFloat(String(a.taxa_emissao || 0).replace(',', '.'));
-          const txB = typeof b.taxa_emissao === 'number' ? b.taxa_emissao : parseFloat(String(b.taxa_emissao || 0).replace(',', '.'));
-          comparison = (isNaN(txA) ? 0 : txA) - (isNaN(txB) ? 0 : txB);
-          break;
+          return compareOptionalStrings(a.indexador, b.indexador, noRateSortDirection);
+        case 'taxa_emissao':
+          return compareNullableNumbers(parseOptRate(a.taxa_emissao), parseOptRate(b.taxa_emissao), noRateSortDirection);
+        case 'rating': {
+          const sA = getRatingScore(a.rating);
+          const sB = getRatingScore(b.rating);
+          return compareNullableNumbers(sA >= 0 ? sA : null, sB >= 0 ? sB : null, noRateSortDirection);
         }
-        case 'rating':
-          comparison = String(a.rating || '').localeCompare(String(b.rating || ''));
-          break;
-        case 'duration':
-          comparison = (Number(a.duration) || 0) - (Number(b.duration) || 0);
-          break;
+        case 'duration': {
+          const durCmp = compareNullableNumbers(parseOptPosNum(a.duration), parseOptPosNum(b.duration), noRateSortDirection);
+          if (durCmp !== 0) return durCmp;
+          return compareOptionalStrings(a.vencimento, b.vencimento, 'asc');
+        }
         case 'vencimento':
-          comparison = String(a.vencimento || '').localeCompare(String(b.vencimento || ''));
-          break;
+          return compareOptionalStrings(a.vencimento, b.vencimento, noRateSortDirection);
         default:
-          comparison = (a.total_volume || 0) - (b.total_volume || 0);
+          return compareNullableNumbers(parseOptPosNum(a.total_volume), parseOptPosNum(b.total_volume), noRateSortDirection);
       }
-
-      return noRateSortDirection === 'asc' ? comparison : -comparison;
     });
   }, [filteredNoRateAssets, noRateSortField, noRateSortDirection]);
 
@@ -1348,6 +1473,10 @@ const Trades: React.FC = () => {
   // Exportação CSV de papéis a PU
   const exportNoRateCSV = () => {
     if (!sortedNoRateAssets.length) return;
+    captureEvent('csv_download_clicked', {
+      source: 'negocios_no_rate',
+      rows_count: sortedNoRateAssets.length
+    });
 
     const headers = [
       'Ticker', 'Tipo', 'Emissor/Devedor', 'Setor', 'Indexador', 'Taxa Emissão', 
@@ -2605,21 +2734,19 @@ const Trades: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto max-h-[380px] overflow-y-auto">
+          <div ref={tradesTableRef} className="overflow-x-auto max-h-[380px] overflow-y-auto">
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead className="sticky top-0 bg-slate-100 z-10 shadow-sm">
                 <tr className="bg-slate-100 border-b border-slate-200 text-slate-700 uppercase text-[11px] font-black tracking-wider">
                   
                   <th 
-                    onClick={() => {
-                      if (sortField === 'ticker') setSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                      else { setSortField('ticker'); setSortDirection('asc'); }
-                    }}
-                    className="p-4 cursor-pointer hover:text-slate-900 transition-colors"
+                    onClick={() => handleMainSort('ticker')}
+                    className="p-4 cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                    title="Clique para ordenar por Ativo / Ticker"
                   >
                     <div className="flex items-center gap-1.5">
                       Ativo / Ticker
-                      <ArrowUpDown size={12} className={sortField === 'ticker' ? 'text-blue-600' : 'text-slate-300'} />
+                      {renderSortIcon(sortField === 'ticker', sortDirection)}
                     </div>
                   </th>
 
@@ -2628,59 +2755,60 @@ const Trades: React.FC = () => {
                   <th className="p-4">Rating</th>
 
                   <th 
-                    onClick={() => {
-                      if (sortField === 'pu') setSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                      else { setSortField('pu'); setSortDirection('desc'); }
-                    }}
-                    className="p-4 text-right cursor-pointer hover:text-slate-900 transition-colors"
+                    onClick={() => handleMainSort('pu')}
+                    className="p-4 text-right cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                    title="Clique para ordenar por Preço Médio (VWAP)"
                   >
                     <div className="flex items-center justify-end gap-1.5">
                       Preço Médio (VWAP)
-                      <ArrowUpDown size={12} className={sortField === 'pu' ? 'text-blue-600' : 'text-slate-300'} />
+                      {renderSortIcon(sortField === 'pu', sortDirection)}
                     </div>
                   </th>
 
                   <th 
-                    onClick={() => {
-                      if (sortField === 'taxa') setSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                      else { setSortField('taxa'); setSortDirection('desc'); }
-                    }}
-                    className="p-4 text-right cursor-pointer hover:text-slate-900 transition-colors"
+                    onClick={() => handleMainSort('taxa')}
+                    className="p-4 text-right cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                    title="Clique para ordenar por Taxa Média B3"
                   >
                     <div className="flex items-center justify-end gap-1.5">
                       Taxa Média B3
-                      <ArrowUpDown size={12} className={sortField === 'taxa' ? 'text-blue-600' : 'text-slate-300'} />
+                      {renderSortIcon(sortField === 'taxa', sortDirection)}
                     </div>
                   </th>
 
                   <th 
-                    onClick={() => {
-                      if (sortField === 'volume') setSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                      else { setSortField('volume'); setSortDirection('desc'); }
-                    }}
-                    className="p-4 text-right cursor-pointer hover:text-slate-900 transition-colors"
+                    onClick={() => handleMainSort('volume')}
+                    className="p-4 text-right cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                    title="Clique para ordenar por Volume Financeiro"
                   >
                     <div className="flex items-center justify-end gap-1.5">
                       Volume Financeiro
-                      <ArrowUpDown size={12} className={sortField === 'volume' ? 'text-blue-600' : 'text-slate-300'} />
+                      {renderSortIcon(sortField === 'volume', sortDirection)}
                     </div>
                   </th>
 
                   <th 
-                    onClick={() => {
-                      if (sortField === 'trades') setSortDirection(d => d === 'asc' ? 'desc' : 'asc');
-                      else { setSortField('trades'); setSortDirection('desc'); }
-                    }}
-                    className="p-4 text-center cursor-pointer hover:text-slate-900 transition-colors"
+                    onClick={() => handleMainSort('trades')}
+                    className="p-4 text-center cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                    title="Clique para ordenar por Quantidade de Trades"
                   >
                     <div className="flex items-center justify-center gap-1.5">
                       Trades
-                      <ArrowUpDown size={12} className={sortField === 'trades' ? 'text-blue-600' : 'text-slate-300'} />
+                      {renderSortIcon(sortField === 'trades', sortDirection)}
                     </div>
                   </th>
 
                   <th className="p-4 text-center">Liq. (DU)</th>
-                  <th className="p-4 text-right">Data</th>
+                  <th 
+                    onClick={() => handleMainSort('data')}
+                    className="p-4 text-right cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
+                    title="Clique para ordenar por Data do Negócio"
+                  >
+                    <div className="flex items-center justify-end gap-1.5">
+                      Data
+                      {renderSortIcon(sortField === 'data', sortDirection)}
+                    </div>
+                  </th>
                   <th className="p-4 text-center">Ações</th>
                 </tr>
               </thead>
@@ -2844,16 +2972,20 @@ const Trades: React.FC = () => {
 
               <div className="flex items-center gap-1">
                 <button
+                  type="button"
+                  aria-label="Página anterior de negócios"
                   onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
                   disabled={currentPage === 1}
-                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
+                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   <ChevronLeft size={16} />
                 </button>
                 <button
+                  type="button"
+                  aria-label="Próxima página de negócios"
                   onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
+                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -3039,7 +3171,7 @@ const Trades: React.FC = () => {
         </div>
 
         {/* Tabela de Papéis a PU */}
-        <div className="overflow-x-auto max-h-[380px] overflow-y-auto rounded-2xl border border-slate-200">
+        <div ref={noRateTableRef} className="overflow-x-auto max-h-[380px] overflow-y-auto rounded-2xl border border-slate-200">
           <table className="w-full text-left border-collapse text-xs">
             <thead className="sticky top-0 bg-slate-100 z-10 shadow-sm">
               <tr className="bg-slate-100 text-slate-700 uppercase text-[11px] font-black border-b border-slate-200">
@@ -3050,7 +3182,7 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center gap-1.5">
                     Ticker / Tipo
-                    <ArrowUpDown size={12} className={noRateSortField === 'ticker' || noRateSortField === 'tipo' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'ticker' || noRateSortField === 'tipo', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3061,7 +3193,7 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center gap-1.5">
                     Emissor / Devedor &amp; Setor
-                    <ArrowUpDown size={12} className={noRateSortField === 'devedor' || noRateSortField === 'setor' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'devedor' || noRateSortField === 'setor', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3072,7 +3204,7 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center gap-1.5">
                     Indexador &amp; Emissão
-                    <ArrowUpDown size={12} className={noRateSortField === 'indexador' || noRateSortField === 'taxa_emissao' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'indexador' || noRateSortField === 'taxa_emissao', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3083,18 +3215,42 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center gap-1.5">
                     Rating
-                    <ArrowUpDown size={12} className={noRateSortField === 'rating' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'rating', noRateSortDirection)}
                   </div>
                 </th>
 
                 <th 
                   className="p-3.5 cursor-pointer hover:bg-slate-200/70 transition-colors select-none"
-                  onClick={() => handleNoRateSort('duration')}
-                  title="Clique para ordenar por Duration (anos) ou Vencimento"
+                  onClick={() => handleNoRateSort('duration', true)}
+                  title="Clique em Duration ou Venc. para ordenar por prazo ou data de vencimento"
                 >
-                  <div className="flex items-center gap-1.5">
-                    Duration / Venc.
-                    <ArrowUpDown size={12} className={noRateSortField === 'duration' || noRateSortField === 'vencimento' ? 'text-blue-600' : 'text-slate-400'} />
+                  <div className="flex items-center gap-1.5 whitespace-nowrap">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNoRateSort('duration');
+                      }}
+                      className={`uppercase font-black tracking-wider hover:text-blue-700 cursor-pointer ${
+                        noRateSortField === 'duration' ? 'text-blue-700 underline underline-offset-2' : ''
+                      }`}
+                    >
+                      Duration
+                    </button>
+                    <span className="text-slate-400">/</span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNoRateSort('vencimento');
+                      }}
+                      className={`uppercase font-black tracking-wider hover:text-blue-700 cursor-pointer ${
+                        noRateSortField === 'vencimento' ? 'text-blue-700 underline underline-offset-2' : ''
+                      }`}
+                    >
+                      Venc.
+                    </button>
+                    {renderSortIcon(noRateSortField === 'duration' || noRateSortField === 'vencimento', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3105,7 +3261,7 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center justify-end gap-1.5">
                     Último PU (VWAP)
-                    <ArrowUpDown size={12} className={noRateSortField === 'pu' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'pu', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3116,7 +3272,7 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center justify-end gap-1.5">
                     Volume Total (R$)
-                    <ArrowUpDown size={12} className={noRateSortField === 'volume' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'volume', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3127,7 +3283,7 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center justify-center gap-1.5">
                     Trades
-                    <ArrowUpDown size={12} className={noRateSortField === 'trades' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'trades', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3138,7 +3294,7 @@ const Trades: React.FC = () => {
                 >
                   <div className="flex items-center justify-end gap-1.5">
                     Último Pregão
-                    <ArrowUpDown size={12} className={noRateSortField === 'pregao' ? 'text-blue-600' : 'text-slate-400'} />
+                    {renderSortIcon(noRateSortField === 'pregao', noRateSortDirection)}
                   </div>
                 </th>
 
@@ -3313,16 +3469,20 @@ const Trades: React.FC = () => {
 
               <div className="flex items-center gap-1">
                 <button
+                  type="button"
+                  aria-label="Página anterior de papéis a PU"
                   onClick={() => setNoRatePage(p => Math.max(p - 1, 1))}
                   disabled={noRatePage === 1}
-                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
+                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   <ChevronLeft size={16} />
                 </button>
                 <button
+                  type="button"
+                  aria-label="Próxima página de papéis a PU"
                   onClick={() => setNoRatePage(p => Math.min(p + 1, noRateTotalPages))}
                   disabled={noRatePage === noRateTotalPages}
-                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40"
+                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   <ChevronRight size={16} />
                 </button>

@@ -1198,6 +1198,106 @@ def write_hub_manifest(manifest: dict):
             f.write(txt)
 
 
+def shared_static_posthog_beacon_html(page_type: str = "static_hub") -> str:
+    """Zero-bundle PostHog $pageview beacon ONLY for non-React static pages."""
+    template = """    <script>
+      (function () {
+        if (window.__fxStaticPhSent) return;
+        window.__fxStaticPhSent = true;
+        function sendBeacon() {
+          try {
+            if (window.localStorage && window.localStorage.getItem('fixdata_is_admin') === 'true') return;
+            var ua = (navigator && navigator.userAgent) || '';
+            if (/bot|crawl|spider|slurp|bingpreview|mediapartners|headless|lighthouse|facebookexternalhit|whatsapp|telegrambot/i.test(ua)) return;
+            var PH_KEY = 'phc_DmT88xtTtZeJqtLN7M7k7TM2PrWUtNz3B465c9ZfTwV8';
+            var DID_KEY = 'fixdata_ph_did';
+            var did = '';
+            var loggedUid = '';
+            try {
+              var authRaw = window.localStorage && window.localStorage.getItem('fixdata_auth_user');
+              if (authRaw) {
+                var authObj = JSON.parse(authRaw);
+                if (authObj && authObj.uid) {
+                  loggedUid = String(authObj.uid);
+                  did = loggedUid;
+                }
+              }
+            } catch (e) {}
+            if (!did) {
+              try {
+                var phRaw = window.localStorage && window.localStorage.getItem('ph_' + PH_KEY + '_posthog');
+                if (phRaw) {
+                  var phObj = JSON.parse(phRaw);
+                  if (phObj && phObj.distinct_id) did = String(phObj.distinct_id);
+                }
+              } catch (e) {}
+            }
+            if (!did) {
+              try {
+                did = (window.localStorage && window.localStorage.getItem(DID_KEY)) || '';
+              } catch (e) {}
+            }
+            if (!did) {
+              did = (window.crypto && typeof window.crypto.randomUUID === 'function')
+                ? window.crypto.randomUUID()
+                : ('fx-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10));
+              try {
+                if (window.localStorage) window.localStorage.setItem(DID_KEY, did);
+              } catch (e) {}
+            }
+            var refDomain = '';
+            if (document.referrer) {
+              try { refDomain = new URL(document.referrer).hostname || ''; } catch (e) {}
+            }
+            var props = {
+              $current_url: window.location.href,
+              $pathname: window.location.pathname,
+              $host: window.location.host,
+              $referrer: document.referrer || '',
+              $referring_domain: refDomain,
+              $screen_width: window.screen ? window.screen.width : undefined,
+              $screen_height: window.screen ? window.screen.height : undefined,
+              $lib: 'fixdata-static-beacon',
+              $process_person_profile: !!loggedUid,
+              page_type: __PAGE_TYPE__
+            };
+            try {
+              var qs = new URLSearchParams(window.location.search || '');
+              ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(function (k) {
+                var v = qs.get(k);
+                if (v) props[k] = v;
+              });
+            } catch (e) {}
+            if (typeof fetch === 'function') {
+              fetch('https://us.i.posthog.com/capture/', {
+                method: 'POST',
+                mode: 'cors',
+                keepalive: true,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  api_key: PH_KEY,
+                  event: '$pageview',
+                  distinct_id: did,
+                  properties: props
+                })
+              }).catch(function () {});
+            }
+          } catch (e) {}
+        }
+        function scheduleBeacon() {
+          if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(sendBeacon, { timeout: 1500 });
+          } else {
+            window.setTimeout(sendBeacon, 1000);
+          }
+        }
+        if (document.readyState === 'complete') scheduleBeacon();
+        else window.addEventListener('load', scheduleBeacon, { once: true });
+      })();
+    </script>"""
+    return template.replace("__PAGE_TYPE__", json.dumps(str(page_type or "static_hub")))
+
+
 def _render_pure_static_shell(
     title: str,
     description: str,
@@ -1207,6 +1307,7 @@ def _render_pure_static_shell(
     body_main_html: str,
     extra_script: str = "",
     robots: str = "index, follow",
+    page_type: str = "static_hub",
 ) -> str:
     schema_json = json.dumps(schema_obj, ensure_ascii=False)
     return f"""<!DOCTYPE html>
@@ -1260,6 +1361,7 @@ def _render_pure_static_shell(
       </div>
     </div>
 {extra_script}
+{shared_static_posthog_beacon_html(page_type)}
   </body>
 </html>"""
 
@@ -2554,6 +2656,7 @@ def render_404_page():
         schema,
         body,
         robots="noindex, nofollow",
+        page_type="static_404",
     )
     for base_dir in ("public", "docs"):
         with open(os.path.join(base_dir, "404.html"), "w", encoding="utf-8") as f:

@@ -39,6 +39,7 @@ import {
   Tooltip as RechartsTooltip
 } from 'recharts';
 import { fetchCSV, Asset, NtnbRecord, getTipoBadgeClass } from '../utils/csv';
+import { captureEvent } from '../utils/posthog';
 import {
   calcGrossUpRate,
   calcNominalRate
@@ -99,6 +100,89 @@ export function formatBrNumber(value: number, decimals: number = 2): string {
     maximumFractionDigits: decimals
   });
 }
+
+function parseFlexibleDecimal(raw: string): number | null {
+  const cleaned = raw.trim().replace(/\s+/g, '').replace(',', '.');
+  if (!cleaned || cleaned === '.' || cleaned === '-') return null;
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+interface DecimalInputProps {
+  value: number;
+  onChangeValue: (val: number) => void;
+  allowDecimals?: boolean;
+  min?: number;
+  max?: number;
+  placeholder?: string;
+  className?: string;
+  ariaLabel?: string;
+}
+
+/** Smooth numeric/decimal input allowing free clearing and comma/dot entry without cursor jumps. */
+const DecimalInput: React.FC<DecimalInputProps> = ({
+  value,
+  onChangeValue,
+  allowDecimals = true,
+  min = 0,
+  max,
+  placeholder,
+  className,
+  ariaLabel
+}) => {
+  const [rawText, setRawText] = useState<string>(() => (Number.isFinite(value) ? String(value) : ''));
+  const prevPropRef = useRef<number>(value);
+
+  useEffect(() => {
+    if (prevPropRef.current !== value) {
+      prevPropRef.current = value;
+      setRawText(Number.isFinite(value) ? String(value) : '');
+    }
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nextRaw = e.target.value;
+    const pattern = allowDecimals ? /^\d*([.,]\d*)?$/ : /^\d*$/;
+    if (!pattern.test(nextRaw)) return;
+
+    setRawText(nextRaw);
+    const parsed = parseFlexibleDecimal(nextRaw);
+    if (parsed === null) return;
+
+    const candidate = allowDecimals ? parsed : Math.floor(parsed);
+    if (candidate < min) return;
+    if (max !== undefined && candidate > max) return;
+
+    prevPropRef.current = candidate;
+    onChangeValue(candidate);
+  };
+
+  const handleBlur = () => {
+    const parsed = parseFlexibleDecimal(rawText);
+    let nextVal = parsed === null ? Math.max(min, Number.isFinite(value) ? value : min) : (allowDecimals ? parsed : Math.floor(parsed));
+    if (nextVal < min) nextVal = min;
+    if (max !== undefined && nextVal > max) nextVal = max;
+
+    prevPropRef.current = nextVal;
+    setRawText(String(nextVal));
+    if (nextVal !== value) {
+      onChangeValue(nextVal);
+    }
+  };
+
+  return (
+    <input
+      type="text"
+      inputMode={allowDecimals ? 'decimal' : 'numeric'}
+      aria-label={ariaLabel}
+      value={rawText}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      placeholder={placeholder}
+      className={className}
+    />
+  );
+};
 
 /* ================= COMPONENTE DE INPUT DE DATA BRASILEIRO (DD/MM/AAAA) ================= */
 interface BrDateInputProps {
@@ -412,6 +496,11 @@ const CalculatorPage: React.FC = () => {
 
   /* ================= 3. SELEÇÃO DO ATIVO ================= */
   const handleSelectAsset = (a: Asset) => {
+    captureEvent('calculator_asset_selected', {
+      ticker: a.ticker,
+      tipo: a.tipo || '',
+      indexador: a.indexador || ''
+    });
     setSelectedAsset(a);
     setSearchQuery(a.ticker);
     setShowSearchResults(false);
@@ -620,6 +709,10 @@ Duration: ${anbimaResult.durationDu.toFixed(2)} DU (${anbimaResult.durationAnos.
 Data da Operação: ${formatToBrDate(anbimaResult.dataOperacao)}
 Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
     navigator.clipboard.writeText(txt);
+    captureEvent('calculator_results_copied', {
+      ticker: anbimaResult.ticker,
+      forma_calculo: formaCalculo
+    });
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -968,15 +1061,15 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                     })()}
                   </label>
                   <div className="relative">
-                    <input
-                      type="number"
-                      step={formaCalculo === 'Taxa' ? '0.0001' : '0.01'}
+                    <DecimalInput
                       value={formaCalculo === 'Taxa' ? inputRate : inputPU}
-                      onChange={e => {
-                        const val = parseFloat(e.target.value);
-                        if (formaCalculo === 'Taxa') setInputRate(isNaN(val) ? 0 : val);
-                        else setInputPU(isNaN(val) ? 0 : val);
+                      onChangeValue={val => {
+                        if (formaCalculo === 'Taxa') setInputRate(val);
+                        else setInputPU(val);
                       }}
+                      allowDecimals={true}
+                      min={0}
+                      ariaLabel={rateInputLabel}
                       placeholder={
                         formaCalculo === 'PU'
                           ? 'Ex: 1081.05'
@@ -986,7 +1079,7 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                           ? 'Ex: 105.0 (% do CDI)'
                           : 'Ex: 6.50 (% a.a.)'
                       }
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-extrabold text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition"
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-extrabold text-slate-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs transition"
                     />
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
@@ -1004,12 +1097,13 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                   </div>
                   <div className="flex items-center justify-between text-[10px] text-slate-400">
                     <span>Quantidade:</span>
-                    <input
-                      type="number"
-                      min={1}
+                    <DecimalInput
                       value={quantity}
-                      onChange={e => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                      className="w-20 px-2 py-0.5 text-right font-bold border border-slate-300 rounded-md bg-white text-slate-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      onChangeValue={setQuantity}
+                      allowDecimals={false}
+                      min={1}
+                      ariaLabel="Quantidade de títulos"
+                      className="w-20 px-2 py-0.5 text-right font-bold border border-slate-300 rounded-md bg-white text-slate-800"
                     />
                   </div>
                 </div>
@@ -1328,34 +1422,37 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-700">Valor Investido (R$)</label>
-                <input
-                  type="number"
-                  step="1000"
+                <DecimalInput
                   value={principalAmount}
-                  onChange={e => setPrincipalAmount(Math.max(100, parseFloat(e.target.value) || 0))}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  onChangeValue={setPrincipalAmount}
+                  allowDecimals={true}
+                  min={100}
+                  ariaLabel="Valor Investido (R$)"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-700">Cenário de IPCA Médio (% a.a.)</label>
-                <input
-                  type="number"
-                  step="0.1"
+                <DecimalInput
                   value={customIpca}
-                  onChange={e => setCustomIpca(parseFloat(e.target.value) || 0)}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  onChangeValue={setCustomIpca}
+                  allowDecimals={true}
+                  min={0}
+                  ariaLabel="Cenário de IPCA Médio (% a.a.)"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-700">Cenário de CDI Médio (% a.a.)</label>
-                <input
-                  type="number"
-                  step="0.1"
+                <DecimalInput
                   value={customCdi}
-                  onChange={e => setCustomCdi(parseFloat(e.target.value) || 0)}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  onChangeValue={setCustomCdi}
+                  allowDecimals={true}
+                  min={0}
+                  ariaLabel="Cenário de CDI Médio (% a.a.)"
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 shadow-xs"
                 />
               </div>
             </div>

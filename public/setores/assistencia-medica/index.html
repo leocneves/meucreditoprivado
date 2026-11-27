@@ -676,5 +676,100 @@
         });
       })();
     </script>
+    <script>
+      (function () {
+        if (window.__fxStaticPhSent) return;
+        window.__fxStaticPhSent = true;
+        function sendBeacon() {
+          try {
+            if (window.localStorage && window.localStorage.getItem('fixdata_is_admin') === 'true') return;
+            var ua = (navigator && navigator.userAgent) || '';
+            if (/bot|crawl|spider|slurp|bingpreview|mediapartners|headless|lighthouse|facebookexternalhit|whatsapp|telegrambot/i.test(ua)) return;
+            var PH_KEY = 'phc_DmT88xtTtZeJqtLN7M7k7TM2PrWUtNz3B465c9ZfTwV8';
+            var DID_KEY = 'fixdata_ph_did';
+            var did = '';
+            var loggedUid = '';
+            try {
+              var authRaw = window.localStorage && window.localStorage.getItem('fixdata_auth_user');
+              if (authRaw) {
+                var authObj = JSON.parse(authRaw);
+                if (authObj && authObj.uid) {
+                  loggedUid = String(authObj.uid);
+                  did = loggedUid;
+                }
+              }
+            } catch (e) {}
+            if (!did) {
+              try {
+                var phRaw = window.localStorage && window.localStorage.getItem('ph_' + PH_KEY + '_posthog');
+                if (phRaw) {
+                  var phObj = JSON.parse(phRaw);
+                  if (phObj && phObj.distinct_id) did = String(phObj.distinct_id);
+                }
+              } catch (e) {}
+            }
+            if (!did) {
+              try {
+                did = (window.localStorage && window.localStorage.getItem(DID_KEY)) || '';
+              } catch (e) {}
+            }
+            if (!did) {
+              did = (window.crypto && typeof window.crypto.randomUUID === 'function')
+                ? window.crypto.randomUUID()
+                : ('fx-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10));
+              try {
+                if (window.localStorage) window.localStorage.setItem(DID_KEY, did);
+              } catch (e) {}
+            }
+            var refDomain = '';
+            if (document.referrer) {
+              try { refDomain = new URL(document.referrer).hostname || ''; } catch (e) {}
+            }
+            var props = {
+              $current_url: window.location.href,
+              $pathname: window.location.pathname,
+              $host: window.location.host,
+              $referrer: document.referrer || '',
+              $referring_domain: refDomain,
+              $screen_width: window.screen ? window.screen.width : undefined,
+              $screen_height: window.screen ? window.screen.height : undefined,
+              $lib: 'fixdata-static-beacon',
+              $process_person_profile: !!loggedUid,
+              page_type: "static_hub"
+            };
+            try {
+              var qs = new URLSearchParams(window.location.search || '');
+              ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(function (k) {
+                var v = qs.get(k);
+                if (v) props[k] = v;
+              });
+            } catch (e) {}
+            if (typeof fetch === 'function') {
+              fetch('https://us.i.posthog.com/capture/', {
+                method: 'POST',
+                mode: 'cors',
+                keepalive: true,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  api_key: PH_KEY,
+                  event: '$pageview',
+                  distinct_id: did,
+                  properties: props
+                })
+              }).catch(function () {});
+            }
+          } catch (e) {}
+        }
+        function scheduleBeacon() {
+          if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(sendBeacon, { timeout: 1500 });
+          } else {
+            window.setTimeout(sendBeacon, 1000);
+          }
+        }
+        if (document.readyState === 'complete') scheduleBeacon();
+        else window.addEventListener('load', scheduleBeacon, { once: true });
+      })();
+    </script>
   </body>
 </html>

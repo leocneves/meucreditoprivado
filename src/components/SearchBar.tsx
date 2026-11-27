@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Fuse from 'fuse.js';
 import { useNavigate } from 'react-router-dom';
 import { Asset } from '../utils/csv';
 import { assetPath } from '../utils/urls';
+import { captureEvent } from '../utils/posthog';
 import { Search } from 'lucide-react';
 
 interface SearchBarProps {
@@ -11,6 +12,7 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
   const [query, setQuery] = useState('');
+  const lastTrackedQueryRef = useRef('');
   const navigate = useNavigate();
 
   const fuse = useMemo(
@@ -22,11 +24,35 @@ const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
     [assets]
   );
 
-  const results = query ? fuse.search(query).slice(0, 6) : [];
+  const results = useMemo(
+    () => (query ? fuse.search(query).slice(0, 6) : []),
+    [fuse, query]
+  );
 
-  const handleSelect = (ticker: string) => {
+  useEffect(() => {
+    const clean = query.trim();
+    if (clean.length < 3) return;
+    const timer = window.setTimeout(() => {
+      if (lastTrackedQueryRef.current === clean) return;
+      lastTrackedQueryRef.current = clean;
+      captureEvent('search_performed', {
+        query: clean,
+        results_count: results.length,
+        location: 'home_searchbar',
+      });
+    }, 800);
+    return () => window.clearTimeout(timer);
+  }, [query, results.length]);
+
+  const handleSelect = (item: Asset) => {
+    captureEvent('search_asset_selected', {
+      ticker: item.ticker,
+      tipo: item.tipo || '',
+      indexador: item.indexador || '',
+      query: query.trim(),
+    });
     setQuery('');
-    navigate(assetPath(ticker));
+    navigate(assetPath(item.ticker));
   };
 
   return (
@@ -35,6 +61,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
       <div className="relative">
         <input
           type="text"
+          aria-label="Pesquisar ativo por ticker, emissor ou tipo"
           className="w-full px-4 py-3 pl-12 bg-white border border-slate-200 rounded-xl shadow-sm
                      focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
           placeholder="Pesquisar por ticker, emissor ou tipo..."
@@ -54,8 +81,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ assets }) => {
           {results.map(({ item }) => (
             <button
               key={item.ticker}
-              className="w-full px-4 py-3 text-left hover:bg-slate-50 flex flex-col transition-colors border-b last:border-0 border-slate-100"
-              onClick={() => handleSelect(item.ticker)}
+              type="button"
+              className="w-full px-4 py-3 text-left hover:bg-slate-50 flex flex-col transition-colors border-b last:border-0 border-slate-100 cursor-pointer"
+              onClick={() => handleSelect(item)}
             >
               {/* Linha principal */}
               <span className="font-bold text-slate-900">

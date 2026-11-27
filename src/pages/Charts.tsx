@@ -30,6 +30,7 @@ import { TrendingUp, Clock, ShieldCheck, Activity, BarChart3, Database, Calendar
 import { normalizeSector, CANONICAL_SECTORS } from '../utils/sectors'
 import { getCachedRaioXIndex, loadRaioXIndex, resolveRaioXCnpj, RaioXIndex } from '../utils/raioxLookup'
 import { assetPath } from '../utils/urls'
+import { captureEvent } from '../utils/posthog'
 
 /* ================= HELPERS ================= */
 
@@ -210,6 +211,7 @@ const toTopPieData = (obj: Record<string, number>, topN = 5) => {
 
 const downloadCSV = (rows: Asset[]) => {
   if (!rows.length) return
+  captureEvent('csv_download_clicked', { source: 'charts_full_base', rows_count: rows.length })
 
   const fieldOrder: { key: keyof Asset | string; label: string }[] = [
     { key: 'ticker', label: 'ticker' },

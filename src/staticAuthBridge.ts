@@ -3,6 +3,50 @@ import { auth, googleProvider, isFirebaseConfigured } from './utils/firebase';
 import { syncAuthCache, type CachedAuthUser } from './utils/authCache';
 import { recordUserLead } from './utils/authLead';
 
+const ADMIN_EMAILS = ['neves.leonardoc@gmail.com'];
+const POSTHOG_KEY = 'phc_DmT88xtTtZeJqtLN7M7k7TM2PrWUtNz3B465c9ZfTwV8';
+const POSTHOG_CAPTURE_URL = 'https://us.i.posthog.com/capture/';
+const POSTHOG_DID_KEY = 'fixdata_ph_did';
+
+/** Sends a lightweight PostHog login beacon from pure static pages without bundling posthog-js. */
+function trackStaticLoginBeacon(uid: string, email: string, displayName: string, origin: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase().trim());
+    if (isAdmin) {
+      localStorage.setItem('fixdata_is_admin', 'true');
+      return;
+    }
+    if (localStorage.getItem('fixdata_is_admin') === 'true') return;
+
+    localStorage.setItem(POSTHOG_DID_KEY, uid);
+    if (typeof fetch !== 'function') return;
+
+    fetch(POSTHOG_CAPTURE_URL, {
+      method: 'POST',
+      mode: 'cors',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: POSTHOG_KEY,
+        event: 'user_logged_in',
+        distinct_id: uid,
+        properties: {
+          origin: `static_${origin}`,
+          $current_url: window.location.href,
+          $pathname: window.location.pathname,
+          $lib: 'fixdata-static-auth',
+          $process_person_profile: true,
+          $set: {
+            email,
+            name: displayName,
+          },
+        },
+      }),
+    }).catch(() => {});
+  } catch (_) {}
+}
+
 /**
  * Triggers Google OAuth popup from non-React static pages (/noticias, hubs, etc.),
  * stores the lead in Firestore, and updates the shared localStorage navbar snapshot.
@@ -20,6 +64,12 @@ export async function staticLoginWithGoogle(origin = 'navbar'): Promise<CachedAu
 
     syncAuthCache(loggedUser);
     await recordUserLead(loggedUser, origin);
+    trackStaticLoginBeacon(
+      loggedUser.uid,
+      loggedUser.email || '',
+      loggedUser.displayName || '',
+      origin
+    );
 
     return {
       uid: loggedUser.uid,
@@ -48,4 +98,7 @@ export async function staticLogout(): Promise<void> {
     }
   }
   syncAuthCache(null);
+  try {
+    localStorage.removeItem(POSTHOG_DID_KEY);
+  } catch (_) {}
 }

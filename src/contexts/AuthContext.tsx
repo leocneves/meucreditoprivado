@@ -6,7 +6,7 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../utils/firebase';
-import { posthog } from '../utils/posthog';
+import { posthog, syncPostHogDistinctId } from '../utils/posthog';
 import { syncAuthCache } from '../utils/authCache';
 import { recordUserLead } from '../utils/authLead';
 
@@ -59,6 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (currentUser) {
         const isAdmin = checkAndHandleAdmin(currentUser);
         if (!isAdmin) {
+          syncPostHogDistinctId(currentUser.uid);
           posthog.identify(currentUser.uid, {
             email: currentUser.email,
             name: currentUser.displayName
@@ -89,6 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(loggedUser);
       const isAdmin = checkAndHandleAdmin(loggedUser);
       if (!isAdmin) {
+        syncPostHogDistinctId(loggedUser.uid);
         posthog.identify(loggedUser.uid, {
           email: loggedUser.email,
           name: loggedUser.displayName,
@@ -112,6 +114,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await signOut(auth);
       posthog.reset();
+      try {
+        const nextDid = typeof posthog.get_distinct_id === 'function' ? posthog.get_distinct_id() : null;
+        syncPostHogDistinctId(nextDid);
+      } catch (_) {}
       syncAuthCache(null);
       setUser(null);
     } catch (err) {
