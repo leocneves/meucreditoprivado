@@ -1,7 +1,43 @@
 {
-  "updated_at": "2026-11-26T22:52:41-03:00",
-  "count": 13,
+  "updated_at": "2026-11-27T07:45:11-03:00",
+  "count": 14,
   "items": [
+    {
+      "slug": "agenda-pagamentos-credito-privado-2026-11-27",
+      "edicao_tipo": "manha",
+      "data_ref": "2026-11-27",
+      "publicado_em": "2026-11-27T07:45:10-03:00",
+      "atualizado_em": "2026-11-27T07:45:10-03:00",
+      "titulo": "Curva NTN-B fecha 19 bps antes de agenda de R$ 110,04 Mi em proventos",
+      "subtitulo": "Levantamento do fluxo contratual de amortizações e juros para 27/11/2026, consolidado de sete dias (R$ 350,14 Mi) e abertura da referência NTN-B.",
+      "secao": "Agenda & Pagamentos",
+      "resumo": "Liquidações de crédito privado somam R$ 110,04 Mi em 27/11/2026 (3 eventos) e acumulam R$ 350,14 Mi em 7 dias.",
+      "og_image": "https://fixdatabrasil.com.br/noticias/og/agenda-pagamentos-credito-privado-2026-11-27.png",
+      "url": "https://fixdatabrasil.com.br/noticias/agenda-pagamentos-credito-privado-2026-11-27/",
+      "kpis": [
+        {
+          "label": "Agenda 27/11",
+          "value": "R$ 110,04 Mi",
+          "delta": "3 eventos"
+        },
+        {
+          "label": "Acumulado 7 dias",
+          "value": "R$ 350,14 Mi",
+          "delta": "141 papéis"
+        },
+        {
+          "label": "NTN-B 2035",
+          "value": "IPCA + 7,66%",
+          "delta": "-18,6 bps"
+        }
+      ],
+      "pontos_chave": [
+        "<strong>Liquidações (27/11/2026):</strong> R$ 110,04 Mi em 3 eventos (3 títulos).",
+        "<strong>Janela de 7 dias:</strong> R$ 350,14 Mi previstos entre 27/11 e 03/12.",
+        "<strong>Referência soberana:</strong> NTN-B 2035 a IPCA + 7,66% (-18,6 bps)."
+      ],
+      "body_html": "\n    <p class=\"text-base text-slate-800 leading-relaxed\">A curva soberana de juros reais abriu o dia com ajuste de até <strong>-18,6 bps</strong> (vértice 2035 em IPCA + 7,66%), em sessão marcada por agenda de <strong>R$ 110,04 milhões</strong> em 3 fluxos de crédito privado previstos para 27/11/2026.</p>\n    <p class=\"text-sm text-slate-700 leading-relaxed mt-4\">No horizonte semanal até 03/12/2026, o mercado acumula <strong>R$ 350,14 milhões</strong> em 146 pagamentos programados sobre 141 séries distintas. O maior desembolso individual da semana envolve <span class=\"font-semibold text-slate-800\">Rumo Agronegócios Ltda. &amp;&amp; Rumo Agrocomércio de Insumos</span>, com R$ 20,00 milhões em 30/11.</p>\n    \n    <section class=\"space-y-3 mt-6\">\n      <div class=\"flex items-center justify-between flex-wrap gap-2\">\n        <h2 class=\"text-lg font-black text-slate-900\">Maiores liquidações programadas para 27/11/2026</h2>\n        <a href=\"/agenda/\" class=\"text-xs font-bold text-blue-600 hover:underline\">Abrir agenda completa →</a>\n      </div>\n      <div class=\"overflow-x-auto rounded-2xl border border-slate-200 bg-white\">\n        <table class=\"w-full text-left border-collapse\">\n          <thead>\n            <tr class=\"bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase\">\n              <th class=\"py-2.5 px-3\">Ticker</th>\n              <th class=\"py-2.5 px-3\">Tipo</th>\n              <th class=\"py-2.5 px-3\">Devedor / Lastro</th>\n              <th class=\"py-2.5 px-3\">Evento</th>\n              <th class=\"py-2.5 px-3\">Remuneração</th>\n              <th class=\"py-2.5 px-3 text-right\">Volume Est.</th>\n            </tr>\n          </thead>\n          <tbody><tr class=\"border-b border-slate-100 text-xs\"><td class=\"py-2.5 px-3 whitespace-nowrap\"><a href=\"/asset/21l0002653/\" class=\"font-mono font-bold text-blue-600 hover:underline\">21L0002653</a></td><td class=\"py-2.5 px-3\">CRI</td><td class=\"py-2.5 px-3\"><span class=\"font-semibold text-slate-800\">Operação pulverizada (Província)</span></td><td class=\"py-2.5 px-3\">Vencimento</td><td class=\"py-2.5 px-3 font-mono text-slate-700 whitespace-nowrap\">CDI + 4,00%</td><td class=\"py-2.5 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap\">R$ 110,00 Mi</td></tr><tr class=\"border-b border-slate-100 text-xs\"><td class=\"py-2.5 px-3 whitespace-nowrap\"><a href=\"/asset/velh12/\" class=\"font-mono font-bold text-blue-600 hover:underline\">VELH12</a> <span class=\"text-[11px] text-slate-500 font-medium\">+1 séries</span></td><td class=\"py-2.5 px-3\">Debênture</td><td class=\"py-2.5 px-3\"><span class=\"font-semibold text-slate-800\">Veleiros Holdings S.A.</span></td><td class=\"py-2.5 px-3\">Pagamento de Juros</td><td class=\"py-2.5 px-3 font-mono text-slate-700 whitespace-nowrap\">IPCA + 7,33%</td><td class=\"py-2.5 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap\">R$ 43,7 Mil</td></tr></tbody>\n        </table>\n      </div>\n    </section>\n    \n    <section class=\"space-y-3 mt-6\">\n      <h2 class=\"text-lg font-black text-slate-900\">Curva soberana NTN-B na abertura (ref. 26/11/2026)</h2>\n      <p class=\"text-sm text-slate-700 leading-relaxed\">\n        As taxas reais dos títulos públicos indexados ao IPCA servem de referência direta para a formação de spreads de debêntures incentivadas, CRIs e CRAs. Na estrutura a termo da ANBIMA, o vértice de 5 anos indica juro nominal prefixado de <strong>14,93% a.a.</strong> e inflação implícita de <strong>6,74% a.a.</strong> em 26/11/2026.\n      </p>\n      <div class=\"overflow-x-auto rounded-2xl border border-slate-200 bg-white\">\n        <table class=\"w-full text-left border-collapse\">\n          <thead>\n            <tr class=\"bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase\">\n              <th class=\"py-2.5 px-3\">Vértice</th>\n              <th class=\"py-2.5 px-3\">Taxa Indicativa</th>\n              <th class=\"py-2.5 px-3 text-right\">Variação Diária</th>\n            </tr>\n          </thead>\n          <tbody><tr class=\"border-b border-slate-100 text-xs\"><td class=\"py-2.5 px-3 font-bold text-slate-900\">NTN-B 2028</td><td class=\"py-2.5 px-3 font-mono font-semibold text-slate-800\">IPCA + 7,19%</td><td class=\"py-2.5 px-3 text-right font-mono text-emerald-600 font-bold\">-7,4 bps</td></tr><tr class=\"border-b border-slate-100 text-xs\"><td class=\"py-2.5 px-3 font-bold text-slate-900\">NTN-B 2030</td><td class=\"py-2.5 px-3 font-mono font-semibold text-slate-800\">IPCA + 7,52%</td><td class=\"py-2.5 px-3 text-right font-mono text-emerald-600 font-bold\">-14,6 bps</td></tr><tr class=\"border-b border-slate-100 text-xs\"><td class=\"py-2.5 px-3 font-bold text-slate-900\">NTN-B 2035</td><td class=\"py-2.5 px-3 font-mono font-semibold text-slate-800\">IPCA + 7,66%</td><td class=\"py-2.5 px-3 text-right font-mono text-emerald-600 font-bold\">-18,6 bps</td></tr><tr class=\"border-b border-slate-100 text-xs\"><td class=\"py-2.5 px-3 font-bold text-slate-900\">NTN-B 2045</td><td class=\"py-2.5 px-3 font-mono font-semibold text-slate-800\">IPCA + 7,46%</td><td class=\"py-2.5 px-3 text-right font-mono text-emerald-600 font-bold\">-13,2 bps</td></tr><tr class=\"border-b border-slate-100 text-xs\"><td class=\"py-2.5 px-3 font-bold text-slate-900\">NTN-B 2055</td><td class=\"py-2.5 px-3 font-mono font-semibold text-slate-800\">IPCA + 7,45%</td><td class=\"py-2.5 px-3 text-right font-mono text-emerald-600 font-bold\">-12,7 bps</td></tr></tbody>\n        </table>\n      </div>\n    </section>\n    \n    "
+    },
     {
       "slug": "fechamento-b3-credito-privado-2026-11-26",
       "edicao_tipo": "fechamento",
