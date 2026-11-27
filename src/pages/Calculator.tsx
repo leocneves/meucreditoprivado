@@ -27,7 +27,8 @@ import {
   Table,
   LineChart,
   X,
-  ChevronRight
+  ChevronRight,
+  Download
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -40,6 +41,8 @@ import {
 } from 'recharts';
 import { fetchCSV, Asset, NtnbRecord, getTipoBadgeClass } from '../utils/csv';
 import { captureEvent } from '../utils/posthog';
+import { useAuth } from '../contexts/AuthContext';
+import { CsvLoginModal } from '../components/CsvLoginModal';
 import {
   calcGrossUpRate,
   calcNominalRate
@@ -370,6 +373,8 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title, content, formula, exam
 
 /* ================= PÁGINA PRINCIPAL DA CALCULADORA ================= */
 const CalculatorPage: React.FC = () => {
+  const { user, isConfigured } = useAuth();
+  const [showCsvModal, setShowCsvModal] = useState(false);
   const [searchParams] = useSearchParams();
   const initialTicker = (searchParams.get('ticker') || '').trim().toUpperCase();
 
@@ -717,6 +722,71 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const exportCashflowCSV = () => {
+    if (!anbimaResult || !anbimaResult.elegivel) return;
+    captureEvent('csv_download_clicked', {
+      source: 'calculadora_fluxo',
+      ticker: anbimaResult.ticker,
+      rows_count: anbimaResult.fluxoPagamento.length
+    });
+
+    const headers = [
+      'Ticker',
+      'Data_Operacao',
+      'Data_Liquidacao',
+      'Taxa_Operacao_AA',
+      'PU_Operacao',
+      'Duration_Anos',
+      'Evento',
+      'Data_Evento',
+      'Prazo_DU',
+      'Periodo_DU',
+      'Expectativa_CDI_Pct',
+      'Juros_Projetados',
+      'Amortizacao',
+      'Valor_Fluxo',
+      'Fluxo_Descontado'
+    ];
+
+    const rows = anbimaResult.fluxoPagamento.map(fl => [
+      anbimaResult.ticker,
+      anbimaResult.dataOperacao,
+      anbimaResult.dataLiquidacao,
+      anbimaResult.taxaOperacao.toFixed(6),
+      anbimaResult.puOperacao.toFixed(6),
+      anbimaResult.durationAnos.toFixed(4),
+      `"${(fl.nome || '').replace(/"/g, '""')}"`,
+      fl.dataLiquidacao,
+      fl.prazoDu,
+      fl.diasEntrePagamentos,
+      fl.jurosExpectativa != null ? fl.jurosExpectativa.toFixed(4) : '',
+      fl.jurosProjetado.toFixed(6),
+      fl.amortizacao.toFixed(6),
+      fl.valorFluxo.toFixed(6),
+      fl.fluxoDescontado.toFixed(6)
+    ]);
+
+    const csvText = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `fixdata_fluxo_anbima_${anbimaResult.ticker}_${anbimaResult.dataLiquidacao}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleRequestCashflowCSV = () => {
+    if (!anbimaResult || !anbimaResult.elegivel) return;
+    if (!isConfigured || user) {
+      exportCashflowCSV();
+      return;
+    }
+    setShowCsvModal(true);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50/70 pb-20 font-sans text-slate-800">
       
@@ -930,14 +1000,23 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
                     onClick={copyResults}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition shadow-xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
                   >
                     {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
                     {copied ? 'Copiado!' : 'Copiar Resultados'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRequestCashflowCSV}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-xs cursor-pointer"
+                    title="Exportar fluxo descontado e métricas ANBIMA para CSV"
+                  >
+                    <Download size={14} />
+                    <span>Exportar Fluxo (.CSV)</span>
                   </button>
                 </div>
               </div>
@@ -1312,9 +1391,20 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
                         Cronograma de liquidação com valores nominais projetados e fluxos descontados.
                       </p>
                     </div>
-                    <span className="text-xs font-bold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
-                      {anbimaResult.fluxoPagamento.length} evento(s)
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg">
+                        {anbimaResult.fluxoPagamento.length} evento(s)
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleRequestCashflowCSV}
+                        className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold transition cursor-pointer"
+                        title="Baixar cronograma e fluxos descontados em .CSV"
+                      >
+                        <Download size={13} />
+                        <span>.CSV</span>
+                      </button>
+                    </div>
                   </div>
 
                   <div className="overflow-x-auto rounded-xl border border-slate-200">
@@ -1485,6 +1575,19 @@ Data de Liquidação: ${formatToBrDate(anbimaResult.dataLiquidacao)}`;
             </div>
           </div>
         )}
+
+      <CsvLoginModal
+        isOpen={showCsvModal}
+        onClose={() => setShowCsvModal(false)}
+        onSuccessDownload={exportCashflowCSV}
+        featureOrigin="calculadora_fluxo_csv"
+        title="Exportar Fluxo ANBIMA em .CSV"
+        subtitle={
+          anbimaResult
+            ? `Faça login gratuito com o Google para baixar o cronograma e os ${anbimaResult.fluxoPagamento.length} fluxos descontados de ${anbimaResult.ticker} automaticamente.`
+            : 'Faça login gratuito com o Google para baixar o fluxo de pagamentos ANBIMA em .CSV automaticamente.'
+        }
+      />
 
       </div>
     </div>

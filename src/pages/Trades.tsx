@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { assetPath } from '../utils/urls';
 import { captureEvent } from '../utils/posthog';
+import { useAuth } from '../contexts/AuthContext';
+import { CsvLoginModal } from '../components/CsvLoginModal';
 import { 
   ArrowLeftRight, 
   Search, 
@@ -373,6 +375,8 @@ const CustomChartTooltip: React.FC<{
 /* ================= COMPONENTE PRINCIPAL ================= */
 
 const Trades: React.FC = () => {
+  const { user, isConfigured } = useAuth();
+  const [pendingCsvModal, setPendingCsvModal] = useState<'trades' | 'no_rate' | null>(null);
   const [loading, setLoading] = useState(true);
   const [kpis, setKpis] = useState<B3MarketKpis | null>(null);
   const [trades, setTrades] = useState<B3TradeRow[]>([]);
@@ -1512,6 +1516,24 @@ const Trades: React.FC = () => {
     document.body.removeChild(link);
   };
 
+  const handleRequestTradesCSV = () => {
+    if (!sortedTrades.length) return;
+    if (!isConfigured || user) {
+      exportFilteredCSV();
+      return;
+    }
+    setPendingCsvModal('trades');
+  };
+
+  const handleRequestNoRateCSV = () => {
+    if (!sortedNoRateAssets.length) return;
+    if (!isConfigured || user) {
+      exportNoRateCSV();
+      return;
+    }
+    setPendingCsvModal('no_rate');
+  };
+
   /* ================= BADGE DE INSTRUMENTO ================= */
 
   const renderTipoBadge = (tipo?: string) => {
@@ -1574,7 +1596,7 @@ const Trades: React.FC = () => {
           </div>
 
           <button
-            onClick={exportFilteredCSV}
+            onClick={handleRequestTradesCSV}
             disabled={!sortedTrades.length}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl font-bold text-xs sm:text-sm shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
             title="Exportar dados da tabela filtrada para CSV"
@@ -1959,7 +1981,7 @@ const Trades: React.FC = () => {
             {/* Botão de Download CSV em destaque nos filtros */}
             <button
               type="button"
-              onClick={exportFilteredCSV}
+              onClick={handleRequestTradesCSV}
               disabled={!sortedTrades.length}
               className="flex items-center gap-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-2xs transition-all disabled:opacity-50 cursor-pointer"
               title="Exportar todos os registros filtrados para planilha CSV"
@@ -2697,7 +2719,7 @@ const Trades: React.FC = () => {
               Mostrando <strong className="text-slate-800">{paginatedTrades.length}</strong> de <strong className="text-slate-800">{sortedTrades.length.toLocaleString('pt-BR')}</strong> negócios filtrados
             </span>
             <button
-              onClick={exportFilteredCSV}
+              onClick={handleRequestTradesCSV}
               disabled={!sortedTrades.length}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all disabled:opacity-50"
               title="Exportar dados filtrados da tabela para CSV"
@@ -3016,9 +3038,9 @@ const Trades: React.FC = () => {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={exportNoRateCSV}
+              onClick={handleRequestNoRateCSV}
               disabled={!sortedNoRateAssets.length}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50 cursor-pointer"
               title="Exportar tabela de papéis a PU para CSV"
             >
               <Download size={16} />
@@ -3491,6 +3513,22 @@ const Trades: React.FC = () => {
           </div>
         )}
       </div>
+
+      <CsvLoginModal
+        isOpen={pendingCsvModal !== null}
+        onClose={() => setPendingCsvModal(null)}
+        onSuccessDownload={() => {
+          if (pendingCsvModal === 'trades') exportFilteredCSV();
+          else if (pendingCsvModal === 'no_rate') exportNoRateCSV();
+        }}
+        featureOrigin={pendingCsvModal === 'no_rate' ? 'negocios_no_rate_csv' : 'negocios_csv'}
+        title="Exportar Negócios B3 em .CSV"
+        subtitle={
+          pendingCsvModal === 'no_rate'
+            ? `Faça login gratuito com o Google para baixar os ${sortedNoRateAssets.length.toLocaleString('pt-BR')} ativos negociados a PU em .CSV automaticamente.`
+            : `Faça login gratuito com o Google para baixar os ${sortedTrades.length.toLocaleString('pt-BR')} negócios filtrados da B3 em .CSV automaticamente.`
+        }
+      />
 
     </div>
   );
