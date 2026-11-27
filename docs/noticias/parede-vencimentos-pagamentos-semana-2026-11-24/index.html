@@ -52,6 +52,7 @@
       .news-article-body p { margin-bottom: 0.9rem; line-height: 1.72; }
       .news-article-body table { width: 100%; border-collapse: collapse; }
       .news-article-body th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b; }
+      .news-article-figure img { width: 100%; height: auto; display: block; }
       .bg-rose-50\/60 { background-color: rgba(255, 241, 242, 0.7); }
       .border-rose-200 { border-color: #fecdd3; }
       .text-rose-900 { color: #881337; }
@@ -591,8 +592,8 @@
           </nav>
 
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div class="lg:col-span-8 space-y-5">
-              <article class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+            <div class="lg:col-span-8 min-w-0 space-y-5">
+              <article class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6 overflow-hidden">
                 <header class="space-y-4">
                   <div class="flex items-center gap-2.5 flex-wrap">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-700 border-emerald-200">
@@ -687,7 +688,7 @@
     
                 </div>
 
-                <figure class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-900">
+                <figure class="news-article-figure overflow-hidden rounded-2xl border border-slate-200 bg-slate-900">
                   <img
                     src="/noticias/og/parede-vencimentos-pagamentos-semana-2026-11-24.png"
                     width="1200"
@@ -717,7 +718,7 @@
             </div>
 
 
-          <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-20">
+          <aside class="lg:col-span-4 min-w-0 space-y-5 lg:sticky lg:top-20">
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3.5">
               <span class="text-[11px] font-extrabold uppercase tracking-wider text-blue-700 block">Ferramentas Relacionadas FIXDATA</span>
               <p class="text-xs text-slate-600 leading-relaxed">Visualize vencimentos, amortizações e cupons futuros dia a dia por emissor e ticker.</p>
