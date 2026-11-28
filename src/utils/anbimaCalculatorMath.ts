@@ -42,16 +42,48 @@ export interface AnbimaCashFlowItem {
   valorFluxo: number;
 }
 
+export interface DiCurveVertex {
+  vertice_dias: number;
+  taxa_ettj_pref: number;
+  taxa_ettj_ipca?: number | null;
+  inflacao_implicita?: number | null;
+}
+
+const DEFAULT_DI_CURVE_VERTICES: DiCurveVertex[] = [
+  { vertice_dias: 126, taxa_ettj_pref: 13.6209 },
+  { vertice_dias: 252, taxa_ettj_pref: 13.5898 },
+  { vertice_dias: 504, taxa_ettj_pref: 13.7223 },
+  { vertice_dias: 756, taxa_ettj_pref: 13.9171 },
+  { vertice_dias: 1260, taxa_ettj_pref: 14.2133 },
+  { vertice_dias: 2520, taxa_ettj_pref: 14.3702 },
+];
+
+let _liveDiCurveVertices: DiCurveVertex[] = [];
+
+export function setLiveDiCurveVertices(vertices: DiCurveVertex[]) {
+  _liveDiCurveVertices = Array.isArray(vertices)
+    ? [...vertices].filter(v => v.vertice_dias > 0 && v.taxa_ettj_pref > 0).sort((a, b) => a.vertice_dias - b.vertice_dias)
+    : [];
+}
+
 /**
- * Curva oficial de expectativa CDI da ANBIMA por vértice de prazo em Dias Úteis
+ * Curva oficial de expectativa CDI da ANBIMA por vértice de prazo em Dias Úteis (interpolação linear)
  */
-export function getCdiExpectationRate(du: number): number {
-  if (du <= 63) return 13.58;
-  if (du <= 189) return 13.24;
-  if (du <= 315) return 12.85;
-  if (du <= 441) return 12.66;
-  if (du <= 567) return 12.56;
-  return 12.59;
+export function getCdiExpectationRate(du: number, vertices?: DiCurveVertex[]): number {
+  const pts = (vertices && vertices.length > 0)
+    ? vertices
+    : (_liveDiCurveVertices.length > 0 ? _liveDiCurveVertices : DEFAULT_DI_CURVE_VERTICES);
+  if (du <= pts[0].vertice_dias) return pts[0].taxa_ettj_pref;
+  if (du >= pts[pts.length - 1].vertice_dias) return pts[pts.length - 1].taxa_ettj_pref;
+  for (let i = 1; i < pts.length; i++) {
+    if (du <= pts[i].vertice_dias) {
+      const p0 = pts[i - 1];
+      const p1 = pts[i];
+      const w = (du - p0.vertice_dias) / (p1.vertice_dias - p0.vertice_dias);
+      return p0.taxa_ettj_pref + w * (p1.taxa_ettj_pref - p0.taxa_ettj_pref);
+    }
+  }
+  return pts[pts.length - 1].taxa_ettj_pref;
 }
 
 export interface AnbimaPricingResult {
@@ -94,6 +126,8 @@ export interface AnbimaPricingParams {
   quantidade?: number;
   /** Projeção mensal de IPCA (% a.m.) para atualizar o VNA da data ANBIMA até a liquidação */
   ipcaProjMensal?: number;
+  /** Vértices vivos da curva ETTJ ANBIMA (public/data/curva_di.json) */
+  diCurveVertices?: DiCurveVertex[];
 }
 
 /* ================= 1. CALENDÁRIO NACIONAL & FERIADOS BANCÁRIOS (ANBIMA / B3) ================= */
@@ -234,18 +268,24 @@ export function countBusinessDays(startStr: string, endStr: string): number {
   return Math.round(diffDays * (252.0 / 365.25));
 }
 
+export function absBusinessDaysDiff(d1: string, d2: string): number {
+  if (!d1 || !d2) return 0;
+  return d1 <= d2 ? countBusinessDays(d1, d2) : countBusinessDays(d2, d1);
+}
+
 export function addBusinessDays(startStr: string, nDays: number): string {
-  if (!startStr) return startStr;
-  if (nDays <= 0) return startStr;
+  if (!startStr || nDays === 0) return startStr;
+  const step = nDays > 0 ? 1 : -1;
+  const target = Math.abs(nDays);
   let curr = new Date(startStr + 'T00:00:00Z');
-  let added = 0;
+  let moved = 0;
   let safety = 0;
-  while (added < nDays && safety < nDays * 3) {
-    curr = addCalendarDays(curr, 1);
+  while (moved < target && safety < target * 4 + 30) {
+    curr = addCalendarDays(curr, step);
     const dow = curr.getUTCDay();
     const iso = formatDateISO(curr);
     if (dow !== 0 && dow !== 6 && !BR_HOLIDAYS_SET.has(iso)) {
-      added++;
+      moved++;
     }
     safety++;
   }
@@ -450,8 +490,13 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     formaCalculo = 'Taxa',
     valor,
     quantidade = 1,
-    ipcaProjMensal = DEFAULT_IPCA_PROJ_MENSAL
+    ipcaProjMensal = DEFAULT_IPCA_PROJ_MENSAL,
+    diCurveVertices
   } = params;
+
+  if (diCurveVertices && diCurveVertices.length > 0) {
+    setLiveDiCurveVertices(diCurveVertices);
+  }
 
   const ticker = (asset?.ticker || asset?.codigo_b3 || 'ATIVO').trim().toUpperCase();
   const dtVenc = asset?.vencimento || asset?.dt_vencimento || asset?.data_vencimento;
@@ -551,6 +596,11 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
   }
   if (rawVna <= 0) {
     rawVna = safeParseFloat(asset?.pu_mercado ?? asset?.pu_indicativo, 1000.0);
+  }
+  const puMercCheck = safeParseFloat(asset?.pu_mercado ?? asset?.pu_mercado_mediano, 0.0);
+  const puParCheck = safeParseFloat(asset?.pu_par, 0.0);
+  if (rawVna > 50000.0 && puMercCheck > 0 && puMercCheck < 25000.0 && (rawVna / puMercCheck) > 10.0) {
+    rawVna = (puParCheck > 0 && puParCheck < 50000.0) ? puParCheck : 1000.0;
   }
   const vnaBase = rawVna > 0 ? rawVna : 1000.0;
 
@@ -835,7 +885,7 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
         if (bestAmortMap) {
           const amortKeys = Object.keys(bestAmortMap);
           for (const ev of eventosFuturos) {
-            const matchedKey = amortKeys.find(k => k === ev.dataLiquidacao || Math.abs(countBusinessDays(k, ev.dataLiquidacao)) <= 3);
+            const matchedKey = amortKeys.find(k => k === ev.dataLiquidacao || absBusinessDaysDiff(k, ev.dataLiquidacao) <= 3);
             if (matchedKey && bestAmortMap[matchedKey] != null) {
               ev.percentualAmortizacao = bestAmortMap[matchedKey];
               ev.hasAmortization = true;
@@ -872,9 +922,12 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
         mesesCiclo = 12;
       }
       const dtCicloPrev = addCalendarDays(new Date(dtPrim + 'T00:00:00Z'), -Math.round(mesesCiclo * 30.4375));
-      const dtCicloIso = rollToNextBusinessDay(formatDateISO(dtCicloPrev));
+      let dtCicloIso = rollToNextBusinessDay(formatDateISO(dtCicloPrev));
       const dtEmissao = asset?.data_emissao || asset?.dt_emissao;
-      dtUltimoCupom = (dtEmissao && dtEmissao > dtCicloIso) ? dtEmissao : dtCicloIso;
+      if (dtCicloIso > dataLiquidacao) {
+        dtCicloIso = (dtEmissao && dtEmissao <= dataLiquidacao) ? dtEmissao : addBusinessDays(dataLiquidacao, -126);
+      }
+      dtUltimoCupom = (dtEmissao && dtEmissao > dtCicloIso && dtEmissao <= dataLiquidacao) ? dtEmissao : dtCicloIso;
     } else {
       dtUltimoCupom = asset?.data_emissao || asset?.dt_emissao || addBusinessDays(dataLiquidacao, -126);
     }
@@ -883,29 +936,34 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
     const puParOficial = safeParseFloat(asset?.pu_par, 0.0);
     const dataAnbima = asset?.data_anbima || asset?.data_ultimo_negocio;
 
-    // Em títulos IPCA e Pré-fixados, o PU Par decorre dia a dia a partir da data do último cupom sobre o VNA:
+    // Em títulos IPCA e Pré-fixados, o PU Par decorre dia a dia a partir da data do último cupom (ou via PU Par oficial):
     if (!indexador.includes('DI')) {
-      duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
-      fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
-      pupar = vna * fatorAccrued;
-    } else if (puParOficial > 0 && (!dataAnbima || dataAnbima === dataLiquidacao)) {
-      pupar = puParOficial;
-      fatorAccrued = vna > 0 ? pupar / vna : 1.0;
-      duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
-    } else if (puParOficial > 0) {
+      if (puParOficial > 0 && puParOficial >= vnaBase * 0.99 && puParOficial < 50000.0) {
+        const ratioVna = vnaBase > 0 ? (vna / vnaBase) : 1.0;
+        const duAnb = (dataAnbima && dataLiquidacao > dataAnbima) ? countBusinessDays(dataAnbima, dataLiquidacao) : 0;
+        pupar = puParOficial * ratioVna * Math.pow(1.0 + taxaEmissaoAnual, duAnb / 252.0);
+        fatorAccrued = vna > 0 ? pupar / vna : 1.0;
+        duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
+      } else {
+        duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
+        fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
+        pupar = vna * fatorAccrued;
+      }
+    } else if (puParOficial > 0 && puParOficial < 50000.0) {
       pupar = puParOficial;
       fatorAccrued = vna > 0 ? pupar / vna : 1.0;
       duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
     } else {
       duDecorrido = countBusinessDays(dtUltimoCupom, dataLiquidacao);
-      fatorAccrued = Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
+      const rCdiAcc = getCdiExpectationRate(Math.max(duDecorrido, 1)) / 100.0;
+      fatorAccrued = Math.pow(1.0 + rCdiAcc, duDecorrido / 252.0) * Math.pow(1.0 + taxaEmissaoAnual, duDecorrido / 252.0);
       pupar = vna * fatorAccrued;
     }
 
     // Identifica se a convenção de amortização é sobre o Saldo Remanescente
     const amortsComPct = eventosFuturos.filter(e => e.percentualAmortizacao > 0);
     const somaPcts = amortsComPct.reduce((acc, e) => acc + e.percentualAmortizacao, 0);
-    const isAmortizacaoSaldo = (somaPcts > 105.0) || amortsComPct.some(e => Math.abs(e.percentualAmortizacao - 33.3334) < 0.1 || Math.abs(e.percentualAmortizacao - 50.0) < 0.1);
+    const isAmortizacaoSaldo = (somaPcts > 105.0) || amortsComPct.some(e => Math.abs(e.percentualAmortizacao - 33.3334) < 0.1);
 
     let saldoDevedor = vna;
     let dtAnt = dtUltimoCupom;
@@ -987,8 +1045,12 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
           valJuros = saldoDevedor * (fCumAtual / fCumPrev - 1.0);
         }
       } else {
-        const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
-        valJuros = saldoDevedor * fatorJuros;
+        if (i === 0 && fatorAccrued > 1.0) {
+          valJuros = saldoDevedor * (fatorAccrued * Math.pow(1.0 + taxaEmissaoAnual, duAteLiq / 252.0) - 1.0);
+        } else {
+          const fatorJuros = Math.pow(1.0 + taxaEmissaoAnual, duPeriodo / 252.0) - 1.0;
+          valJuros = saldoDevedor * fatorJuros;
+        }
       }
 
       fluxosCalculo.push({
@@ -1093,7 +1155,13 @@ export function calculateAnbimaPricing(params: AnbimaPricingParams): AnbimaPrici
 
   const durationDu = puOperacao > 0 ? timePvSum / puOperacao : 0.0;
   const durationAnos = durationDu / 252.0;
-  const modifiedDuration = durationAnos / (1.0 + taxaOpAnual);
+  let taxaMod = taxaOpAnual;
+  if (isDiPercent) {
+    const rCdiMod = getCdiExpectationRate(Math.max(Math.round(durationDu), 1)) / 100.0;
+    const pctOpMult = taxaOpAnual > 10.0 ? taxaOpAnual / 100.0 : taxaOpAnual;
+    taxaMod = rCdiMod * pctOpMult;
+  }
+  const modifiedDuration = durationAnos / (1.0 + taxaMod);
 
   // PU Limpo e Indicadores de Ágio/Deságio
   const puLimpo = fatorAccrued > 0 ? puOperacao / fatorAccrued : puOperacao;

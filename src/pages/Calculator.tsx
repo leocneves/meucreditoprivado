@@ -52,7 +52,8 @@ import {
   addBusinessDays,
   todayLocalIso,
   PaymentEventItem,
-  AnbimaPricingResult
+  AnbimaPricingResult,
+  DiCurveVertex
 } from '../utils/anbimaCalculatorMath';
 
 /* ================= BENCHMARKS DE NTN-B DEFAULT (Fallback) ================= */
@@ -385,6 +386,7 @@ const CalculatorPage: React.FC = () => {
   // Estados de dados
   const [allAssets, setAllAssets] = useState<Asset[]>([]);
   const [ntnbRecords, setNtnbRecords] = useState<typeof DEFAULT_NTNB_LIST>(DEFAULT_NTNB_LIST);
+  const [diCurveVertices, setDiCurveVertices] = useState<DiCurveVertex[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -420,10 +422,14 @@ const CalculatorPage: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [assetsData, ntnbData] = await Promise.all([
+        const [assetsData, ntnbData, curvaDiData] = await Promise.all([
           fetchCSV<Asset>('/data/assets_master.csv').catch(() => []),
-          fetchCSV<NtnbRecord>('/data/ntnb_history.csv').catch(() => [])
+          fetchCSV<NtnbRecord>('/data/ntnb_history.csv').catch(() => []),
+          fetch('/data/curva_di.json').then(r => (r.ok ? r.json() : null)).catch(() => null)
         ]);
+        if (curvaDiData?.vertices && Array.isArray(curvaDiData.vertices)) {
+          setDiCurveVertices(curvaDiData.vertices);
+        }
 
         if (assetsData && assetsData.length > 0) {
           // Disponibiliza todos os 15.984 títulos cadastrados (não filtra status_ativo para não ocultar papéis como CERR18)
@@ -567,9 +573,14 @@ const CalculatorPage: React.FC = () => {
 
     setInputRate(Number(bestRate.toFixed(4)));
 
-    // Identifica PU inicial
+    // Identifica PU inicial com trava contra PU espúrio > 50k
     const rawPu = a.vna || a.pu || a.pu_par || '';
-    const puVna = typeof rawPu === 'number' ? rawPu : parseFloat(String(rawPu).replace(',', '.'));
+    let puVna = typeof rawPu === 'number' ? rawPu : parseFloat(String(rawPu).replace(',', '.'));
+    const puMerc = parseFloat(String((a as any).pu_mercado || '').replace(',', '.'));
+    if (puVna > 50000 && !isNaN(puMerc) && puMerc > 0 && puMerc < 25000 && (puVna / puMerc) > 10) {
+      const puParNum = parseFloat(String(a.pu_par || '').replace(',', '.'));
+      puVna = (!isNaN(puParNum) && puParNum > 0 && puParNum < 50000) ? puParNum : 1000.0;
+    }
     setInputPU(!isNaN(puVna) && puVna > 0 ? Number(puVna.toFixed(4)) : 1000.0);
 
     // Prazo em anos
@@ -594,9 +605,10 @@ const CalculatorPage: React.FC = () => {
       dataLiquidacao,
       formaCalculo,
       valor: formaCalculo === 'Taxa' ? inputRate : inputPU,
-      quantidade: quantity
+      quantidade: quantity,
+      diCurveVertices
     });
-  }, [selectedAsset, assetPaymentEvents, dataOperacao, dataLiquidacao, formaCalculo, inputRate, inputPU, quantity]);
+  }, [selectedAsset, assetPaymentEvents, dataOperacao, dataLiquidacao, formaCalculo, inputRate, inputPU, quantity, diCurveVertices]);
 
   // Sincronização inteligente ao alternar entre Taxa e PU
   const handleToggleFormaCalculo = (novaForma: 'Taxa' | 'PU') => {
@@ -628,7 +640,8 @@ const CalculatorPage: React.FC = () => {
         dataLiquidacao,
         formaCalculo: 'Taxa',
         valor: rSim,
-        quantidade: 1
+        quantidade: 1,
+        diCurveVertices
       });
 
       if (resSim.elegivel) {
@@ -641,7 +654,7 @@ const CalculatorPage: React.FC = () => {
       }
     }
     return points;
-  }, [selectedAsset, anbimaResult, assetPaymentEvents, dataOperacao, dataLiquidacao]);
+  }, [selectedAsset, anbimaResult, assetPaymentEvents, dataOperacao, dataLiquidacao, diCurveVertices]);
 
   /* ================= 6. BUSCA DE ATIVOS (PRIORIDADE EXATA POR TICKER) ================= */
   const searchResults = useMemo(() => {
